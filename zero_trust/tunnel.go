@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -332,6 +332,14 @@ const (
 	TunnelListResponseTunnelCfdTunnelTunTypeCni           TunnelListResponseTunnelCfdTunnelTunType = "cni"
 )
 
+func (r TunnelListResponseTunnelCfdTunnelTunType) IsKnown() bool {
+	switch r {
+	case TunnelListResponseTunnelCfdTunnelTunTypeCfdTunnel, TunnelListResponseTunnelCfdTunnelTunTypeWARPConnector, TunnelListResponseTunnelCfdTunnelTunTypeIPSec, TunnelListResponseTunnelCfdTunnelTunTypeGRE, TunnelListResponseTunnelCfdTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelListResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
@@ -449,6 +457,14 @@ const (
 	TunnelListResponseTunnelWARPConnectorTunnelTunTypeGRE           TunnelListResponseTunnelWARPConnectorTunnelTunType = "gre"
 	TunnelListResponseTunnelWARPConnectorTunnelTunTypeCni           TunnelListResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
+
+func (r TunnelListResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
+	switch r {
+	case TunnelListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelListResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelListResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelListResponseTunnelWARPConnectorTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
@@ -595,6 +611,14 @@ const (
 	TunnelEditResponseTunnelCfdTunnelTunTypeCni           TunnelEditResponseTunnelCfdTunnelTunType = "cni"
 )
 
+func (r TunnelEditResponseTunnelCfdTunnelTunType) IsKnown() bool {
+	switch r {
+	case TunnelEditResponseTunnelCfdTunnelTunTypeCfdTunnel, TunnelEditResponseTunnelCfdTunnelTunTypeWARPConnector, TunnelEditResponseTunnelCfdTunnelTunTypeIPSec, TunnelEditResponseTunnelCfdTunnelTunTypeGRE, TunnelEditResponseTunnelCfdTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type TunnelEditResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
@@ -713,6 +737,14 @@ const (
 	TunnelEditResponseTunnelWARPConnectorTunnelTunTypeCni           TunnelEditResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
+func (r TunnelEditResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
+	switch r {
+	case TunnelEditResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, TunnelEditResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, TunnelEditResponseTunnelWARPConnectorTunnelTunTypeIPSec, TunnelEditResponseTunnelWARPConnectorTunnelTunTypeGRE, TunnelEditResponseTunnelWARPConnectorTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
 type TunnelNewParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -807,6 +839,14 @@ type TunnelNewResponseEnvelopeSuccess bool
 const (
 	TunnelNewResponseEnvelopeSuccessTrue TunnelNewResponseEnvelopeSuccess = true
 )
+
+func (r TunnelNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type TunnelListParams struct {
 	// Cloudflare account ID
@@ -930,6 +970,14 @@ const (
 	TunnelDeleteResponseEnvelopeSuccessTrue TunnelDeleteResponseEnvelopeSuccess = true
 )
 
+func (r TunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TunnelEditParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1026,6 +1074,14 @@ const (
 	TunnelEditResponseEnvelopeSuccessTrue TunnelEditResponseEnvelopeSuccess = true
 )
 
+func (r TunnelEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TunnelGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1111,3 +1167,11 @@ type TunnelGetResponseEnvelopeSuccess bool
 const (
 	TunnelGetResponseEnvelopeSuccessTrue TunnelGetResponseEnvelopeSuccess = true
 )
+
+func (r TunnelGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

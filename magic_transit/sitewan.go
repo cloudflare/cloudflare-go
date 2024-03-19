@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit
 
@@ -31,11 +31,11 @@ func NewSiteWanService(opts ...option.RequestOption) (r *SiteWanService) {
 }
 
 // Creates a new WAN.
-func (r *SiteWanService) New(ctx context.Context, accountIdentifier string, siteIdentifier string, body SiteWanNewParams, opts ...option.RequestOption) (res *SiteWanNewResponse, err error) {
+func (r *SiteWanService) New(ctx context.Context, siteID string, params SiteWanNewParams, opts ...option.RequestOption) (res *SiteWanNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWanNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", accountIdentifier, siteIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", params.AccountID, siteID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -44,11 +44,11 @@ func (r *SiteWanService) New(ctx context.Context, accountIdentifier string, site
 }
 
 // Update a specific WAN.
-func (r *SiteWanService) Update(ctx context.Context, accountIdentifier string, siteIdentifier string, wanIdentifier string, body SiteWanUpdateParams, opts ...option.RequestOption) (res *SiteWanUpdateResponse, err error) {
+func (r *SiteWanService) Update(ctx context.Context, siteID string, wanID string, params SiteWanUpdateParams, opts ...option.RequestOption) (res *SiteWanUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWanUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", accountIdentifier, siteIdentifier, wanIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", params.AccountID, siteID, wanID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -57,10 +57,10 @@ func (r *SiteWanService) Update(ctx context.Context, accountIdentifier string, s
 }
 
 // Lists WANs associated with an account and site.
-func (r *SiteWanService) List(ctx context.Context, accountIdentifier string, siteIdentifier string, opts ...option.RequestOption) (res *SiteWanListResponse, err error) {
+func (r *SiteWanService) List(ctx context.Context, siteID string, query SiteWanListParams, opts ...option.RequestOption) (res *SiteWanListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWanListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", accountIdentifier, siteIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans", query.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -70,10 +70,10 @@ func (r *SiteWanService) List(ctx context.Context, accountIdentifier string, sit
 }
 
 // Remove a specific WAN.
-func (r *SiteWanService) Delete(ctx context.Context, accountIdentifier string, siteIdentifier string, wanIdentifier string, opts ...option.RequestOption) (res *SiteWanDeleteResponse, err error) {
+func (r *SiteWanService) Delete(ctx context.Context, siteID string, wanID string, body SiteWanDeleteParams, opts ...option.RequestOption) (res *SiteWanDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWanDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", accountIdentifier, siteIdentifier, wanIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", body.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -83,10 +83,10 @@ func (r *SiteWanService) Delete(ctx context.Context, accountIdentifier string, s
 }
 
 // Get a specific WAN.
-func (r *SiteWanService) Get(ctx context.Context, accountIdentifier string, siteIdentifier string, wanIdentifier string, opts ...option.RequestOption) (res *SiteWanGetResponse, err error) {
+func (r *SiteWanService) Get(ctx context.Context, siteID string, wanID string, query SiteWanGetParams, opts ...option.RequestOption) (res *SiteWanGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWanGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", accountIdentifier, siteIdentifier, wanIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", query.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -548,7 +548,9 @@ func (r siteWanGetResponseWanStaticAddressingJSON) RawJSON() string {
 }
 
 type SiteWanNewParams struct {
-	Wan param.Field[SiteWanNewParamsWan] `json:"wan"`
+	// Identifier
+	AccountID param.Field[string]              `path:"account_id,required"`
+	Wan       param.Field[SiteWanNewParamsWan] `json:"wan"`
 }
 
 func (r SiteWanNewParams) MarshalJSON() (data []byte, err error) {
@@ -666,8 +668,18 @@ const (
 	SiteWanNewResponseEnvelopeSuccessTrue SiteWanNewResponseEnvelopeSuccess = true
 )
 
+func (r SiteWanNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteWanUpdateParams struct {
-	Wan param.Field[SiteWanUpdateParamsWan] `json:"wan"`
+	// Identifier
+	AccountID param.Field[string]                 `path:"account_id,required"`
+	Wan       param.Field[SiteWanUpdateParamsWan] `json:"wan"`
 }
 
 func (r SiteWanUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -785,6 +797,19 @@ const (
 	SiteWanUpdateResponseEnvelopeSuccessTrue SiteWanUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SiteWanUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteWanListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type SiteWanListResponseEnvelope struct {
 	Errors   []SiteWanListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteWanListResponseEnvelopeMessages `json:"messages,required"`
@@ -865,6 +890,19 @@ type SiteWanListResponseEnvelopeSuccess bool
 const (
 	SiteWanListResponseEnvelopeSuccessTrue SiteWanListResponseEnvelopeSuccess = true
 )
+
+func (r SiteWanListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteWanDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type SiteWanDeleteResponseEnvelope struct {
 	Errors   []SiteWanDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -947,6 +985,19 @@ const (
 	SiteWanDeleteResponseEnvelopeSuccessTrue SiteWanDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SiteWanDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteWanGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type SiteWanGetResponseEnvelope struct {
 	Errors   []SiteWanGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteWanGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1027,3 +1078,11 @@ type SiteWanGetResponseEnvelopeSuccess bool
 const (
 	SiteWanGetResponseEnvelopeSuccessTrue SiteWanGetResponseEnvelopeSuccess = true
 )
+
+func (r SiteWanGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

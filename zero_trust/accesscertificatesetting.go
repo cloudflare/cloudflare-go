@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -216,6 +216,14 @@ const (
 	AccessCertificateSettingUpdateResponseEnvelopeSuccessTrue AccessCertificateSettingUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AccessCertificateSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCertificateSettingUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessCertificateSettingUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -337,6 +345,14 @@ type AccessCertificateSettingGetResponseEnvelopeSuccess bool
 const (
 	AccessCertificateSettingGetResponseEnvelopeSuccessTrue AccessCertificateSettingGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessCertificateSettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCertificateSettingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessCertificateSettingGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package load_balancers
 
@@ -262,6 +262,14 @@ const (
 	PoolNewParamsLoadSheddingDefaultPolicyHash   PoolNewParamsLoadSheddingDefaultPolicy = "hash"
 )
 
+func (r PoolNewParamsLoadSheddingDefaultPolicy) IsKnown() bool {
+	switch r {
+	case PoolNewParamsLoadSheddingDefaultPolicyRandom, PoolNewParamsLoadSheddingDefaultPolicyHash:
+		return true
+	}
+	return false
+}
+
 // Only the hash policy is supported for existing sessions (to avoid exponential
 // decay).
 type PoolNewParamsLoadSheddingSessionPolicy string
@@ -269,6 +277,14 @@ type PoolNewParamsLoadSheddingSessionPolicy string
 const (
 	PoolNewParamsLoadSheddingSessionPolicyHash PoolNewParamsLoadSheddingSessionPolicy = "hash"
 )
+
+func (r PoolNewParamsLoadSheddingSessionPolicy) IsKnown() bool {
+	switch r {
+	case PoolNewParamsLoadSheddingSessionPolicyHash:
+		return true
+	}
+	return false
+}
 
 // Filter pool and origin health notifications by resource type or health status.
 // Use null to reset.
@@ -358,6 +374,14 @@ const (
 	PoolNewParamsOriginSteeringPolicyLeastConnections         PoolNewParamsOriginSteeringPolicy = "least_connections"
 )
 
+func (r PoolNewParamsOriginSteeringPolicy) IsKnown() bool {
+	switch r {
+	case PoolNewParamsOriginSteeringPolicyRandom, PoolNewParamsOriginSteeringPolicyHash, PoolNewParamsOriginSteeringPolicyLeastOutstandingRequests, PoolNewParamsOriginSteeringPolicyLeastConnections:
+		return true
+	}
+	return false
+}
+
 type PoolNewResponseEnvelope struct {
 	Errors   []PoolNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PoolNewResponseEnvelopeMessages `json:"messages,required"`
@@ -438,6 +462,14 @@ type PoolNewResponseEnvelopeSuccess bool
 const (
 	PoolNewResponseEnvelopeSuccessTrue PoolNewResponseEnvelopeSuccess = true
 )
+
+func (r PoolNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PoolUpdateParams struct {
 	// Identifier
@@ -559,6 +591,14 @@ const (
 	PoolUpdateParamsCheckRegionAllRegions PoolUpdateParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r PoolUpdateParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case PoolUpdateParamsCheckRegionWnam, PoolUpdateParamsCheckRegionEnam, PoolUpdateParamsCheckRegionWeu, PoolUpdateParamsCheckRegionEeu, PoolUpdateParamsCheckRegionNsam, PoolUpdateParamsCheckRegionSsam, PoolUpdateParamsCheckRegionOc, PoolUpdateParamsCheckRegionMe, PoolUpdateParamsCheckRegionNaf, PoolUpdateParamsCheckRegionSaf, PoolUpdateParamsCheckRegionSas, PoolUpdateParamsCheckRegionSeas, PoolUpdateParamsCheckRegionNeas, PoolUpdateParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Configures load shedding policies and percentages for the pool.
 type PoolUpdateParamsLoadShedding struct {
 	// The percent of traffic to shed from the pool, according to the default policy.
@@ -592,6 +632,14 @@ const (
 	PoolUpdateParamsLoadSheddingDefaultPolicyHash   PoolUpdateParamsLoadSheddingDefaultPolicy = "hash"
 )
 
+func (r PoolUpdateParamsLoadSheddingDefaultPolicy) IsKnown() bool {
+	switch r {
+	case PoolUpdateParamsLoadSheddingDefaultPolicyRandom, PoolUpdateParamsLoadSheddingDefaultPolicyHash:
+		return true
+	}
+	return false
+}
+
 // Only the hash policy is supported for existing sessions (to avoid exponential
 // decay).
 type PoolUpdateParamsLoadSheddingSessionPolicy string
@@ -599,6 +647,14 @@ type PoolUpdateParamsLoadSheddingSessionPolicy string
 const (
 	PoolUpdateParamsLoadSheddingSessionPolicyHash PoolUpdateParamsLoadSheddingSessionPolicy = "hash"
 )
+
+func (r PoolUpdateParamsLoadSheddingSessionPolicy) IsKnown() bool {
+	switch r {
+	case PoolUpdateParamsLoadSheddingSessionPolicyHash:
+		return true
+	}
+	return false
+}
 
 // Filter pool and origin health notifications by resource type or health status.
 // Use null to reset.
@@ -688,6 +744,14 @@ const (
 	PoolUpdateParamsOriginSteeringPolicyLeastConnections         PoolUpdateParamsOriginSteeringPolicy = "least_connections"
 )
 
+func (r PoolUpdateParamsOriginSteeringPolicy) IsKnown() bool {
+	switch r {
+	case PoolUpdateParamsOriginSteeringPolicyRandom, PoolUpdateParamsOriginSteeringPolicyHash, PoolUpdateParamsOriginSteeringPolicyLeastOutstandingRequests, PoolUpdateParamsOriginSteeringPolicyLeastConnections:
+		return true
+	}
+	return false
+}
+
 type PoolUpdateResponseEnvelope struct {
 	Errors   []PoolUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PoolUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -768,6 +832,14 @@ type PoolUpdateResponseEnvelopeSuccess bool
 const (
 	PoolUpdateResponseEnvelopeSuccessTrue PoolUpdateResponseEnvelopeSuccess = true
 )
+
+func (r PoolUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PoolListParams struct {
 	// Identifier
@@ -867,6 +939,14 @@ type PoolListResponseEnvelopeSuccess bool
 const (
 	PoolListResponseEnvelopeSuccessTrue PoolListResponseEnvelopeSuccess = true
 )
+
+func (r PoolListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PoolListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -985,6 +1065,14 @@ const (
 	PoolDeleteResponseEnvelopeSuccessTrue PoolDeleteResponseEnvelopeSuccess = true
 )
 
+func (r PoolDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PoolEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1060,6 +1148,14 @@ const (
 	PoolEditParamsCheckRegionAllRegions PoolEditParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r PoolEditParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case PoolEditParamsCheckRegionWnam, PoolEditParamsCheckRegionEnam, PoolEditParamsCheckRegionWeu, PoolEditParamsCheckRegionEeu, PoolEditParamsCheckRegionNsam, PoolEditParamsCheckRegionSsam, PoolEditParamsCheckRegionOc, PoolEditParamsCheckRegionMe, PoolEditParamsCheckRegionNaf, PoolEditParamsCheckRegionSaf, PoolEditParamsCheckRegionSas, PoolEditParamsCheckRegionSeas, PoolEditParamsCheckRegionNeas, PoolEditParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Configures load shedding policies and percentages for the pool.
 type PoolEditParamsLoadShedding struct {
 	// The percent of traffic to shed from the pool, according to the default policy.
@@ -1093,6 +1189,14 @@ const (
 	PoolEditParamsLoadSheddingDefaultPolicyHash   PoolEditParamsLoadSheddingDefaultPolicy = "hash"
 )
 
+func (r PoolEditParamsLoadSheddingDefaultPolicy) IsKnown() bool {
+	switch r {
+	case PoolEditParamsLoadSheddingDefaultPolicyRandom, PoolEditParamsLoadSheddingDefaultPolicyHash:
+		return true
+	}
+	return false
+}
+
 // Only the hash policy is supported for existing sessions (to avoid exponential
 // decay).
 type PoolEditParamsLoadSheddingSessionPolicy string
@@ -1100,6 +1204,14 @@ type PoolEditParamsLoadSheddingSessionPolicy string
 const (
 	PoolEditParamsLoadSheddingSessionPolicyHash PoolEditParamsLoadSheddingSessionPolicy = "hash"
 )
+
+func (r PoolEditParamsLoadSheddingSessionPolicy) IsKnown() bool {
+	switch r {
+	case PoolEditParamsLoadSheddingSessionPolicyHash:
+		return true
+	}
+	return false
+}
 
 // Filter pool and origin health notifications by resource type or health status.
 // Use null to reset.
@@ -1188,6 +1300,14 @@ const (
 	PoolEditParamsOriginSteeringPolicyLeastOutstandingRequests PoolEditParamsOriginSteeringPolicy = "least_outstanding_requests"
 	PoolEditParamsOriginSteeringPolicyLeastConnections         PoolEditParamsOriginSteeringPolicy = "least_connections"
 )
+
+func (r PoolEditParamsOriginSteeringPolicy) IsKnown() bool {
+	switch r {
+	case PoolEditParamsOriginSteeringPolicyRandom, PoolEditParamsOriginSteeringPolicyHash, PoolEditParamsOriginSteeringPolicyLeastOutstandingRequests, PoolEditParamsOriginSteeringPolicyLeastConnections:
+		return true
+	}
+	return false
+}
 
 type PoolEditParamsOrigin struct {
 	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
@@ -1315,6 +1435,14 @@ const (
 	PoolEditResponseEnvelopeSuccessTrue PoolEditResponseEnvelopeSuccess = true
 )
 
+func (r PoolEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PoolGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1400,3 +1528,11 @@ type PoolGetResponseEnvelopeSuccess bool
 const (
 	PoolGetResponseEnvelopeSuccessTrue PoolGetResponseEnvelopeSuccess = true
 )
+
+func (r PoolGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -368,6 +368,14 @@ const (
 	AccessServiceTokenNewResponseEnvelopeSuccessTrue AccessServiceTokenNewResponseEnvelopeSuccess = true
 )
 
+func (r AccessServiceTokenNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessServiceTokenNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessServiceTokenUpdateParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -466,6 +474,14 @@ const (
 	AccessServiceTokenUpdateResponseEnvelopeSuccessTrue AccessServiceTokenUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AccessServiceTokenUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessServiceTokenUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessServiceTokenListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -555,6 +571,14 @@ type AccessServiceTokenListResponseEnvelopeSuccess bool
 const (
 	AccessServiceTokenListResponseEnvelopeSuccessTrue AccessServiceTokenListResponseEnvelopeSuccess = true
 )
+
+func (r AccessServiceTokenListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessServiceTokenListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessServiceTokenListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -675,6 +699,14 @@ const (
 	AccessServiceTokenDeleteResponseEnvelopeSuccessTrue AccessServiceTokenDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessServiceTokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessServiceTokenDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessServiceTokenRefreshResponseEnvelope struct {
 	Errors   []AccessServiceTokenRefreshResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenRefreshResponseEnvelopeMessages `json:"messages,required"`
@@ -756,6 +788,14 @@ const (
 	AccessServiceTokenRefreshResponseEnvelopeSuccessTrue AccessServiceTokenRefreshResponseEnvelopeSuccess = true
 )
 
+func (r AccessServiceTokenRefreshResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessServiceTokenRefreshResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessServiceTokenRotateResponseEnvelope struct {
 	Errors   []AccessServiceTokenRotateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenRotateResponseEnvelopeMessages `json:"messages,required"`
@@ -836,3 +876,11 @@ type AccessServiceTokenRotateResponseEnvelopeSuccess bool
 const (
 	AccessServiceTokenRotateResponseEnvelopeSuccessTrue AccessServiceTokenRotateResponseEnvelopeSuccess = true
 )
+
+func (r AccessServiceTokenRotateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessServiceTokenRotateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

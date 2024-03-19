@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package origin_tls_client_auth
 
@@ -273,6 +273,14 @@ const (
 	OriginTLSClientAuthNewResponseEnvelopeSuccessTrue OriginTLSClientAuthNewResponseEnvelopeSuccess = true
 )
 
+func (r OriginTLSClientAuthNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginTLSClientAuthNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OriginTLSClientAuthListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -360,6 +368,14 @@ type OriginTLSClientAuthListResponseEnvelopeSuccess bool
 const (
 	OriginTLSClientAuthListResponseEnvelopeSuccessTrue OriginTLSClientAuthListResponseEnvelopeSuccess = true
 )
+
+func (r OriginTLSClientAuthListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginTLSClientAuthListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type OriginTLSClientAuthListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -478,6 +494,14 @@ const (
 	OriginTLSClientAuthDeleteResponseEnvelopeSuccessTrue OriginTLSClientAuthDeleteResponseEnvelopeSuccess = true
 )
 
+func (r OriginTLSClientAuthDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginTLSClientAuthDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OriginTLSClientAuthGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -563,3 +587,11 @@ type OriginTLSClientAuthGetResponseEnvelopeSuccess bool
 const (
 	OriginTLSClientAuthGetResponseEnvelopeSuccessTrue OriginTLSClientAuthGetResponseEnvelopeSuccess = true
 )
+
+func (r OriginTLSClientAuthGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginTLSClientAuthGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

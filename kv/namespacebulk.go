@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package kv
 
@@ -215,6 +215,14 @@ const (
 	NamespaceBulkUpdateResponseEnvelopeSuccessTrue NamespaceBulkUpdateResponseEnvelopeSuccess = true
 )
 
+func (r NamespaceBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceBulkUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NamespaceBulkDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string]   `path:"account_id,required"`
@@ -305,3 +313,11 @@ type NamespaceBulkDeleteResponseEnvelopeSuccess bool
 const (
 	NamespaceBulkDeleteResponseEnvelopeSuccessTrue NamespaceBulkDeleteResponseEnvelopeSuccess = true
 )
+
+func (r NamespaceBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceBulkDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

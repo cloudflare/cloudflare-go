@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -184,6 +184,14 @@ const (
 	DLPPredefinedProfileTypePredefined DLPPredefinedProfileType = "predefined"
 )
 
+func (r DLPPredefinedProfileType) IsKnown() bool {
+	switch r {
+	case DLPPredefinedProfileTypePredefined:
+		return true
+	}
+	return false
+}
+
 type DLPProfilePredefinedUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -318,3 +326,11 @@ type DLPProfilePredefinedGetResponseEnvelopeSuccess bool
 const (
 	DLPProfilePredefinedGetResponseEnvelopeSuccessTrue DLPProfilePredefinedGetResponseEnvelopeSuccess = true
 )
+
+func (r DLPProfilePredefinedGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfilePredefinedGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

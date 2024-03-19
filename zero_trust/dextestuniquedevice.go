@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -167,3 +167,11 @@ type DEXTestUniqueDeviceListResponseEnvelopeSuccess bool
 const (
 	DEXTestUniqueDeviceListResponseEnvelopeSuccessTrue DEXTestUniqueDeviceListResponseEnvelopeSuccess = true
 )
+
+func (r DEXTestUniqueDeviceListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXTestUniqueDeviceListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

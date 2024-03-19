@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers_for_platforms
 
@@ -188,6 +188,14 @@ type DispatchNamespaceScriptContentScriptUpdateResponseEnvelopeSuccess bool
 const (
 	DispatchNamespaceScriptContentScriptUpdateResponseEnvelopeSuccessTrue DispatchNamespaceScriptContentScriptUpdateResponseEnvelopeSuccess = true
 )
+
+func (r DispatchNamespaceScriptContentScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentScriptUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DispatchNamespaceScriptContentScriptGetParams struct {
 	// Identifier

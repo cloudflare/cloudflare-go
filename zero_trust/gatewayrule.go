@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -188,6 +188,14 @@ const (
 	ZeroTrustGatewayRulesActionAuditSSH     ZeroTrustGatewayRulesAction = "audit_ssh"
 )
 
+func (r ZeroTrustGatewayRulesAction) IsKnown() bool {
+	switch r {
+	case ZeroTrustGatewayRulesActionOn, ZeroTrustGatewayRulesActionOff, ZeroTrustGatewayRulesActionAllow, ZeroTrustGatewayRulesActionBlock, ZeroTrustGatewayRulesActionScan, ZeroTrustGatewayRulesActionNoscan, ZeroTrustGatewayRulesActionSafesearch, ZeroTrustGatewayRulesActionYtrestricted, ZeroTrustGatewayRulesActionIsolate, ZeroTrustGatewayRulesActionNoisolate, ZeroTrustGatewayRulesActionOverride, ZeroTrustGatewayRulesActionL4Override, ZeroTrustGatewayRulesActionEgress, ZeroTrustGatewayRulesActionAuditSSH:
+		return true
+	}
+	return false
+}
+
 // The protocol or layer to use.
 type ZeroTrustGatewayRulesFilter string
 
@@ -197,6 +205,14 @@ const (
 	ZeroTrustGatewayRulesFilterL4     ZeroTrustGatewayRulesFilter = "l4"
 	ZeroTrustGatewayRulesFilterEgress ZeroTrustGatewayRulesFilter = "egress"
 )
+
+func (r ZeroTrustGatewayRulesFilter) IsKnown() bool {
+	switch r {
+	case ZeroTrustGatewayRulesFilterHTTP, ZeroTrustGatewayRulesFilterDNS, ZeroTrustGatewayRulesFilterL4, ZeroTrustGatewayRulesFilterEgress:
+		return true
+	}
+	return false
+}
 
 // Additional settings that modify the rule's action.
 type ZeroTrustGatewayRulesRuleSettings struct {
@@ -611,6 +627,14 @@ const (
 	ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionError       ZeroTrustGatewayRulesRuleSettingsUntrustedCertAction = "error"
 )
 
+func (r ZeroTrustGatewayRulesRuleSettingsUntrustedCertAction) IsKnown() bool {
+	switch r {
+	case ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionPassThrough, ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionBlock, ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionError:
+		return true
+	}
+	return false
+}
+
 // The schedule for activating DNS policies. This does not apply to HTTP or network
 // policies.
 type ZeroTrustGatewayRulesSchedule struct {
@@ -749,6 +773,14 @@ const (
 	GatewayRuleNewParamsActionAuditSSH     GatewayRuleNewParamsAction = "audit_ssh"
 )
 
+func (r GatewayRuleNewParamsAction) IsKnown() bool {
+	switch r {
+	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionAuditSSH:
+		return true
+	}
+	return false
+}
+
 // The protocol or layer to use.
 type GatewayRuleNewParamsFilter string
 
@@ -758,6 +790,14 @@ const (
 	GatewayRuleNewParamsFilterL4     GatewayRuleNewParamsFilter = "l4"
 	GatewayRuleNewParamsFilterEgress GatewayRuleNewParamsFilter = "egress"
 )
+
+func (r GatewayRuleNewParamsFilter) IsKnown() bool {
+	switch r {
+	case GatewayRuleNewParamsFilterHTTP, GatewayRuleNewParamsFilterDNS, GatewayRuleNewParamsFilterL4, GatewayRuleNewParamsFilterEgress:
+		return true
+	}
+	return false
+}
 
 // Additional settings that modify the rule's action.
 type GatewayRuleNewParamsRuleSettings struct {
@@ -980,6 +1020,14 @@ const (
 	GatewayRuleNewParamsRuleSettingsUntrustedCertActionError       GatewayRuleNewParamsRuleSettingsUntrustedCertAction = "error"
 )
 
+func (r GatewayRuleNewParamsRuleSettingsUntrustedCertAction) IsKnown() bool {
+	switch r {
+	case GatewayRuleNewParamsRuleSettingsUntrustedCertActionPassThrough, GatewayRuleNewParamsRuleSettingsUntrustedCertActionBlock, GatewayRuleNewParamsRuleSettingsUntrustedCertActionError:
+		return true
+	}
+	return false
+}
+
 // The schedule for activating DNS policies. This does not apply to HTTP or network
 // policies.
 type GatewayRuleNewParamsSchedule struct {
@@ -1106,6 +1154,14 @@ const (
 	GatewayRuleNewResponseEnvelopeSuccessTrue GatewayRuleNewResponseEnvelopeSuccess = true
 )
 
+func (r GatewayRuleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayRuleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayRuleUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The action to preform when the associated traffic, identity, and device posture
@@ -1162,6 +1218,14 @@ const (
 	GatewayRuleUpdateParamsActionAuditSSH     GatewayRuleUpdateParamsAction = "audit_ssh"
 )
 
+func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
+	switch r {
+	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionAuditSSH:
+		return true
+	}
+	return false
+}
+
 // The protocol or layer to use.
 type GatewayRuleUpdateParamsFilter string
 
@@ -1171,6 +1235,14 @@ const (
 	GatewayRuleUpdateParamsFilterL4     GatewayRuleUpdateParamsFilter = "l4"
 	GatewayRuleUpdateParamsFilterEgress GatewayRuleUpdateParamsFilter = "egress"
 )
+
+func (r GatewayRuleUpdateParamsFilter) IsKnown() bool {
+	switch r {
+	case GatewayRuleUpdateParamsFilterHTTP, GatewayRuleUpdateParamsFilterDNS, GatewayRuleUpdateParamsFilterL4, GatewayRuleUpdateParamsFilterEgress:
+		return true
+	}
+	return false
+}
 
 // Additional settings that modify the rule's action.
 type GatewayRuleUpdateParamsRuleSettings struct {
@@ -1393,6 +1465,14 @@ const (
 	GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionError       GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction = "error"
 )
 
+func (r GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction) IsKnown() bool {
+	switch r {
+	case GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionPassThrough, GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionBlock, GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionError:
+		return true
+	}
+	return false
+}
+
 // The schedule for activating DNS policies. This does not apply to HTTP or network
 // policies.
 type GatewayRuleUpdateParamsSchedule struct {
@@ -1519,6 +1599,14 @@ const (
 	GatewayRuleUpdateResponseEnvelopeSuccessTrue GatewayRuleUpdateResponseEnvelopeSuccess = true
 )
 
+func (r GatewayRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayRuleUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayRuleListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -1605,6 +1693,14 @@ type GatewayRuleListResponseEnvelopeSuccess bool
 const (
 	GatewayRuleListResponseEnvelopeSuccessTrue GatewayRuleListResponseEnvelopeSuccess = true
 )
+
+func (r GatewayRuleListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayRuleListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type GatewayRuleListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -1722,6 +1818,14 @@ const (
 	GatewayRuleDeleteResponseEnvelopeSuccessTrue GatewayRuleDeleteResponseEnvelopeSuccess = true
 )
 
+func (r GatewayRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayRuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayRuleGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -1806,3 +1910,11 @@ type GatewayRuleGetResponseEnvelopeSuccess bool
 const (
 	GatewayRuleGetResponseEnvelopeSuccessTrue GatewayRuleGetResponseEnvelopeSuccess = true
 )
+
+func (r GatewayRuleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayRuleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

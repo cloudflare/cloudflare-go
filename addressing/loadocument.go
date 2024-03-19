@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package addressing
 
@@ -159,3 +159,11 @@ type LOADocumentNewResponseEnvelopeSuccess bool
 const (
 	LOADocumentNewResponseEnvelopeSuccessTrue LOADocumentNewResponseEnvelopeSuccess = true
 )
+
+func (r LOADocumentNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LOADocumentNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

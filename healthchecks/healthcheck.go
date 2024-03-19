@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package healthchecks
 
@@ -35,11 +35,11 @@ func NewHealthcheckService(opts ...option.RequestOption) (r *HealthcheckService)
 }
 
 // Create a new health check.
-func (r *HealthcheckService) New(ctx context.Context, zoneIdentifier string, body HealthcheckNewParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/healthchecks", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *HealthcheckService) New(ctx context.Context, zoneIdentifier string, bod
 }
 
 // Update a configured health check.
-func (r *HealthcheckService) Update(ctx context.Context, zoneIdentifier string, identifier string, body HealthcheckUpdateParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, params HealthcheckUpdateParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/%s", zoneIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/healthchecks/%s", params.ZoneID, healthcheckID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,10 +61,10 @@ func (r *HealthcheckService) Update(ctx context.Context, zoneIdentifier string, 
 }
 
 // List configured health checks.
-func (r *HealthcheckService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]HealthchecksHealthchecks, err error) {
+func (r *HealthcheckService) List(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) (res *[]HealthchecksHealthchecks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/healthchecks", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -74,10 +74,10 @@ func (r *HealthcheckService) List(ctx context.Context, zoneIdentifier string, op
 }
 
 // Delete a health check.
-func (r *HealthcheckService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HealthcheckDeleteResponse, err error) {
+func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, body HealthcheckDeleteParams, opts ...option.RequestOption) (res *HealthcheckDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/%s", zoneIdentifier, identifier)
+	path := fmt.Sprintf("zones/%s/healthchecks/%s", body.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -87,11 +87,11 @@ func (r *HealthcheckService) Delete(ctx context.Context, zoneIdentifier string, 
 }
 
 // Patch a configured health check.
-func (r *HealthcheckService) Edit(ctx context.Context, zoneIdentifier string, identifier string, body HealthcheckEditParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, params HealthcheckEditParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/%s", zoneIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/healthchecks/%s", params.ZoneID, healthcheckID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -100,10 +100,10 @@ func (r *HealthcheckService) Edit(ctx context.Context, zoneIdentifier string, id
 }
 
 // Fetch a single configured health check.
-func (r *HealthcheckService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, query HealthcheckGetParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/%s", zoneIdentifier, identifier)
+	path := fmt.Sprintf("zones/%s/healthchecks/%s", query.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -215,6 +215,14 @@ const (
 	HealthchecksHealthchecksCheckRegionAllRegions HealthchecksHealthchecksCheckRegion = "ALL_REGIONS"
 )
 
+func (r HealthchecksHealthchecksCheckRegion) IsKnown() bool {
+	switch r {
+	case HealthchecksHealthchecksCheckRegionWnam, HealthchecksHealthchecksCheckRegionEnam, HealthchecksHealthchecksCheckRegionWeu, HealthchecksHealthchecksCheckRegionEeu, HealthchecksHealthchecksCheckRegionNsam, HealthchecksHealthchecksCheckRegionSsam, HealthchecksHealthchecksCheckRegionOc, HealthchecksHealthchecksCheckRegionMe, HealthchecksHealthchecksCheckRegionNaf, HealthchecksHealthchecksCheckRegionSaf, HealthchecksHealthchecksCheckRegionIn, HealthchecksHealthchecksCheckRegionSeas, HealthchecksHealthchecksCheckRegionNeas, HealthchecksHealthchecksCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to an HTTP or HTTPS health check.
 type HealthchecksHealthchecksHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
@@ -271,6 +279,14 @@ const (
 	HealthchecksHealthchecksHTTPConfigMethodHead HealthchecksHealthchecksHTTPConfigMethod = "HEAD"
 )
 
+func (r HealthchecksHealthchecksHTTPConfigMethod) IsKnown() bool {
+	switch r {
+	case HealthchecksHealthchecksHTTPConfigMethodGet, HealthchecksHealthchecksHTTPConfigMethodHead:
+		return true
+	}
+	return false
+}
+
 // The current status of the origin server according to the health check.
 type HealthchecksHealthchecksStatus string
 
@@ -280,6 +296,14 @@ const (
 	HealthchecksHealthchecksStatusUnhealthy HealthchecksHealthchecksStatus = "unhealthy"
 	HealthchecksHealthchecksStatusSuspended HealthchecksHealthchecksStatus = "suspended"
 )
+
+func (r HealthchecksHealthchecksStatus) IsKnown() bool {
+	switch r {
+	case HealthchecksHealthchecksStatusUnknown, HealthchecksHealthchecksStatusHealthy, HealthchecksHealthchecksStatusUnhealthy, HealthchecksHealthchecksStatusSuspended:
+		return true
+	}
+	return false
+}
 
 // Parameters specific to TCP health check.
 type HealthchecksHealthchecksTcpConfig struct {
@@ -314,6 +338,14 @@ const (
 	HealthchecksHealthchecksTcpConfigMethodConnectionEstablished HealthchecksHealthchecksTcpConfigMethod = "connection_established"
 )
 
+func (r HealthchecksHealthchecksTcpConfigMethod) IsKnown() bool {
+	switch r {
+	case HealthchecksHealthchecksTcpConfigMethodConnectionEstablished:
+		return true
+	}
+	return false
+}
+
 type HealthcheckDeleteResponse struct {
 	// Identifier
 	ID   string                        `json:"id"`
@@ -337,6 +369,8 @@ func (r healthcheckDeleteResponseJSON) RawJSON() string {
 }
 
 type HealthcheckNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The hostname or IP address of the origin server to run health checks on.
 	Address param.Field[string] `json:"address,required"`
 	// A short name to identify the health check. Only alphanumeric characters, hyphens
@@ -401,6 +435,14 @@ const (
 	HealthcheckNewParamsCheckRegionAllRegions HealthcheckNewParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r HealthcheckNewParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case HealthcheckNewParamsCheckRegionWnam, HealthcheckNewParamsCheckRegionEnam, HealthcheckNewParamsCheckRegionWeu, HealthcheckNewParamsCheckRegionEeu, HealthcheckNewParamsCheckRegionNsam, HealthcheckNewParamsCheckRegionSsam, HealthcheckNewParamsCheckRegionOc, HealthcheckNewParamsCheckRegionMe, HealthcheckNewParamsCheckRegionNaf, HealthcheckNewParamsCheckRegionSaf, HealthcheckNewParamsCheckRegionIn, HealthcheckNewParamsCheckRegionSeas, HealthcheckNewParamsCheckRegionNeas, HealthcheckNewParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to an HTTP or HTTPS health check.
 type HealthcheckNewParamsHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
@@ -437,6 +479,14 @@ const (
 	HealthcheckNewParamsHTTPConfigMethodHead HealthcheckNewParamsHTTPConfigMethod = "HEAD"
 )
 
+func (r HealthcheckNewParamsHTTPConfigMethod) IsKnown() bool {
+	switch r {
+	case HealthcheckNewParamsHTTPConfigMethodGet, HealthcheckNewParamsHTTPConfigMethodHead:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to TCP health check.
 type HealthcheckNewParamsTcpConfig struct {
 	// The TCP connection method to use for the health check.
@@ -455,6 +505,14 @@ type HealthcheckNewParamsTcpConfigMethod string
 const (
 	HealthcheckNewParamsTcpConfigMethodConnectionEstablished HealthcheckNewParamsTcpConfigMethod = "connection_established"
 )
+
+func (r HealthcheckNewParamsTcpConfigMethod) IsKnown() bool {
+	switch r {
+	case HealthcheckNewParamsTcpConfigMethodConnectionEstablished:
+		return true
+	}
+	return false
+}
 
 type HealthcheckNewResponseEnvelope struct {
 	Errors   []HealthcheckNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -537,7 +595,17 @@ const (
 	HealthcheckNewResponseEnvelopeSuccessTrue HealthcheckNewResponseEnvelopeSuccess = true
 )
 
+func (r HealthcheckNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HealthcheckNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HealthcheckUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The hostname or IP address of the origin server to run health checks on.
 	Address param.Field[string] `json:"address,required"`
 	// A short name to identify the health check. Only alphanumeric characters, hyphens
@@ -602,6 +670,14 @@ const (
 	HealthcheckUpdateParamsCheckRegionAllRegions HealthcheckUpdateParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r HealthcheckUpdateParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case HealthcheckUpdateParamsCheckRegionWnam, HealthcheckUpdateParamsCheckRegionEnam, HealthcheckUpdateParamsCheckRegionWeu, HealthcheckUpdateParamsCheckRegionEeu, HealthcheckUpdateParamsCheckRegionNsam, HealthcheckUpdateParamsCheckRegionSsam, HealthcheckUpdateParamsCheckRegionOc, HealthcheckUpdateParamsCheckRegionMe, HealthcheckUpdateParamsCheckRegionNaf, HealthcheckUpdateParamsCheckRegionSaf, HealthcheckUpdateParamsCheckRegionIn, HealthcheckUpdateParamsCheckRegionSeas, HealthcheckUpdateParamsCheckRegionNeas, HealthcheckUpdateParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to an HTTP or HTTPS health check.
 type HealthcheckUpdateParamsHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
@@ -638,6 +714,14 @@ const (
 	HealthcheckUpdateParamsHTTPConfigMethodHead HealthcheckUpdateParamsHTTPConfigMethod = "HEAD"
 )
 
+func (r HealthcheckUpdateParamsHTTPConfigMethod) IsKnown() bool {
+	switch r {
+	case HealthcheckUpdateParamsHTTPConfigMethodGet, HealthcheckUpdateParamsHTTPConfigMethodHead:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to TCP health check.
 type HealthcheckUpdateParamsTcpConfig struct {
 	// The TCP connection method to use for the health check.
@@ -656,6 +740,14 @@ type HealthcheckUpdateParamsTcpConfigMethod string
 const (
 	HealthcheckUpdateParamsTcpConfigMethodConnectionEstablished HealthcheckUpdateParamsTcpConfigMethod = "connection_established"
 )
+
+func (r HealthcheckUpdateParamsTcpConfigMethod) IsKnown() bool {
+	switch r {
+	case HealthcheckUpdateParamsTcpConfigMethodConnectionEstablished:
+		return true
+	}
+	return false
+}
 
 type HealthcheckUpdateResponseEnvelope struct {
 	Errors   []HealthcheckUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -737,6 +829,19 @@ type HealthcheckUpdateResponseEnvelopeSuccess bool
 const (
 	HealthcheckUpdateResponseEnvelopeSuccessTrue HealthcheckUpdateResponseEnvelopeSuccess = true
 )
+
+func (r HealthcheckUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HealthcheckUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type HealthcheckListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type HealthcheckListResponseEnvelope struct {
 	Errors   []HealthcheckListResponseEnvelopeErrors   `json:"errors,required"`
@@ -821,6 +926,14 @@ const (
 	HealthcheckListResponseEnvelopeSuccessTrue HealthcheckListResponseEnvelopeSuccess = true
 )
 
+func (r HealthcheckListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HealthcheckListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HealthcheckListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -850,6 +963,11 @@ func (r *HealthcheckListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (
 
 func (r healthcheckListResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
+}
+
+type HealthcheckDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type HealthcheckDeleteResponseEnvelope struct {
@@ -933,7 +1051,17 @@ const (
 	HealthcheckDeleteResponseEnvelopeSuccessTrue HealthcheckDeleteResponseEnvelopeSuccess = true
 )
 
+func (r HealthcheckDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HealthcheckDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HealthcheckEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The hostname or IP address of the origin server to run health checks on.
 	Address param.Field[string] `json:"address,required"`
 	// A short name to identify the health check. Only alphanumeric characters, hyphens
@@ -998,6 +1126,14 @@ const (
 	HealthcheckEditParamsCheckRegionAllRegions HealthcheckEditParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r HealthcheckEditParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case HealthcheckEditParamsCheckRegionWnam, HealthcheckEditParamsCheckRegionEnam, HealthcheckEditParamsCheckRegionWeu, HealthcheckEditParamsCheckRegionEeu, HealthcheckEditParamsCheckRegionNsam, HealthcheckEditParamsCheckRegionSsam, HealthcheckEditParamsCheckRegionOc, HealthcheckEditParamsCheckRegionMe, HealthcheckEditParamsCheckRegionNaf, HealthcheckEditParamsCheckRegionSaf, HealthcheckEditParamsCheckRegionIn, HealthcheckEditParamsCheckRegionSeas, HealthcheckEditParamsCheckRegionNeas, HealthcheckEditParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to an HTTP or HTTPS health check.
 type HealthcheckEditParamsHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
@@ -1034,6 +1170,14 @@ const (
 	HealthcheckEditParamsHTTPConfigMethodHead HealthcheckEditParamsHTTPConfigMethod = "HEAD"
 )
 
+func (r HealthcheckEditParamsHTTPConfigMethod) IsKnown() bool {
+	switch r {
+	case HealthcheckEditParamsHTTPConfigMethodGet, HealthcheckEditParamsHTTPConfigMethodHead:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to TCP health check.
 type HealthcheckEditParamsTcpConfig struct {
 	// The TCP connection method to use for the health check.
@@ -1052,6 +1196,14 @@ type HealthcheckEditParamsTcpConfigMethod string
 const (
 	HealthcheckEditParamsTcpConfigMethodConnectionEstablished HealthcheckEditParamsTcpConfigMethod = "connection_established"
 )
+
+func (r HealthcheckEditParamsTcpConfigMethod) IsKnown() bool {
+	switch r {
+	case HealthcheckEditParamsTcpConfigMethodConnectionEstablished:
+		return true
+	}
+	return false
+}
 
 type HealthcheckEditResponseEnvelope struct {
 	Errors   []HealthcheckEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -1134,6 +1286,19 @@ const (
 	HealthcheckEditResponseEnvelopeSuccessTrue HealthcheckEditResponseEnvelopeSuccess = true
 )
 
+func (r HealthcheckEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HealthcheckEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type HealthcheckGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type HealthcheckGetResponseEnvelope struct {
 	Errors   []HealthcheckGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HealthcheckGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1214,3 +1379,11 @@ type HealthcheckGetResponseEnvelopeSuccess bool
 const (
 	HealthcheckGetResponseEnvelopeSuccessTrue HealthcheckGetResponseEnvelopeSuccess = true
 )
+
+func (r HealthcheckGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HealthcheckGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -191,6 +191,14 @@ const (
 	BGPTopPrefixesParamsDateRange24wControl BGPTopPrefixesParamsDateRange = "24wControl"
 )
 
+func (r BGPTopPrefixesParamsDateRange) IsKnown() bool {
+	switch r {
+	case BGPTopPrefixesParamsDateRange1d, BGPTopPrefixesParamsDateRange2d, BGPTopPrefixesParamsDateRange7d, BGPTopPrefixesParamsDateRange14d, BGPTopPrefixesParamsDateRange28d, BGPTopPrefixesParamsDateRange12w, BGPTopPrefixesParamsDateRange24w, BGPTopPrefixesParamsDateRange52w, BGPTopPrefixesParamsDateRange1dControl, BGPTopPrefixesParamsDateRange2dControl, BGPTopPrefixesParamsDateRange7dControl, BGPTopPrefixesParamsDateRange14dControl, BGPTopPrefixesParamsDateRange28dControl, BGPTopPrefixesParamsDateRange12wControl, BGPTopPrefixesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type BGPTopPrefixesParamsFormat string
 
@@ -199,12 +207,28 @@ const (
 	BGPTopPrefixesParamsFormatCsv  BGPTopPrefixesParamsFormat = "CSV"
 )
 
+func (r BGPTopPrefixesParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPTopPrefixesParamsFormatJson, BGPTopPrefixesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type BGPTopPrefixesParamsUpdateType string
 
 const (
 	BGPTopPrefixesParamsUpdateTypeAnnouncement BGPTopPrefixesParamsUpdateType = "ANNOUNCEMENT"
 	BGPTopPrefixesParamsUpdateTypeWithdrawal   BGPTopPrefixesParamsUpdateType = "WITHDRAWAL"
 )
+
+func (r BGPTopPrefixesParamsUpdateType) IsKnown() bool {
+	switch r {
+	case BGPTopPrefixesParamsUpdateTypeAnnouncement, BGPTopPrefixesParamsUpdateTypeWithdrawal:
+		return true
+	}
+	return false
+}
 
 type BGPTopPrefixesResponseEnvelope struct {
 	Result  BGPTopPrefixesResponse             `json:"result,required"`

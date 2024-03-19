@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -250,6 +250,14 @@ const (
 	OrganizationRevokeUsersResponseFalse OrganizationRevokeUsersResponse = false
 )
 
+func (r OrganizationRevokeUsersResponse) IsKnown() bool {
+	switch r {
+	case OrganizationRevokeUsersResponseTrue, OrganizationRevokeUsersResponseFalse:
+		return true
+	}
+	return false
+}
+
 type OrganizationNewParams struct {
 	// The unique subdomain assigned to your Zero Trust organization.
 	AuthDomain param.Field[string] `json:"auth_domain,required"`
@@ -386,6 +394,14 @@ type OrganizationNewResponseEnvelopeSuccess bool
 const (
 	OrganizationNewResponseEnvelopeSuccessTrue OrganizationNewResponseEnvelopeSuccess = true
 )
+
+func (r OrganizationNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OrganizationNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type OrganizationUpdateParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -537,6 +553,14 @@ const (
 	OrganizationUpdateResponseEnvelopeSuccessTrue OrganizationUpdateResponseEnvelopeSuccess = true
 )
 
+func (r OrganizationUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OrganizationUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OrganizationListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -625,6 +649,14 @@ const (
 	OrganizationListResponseEnvelopeSuccessTrue OrganizationListResponseEnvelopeSuccess = true
 )
 
+func (r OrganizationListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OrganizationListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OrganizationRevokeUsersParams struct {
 	// The email of the user to revoke.
 	Email param.Field[string] `json:"email,required"`
@@ -667,3 +699,11 @@ const (
 	OrganizationRevokeUsersResponseEnvelopeSuccessTrue  OrganizationRevokeUsersResponseEnvelopeSuccess = true
 	OrganizationRevokeUsersResponseEnvelopeSuccessFalse OrganizationRevokeUsersResponseEnvelopeSuccess = false
 )
+
+func (r OrganizationRevokeUsersResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OrganizationRevokeUsersResponseEnvelopeSuccessTrue, OrganizationRevokeUsersResponseEnvelopeSuccessFalse:
+		return true
+	}
+	return false
+}

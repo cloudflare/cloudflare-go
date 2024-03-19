@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_network_monitoring
 
@@ -122,3 +122,11 @@ type ConfigFullGetResponseEnvelopeSuccess bool
 const (
 	ConfigFullGetResponseEnvelopeSuccessTrue ConfigFullGetResponseEnvelopeSuccess = true
 )
+
+func (r ConfigFullGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigFullGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

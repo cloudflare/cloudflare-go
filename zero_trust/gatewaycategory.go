@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -98,6 +98,14 @@ const (
 	ZeroTrustGatewayCategoriesClassNoBlock        ZeroTrustGatewayCategoriesClass = "noBlock"
 )
 
+func (r ZeroTrustGatewayCategoriesClass) IsKnown() bool {
+	switch r {
+	case ZeroTrustGatewayCategoriesClassFree, ZeroTrustGatewayCategoriesClassPremium, ZeroTrustGatewayCategoriesClassBlocked, ZeroTrustGatewayCategoriesClassRemovalPending, ZeroTrustGatewayCategoriesClassNoBlock:
+		return true
+	}
+	return false
+}
+
 type ZeroTrustGatewayCategoriesSubcategory struct {
 	// The identifier for this category. There is only one category per ID.
 	ID int64 `json:"id"`
@@ -148,6 +156,14 @@ const (
 	ZeroTrustGatewayCategoriesSubcategoriesClassRemovalPending ZeroTrustGatewayCategoriesSubcategoriesClass = "removalPending"
 	ZeroTrustGatewayCategoriesSubcategoriesClassNoBlock        ZeroTrustGatewayCategoriesSubcategoriesClass = "noBlock"
 )
+
+func (r ZeroTrustGatewayCategoriesSubcategoriesClass) IsKnown() bool {
+	switch r {
+	case ZeroTrustGatewayCategoriesSubcategoriesClassFree, ZeroTrustGatewayCategoriesSubcategoriesClassPremium, ZeroTrustGatewayCategoriesSubcategoriesClassBlocked, ZeroTrustGatewayCategoriesSubcategoriesClassRemovalPending, ZeroTrustGatewayCategoriesSubcategoriesClassNoBlock:
+		return true
+	}
+	return false
+}
 
 type GatewayCategoryListParams struct {
 	// Identifier
@@ -236,6 +252,14 @@ type GatewayCategoryListResponseEnvelopeSuccess bool
 const (
 	GatewayCategoryListResponseEnvelopeSuccessTrue GatewayCategoryListResponseEnvelopeSuccess = true
 )
+
+func (r GatewayCategoryListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayCategoryListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type GatewayCategoryListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

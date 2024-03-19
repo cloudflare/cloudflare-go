@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -97,6 +97,14 @@ const (
 	MiscategorizationNewParamsIndicatorTypeURL    MiscategorizationNewParamsIndicatorType = "url"
 )
 
+func (r MiscategorizationNewParamsIndicatorType) IsKnown() bool {
+	switch r {
+	case MiscategorizationNewParamsIndicatorTypeDomain, MiscategorizationNewParamsIndicatorTypeIPV4, MiscategorizationNewParamsIndicatorTypeIPV6, MiscategorizationNewParamsIndicatorTypeURL:
+		return true
+	}
+	return false
+}
+
 type MiscategorizationNewResponseEnvelope struct {
 	Errors   []MiscategorizationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MiscategorizationNewResponseEnvelopeMessages `json:"messages,required"`
@@ -177,3 +185,11 @@ type MiscategorizationNewResponseEnvelopeSuccess bool
 const (
 	MiscategorizationNewResponseEnvelopeSuccessTrue MiscategorizationNewResponseEnvelopeSuccess = true
 )
+
+func (r MiscategorizationNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MiscategorizationNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

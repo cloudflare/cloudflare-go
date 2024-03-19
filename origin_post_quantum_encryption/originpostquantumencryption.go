@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package origin_post_quantum_encryption
 
@@ -126,6 +126,14 @@ const (
 	OriginPostQuantumEncryptionUpdateParamsValueOff       OriginPostQuantumEncryptionUpdateParamsValue = "off"
 )
 
+func (r OriginPostQuantumEncryptionUpdateParamsValue) IsKnown() bool {
+	switch r {
+	case OriginPostQuantumEncryptionUpdateParamsValuePreferred, OriginPostQuantumEncryptionUpdateParamsValueSupported, OriginPostQuantumEncryptionUpdateParamsValueOff:
+		return true
+	}
+	return false
+}
+
 type OriginPostQuantumEncryptionUpdateResponseEnvelope struct {
 	Errors   []OriginPostQuantumEncryptionUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OriginPostQuantumEncryptionUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -208,6 +216,14 @@ type OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess bool
 const (
 	OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccessTrue OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess = true
 )
+
+func (r OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type OriginPostQuantumEncryptionGetParams struct {
 	// Identifier
@@ -294,3 +310,11 @@ type OriginPostQuantumEncryptionGetResponseEnvelopeSuccess bool
 const (
 	OriginPostQuantumEncryptionGetResponseEnvelopeSuccessTrue OriginPostQuantumEncryptionGetResponseEnvelopeSuccess = true
 )
+
+func (r OriginPostQuantumEncryptionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginPostQuantumEncryptionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

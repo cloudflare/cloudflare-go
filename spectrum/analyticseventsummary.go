@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package spectrum
 
@@ -134,6 +134,14 @@ const (
 	AnalyticsEventSummaryGetParamsDimensionIPVersion AnalyticsEventSummaryGetParamsDimension = "ipVersion"
 )
 
+func (r AnalyticsEventSummaryGetParamsDimension) IsKnown() bool {
+	switch r {
+	case AnalyticsEventSummaryGetParamsDimensionEvent, AnalyticsEventSummaryGetParamsDimensionAppID, AnalyticsEventSummaryGetParamsDimensionColoName, AnalyticsEventSummaryGetParamsDimensionIPVersion:
+		return true
+	}
+	return false
+}
+
 type AnalyticsEventSummaryGetParamsMetric string
 
 const (
@@ -145,6 +153,14 @@ const (
 	AnalyticsEventSummaryGetParamsMetricDuration90th   AnalyticsEventSummaryGetParamsMetric = "duration90th"
 	AnalyticsEventSummaryGetParamsMetricDuration99th   AnalyticsEventSummaryGetParamsMetric = "duration99th"
 )
+
+func (r AnalyticsEventSummaryGetParamsMetric) IsKnown() bool {
+	switch r {
+	case AnalyticsEventSummaryGetParamsMetricCount, AnalyticsEventSummaryGetParamsMetricBytesIngress, AnalyticsEventSummaryGetParamsMetricBytesEgress, AnalyticsEventSummaryGetParamsMetricDurationAvg, AnalyticsEventSummaryGetParamsMetricDurationMedian, AnalyticsEventSummaryGetParamsMetricDuration90th, AnalyticsEventSummaryGetParamsMetricDuration99th:
+		return true
+	}
+	return false
+}
 
 type AnalyticsEventSummaryGetResponseEnvelope struct {
 	Errors   []AnalyticsEventSummaryGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -226,3 +242,11 @@ type AnalyticsEventSummaryGetResponseEnvelopeSuccess bool
 const (
 	AnalyticsEventSummaryGetResponseEnvelopeSuccessTrue AnalyticsEventSummaryGetResponseEnvelopeSuccess = true
 )
+
+func (r AnalyticsEventSummaryGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AnalyticsEventSummaryGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

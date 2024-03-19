@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package queues
 
@@ -368,6 +368,14 @@ const (
 	ConsumerNewResponseEnvelopeSuccessTrue ConsumerNewResponseEnvelopeSuccess = true
 )
 
+func (r ConsumerNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConsumerNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConsumerNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -492,6 +500,14 @@ const (
 	ConsumerUpdateResponseEnvelopeSuccessTrue ConsumerUpdateResponseEnvelopeSuccess = true
 )
 
+func (r ConsumerUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConsumerUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConsumerUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -611,6 +627,14 @@ const (
 	ConsumerDeleteResponseEnvelopeSuccessTrue ConsumerDeleteResponseEnvelopeSuccess = true
 )
 
+func (r ConsumerDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConsumerDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConsumerDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -683,6 +707,14 @@ type ConsumerGetResponseEnvelopeSuccess bool
 const (
 	ConsumerGetResponseEnvelopeSuccessTrue ConsumerGetResponseEnvelopeSuccess = true
 )
+
+func (r ConsumerGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConsumerGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ConsumerGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

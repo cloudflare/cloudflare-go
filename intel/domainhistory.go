@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -191,6 +191,14 @@ type DomainHistoryGetResponseEnvelopeSuccess bool
 const (
 	DomainHistoryGetResponseEnvelopeSuccessTrue DomainHistoryGetResponseEnvelopeSuccess = true
 )
+
+func (r DomainHistoryGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainHistoryGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DomainHistoryGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

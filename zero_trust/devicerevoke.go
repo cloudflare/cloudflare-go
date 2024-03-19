@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -154,3 +154,11 @@ type DeviceRevokeNewResponseEnvelopeSuccess bool
 const (
 	DeviceRevokeNewResponseEnvelopeSuccessTrue DeviceRevokeNewResponseEnvelopeSuccess = true
 )
+
+func (r DeviceRevokeNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceRevokeNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

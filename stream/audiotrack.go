@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package stream
 
@@ -130,6 +130,14 @@ const (
 	StreamAdditionalAudioStatusError  StreamAdditionalAudioStatus = "error"
 )
 
+func (r StreamAdditionalAudioStatus) IsKnown() bool {
+	switch r {
+	case StreamAdditionalAudioStatusQueued, StreamAdditionalAudioStatusReady, StreamAdditionalAudioStatusError:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [stream.AudioTrackDeleteResponseUnknown] or
 // [shared.UnionString].
 type AudioTrackDeleteResponse interface {
@@ -233,6 +241,14 @@ const (
 	AudioTrackDeleteResponseEnvelopeSuccessTrue AudioTrackDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AudioTrackDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AudioTrackDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AudioTrackCopyParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -330,6 +346,14 @@ const (
 	AudioTrackCopyResponseEnvelopeSuccessTrue AudioTrackCopyResponseEnvelopeSuccess = true
 )
 
+func (r AudioTrackCopyResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AudioTrackCopyResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AudioTrackEditParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -425,6 +449,14 @@ const (
 	AudioTrackEditResponseEnvelopeSuccessTrue AudioTrackEditResponseEnvelopeSuccess = true
 )
 
+func (r AudioTrackEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AudioTrackEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AudioTrackGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -510,3 +542,11 @@ type AudioTrackGetResponseEnvelopeSuccess bool
 const (
 	AudioTrackGetResponseEnvelopeSuccessTrue AudioTrackGetResponseEnvelopeSuccess = true
 )
+
+func (r AudioTrackGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AudioTrackGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -246,6 +246,14 @@ const (
 	EmailSecurityTopTldSpoofGetParamsSpoofNotSpoof EmailSecurityTopTldSpoofGetParamsSpoof = "NOT_SPOOF"
 )
 
+func (r EmailSecurityTopTldSpoofGetParamsSpoof) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetParamsSpoofSpoof, EmailSecurityTopTldSpoofGetParamsSpoofNotSpoof:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTopTldSpoofGetParamsARC string
 
 const (
@@ -253,6 +261,14 @@ const (
 	EmailSecurityTopTldSpoofGetParamsARCNone EmailSecurityTopTldSpoofGetParamsARC = "NONE"
 	EmailSecurityTopTldSpoofGetParamsARCFail EmailSecurityTopTldSpoofGetParamsARC = "FAIL"
 )
+
+func (r EmailSecurityTopTldSpoofGetParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetParamsARCPass, EmailSecurityTopTldSpoofGetParamsARCNone, EmailSecurityTopTldSpoofGetParamsARCFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTopTldSpoofGetParamsDateRange string
 
@@ -274,6 +290,14 @@ const (
 	EmailSecurityTopTldSpoofGetParamsDateRange24wControl EmailSecurityTopTldSpoofGetParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTopTldSpoofGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetParamsDateRange1d, EmailSecurityTopTldSpoofGetParamsDateRange2d, EmailSecurityTopTldSpoofGetParamsDateRange7d, EmailSecurityTopTldSpoofGetParamsDateRange14d, EmailSecurityTopTldSpoofGetParamsDateRange28d, EmailSecurityTopTldSpoofGetParamsDateRange12w, EmailSecurityTopTldSpoofGetParamsDateRange24w, EmailSecurityTopTldSpoofGetParamsDateRange52w, EmailSecurityTopTldSpoofGetParamsDateRange1dControl, EmailSecurityTopTldSpoofGetParamsDateRange2dControl, EmailSecurityTopTldSpoofGetParamsDateRange7dControl, EmailSecurityTopTldSpoofGetParamsDateRange14dControl, EmailSecurityTopTldSpoofGetParamsDateRange28dControl, EmailSecurityTopTldSpoofGetParamsDateRange12wControl, EmailSecurityTopTldSpoofGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTopTldSpoofGetParamsDKIM string
 
 const (
@@ -281,6 +305,14 @@ const (
 	EmailSecurityTopTldSpoofGetParamsDKIMNone EmailSecurityTopTldSpoofGetParamsDKIM = "NONE"
 	EmailSecurityTopTldSpoofGetParamsDKIMFail EmailSecurityTopTldSpoofGetParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTopTldSpoofGetParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetParamsDKIMPass, EmailSecurityTopTldSpoofGetParamsDKIMNone, EmailSecurityTopTldSpoofGetParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTopTldSpoofGetParamsDMARC string
 
@@ -290,6 +322,14 @@ const (
 	EmailSecurityTopTldSpoofGetParamsDMARCFail EmailSecurityTopTldSpoofGetParamsDMARC = "FAIL"
 )
 
+func (r EmailSecurityTopTldSpoofGetParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetParamsDMARCPass, EmailSecurityTopTldSpoofGetParamsDMARCNone, EmailSecurityTopTldSpoofGetParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecurityTopTldSpoofGetParamsFormat string
 
@@ -297,6 +337,14 @@ const (
 	EmailSecurityTopTldSpoofGetParamsFormatJson EmailSecurityTopTldSpoofGetParamsFormat = "JSON"
 	EmailSecurityTopTldSpoofGetParamsFormatCsv  EmailSecurityTopTldSpoofGetParamsFormat = "CSV"
 )
+
+func (r EmailSecurityTopTldSpoofGetParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetParamsFormatJson, EmailSecurityTopTldSpoofGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTopTldSpoofGetParamsSPF string
 
@@ -306,6 +354,14 @@ const (
 	EmailSecurityTopTldSpoofGetParamsSPFFail EmailSecurityTopTldSpoofGetParamsSPF = "FAIL"
 )
 
+func (r EmailSecurityTopTldSpoofGetParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetParamsSPFPass, EmailSecurityTopTldSpoofGetParamsSPFNone, EmailSecurityTopTldSpoofGetParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 // Filter for TLDs by category.
 type EmailSecurityTopTldSpoofGetParamsTldCategory string
 
@@ -313,6 +369,14 @@ const (
 	EmailSecurityTopTldSpoofGetParamsTldCategoryClassic EmailSecurityTopTldSpoofGetParamsTldCategory = "CLASSIC"
 	EmailSecurityTopTldSpoofGetParamsTldCategoryCountry EmailSecurityTopTldSpoofGetParamsTldCategory = "COUNTRY"
 )
+
+func (r EmailSecurityTopTldSpoofGetParamsTldCategory) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetParamsTldCategoryClassic, EmailSecurityTopTldSpoofGetParamsTldCategoryCountry:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTopTldSpoofGetParamsTLSVersion string
 
@@ -322,6 +386,14 @@ const (
 	EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_2 EmailSecurityTopTldSpoofGetParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_3 EmailSecurityTopTldSpoofGetParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTopTldSpoofGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_0, EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_1, EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_2, EmailSecurityTopTldSpoofGetParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTopTldSpoofGetResponseEnvelope struct {
 	Result  EmailSecurityTopTldSpoofGetResponse             `json:"result,required"`

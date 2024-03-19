@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit_test
 
@@ -31,8 +31,8 @@ func TestSiteLanNewWithOptionalParams(t *testing.T) {
 	_, err := client.MagicTransit.Sites.Lans.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteLanNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Lan: cloudflare.F(magic_transit.SiteLanNewParamsLan{
 				Description: cloudflare.F("string"),
 				HaLink:      cloudflare.F(true),
@@ -107,8 +107,8 @@ func TestSiteLanUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteLanUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Lan: cloudflare.F(magic_transit.SiteLanUpdateParamsLan{
 				Description: cloudflare.F("string"),
 				Nat: cloudflare.F(magic_transit.SiteLanUpdateParamsLanNat{
@@ -181,7 +181,9 @@ func TestSiteLanList(t *testing.T) {
 	_, err := client.MagicTransit.Sites.Lans.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteLanListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -210,7 +212,9 @@ func TestSiteLanDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteLanDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -239,7 +243,9 @@ func TestSiteLanGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteLanGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

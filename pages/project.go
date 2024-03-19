@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package pages
 
@@ -743,6 +743,14 @@ const (
 	PagesProjectsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText PagesProjectsDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "secret_text"
 )
 
+func (r PagesProjectsDeploymentConfigsPreviewEnvVarsEnvironmentVariableType) IsKnown() bool {
+	switch r {
+	case PagesProjectsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText, PagesProjectsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText:
+		return true
+	}
+	return false
+}
+
 // Hyperdrive bindings used for Pages Functions.
 type PagesProjectsDeploymentConfigsPreviewHyperdriveBindings struct {
 	// Hyperdrive binding.
@@ -1434,6 +1442,14 @@ const (
 	PagesProjectsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText PagesProjectsDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "secret_text"
 )
 
+func (r PagesProjectsDeploymentConfigsProductionEnvVarsEnvironmentVariableType) IsKnown() bool {
+	switch r {
+	case PagesProjectsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText, PagesProjectsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText:
+		return true
+	}
+	return false
+}
+
 // Hyperdrive bindings used for Pages Functions.
 type PagesProjectsDeploymentConfigsProductionHyperdriveBindings struct {
 	// Hyperdrive binding.
@@ -2053,6 +2069,14 @@ const (
 	ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "secret_text"
 )
 
+func (r ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableType) IsKnown() bool {
+	switch r {
+	case ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText, ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText:
+		return true
+	}
+	return false
+}
+
 // Hyperdrive bindings used for Pages Functions.
 type ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindings struct {
 	// Hyperdrive binding.
@@ -2361,6 +2385,14 @@ const (
 	ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "secret_text"
 )
 
+func (r ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableType) IsKnown() bool {
+	switch r {
+	case ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText, ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText:
+		return true
+	}
+	return false
+}
+
 // Hyperdrive bindings used for Pages Functions.
 type ProjectNewParamsDeploymentConfigsProductionHyperdriveBindings struct {
 	// Hyperdrive binding.
@@ -2591,6 +2623,14 @@ const (
 	ProjectNewResponseEnvelopeSuccessTrue ProjectNewResponseEnvelopeSuccess = true
 )
 
+func (r ProjectNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ProjectListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -2678,6 +2718,14 @@ type ProjectListResponseEnvelopeSuccess bool
 const (
 	ProjectListResponseEnvelopeSuccessTrue ProjectListResponseEnvelopeSuccess = true
 )
+
+func (r ProjectListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ProjectListResponseEnvelopeResultInfo struct {
 	Count      interface{}                               `json:"count"`
@@ -2802,6 +2850,14 @@ const (
 	ProjectEditResponseEnvelopeSuccessTrue ProjectEditResponseEnvelopeSuccess = true
 )
 
+func (r ProjectEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ProjectGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -2887,6 +2943,14 @@ type ProjectGetResponseEnvelopeSuccess bool
 const (
 	ProjectGetResponseEnvelopeSuccessTrue ProjectGetResponseEnvelopeSuccess = true
 )
+
+func (r ProjectGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ProjectPurgeBuildCacheParams struct {
 	// Identifier

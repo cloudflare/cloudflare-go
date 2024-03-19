@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package mtls_certificates
 
@@ -281,6 +281,14 @@ const (
 	MTLSCertificateNewResponseEnvelopeSuccessTrue MTLSCertificateNewResponseEnvelopeSuccess = true
 )
 
+func (r MTLSCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MTLSCertificateNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type MTLSCertificateListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -368,6 +376,14 @@ type MTLSCertificateListResponseEnvelopeSuccess bool
 const (
 	MTLSCertificateListResponseEnvelopeSuccessTrue MTLSCertificateListResponseEnvelopeSuccess = true
 )
+
+func (r MTLSCertificateListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MTLSCertificateListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type MTLSCertificateListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -488,6 +504,14 @@ const (
 	MTLSCertificateDeleteResponseEnvelopeSuccessTrue MTLSCertificateDeleteResponseEnvelopeSuccess = true
 )
 
+func (r MTLSCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MTLSCertificateDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type MTLSCertificateGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -573,3 +597,11 @@ type MTLSCertificateGetResponseEnvelopeSuccess bool
 const (
 	MTLSCertificateGetResponseEnvelopeSuccessTrue MTLSCertificateGetResponseEnvelopeSuccess = true
 )
+
+func (r MTLSCertificateGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MTLSCertificateGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

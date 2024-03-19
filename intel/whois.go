@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -176,3 +176,11 @@ type WhoisGetResponseEnvelopeSuccess bool
 const (
 	WhoisGetResponseEnvelopeSuccessTrue WhoisGetResponseEnvelopeSuccess = true
 )
+
+func (r WhoisGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WhoisGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

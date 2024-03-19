@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -145,6 +145,14 @@ const (
 	ZonesSSLIDSSL ZonesSSLID = "ssl"
 )
 
+func (r ZonesSSLID) IsKnown() bool {
+	switch r {
+	case ZonesSSLIDSSL:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesSSLValue string
 
@@ -155,6 +163,14 @@ const (
 	ZonesSSLValueStrict   ZonesSSLValue = "strict"
 )
 
+func (r ZonesSSLValue) IsKnown() bool {
+	switch r {
+	case ZonesSSLValueOff, ZonesSSLValueFlexible, ZonesSSLValueFull, ZonesSSLValueStrict:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesSSLEditable bool
@@ -163,6 +179,14 @@ const (
 	ZonesSSLEditableTrue  ZonesSSLEditable = true
 	ZonesSSLEditableFalse ZonesSSLEditable = false
 )
+
+func (r ZonesSSLEditable) IsKnown() bool {
+	switch r {
+	case ZonesSSLEditableTrue, ZonesSSLEditableFalse:
+		return true
+	}
+	return false
+}
 
 // SSL encrypts your visitor's connection and safeguards credit card numbers and
 // other personal data to and from your website. SSL can take up to 5 minutes to
@@ -213,6 +237,14 @@ const (
 	SettingSSLEditParamsValueFull     SettingSSLEditParamsValue = "full"
 	SettingSSLEditParamsValueStrict   SettingSSLEditParamsValue = "strict"
 )
+
+func (r SettingSSLEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingSSLEditParamsValueOff, SettingSSLEditParamsValueFlexible, SettingSSLEditParamsValueFull, SettingSSLEditParamsValueStrict:
+		return true
+	}
+	return false
+}
 
 type SettingSSLEditResponseEnvelope struct {
 	Errors   []SettingSSLEditResponseEnvelopeErrors   `json:"errors,required"`

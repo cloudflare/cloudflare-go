@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package dns
 
@@ -39,11 +39,11 @@ func NewAnalyticsReportBytimeService(opts ...option.RequestOption) (r *Analytics
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *AnalyticsReportBytimeService) Get(ctx context.Context, identifier string, query AnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReportBytime, err error) {
+func (r *AnalyticsReportBytimeService) Get(ctx context.Context, params AnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReportBytime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsReportBytimeGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_analytics/report/bytime", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_analytics/report/bytime", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -185,7 +185,17 @@ const (
 	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaMinute     DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "minute"
 )
 
+func (r DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta) IsKnown() bool {
+	switch r {
+	case DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaAll, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaAuto, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaYear, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaQuarter, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaMonth, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaWeek, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaDay, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaHour, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaDekaminute, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaMinute:
+		return true
+	}
+	return false
+}
+
 type AnalyticsReportBytimeGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -229,6 +239,14 @@ const (
 	AnalyticsReportBytimeGetParamsTimeDeltaDekaminute AnalyticsReportBytimeGetParamsTimeDelta = "dekaminute"
 	AnalyticsReportBytimeGetParamsTimeDeltaMinute     AnalyticsReportBytimeGetParamsTimeDelta = "minute"
 )
+
+func (r AnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
+	switch r {
+	case AnalyticsReportBytimeGetParamsTimeDeltaAll, AnalyticsReportBytimeGetParamsTimeDeltaAuto, AnalyticsReportBytimeGetParamsTimeDeltaYear, AnalyticsReportBytimeGetParamsTimeDeltaQuarter, AnalyticsReportBytimeGetParamsTimeDeltaMonth, AnalyticsReportBytimeGetParamsTimeDeltaWeek, AnalyticsReportBytimeGetParamsTimeDeltaDay, AnalyticsReportBytimeGetParamsTimeDeltaHour, AnalyticsReportBytimeGetParamsTimeDeltaDekaminute, AnalyticsReportBytimeGetParamsTimeDeltaMinute:
+		return true
+	}
+	return false
+}
 
 type AnalyticsReportBytimeGetResponseEnvelope struct {
 	Errors   []AnalyticsReportBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -310,3 +328,11 @@ type AnalyticsReportBytimeGetResponseEnvelopeSuccess bool
 const (
 	AnalyticsReportBytimeGetResponseEnvelopeSuccessTrue AnalyticsReportBytimeGetResponseEnvelopeSuccess = true
 )
+
+func (r AnalyticsReportBytimeGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AnalyticsReportBytimeGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

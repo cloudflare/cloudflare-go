@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -169,3 +169,11 @@ type SinkholeListResponseEnvelopeSuccess bool
 const (
 	SinkholeListResponseEnvelopeSuccessTrue SinkholeListResponseEnvelopeSuccess = true
 )
+
+func (r SinkholeListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SinkholeListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

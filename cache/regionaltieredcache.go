@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package cache
 
@@ -102,6 +102,14 @@ const (
 	RegionalTieredCacheEditResponseIDTcRegional RegionalTieredCacheEditResponseID = "tc_regional"
 )
 
+func (r RegionalTieredCacheEditResponseID) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheEditResponseIDTcRegional:
+		return true
+	}
+	return false
+}
+
 // Instructs Cloudflare to check a regional hub data center on the way to your
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
@@ -136,6 +144,14 @@ type RegionalTieredCacheEditResponseValueID string
 const (
 	RegionalTieredCacheEditResponseValueIDTcRegional RegionalTieredCacheEditResponseValueID = "tc_regional"
 )
+
+func (r RegionalTieredCacheEditResponseValueID) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheEditResponseValueIDTcRegional:
+		return true
+	}
+	return false
+}
 
 // Instructs Cloudflare to check a regional hub data center on the way to your
 // upper tier. This can help improve performance for smart and custom tiered cache
@@ -177,6 +193,14 @@ const (
 	RegionalTieredCacheGetResponseIDTcRegional RegionalTieredCacheGetResponseID = "tc_regional"
 )
 
+func (r RegionalTieredCacheGetResponseID) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheGetResponseIDTcRegional:
+		return true
+	}
+	return false
+}
+
 // Instructs Cloudflare to check a regional hub data center on the way to your
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
@@ -212,6 +236,14 @@ const (
 	RegionalTieredCacheGetResponseValueIDTcRegional RegionalTieredCacheGetResponseValueID = "tc_regional"
 )
 
+func (r RegionalTieredCacheGetResponseValueID) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheGetResponseValueIDTcRegional:
+		return true
+	}
+	return false
+}
+
 type RegionalTieredCacheEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -230,6 +262,14 @@ const (
 	RegionalTieredCacheEditParamsValueOn  RegionalTieredCacheEditParamsValue = "on"
 	RegionalTieredCacheEditParamsValueOff RegionalTieredCacheEditParamsValue = "off"
 )
+
+func (r RegionalTieredCacheEditParamsValue) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheEditParamsValueOn, RegionalTieredCacheEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type RegionalTieredCacheEditResponseEnvelope struct {
 	Errors   []RegionalTieredCacheEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -314,6 +354,14 @@ type RegionalTieredCacheEditResponseEnvelopeSuccess bool
 const (
 	RegionalTieredCacheEditResponseEnvelopeSuccessTrue RegionalTieredCacheEditResponseEnvelopeSuccess = true
 )
+
+func (r RegionalTieredCacheEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RegionalTieredCacheGetParams struct {
 	// Identifier
@@ -403,3 +451,11 @@ type RegionalTieredCacheGetResponseEnvelopeSuccess bool
 const (
 	RegionalTieredCacheGetResponseEnvelopeSuccessTrue RegionalTieredCacheGetResponseEnvelopeSuccess = true
 )
+
+func (r RegionalTieredCacheGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RegionalTieredCacheGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

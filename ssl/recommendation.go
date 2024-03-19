@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package ssl
 
@@ -77,6 +77,14 @@ const (
 	RecommendationGetResponseValueFull     RecommendationGetResponseValue = "full"
 	RecommendationGetResponseValueStrict   RecommendationGetResponseValue = "strict"
 )
+
+func (r RecommendationGetResponseValue) IsKnown() bool {
+	switch r {
+	case RecommendationGetResponseValueFlexible, RecommendationGetResponseValueFull, RecommendationGetResponseValueStrict:
+		return true
+	}
+	return false
+}
 
 type RecommendationGetResponseEnvelope struct {
 	Errors   []RecommendationGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -158,3 +166,11 @@ type RecommendationGetResponseEnvelopeSuccess bool
 const (
 	RecommendationGetResponseEnvelopeSuccessTrue RecommendationGetResponseEnvelopeSuccess = true
 )
+
+func (r RecommendationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RecommendationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -543,6 +543,14 @@ const (
 	EntityASNListParamsFormatCsv  EntityASNListParamsFormat = "CSV"
 )
 
+func (r EntityASNListParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityASNListParamsFormatJson, EntityASNListParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 // Order asn list.
 type EntityASNListParamsOrderBy string
 
@@ -550,6 +558,14 @@ const (
 	EntityASNListParamsOrderByASN        EntityASNListParamsOrderBy = "ASN"
 	EntityASNListParamsOrderByPopulation EntityASNListParamsOrderBy = "POPULATION"
 )
+
+func (r EntityASNListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case EntityASNListParamsOrderByASN, EntityASNListParamsOrderByPopulation:
+		return true
+	}
+	return false
+}
 
 type EntityASNListResponseEnvelope struct {
 	Result  EntityASNListResponse             `json:"result,required"`
@@ -594,6 +610,14 @@ const (
 	EntityASNGetParamsFormatJson EntityASNGetParamsFormat = "JSON"
 	EntityASNGetParamsFormatCsv  EntityASNGetParamsFormat = "CSV"
 )
+
+func (r EntityASNGetParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityASNGetParamsFormatJson, EntityASNGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EntityASNGetResponseEnvelope struct {
 	Result  EntityASNGetResponse             `json:"result,required"`
@@ -641,6 +665,14 @@ const (
 	EntityAsnipParamsFormatCsv  EntityAsnipParamsFormat = "CSV"
 )
 
+func (r EntityAsnipParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityAsnipParamsFormatJson, EntityAsnipParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EntityAsnipResponseEnvelope struct {
 	Result  EntityAsnipResponse             `json:"result,required"`
 	Success bool                            `json:"success,required"`
@@ -686,6 +718,14 @@ const (
 	EntityASNRelParamsFormatJson EntityASNRelParamsFormat = "JSON"
 	EntityASNRelParamsFormatCsv  EntityASNRelParamsFormat = "CSV"
 )
+
+func (r EntityASNRelParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityASNRelParamsFormatJson, EntityASNRelParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EntityASNRelResponseEnvelope struct {
 	Result  EntityASNRelResponse             `json:"result,required"`

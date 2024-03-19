@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -126,6 +126,14 @@ const (
 	EntityGetParamsFormatJson EntityGetParamsFormat = "JSON"
 	EntityGetParamsFormatCsv  EntityGetParamsFormat = "CSV"
 )
+
+func (r EntityGetParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityGetParamsFormatJson, EntityGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EntityGetResponseEnvelope struct {
 	Result  EntityGetResponse             `json:"result,required"`

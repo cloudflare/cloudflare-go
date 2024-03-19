@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package stream
 
@@ -214,6 +214,14 @@ const (
 	WebhookUpdateResponseEnvelopeSuccessTrue WebhookUpdateResponseEnvelopeSuccess = true
 )
 
+func (r WebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WebhookUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WebhookDeleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -300,6 +308,14 @@ const (
 	WebhookDeleteResponseEnvelopeSuccessTrue WebhookDeleteResponseEnvelopeSuccess = true
 )
 
+func (r WebhookDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WebhookDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WebhookGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -385,3 +401,11 @@ type WebhookGetResponseEnvelopeSuccess bool
 const (
 	WebhookGetResponseEnvelopeSuccessTrue WebhookGetResponseEnvelopeSuccess = true
 )
+
+func (r WebhookGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WebhookGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

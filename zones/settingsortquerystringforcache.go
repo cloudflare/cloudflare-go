@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -108,6 +108,14 @@ const (
 	ZonesSortQueryStringForCacheIDSortQueryStringForCache ZonesSortQueryStringForCacheID = "sort_query_string_for_cache"
 )
 
+func (r ZonesSortQueryStringForCacheID) IsKnown() bool {
+	switch r {
+	case ZonesSortQueryStringForCacheIDSortQueryStringForCache:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesSortQueryStringForCacheValue string
 
@@ -115,6 +123,14 @@ const (
 	ZonesSortQueryStringForCacheValueOn  ZonesSortQueryStringForCacheValue = "on"
 	ZonesSortQueryStringForCacheValueOff ZonesSortQueryStringForCacheValue = "off"
 )
+
+func (r ZonesSortQueryStringForCacheValue) IsKnown() bool {
+	switch r {
+	case ZonesSortQueryStringForCacheValueOn, ZonesSortQueryStringForCacheValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -124,6 +140,14 @@ const (
 	ZonesSortQueryStringForCacheEditableTrue  ZonesSortQueryStringForCacheEditable = true
 	ZonesSortQueryStringForCacheEditableFalse ZonesSortQueryStringForCacheEditable = false
 )
+
+func (r ZonesSortQueryStringForCacheEditable) IsKnown() bool {
+	switch r {
+	case ZonesSortQueryStringForCacheEditableTrue, ZonesSortQueryStringForCacheEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Cloudflare will treat files with the same query strings as the same file in
 // cache, regardless of the order of the query strings. This is limited to
@@ -159,6 +183,14 @@ const (
 	SettingSortQueryStringForCacheEditParamsValueOn  SettingSortQueryStringForCacheEditParamsValue = "on"
 	SettingSortQueryStringForCacheEditParamsValueOff SettingSortQueryStringForCacheEditParamsValue = "off"
 )
+
+func (r SettingSortQueryStringForCacheEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingSortQueryStringForCacheEditParamsValueOn, SettingSortQueryStringForCacheEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingSortQueryStringForCacheEditResponseEnvelope struct {
 	Errors   []SettingSortQueryStringForCacheEditResponseEnvelopeErrors   `json:"errors,required"`

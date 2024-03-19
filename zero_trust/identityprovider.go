@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -334,6 +334,14 @@ const (
 	AccessIdentityProvidersAccessAzureAdConfigPromptNone          AccessIdentityProvidersAccessAzureAdConfigPrompt = "none"
 )
 
+func (r AccessIdentityProvidersAccessAzureAdConfigPrompt) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessAzureAdConfigPromptLogin, AccessIdentityProvidersAccessAzureAdConfigPromptSelectAccount, AccessIdentityProvidersAccessAzureAdConfigPromptNone:
+		return true
+	}
+	return false
+}
+
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -355,6 +363,14 @@ const (
 	AccessIdentityProvidersAccessAzureAdTypePingone    AccessIdentityProvidersAccessAzureAdType = "pingone"
 	AccessIdentityProvidersAccessAzureAdTypeYandex     AccessIdentityProvidersAccessAzureAdType = "yandex"
 )
+
+func (r AccessIdentityProvidersAccessAzureAdType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessAzureAdTypeOnetimepin, AccessIdentityProvidersAccessAzureAdTypeAzureAd, AccessIdentityProvidersAccessAzureAdTypeSaml, AccessIdentityProvidersAccessAzureAdTypeCentrify, AccessIdentityProvidersAccessAzureAdTypeFacebook, AccessIdentityProvidersAccessAzureAdTypeGitHub, AccessIdentityProvidersAccessAzureAdTypeGoogleApps, AccessIdentityProvidersAccessAzureAdTypeGoogle, AccessIdentityProvidersAccessAzureAdTypeLinkedin, AccessIdentityProvidersAccessAzureAdTypeOidc, AccessIdentityProvidersAccessAzureAdTypeOkta, AccessIdentityProvidersAccessAzureAdTypeOnelogin, AccessIdentityProvidersAccessAzureAdTypePingone, AccessIdentityProvidersAccessAzureAdTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -502,6 +518,14 @@ const (
 	AccessIdentityProvidersAccessCentrifyTypeYandex     AccessIdentityProvidersAccessCentrifyType = "yandex"
 )
 
+func (r AccessIdentityProvidersAccessCentrifyType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessCentrifyTypeOnetimepin, AccessIdentityProvidersAccessCentrifyTypeAzureAd, AccessIdentityProvidersAccessCentrifyTypeSaml, AccessIdentityProvidersAccessCentrifyTypeCentrify, AccessIdentityProvidersAccessCentrifyTypeFacebook, AccessIdentityProvidersAccessCentrifyTypeGitHub, AccessIdentityProvidersAccessCentrifyTypeGoogleApps, AccessIdentityProvidersAccessCentrifyTypeGoogle, AccessIdentityProvidersAccessCentrifyTypeLinkedin, AccessIdentityProvidersAccessCentrifyTypeOidc, AccessIdentityProvidersAccessCentrifyTypeOkta, AccessIdentityProvidersAccessCentrifyTypeOnelogin, AccessIdentityProvidersAccessCentrifyTypePingone, AccessIdentityProvidersAccessCentrifyTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProvidersAccessCentrifyScimConfig struct {
@@ -636,6 +660,14 @@ const (
 	AccessIdentityProvidersAccessFacebookTypeYandex     AccessIdentityProvidersAccessFacebookType = "yandex"
 )
 
+func (r AccessIdentityProvidersAccessFacebookType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessFacebookTypeOnetimepin, AccessIdentityProvidersAccessFacebookTypeAzureAd, AccessIdentityProvidersAccessFacebookTypeSaml, AccessIdentityProvidersAccessFacebookTypeCentrify, AccessIdentityProvidersAccessFacebookTypeFacebook, AccessIdentityProvidersAccessFacebookTypeGitHub, AccessIdentityProvidersAccessFacebookTypeGoogleApps, AccessIdentityProvidersAccessFacebookTypeGoogle, AccessIdentityProvidersAccessFacebookTypeLinkedin, AccessIdentityProvidersAccessFacebookTypeOidc, AccessIdentityProvidersAccessFacebookTypeOkta, AccessIdentityProvidersAccessFacebookTypeOnelogin, AccessIdentityProvidersAccessFacebookTypePingone, AccessIdentityProvidersAccessFacebookTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProvidersAccessFacebookScimConfig struct {
@@ -769,6 +801,14 @@ const (
 	AccessIdentityProvidersAccessGitHubTypePingone    AccessIdentityProvidersAccessGitHubType = "pingone"
 	AccessIdentityProvidersAccessGitHubTypeYandex     AccessIdentityProvidersAccessGitHubType = "yandex"
 )
+
+func (r AccessIdentityProvidersAccessGitHubType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessGitHubTypeOnetimepin, AccessIdentityProvidersAccessGitHubTypeAzureAd, AccessIdentityProvidersAccessGitHubTypeSaml, AccessIdentityProvidersAccessGitHubTypeCentrify, AccessIdentityProvidersAccessGitHubTypeFacebook, AccessIdentityProvidersAccessGitHubTypeGitHub, AccessIdentityProvidersAccessGitHubTypeGoogleApps, AccessIdentityProvidersAccessGitHubTypeGoogle, AccessIdentityProvidersAccessGitHubTypeLinkedin, AccessIdentityProvidersAccessGitHubTypeOidc, AccessIdentityProvidersAccessGitHubTypeOkta, AccessIdentityProvidersAccessGitHubTypeOnelogin, AccessIdentityProvidersAccessGitHubTypePingone, AccessIdentityProvidersAccessGitHubTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -909,6 +949,14 @@ const (
 	AccessIdentityProvidersAccessGoogleTypePingone    AccessIdentityProvidersAccessGoogleType = "pingone"
 	AccessIdentityProvidersAccessGoogleTypeYandex     AccessIdentityProvidersAccessGoogleType = "yandex"
 )
+
+func (r AccessIdentityProvidersAccessGoogleType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessGoogleTypeOnetimepin, AccessIdentityProvidersAccessGoogleTypeAzureAd, AccessIdentityProvidersAccessGoogleTypeSaml, AccessIdentityProvidersAccessGoogleTypeCentrify, AccessIdentityProvidersAccessGoogleTypeFacebook, AccessIdentityProvidersAccessGoogleTypeGitHub, AccessIdentityProvidersAccessGoogleTypeGoogleApps, AccessIdentityProvidersAccessGoogleTypeGoogle, AccessIdentityProvidersAccessGoogleTypeLinkedin, AccessIdentityProvidersAccessGoogleTypeOidc, AccessIdentityProvidersAccessGoogleTypeOkta, AccessIdentityProvidersAccessGoogleTypeOnelogin, AccessIdentityProvidersAccessGoogleTypePingone, AccessIdentityProvidersAccessGoogleTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1053,6 +1101,14 @@ const (
 	AccessIdentityProvidersAccessGoogleAppsTypeYandex     AccessIdentityProvidersAccessGoogleAppsType = "yandex"
 )
 
+func (r AccessIdentityProvidersAccessGoogleAppsType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessGoogleAppsTypeOnetimepin, AccessIdentityProvidersAccessGoogleAppsTypeAzureAd, AccessIdentityProvidersAccessGoogleAppsTypeSaml, AccessIdentityProvidersAccessGoogleAppsTypeCentrify, AccessIdentityProvidersAccessGoogleAppsTypeFacebook, AccessIdentityProvidersAccessGoogleAppsTypeGitHub, AccessIdentityProvidersAccessGoogleAppsTypeGoogleApps, AccessIdentityProvidersAccessGoogleAppsTypeGoogle, AccessIdentityProvidersAccessGoogleAppsTypeLinkedin, AccessIdentityProvidersAccessGoogleAppsTypeOidc, AccessIdentityProvidersAccessGoogleAppsTypeOkta, AccessIdentityProvidersAccessGoogleAppsTypeOnelogin, AccessIdentityProvidersAccessGoogleAppsTypePingone, AccessIdentityProvidersAccessGoogleAppsTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProvidersAccessGoogleAppsScimConfig struct {
@@ -1186,6 +1242,14 @@ const (
 	AccessIdentityProvidersAccessLinkedinTypePingone    AccessIdentityProvidersAccessLinkedinType = "pingone"
 	AccessIdentityProvidersAccessLinkedinTypeYandex     AccessIdentityProvidersAccessLinkedinType = "yandex"
 )
+
+func (r AccessIdentityProvidersAccessLinkedinType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessLinkedinTypeOnetimepin, AccessIdentityProvidersAccessLinkedinTypeAzureAd, AccessIdentityProvidersAccessLinkedinTypeSaml, AccessIdentityProvidersAccessLinkedinTypeCentrify, AccessIdentityProvidersAccessLinkedinTypeFacebook, AccessIdentityProvidersAccessLinkedinTypeGitHub, AccessIdentityProvidersAccessLinkedinTypeGoogleApps, AccessIdentityProvidersAccessLinkedinTypeGoogle, AccessIdentityProvidersAccessLinkedinTypeLinkedin, AccessIdentityProvidersAccessLinkedinTypeOidc, AccessIdentityProvidersAccessLinkedinTypeOkta, AccessIdentityProvidersAccessLinkedinTypeOnelogin, AccessIdentityProvidersAccessLinkedinTypePingone, AccessIdentityProvidersAccessLinkedinTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1339,6 +1403,14 @@ const (
 	AccessIdentityProvidersAccessOidcTypeYandex     AccessIdentityProvidersAccessOidcType = "yandex"
 )
 
+func (r AccessIdentityProvidersAccessOidcType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessOidcTypeOnetimepin, AccessIdentityProvidersAccessOidcTypeAzureAd, AccessIdentityProvidersAccessOidcTypeSaml, AccessIdentityProvidersAccessOidcTypeCentrify, AccessIdentityProvidersAccessOidcTypeFacebook, AccessIdentityProvidersAccessOidcTypeGitHub, AccessIdentityProvidersAccessOidcTypeGoogleApps, AccessIdentityProvidersAccessOidcTypeGoogle, AccessIdentityProvidersAccessOidcTypeLinkedin, AccessIdentityProvidersAccessOidcTypeOidc, AccessIdentityProvidersAccessOidcTypeOkta, AccessIdentityProvidersAccessOidcTypeOnelogin, AccessIdentityProvidersAccessOidcTypePingone, AccessIdentityProvidersAccessOidcTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProvidersAccessOidcScimConfig struct {
@@ -1485,6 +1557,14 @@ const (
 	AccessIdentityProvidersAccessOktaTypeYandex     AccessIdentityProvidersAccessOktaType = "yandex"
 )
 
+func (r AccessIdentityProvidersAccessOktaType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessOktaTypeOnetimepin, AccessIdentityProvidersAccessOktaTypeAzureAd, AccessIdentityProvidersAccessOktaTypeSaml, AccessIdentityProvidersAccessOktaTypeCentrify, AccessIdentityProvidersAccessOktaTypeFacebook, AccessIdentityProvidersAccessOktaTypeGitHub, AccessIdentityProvidersAccessOktaTypeGoogleApps, AccessIdentityProvidersAccessOktaTypeGoogle, AccessIdentityProvidersAccessOktaTypeLinkedin, AccessIdentityProvidersAccessOktaTypeOidc, AccessIdentityProvidersAccessOktaTypeOkta, AccessIdentityProvidersAccessOktaTypeOnelogin, AccessIdentityProvidersAccessOktaTypePingone, AccessIdentityProvidersAccessOktaTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProvidersAccessOktaScimConfig struct {
@@ -1628,6 +1708,14 @@ const (
 	AccessIdentityProvidersAccessOneloginTypeYandex     AccessIdentityProvidersAccessOneloginType = "yandex"
 )
 
+func (r AccessIdentityProvidersAccessOneloginType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessOneloginTypeOnetimepin, AccessIdentityProvidersAccessOneloginTypeAzureAd, AccessIdentityProvidersAccessOneloginTypeSaml, AccessIdentityProvidersAccessOneloginTypeCentrify, AccessIdentityProvidersAccessOneloginTypeFacebook, AccessIdentityProvidersAccessOneloginTypeGitHub, AccessIdentityProvidersAccessOneloginTypeGoogleApps, AccessIdentityProvidersAccessOneloginTypeGoogle, AccessIdentityProvidersAccessOneloginTypeLinkedin, AccessIdentityProvidersAccessOneloginTypeOidc, AccessIdentityProvidersAccessOneloginTypeOkta, AccessIdentityProvidersAccessOneloginTypeOnelogin, AccessIdentityProvidersAccessOneloginTypePingone, AccessIdentityProvidersAccessOneloginTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProvidersAccessOneloginScimConfig struct {
@@ -1770,6 +1858,14 @@ const (
 	AccessIdentityProvidersAccessPingoneTypePingone    AccessIdentityProvidersAccessPingoneType = "pingone"
 	AccessIdentityProvidersAccessPingoneTypeYandex     AccessIdentityProvidersAccessPingoneType = "yandex"
 )
+
+func (r AccessIdentityProvidersAccessPingoneType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessPingoneTypeOnetimepin, AccessIdentityProvidersAccessPingoneTypeAzureAd, AccessIdentityProvidersAccessPingoneTypeSaml, AccessIdentityProvidersAccessPingoneTypeCentrify, AccessIdentityProvidersAccessPingoneTypeFacebook, AccessIdentityProvidersAccessPingoneTypeGitHub, AccessIdentityProvidersAccessPingoneTypeGoogleApps, AccessIdentityProvidersAccessPingoneTypeGoogle, AccessIdentityProvidersAccessPingoneTypeLinkedin, AccessIdentityProvidersAccessPingoneTypeOidc, AccessIdentityProvidersAccessPingoneTypeOkta, AccessIdentityProvidersAccessPingoneTypeOnelogin, AccessIdentityProvidersAccessPingoneTypePingone, AccessIdentityProvidersAccessPingoneTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1948,6 +2044,14 @@ const (
 	AccessIdentityProvidersAccessSamlTypeYandex     AccessIdentityProvidersAccessSamlType = "yandex"
 )
 
+func (r AccessIdentityProvidersAccessSamlType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessSamlTypeOnetimepin, AccessIdentityProvidersAccessSamlTypeAzureAd, AccessIdentityProvidersAccessSamlTypeSaml, AccessIdentityProvidersAccessSamlTypeCentrify, AccessIdentityProvidersAccessSamlTypeFacebook, AccessIdentityProvidersAccessSamlTypeGitHub, AccessIdentityProvidersAccessSamlTypeGoogleApps, AccessIdentityProvidersAccessSamlTypeGoogle, AccessIdentityProvidersAccessSamlTypeLinkedin, AccessIdentityProvidersAccessSamlTypeOidc, AccessIdentityProvidersAccessSamlTypeOkta, AccessIdentityProvidersAccessSamlTypeOnelogin, AccessIdentityProvidersAccessSamlTypePingone, AccessIdentityProvidersAccessSamlTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProvidersAccessSamlScimConfig struct {
@@ -2082,6 +2186,14 @@ const (
 	AccessIdentityProvidersAccessYandexTypeYandex     AccessIdentityProvidersAccessYandexType = "yandex"
 )
 
+func (r AccessIdentityProvidersAccessYandexType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessYandexTypeOnetimepin, AccessIdentityProvidersAccessYandexTypeAzureAd, AccessIdentityProvidersAccessYandexTypeSaml, AccessIdentityProvidersAccessYandexTypeCentrify, AccessIdentityProvidersAccessYandexTypeFacebook, AccessIdentityProvidersAccessYandexTypeGitHub, AccessIdentityProvidersAccessYandexTypeGoogleApps, AccessIdentityProvidersAccessYandexTypeGoogle, AccessIdentityProvidersAccessYandexTypeLinkedin, AccessIdentityProvidersAccessYandexTypeOidc, AccessIdentityProvidersAccessYandexTypeOkta, AccessIdentityProvidersAccessYandexTypeOnelogin, AccessIdentityProvidersAccessYandexTypePingone, AccessIdentityProvidersAccessYandexTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProvidersAccessYandexScimConfig struct {
@@ -2187,6 +2299,14 @@ const (
 	AccessIdentityProvidersAccessOnetimepinTypePingone    AccessIdentityProvidersAccessOnetimepinType = "pingone"
 	AccessIdentityProvidersAccessOnetimepinTypeYandex     AccessIdentityProvidersAccessOnetimepinType = "yandex"
 )
+
+func (r AccessIdentityProvidersAccessOnetimepinType) IsKnown() bool {
+	switch r {
+	case AccessIdentityProvidersAccessOnetimepinTypeOnetimepin, AccessIdentityProvidersAccessOnetimepinTypeAzureAd, AccessIdentityProvidersAccessOnetimepinTypeSaml, AccessIdentityProvidersAccessOnetimepinTypeCentrify, AccessIdentityProvidersAccessOnetimepinTypeFacebook, AccessIdentityProvidersAccessOnetimepinTypeGitHub, AccessIdentityProvidersAccessOnetimepinTypeGoogleApps, AccessIdentityProvidersAccessOnetimepinTypeGoogle, AccessIdentityProvidersAccessOnetimepinTypeLinkedin, AccessIdentityProvidersAccessOnetimepinTypeOidc, AccessIdentityProvidersAccessOnetimepinTypeOkta, AccessIdentityProvidersAccessOnetimepinTypeOnelogin, AccessIdentityProvidersAccessOnetimepinTypePingone, AccessIdentityProvidersAccessOnetimepinTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2418,6 +2538,14 @@ const (
 	IdentityProviderListResponseAccessAzureAdConfigPromptNone          IdentityProviderListResponseAccessAzureAdConfigPrompt = "none"
 )
 
+func (r IdentityProviderListResponseAccessAzureAdConfigPrompt) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessAzureAdConfigPromptLogin, IdentityProviderListResponseAccessAzureAdConfigPromptSelectAccount, IdentityProviderListResponseAccessAzureAdConfigPromptNone:
+		return true
+	}
+	return false
+}
+
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -2439,6 +2567,14 @@ const (
 	IdentityProviderListResponseAccessAzureAdTypePingone    IdentityProviderListResponseAccessAzureAdType = "pingone"
 	IdentityProviderListResponseAccessAzureAdTypeYandex     IdentityProviderListResponseAccessAzureAdType = "yandex"
 )
+
+func (r IdentityProviderListResponseAccessAzureAdType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessAzureAdTypeOnetimepin, IdentityProviderListResponseAccessAzureAdTypeAzureAd, IdentityProviderListResponseAccessAzureAdTypeSaml, IdentityProviderListResponseAccessAzureAdTypeCentrify, IdentityProviderListResponseAccessAzureAdTypeFacebook, IdentityProviderListResponseAccessAzureAdTypeGitHub, IdentityProviderListResponseAccessAzureAdTypeGoogleApps, IdentityProviderListResponseAccessAzureAdTypeGoogle, IdentityProviderListResponseAccessAzureAdTypeLinkedin, IdentityProviderListResponseAccessAzureAdTypeOidc, IdentityProviderListResponseAccessAzureAdTypeOkta, IdentityProviderListResponseAccessAzureAdTypeOnelogin, IdentityProviderListResponseAccessAzureAdTypePingone, IdentityProviderListResponseAccessAzureAdTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2587,6 +2723,14 @@ const (
 	IdentityProviderListResponseAccessCentrifyTypeYandex     IdentityProviderListResponseAccessCentrifyType = "yandex"
 )
 
+func (r IdentityProviderListResponseAccessCentrifyType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessCentrifyTypeOnetimepin, IdentityProviderListResponseAccessCentrifyTypeAzureAd, IdentityProviderListResponseAccessCentrifyTypeSaml, IdentityProviderListResponseAccessCentrifyTypeCentrify, IdentityProviderListResponseAccessCentrifyTypeFacebook, IdentityProviderListResponseAccessCentrifyTypeGitHub, IdentityProviderListResponseAccessCentrifyTypeGoogleApps, IdentityProviderListResponseAccessCentrifyTypeGoogle, IdentityProviderListResponseAccessCentrifyTypeLinkedin, IdentityProviderListResponseAccessCentrifyTypeOidc, IdentityProviderListResponseAccessCentrifyTypeOkta, IdentityProviderListResponseAccessCentrifyTypeOnelogin, IdentityProviderListResponseAccessCentrifyTypePingone, IdentityProviderListResponseAccessCentrifyTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderListResponseAccessCentrifyScimConfig struct {
@@ -2722,6 +2866,14 @@ const (
 	IdentityProviderListResponseAccessFacebookTypeYandex     IdentityProviderListResponseAccessFacebookType = "yandex"
 )
 
+func (r IdentityProviderListResponseAccessFacebookType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessFacebookTypeOnetimepin, IdentityProviderListResponseAccessFacebookTypeAzureAd, IdentityProviderListResponseAccessFacebookTypeSaml, IdentityProviderListResponseAccessFacebookTypeCentrify, IdentityProviderListResponseAccessFacebookTypeFacebook, IdentityProviderListResponseAccessFacebookTypeGitHub, IdentityProviderListResponseAccessFacebookTypeGoogleApps, IdentityProviderListResponseAccessFacebookTypeGoogle, IdentityProviderListResponseAccessFacebookTypeLinkedin, IdentityProviderListResponseAccessFacebookTypeOidc, IdentityProviderListResponseAccessFacebookTypeOkta, IdentityProviderListResponseAccessFacebookTypeOnelogin, IdentityProviderListResponseAccessFacebookTypePingone, IdentityProviderListResponseAccessFacebookTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderListResponseAccessFacebookScimConfig struct {
@@ -2855,6 +3007,14 @@ const (
 	IdentityProviderListResponseAccessGitHubTypePingone    IdentityProviderListResponseAccessGitHubType = "pingone"
 	IdentityProviderListResponseAccessGitHubTypeYandex     IdentityProviderListResponseAccessGitHubType = "yandex"
 )
+
+func (r IdentityProviderListResponseAccessGitHubType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessGitHubTypeOnetimepin, IdentityProviderListResponseAccessGitHubTypeAzureAd, IdentityProviderListResponseAccessGitHubTypeSaml, IdentityProviderListResponseAccessGitHubTypeCentrify, IdentityProviderListResponseAccessGitHubTypeFacebook, IdentityProviderListResponseAccessGitHubTypeGitHub, IdentityProviderListResponseAccessGitHubTypeGoogleApps, IdentityProviderListResponseAccessGitHubTypeGoogle, IdentityProviderListResponseAccessGitHubTypeLinkedin, IdentityProviderListResponseAccessGitHubTypeOidc, IdentityProviderListResponseAccessGitHubTypeOkta, IdentityProviderListResponseAccessGitHubTypeOnelogin, IdentityProviderListResponseAccessGitHubTypePingone, IdentityProviderListResponseAccessGitHubTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2995,6 +3155,14 @@ const (
 	IdentityProviderListResponseAccessGoogleTypePingone    IdentityProviderListResponseAccessGoogleType = "pingone"
 	IdentityProviderListResponseAccessGoogleTypeYandex     IdentityProviderListResponseAccessGoogleType = "yandex"
 )
+
+func (r IdentityProviderListResponseAccessGoogleType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessGoogleTypeOnetimepin, IdentityProviderListResponseAccessGoogleTypeAzureAd, IdentityProviderListResponseAccessGoogleTypeSaml, IdentityProviderListResponseAccessGoogleTypeCentrify, IdentityProviderListResponseAccessGoogleTypeFacebook, IdentityProviderListResponseAccessGoogleTypeGitHub, IdentityProviderListResponseAccessGoogleTypeGoogleApps, IdentityProviderListResponseAccessGoogleTypeGoogle, IdentityProviderListResponseAccessGoogleTypeLinkedin, IdentityProviderListResponseAccessGoogleTypeOidc, IdentityProviderListResponseAccessGoogleTypeOkta, IdentityProviderListResponseAccessGoogleTypeOnelogin, IdentityProviderListResponseAccessGoogleTypePingone, IdentityProviderListResponseAccessGoogleTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -3140,6 +3308,14 @@ const (
 	IdentityProviderListResponseAccessGoogleAppsTypeYandex     IdentityProviderListResponseAccessGoogleAppsType = "yandex"
 )
 
+func (r IdentityProviderListResponseAccessGoogleAppsType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessGoogleAppsTypeOnetimepin, IdentityProviderListResponseAccessGoogleAppsTypeAzureAd, IdentityProviderListResponseAccessGoogleAppsTypeSaml, IdentityProviderListResponseAccessGoogleAppsTypeCentrify, IdentityProviderListResponseAccessGoogleAppsTypeFacebook, IdentityProviderListResponseAccessGoogleAppsTypeGitHub, IdentityProviderListResponseAccessGoogleAppsTypeGoogleApps, IdentityProviderListResponseAccessGoogleAppsTypeGoogle, IdentityProviderListResponseAccessGoogleAppsTypeLinkedin, IdentityProviderListResponseAccessGoogleAppsTypeOidc, IdentityProviderListResponseAccessGoogleAppsTypeOkta, IdentityProviderListResponseAccessGoogleAppsTypeOnelogin, IdentityProviderListResponseAccessGoogleAppsTypePingone, IdentityProviderListResponseAccessGoogleAppsTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderListResponseAccessGoogleAppsScimConfig struct {
@@ -3274,6 +3450,14 @@ const (
 	IdentityProviderListResponseAccessLinkedinTypePingone    IdentityProviderListResponseAccessLinkedinType = "pingone"
 	IdentityProviderListResponseAccessLinkedinTypeYandex     IdentityProviderListResponseAccessLinkedinType = "yandex"
 )
+
+func (r IdentityProviderListResponseAccessLinkedinType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessLinkedinTypeOnetimepin, IdentityProviderListResponseAccessLinkedinTypeAzureAd, IdentityProviderListResponseAccessLinkedinTypeSaml, IdentityProviderListResponseAccessLinkedinTypeCentrify, IdentityProviderListResponseAccessLinkedinTypeFacebook, IdentityProviderListResponseAccessLinkedinTypeGitHub, IdentityProviderListResponseAccessLinkedinTypeGoogleApps, IdentityProviderListResponseAccessLinkedinTypeGoogle, IdentityProviderListResponseAccessLinkedinTypeLinkedin, IdentityProviderListResponseAccessLinkedinTypeOidc, IdentityProviderListResponseAccessLinkedinTypeOkta, IdentityProviderListResponseAccessLinkedinTypeOnelogin, IdentityProviderListResponseAccessLinkedinTypePingone, IdentityProviderListResponseAccessLinkedinTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -3427,6 +3611,14 @@ const (
 	IdentityProviderListResponseAccessOidcTypeYandex     IdentityProviderListResponseAccessOidcType = "yandex"
 )
 
+func (r IdentityProviderListResponseAccessOidcType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessOidcTypeOnetimepin, IdentityProviderListResponseAccessOidcTypeAzureAd, IdentityProviderListResponseAccessOidcTypeSaml, IdentityProviderListResponseAccessOidcTypeCentrify, IdentityProviderListResponseAccessOidcTypeFacebook, IdentityProviderListResponseAccessOidcTypeGitHub, IdentityProviderListResponseAccessOidcTypeGoogleApps, IdentityProviderListResponseAccessOidcTypeGoogle, IdentityProviderListResponseAccessOidcTypeLinkedin, IdentityProviderListResponseAccessOidcTypeOidc, IdentityProviderListResponseAccessOidcTypeOkta, IdentityProviderListResponseAccessOidcTypeOnelogin, IdentityProviderListResponseAccessOidcTypePingone, IdentityProviderListResponseAccessOidcTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderListResponseAccessOidcScimConfig struct {
@@ -3573,6 +3765,14 @@ const (
 	IdentityProviderListResponseAccessOktaTypeYandex     IdentityProviderListResponseAccessOktaType = "yandex"
 )
 
+func (r IdentityProviderListResponseAccessOktaType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessOktaTypeOnetimepin, IdentityProviderListResponseAccessOktaTypeAzureAd, IdentityProviderListResponseAccessOktaTypeSaml, IdentityProviderListResponseAccessOktaTypeCentrify, IdentityProviderListResponseAccessOktaTypeFacebook, IdentityProviderListResponseAccessOktaTypeGitHub, IdentityProviderListResponseAccessOktaTypeGoogleApps, IdentityProviderListResponseAccessOktaTypeGoogle, IdentityProviderListResponseAccessOktaTypeLinkedin, IdentityProviderListResponseAccessOktaTypeOidc, IdentityProviderListResponseAccessOktaTypeOkta, IdentityProviderListResponseAccessOktaTypeOnelogin, IdentityProviderListResponseAccessOktaTypePingone, IdentityProviderListResponseAccessOktaTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderListResponseAccessOktaScimConfig struct {
@@ -3717,6 +3917,14 @@ const (
 	IdentityProviderListResponseAccessOneloginTypeYandex     IdentityProviderListResponseAccessOneloginType = "yandex"
 )
 
+func (r IdentityProviderListResponseAccessOneloginType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessOneloginTypeOnetimepin, IdentityProviderListResponseAccessOneloginTypeAzureAd, IdentityProviderListResponseAccessOneloginTypeSaml, IdentityProviderListResponseAccessOneloginTypeCentrify, IdentityProviderListResponseAccessOneloginTypeFacebook, IdentityProviderListResponseAccessOneloginTypeGitHub, IdentityProviderListResponseAccessOneloginTypeGoogleApps, IdentityProviderListResponseAccessOneloginTypeGoogle, IdentityProviderListResponseAccessOneloginTypeLinkedin, IdentityProviderListResponseAccessOneloginTypeOidc, IdentityProviderListResponseAccessOneloginTypeOkta, IdentityProviderListResponseAccessOneloginTypeOnelogin, IdentityProviderListResponseAccessOneloginTypePingone, IdentityProviderListResponseAccessOneloginTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderListResponseAccessOneloginScimConfig struct {
@@ -3860,6 +4068,14 @@ const (
 	IdentityProviderListResponseAccessPingoneTypePingone    IdentityProviderListResponseAccessPingoneType = "pingone"
 	IdentityProviderListResponseAccessPingoneTypeYandex     IdentityProviderListResponseAccessPingoneType = "yandex"
 )
+
+func (r IdentityProviderListResponseAccessPingoneType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessPingoneTypeOnetimepin, IdentityProviderListResponseAccessPingoneTypeAzureAd, IdentityProviderListResponseAccessPingoneTypeSaml, IdentityProviderListResponseAccessPingoneTypeCentrify, IdentityProviderListResponseAccessPingoneTypeFacebook, IdentityProviderListResponseAccessPingoneTypeGitHub, IdentityProviderListResponseAccessPingoneTypeGoogleApps, IdentityProviderListResponseAccessPingoneTypeGoogle, IdentityProviderListResponseAccessPingoneTypeLinkedin, IdentityProviderListResponseAccessPingoneTypeOidc, IdentityProviderListResponseAccessPingoneTypeOkta, IdentityProviderListResponseAccessPingoneTypeOnelogin, IdentityProviderListResponseAccessPingoneTypePingone, IdentityProviderListResponseAccessPingoneTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4039,6 +4255,14 @@ const (
 	IdentityProviderListResponseAccessSamlTypeYandex     IdentityProviderListResponseAccessSamlType = "yandex"
 )
 
+func (r IdentityProviderListResponseAccessSamlType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessSamlTypeOnetimepin, IdentityProviderListResponseAccessSamlTypeAzureAd, IdentityProviderListResponseAccessSamlTypeSaml, IdentityProviderListResponseAccessSamlTypeCentrify, IdentityProviderListResponseAccessSamlTypeFacebook, IdentityProviderListResponseAccessSamlTypeGitHub, IdentityProviderListResponseAccessSamlTypeGoogleApps, IdentityProviderListResponseAccessSamlTypeGoogle, IdentityProviderListResponseAccessSamlTypeLinkedin, IdentityProviderListResponseAccessSamlTypeOidc, IdentityProviderListResponseAccessSamlTypeOkta, IdentityProviderListResponseAccessSamlTypeOnelogin, IdentityProviderListResponseAccessSamlTypePingone, IdentityProviderListResponseAccessSamlTypeYandex:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderListResponseAccessSamlScimConfig struct {
@@ -4172,6 +4396,14 @@ const (
 	IdentityProviderListResponseAccessYandexTypePingone    IdentityProviderListResponseAccessYandexType = "pingone"
 	IdentityProviderListResponseAccessYandexTypeYandex     IdentityProviderListResponseAccessYandexType = "yandex"
 )
+
+func (r IdentityProviderListResponseAccessYandexType) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseAccessYandexTypeOnetimepin, IdentityProviderListResponseAccessYandexTypeAzureAd, IdentityProviderListResponseAccessYandexTypeSaml, IdentityProviderListResponseAccessYandexTypeCentrify, IdentityProviderListResponseAccessYandexTypeFacebook, IdentityProviderListResponseAccessYandexTypeGitHub, IdentityProviderListResponseAccessYandexTypeGoogleApps, IdentityProviderListResponseAccessYandexTypeGoogle, IdentityProviderListResponseAccessYandexTypeLinkedin, IdentityProviderListResponseAccessYandexTypeOidc, IdentityProviderListResponseAccessYandexTypeOkta, IdentityProviderListResponseAccessYandexTypeOnelogin, IdentityProviderListResponseAccessYandexTypePingone, IdentityProviderListResponseAccessYandexTypeYandex:
+		return true
+	}
+	return false
+}
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4353,6 +4585,14 @@ const (
 	IdentityProviderNewParamsConfigPromptNone          IdentityProviderNewParamsConfigPrompt = "none"
 )
 
+func (r IdentityProviderNewParamsConfigPrompt) IsKnown() bool {
+	switch r {
+	case IdentityProviderNewParamsConfigPromptLogin, IdentityProviderNewParamsConfigPromptSelectAccount, IdentityProviderNewParamsConfigPromptNone:
+		return true
+	}
+	return false
+}
+
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -4374,6 +4614,14 @@ const (
 	IdentityProviderNewParamsTypePingone    IdentityProviderNewParamsType = "pingone"
 	IdentityProviderNewParamsTypeYandex     IdentityProviderNewParamsType = "yandex"
 )
+
+func (r IdentityProviderNewParamsType) IsKnown() bool {
+	switch r {
+	case IdentityProviderNewParamsTypeOnetimepin, IdentityProviderNewParamsTypeAzureAd, IdentityProviderNewParamsTypeSaml, IdentityProviderNewParamsTypeCentrify, IdentityProviderNewParamsTypeFacebook, IdentityProviderNewParamsTypeGitHub, IdentityProviderNewParamsTypeGoogleApps, IdentityProviderNewParamsTypeGoogle, IdentityProviderNewParamsTypeLinkedin, IdentityProviderNewParamsTypeOidc, IdentityProviderNewParamsTypeOkta, IdentityProviderNewParamsTypeOnelogin, IdentityProviderNewParamsTypePingone, IdentityProviderNewParamsTypeYandex:
+		return true
+	}
+	return false
+}
 
 type IdentityProviderNewParamsScimConfig struct {
 	// A flag to enable or disable SCIM for the identity provider.
@@ -4479,6 +4727,14 @@ type IdentityProviderNewResponseEnvelopeSuccess bool
 const (
 	IdentityProviderNewResponseEnvelopeSuccessTrue IdentityProviderNewResponseEnvelopeSuccess = true
 )
+
+func (r IdentityProviderNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IdentityProviderNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IdentityProviderUpdateParams struct {
 	Config param.Field[IdentityProviderUpdateParamsConfig] `json:"config,required"`
@@ -4595,6 +4851,14 @@ const (
 	IdentityProviderUpdateParamsConfigPromptNone          IdentityProviderUpdateParamsConfigPrompt = "none"
 )
 
+func (r IdentityProviderUpdateParamsConfigPrompt) IsKnown() bool {
+	switch r {
+	case IdentityProviderUpdateParamsConfigPromptLogin, IdentityProviderUpdateParamsConfigPromptSelectAccount, IdentityProviderUpdateParamsConfigPromptNone:
+		return true
+	}
+	return false
+}
+
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -4616,6 +4880,14 @@ const (
 	IdentityProviderUpdateParamsTypePingone    IdentityProviderUpdateParamsType = "pingone"
 	IdentityProviderUpdateParamsTypeYandex     IdentityProviderUpdateParamsType = "yandex"
 )
+
+func (r IdentityProviderUpdateParamsType) IsKnown() bool {
+	switch r {
+	case IdentityProviderUpdateParamsTypeOnetimepin, IdentityProviderUpdateParamsTypeAzureAd, IdentityProviderUpdateParamsTypeSaml, IdentityProviderUpdateParamsTypeCentrify, IdentityProviderUpdateParamsTypeFacebook, IdentityProviderUpdateParamsTypeGitHub, IdentityProviderUpdateParamsTypeGoogleApps, IdentityProviderUpdateParamsTypeGoogle, IdentityProviderUpdateParamsTypeLinkedin, IdentityProviderUpdateParamsTypeOidc, IdentityProviderUpdateParamsTypeOkta, IdentityProviderUpdateParamsTypeOnelogin, IdentityProviderUpdateParamsTypePingone, IdentityProviderUpdateParamsTypeYandex:
+		return true
+	}
+	return false
+}
 
 type IdentityProviderUpdateParamsScimConfig struct {
 	// A flag to enable or disable SCIM for the identity provider.
@@ -4722,6 +4994,14 @@ const (
 	IdentityProviderUpdateResponseEnvelopeSuccessTrue IdentityProviderUpdateResponseEnvelopeSuccess = true
 )
 
+func (r IdentityProviderUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IdentityProviderUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IdentityProviderListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -4811,6 +5091,14 @@ type IdentityProviderListResponseEnvelopeSuccess bool
 const (
 	IdentityProviderListResponseEnvelopeSuccessTrue IdentityProviderListResponseEnvelopeSuccess = true
 )
+
+func (r IdentityProviderListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IdentityProviderListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IdentityProviderListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -4931,6 +5219,14 @@ const (
 	IdentityProviderDeleteResponseEnvelopeSuccessTrue IdentityProviderDeleteResponseEnvelopeSuccess = true
 )
 
+func (r IdentityProviderDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IdentityProviderDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IdentityProviderGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -5018,3 +5314,11 @@ type IdentityProviderGetResponseEnvelopeSuccess bool
 const (
 	IdentityProviderGetResponseEnvelopeSuccessTrue IdentityProviderGetResponseEnvelopeSuccess = true
 )
+
+func (r IdentityProviderGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IdentityProviderGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

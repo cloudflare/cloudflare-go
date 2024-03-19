@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package speed
 
@@ -110,6 +110,14 @@ const (
 	ScheduleNewParamsRegionUsSouth1            ScheduleNewParamsRegion = "us-south1"
 	ScheduleNewParamsRegionUsWest1             ScheduleNewParamsRegion = "us-west1"
 )
+
+func (r ScheduleNewParamsRegion) IsKnown() bool {
+	switch r {
+	case ScheduleNewParamsRegionAsiaEast1, ScheduleNewParamsRegionAsiaNortheast1, ScheduleNewParamsRegionAsiaNortheast2, ScheduleNewParamsRegionAsiaSouth1, ScheduleNewParamsRegionAsiaSoutheast1, ScheduleNewParamsRegionAustraliaSoutheast1, ScheduleNewParamsRegionEuropeNorth1, ScheduleNewParamsRegionEuropeSouthwest1, ScheduleNewParamsRegionEuropeWest1, ScheduleNewParamsRegionEuropeWest2, ScheduleNewParamsRegionEuropeWest3, ScheduleNewParamsRegionEuropeWest4, ScheduleNewParamsRegionEuropeWest8, ScheduleNewParamsRegionEuropeWest9, ScheduleNewParamsRegionMeWest1, ScheduleNewParamsRegionSouthamericaEast1, ScheduleNewParamsRegionUsCentral1, ScheduleNewParamsRegionUsEast1, ScheduleNewParamsRegionUsEast4, ScheduleNewParamsRegionUsSouth1, ScheduleNewParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
 
 type ScheduleNewResponseEnvelope struct {
 	Result ScheduleNewResponse             `json:"result"`

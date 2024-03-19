@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -111,6 +111,14 @@ const (
 	ZonesBrowserCacheTTLIDBrowserCacheTTL ZonesBrowserCacheTTLID = "browser_cache_ttl"
 )
 
+func (r ZonesBrowserCacheTTLID) IsKnown() bool {
+	switch r {
+	case ZonesBrowserCacheTTLIDBrowserCacheTTL:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesBrowserCacheTTLValue float64
 
@@ -145,6 +153,14 @@ const (
 	ZonesBrowserCacheTTLValue31536000 ZonesBrowserCacheTTLValue = 31536000
 )
 
+func (r ZonesBrowserCacheTTLValue) IsKnown() bool {
+	switch r {
+	case ZonesBrowserCacheTTLValue0, ZonesBrowserCacheTTLValue30, ZonesBrowserCacheTTLValue60, ZonesBrowserCacheTTLValue120, ZonesBrowserCacheTTLValue300, ZonesBrowserCacheTTLValue1200, ZonesBrowserCacheTTLValue1800, ZonesBrowserCacheTTLValue3600, ZonesBrowserCacheTTLValue7200, ZonesBrowserCacheTTLValue10800, ZonesBrowserCacheTTLValue14400, ZonesBrowserCacheTTLValue18000, ZonesBrowserCacheTTLValue28800, ZonesBrowserCacheTTLValue43200, ZonesBrowserCacheTTLValue57600, ZonesBrowserCacheTTLValue72000, ZonesBrowserCacheTTLValue86400, ZonesBrowserCacheTTLValue172800, ZonesBrowserCacheTTLValue259200, ZonesBrowserCacheTTLValue345600, ZonesBrowserCacheTTLValue432000, ZonesBrowserCacheTTLValue691200, ZonesBrowserCacheTTLValue1382400, ZonesBrowserCacheTTLValue2073600, ZonesBrowserCacheTTLValue2678400, ZonesBrowserCacheTTLValue5356800, ZonesBrowserCacheTTLValue16070400, ZonesBrowserCacheTTLValue31536000:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesBrowserCacheTTLEditable bool
@@ -153,6 +169,14 @@ const (
 	ZonesBrowserCacheTTLEditableTrue  ZonesBrowserCacheTTLEditable = true
 	ZonesBrowserCacheTTLEditableFalse ZonesBrowserCacheTTLEditable = false
 )
+
+func (r ZonesBrowserCacheTTLEditable) IsKnown() bool {
+	switch r {
+	case ZonesBrowserCacheTTLEditableTrue, ZonesBrowserCacheTTLEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
 // will remain on your visitors' computers. Cloudflare will honor any larger times
@@ -217,6 +241,14 @@ const (
 	SettingBrowserCacheTTLEditParamsValue16070400 SettingBrowserCacheTTLEditParamsValue = 16070400
 	SettingBrowserCacheTTLEditParamsValue31536000 SettingBrowserCacheTTLEditParamsValue = 31536000
 )
+
+func (r SettingBrowserCacheTTLEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingBrowserCacheTTLEditParamsValue0, SettingBrowserCacheTTLEditParamsValue30, SettingBrowserCacheTTLEditParamsValue60, SettingBrowserCacheTTLEditParamsValue120, SettingBrowserCacheTTLEditParamsValue300, SettingBrowserCacheTTLEditParamsValue1200, SettingBrowserCacheTTLEditParamsValue1800, SettingBrowserCacheTTLEditParamsValue3600, SettingBrowserCacheTTLEditParamsValue7200, SettingBrowserCacheTTLEditParamsValue10800, SettingBrowserCacheTTLEditParamsValue14400, SettingBrowserCacheTTLEditParamsValue18000, SettingBrowserCacheTTLEditParamsValue28800, SettingBrowserCacheTTLEditParamsValue43200, SettingBrowserCacheTTLEditParamsValue57600, SettingBrowserCacheTTLEditParamsValue72000, SettingBrowserCacheTTLEditParamsValue86400, SettingBrowserCacheTTLEditParamsValue172800, SettingBrowserCacheTTLEditParamsValue259200, SettingBrowserCacheTTLEditParamsValue345600, SettingBrowserCacheTTLEditParamsValue432000, SettingBrowserCacheTTLEditParamsValue691200, SettingBrowserCacheTTLEditParamsValue1382400, SettingBrowserCacheTTLEditParamsValue2073600, SettingBrowserCacheTTLEditParamsValue2678400, SettingBrowserCacheTTLEditParamsValue5356800, SettingBrowserCacheTTLEditParamsValue16070400, SettingBrowserCacheTTLEditParamsValue31536000:
+		return true
+	}
+	return false
+}
 
 type SettingBrowserCacheTTLEditResponseEnvelope struct {
 	Errors   []SettingBrowserCacheTTLEditResponseEnvelopeErrors   `json:"errors,required"`

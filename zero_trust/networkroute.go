@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -206,6 +206,14 @@ const (
 	TunnelTeamnetTunTypeCni           TunnelTeamnetTunType = "cni"
 )
 
+func (r TunnelTeamnetTunType) IsKnown() bool {
+	switch r {
+	case TunnelTeamnetTunTypeCfdTunnel, TunnelTeamnetTunTypeWARPConnector, TunnelTeamnetTunTypeIPSec, TunnelTeamnetTunTypeGRE, TunnelTeamnetTunTypeCni:
+		return true
+	}
+	return false
+}
+
 type NetworkRouteNewParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -303,6 +311,14 @@ type NetworkRouteNewResponseEnvelopeSuccess bool
 const (
 	NetworkRouteNewResponseEnvelopeSuccessTrue NetworkRouteNewResponseEnvelopeSuccess = true
 )
+
+func (r NetworkRouteNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkRouteNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type NetworkRouteListParams struct {
 	// Cloudflare account ID
@@ -427,6 +443,14 @@ const (
 	NetworkRouteDeleteResponseEnvelopeSuccessTrue NetworkRouteDeleteResponseEnvelopeSuccess = true
 )
 
+func (r NetworkRouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkRouteDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NetworkRouteEditParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -458,6 +482,14 @@ const (
 	NetworkRouteEditParamsTunTypeGRE           NetworkRouteEditParamsTunType = "gre"
 	NetworkRouteEditParamsTunTypeCni           NetworkRouteEditParamsTunType = "cni"
 )
+
+func (r NetworkRouteEditParamsTunType) IsKnown() bool {
+	switch r {
+	case NetworkRouteEditParamsTunTypeCfdTunnel, NetworkRouteEditParamsTunTypeWARPConnector, NetworkRouteEditParamsTunTypeIPSec, NetworkRouteEditParamsTunTypeGRE, NetworkRouteEditParamsTunTypeCni:
+		return true
+	}
+	return false
+}
 
 type NetworkRouteEditResponseEnvelope struct {
 	Errors   []NetworkRouteEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -539,3 +571,11 @@ type NetworkRouteEditResponseEnvelopeSuccess bool
 const (
 	NetworkRouteEditResponseEnvelopeSuccessTrue NetworkRouteEditResponseEnvelopeSuccess = true
 )
+
+func (r NetworkRouteEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkRouteEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

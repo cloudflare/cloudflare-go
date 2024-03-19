@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -393,6 +393,14 @@ const (
 	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPatch   AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "PATCH"
 )
 
+func (r AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod) IsKnown() bool {
+	switch r {
+	case AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodGet, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPost, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodHead, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPut, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodDelete, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodConnect, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodOptions, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodTrace, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPatch:
+		return true
+	}
+	return false
+}
+
 type AccessAppsSaaSApplication struct {
 	// UUID
 	ID string `json:"id"`
@@ -545,6 +553,14 @@ const (
 	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeOidc AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType = "oidc"
 )
 
+func (r AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType) IsKnown() bool {
+	switch r {
+	case AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeSaml, AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeOidc:
+		return true
+	}
+	return false
+}
+
 type AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes struct {
 	// The name of the attribute.
 	Name string `json:"name"`
@@ -582,6 +598,14 @@ const (
 	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI         AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
 )
 
+func (r AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat) IsKnown() bool {
+	switch r {
+	case AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic, AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI:
+		return true
+	}
+	return false
+}
+
 type AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource struct {
 	// The name of the IdP attribute.
 	Name string                                                                      `json:"name"`
@@ -612,6 +636,14 @@ const (
 	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID    AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "id"
 	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "email"
 )
+
+func (r AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat) IsKnown() bool {
+	switch r {
+	case AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID, AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail:
+		return true
+	}
+	return false
+}
 
 type AccessAppsSaaSApplicationSaasAppAccessOidcSaasApp struct {
 	// The URL where this applications tile redirects users
@@ -677,12 +709,28 @@ const (
 	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeOidc AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType = "oidc"
 )
 
+func (r AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType) IsKnown() bool {
+	switch r {
+	case AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeSaml, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeOidc:
+		return true
+	}
+	return false
+}
+
 type AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType string
 
 const (
 	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode         AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType = "authorization_code"
 	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType = "authorization_code_with_pkce"
 )
+
+func (r AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType) IsKnown() bool {
+	switch r {
+	case AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce:
+		return true
+	}
+	return false
+}
 
 type AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope string
 
@@ -692,6 +740,14 @@ const (
 	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeEmail   AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "email"
 	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeProfile AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "profile"
 )
+
+func (r AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope) IsKnown() bool {
+	switch r {
+	case AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeOpenid, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeGroups, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeEmail, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeProfile:
+		return true
+	}
+	return false
+}
 
 type AccessAppsBrowserSSHApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
@@ -863,6 +919,14 @@ const (
 	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPatch   AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "PATCH"
 )
 
+func (r AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod) IsKnown() bool {
+	switch r {
+	case AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodGet, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPost, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodHead, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPut, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodDelete, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodConnect, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodOptions, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodTrace, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPatch:
+		return true
+	}
+	return false
+}
+
 type AccessAppsBrowserVncApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
@@ -1033,6 +1097,14 @@ const (
 	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPatch   AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "PATCH"
 )
 
+func (r AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod) IsKnown() bool {
+	switch r {
+	case AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodGet, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPost, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodHead, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPut, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodDelete, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodConnect, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodOptions, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodTrace, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPatch:
+		return true
+	}
+	return false
+}
+
 type AccessAppsAppLauncherApplication struct {
 	// The application type.
 	Type AccessAppsAppLauncherApplicationType `json:"type,required"`
@@ -1101,6 +1173,14 @@ const (
 	AccessAppsAppLauncherApplicationTypeBookmark    AccessAppsAppLauncherApplicationType = "bookmark"
 	AccessAppsAppLauncherApplicationTypeDashSSO     AccessAppsAppLauncherApplicationType = "dash_sso"
 )
+
+func (r AccessAppsAppLauncherApplicationType) IsKnown() bool {
+	switch r {
+	case AccessAppsAppLauncherApplicationTypeSelfHosted, AccessAppsAppLauncherApplicationTypeSaas, AccessAppsAppLauncherApplicationTypeSSH, AccessAppsAppLauncherApplicationTypeVnc, AccessAppsAppLauncherApplicationTypeAppLauncher, AccessAppsAppLauncherApplicationTypeWARP, AccessAppsAppLauncherApplicationTypeBiso, AccessAppsAppLauncherApplicationTypeBookmark, AccessAppsAppLauncherApplicationTypeDashSSO:
+		return true
+	}
+	return false
+}
 
 type AccessAppsDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
@@ -1171,6 +1251,14 @@ const (
 	AccessAppsDeviceEnrollmentPermissionsApplicationTypeDashSSO     AccessAppsDeviceEnrollmentPermissionsApplicationType = "dash_sso"
 )
 
+func (r AccessAppsDeviceEnrollmentPermissionsApplicationType) IsKnown() bool {
+	switch r {
+	case AccessAppsDeviceEnrollmentPermissionsApplicationTypeSelfHosted, AccessAppsDeviceEnrollmentPermissionsApplicationTypeSaas, AccessAppsDeviceEnrollmentPermissionsApplicationTypeSSH, AccessAppsDeviceEnrollmentPermissionsApplicationTypeVnc, AccessAppsDeviceEnrollmentPermissionsApplicationTypeAppLauncher, AccessAppsDeviceEnrollmentPermissionsApplicationTypeWARP, AccessAppsDeviceEnrollmentPermissionsApplicationTypeBiso, AccessAppsDeviceEnrollmentPermissionsApplicationTypeBookmark, AccessAppsDeviceEnrollmentPermissionsApplicationTypeDashSSO:
+		return true
+	}
+	return false
+}
+
 type AccessAppsBrowserIsolationPermissionsApplication struct {
 	// The application type.
 	Type AccessAppsBrowserIsolationPermissionsApplicationType `json:"type,required"`
@@ -1239,6 +1327,14 @@ const (
 	AccessAppsBrowserIsolationPermissionsApplicationTypeBookmark    AccessAppsBrowserIsolationPermissionsApplicationType = "bookmark"
 	AccessAppsBrowserIsolationPermissionsApplicationTypeDashSSO     AccessAppsBrowserIsolationPermissionsApplicationType = "dash_sso"
 )
+
+func (r AccessAppsBrowserIsolationPermissionsApplicationType) IsKnown() bool {
+	switch r {
+	case AccessAppsBrowserIsolationPermissionsApplicationTypeSelfHosted, AccessAppsBrowserIsolationPermissionsApplicationTypeSaas, AccessAppsBrowserIsolationPermissionsApplicationTypeSSH, AccessAppsBrowserIsolationPermissionsApplicationTypeVnc, AccessAppsBrowserIsolationPermissionsApplicationTypeAppLauncher, AccessAppsBrowserIsolationPermissionsApplicationTypeWARP, AccessAppsBrowserIsolationPermissionsApplicationTypeBiso, AccessAppsBrowserIsolationPermissionsApplicationTypeBookmark, AccessAppsBrowserIsolationPermissionsApplicationTypeDashSSO:
+		return true
+	}
+	return false
+}
 
 type AccessAppsBookmarkApplication struct {
 	// UUID
@@ -1420,6 +1516,14 @@ const (
 	AccessApplicationNewParamsCorsHeadersAllowedMethodPatch   AccessApplicationNewParamsCorsHeadersAllowedMethod = "PATCH"
 )
 
+func (r AccessApplicationNewParamsCorsHeadersAllowedMethod) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsCorsHeadersAllowedMethodGet, AccessApplicationNewParamsCorsHeadersAllowedMethodPost, AccessApplicationNewParamsCorsHeadersAllowedMethodHead, AccessApplicationNewParamsCorsHeadersAllowedMethodPut, AccessApplicationNewParamsCorsHeadersAllowedMethodDelete, AccessApplicationNewParamsCorsHeadersAllowedMethodConnect, AccessApplicationNewParamsCorsHeadersAllowedMethodOptions, AccessApplicationNewParamsCorsHeadersAllowedMethodTrace, AccessApplicationNewParamsCorsHeadersAllowedMethodPatch:
+		return true
+	}
+	return false
+}
+
 // Satisfied by [zero_trust.AccessApplicationNewParamsSaasAppAccessSamlSaasApp],
 // [zero_trust.AccessApplicationNewParamsSaasAppAccessOidcSaasApp].
 type AccessApplicationNewParamsSaasApp interface {
@@ -1470,6 +1574,14 @@ const (
 	AccessApplicationNewParamsSaasAppAccessSamlSaasAppAuthTypeOidc AccessApplicationNewParamsSaasAppAccessSamlSaasAppAuthType = "oidc"
 )
 
+func (r AccessApplicationNewParamsSaasAppAccessSamlSaasAppAuthType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsSaasAppAccessSamlSaasAppAuthTypeSaml, AccessApplicationNewParamsSaasAppAccessSamlSaasAppAuthTypeOidc:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributes struct {
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
@@ -1491,6 +1603,14 @@ const (
 	AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI         AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
 )
 
+func (r AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormat) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic, AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributesSource struct {
 	// The name of the IdP attribute.
 	Name param.Field[string] `json:"name"`
@@ -1507,6 +1627,14 @@ const (
 	AccessApplicationNewParamsSaasAppAccessSamlSaasAppNameIDFormatID    AccessApplicationNewParamsSaasAppAccessSamlSaasAppNameIDFormat = "id"
 	AccessApplicationNewParamsSaasAppAccessSamlSaasAppNameIDFormatEmail AccessApplicationNewParamsSaasAppAccessSamlSaasAppNameIDFormat = "email"
 )
+
+func (r AccessApplicationNewParamsSaasAppAccessSamlSaasAppNameIDFormat) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsSaasAppAccessSamlSaasAppNameIDFormatID, AccessApplicationNewParamsSaasAppAccessSamlSaasAppNameIDFormatEmail:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationNewParamsSaasAppAccessOidcSaasApp struct {
 	// The URL where this applications tile redirects users
@@ -1547,12 +1675,28 @@ const (
 	AccessApplicationNewParamsSaasAppAccessOidcSaasAppAuthTypeOidc AccessApplicationNewParamsSaasAppAccessOidcSaasAppAuthType = "oidc"
 )
 
+func (r AccessApplicationNewParamsSaasAppAccessOidcSaasAppAuthType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsSaasAppAccessOidcSaasAppAuthTypeSaml, AccessApplicationNewParamsSaasAppAccessOidcSaasAppAuthTypeOidc:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationNewParamsSaasAppAccessOidcSaasAppGrantType string
 
 const (
 	AccessApplicationNewParamsSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode         AccessApplicationNewParamsSaasAppAccessOidcSaasAppGrantType = "authorization_code"
 	AccessApplicationNewParamsSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce AccessApplicationNewParamsSaasAppAccessOidcSaasAppGrantType = "authorization_code_with_pkce"
 )
+
+func (r AccessApplicationNewParamsSaasAppAccessOidcSaasAppGrantType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode, AccessApplicationNewParamsSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationNewParamsSaasAppAccessOidcSaasAppScope string
 
@@ -1562,6 +1706,14 @@ const (
 	AccessApplicationNewParamsSaasAppAccessOidcSaasAppScopeEmail   AccessApplicationNewParamsSaasAppAccessOidcSaasAppScope = "email"
 	AccessApplicationNewParamsSaasAppAccessOidcSaasAppScopeProfile AccessApplicationNewParamsSaasAppAccessOidcSaasAppScope = "profile"
 )
+
+func (r AccessApplicationNewParamsSaasAppAccessOidcSaasAppScope) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsSaasAppAccessOidcSaasAppScopeOpenid, AccessApplicationNewParamsSaasAppAccessOidcSaasAppScopeGroups, AccessApplicationNewParamsSaasAppAccessOidcSaasAppScopeEmail, AccessApplicationNewParamsSaasAppAccessOidcSaasAppScopeProfile:
+		return true
+	}
+	return false
+}
 
 // The application type.
 type AccessApplicationNewParamsType string
@@ -1577,6 +1729,14 @@ const (
 	AccessApplicationNewParamsTypeBookmark    AccessApplicationNewParamsType = "bookmark"
 	AccessApplicationNewParamsTypeDashSSO     AccessApplicationNewParamsType = "dash_sso"
 )
+
+func (r AccessApplicationNewParamsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsTypeSelfHosted, AccessApplicationNewParamsTypeSaas, AccessApplicationNewParamsTypeSSH, AccessApplicationNewParamsTypeVnc, AccessApplicationNewParamsTypeAppLauncher, AccessApplicationNewParamsTypeWARP, AccessApplicationNewParamsTypeBiso, AccessApplicationNewParamsTypeBookmark, AccessApplicationNewParamsTypeDashSSO:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationNewResponseEnvelope struct {
 	Errors   []AccessApplicationNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -1658,6 +1818,14 @@ type AccessApplicationNewResponseEnvelopeSuccess bool
 const (
 	AccessApplicationNewResponseEnvelopeSuccessTrue AccessApplicationNewResponseEnvelopeSuccess = true
 )
+
+func (r AccessApplicationNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationUpdateParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -1773,6 +1941,14 @@ const (
 	AccessApplicationUpdateParamsCorsHeadersAllowedMethodPatch   AccessApplicationUpdateParamsCorsHeadersAllowedMethod = "PATCH"
 )
 
+func (r AccessApplicationUpdateParamsCorsHeadersAllowedMethod) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsCorsHeadersAllowedMethodGet, AccessApplicationUpdateParamsCorsHeadersAllowedMethodPost, AccessApplicationUpdateParamsCorsHeadersAllowedMethodHead, AccessApplicationUpdateParamsCorsHeadersAllowedMethodPut, AccessApplicationUpdateParamsCorsHeadersAllowedMethodDelete, AccessApplicationUpdateParamsCorsHeadersAllowedMethodConnect, AccessApplicationUpdateParamsCorsHeadersAllowedMethodOptions, AccessApplicationUpdateParamsCorsHeadersAllowedMethodTrace, AccessApplicationUpdateParamsCorsHeadersAllowedMethodPatch:
+		return true
+	}
+	return false
+}
+
 // Satisfied by [zero_trust.AccessApplicationUpdateParamsSaasAppAccessSamlSaasApp],
 // [zero_trust.AccessApplicationUpdateParamsSaasAppAccessOidcSaasApp].
 type AccessApplicationUpdateParamsSaasApp interface {
@@ -1823,6 +1999,14 @@ const (
 	AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppAuthTypeOidc AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppAuthType = "oidc"
 )
 
+func (r AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppAuthType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppAuthTypeSaml, AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppAuthTypeOidc:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributes struct {
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
@@ -1844,6 +2028,14 @@ const (
 	AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI         AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
 )
 
+func (r AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormat) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic, AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributesSource struct {
 	// The name of the IdP attribute.
 	Name param.Field[string] `json:"name"`
@@ -1860,6 +2052,14 @@ const (
 	AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppNameIDFormatID    AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppNameIDFormat = "id"
 	AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppNameIDFormatEmail AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppNameIDFormat = "email"
 )
+
+func (r AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppNameIDFormat) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppNameIDFormatID, AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppNameIDFormatEmail:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationUpdateParamsSaasAppAccessOidcSaasApp struct {
 	// The URL where this applications tile redirects users
@@ -1900,12 +2100,28 @@ const (
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppAuthTypeOidc AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppAuthType = "oidc"
 )
 
+func (r AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppAuthType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppAuthTypeSaml, AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppAuthTypeOidc:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppGrantType string
 
 const (
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode         AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppGrantType = "authorization_code"
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppGrantType = "authorization_code_with_pkce"
 )
+
+func (r AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppGrantType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode, AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope string
 
@@ -1915,6 +2131,14 @@ const (
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeEmail   AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope = "email"
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeProfile AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope = "profile"
 )
+
+func (r AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeOpenid, AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeGroups, AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeEmail, AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeProfile:
+		return true
+	}
+	return false
+}
 
 // The application type.
 type AccessApplicationUpdateParamsType string
@@ -1930,6 +2154,14 @@ const (
 	AccessApplicationUpdateParamsTypeBookmark    AccessApplicationUpdateParamsType = "bookmark"
 	AccessApplicationUpdateParamsTypeDashSSO     AccessApplicationUpdateParamsType = "dash_sso"
 )
+
+func (r AccessApplicationUpdateParamsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsTypeSelfHosted, AccessApplicationUpdateParamsTypeSaas, AccessApplicationUpdateParamsTypeSSH, AccessApplicationUpdateParamsTypeVnc, AccessApplicationUpdateParamsTypeAppLauncher, AccessApplicationUpdateParamsTypeWARP, AccessApplicationUpdateParamsTypeBiso, AccessApplicationUpdateParamsTypeBookmark, AccessApplicationUpdateParamsTypeDashSSO:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationUpdateResponseEnvelope struct {
 	Errors   []AccessApplicationUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -2011,6 +2243,14 @@ type AccessApplicationUpdateResponseEnvelopeSuccess bool
 const (
 	AccessApplicationUpdateResponseEnvelopeSuccessTrue AccessApplicationUpdateResponseEnvelopeSuccess = true
 )
+
+func (r AccessApplicationUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -2101,6 +2341,14 @@ type AccessApplicationListResponseEnvelopeSuccess bool
 const (
 	AccessApplicationListResponseEnvelopeSuccessTrue AccessApplicationListResponseEnvelopeSuccess = true
 )
+
+func (r AccessApplicationListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -2228,6 +2476,14 @@ const (
 	AccessApplicationDeleteResponseEnvelopeSuccessTrue AccessApplicationDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessApplicationDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -2323,6 +2579,14 @@ const (
 	AccessApplicationGetResponseEnvelopeSuccessTrue AccessApplicationGetResponseEnvelopeSuccess = true
 )
 
+func (r AccessApplicationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationRevokeTokensParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -2366,3 +2630,11 @@ const (
 	AccessApplicationRevokeTokensResponseEnvelopeSuccessTrue  AccessApplicationRevokeTokensResponseEnvelopeSuccess = true
 	AccessApplicationRevokeTokensResponseEnvelopeSuccessFalse AccessApplicationRevokeTokensResponseEnvelopeSuccess = false
 )
+
+func (r AccessApplicationRevokeTokensResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationRevokeTokensResponseEnvelopeSuccessTrue, AccessApplicationRevokeTokensResponseEnvelopeSuccessFalse:
+		return true
+	}
+	return false
+}

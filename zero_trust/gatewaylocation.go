@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -291,6 +291,14 @@ const (
 	GatewayLocationNewResponseEnvelopeSuccessTrue GatewayLocationNewResponseEnvelopeSuccess = true
 )
 
+func (r GatewayLocationNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayLocationNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayLocationUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The name of the location.
@@ -397,6 +405,14 @@ const (
 	GatewayLocationUpdateResponseEnvelopeSuccessTrue GatewayLocationUpdateResponseEnvelopeSuccess = true
 )
 
+func (r GatewayLocationUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayLocationUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayLocationListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -483,6 +499,14 @@ type GatewayLocationListResponseEnvelopeSuccess bool
 const (
 	GatewayLocationListResponseEnvelopeSuccessTrue GatewayLocationListResponseEnvelopeSuccess = true
 )
+
+func (r GatewayLocationListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayLocationListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type GatewayLocationListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -600,6 +624,14 @@ const (
 	GatewayLocationDeleteResponseEnvelopeSuccessTrue GatewayLocationDeleteResponseEnvelopeSuccess = true
 )
 
+func (r GatewayLocationDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayLocationDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayLocationGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -684,3 +716,11 @@ type GatewayLocationGetResponseEnvelopeSuccess bool
 const (
 	GatewayLocationGetResponseEnvelopeSuccessTrue GatewayLocationGetResponseEnvelopeSuccess = true
 )
+
+func (r GatewayLocationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayLocationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

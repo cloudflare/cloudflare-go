@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package registrar
 
@@ -376,6 +376,14 @@ const (
 	DomainUpdateResponseEnvelopeSuccessTrue DomainUpdateResponseEnvelopeSuccess = true
 )
 
+func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DomainListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -463,6 +471,14 @@ type DomainListResponseEnvelopeSuccess bool
 const (
 	DomainListResponseEnvelopeSuccessTrue DomainListResponseEnvelopeSuccess = true
 )
+
+func (r DomainListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DomainListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -580,3 +596,11 @@ type DomainGetResponseEnvelopeSuccess bool
 const (
 	DomainGetResponseEnvelopeSuccessTrue DomainGetResponseEnvelopeSuccess = true
 )
+
+func (r DomainGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

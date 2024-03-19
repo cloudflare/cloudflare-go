@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package page_shield
 
@@ -260,6 +260,14 @@ const (
 	ScriptListParamsDirectionDesc ScriptListParamsDirection = "desc"
 )
 
+func (r ScriptListParamsDirection) IsKnown() bool {
+	switch r {
+	case ScriptListParamsDirectionAsc, ScriptListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Export the list of scripts as a file. Cannot be used with per_page or page
 // options.
 type ScriptListParamsExport string
@@ -268,6 +276,14 @@ const (
 	ScriptListParamsExportCsv ScriptListParamsExport = "csv"
 )
 
+func (r ScriptListParamsExport) IsKnown() bool {
+	switch r {
+	case ScriptListParamsExportCsv:
+		return true
+	}
+	return false
+}
+
 // The field used to sort returned scripts.
 type ScriptListParamsOrderBy string
 
@@ -275,6 +291,14 @@ const (
 	ScriptListParamsOrderByFirstSeenAt ScriptListParamsOrderBy = "first_seen_at"
 	ScriptListParamsOrderByLastSeenAt  ScriptListParamsOrderBy = "last_seen_at"
 )
+
+func (r ScriptListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case ScriptListParamsOrderByFirstSeenAt, ScriptListParamsOrderByLastSeenAt:
+		return true
+	}
+	return false
+}
 
 type ScriptListResponseEnvelope struct {
 	Errors   []ScriptListResponseEnvelopeErrors   `json:"errors,required"`
@@ -358,6 +382,14 @@ type ScriptListResponseEnvelopeSuccess bool
 const (
 	ScriptListResponseEnvelopeSuccessTrue ScriptListResponseEnvelopeSuccess = true
 )
+
+func (r ScriptListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ScriptListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

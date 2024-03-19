@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package alerting
 
@@ -164,6 +164,14 @@ type V3ListResponseEnvelopeSuccess bool
 const (
 	V3ListResponseEnvelopeSuccessTrue V3ListResponseEnvelopeSuccess = true
 )
+
+func (r V3ListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3ListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type V3ListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit_test
 
@@ -31,8 +31,8 @@ func TestSiteWanNewWithOptionalParams(t *testing.T) {
 	_, err := client.MagicTransit.Sites.Wans.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteWanNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Wan: cloudflare.F(magic_transit.SiteWanNewParamsWan{
 				Description: cloudflare.F("string"),
 				Physport:    cloudflare.F(int64(1)),
@@ -73,8 +73,8 @@ func TestSiteWanUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteWanUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Wan: cloudflare.F(magic_transit.SiteWanUpdateParamsWan{
 				Description: cloudflare.F("string"),
 				Physport:    cloudflare.F(int64(1)),
@@ -114,7 +114,9 @@ func TestSiteWanList(t *testing.T) {
 	_, err := client.MagicTransit.Sites.Wans.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteWanListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -143,7 +145,9 @@ func TestSiteWanDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteWanDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -172,7 +176,9 @@ func TestSiteWanGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteWanGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

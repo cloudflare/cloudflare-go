@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package request_tracers
 
@@ -220,3 +220,11 @@ type TraceNewResponseEnvelopeSuccess bool
 const (
 	TraceNewResponseEnvelopeSuccessTrue TraceNewResponseEnvelopeSuccess = true
 )
+
+func (r TraceNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TraceNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

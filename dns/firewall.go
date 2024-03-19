@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package dns
 
@@ -405,6 +405,14 @@ const (
 	FirewallNewResponseEnvelopeSuccessTrue FirewallNewResponseEnvelopeSuccess = true
 )
 
+func (r FirewallNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FirewallNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FirewallListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -507,6 +515,14 @@ type FirewallDeleteResponseEnvelopeSuccess bool
 const (
 	FirewallDeleteResponseEnvelopeSuccessTrue FirewallDeleteResponseEnvelopeSuccess = true
 )
+
+func (r FirewallDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FirewallDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type FirewallEditParams struct {
 	// Identifier
@@ -651,6 +667,14 @@ const (
 	FirewallEditResponseEnvelopeSuccessTrue FirewallEditResponseEnvelopeSuccess = true
 )
 
+func (r FirewallEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FirewallEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FirewallGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -736,3 +760,11 @@ type FirewallGetResponseEnvelopeSuccess bool
 const (
 	FirewallGetResponseEnvelopeSuccessTrue FirewallGetResponseEnvelopeSuccess = true
 )
+
+func (r FirewallGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FirewallGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

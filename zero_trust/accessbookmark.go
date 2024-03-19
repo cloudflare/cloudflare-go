@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -236,6 +236,14 @@ const (
 	AccessBookmarkNewResponseEnvelopeSuccessTrue AccessBookmarkNewResponseEnvelopeSuccess = true
 )
 
+func (r AccessBookmarkNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessBookmarkNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessBookmarkUpdateResponseEnvelope struct {
 	Errors   []AccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -316,6 +324,14 @@ type AccessBookmarkUpdateResponseEnvelopeSuccess bool
 const (
 	AccessBookmarkUpdateResponseEnvelopeSuccessTrue AccessBookmarkUpdateResponseEnvelopeSuccess = true
 )
+
+func (r AccessBookmarkUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessBookmarkUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessBookmarkListResponseEnvelope struct {
 	Errors   []AccessBookmarkListResponseEnvelopeErrors   `json:"errors,required"`
@@ -399,6 +415,14 @@ type AccessBookmarkListResponseEnvelopeSuccess bool
 const (
 	AccessBookmarkListResponseEnvelopeSuccessTrue AccessBookmarkListResponseEnvelopeSuccess = true
 )
+
+func (r AccessBookmarkListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessBookmarkListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessBookmarkListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -512,6 +536,14 @@ const (
 	AccessBookmarkDeleteResponseEnvelopeSuccessTrue AccessBookmarkDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessBookmarkDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessBookmarkDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessBookmarkGetResponseEnvelope struct {
 	Errors   []AccessBookmarkGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkGetResponseEnvelopeMessages `json:"messages,required"`
@@ -592,3 +624,11 @@ type AccessBookmarkGetResponseEnvelopeSuccess bool
 const (
 	AccessBookmarkGetResponseEnvelopeSuccessTrue AccessBookmarkGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessBookmarkGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessBookmarkGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

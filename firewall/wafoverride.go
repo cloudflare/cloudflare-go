@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package firewall
 
@@ -227,6 +227,14 @@ const (
 	LegacyJhsOverrideRewriteActionBlockDefault   LegacyJhsOverrideRewriteActionBlock = "default"
 )
 
+func (r LegacyJhsOverrideRewriteActionBlock) IsKnown() bool {
+	switch r {
+	case LegacyJhsOverrideRewriteActionBlockChallenge, LegacyJhsOverrideRewriteActionBlockBlock, LegacyJhsOverrideRewriteActionBlockSimulate, LegacyJhsOverrideRewriteActionBlockDisable, LegacyJhsOverrideRewriteActionBlockDefault:
+		return true
+	}
+	return false
+}
+
 // The WAF rule action to apply.
 type LegacyJhsOverrideRewriteActionDisable string
 
@@ -238,6 +246,14 @@ const (
 	LegacyJhsOverrideRewriteActionDisableDefault   LegacyJhsOverrideRewriteActionDisable = "default"
 )
 
+func (r LegacyJhsOverrideRewriteActionDisable) IsKnown() bool {
+	switch r {
+	case LegacyJhsOverrideRewriteActionDisableChallenge, LegacyJhsOverrideRewriteActionDisableBlock, LegacyJhsOverrideRewriteActionDisableSimulate, LegacyJhsOverrideRewriteActionDisableDisable, LegacyJhsOverrideRewriteActionDisableDefault:
+		return true
+	}
+	return false
+}
+
 // The WAF rule action to apply.
 type LegacyJhsOverrideRule string
 
@@ -248,6 +264,14 @@ const (
 	LegacyJhsOverrideRuleDisable   LegacyJhsOverrideRule = "disable"
 	LegacyJhsOverrideRuleDefault   LegacyJhsOverrideRule = "default"
 )
+
+func (r LegacyJhsOverrideRule) IsKnown() bool {
+	switch r {
+	case LegacyJhsOverrideRuleChallenge, LegacyJhsOverrideRuleBlock, LegacyJhsOverrideRuleSimulate, LegacyJhsOverrideRuleDisable, LegacyJhsOverrideRuleDefault:
+		return true
+	}
+	return false
+}
 
 type WAFOverrideDeleteResponse struct {
 	// The unique identifier of the WAF override.
@@ -360,6 +384,14 @@ const (
 	WAFOverrideNewResponseEnvelopeSuccessTrue WAFOverrideNewResponseEnvelopeSuccess = true
 )
 
+func (r WAFOverrideNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WAFOverrideNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WAFOverrideUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -448,6 +480,14 @@ type WAFOverrideUpdateResponseEnvelopeSuccess bool
 const (
 	WAFOverrideUpdateResponseEnvelopeSuccessTrue WAFOverrideUpdateResponseEnvelopeSuccess = true
 )
+
+func (r WAFOverrideUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WAFOverrideUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type WAFOverrideListParams struct {
 	// The page number of paginated results.
@@ -565,3 +605,11 @@ type WAFOverrideGetResponseEnvelopeSuccess bool
 const (
 	WAFOverrideGetResponseEnvelopeSuccessTrue WAFOverrideGetResponseEnvelopeSuccess = true
 )
+
+func (r WAFOverrideGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WAFOverrideGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

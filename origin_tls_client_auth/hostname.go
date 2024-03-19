@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package origin_tls_client_auth
 
@@ -139,6 +139,14 @@ const (
 	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeletionTimedOut   TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "deletion_timed_out"
 )
 
+func (r TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusInitializing, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusPendingDeployment, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusPendingDeletion, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusActive, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeleted, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeploymentTimedOut, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeletionTimedOut:
+		return true
+	}
+	return false
+}
+
 // Status of the certificate or the association.
 type TLSCertificatesAndHostnamesHostnameCertidObjectStatus string
 
@@ -151,6 +159,14 @@ const (
 	TLSCertificatesAndHostnamesHostnameCertidObjectStatusDeploymentTimedOut TLSCertificatesAndHostnamesHostnameCertidObjectStatus = "deployment_timed_out"
 	TLSCertificatesAndHostnamesHostnameCertidObjectStatusDeletionTimedOut   TLSCertificatesAndHostnamesHostnameCertidObjectStatus = "deletion_timed_out"
 )
+
+func (r TLSCertificatesAndHostnamesHostnameCertidObjectStatus) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesHostnameCertidObjectStatusInitializing, TLSCertificatesAndHostnamesHostnameCertidObjectStatusPendingDeployment, TLSCertificatesAndHostnamesHostnameCertidObjectStatusPendingDeletion, TLSCertificatesAndHostnamesHostnameCertidObjectStatusActive, TLSCertificatesAndHostnamesHostnameCertidObjectStatusDeleted, TLSCertificatesAndHostnamesHostnameCertidObjectStatusDeploymentTimedOut, TLSCertificatesAndHostnamesHostnameCertidObjectStatusDeletionTimedOut:
+		return true
+	}
+	return false
+}
 
 type HostnameUpdateParams struct {
 	// Identifier
@@ -259,6 +275,14 @@ type HostnameUpdateResponseEnvelopeSuccess bool
 const (
 	HostnameUpdateResponseEnvelopeSuccessTrue HostnameUpdateResponseEnvelopeSuccess = true
 )
+
+func (r HostnameUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type HostnameUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -376,3 +400,11 @@ type HostnameGetResponseEnvelopeSuccess bool
 const (
 	HostnameGetResponseEnvelopeSuccessTrue HostnameGetResponseEnvelopeSuccess = true
 )
+
+func (r HostnameGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

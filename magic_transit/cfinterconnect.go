@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit
 
@@ -35,11 +35,11 @@ func NewCfInterconnectService(opts ...option.RequestOption) (r *CfInterconnectSe
 // Updates a specific interconnect associated with an account. Use
 // `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *CfInterconnectService) Update(ctx context.Context, accountIdentifier string, tunnelIdentifier string, body CfInterconnectUpdateParams, opts ...option.RequestOption) (res *CfInterconnectUpdateResponse, err error) {
+func (r *CfInterconnectService) Update(ctx context.Context, tunnelIdentifier string, params CfInterconnectUpdateParams, opts ...option.RequestOption) (res *CfInterconnectUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CfInterconnectUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", accountIdentifier, tunnelIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", params.AccountID, tunnelIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,10 +48,10 @@ func (r *CfInterconnectService) Update(ctx context.Context, accountIdentifier st
 }
 
 // Lists interconnects associated with an account.
-func (r *CfInterconnectService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CfInterconnectListResponse, err error) {
+func (r *CfInterconnectService) List(ctx context.Context, query CfInterconnectListParams, opts ...option.RequestOption) (res *CfInterconnectListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CfInterconnectListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects", accountIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -61,10 +61,10 @@ func (r *CfInterconnectService) List(ctx context.Context, accountIdentifier stri
 }
 
 // Lists details for a specific interconnect.
-func (r *CfInterconnectService) Get(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *CfInterconnectGetResponse, err error) {
+func (r *CfInterconnectService) Get(ctx context.Context, tunnelIdentifier string, query CfInterconnectGetParams, opts ...option.RequestOption) (res *CfInterconnectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CfInterconnectGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", accountIdentifier, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", query.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -234,6 +234,14 @@ const (
 	CfInterconnectListResponseInterconnectsHealthCheckRateHigh CfInterconnectListResponseInterconnectsHealthCheckRate = "high"
 )
 
+func (r CfInterconnectListResponseInterconnectsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case CfInterconnectListResponseInterconnectsHealthCheckRateLow, CfInterconnectListResponseInterconnectsHealthCheckRateMid, CfInterconnectListResponseInterconnectsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type CfInterconnectListResponseInterconnectsHealthCheckType string
 
@@ -241,6 +249,14 @@ const (
 	CfInterconnectListResponseInterconnectsHealthCheckTypeReply   CfInterconnectListResponseInterconnectsHealthCheckType = "reply"
 	CfInterconnectListResponseInterconnectsHealthCheckTypeRequest CfInterconnectListResponseInterconnectsHealthCheckType = "request"
 )
+
+func (r CfInterconnectListResponseInterconnectsHealthCheckType) IsKnown() bool {
+	switch r {
+	case CfInterconnectListResponseInterconnectsHealthCheckTypeReply, CfInterconnectListResponseInterconnectsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type CfInterconnectGetResponse struct {
 	Interconnect interface{}                   `json:"interconnect"`
@@ -264,6 +280,8 @@ func (r cfInterconnectGetResponseJSON) RawJSON() string {
 }
 
 type CfInterconnectUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// An optional description of the interconnect.
 	Description param.Field[string] `json:"description"`
 	// The configuration specific to GRE interconnects.
@@ -319,6 +337,14 @@ const (
 	CfInterconnectUpdateParamsHealthCheckRateHigh CfInterconnectUpdateParamsHealthCheckRate = "high"
 )
 
+func (r CfInterconnectUpdateParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case CfInterconnectUpdateParamsHealthCheckRateLow, CfInterconnectUpdateParamsHealthCheckRateMid, CfInterconnectUpdateParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type CfInterconnectUpdateParamsHealthCheckType string
 
@@ -326,6 +352,14 @@ const (
 	CfInterconnectUpdateParamsHealthCheckTypeReply   CfInterconnectUpdateParamsHealthCheckType = "reply"
 	CfInterconnectUpdateParamsHealthCheckTypeRequest CfInterconnectUpdateParamsHealthCheckType = "request"
 )
+
+func (r CfInterconnectUpdateParamsHealthCheckType) IsKnown() bool {
+	switch r {
+	case CfInterconnectUpdateParamsHealthCheckTypeReply, CfInterconnectUpdateParamsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type CfInterconnectUpdateResponseEnvelope struct {
 	Errors   []CfInterconnectUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -408,6 +442,19 @@ const (
 	CfInterconnectUpdateResponseEnvelopeSuccessTrue CfInterconnectUpdateResponseEnvelopeSuccess = true
 )
 
+func (r CfInterconnectUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CfInterconnectUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type CfInterconnectListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type CfInterconnectListResponseEnvelope struct {
 	Errors   []CfInterconnectListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CfInterconnectListResponseEnvelopeMessages `json:"messages,required"`
@@ -489,6 +536,19 @@ const (
 	CfInterconnectListResponseEnvelopeSuccessTrue CfInterconnectListResponseEnvelopeSuccess = true
 )
 
+func (r CfInterconnectListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CfInterconnectListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type CfInterconnectGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type CfInterconnectGetResponseEnvelope struct {
 	Errors   []CfInterconnectGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CfInterconnectGetResponseEnvelopeMessages `json:"messages,required"`
@@ -569,3 +629,11 @@ type CfInterconnectGetResponseEnvelopeSuccess bool
 const (
 	CfInterconnectGetResponseEnvelopeSuccessTrue CfInterconnectGetResponseEnvelopeSuccess = true
 )
+
+func (r CfInterconnectGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CfInterconnectGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

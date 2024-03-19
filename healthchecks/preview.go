@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package healthchecks
 
@@ -31,11 +31,11 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 }
 
 // Create a new preview health check.
-func (r *PreviewService) New(ctx context.Context, zoneIdentifier string, body PreviewNewParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/preview", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/healthchecks/preview", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -44,10 +44,10 @@ func (r *PreviewService) New(ctx context.Context, zoneIdentifier string, body Pr
 }
 
 // Delete a health check.
-func (r *PreviewService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *PreviewDeleteResponse, err error) {
+func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body PreviewDeleteParams, opts ...option.RequestOption) (res *PreviewDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", zoneIdentifier, identifier)
+	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", body.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -57,10 +57,10 @@ func (r *PreviewService) Delete(ctx context.Context, zoneIdentifier string, iden
 }
 
 // Fetch a single configured health check preview.
-func (r *PreviewService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *PreviewService) Get(ctx context.Context, healthcheckID string, query PreviewGetParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", zoneIdentifier, identifier)
+	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", query.ZoneID, healthcheckID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -92,6 +92,8 @@ func (r previewDeleteResponseJSON) RawJSON() string {
 }
 
 type PreviewNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The hostname or IP address of the origin server to run health checks on.
 	Address param.Field[string] `json:"address,required"`
 	// A short name to identify the health check. Only alphanumeric characters, hyphens
@@ -156,6 +158,14 @@ const (
 	PreviewNewParamsCheckRegionAllRegions PreviewNewParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r PreviewNewParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case PreviewNewParamsCheckRegionWnam, PreviewNewParamsCheckRegionEnam, PreviewNewParamsCheckRegionWeu, PreviewNewParamsCheckRegionEeu, PreviewNewParamsCheckRegionNsam, PreviewNewParamsCheckRegionSsam, PreviewNewParamsCheckRegionOc, PreviewNewParamsCheckRegionMe, PreviewNewParamsCheckRegionNaf, PreviewNewParamsCheckRegionSaf, PreviewNewParamsCheckRegionIn, PreviewNewParamsCheckRegionSeas, PreviewNewParamsCheckRegionNeas, PreviewNewParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to an HTTP or HTTPS health check.
 type PreviewNewParamsHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
@@ -192,6 +202,14 @@ const (
 	PreviewNewParamsHTTPConfigMethodHead PreviewNewParamsHTTPConfigMethod = "HEAD"
 )
 
+func (r PreviewNewParamsHTTPConfigMethod) IsKnown() bool {
+	switch r {
+	case PreviewNewParamsHTTPConfigMethodGet, PreviewNewParamsHTTPConfigMethodHead:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to TCP health check.
 type PreviewNewParamsTcpConfig struct {
 	// The TCP connection method to use for the health check.
@@ -210,6 +228,14 @@ type PreviewNewParamsTcpConfigMethod string
 const (
 	PreviewNewParamsTcpConfigMethodConnectionEstablished PreviewNewParamsTcpConfigMethod = "connection_established"
 )
+
+func (r PreviewNewParamsTcpConfigMethod) IsKnown() bool {
+	switch r {
+	case PreviewNewParamsTcpConfigMethodConnectionEstablished:
+		return true
+	}
+	return false
+}
 
 type PreviewNewResponseEnvelope struct {
 	Errors   []PreviewNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -292,6 +318,19 @@ const (
 	PreviewNewResponseEnvelopeSuccessTrue PreviewNewResponseEnvelopeSuccess = true
 )
 
+func (r PreviewNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PreviewNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type PreviewDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type PreviewDeleteResponseEnvelope struct {
 	Errors   []PreviewDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PreviewDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -373,6 +412,19 @@ const (
 	PreviewDeleteResponseEnvelopeSuccessTrue PreviewDeleteResponseEnvelopeSuccess = true
 )
 
+func (r PreviewDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PreviewDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type PreviewGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type PreviewGetResponseEnvelope struct {
 	Errors   []PreviewGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PreviewGetResponseEnvelopeMessages `json:"messages,required"`
@@ -453,3 +505,11 @@ type PreviewGetResponseEnvelopeSuccess bool
 const (
 	PreviewGetResponseEnvelopeSuccessTrue PreviewGetResponseEnvelopeSuccess = true
 )
+
+func (r PreviewGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PreviewGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

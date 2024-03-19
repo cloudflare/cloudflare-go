@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package healthchecks_test
 
@@ -28,44 +28,41 @@ func TestHealthcheckNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Healthchecks.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		healthchecks.HealthcheckNewParams{
-			Address:              cloudflare.F("www.example.com"),
-			Name:                 cloudflare.F("server-1"),
-			CheckRegions:         cloudflare.F([]healthchecks.HealthcheckNewParamsCheckRegion{healthchecks.HealthcheckNewParamsCheckRegionWeu, healthchecks.HealthcheckNewParamsCheckRegionEnam}),
-			ConsecutiveFails:     cloudflare.F(int64(0)),
-			ConsecutiveSuccesses: cloudflare.F(int64(0)),
-			Description:          cloudflare.F("Health check for www.example.com"),
-			HTTPConfig: cloudflare.F(healthchecks.HealthcheckNewParamsHTTPConfig{
-				AllowInsecure:   cloudflare.F(true),
-				ExpectedBody:    cloudflare.F("success"),
-				ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
-				FollowRedirects: cloudflare.F(true),
-				Header: cloudflare.F[any](map[string]interface{}{
-					"Host": map[string]interface{}{
-						"0": "example.com",
-					},
-					"X-App-ID": map[string]interface{}{
-						"0": "abc123",
-					},
-				}),
-				Method: cloudflare.F(healthchecks.HealthcheckNewParamsHTTPConfigMethodGet),
-				Path:   cloudflare.F("/health"),
-				Port:   cloudflare.F(int64(0)),
+	_, err := client.Healthchecks.New(context.TODO(), healthchecks.HealthcheckNewParams{
+		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Address:              cloudflare.F("www.example.com"),
+		Name:                 cloudflare.F("server-1"),
+		CheckRegions:         cloudflare.F([]healthchecks.HealthcheckNewParamsCheckRegion{healthchecks.HealthcheckNewParamsCheckRegionWeu, healthchecks.HealthcheckNewParamsCheckRegionEnam}),
+		ConsecutiveFails:     cloudflare.F(int64(0)),
+		ConsecutiveSuccesses: cloudflare.F(int64(0)),
+		Description:          cloudflare.F("Health check for www.example.com"),
+		HTTPConfig: cloudflare.F(healthchecks.HealthcheckNewParamsHTTPConfig{
+			AllowInsecure:   cloudflare.F(true),
+			ExpectedBody:    cloudflare.F("success"),
+			ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
+			FollowRedirects: cloudflare.F(true),
+			Header: cloudflare.F[any](map[string]interface{}{
+				"Host": map[string]interface{}{
+					"0": "example.com",
+				},
+				"X-App-ID": map[string]interface{}{
+					"0": "abc123",
+				},
 			}),
-			Interval:  cloudflare.F(int64(0)),
-			Retries:   cloudflare.F(int64(0)),
-			Suspended: cloudflare.F(true),
-			TcpConfig: cloudflare.F(healthchecks.HealthcheckNewParamsTcpConfig{
-				Method: cloudflare.F(healthchecks.HealthcheckNewParamsTcpConfigMethodConnectionEstablished),
-				Port:   cloudflare.F(int64(0)),
-			}),
-			Timeout: cloudflare.F(int64(0)),
-			Type:    cloudflare.F("HTTPS"),
-		},
-	)
+			Method: cloudflare.F(healthchecks.HealthcheckNewParamsHTTPConfigMethodGet),
+			Path:   cloudflare.F("/health"),
+			Port:   cloudflare.F(int64(0)),
+		}),
+		Interval:  cloudflare.F(int64(0)),
+		Retries:   cloudflare.F(int64(0)),
+		Suspended: cloudflare.F(true),
+		TcpConfig: cloudflare.F(healthchecks.HealthcheckNewParamsTcpConfig{
+			Method: cloudflare.F(healthchecks.HealthcheckNewParamsTcpConfigMethodConnectionEstablished),
+			Port:   cloudflare.F(int64(0)),
+		}),
+		Timeout: cloudflare.F(int64(0)),
+		Type:    cloudflare.F("HTTPS"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -92,8 +89,8 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Healthchecks.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		healthchecks.HealthcheckUpdateParams{
+			ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Address:              cloudflare.F("www.example.com"),
 			Name:                 cloudflare.F("server-1"),
 			CheckRegions:         cloudflare.F([]healthchecks.HealthcheckUpdateParamsCheckRegion{healthchecks.HealthcheckUpdateParamsCheckRegionWeu, healthchecks.HealthcheckUpdateParamsCheckRegionEnam}),
@@ -151,7 +148,9 @@ func TestHealthcheckList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Healthchecks.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Healthchecks.List(context.TODO(), healthchecks.HealthcheckListParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -178,7 +177,9 @@ func TestHealthcheckDelete(t *testing.T) {
 	_, err := client.Healthchecks.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		healthchecks.HealthcheckDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -206,8 +207,8 @@ func TestHealthcheckEditWithOptionalParams(t *testing.T) {
 	_, err := client.Healthchecks.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		healthchecks.HealthcheckEditParams{
+			ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Address:              cloudflare.F("www.example.com"),
 			Name:                 cloudflare.F("server-1"),
 			CheckRegions:         cloudflare.F([]healthchecks.HealthcheckEditParamsCheckRegion{healthchecks.HealthcheckEditParamsCheckRegionWeu, healthchecks.HealthcheckEditParamsCheckRegionEnam}),
@@ -268,7 +269,9 @@ func TestHealthcheckGet(t *testing.T) {
 	_, err := client.Healthchecks.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		healthchecks.HealthcheckGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -166,6 +166,14 @@ const (
 	TeamsDevicesDeviceManagedNetworksTypeTLS TeamsDevicesDeviceManagedNetworksType = "tls"
 )
 
+func (r TeamsDevicesDeviceManagedNetworksType) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDeviceManagedNetworksTypeTLS:
+		return true
+	}
+	return false
+}
+
 type DeviceNetworkNewParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The configuration object containing information for the WARP client to detect
@@ -203,6 +211,14 @@ type DeviceNetworkNewParamsType string
 const (
 	DeviceNetworkNewParamsTypeTLS DeviceNetworkNewParamsType = "tls"
 )
+
+func (r DeviceNetworkNewParamsType) IsKnown() bool {
+	switch r {
+	case DeviceNetworkNewParamsTypeTLS:
+		return true
+	}
+	return false
+}
 
 type DeviceNetworkNewResponseEnvelope struct {
 	Errors   []DeviceNetworkNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -285,6 +301,14 @@ const (
 	DeviceNetworkNewResponseEnvelopeSuccessTrue DeviceNetworkNewResponseEnvelopeSuccess = true
 )
 
+func (r DeviceNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceNetworkNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DeviceNetworkUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The configuration object containing information for the WARP client to detect
@@ -322,6 +346,14 @@ type DeviceNetworkUpdateParamsType string
 const (
 	DeviceNetworkUpdateParamsTypeTLS DeviceNetworkUpdateParamsType = "tls"
 )
+
+func (r DeviceNetworkUpdateParamsType) IsKnown() bool {
+	switch r {
+	case DeviceNetworkUpdateParamsTypeTLS:
+		return true
+	}
+	return false
+}
 
 type DeviceNetworkUpdateResponseEnvelope struct {
 	Errors   []DeviceNetworkUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -403,6 +435,14 @@ type DeviceNetworkUpdateResponseEnvelopeSuccess bool
 const (
 	DeviceNetworkUpdateResponseEnvelopeSuccessTrue DeviceNetworkUpdateResponseEnvelopeSuccess = true
 )
+
+func (r DeviceNetworkUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceNetworkUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DeviceNetworkListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -490,6 +530,14 @@ type DeviceNetworkListResponseEnvelopeSuccess bool
 const (
 	DeviceNetworkListResponseEnvelopeSuccessTrue DeviceNetworkListResponseEnvelopeSuccess = true
 )
+
+func (r DeviceNetworkListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceNetworkListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DeviceNetworkListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -609,6 +657,14 @@ const (
 	DeviceNetworkDeleteResponseEnvelopeSuccessTrue DeviceNetworkDeleteResponseEnvelopeSuccess = true
 )
 
+func (r DeviceNetworkDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceNetworkDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DeviceNetworkDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -724,3 +780,11 @@ type DeviceNetworkGetResponseEnvelopeSuccess bool
 const (
 	DeviceNetworkGetResponseEnvelopeSuccessTrue DeviceNetworkGetResponseEnvelopeSuccess = true
 )
+
+func (r DeviceNetworkGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceNetworkGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

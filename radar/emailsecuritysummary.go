@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -1617,6 +1617,14 @@ const (
 	EmailSecuritySummaryARCParamsDateRange24wControl EmailSecuritySummaryARCParamsDateRange = "24wControl"
 )
 
+func (r EmailSecuritySummaryARCParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryARCParamsDateRange1d, EmailSecuritySummaryARCParamsDateRange2d, EmailSecuritySummaryARCParamsDateRange7d, EmailSecuritySummaryARCParamsDateRange14d, EmailSecuritySummaryARCParamsDateRange28d, EmailSecuritySummaryARCParamsDateRange12w, EmailSecuritySummaryARCParamsDateRange24w, EmailSecuritySummaryARCParamsDateRange52w, EmailSecuritySummaryARCParamsDateRange1dControl, EmailSecuritySummaryARCParamsDateRange2dControl, EmailSecuritySummaryARCParamsDateRange7dControl, EmailSecuritySummaryARCParamsDateRange14dControl, EmailSecuritySummaryARCParamsDateRange28dControl, EmailSecuritySummaryARCParamsDateRange12wControl, EmailSecuritySummaryARCParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryARCParamsDKIM string
 
 const (
@@ -1624,6 +1632,14 @@ const (
 	EmailSecuritySummaryARCParamsDKIMNone EmailSecuritySummaryARCParamsDKIM = "NONE"
 	EmailSecuritySummaryARCParamsDKIMFail EmailSecuritySummaryARCParamsDKIM = "FAIL"
 )
+
+func (r EmailSecuritySummaryARCParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryARCParamsDKIMPass, EmailSecuritySummaryARCParamsDKIMNone, EmailSecuritySummaryARCParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryARCParamsDMARC string
 
@@ -1633,6 +1649,14 @@ const (
 	EmailSecuritySummaryARCParamsDMARCFail EmailSecuritySummaryARCParamsDMARC = "FAIL"
 )
 
+func (r EmailSecuritySummaryARCParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryARCParamsDMARCPass, EmailSecuritySummaryARCParamsDMARCNone, EmailSecuritySummaryARCParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecuritySummaryARCParamsFormat string
 
@@ -1640,6 +1664,14 @@ const (
 	EmailSecuritySummaryARCParamsFormatJson EmailSecuritySummaryARCParamsFormat = "JSON"
 	EmailSecuritySummaryARCParamsFormatCsv  EmailSecuritySummaryARCParamsFormat = "CSV"
 )
+
+func (r EmailSecuritySummaryARCParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryARCParamsFormatJson, EmailSecuritySummaryARCParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryARCParamsSPF string
 
@@ -1649,6 +1681,14 @@ const (
 	EmailSecuritySummaryARCParamsSPFFail EmailSecuritySummaryARCParamsSPF = "FAIL"
 )
 
+func (r EmailSecuritySummaryARCParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryARCParamsSPFPass, EmailSecuritySummaryARCParamsSPFNone, EmailSecuritySummaryARCParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryARCParamsTLSVersion string
 
 const (
@@ -1657,6 +1697,14 @@ const (
 	EmailSecuritySummaryARCParamsTLSVersionTlSv1_2 EmailSecuritySummaryARCParamsTLSVersion = "TLSv1_2"
 	EmailSecuritySummaryARCParamsTLSVersionTlSv1_3 EmailSecuritySummaryARCParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecuritySummaryARCParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryARCParamsTLSVersionTlSv1_0, EmailSecuritySummaryARCParamsTLSVersionTlSv1_1, EmailSecuritySummaryARCParamsTLSVersionTlSv1_2, EmailSecuritySummaryARCParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryARCResponseEnvelope struct {
 	Result  EmailSecuritySummaryARCResponse             `json:"result,required"`
@@ -1721,6 +1769,14 @@ const (
 	EmailSecuritySummaryDKIMParamsARCFail EmailSecuritySummaryDKIMParamsARC = "FAIL"
 )
 
+func (r EmailSecuritySummaryDKIMParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDKIMParamsARCPass, EmailSecuritySummaryDKIMParamsARCNone, EmailSecuritySummaryDKIMParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryDKIMParamsDateRange string
 
 const (
@@ -1741,6 +1797,14 @@ const (
 	EmailSecuritySummaryDKIMParamsDateRange24wControl EmailSecuritySummaryDKIMParamsDateRange = "24wControl"
 )
 
+func (r EmailSecuritySummaryDKIMParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDKIMParamsDateRange1d, EmailSecuritySummaryDKIMParamsDateRange2d, EmailSecuritySummaryDKIMParamsDateRange7d, EmailSecuritySummaryDKIMParamsDateRange14d, EmailSecuritySummaryDKIMParamsDateRange28d, EmailSecuritySummaryDKIMParamsDateRange12w, EmailSecuritySummaryDKIMParamsDateRange24w, EmailSecuritySummaryDKIMParamsDateRange52w, EmailSecuritySummaryDKIMParamsDateRange1dControl, EmailSecuritySummaryDKIMParamsDateRange2dControl, EmailSecuritySummaryDKIMParamsDateRange7dControl, EmailSecuritySummaryDKIMParamsDateRange14dControl, EmailSecuritySummaryDKIMParamsDateRange28dControl, EmailSecuritySummaryDKIMParamsDateRange12wControl, EmailSecuritySummaryDKIMParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryDKIMParamsDMARC string
 
 const (
@@ -1748,6 +1812,14 @@ const (
 	EmailSecuritySummaryDKIMParamsDMARCNone EmailSecuritySummaryDKIMParamsDMARC = "NONE"
 	EmailSecuritySummaryDKIMParamsDMARCFail EmailSecuritySummaryDKIMParamsDMARC = "FAIL"
 )
+
+func (r EmailSecuritySummaryDKIMParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDKIMParamsDMARCPass, EmailSecuritySummaryDKIMParamsDMARCNone, EmailSecuritySummaryDKIMParamsDMARCFail:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type EmailSecuritySummaryDKIMParamsFormat string
@@ -1757,6 +1829,14 @@ const (
 	EmailSecuritySummaryDKIMParamsFormatCsv  EmailSecuritySummaryDKIMParamsFormat = "CSV"
 )
 
+func (r EmailSecuritySummaryDKIMParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDKIMParamsFormatJson, EmailSecuritySummaryDKIMParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryDKIMParamsSPF string
 
 const (
@@ -1764,6 +1844,14 @@ const (
 	EmailSecuritySummaryDKIMParamsSPFNone EmailSecuritySummaryDKIMParamsSPF = "NONE"
 	EmailSecuritySummaryDKIMParamsSPFFail EmailSecuritySummaryDKIMParamsSPF = "FAIL"
 )
+
+func (r EmailSecuritySummaryDKIMParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDKIMParamsSPFPass, EmailSecuritySummaryDKIMParamsSPFNone, EmailSecuritySummaryDKIMParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryDKIMParamsTLSVersion string
 
@@ -1773,6 +1861,14 @@ const (
 	EmailSecuritySummaryDKIMParamsTLSVersionTlSv1_2 EmailSecuritySummaryDKIMParamsTLSVersion = "TLSv1_2"
 	EmailSecuritySummaryDKIMParamsTLSVersionTlSv1_3 EmailSecuritySummaryDKIMParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecuritySummaryDKIMParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDKIMParamsTLSVersionTlSv1_0, EmailSecuritySummaryDKIMParamsTLSVersionTlSv1_1, EmailSecuritySummaryDKIMParamsTLSVersionTlSv1_2, EmailSecuritySummaryDKIMParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryDKIMResponseEnvelope struct {
 	Result  EmailSecuritySummaryDKIMResponse             `json:"result,required"`
@@ -1837,6 +1933,14 @@ const (
 	EmailSecuritySummaryDMARCParamsARCFail EmailSecuritySummaryDMARCParamsARC = "FAIL"
 )
 
+func (r EmailSecuritySummaryDMARCParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDMARCParamsARCPass, EmailSecuritySummaryDMARCParamsARCNone, EmailSecuritySummaryDMARCParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryDMARCParamsDateRange string
 
 const (
@@ -1857,6 +1961,14 @@ const (
 	EmailSecuritySummaryDMARCParamsDateRange24wControl EmailSecuritySummaryDMARCParamsDateRange = "24wControl"
 )
 
+func (r EmailSecuritySummaryDMARCParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDMARCParamsDateRange1d, EmailSecuritySummaryDMARCParamsDateRange2d, EmailSecuritySummaryDMARCParamsDateRange7d, EmailSecuritySummaryDMARCParamsDateRange14d, EmailSecuritySummaryDMARCParamsDateRange28d, EmailSecuritySummaryDMARCParamsDateRange12w, EmailSecuritySummaryDMARCParamsDateRange24w, EmailSecuritySummaryDMARCParamsDateRange52w, EmailSecuritySummaryDMARCParamsDateRange1dControl, EmailSecuritySummaryDMARCParamsDateRange2dControl, EmailSecuritySummaryDMARCParamsDateRange7dControl, EmailSecuritySummaryDMARCParamsDateRange14dControl, EmailSecuritySummaryDMARCParamsDateRange28dControl, EmailSecuritySummaryDMARCParamsDateRange12wControl, EmailSecuritySummaryDMARCParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryDMARCParamsDKIM string
 
 const (
@@ -1864,6 +1976,14 @@ const (
 	EmailSecuritySummaryDMARCParamsDKIMNone EmailSecuritySummaryDMARCParamsDKIM = "NONE"
 	EmailSecuritySummaryDMARCParamsDKIMFail EmailSecuritySummaryDMARCParamsDKIM = "FAIL"
 )
+
+func (r EmailSecuritySummaryDMARCParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDMARCParamsDKIMPass, EmailSecuritySummaryDMARCParamsDKIMNone, EmailSecuritySummaryDMARCParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type EmailSecuritySummaryDMARCParamsFormat string
@@ -1873,6 +1993,14 @@ const (
 	EmailSecuritySummaryDMARCParamsFormatCsv  EmailSecuritySummaryDMARCParamsFormat = "CSV"
 )
 
+func (r EmailSecuritySummaryDMARCParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDMARCParamsFormatJson, EmailSecuritySummaryDMARCParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryDMARCParamsSPF string
 
 const (
@@ -1880,6 +2008,14 @@ const (
 	EmailSecuritySummaryDMARCParamsSPFNone EmailSecuritySummaryDMARCParamsSPF = "NONE"
 	EmailSecuritySummaryDMARCParamsSPFFail EmailSecuritySummaryDMARCParamsSPF = "FAIL"
 )
+
+func (r EmailSecuritySummaryDMARCParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDMARCParamsSPFPass, EmailSecuritySummaryDMARCParamsSPFNone, EmailSecuritySummaryDMARCParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryDMARCParamsTLSVersion string
 
@@ -1889,6 +2025,14 @@ const (
 	EmailSecuritySummaryDMARCParamsTLSVersionTlSv1_2 EmailSecuritySummaryDMARCParamsTLSVersion = "TLSv1_2"
 	EmailSecuritySummaryDMARCParamsTLSVersionTlSv1_3 EmailSecuritySummaryDMARCParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecuritySummaryDMARCParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryDMARCParamsTLSVersionTlSv1_0, EmailSecuritySummaryDMARCParamsTLSVersionTlSv1_1, EmailSecuritySummaryDMARCParamsTLSVersionTlSv1_2, EmailSecuritySummaryDMARCParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryDMARCResponseEnvelope struct {
 	Result  EmailSecuritySummaryDMARCResponse             `json:"result,required"`
@@ -1955,6 +2099,14 @@ const (
 	EmailSecuritySummaryMaliciousParamsARCFail EmailSecuritySummaryMaliciousParamsARC = "FAIL"
 )
 
+func (r EmailSecuritySummaryMaliciousParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryMaliciousParamsARCPass, EmailSecuritySummaryMaliciousParamsARCNone, EmailSecuritySummaryMaliciousParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryMaliciousParamsDateRange string
 
 const (
@@ -1975,6 +2127,14 @@ const (
 	EmailSecuritySummaryMaliciousParamsDateRange24wControl EmailSecuritySummaryMaliciousParamsDateRange = "24wControl"
 )
 
+func (r EmailSecuritySummaryMaliciousParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryMaliciousParamsDateRange1d, EmailSecuritySummaryMaliciousParamsDateRange2d, EmailSecuritySummaryMaliciousParamsDateRange7d, EmailSecuritySummaryMaliciousParamsDateRange14d, EmailSecuritySummaryMaliciousParamsDateRange28d, EmailSecuritySummaryMaliciousParamsDateRange12w, EmailSecuritySummaryMaliciousParamsDateRange24w, EmailSecuritySummaryMaliciousParamsDateRange52w, EmailSecuritySummaryMaliciousParamsDateRange1dControl, EmailSecuritySummaryMaliciousParamsDateRange2dControl, EmailSecuritySummaryMaliciousParamsDateRange7dControl, EmailSecuritySummaryMaliciousParamsDateRange14dControl, EmailSecuritySummaryMaliciousParamsDateRange28dControl, EmailSecuritySummaryMaliciousParamsDateRange12wControl, EmailSecuritySummaryMaliciousParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryMaliciousParamsDKIM string
 
 const (
@@ -1982,6 +2142,14 @@ const (
 	EmailSecuritySummaryMaliciousParamsDKIMNone EmailSecuritySummaryMaliciousParamsDKIM = "NONE"
 	EmailSecuritySummaryMaliciousParamsDKIMFail EmailSecuritySummaryMaliciousParamsDKIM = "FAIL"
 )
+
+func (r EmailSecuritySummaryMaliciousParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryMaliciousParamsDKIMPass, EmailSecuritySummaryMaliciousParamsDKIMNone, EmailSecuritySummaryMaliciousParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryMaliciousParamsDMARC string
 
@@ -1991,6 +2159,14 @@ const (
 	EmailSecuritySummaryMaliciousParamsDMARCFail EmailSecuritySummaryMaliciousParamsDMARC = "FAIL"
 )
 
+func (r EmailSecuritySummaryMaliciousParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryMaliciousParamsDMARCPass, EmailSecuritySummaryMaliciousParamsDMARCNone, EmailSecuritySummaryMaliciousParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecuritySummaryMaliciousParamsFormat string
 
@@ -1998,6 +2174,14 @@ const (
 	EmailSecuritySummaryMaliciousParamsFormatJson EmailSecuritySummaryMaliciousParamsFormat = "JSON"
 	EmailSecuritySummaryMaliciousParamsFormatCsv  EmailSecuritySummaryMaliciousParamsFormat = "CSV"
 )
+
+func (r EmailSecuritySummaryMaliciousParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryMaliciousParamsFormatJson, EmailSecuritySummaryMaliciousParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryMaliciousParamsSPF string
 
@@ -2007,6 +2191,14 @@ const (
 	EmailSecuritySummaryMaliciousParamsSPFFail EmailSecuritySummaryMaliciousParamsSPF = "FAIL"
 )
 
+func (r EmailSecuritySummaryMaliciousParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryMaliciousParamsSPFPass, EmailSecuritySummaryMaliciousParamsSPFNone, EmailSecuritySummaryMaliciousParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryMaliciousParamsTLSVersion string
 
 const (
@@ -2015,6 +2207,14 @@ const (
 	EmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_2 EmailSecuritySummaryMaliciousParamsTLSVersion = "TLSv1_2"
 	EmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_3 EmailSecuritySummaryMaliciousParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecuritySummaryMaliciousParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_0, EmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_1, EmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_2, EmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryMaliciousResponseEnvelope struct {
 	Result  EmailSecuritySummaryMaliciousResponse             `json:"result,required"`
@@ -2081,6 +2281,14 @@ const (
 	EmailSecuritySummarySpamParamsARCFail EmailSecuritySummarySpamParamsARC = "FAIL"
 )
 
+func (r EmailSecuritySummarySpamParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpamParamsARCPass, EmailSecuritySummarySpamParamsARCNone, EmailSecuritySummarySpamParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummarySpamParamsDateRange string
 
 const (
@@ -2101,6 +2309,14 @@ const (
 	EmailSecuritySummarySpamParamsDateRange24wControl EmailSecuritySummarySpamParamsDateRange = "24wControl"
 )
 
+func (r EmailSecuritySummarySpamParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpamParamsDateRange1d, EmailSecuritySummarySpamParamsDateRange2d, EmailSecuritySummarySpamParamsDateRange7d, EmailSecuritySummarySpamParamsDateRange14d, EmailSecuritySummarySpamParamsDateRange28d, EmailSecuritySummarySpamParamsDateRange12w, EmailSecuritySummarySpamParamsDateRange24w, EmailSecuritySummarySpamParamsDateRange52w, EmailSecuritySummarySpamParamsDateRange1dControl, EmailSecuritySummarySpamParamsDateRange2dControl, EmailSecuritySummarySpamParamsDateRange7dControl, EmailSecuritySummarySpamParamsDateRange14dControl, EmailSecuritySummarySpamParamsDateRange28dControl, EmailSecuritySummarySpamParamsDateRange12wControl, EmailSecuritySummarySpamParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummarySpamParamsDKIM string
 
 const (
@@ -2108,6 +2324,14 @@ const (
 	EmailSecuritySummarySpamParamsDKIMNone EmailSecuritySummarySpamParamsDKIM = "NONE"
 	EmailSecuritySummarySpamParamsDKIMFail EmailSecuritySummarySpamParamsDKIM = "FAIL"
 )
+
+func (r EmailSecuritySummarySpamParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpamParamsDKIMPass, EmailSecuritySummarySpamParamsDKIMNone, EmailSecuritySummarySpamParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummarySpamParamsDMARC string
 
@@ -2117,6 +2341,14 @@ const (
 	EmailSecuritySummarySpamParamsDMARCFail EmailSecuritySummarySpamParamsDMARC = "FAIL"
 )
 
+func (r EmailSecuritySummarySpamParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpamParamsDMARCPass, EmailSecuritySummarySpamParamsDMARCNone, EmailSecuritySummarySpamParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecuritySummarySpamParamsFormat string
 
@@ -2124,6 +2356,14 @@ const (
 	EmailSecuritySummarySpamParamsFormatJson EmailSecuritySummarySpamParamsFormat = "JSON"
 	EmailSecuritySummarySpamParamsFormatCsv  EmailSecuritySummarySpamParamsFormat = "CSV"
 )
+
+func (r EmailSecuritySummarySpamParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpamParamsFormatJson, EmailSecuritySummarySpamParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummarySpamParamsSPF string
 
@@ -2133,6 +2373,14 @@ const (
 	EmailSecuritySummarySpamParamsSPFFail EmailSecuritySummarySpamParamsSPF = "FAIL"
 )
 
+func (r EmailSecuritySummarySpamParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpamParamsSPFPass, EmailSecuritySummarySpamParamsSPFNone, EmailSecuritySummarySpamParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummarySpamParamsTLSVersion string
 
 const (
@@ -2141,6 +2389,14 @@ const (
 	EmailSecuritySummarySpamParamsTLSVersionTlSv1_2 EmailSecuritySummarySpamParamsTLSVersion = "TLSv1_2"
 	EmailSecuritySummarySpamParamsTLSVersionTlSv1_3 EmailSecuritySummarySpamParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecuritySummarySpamParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpamParamsTLSVersionTlSv1_0, EmailSecuritySummarySpamParamsTLSVersionTlSv1_1, EmailSecuritySummarySpamParamsTLSVersionTlSv1_2, EmailSecuritySummarySpamParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummarySpamResponseEnvelope struct {
 	Result  EmailSecuritySummarySpamResponse             `json:"result,required"`
@@ -2205,6 +2461,14 @@ const (
 	EmailSecuritySummarySPFParamsARCFail EmailSecuritySummarySPFParamsARC = "FAIL"
 )
 
+func (r EmailSecuritySummarySPFParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySPFParamsARCPass, EmailSecuritySummarySPFParamsARCNone, EmailSecuritySummarySPFParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummarySPFParamsDateRange string
 
 const (
@@ -2225,6 +2489,14 @@ const (
 	EmailSecuritySummarySPFParamsDateRange24wControl EmailSecuritySummarySPFParamsDateRange = "24wControl"
 )
 
+func (r EmailSecuritySummarySPFParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySPFParamsDateRange1d, EmailSecuritySummarySPFParamsDateRange2d, EmailSecuritySummarySPFParamsDateRange7d, EmailSecuritySummarySPFParamsDateRange14d, EmailSecuritySummarySPFParamsDateRange28d, EmailSecuritySummarySPFParamsDateRange12w, EmailSecuritySummarySPFParamsDateRange24w, EmailSecuritySummarySPFParamsDateRange52w, EmailSecuritySummarySPFParamsDateRange1dControl, EmailSecuritySummarySPFParamsDateRange2dControl, EmailSecuritySummarySPFParamsDateRange7dControl, EmailSecuritySummarySPFParamsDateRange14dControl, EmailSecuritySummarySPFParamsDateRange28dControl, EmailSecuritySummarySPFParamsDateRange12wControl, EmailSecuritySummarySPFParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummarySPFParamsDKIM string
 
 const (
@@ -2232,6 +2504,14 @@ const (
 	EmailSecuritySummarySPFParamsDKIMNone EmailSecuritySummarySPFParamsDKIM = "NONE"
 	EmailSecuritySummarySPFParamsDKIMFail EmailSecuritySummarySPFParamsDKIM = "FAIL"
 )
+
+func (r EmailSecuritySummarySPFParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySPFParamsDKIMPass, EmailSecuritySummarySPFParamsDKIMNone, EmailSecuritySummarySPFParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummarySPFParamsDMARC string
 
@@ -2241,6 +2521,14 @@ const (
 	EmailSecuritySummarySPFParamsDMARCFail EmailSecuritySummarySPFParamsDMARC = "FAIL"
 )
 
+func (r EmailSecuritySummarySPFParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySPFParamsDMARCPass, EmailSecuritySummarySPFParamsDMARCNone, EmailSecuritySummarySPFParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecuritySummarySPFParamsFormat string
 
@@ -2248,6 +2536,14 @@ const (
 	EmailSecuritySummarySPFParamsFormatJson EmailSecuritySummarySPFParamsFormat = "JSON"
 	EmailSecuritySummarySPFParamsFormatCsv  EmailSecuritySummarySPFParamsFormat = "CSV"
 )
+
+func (r EmailSecuritySummarySPFParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySPFParamsFormatJson, EmailSecuritySummarySPFParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummarySPFParamsTLSVersion string
 
@@ -2257,6 +2553,14 @@ const (
 	EmailSecuritySummarySPFParamsTLSVersionTlSv1_2 EmailSecuritySummarySPFParamsTLSVersion = "TLSv1_2"
 	EmailSecuritySummarySPFParamsTLSVersionTlSv1_3 EmailSecuritySummarySPFParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecuritySummarySPFParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySPFParamsTLSVersionTlSv1_0, EmailSecuritySummarySPFParamsTLSVersionTlSv1_1, EmailSecuritySummarySPFParamsTLSVersionTlSv1_2, EmailSecuritySummarySPFParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummarySPFResponseEnvelope struct {
 	Result  EmailSecuritySummarySPFResponse             `json:"result,required"`
@@ -2323,6 +2627,14 @@ const (
 	EmailSecuritySummarySpoofParamsARCFail EmailSecuritySummarySpoofParamsARC = "FAIL"
 )
 
+func (r EmailSecuritySummarySpoofParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpoofParamsARCPass, EmailSecuritySummarySpoofParamsARCNone, EmailSecuritySummarySpoofParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummarySpoofParamsDateRange string
 
 const (
@@ -2343,6 +2655,14 @@ const (
 	EmailSecuritySummarySpoofParamsDateRange24wControl EmailSecuritySummarySpoofParamsDateRange = "24wControl"
 )
 
+func (r EmailSecuritySummarySpoofParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpoofParamsDateRange1d, EmailSecuritySummarySpoofParamsDateRange2d, EmailSecuritySummarySpoofParamsDateRange7d, EmailSecuritySummarySpoofParamsDateRange14d, EmailSecuritySummarySpoofParamsDateRange28d, EmailSecuritySummarySpoofParamsDateRange12w, EmailSecuritySummarySpoofParamsDateRange24w, EmailSecuritySummarySpoofParamsDateRange52w, EmailSecuritySummarySpoofParamsDateRange1dControl, EmailSecuritySummarySpoofParamsDateRange2dControl, EmailSecuritySummarySpoofParamsDateRange7dControl, EmailSecuritySummarySpoofParamsDateRange14dControl, EmailSecuritySummarySpoofParamsDateRange28dControl, EmailSecuritySummarySpoofParamsDateRange12wControl, EmailSecuritySummarySpoofParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummarySpoofParamsDKIM string
 
 const (
@@ -2350,6 +2670,14 @@ const (
 	EmailSecuritySummarySpoofParamsDKIMNone EmailSecuritySummarySpoofParamsDKIM = "NONE"
 	EmailSecuritySummarySpoofParamsDKIMFail EmailSecuritySummarySpoofParamsDKIM = "FAIL"
 )
+
+func (r EmailSecuritySummarySpoofParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpoofParamsDKIMPass, EmailSecuritySummarySpoofParamsDKIMNone, EmailSecuritySummarySpoofParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummarySpoofParamsDMARC string
 
@@ -2359,6 +2687,14 @@ const (
 	EmailSecuritySummarySpoofParamsDMARCFail EmailSecuritySummarySpoofParamsDMARC = "FAIL"
 )
 
+func (r EmailSecuritySummarySpoofParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpoofParamsDMARCPass, EmailSecuritySummarySpoofParamsDMARCNone, EmailSecuritySummarySpoofParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecuritySummarySpoofParamsFormat string
 
@@ -2366,6 +2702,14 @@ const (
 	EmailSecuritySummarySpoofParamsFormatJson EmailSecuritySummarySpoofParamsFormat = "JSON"
 	EmailSecuritySummarySpoofParamsFormatCsv  EmailSecuritySummarySpoofParamsFormat = "CSV"
 )
+
+func (r EmailSecuritySummarySpoofParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpoofParamsFormatJson, EmailSecuritySummarySpoofParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummarySpoofParamsSPF string
 
@@ -2375,6 +2719,14 @@ const (
 	EmailSecuritySummarySpoofParamsSPFFail EmailSecuritySummarySpoofParamsSPF = "FAIL"
 )
 
+func (r EmailSecuritySummarySpoofParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpoofParamsSPFPass, EmailSecuritySummarySpoofParamsSPFNone, EmailSecuritySummarySpoofParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummarySpoofParamsTLSVersion string
 
 const (
@@ -2383,6 +2735,14 @@ const (
 	EmailSecuritySummarySpoofParamsTLSVersionTlSv1_2 EmailSecuritySummarySpoofParamsTLSVersion = "TLSv1_2"
 	EmailSecuritySummarySpoofParamsTLSVersionTlSv1_3 EmailSecuritySummarySpoofParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecuritySummarySpoofParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummarySpoofParamsTLSVersionTlSv1_0, EmailSecuritySummarySpoofParamsTLSVersionTlSv1_1, EmailSecuritySummarySpoofParamsTLSVersionTlSv1_2, EmailSecuritySummarySpoofParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummarySpoofResponseEnvelope struct {
 	Result  EmailSecuritySummarySpoofResponse             `json:"result,required"`
@@ -2449,6 +2809,14 @@ const (
 	EmailSecuritySummaryThreatCategoryParamsARCFail EmailSecuritySummaryThreatCategoryParamsARC = "FAIL"
 )
 
+func (r EmailSecuritySummaryThreatCategoryParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryThreatCategoryParamsARCPass, EmailSecuritySummaryThreatCategoryParamsARCNone, EmailSecuritySummaryThreatCategoryParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryThreatCategoryParamsDateRange string
 
 const (
@@ -2469,6 +2837,14 @@ const (
 	EmailSecuritySummaryThreatCategoryParamsDateRange24wControl EmailSecuritySummaryThreatCategoryParamsDateRange = "24wControl"
 )
 
+func (r EmailSecuritySummaryThreatCategoryParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryThreatCategoryParamsDateRange1d, EmailSecuritySummaryThreatCategoryParamsDateRange2d, EmailSecuritySummaryThreatCategoryParamsDateRange7d, EmailSecuritySummaryThreatCategoryParamsDateRange14d, EmailSecuritySummaryThreatCategoryParamsDateRange28d, EmailSecuritySummaryThreatCategoryParamsDateRange12w, EmailSecuritySummaryThreatCategoryParamsDateRange24w, EmailSecuritySummaryThreatCategoryParamsDateRange52w, EmailSecuritySummaryThreatCategoryParamsDateRange1dControl, EmailSecuritySummaryThreatCategoryParamsDateRange2dControl, EmailSecuritySummaryThreatCategoryParamsDateRange7dControl, EmailSecuritySummaryThreatCategoryParamsDateRange14dControl, EmailSecuritySummaryThreatCategoryParamsDateRange28dControl, EmailSecuritySummaryThreatCategoryParamsDateRange12wControl, EmailSecuritySummaryThreatCategoryParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryThreatCategoryParamsDKIM string
 
 const (
@@ -2476,6 +2852,14 @@ const (
 	EmailSecuritySummaryThreatCategoryParamsDKIMNone EmailSecuritySummaryThreatCategoryParamsDKIM = "NONE"
 	EmailSecuritySummaryThreatCategoryParamsDKIMFail EmailSecuritySummaryThreatCategoryParamsDKIM = "FAIL"
 )
+
+func (r EmailSecuritySummaryThreatCategoryParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryThreatCategoryParamsDKIMPass, EmailSecuritySummaryThreatCategoryParamsDKIMNone, EmailSecuritySummaryThreatCategoryParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryThreatCategoryParamsDMARC string
 
@@ -2485,6 +2869,14 @@ const (
 	EmailSecuritySummaryThreatCategoryParamsDMARCFail EmailSecuritySummaryThreatCategoryParamsDMARC = "FAIL"
 )
 
+func (r EmailSecuritySummaryThreatCategoryParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryThreatCategoryParamsDMARCPass, EmailSecuritySummaryThreatCategoryParamsDMARCNone, EmailSecuritySummaryThreatCategoryParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecuritySummaryThreatCategoryParamsFormat string
 
@@ -2492,6 +2884,14 @@ const (
 	EmailSecuritySummaryThreatCategoryParamsFormatJson EmailSecuritySummaryThreatCategoryParamsFormat = "JSON"
 	EmailSecuritySummaryThreatCategoryParamsFormatCsv  EmailSecuritySummaryThreatCategoryParamsFormat = "CSV"
 )
+
+func (r EmailSecuritySummaryThreatCategoryParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryThreatCategoryParamsFormatJson, EmailSecuritySummaryThreatCategoryParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryThreatCategoryParamsSPF string
 
@@ -2501,6 +2901,14 @@ const (
 	EmailSecuritySummaryThreatCategoryParamsSPFFail EmailSecuritySummaryThreatCategoryParamsSPF = "FAIL"
 )
 
+func (r EmailSecuritySummaryThreatCategoryParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryThreatCategoryParamsSPFPass, EmailSecuritySummaryThreatCategoryParamsSPFNone, EmailSecuritySummaryThreatCategoryParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryThreatCategoryParamsTLSVersion string
 
 const (
@@ -2509,6 +2917,14 @@ const (
 	EmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_2 EmailSecuritySummaryThreatCategoryParamsTLSVersion = "TLSv1_2"
 	EmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_3 EmailSecuritySummaryThreatCategoryParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecuritySummaryThreatCategoryParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_0, EmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_1, EmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_2, EmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryThreatCategoryResponseEnvelope struct {
 	Result  EmailSecuritySummaryThreatCategoryResponse             `json:"result,required"`
@@ -2573,6 +2989,14 @@ const (
 	EmailSecuritySummaryTLSVersionParamsARCFail EmailSecuritySummaryTLSVersionParamsARC = "FAIL"
 )
 
+func (r EmailSecuritySummaryTLSVersionParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryTLSVersionParamsARCPass, EmailSecuritySummaryTLSVersionParamsARCNone, EmailSecuritySummaryTLSVersionParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryTLSVersionParamsDateRange string
 
 const (
@@ -2593,6 +3017,14 @@ const (
 	EmailSecuritySummaryTLSVersionParamsDateRange24wControl EmailSecuritySummaryTLSVersionParamsDateRange = "24wControl"
 )
 
+func (r EmailSecuritySummaryTLSVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryTLSVersionParamsDateRange1d, EmailSecuritySummaryTLSVersionParamsDateRange2d, EmailSecuritySummaryTLSVersionParamsDateRange7d, EmailSecuritySummaryTLSVersionParamsDateRange14d, EmailSecuritySummaryTLSVersionParamsDateRange28d, EmailSecuritySummaryTLSVersionParamsDateRange12w, EmailSecuritySummaryTLSVersionParamsDateRange24w, EmailSecuritySummaryTLSVersionParamsDateRange52w, EmailSecuritySummaryTLSVersionParamsDateRange1dControl, EmailSecuritySummaryTLSVersionParamsDateRange2dControl, EmailSecuritySummaryTLSVersionParamsDateRange7dControl, EmailSecuritySummaryTLSVersionParamsDateRange14dControl, EmailSecuritySummaryTLSVersionParamsDateRange28dControl, EmailSecuritySummaryTLSVersionParamsDateRange12wControl, EmailSecuritySummaryTLSVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryTLSVersionParamsDKIM string
 
 const (
@@ -2600,6 +3032,14 @@ const (
 	EmailSecuritySummaryTLSVersionParamsDKIMNone EmailSecuritySummaryTLSVersionParamsDKIM = "NONE"
 	EmailSecuritySummaryTLSVersionParamsDKIMFail EmailSecuritySummaryTLSVersionParamsDKIM = "FAIL"
 )
+
+func (r EmailSecuritySummaryTLSVersionParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryTLSVersionParamsDKIMPass, EmailSecuritySummaryTLSVersionParamsDKIMNone, EmailSecuritySummaryTLSVersionParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryTLSVersionParamsDMARC string
 
@@ -2609,6 +3049,14 @@ const (
 	EmailSecuritySummaryTLSVersionParamsDMARCFail EmailSecuritySummaryTLSVersionParamsDMARC = "FAIL"
 )
 
+func (r EmailSecuritySummaryTLSVersionParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryTLSVersionParamsDMARCPass, EmailSecuritySummaryTLSVersionParamsDMARCNone, EmailSecuritySummaryTLSVersionParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecuritySummaryTLSVersionParamsFormat string
 
@@ -2617,6 +3065,14 @@ const (
 	EmailSecuritySummaryTLSVersionParamsFormatCsv  EmailSecuritySummaryTLSVersionParamsFormat = "CSV"
 )
 
+func (r EmailSecuritySummaryTLSVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryTLSVersionParamsFormatJson, EmailSecuritySummaryTLSVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailSecuritySummaryTLSVersionParamsSPF string
 
 const (
@@ -2624,6 +3080,14 @@ const (
 	EmailSecuritySummaryTLSVersionParamsSPFNone EmailSecuritySummaryTLSVersionParamsSPF = "NONE"
 	EmailSecuritySummaryTLSVersionParamsSPFFail EmailSecuritySummaryTLSVersionParamsSPF = "FAIL"
 )
+
+func (r EmailSecuritySummaryTLSVersionParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecuritySummaryTLSVersionParamsSPFPass, EmailSecuritySummaryTLSVersionParamsSPFNone, EmailSecuritySummaryTLSVersionParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecuritySummaryTLSVersionResponseEnvelope struct {
 	Result  EmailSecuritySummaryTLSVersionResponse             `json:"result,required"`

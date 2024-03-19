@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -105,6 +105,14 @@ const (
 	ZonesTLSClientAuthIDTLSClientAuth ZonesTLSClientAuthID = "tls_client_auth"
 )
 
+func (r ZonesTLSClientAuthID) IsKnown() bool {
+	switch r {
+	case ZonesTLSClientAuthIDTLSClientAuth:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesTLSClientAuthValue string
 
@@ -112,6 +120,14 @@ const (
 	ZonesTLSClientAuthValueOn  ZonesTLSClientAuthValue = "on"
 	ZonesTLSClientAuthValueOff ZonesTLSClientAuthValue = "off"
 )
+
+func (r ZonesTLSClientAuthValue) IsKnown() bool {
+	switch r {
+	case ZonesTLSClientAuthValueOn, ZonesTLSClientAuthValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -121,6 +137,14 @@ const (
 	ZonesTLSClientAuthEditableTrue  ZonesTLSClientAuthEditable = true
 	ZonesTLSClientAuthEditableFalse ZonesTLSClientAuthEditable = false
 )
+
+func (r ZonesTLSClientAuthEditable) IsKnown() bool {
+	switch r {
+	case ZonesTLSClientAuthEditableTrue, ZonesTLSClientAuthEditableFalse:
+		return true
+	}
+	return false
+}
 
 // TLS Client Auth requires Cloudflare to connect to your origin server using a
 // client certificate (Enterprise Only).
@@ -155,6 +179,14 @@ const (
 	SettingTLSClientAuthEditParamsValueOn  SettingTLSClientAuthEditParamsValue = "on"
 	SettingTLSClientAuthEditParamsValueOff SettingTLSClientAuthEditParamsValue = "off"
 )
+
+func (r SettingTLSClientAuthEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingTLSClientAuthEditParamsValueOn, SettingTLSClientAuthEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingTLSClientAuthEditResponseEnvelope struct {
 	Errors   []SettingTLSClientAuthEditResponseEnvelopeErrors   `json:"errors,required"`

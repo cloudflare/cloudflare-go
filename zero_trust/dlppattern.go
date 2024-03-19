@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -158,3 +158,11 @@ type DLPPatternValidateResponseEnvelopeSuccess bool
 const (
 	DLPPatternValidateResponseEnvelopeSuccessTrue DLPPatternValidateResponseEnvelopeSuccess = true
 )
+
+func (r DLPPatternValidateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPPatternValidateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

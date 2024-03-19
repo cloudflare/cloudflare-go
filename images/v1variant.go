@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package images
 
@@ -191,6 +191,14 @@ const (
 	ImageVariantVariantOptionsFitPad       ImageVariantVariantOptionsFit = "pad"
 )
 
+func (r ImageVariantVariantOptionsFit) IsKnown() bool {
+	switch r {
+	case ImageVariantVariantOptionsFitScaleDown, ImageVariantVariantOptionsFitContain, ImageVariantVariantOptionsFitCover, ImageVariantVariantOptionsFitCrop, ImageVariantVariantOptionsFitPad:
+		return true
+	}
+	return false
+}
+
 // What EXIF data should be preserved in the output image.
 type ImageVariantVariantOptionsMetadata string
 
@@ -199,6 +207,14 @@ const (
 	ImageVariantVariantOptionsMetadataCopyright ImageVariantVariantOptionsMetadata = "copyright"
 	ImageVariantVariantOptionsMetadataNone      ImageVariantVariantOptionsMetadata = "none"
 )
+
+func (r ImageVariantVariantOptionsMetadata) IsKnown() bool {
+	switch r {
+	case ImageVariantVariantOptionsMetadataKeep, ImageVariantVariantOptionsMetadataCopyright, ImageVariantVariantOptionsMetadataNone:
+		return true
+	}
+	return false
+}
 
 type ImageVariants struct {
 	Variants ImageVariantsVariants `json:"variants"`
@@ -314,6 +330,14 @@ const (
 	ImageVariantsVariantsHeroOptionsFitPad       ImageVariantsVariantsHeroOptionsFit = "pad"
 )
 
+func (r ImageVariantsVariantsHeroOptionsFit) IsKnown() bool {
+	switch r {
+	case ImageVariantsVariantsHeroOptionsFitScaleDown, ImageVariantsVariantsHeroOptionsFitContain, ImageVariantsVariantsHeroOptionsFitCover, ImageVariantsVariantsHeroOptionsFitCrop, ImageVariantsVariantsHeroOptionsFitPad:
+		return true
+	}
+	return false
+}
+
 // What EXIF data should be preserved in the output image.
 type ImageVariantsVariantsHeroOptionsMetadata string
 
@@ -322,6 +346,14 @@ const (
 	ImageVariantsVariantsHeroOptionsMetadataCopyright ImageVariantsVariantsHeroOptionsMetadata = "copyright"
 	ImageVariantsVariantsHeroOptionsMetadataNone      ImageVariantsVariantsHeroOptionsMetadata = "none"
 )
+
+func (r ImageVariantsVariantsHeroOptionsMetadata) IsKnown() bool {
+	switch r {
+	case ImageVariantsVariantsHeroOptionsMetadataKeep, ImageVariantsVariantsHeroOptionsMetadataCopyright, ImageVariantsVariantsHeroOptionsMetadataNone:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [images.V1VariantDeleteResponseUnknown] or
 // [shared.UnionString].
@@ -384,6 +416,14 @@ const (
 	V1VariantNewParamsOptionsFitPad       V1VariantNewParamsOptionsFit = "pad"
 )
 
+func (r V1VariantNewParamsOptionsFit) IsKnown() bool {
+	switch r {
+	case V1VariantNewParamsOptionsFitScaleDown, V1VariantNewParamsOptionsFitContain, V1VariantNewParamsOptionsFitCover, V1VariantNewParamsOptionsFitCrop, V1VariantNewParamsOptionsFitPad:
+		return true
+	}
+	return false
+}
+
 // What EXIF data should be preserved in the output image.
 type V1VariantNewParamsOptionsMetadata string
 
@@ -392,6 +432,14 @@ const (
 	V1VariantNewParamsOptionsMetadataCopyright V1VariantNewParamsOptionsMetadata = "copyright"
 	V1VariantNewParamsOptionsMetadataNone      V1VariantNewParamsOptionsMetadata = "none"
 )
+
+func (r V1VariantNewParamsOptionsMetadata) IsKnown() bool {
+	switch r {
+	case V1VariantNewParamsOptionsMetadataKeep, V1VariantNewParamsOptionsMetadataCopyright, V1VariantNewParamsOptionsMetadataNone:
+		return true
+	}
+	return false
+}
 
 type V1VariantNewResponseEnvelope struct {
 	Errors   []V1VariantNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -473,6 +521,14 @@ type V1VariantNewResponseEnvelopeSuccess bool
 const (
 	V1VariantNewResponseEnvelopeSuccessTrue V1VariantNewResponseEnvelopeSuccess = true
 )
+
+func (r V1VariantNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1VariantNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type V1VariantListParams struct {
 	// Account identifier tag.
@@ -560,6 +616,14 @@ const (
 	V1VariantListResponseEnvelopeSuccessTrue V1VariantListResponseEnvelopeSuccess = true
 )
 
+func (r V1VariantListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1VariantListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V1VariantDeleteParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -646,6 +710,14 @@ const (
 	V1VariantDeleteResponseEnvelopeSuccessTrue V1VariantDeleteResponseEnvelopeSuccess = true
 )
 
+func (r V1VariantDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1VariantDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V1VariantEditParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -689,6 +761,14 @@ const (
 	V1VariantEditParamsOptionsFitPad       V1VariantEditParamsOptionsFit = "pad"
 )
 
+func (r V1VariantEditParamsOptionsFit) IsKnown() bool {
+	switch r {
+	case V1VariantEditParamsOptionsFitScaleDown, V1VariantEditParamsOptionsFitContain, V1VariantEditParamsOptionsFitCover, V1VariantEditParamsOptionsFitCrop, V1VariantEditParamsOptionsFitPad:
+		return true
+	}
+	return false
+}
+
 // What EXIF data should be preserved in the output image.
 type V1VariantEditParamsOptionsMetadata string
 
@@ -697,6 +777,14 @@ const (
 	V1VariantEditParamsOptionsMetadataCopyright V1VariantEditParamsOptionsMetadata = "copyright"
 	V1VariantEditParamsOptionsMetadataNone      V1VariantEditParamsOptionsMetadata = "none"
 )
+
+func (r V1VariantEditParamsOptionsMetadata) IsKnown() bool {
+	switch r {
+	case V1VariantEditParamsOptionsMetadataKeep, V1VariantEditParamsOptionsMetadataCopyright, V1VariantEditParamsOptionsMetadataNone:
+		return true
+	}
+	return false
+}
 
 type V1VariantEditResponseEnvelope struct {
 	Errors   []V1VariantEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -778,6 +866,14 @@ type V1VariantEditResponseEnvelopeSuccess bool
 const (
 	V1VariantEditResponseEnvelopeSuccessTrue V1VariantEditResponseEnvelopeSuccess = true
 )
+
+func (r V1VariantEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1VariantEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type V1VariantGetParams struct {
 	// Account identifier tag.
@@ -864,3 +960,11 @@ type V1VariantGetResponseEnvelopeSuccess bool
 const (
 	V1VariantGetResponseEnvelopeSuccessTrue V1VariantGetResponseEnvelopeSuccess = true
 )
+
+func (r V1VariantGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1VariantGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

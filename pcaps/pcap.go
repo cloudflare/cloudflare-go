@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package pcaps
 
@@ -189,12 +189,28 @@ const (
 	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusFailed            PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus = "failed"
 )
 
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusUnknown, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusSuccess, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusPending, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusRunning, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusConversionPending, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusConversionRunning, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusComplete, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusFailed:
+		return true
+	}
+	return false
+}
+
 // The system used to collect packet captures.
 type PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystem string
 
 const (
 	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystem = "magic-transit"
 )
+
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystem) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit:
+		return true
+	}
+	return false
+}
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
@@ -204,6 +220,14 @@ const (
 	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleTypeSimple PCAPNewResponseMagicVisibilityPCAPsResponseSimpleType = "simple"
 	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleTypeFull   PCAPNewResponseMagicVisibilityPCAPsResponseSimpleType = "full"
 )
+
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseSimpleType) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseMagicVisibilityPCAPsResponseSimpleTypeSimple, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleTypeFull:
+		return true
+	}
+	return false
+}
 
 type PCAPNewResponseMagicVisibilityPCAPsResponseFull struct {
 	// The ID for the packet capture.
@@ -314,12 +338,28 @@ const (
 	PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusFailed            PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus = "failed"
 )
 
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusUnknown, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusSuccess, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusPending, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusRunning, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusConversionPending, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusConversionRunning, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusComplete, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusFailed:
+		return true
+	}
+	return false
+}
+
 // The system used to collect packet captures.
 type PCAPNewResponseMagicVisibilityPCAPsResponseFullSystem string
 
 const (
 	PCAPNewResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit PCAPNewResponseMagicVisibilityPCAPsResponseFullSystem = "magic-transit"
 )
+
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseFullSystem) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit:
+		return true
+	}
+	return false
+}
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
@@ -329,6 +369,14 @@ const (
 	PCAPNewResponseMagicVisibilityPCAPsResponseFullTypeSimple PCAPNewResponseMagicVisibilityPCAPsResponseFullType = "simple"
 	PCAPNewResponseMagicVisibilityPCAPsResponseFullTypeFull   PCAPNewResponseMagicVisibilityPCAPsResponseFullType = "full"
 )
+
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseFullType) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseMagicVisibilityPCAPsResponseFullTypeSimple, PCAPNewResponseMagicVisibilityPCAPsResponseFullTypeFull:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [pcaps.PCAPListResponseMagicVisibilityPCAPsResponseSimple] or
 // [pcaps.PCAPListResponseMagicVisibilityPCAPsResponseFull].
@@ -444,12 +492,28 @@ const (
 	PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusFailed            PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus = "failed"
 )
 
+func (r PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus) IsKnown() bool {
+	switch r {
+	case PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusUnknown, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusSuccess, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusPending, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusRunning, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusConversionPending, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusConversionRunning, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusComplete, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusFailed:
+		return true
+	}
+	return false
+}
+
 // The system used to collect packet captures.
 type PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystem string
 
 const (
 	PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystem = "magic-transit"
 )
+
+func (r PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystem) IsKnown() bool {
+	switch r {
+	case PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit:
+		return true
+	}
+	return false
+}
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
@@ -459,6 +523,14 @@ const (
 	PCAPListResponseMagicVisibilityPCAPsResponseSimpleTypeSimple PCAPListResponseMagicVisibilityPCAPsResponseSimpleType = "simple"
 	PCAPListResponseMagicVisibilityPCAPsResponseSimpleTypeFull   PCAPListResponseMagicVisibilityPCAPsResponseSimpleType = "full"
 )
+
+func (r PCAPListResponseMagicVisibilityPCAPsResponseSimpleType) IsKnown() bool {
+	switch r {
+	case PCAPListResponseMagicVisibilityPCAPsResponseSimpleTypeSimple, PCAPListResponseMagicVisibilityPCAPsResponseSimpleTypeFull:
+		return true
+	}
+	return false
+}
 
 type PCAPListResponseMagicVisibilityPCAPsResponseFull struct {
 	// The ID for the packet capture.
@@ -569,12 +641,28 @@ const (
 	PCAPListResponseMagicVisibilityPCAPsResponseFullStatusFailed            PCAPListResponseMagicVisibilityPCAPsResponseFullStatus = "failed"
 )
 
+func (r PCAPListResponseMagicVisibilityPCAPsResponseFullStatus) IsKnown() bool {
+	switch r {
+	case PCAPListResponseMagicVisibilityPCAPsResponseFullStatusUnknown, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusSuccess, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusPending, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusRunning, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusConversionPending, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusConversionRunning, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusComplete, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusFailed:
+		return true
+	}
+	return false
+}
+
 // The system used to collect packet captures.
 type PCAPListResponseMagicVisibilityPCAPsResponseFullSystem string
 
 const (
 	PCAPListResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit PCAPListResponseMagicVisibilityPCAPsResponseFullSystem = "magic-transit"
 )
+
+func (r PCAPListResponseMagicVisibilityPCAPsResponseFullSystem) IsKnown() bool {
+	switch r {
+	case PCAPListResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit:
+		return true
+	}
+	return false
+}
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
@@ -584,6 +672,14 @@ const (
 	PCAPListResponseMagicVisibilityPCAPsResponseFullTypeSimple PCAPListResponseMagicVisibilityPCAPsResponseFullType = "simple"
 	PCAPListResponseMagicVisibilityPCAPsResponseFullTypeFull   PCAPListResponseMagicVisibilityPCAPsResponseFullType = "full"
 )
+
+func (r PCAPListResponseMagicVisibilityPCAPsResponseFullType) IsKnown() bool {
+	switch r {
+	case PCAPListResponseMagicVisibilityPCAPsResponseFullTypeSimple, PCAPListResponseMagicVisibilityPCAPsResponseFullTypeFull:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [pcaps.PCAPGetResponseMagicVisibilityPCAPsResponseSimple] or
 // [pcaps.PCAPGetResponseMagicVisibilityPCAPsResponseFull].
@@ -699,12 +795,28 @@ const (
 	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusFailed            PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus = "failed"
 )
 
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusUnknown, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusSuccess, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusPending, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusRunning, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusConversionPending, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusConversionRunning, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusComplete, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusFailed:
+		return true
+	}
+	return false
+}
+
 // The system used to collect packet captures.
 type PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystem string
 
 const (
 	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystem = "magic-transit"
 )
+
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystem) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit:
+		return true
+	}
+	return false
+}
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
@@ -714,6 +826,14 @@ const (
 	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleTypeSimple PCAPGetResponseMagicVisibilityPCAPsResponseSimpleType = "simple"
 	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleTypeFull   PCAPGetResponseMagicVisibilityPCAPsResponseSimpleType = "full"
 )
+
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseSimpleType) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseMagicVisibilityPCAPsResponseSimpleTypeSimple, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleTypeFull:
+		return true
+	}
+	return false
+}
 
 type PCAPGetResponseMagicVisibilityPCAPsResponseFull struct {
 	// The ID for the packet capture.
@@ -824,12 +944,28 @@ const (
 	PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusFailed            PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus = "failed"
 )
 
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusUnknown, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusSuccess, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusPending, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusRunning, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusConversionPending, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusConversionRunning, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusComplete, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusFailed:
+		return true
+	}
+	return false
+}
+
 // The system used to collect packet captures.
 type PCAPGetResponseMagicVisibilityPCAPsResponseFullSystem string
 
 const (
 	PCAPGetResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit PCAPGetResponseMagicVisibilityPCAPsResponseFullSystem = "magic-transit"
 )
+
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseFullSystem) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit:
+		return true
+	}
+	return false
+}
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
@@ -839,6 +975,14 @@ const (
 	PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeSimple PCAPGetResponseMagicVisibilityPCAPsResponseFullType = "simple"
 	PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeFull   PCAPGetResponseMagicVisibilityPCAPsResponseFullType = "full"
 )
+
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseFullType) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeSimple, PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeFull:
+		return true
+	}
+	return false
+}
 
 type PCAPNewParams struct {
 	// Identifier
@@ -875,6 +1019,14 @@ const (
 	PCAPNewParamsSystemMagicTransit PCAPNewParamsSystem = "magic-transit"
 )
 
+func (r PCAPNewParamsSystem) IsKnown() bool {
+	switch r {
+	case PCAPNewParamsSystemMagicTransit:
+		return true
+	}
+	return false
+}
+
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
 type PCAPNewParamsType string
@@ -883,6 +1035,14 @@ const (
 	PCAPNewParamsTypeSimple PCAPNewParamsType = "simple"
 	PCAPNewParamsTypeFull   PCAPNewParamsType = "full"
 )
+
+func (r PCAPNewParamsType) IsKnown() bool {
+	switch r {
+	case PCAPNewParamsTypeSimple, PCAPNewParamsTypeFull:
+		return true
+	}
+	return false
+}
 
 type PCAPNewParamsFilterV1 struct {
 	// The destination IP address of the packet.
@@ -982,6 +1142,14 @@ const (
 	PCAPNewResponseEnvelopeSuccessTrue PCAPNewResponseEnvelopeSuccess = true
 )
 
+func (r PCAPNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PCAPListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1069,6 +1237,14 @@ type PCAPListResponseEnvelopeSuccess bool
 const (
 	PCAPListResponseEnvelopeSuccessTrue PCAPListResponseEnvelopeSuccess = true
 )
+
+func (r PCAPListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PCAPListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PCAPListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -1186,3 +1362,11 @@ type PCAPGetResponseEnvelopeSuccess bool
 const (
 	PCAPGetResponseEnvelopeSuccessTrue PCAPGetResponseEnvelopeSuccess = true
 )
+
+func (r PCAPGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

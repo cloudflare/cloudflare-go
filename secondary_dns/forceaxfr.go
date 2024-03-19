@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package secondary_dns
 
@@ -130,3 +130,11 @@ type ForceAXFRNewResponseEnvelopeSuccess bool
 const (
 	ForceAXFRNewResponseEnvelopeSuccessTrue ForceAXFRNewResponseEnvelopeSuccess = true
 )
+
+func (r ForceAXFRNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ForceAXFRNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -168,6 +168,14 @@ type WorkerScriptUpdateResponseEnvelopeSuccess bool
 const (
 	WorkerScriptUpdateResponseEnvelopeSuccessTrue WorkerScriptUpdateResponseEnvelopeSuccess = true
 )
+
+func (r WorkerScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WorkerScriptUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type WorkerScriptDeleteParams struct {
 	// Identifier

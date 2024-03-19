@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package web3
 
@@ -89,6 +89,14 @@ const (
 	DwebConfigContentListDetailsActionBlock DwebConfigContentListDetailsAction = "block"
 )
 
+func (r DwebConfigContentListDetailsAction) IsKnown() bool {
+	switch r {
+	case DwebConfigContentListDetailsActionBlock:
+		return true
+	}
+	return false
+}
+
 type HostnameIPFSUniversalPathContentListUpdateParams struct {
 	// Behavior of the content list.
 	Action param.Field[HostnameIPFSUniversalPathContentListUpdateParamsAction] `json:"action,required"`
@@ -106,6 +114,14 @@ type HostnameIPFSUniversalPathContentListUpdateParamsAction string
 const (
 	HostnameIPFSUniversalPathContentListUpdateParamsActionBlock HostnameIPFSUniversalPathContentListUpdateParamsAction = "block"
 )
+
+func (r HostnameIPFSUniversalPathContentListUpdateParamsAction) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListUpdateParamsActionBlock:
+		return true
+	}
+	return false
+}
 
 type HostnameIPFSUniversalPathContentListUpdateResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -191,6 +207,14 @@ const (
 	HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccessTrue HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess = true
 )
 
+func (r HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HostnameIPFSUniversalPathContentListGetResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages `json:"messages,required"`
@@ -274,3 +298,11 @@ type HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess bool
 const (
 	HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccessTrue HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess = true
 )
+
+func (r HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

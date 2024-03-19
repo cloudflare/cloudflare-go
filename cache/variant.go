@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package cache
 
@@ -118,6 +118,14 @@ const (
 	CacheVariantsIDVariants CacheVariantsID = "variants"
 )
 
+func (r CacheVariantsID) IsKnown() bool {
+	switch r {
+	case CacheVariantsIDVariants:
+		return true
+	}
+	return false
+}
+
 // Variant support enables caching variants of images with certain file extensions
 // in addition to the original. This only applies when the origin server sends the
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
@@ -157,6 +165,14 @@ type VariantEditResponseID string
 const (
 	VariantEditResponseIDVariants VariantEditResponseID = "variants"
 )
+
+func (r VariantEditResponseID) IsKnown() bool {
+	switch r {
+	case VariantEditResponseIDVariants:
+		return true
+	}
+	return false
+}
 
 // Value of the zone setting.
 type VariantEditResponseValue struct {
@@ -261,6 +277,14 @@ type VariantGetResponseID string
 const (
 	VariantGetResponseIDVariants VariantGetResponseID = "variants"
 )
+
+func (r VariantGetResponseID) IsKnown() bool {
+	switch r {
+	case VariantGetResponseIDVariants:
+		return true
+	}
+	return false
+}
 
 // Value of the zone setting.
 type VariantGetResponseValue struct {
@@ -417,6 +441,14 @@ const (
 	VariantDeleteResponseEnvelopeSuccessTrue VariantDeleteResponseEnvelopeSuccess = true
 )
 
+func (r VariantDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VariantDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type VariantEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -555,6 +587,14 @@ const (
 	VariantEditResponseEnvelopeSuccessTrue VariantEditResponseEnvelopeSuccess = true
 )
 
+func (r VariantEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VariantEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type VariantGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -645,3 +685,11 @@ type VariantGetResponseEnvelopeSuccess bool
 const (
 	VariantGetResponseEnvelopeSuccessTrue VariantGetResponseEnvelopeSuccess = true
 )
+
+func (r VariantGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VariantGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package waiting_rooms
 
@@ -144,6 +144,14 @@ const (
 	WaitingroomRuleResultActionBypassWaitingRoom WaitingroomRuleResultAction = "bypass_waiting_room"
 )
 
+func (r WaitingroomRuleResultAction) IsKnown() bool {
+	switch r {
+	case WaitingroomRuleResultActionBypassWaitingRoom:
+		return true
+	}
+	return false
+}
+
 type RuleNewParams struct {
 	// The action to take when the expression matches.
 	Action param.Field[RuleNewParamsAction] `json:"action,required"`
@@ -165,6 +173,14 @@ type RuleNewParamsAction string
 const (
 	RuleNewParamsActionBypassWaitingRoom RuleNewParamsAction = "bypass_waiting_room"
 )
+
+func (r RuleNewParamsAction) IsKnown() bool {
+	switch r {
+	case RuleNewParamsActionBypassWaitingRoom:
+		return true
+	}
+	return false
+}
 
 type RuleNewResponseEnvelope struct {
 	Errors   []RuleNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -249,6 +265,14 @@ const (
 	RuleNewResponseEnvelopeSuccessTrue RuleNewResponseEnvelopeSuccess = true
 )
 
+func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -309,6 +333,14 @@ type RuleUpdateParamsBodyAction string
 const (
 	RuleUpdateParamsBodyActionBypassWaitingRoom RuleUpdateParamsBodyAction = "bypass_waiting_room"
 )
+
+func (r RuleUpdateParamsBodyAction) IsKnown() bool {
+	switch r {
+	case RuleUpdateParamsBodyActionBypassWaitingRoom:
+		return true
+	}
+	return false
+}
 
 type RuleUpdateResponseEnvelope struct {
 	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -392,6 +424,14 @@ type RuleUpdateResponseEnvelopeSuccess bool
 const (
 	RuleUpdateResponseEnvelopeSuccessTrue RuleUpdateResponseEnvelopeSuccess = true
 )
+
+func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RuleUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -507,6 +547,14 @@ const (
 	RuleListResponseEnvelopeSuccessTrue RuleListResponseEnvelopeSuccess = true
 )
 
+func (r RuleListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -621,6 +669,14 @@ const (
 	RuleDeleteResponseEnvelopeSuccessTrue RuleDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -675,6 +731,14 @@ type RuleEditParamsAction string
 const (
 	RuleEditParamsActionBypassWaitingRoom RuleEditParamsAction = "bypass_waiting_room"
 )
+
+func (r RuleEditParamsAction) IsKnown() bool {
+	switch r {
+	case RuleEditParamsActionBypassWaitingRoom:
+		return true
+	}
+	return false
+}
 
 // Reorder the position of a rule
 //
@@ -781,6 +845,14 @@ type RuleEditResponseEnvelopeSuccess bool
 const (
 	RuleEditResponseEnvelopeSuccessTrue RuleEditResponseEnvelopeSuccess = true
 )
+
+func (r RuleEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RuleEditResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

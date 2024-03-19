@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -301,6 +301,14 @@ const (
 	AccessCertificateNewResponseEnvelopeSuccessTrue AccessCertificateNewResponseEnvelopeSuccess = true
 )
 
+func (r AccessCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCertificateNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessCertificateUpdateParams struct {
 	// The hostnames of the applications that will use this certificate.
 	AssociatedHostnames param.Field[[]string] `json:"associated_hostnames,required"`
@@ -397,6 +405,14 @@ const (
 	AccessCertificateUpdateResponseEnvelopeSuccessTrue AccessCertificateUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AccessCertificateUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCertificateUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessCertificateListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -486,6 +502,14 @@ type AccessCertificateListResponseEnvelopeSuccess bool
 const (
 	AccessCertificateListResponseEnvelopeSuccessTrue AccessCertificateListResponseEnvelopeSuccess = true
 )
+
+func (r AccessCertificateListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCertificateListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessCertificateListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -606,6 +630,14 @@ const (
 	AccessCertificateDeleteResponseEnvelopeSuccessTrue AccessCertificateDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCertificateDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessCertificateGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -693,3 +725,11 @@ type AccessCertificateGetResponseEnvelopeSuccess bool
 const (
 	AccessCertificateGetResponseEnvelopeSuccessTrue AccessCertificateGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessCertificateGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCertificateGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

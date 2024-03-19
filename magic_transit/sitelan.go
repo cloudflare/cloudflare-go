@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit
 
@@ -32,11 +32,11 @@ func NewSiteLanService(opts ...option.RequestOption) (r *SiteLanService) {
 
 // Creates a new LAN. If the site is in high availability mode, static_addressing
 // is required along with secondary and virtual address.
-func (r *SiteLanService) New(ctx context.Context, accountIdentifier string, siteIdentifier string, body SiteLanNewParams, opts ...option.RequestOption) (res *SiteLanNewResponse, err error) {
+func (r *SiteLanService) New(ctx context.Context, siteID string, params SiteLanNewParams, opts ...option.RequestOption) (res *SiteLanNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLanNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", accountIdentifier, siteIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", params.AccountID, siteID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *SiteLanService) New(ctx context.Context, accountIdentifier string, site
 }
 
 // Update a specific LAN.
-func (r *SiteLanService) Update(ctx context.Context, accountIdentifier string, siteIdentifier string, lanIdentifier string, body SiteLanUpdateParams, opts ...option.RequestOption) (res *SiteLanUpdateResponse, err error) {
+func (r *SiteLanService) Update(ctx context.Context, siteID string, lanID string, params SiteLanUpdateParams, opts ...option.RequestOption) (res *SiteLanUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLanUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", accountIdentifier, siteIdentifier, lanIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", params.AccountID, siteID, lanID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,10 +58,10 @@ func (r *SiteLanService) Update(ctx context.Context, accountIdentifier string, s
 }
 
 // Lists LANs associated with an account and site.
-func (r *SiteLanService) List(ctx context.Context, accountIdentifier string, siteIdentifier string, opts ...option.RequestOption) (res *SiteLanListResponse, err error) {
+func (r *SiteLanService) List(ctx context.Context, siteID string, query SiteLanListParams, opts ...option.RequestOption) (res *SiteLanListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLanListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", accountIdentifier, siteIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", query.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -71,10 +71,10 @@ func (r *SiteLanService) List(ctx context.Context, accountIdentifier string, sit
 }
 
 // Remove a specific LAN.
-func (r *SiteLanService) Delete(ctx context.Context, accountIdentifier string, siteIdentifier string, lanIdentifier string, opts ...option.RequestOption) (res *SiteLanDeleteResponse, err error) {
+func (r *SiteLanService) Delete(ctx context.Context, siteID string, lanID string, body SiteLanDeleteParams, opts ...option.RequestOption) (res *SiteLanDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLanDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", accountIdentifier, siteIdentifier, lanIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", body.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -84,10 +84,10 @@ func (r *SiteLanService) Delete(ctx context.Context, accountIdentifier string, s
 }
 
 // Get a specific LAN.
-func (r *SiteLanService) Get(ctx context.Context, accountIdentifier string, siteIdentifier string, lanIdentifier string, opts ...option.RequestOption) (res *SiteLanGetResponse, err error) {
+func (r *SiteLanService) Get(ctx context.Context, siteID string, lanID string, query SiteLanGetParams, opts ...option.RequestOption) (res *SiteLanGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLanGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", accountIdentifier, siteIdentifier, lanIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", query.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1226,7 +1226,9 @@ func (r siteLanGetResponseLanStaticAddressingDhcpServerJSON) RawJSON() string {
 }
 
 type SiteLanNewParams struct {
-	Lan param.Field[SiteLanNewParamsLan] `json:"lan"`
+	// Identifier
+	AccountID param.Field[string]              `path:"account_id,required"`
+	Lan       param.Field[SiteLanNewParamsLan] `json:"lan"`
 }
 
 func (r SiteLanNewParams) MarshalJSON() (data []byte, err error) {
@@ -1406,8 +1408,18 @@ const (
 	SiteLanNewResponseEnvelopeSuccessTrue SiteLanNewResponseEnvelopeSuccess = true
 )
 
+func (r SiteLanNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteLanUpdateParams struct {
-	Lan param.Field[SiteLanUpdateParamsLan] `json:"lan"`
+	// Identifier
+	AccountID param.Field[string]                 `path:"account_id,required"`
+	Lan       param.Field[SiteLanUpdateParamsLan] `json:"lan"`
 }
 
 func (r SiteLanUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1584,6 +1596,19 @@ const (
 	SiteLanUpdateResponseEnvelopeSuccessTrue SiteLanUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SiteLanUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteLanListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type SiteLanListResponseEnvelope struct {
 	Errors   []SiteLanListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteLanListResponseEnvelopeMessages `json:"messages,required"`
@@ -1664,6 +1689,19 @@ type SiteLanListResponseEnvelopeSuccess bool
 const (
 	SiteLanListResponseEnvelopeSuccessTrue SiteLanListResponseEnvelopeSuccess = true
 )
+
+func (r SiteLanListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteLanDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type SiteLanDeleteResponseEnvelope struct {
 	Errors   []SiteLanDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1746,6 +1784,19 @@ const (
 	SiteLanDeleteResponseEnvelopeSuccessTrue SiteLanDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SiteLanDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteLanGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type SiteLanGetResponseEnvelope struct {
 	Errors   []SiteLanGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteLanGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1826,3 +1877,11 @@ type SiteLanGetResponseEnvelopeSuccess bool
 const (
 	SiteLanGetResponseEnvelopeSuccessTrue SiteLanGetResponseEnvelopeSuccess = true
 )
+
+func (r SiteLanGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

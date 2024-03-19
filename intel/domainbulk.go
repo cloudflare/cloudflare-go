@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -287,6 +287,14 @@ type DomainBulkGetResponseEnvelopeSuccess bool
 const (
 	DomainBulkGetResponseEnvelopeSuccessTrue DomainBulkGetResponseEnvelopeSuccess = true
 )
+
+func (r DomainBulkGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainBulkGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DomainBulkGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

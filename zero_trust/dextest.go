@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -171,6 +171,14 @@ const (
 	DigitalExperienceMonitoringTestsTestsKindTraceroute DigitalExperienceMonitoringTestsTestsKind = "traceroute"
 )
 
+func (r DigitalExperienceMonitoringTestsTestsKind) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTestsTestsKindHTTP, DigitalExperienceMonitoringTestsTestsKindTraceroute:
+		return true
+	}
+	return false
+}
+
 type DigitalExperienceMonitoringTestsTestsHTTPResults struct {
 	ResourceFetchTime DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTime `json:"resourceFetchTime,required"`
 	JSON              digitalExperienceMonitoringTestsTestsHTTPResultsJSON              `json:"-"`
@@ -276,6 +284,14 @@ const (
 	DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "testRuns"
 )
 
+func (r DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsTestRuns:
+		return true
+	}
+	return false
+}
+
 type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTime struct {
 	TimePeriod DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod `json:"timePeriod,required"`
 	Values     []DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValue    `json:"values,required"`
@@ -331,6 +347,14 @@ const (
 	DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "days"
 	DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "testRuns"
 )
+
+func (r DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsTestRuns:
+		return true
+	}
+	return false
+}
 
 type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValue struct {
 	AvgMs     int64                                                                              `json:"avgMs,required"`
@@ -464,6 +488,14 @@ const (
 	DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "testRuns"
 )
 
+func (r DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsTestRuns:
+		return true
+	}
+	return false
+}
+
 type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTime struct {
 	TimePeriod DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod `json:"timePeriod,required"`
 	Values     []DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue    `json:"values,required"`
@@ -519,6 +551,14 @@ const (
 	DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "days"
 	DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "testRuns"
 )
+
+func (r DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsTestRuns:
+		return true
+	}
+	return false
+}
 
 type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue struct {
 	AvgMs     int64                                                                                    `json:"avgMs,required"`
@@ -649,6 +689,14 @@ const (
 	DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "testRuns"
 )
 
+func (r DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsTestRuns:
+		return true
+	}
+	return false
+}
+
 type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTime struct {
 	TimePeriod DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod `json:"timePeriod,required"`
 	Values     []DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValue    `json:"values,required"`
@@ -704,6 +752,14 @@ const (
 	DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "days"
 	DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "testRuns"
 )
+
+func (r DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsTestRuns:
+		return true
+	}
+	return false
+}
 
 type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValue struct {
 	AvgMs     int64                                                                                `json:"avgMs,required"`
@@ -838,6 +894,14 @@ const (
 	DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "testRuns"
 )
 
+func (r DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsTestRuns:
+		return true
+	}
+	return false
+}
+
 type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTime struct {
 	TimePeriod DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod `json:"timePeriod,required"`
 	Values     []DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue    `json:"values,required"`
@@ -893,6 +957,14 @@ const (
 	DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "days"
 	DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "testRuns"
 )
+
+func (r DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsTestRuns:
+		return true
+	}
+	return false
+}
 
 type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue struct {
 	AvgMs     int64                                                                                      `json:"avgMs,required"`
@@ -1000,6 +1072,14 @@ type DEXTestListResponseSuccess bool
 const (
 	DEXTestListResponseSuccessTrue DEXTestListResponseSuccess = true
 )
+
+func (r DEXTestListResponseSuccess) IsKnown() bool {
+	switch r {
+	case DEXTestListResponseSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DEXTestListResponseResultInfo struct {
 	// Total number of results for the requested service

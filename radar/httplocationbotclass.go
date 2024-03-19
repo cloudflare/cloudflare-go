@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -263,6 +263,14 @@ const (
 	HTTPLocationBotClassGetParamsBotClassLikelyHuman     HTTPLocationBotClassGetParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPLocationBotClassGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsBotClassLikelyAutomated, HTTPLocationBotClassGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationBotClassGetParamsDateRange string
 
 const (
@@ -283,6 +291,14 @@ const (
 	HTTPLocationBotClassGetParamsDateRange24wControl HTTPLocationBotClassGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPLocationBotClassGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsDateRange1d, HTTPLocationBotClassGetParamsDateRange2d, HTTPLocationBotClassGetParamsDateRange7d, HTTPLocationBotClassGetParamsDateRange14d, HTTPLocationBotClassGetParamsDateRange28d, HTTPLocationBotClassGetParamsDateRange12w, HTTPLocationBotClassGetParamsDateRange24w, HTTPLocationBotClassGetParamsDateRange52w, HTTPLocationBotClassGetParamsDateRange1dControl, HTTPLocationBotClassGetParamsDateRange2dControl, HTTPLocationBotClassGetParamsDateRange7dControl, HTTPLocationBotClassGetParamsDateRange14dControl, HTTPLocationBotClassGetParamsDateRange28dControl, HTTPLocationBotClassGetParamsDateRange12wControl, HTTPLocationBotClassGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationBotClassGetParamsDeviceType string
 
 const (
@@ -290,6 +306,14 @@ const (
 	HTTPLocationBotClassGetParamsDeviceTypeMobile  HTTPLocationBotClassGetParamsDeviceType = "MOBILE"
 	HTTPLocationBotClassGetParamsDeviceTypeOther   HTTPLocationBotClassGetParamsDeviceType = "OTHER"
 )
+
+func (r HTTPLocationBotClassGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsDeviceTypeDesktop, HTTPLocationBotClassGetParamsDeviceTypeMobile, HTTPLocationBotClassGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPLocationBotClassGetParamsFormat string
@@ -299,12 +323,28 @@ const (
 	HTTPLocationBotClassGetParamsFormatCsv  HTTPLocationBotClassGetParamsFormat = "CSV"
 )
 
+func (r HTTPLocationBotClassGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsFormatJson, HTTPLocationBotClassGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationBotClassGetParamsHTTPProtocol string
 
 const (
 	HTTPLocationBotClassGetParamsHTTPProtocolHTTP  HTTPLocationBotClassGetParamsHTTPProtocol = "HTTP"
 	HTTPLocationBotClassGetParamsHTTPProtocolHTTPS HTTPLocationBotClassGetParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPLocationBotClassGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsHTTPProtocolHTTP, HTTPLocationBotClassGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationBotClassGetParamsHTTPVersion string
 
@@ -314,12 +354,28 @@ const (
 	HTTPLocationBotClassGetParamsHTTPVersionHttPv3 HTTPLocationBotClassGetParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPLocationBotClassGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsHTTPVersionHttPv1, HTTPLocationBotClassGetParamsHTTPVersionHttPv2, HTTPLocationBotClassGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationBotClassGetParamsIPVersion string
 
 const (
 	HTTPLocationBotClassGetParamsIPVersionIPv4 HTTPLocationBotClassGetParamsIPVersion = "IPv4"
 	HTTPLocationBotClassGetParamsIPVersionIPv6 HTTPLocationBotClassGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPLocationBotClassGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsIPVersionIPv4, HTTPLocationBotClassGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationBotClassGetParamsOS string
 
@@ -333,6 +389,14 @@ const (
 	HTTPLocationBotClassGetParamsOSSmartTv  HTTPLocationBotClassGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPLocationBotClassGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsOSWindows, HTTPLocationBotClassGetParamsOSMacosx, HTTPLocationBotClassGetParamsOSIos, HTTPLocationBotClassGetParamsOSAndroid, HTTPLocationBotClassGetParamsOSChromeos, HTTPLocationBotClassGetParamsOSLinux, HTTPLocationBotClassGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationBotClassGetParamsTLSVersion string
 
 const (
@@ -342,6 +406,14 @@ const (
 	HTTPLocationBotClassGetParamsTLSVersionTlSv1_3  HTTPLocationBotClassGetParamsTLSVersion = "TLSv1_3"
 	HTTPLocationBotClassGetParamsTLSVersionTlSvQuic HTTPLocationBotClassGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPLocationBotClassGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationBotClassGetParamsTLSVersionTlSv1_0, HTTPLocationBotClassGetParamsTLSVersionTlSv1_1, HTTPLocationBotClassGetParamsTLSVersionTlSv1_2, HTTPLocationBotClassGetParamsTLSVersionTlSv1_3, HTTPLocationBotClassGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationBotClassGetResponseEnvelope struct {
 	Result  HTTPLocationBotClassGetResponse             `json:"result,required"`

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -252,6 +252,14 @@ const (
 	EmailSecurityTopTldGetParamsARCFail EmailSecurityTopTldGetParamsARC = "FAIL"
 )
 
+func (r EmailSecurityTopTldGetParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldGetParamsARCPass, EmailSecurityTopTldGetParamsARCNone, EmailSecurityTopTldGetParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTopTldGetParamsDateRange string
 
 const (
@@ -272,6 +280,14 @@ const (
 	EmailSecurityTopTldGetParamsDateRange24wControl EmailSecurityTopTldGetParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTopTldGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldGetParamsDateRange1d, EmailSecurityTopTldGetParamsDateRange2d, EmailSecurityTopTldGetParamsDateRange7d, EmailSecurityTopTldGetParamsDateRange14d, EmailSecurityTopTldGetParamsDateRange28d, EmailSecurityTopTldGetParamsDateRange12w, EmailSecurityTopTldGetParamsDateRange24w, EmailSecurityTopTldGetParamsDateRange52w, EmailSecurityTopTldGetParamsDateRange1dControl, EmailSecurityTopTldGetParamsDateRange2dControl, EmailSecurityTopTldGetParamsDateRange7dControl, EmailSecurityTopTldGetParamsDateRange14dControl, EmailSecurityTopTldGetParamsDateRange28dControl, EmailSecurityTopTldGetParamsDateRange12wControl, EmailSecurityTopTldGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTopTldGetParamsDKIM string
 
 const (
@@ -279,6 +295,14 @@ const (
 	EmailSecurityTopTldGetParamsDKIMNone EmailSecurityTopTldGetParamsDKIM = "NONE"
 	EmailSecurityTopTldGetParamsDKIMFail EmailSecurityTopTldGetParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTopTldGetParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldGetParamsDKIMPass, EmailSecurityTopTldGetParamsDKIMNone, EmailSecurityTopTldGetParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTopTldGetParamsDMARC string
 
@@ -288,6 +312,14 @@ const (
 	EmailSecurityTopTldGetParamsDMARCFail EmailSecurityTopTldGetParamsDMARC = "FAIL"
 )
 
+func (r EmailSecurityTopTldGetParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldGetParamsDMARCPass, EmailSecurityTopTldGetParamsDMARCNone, EmailSecurityTopTldGetParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecurityTopTldGetParamsFormat string
 
@@ -295,6 +327,14 @@ const (
 	EmailSecurityTopTldGetParamsFormatJson EmailSecurityTopTldGetParamsFormat = "JSON"
 	EmailSecurityTopTldGetParamsFormatCsv  EmailSecurityTopTldGetParamsFormat = "CSV"
 )
+
+func (r EmailSecurityTopTldGetParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldGetParamsFormatJson, EmailSecurityTopTldGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTopTldGetParamsSPF string
 
@@ -304,6 +344,14 @@ const (
 	EmailSecurityTopTldGetParamsSPFFail EmailSecurityTopTldGetParamsSPF = "FAIL"
 )
 
+func (r EmailSecurityTopTldGetParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldGetParamsSPFPass, EmailSecurityTopTldGetParamsSPFNone, EmailSecurityTopTldGetParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 // Filter for TLDs by category.
 type EmailSecurityTopTldGetParamsTldCategory string
 
@@ -311,6 +359,14 @@ const (
 	EmailSecurityTopTldGetParamsTldCategoryClassic EmailSecurityTopTldGetParamsTldCategory = "CLASSIC"
 	EmailSecurityTopTldGetParamsTldCategoryCountry EmailSecurityTopTldGetParamsTldCategory = "COUNTRY"
 )
+
+func (r EmailSecurityTopTldGetParamsTldCategory) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldGetParamsTldCategoryClassic, EmailSecurityTopTldGetParamsTldCategoryCountry:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTopTldGetParamsTLSVersion string
 
@@ -320,6 +376,14 @@ const (
 	EmailSecurityTopTldGetParamsTLSVersionTlSv1_2 EmailSecurityTopTldGetParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTopTldGetParamsTLSVersionTlSv1_3 EmailSecurityTopTldGetParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTopTldGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTopTldGetParamsTLSVersionTlSv1_0, EmailSecurityTopTldGetParamsTLSVersionTlSv1_1, EmailSecurityTopTldGetParamsTLSVersionTlSv1_2, EmailSecurityTopTldGetParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTopTldGetResponseEnvelope struct {
 	Result  EmailSecurityTopTldGetResponse             `json:"result,required"`

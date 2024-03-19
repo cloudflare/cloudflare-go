@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -113,6 +113,14 @@ type DigitalExperienceMonitoringTracerouteDetailsKind string
 const (
 	DigitalExperienceMonitoringTracerouteDetailsKindTraceroute DigitalExperienceMonitoringTracerouteDetailsKind = "traceroute"
 )
+
+func (r DigitalExperienceMonitoringTracerouteDetailsKind) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTracerouteDetailsKindTraceroute:
+		return true
+	}
+	return false
+}
 
 type DigitalExperienceMonitoringTracerouteDetailsTracerouteStats struct {
 	AvailabilityPct DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPct `json:"availabilityPct,required"`
@@ -782,6 +790,14 @@ const (
 	DigitalExperienceMonitoringTracerouteTestNetworkPathKindTraceroute DigitalExperienceMonitoringTracerouteTestNetworkPathKind = "traceroute"
 )
 
+func (r DigitalExperienceMonitoringTracerouteTestNetworkPathKind) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTracerouteTestNetworkPathKindTraceroute:
+		return true
+	}
+	return false
+}
+
 type DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPath struct {
 	Slots []DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSlot `json:"slots,required"`
 	// Specifies the sampling applied, if any, to the slots response. When sampled,
@@ -879,6 +895,14 @@ const (
 	DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingUnitHours DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingUnit = "hours"
 )
 
+func (r DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingUnit) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingUnitHours:
+		return true
+	}
+	return false
+}
+
 type DEXTracerouteTestGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Time interval for aggregate time slots.
@@ -911,6 +935,14 @@ const (
 	DEXTracerouteTestGetParamsIntervalMinute DEXTracerouteTestGetParamsInterval = "minute"
 	DEXTracerouteTestGetParamsIntervalHour   DEXTracerouteTestGetParamsInterval = "hour"
 )
+
+func (r DEXTracerouteTestGetParamsInterval) IsKnown() bool {
+	switch r {
+	case DEXTracerouteTestGetParamsIntervalMinute, DEXTracerouteTestGetParamsIntervalHour:
+		return true
+	}
+	return false
+}
 
 type DEXTracerouteTestGetResponseEnvelope struct {
 	Errors   []DEXTracerouteTestGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -993,6 +1025,14 @@ const (
 	DEXTracerouteTestGetResponseEnvelopeSuccessTrue DEXTracerouteTestGetResponseEnvelopeSuccess = true
 )
 
+func (r DEXTracerouteTestGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXTracerouteTestGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DEXTracerouteTestNetworkPathParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Device to filter tracroute result runs to
@@ -1021,6 +1061,14 @@ const (
 	DEXTracerouteTestNetworkPathParamsIntervalMinute DEXTracerouteTestNetworkPathParamsInterval = "minute"
 	DEXTracerouteTestNetworkPathParamsIntervalHour   DEXTracerouteTestNetworkPathParamsInterval = "hour"
 )
+
+func (r DEXTracerouteTestNetworkPathParamsInterval) IsKnown() bool {
+	switch r {
+	case DEXTracerouteTestNetworkPathParamsIntervalMinute, DEXTracerouteTestNetworkPathParamsIntervalHour:
+		return true
+	}
+	return false
+}
 
 type DEXTracerouteTestNetworkPathResponseEnvelope struct {
 	Errors   []DEXTracerouteTestNetworkPathResponseEnvelopeErrors   `json:"errors,required"`
@@ -1102,6 +1150,14 @@ type DEXTracerouteTestNetworkPathResponseEnvelopeSuccess bool
 const (
 	DEXTracerouteTestNetworkPathResponseEnvelopeSuccessTrue DEXTracerouteTestNetworkPathResponseEnvelopeSuccess = true
 )
+
+func (r DEXTracerouteTestNetworkPathResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXTracerouteTestNetworkPathResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DEXTracerouteTestPercentilesParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1206,3 +1262,11 @@ type DEXTracerouteTestPercentilesResponseEnvelopeSuccess bool
 const (
 	DEXTracerouteTestPercentilesResponseEnvelopeSuccessTrue DEXTracerouteTestPercentilesResponseEnvelopeSuccess = true
 )
+
+func (r DEXTracerouteTestPercentilesResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXTracerouteTestPercentilesResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

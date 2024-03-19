@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package hostnames
 
@@ -256,6 +256,14 @@ const (
 	SettingTLSUpdateParamsSettingIDHTTP2         SettingTLSUpdateParamsSettingID = "http2"
 )
 
+func (r SettingTLSUpdateParamsSettingID) IsKnown() bool {
+	switch r {
+	case SettingTLSUpdateParamsSettingIDCiphers, SettingTLSUpdateParamsSettingIDMinTLSVersion, SettingTLSUpdateParamsSettingIDHTTP2:
+		return true
+	}
+	return false
+}
+
 // The tls setting value.
 //
 // Satisfied by [shared.UnionFloat], [shared.UnionString],
@@ -349,6 +357,14 @@ const (
 	SettingTLSUpdateResponseEnvelopeSuccessTrue SettingTLSUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SettingTLSUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingTLSUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SettingTLSDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -362,6 +378,14 @@ const (
 	SettingTLSDeleteParamsSettingIDMinTLSVersion SettingTLSDeleteParamsSettingID = "min_tls_version"
 	SettingTLSDeleteParamsSettingIDHTTP2         SettingTLSDeleteParamsSettingID = "http2"
 )
+
+func (r SettingTLSDeleteParamsSettingID) IsKnown() bool {
+	switch r {
+	case SettingTLSDeleteParamsSettingIDCiphers, SettingTLSDeleteParamsSettingIDMinTLSVersion, SettingTLSDeleteParamsSettingIDHTTP2:
+		return true
+	}
+	return false
+}
 
 type SettingTLSDeleteResponseEnvelope struct {
 	Errors   []SettingTLSDeleteResponseEnvelopeErrors       `json:"errors,required"`
@@ -444,6 +468,14 @@ const (
 	SettingTLSDeleteResponseEnvelopeSuccessTrue SettingTLSDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SettingTLSDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingTLSDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SettingTLSGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -457,6 +489,14 @@ const (
 	SettingTLSGetParamsSettingIDMinTLSVersion SettingTLSGetParamsSettingID = "min_tls_version"
 	SettingTLSGetParamsSettingIDHTTP2         SettingTLSGetParamsSettingID = "http2"
 )
+
+func (r SettingTLSGetParamsSettingID) IsKnown() bool {
+	switch r {
+	case SettingTLSGetParamsSettingIDCiphers, SettingTLSGetParamsSettingIDMinTLSVersion, SettingTLSGetParamsSettingIDHTTP2:
+		return true
+	}
+	return false
+}
 
 type SettingTLSGetResponseEnvelope struct {
 	Errors   []SettingTLSGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -540,6 +580,14 @@ type SettingTLSGetResponseEnvelopeSuccess bool
 const (
 	SettingTLSGetResponseEnvelopeSuccessTrue SettingTLSGetResponseEnvelopeSuccess = true
 )
+
+func (r SettingTLSGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingTLSGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SettingTLSGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package stream
 
@@ -207,3 +207,11 @@ type DirectUploadNewResponseEnvelopeSuccess bool
 const (
 	DirectUploadNewResponseEnvelopeSuccessTrue DirectUploadNewResponseEnvelopeSuccess = true
 )
+
+func (r DirectUploadNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DirectUploadNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

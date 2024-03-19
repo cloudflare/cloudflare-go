@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -1110,6 +1110,14 @@ const (
 	AttackLayer7SummaryGetParamsDateRange24wControl AttackLayer7SummaryGetParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7SummaryGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryGetParamsDateRange1d, AttackLayer7SummaryGetParamsDateRange2d, AttackLayer7SummaryGetParamsDateRange7d, AttackLayer7SummaryGetParamsDateRange14d, AttackLayer7SummaryGetParamsDateRange28d, AttackLayer7SummaryGetParamsDateRange12w, AttackLayer7SummaryGetParamsDateRange24w, AttackLayer7SummaryGetParamsDateRange52w, AttackLayer7SummaryGetParamsDateRange1dControl, AttackLayer7SummaryGetParamsDateRange2dControl, AttackLayer7SummaryGetParamsDateRange7dControl, AttackLayer7SummaryGetParamsDateRange14dControl, AttackLayer7SummaryGetParamsDateRange28dControl, AttackLayer7SummaryGetParamsDateRange12wControl, AttackLayer7SummaryGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7SummaryGetParamsFormat string
 
@@ -1117,6 +1125,14 @@ const (
 	AttackLayer7SummaryGetParamsFormatJson AttackLayer7SummaryGetParamsFormat = "JSON"
 	AttackLayer7SummaryGetParamsFormatCsv  AttackLayer7SummaryGetParamsFormat = "CSV"
 )
+
+func (r AttackLayer7SummaryGetParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryGetParamsFormatJson, AttackLayer7SummaryGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryGetResponseEnvelope struct {
 	Result  AttackLayer7SummaryGetResponse             `json:"result,required"`
@@ -1203,6 +1219,14 @@ const (
 	AttackLayer7SummaryHTTPMethodParamsDateRange24wControl AttackLayer7SummaryHTTPMethodParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7SummaryHTTPMethodParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPMethodParamsDateRange1d, AttackLayer7SummaryHTTPMethodParamsDateRange2d, AttackLayer7SummaryHTTPMethodParamsDateRange7d, AttackLayer7SummaryHTTPMethodParamsDateRange14d, AttackLayer7SummaryHTTPMethodParamsDateRange28d, AttackLayer7SummaryHTTPMethodParamsDateRange12w, AttackLayer7SummaryHTTPMethodParamsDateRange24w, AttackLayer7SummaryHTTPMethodParamsDateRange52w, AttackLayer7SummaryHTTPMethodParamsDateRange1dControl, AttackLayer7SummaryHTTPMethodParamsDateRange2dControl, AttackLayer7SummaryHTTPMethodParamsDateRange7dControl, AttackLayer7SummaryHTTPMethodParamsDateRange14dControl, AttackLayer7SummaryHTTPMethodParamsDateRange28dControl, AttackLayer7SummaryHTTPMethodParamsDateRange12wControl, AttackLayer7SummaryHTTPMethodParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7SummaryHTTPMethodParamsFormat string
 
@@ -1210,6 +1234,14 @@ const (
 	AttackLayer7SummaryHTTPMethodParamsFormatJson AttackLayer7SummaryHTTPMethodParamsFormat = "JSON"
 	AttackLayer7SummaryHTTPMethodParamsFormatCsv  AttackLayer7SummaryHTTPMethodParamsFormat = "CSV"
 )
+
+func (r AttackLayer7SummaryHTTPMethodParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPMethodParamsFormatJson, AttackLayer7SummaryHTTPMethodParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryHTTPMethodParamsHTTPVersion string
 
@@ -1219,12 +1251,28 @@ const (
 	AttackLayer7SummaryHTTPMethodParamsHTTPVersionHttPv3 AttackLayer7SummaryHTTPMethodParamsHTTPVersion = "HTTPv3"
 )
 
+func (r AttackLayer7SummaryHTTPMethodParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPMethodParamsHTTPVersionHttPv1, AttackLayer7SummaryHTTPMethodParamsHTTPVersionHttPv2, AttackLayer7SummaryHTTPMethodParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7SummaryHTTPMethodParamsIPVersion string
 
 const (
 	AttackLayer7SummaryHTTPMethodParamsIPVersionIPv4 AttackLayer7SummaryHTTPMethodParamsIPVersion = "IPv4"
 	AttackLayer7SummaryHTTPMethodParamsIPVersionIPv6 AttackLayer7SummaryHTTPMethodParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7SummaryHTTPMethodParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPMethodParamsIPVersionIPv4, AttackLayer7SummaryHTTPMethodParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryHTTPMethodParamsMitigationProduct string
 
@@ -1237,6 +1285,14 @@ const (
 	AttackLayer7SummaryHTTPMethodParamsMitigationProductAPIShield          AttackLayer7SummaryHTTPMethodParamsMitigationProduct = "API_SHIELD"
 	AttackLayer7SummaryHTTPMethodParamsMitigationProductDataLossPrevention AttackLayer7SummaryHTTPMethodParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
+
+func (r AttackLayer7SummaryHTTPMethodParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPMethodParamsMitigationProductDDOS, AttackLayer7SummaryHTTPMethodParamsMitigationProductWAF, AttackLayer7SummaryHTTPMethodParamsMitigationProductBotManagement, AttackLayer7SummaryHTTPMethodParamsMitigationProductAccessRules, AttackLayer7SummaryHTTPMethodParamsMitigationProductIPReputation, AttackLayer7SummaryHTTPMethodParamsMitigationProductAPIShield, AttackLayer7SummaryHTTPMethodParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryHTTPMethodResponseEnvelope struct {
 	Result  AttackLayer7SummaryHTTPMethodResponse             `json:"result,required"`
@@ -1323,6 +1379,14 @@ const (
 	AttackLayer7SummaryHTTPVersionParamsDateRange24wControl AttackLayer7SummaryHTTPVersionParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7SummaryHTTPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPVersionParamsDateRange1d, AttackLayer7SummaryHTTPVersionParamsDateRange2d, AttackLayer7SummaryHTTPVersionParamsDateRange7d, AttackLayer7SummaryHTTPVersionParamsDateRange14d, AttackLayer7SummaryHTTPVersionParamsDateRange28d, AttackLayer7SummaryHTTPVersionParamsDateRange12w, AttackLayer7SummaryHTTPVersionParamsDateRange24w, AttackLayer7SummaryHTTPVersionParamsDateRange52w, AttackLayer7SummaryHTTPVersionParamsDateRange1dControl, AttackLayer7SummaryHTTPVersionParamsDateRange2dControl, AttackLayer7SummaryHTTPVersionParamsDateRange7dControl, AttackLayer7SummaryHTTPVersionParamsDateRange14dControl, AttackLayer7SummaryHTTPVersionParamsDateRange28dControl, AttackLayer7SummaryHTTPVersionParamsDateRange12wControl, AttackLayer7SummaryHTTPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7SummaryHTTPVersionParamsFormat string
 
@@ -1330,6 +1394,14 @@ const (
 	AttackLayer7SummaryHTTPVersionParamsFormatJson AttackLayer7SummaryHTTPVersionParamsFormat = "JSON"
 	AttackLayer7SummaryHTTPVersionParamsFormatCsv  AttackLayer7SummaryHTTPVersionParamsFormat = "CSV"
 )
+
+func (r AttackLayer7SummaryHTTPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPVersionParamsFormatJson, AttackLayer7SummaryHTTPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryHTTPVersionParamsHTTPMethod string
 
@@ -1382,12 +1454,28 @@ const (
 	AttackLayer7SummaryHTTPVersionParamsHTTPMethodTrack           AttackLayer7SummaryHTTPVersionParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7SummaryHTTPVersionParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPVersionParamsHTTPMethodGet, AttackLayer7SummaryHTTPVersionParamsHTTPMethodPost, AttackLayer7SummaryHTTPVersionParamsHTTPMethodDelete, AttackLayer7SummaryHTTPVersionParamsHTTPMethodPut, AttackLayer7SummaryHTTPVersionParamsHTTPMethodHead, AttackLayer7SummaryHTTPVersionParamsHTTPMethodPurge, AttackLayer7SummaryHTTPVersionParamsHTTPMethodOptions, AttackLayer7SummaryHTTPVersionParamsHTTPMethodPropfind, AttackLayer7SummaryHTTPVersionParamsHTTPMethodMkcol, AttackLayer7SummaryHTTPVersionParamsHTTPMethodPatch, AttackLayer7SummaryHTTPVersionParamsHTTPMethodACL, AttackLayer7SummaryHTTPVersionParamsHTTPMethodBcopy, AttackLayer7SummaryHTTPVersionParamsHTTPMethodBdelete, AttackLayer7SummaryHTTPVersionParamsHTTPMethodBmove, AttackLayer7SummaryHTTPVersionParamsHTTPMethodBpropfind, AttackLayer7SummaryHTTPVersionParamsHTTPMethodBproppatch, AttackLayer7SummaryHTTPVersionParamsHTTPMethodCheckin, AttackLayer7SummaryHTTPVersionParamsHTTPMethodCheckout, AttackLayer7SummaryHTTPVersionParamsHTTPMethodConnect, AttackLayer7SummaryHTTPVersionParamsHTTPMethodCopy, AttackLayer7SummaryHTTPVersionParamsHTTPMethodLabel, AttackLayer7SummaryHTTPVersionParamsHTTPMethodLock, AttackLayer7SummaryHTTPVersionParamsHTTPMethodMerge, AttackLayer7SummaryHTTPVersionParamsHTTPMethodMkactivity, AttackLayer7SummaryHTTPVersionParamsHTTPMethodMkworkspace, AttackLayer7SummaryHTTPVersionParamsHTTPMethodMove, AttackLayer7SummaryHTTPVersionParamsHTTPMethodNotify, AttackLayer7SummaryHTTPVersionParamsHTTPMethodOrderpatch, AttackLayer7SummaryHTTPVersionParamsHTTPMethodPoll, AttackLayer7SummaryHTTPVersionParamsHTTPMethodProppatch, AttackLayer7SummaryHTTPVersionParamsHTTPMethodReport, AttackLayer7SummaryHTTPVersionParamsHTTPMethodSearch, AttackLayer7SummaryHTTPVersionParamsHTTPMethodSubscribe, AttackLayer7SummaryHTTPVersionParamsHTTPMethodTrace, AttackLayer7SummaryHTTPVersionParamsHTTPMethodUncheckout, AttackLayer7SummaryHTTPVersionParamsHTTPMethodUnlock, AttackLayer7SummaryHTTPVersionParamsHTTPMethodUnsubscribe, AttackLayer7SummaryHTTPVersionParamsHTTPMethodUpdate, AttackLayer7SummaryHTTPVersionParamsHTTPMethodVersioncontrol, AttackLayer7SummaryHTTPVersionParamsHTTPMethodBaselinecontrol, AttackLayer7SummaryHTTPVersionParamsHTTPMethodXmsenumatts, AttackLayer7SummaryHTTPVersionParamsHTTPMethodRpcOutData, AttackLayer7SummaryHTTPVersionParamsHTTPMethodRpcInData, AttackLayer7SummaryHTTPVersionParamsHTTPMethodJson, AttackLayer7SummaryHTTPVersionParamsHTTPMethodCook, AttackLayer7SummaryHTTPVersionParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7SummaryHTTPVersionParamsIPVersion string
 
 const (
 	AttackLayer7SummaryHTTPVersionParamsIPVersionIPv4 AttackLayer7SummaryHTTPVersionParamsIPVersion = "IPv4"
 	AttackLayer7SummaryHTTPVersionParamsIPVersionIPv6 AttackLayer7SummaryHTTPVersionParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7SummaryHTTPVersionParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPVersionParamsIPVersionIPv4, AttackLayer7SummaryHTTPVersionParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryHTTPVersionParamsMitigationProduct string
 
@@ -1400,6 +1488,14 @@ const (
 	AttackLayer7SummaryHTTPVersionParamsMitigationProductAPIShield          AttackLayer7SummaryHTTPVersionParamsMitigationProduct = "API_SHIELD"
 	AttackLayer7SummaryHTTPVersionParamsMitigationProductDataLossPrevention AttackLayer7SummaryHTTPVersionParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
+
+func (r AttackLayer7SummaryHTTPVersionParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryHTTPVersionParamsMitigationProductDDOS, AttackLayer7SummaryHTTPVersionParamsMitigationProductWAF, AttackLayer7SummaryHTTPVersionParamsMitigationProductBotManagement, AttackLayer7SummaryHTTPVersionParamsMitigationProductAccessRules, AttackLayer7SummaryHTTPVersionParamsMitigationProductIPReputation, AttackLayer7SummaryHTTPVersionParamsMitigationProductAPIShield, AttackLayer7SummaryHTTPVersionParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryHTTPVersionResponseEnvelope struct {
 	Result  AttackLayer7SummaryHTTPVersionResponse             `json:"result,required"`
@@ -1486,6 +1582,14 @@ const (
 	AttackLayer7SummaryIPVersionParamsDateRange24wControl AttackLayer7SummaryIPVersionParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7SummaryIPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIPVersionParamsDateRange1d, AttackLayer7SummaryIPVersionParamsDateRange2d, AttackLayer7SummaryIPVersionParamsDateRange7d, AttackLayer7SummaryIPVersionParamsDateRange14d, AttackLayer7SummaryIPVersionParamsDateRange28d, AttackLayer7SummaryIPVersionParamsDateRange12w, AttackLayer7SummaryIPVersionParamsDateRange24w, AttackLayer7SummaryIPVersionParamsDateRange52w, AttackLayer7SummaryIPVersionParamsDateRange1dControl, AttackLayer7SummaryIPVersionParamsDateRange2dControl, AttackLayer7SummaryIPVersionParamsDateRange7dControl, AttackLayer7SummaryIPVersionParamsDateRange14dControl, AttackLayer7SummaryIPVersionParamsDateRange28dControl, AttackLayer7SummaryIPVersionParamsDateRange12wControl, AttackLayer7SummaryIPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7SummaryIPVersionParamsFormat string
 
@@ -1493,6 +1597,14 @@ const (
 	AttackLayer7SummaryIPVersionParamsFormatJson AttackLayer7SummaryIPVersionParamsFormat = "JSON"
 	AttackLayer7SummaryIPVersionParamsFormatCsv  AttackLayer7SummaryIPVersionParamsFormat = "CSV"
 )
+
+func (r AttackLayer7SummaryIPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIPVersionParamsFormatJson, AttackLayer7SummaryIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryIPVersionParamsHTTPMethod string
 
@@ -1545,6 +1657,14 @@ const (
 	AttackLayer7SummaryIPVersionParamsHTTPMethodTrack           AttackLayer7SummaryIPVersionParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7SummaryIPVersionParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIPVersionParamsHTTPMethodGet, AttackLayer7SummaryIPVersionParamsHTTPMethodPost, AttackLayer7SummaryIPVersionParamsHTTPMethodDelete, AttackLayer7SummaryIPVersionParamsHTTPMethodPut, AttackLayer7SummaryIPVersionParamsHTTPMethodHead, AttackLayer7SummaryIPVersionParamsHTTPMethodPurge, AttackLayer7SummaryIPVersionParamsHTTPMethodOptions, AttackLayer7SummaryIPVersionParamsHTTPMethodPropfind, AttackLayer7SummaryIPVersionParamsHTTPMethodMkcol, AttackLayer7SummaryIPVersionParamsHTTPMethodPatch, AttackLayer7SummaryIPVersionParamsHTTPMethodACL, AttackLayer7SummaryIPVersionParamsHTTPMethodBcopy, AttackLayer7SummaryIPVersionParamsHTTPMethodBdelete, AttackLayer7SummaryIPVersionParamsHTTPMethodBmove, AttackLayer7SummaryIPVersionParamsHTTPMethodBpropfind, AttackLayer7SummaryIPVersionParamsHTTPMethodBproppatch, AttackLayer7SummaryIPVersionParamsHTTPMethodCheckin, AttackLayer7SummaryIPVersionParamsHTTPMethodCheckout, AttackLayer7SummaryIPVersionParamsHTTPMethodConnect, AttackLayer7SummaryIPVersionParamsHTTPMethodCopy, AttackLayer7SummaryIPVersionParamsHTTPMethodLabel, AttackLayer7SummaryIPVersionParamsHTTPMethodLock, AttackLayer7SummaryIPVersionParamsHTTPMethodMerge, AttackLayer7SummaryIPVersionParamsHTTPMethodMkactivity, AttackLayer7SummaryIPVersionParamsHTTPMethodMkworkspace, AttackLayer7SummaryIPVersionParamsHTTPMethodMove, AttackLayer7SummaryIPVersionParamsHTTPMethodNotify, AttackLayer7SummaryIPVersionParamsHTTPMethodOrderpatch, AttackLayer7SummaryIPVersionParamsHTTPMethodPoll, AttackLayer7SummaryIPVersionParamsHTTPMethodProppatch, AttackLayer7SummaryIPVersionParamsHTTPMethodReport, AttackLayer7SummaryIPVersionParamsHTTPMethodSearch, AttackLayer7SummaryIPVersionParamsHTTPMethodSubscribe, AttackLayer7SummaryIPVersionParamsHTTPMethodTrace, AttackLayer7SummaryIPVersionParamsHTTPMethodUncheckout, AttackLayer7SummaryIPVersionParamsHTTPMethodUnlock, AttackLayer7SummaryIPVersionParamsHTTPMethodUnsubscribe, AttackLayer7SummaryIPVersionParamsHTTPMethodUpdate, AttackLayer7SummaryIPVersionParamsHTTPMethodVersioncontrol, AttackLayer7SummaryIPVersionParamsHTTPMethodBaselinecontrol, AttackLayer7SummaryIPVersionParamsHTTPMethodXmsenumatts, AttackLayer7SummaryIPVersionParamsHTTPMethodRpcOutData, AttackLayer7SummaryIPVersionParamsHTTPMethodRpcInData, AttackLayer7SummaryIPVersionParamsHTTPMethodJson, AttackLayer7SummaryIPVersionParamsHTTPMethodCook, AttackLayer7SummaryIPVersionParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7SummaryIPVersionParamsHTTPVersion string
 
 const (
@@ -1552,6 +1672,14 @@ const (
 	AttackLayer7SummaryIPVersionParamsHTTPVersionHttPv2 AttackLayer7SummaryIPVersionParamsHTTPVersion = "HTTPv2"
 	AttackLayer7SummaryIPVersionParamsHTTPVersionHttPv3 AttackLayer7SummaryIPVersionParamsHTTPVersion = "HTTPv3"
 )
+
+func (r AttackLayer7SummaryIPVersionParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIPVersionParamsHTTPVersionHttPv1, AttackLayer7SummaryIPVersionParamsHTTPVersionHttPv2, AttackLayer7SummaryIPVersionParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryIPVersionParamsMitigationProduct string
 
@@ -1564,6 +1692,14 @@ const (
 	AttackLayer7SummaryIPVersionParamsMitigationProductAPIShield          AttackLayer7SummaryIPVersionParamsMitigationProduct = "API_SHIELD"
 	AttackLayer7SummaryIPVersionParamsMitigationProductDataLossPrevention AttackLayer7SummaryIPVersionParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
+
+func (r AttackLayer7SummaryIPVersionParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryIPVersionParamsMitigationProductDDOS, AttackLayer7SummaryIPVersionParamsMitigationProductWAF, AttackLayer7SummaryIPVersionParamsMitigationProductBotManagement, AttackLayer7SummaryIPVersionParamsMitigationProductAccessRules, AttackLayer7SummaryIPVersionParamsMitigationProductIPReputation, AttackLayer7SummaryIPVersionParamsMitigationProductAPIShield, AttackLayer7SummaryIPVersionParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryIPVersionResponseEnvelope struct {
 	Result  AttackLayer7SummaryIPVersionResponse             `json:"result,required"`
@@ -1652,6 +1788,14 @@ const (
 	AttackLayer7SummaryManagedRulesParamsDateRange24wControl AttackLayer7SummaryManagedRulesParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7SummaryManagedRulesParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryManagedRulesParamsDateRange1d, AttackLayer7SummaryManagedRulesParamsDateRange2d, AttackLayer7SummaryManagedRulesParamsDateRange7d, AttackLayer7SummaryManagedRulesParamsDateRange14d, AttackLayer7SummaryManagedRulesParamsDateRange28d, AttackLayer7SummaryManagedRulesParamsDateRange12w, AttackLayer7SummaryManagedRulesParamsDateRange24w, AttackLayer7SummaryManagedRulesParamsDateRange52w, AttackLayer7SummaryManagedRulesParamsDateRange1dControl, AttackLayer7SummaryManagedRulesParamsDateRange2dControl, AttackLayer7SummaryManagedRulesParamsDateRange7dControl, AttackLayer7SummaryManagedRulesParamsDateRange14dControl, AttackLayer7SummaryManagedRulesParamsDateRange28dControl, AttackLayer7SummaryManagedRulesParamsDateRange12wControl, AttackLayer7SummaryManagedRulesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7SummaryManagedRulesParamsFormat string
 
@@ -1659,6 +1803,14 @@ const (
 	AttackLayer7SummaryManagedRulesParamsFormatJson AttackLayer7SummaryManagedRulesParamsFormat = "JSON"
 	AttackLayer7SummaryManagedRulesParamsFormatCsv  AttackLayer7SummaryManagedRulesParamsFormat = "CSV"
 )
+
+func (r AttackLayer7SummaryManagedRulesParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryManagedRulesParamsFormatJson, AttackLayer7SummaryManagedRulesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryManagedRulesParamsHTTPMethod string
 
@@ -1711,6 +1863,14 @@ const (
 	AttackLayer7SummaryManagedRulesParamsHTTPMethodTrack           AttackLayer7SummaryManagedRulesParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7SummaryManagedRulesParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryManagedRulesParamsHTTPMethodGet, AttackLayer7SummaryManagedRulesParamsHTTPMethodPost, AttackLayer7SummaryManagedRulesParamsHTTPMethodDelete, AttackLayer7SummaryManagedRulesParamsHTTPMethodPut, AttackLayer7SummaryManagedRulesParamsHTTPMethodHead, AttackLayer7SummaryManagedRulesParamsHTTPMethodPurge, AttackLayer7SummaryManagedRulesParamsHTTPMethodOptions, AttackLayer7SummaryManagedRulesParamsHTTPMethodPropfind, AttackLayer7SummaryManagedRulesParamsHTTPMethodMkcol, AttackLayer7SummaryManagedRulesParamsHTTPMethodPatch, AttackLayer7SummaryManagedRulesParamsHTTPMethodACL, AttackLayer7SummaryManagedRulesParamsHTTPMethodBcopy, AttackLayer7SummaryManagedRulesParamsHTTPMethodBdelete, AttackLayer7SummaryManagedRulesParamsHTTPMethodBmove, AttackLayer7SummaryManagedRulesParamsHTTPMethodBpropfind, AttackLayer7SummaryManagedRulesParamsHTTPMethodBproppatch, AttackLayer7SummaryManagedRulesParamsHTTPMethodCheckin, AttackLayer7SummaryManagedRulesParamsHTTPMethodCheckout, AttackLayer7SummaryManagedRulesParamsHTTPMethodConnect, AttackLayer7SummaryManagedRulesParamsHTTPMethodCopy, AttackLayer7SummaryManagedRulesParamsHTTPMethodLabel, AttackLayer7SummaryManagedRulesParamsHTTPMethodLock, AttackLayer7SummaryManagedRulesParamsHTTPMethodMerge, AttackLayer7SummaryManagedRulesParamsHTTPMethodMkactivity, AttackLayer7SummaryManagedRulesParamsHTTPMethodMkworkspace, AttackLayer7SummaryManagedRulesParamsHTTPMethodMove, AttackLayer7SummaryManagedRulesParamsHTTPMethodNotify, AttackLayer7SummaryManagedRulesParamsHTTPMethodOrderpatch, AttackLayer7SummaryManagedRulesParamsHTTPMethodPoll, AttackLayer7SummaryManagedRulesParamsHTTPMethodProppatch, AttackLayer7SummaryManagedRulesParamsHTTPMethodReport, AttackLayer7SummaryManagedRulesParamsHTTPMethodSearch, AttackLayer7SummaryManagedRulesParamsHTTPMethodSubscribe, AttackLayer7SummaryManagedRulesParamsHTTPMethodTrace, AttackLayer7SummaryManagedRulesParamsHTTPMethodUncheckout, AttackLayer7SummaryManagedRulesParamsHTTPMethodUnlock, AttackLayer7SummaryManagedRulesParamsHTTPMethodUnsubscribe, AttackLayer7SummaryManagedRulesParamsHTTPMethodUpdate, AttackLayer7SummaryManagedRulesParamsHTTPMethodVersioncontrol, AttackLayer7SummaryManagedRulesParamsHTTPMethodBaselinecontrol, AttackLayer7SummaryManagedRulesParamsHTTPMethodXmsenumatts, AttackLayer7SummaryManagedRulesParamsHTTPMethodRpcOutData, AttackLayer7SummaryManagedRulesParamsHTTPMethodRpcInData, AttackLayer7SummaryManagedRulesParamsHTTPMethodJson, AttackLayer7SummaryManagedRulesParamsHTTPMethodCook, AttackLayer7SummaryManagedRulesParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7SummaryManagedRulesParamsHTTPVersion string
 
 const (
@@ -1719,12 +1879,28 @@ const (
 	AttackLayer7SummaryManagedRulesParamsHTTPVersionHttPv3 AttackLayer7SummaryManagedRulesParamsHTTPVersion = "HTTPv3"
 )
 
+func (r AttackLayer7SummaryManagedRulesParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryManagedRulesParamsHTTPVersionHttPv1, AttackLayer7SummaryManagedRulesParamsHTTPVersionHttPv2, AttackLayer7SummaryManagedRulesParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7SummaryManagedRulesParamsIPVersion string
 
 const (
 	AttackLayer7SummaryManagedRulesParamsIPVersionIPv4 AttackLayer7SummaryManagedRulesParamsIPVersion = "IPv4"
 	AttackLayer7SummaryManagedRulesParamsIPVersionIPv6 AttackLayer7SummaryManagedRulesParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7SummaryManagedRulesParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryManagedRulesParamsIPVersionIPv4, AttackLayer7SummaryManagedRulesParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryManagedRulesParamsMitigationProduct string
 
@@ -1737,6 +1913,14 @@ const (
 	AttackLayer7SummaryManagedRulesParamsMitigationProductAPIShield          AttackLayer7SummaryManagedRulesParamsMitigationProduct = "API_SHIELD"
 	AttackLayer7SummaryManagedRulesParamsMitigationProductDataLossPrevention AttackLayer7SummaryManagedRulesParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
+
+func (r AttackLayer7SummaryManagedRulesParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryManagedRulesParamsMitigationProductDDOS, AttackLayer7SummaryManagedRulesParamsMitigationProductWAF, AttackLayer7SummaryManagedRulesParamsMitigationProductBotManagement, AttackLayer7SummaryManagedRulesParamsMitigationProductAccessRules, AttackLayer7SummaryManagedRulesParamsMitigationProductIPReputation, AttackLayer7SummaryManagedRulesParamsMitigationProductAPIShield, AttackLayer7SummaryManagedRulesParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryManagedRulesResponseEnvelope struct {
 	Result  AttackLayer7SummaryManagedRulesResponse             `json:"result,required"`
@@ -1823,6 +2007,14 @@ const (
 	AttackLayer7SummaryMitigationProductParamsDateRange24wControl AttackLayer7SummaryMitigationProductParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7SummaryMitigationProductParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryMitigationProductParamsDateRange1d, AttackLayer7SummaryMitigationProductParamsDateRange2d, AttackLayer7SummaryMitigationProductParamsDateRange7d, AttackLayer7SummaryMitigationProductParamsDateRange14d, AttackLayer7SummaryMitigationProductParamsDateRange28d, AttackLayer7SummaryMitigationProductParamsDateRange12w, AttackLayer7SummaryMitigationProductParamsDateRange24w, AttackLayer7SummaryMitigationProductParamsDateRange52w, AttackLayer7SummaryMitigationProductParamsDateRange1dControl, AttackLayer7SummaryMitigationProductParamsDateRange2dControl, AttackLayer7SummaryMitigationProductParamsDateRange7dControl, AttackLayer7SummaryMitigationProductParamsDateRange14dControl, AttackLayer7SummaryMitigationProductParamsDateRange28dControl, AttackLayer7SummaryMitigationProductParamsDateRange12wControl, AttackLayer7SummaryMitigationProductParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7SummaryMitigationProductParamsFormat string
 
@@ -1830,6 +2022,14 @@ const (
 	AttackLayer7SummaryMitigationProductParamsFormatJson AttackLayer7SummaryMitigationProductParamsFormat = "JSON"
 	AttackLayer7SummaryMitigationProductParamsFormatCsv  AttackLayer7SummaryMitigationProductParamsFormat = "CSV"
 )
+
+func (r AttackLayer7SummaryMitigationProductParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryMitigationProductParamsFormatJson, AttackLayer7SummaryMitigationProductParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryMitigationProductParamsHTTPMethod string
 
@@ -1882,6 +2082,14 @@ const (
 	AttackLayer7SummaryMitigationProductParamsHTTPMethodTrack           AttackLayer7SummaryMitigationProductParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7SummaryMitigationProductParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryMitigationProductParamsHTTPMethodGet, AttackLayer7SummaryMitigationProductParamsHTTPMethodPost, AttackLayer7SummaryMitigationProductParamsHTTPMethodDelete, AttackLayer7SummaryMitigationProductParamsHTTPMethodPut, AttackLayer7SummaryMitigationProductParamsHTTPMethodHead, AttackLayer7SummaryMitigationProductParamsHTTPMethodPurge, AttackLayer7SummaryMitigationProductParamsHTTPMethodOptions, AttackLayer7SummaryMitigationProductParamsHTTPMethodPropfind, AttackLayer7SummaryMitigationProductParamsHTTPMethodMkcol, AttackLayer7SummaryMitigationProductParamsHTTPMethodPatch, AttackLayer7SummaryMitigationProductParamsHTTPMethodACL, AttackLayer7SummaryMitigationProductParamsHTTPMethodBcopy, AttackLayer7SummaryMitigationProductParamsHTTPMethodBdelete, AttackLayer7SummaryMitigationProductParamsHTTPMethodBmove, AttackLayer7SummaryMitigationProductParamsHTTPMethodBpropfind, AttackLayer7SummaryMitigationProductParamsHTTPMethodBproppatch, AttackLayer7SummaryMitigationProductParamsHTTPMethodCheckin, AttackLayer7SummaryMitigationProductParamsHTTPMethodCheckout, AttackLayer7SummaryMitigationProductParamsHTTPMethodConnect, AttackLayer7SummaryMitigationProductParamsHTTPMethodCopy, AttackLayer7SummaryMitigationProductParamsHTTPMethodLabel, AttackLayer7SummaryMitigationProductParamsHTTPMethodLock, AttackLayer7SummaryMitigationProductParamsHTTPMethodMerge, AttackLayer7SummaryMitigationProductParamsHTTPMethodMkactivity, AttackLayer7SummaryMitigationProductParamsHTTPMethodMkworkspace, AttackLayer7SummaryMitigationProductParamsHTTPMethodMove, AttackLayer7SummaryMitigationProductParamsHTTPMethodNotify, AttackLayer7SummaryMitigationProductParamsHTTPMethodOrderpatch, AttackLayer7SummaryMitigationProductParamsHTTPMethodPoll, AttackLayer7SummaryMitigationProductParamsHTTPMethodProppatch, AttackLayer7SummaryMitigationProductParamsHTTPMethodReport, AttackLayer7SummaryMitigationProductParamsHTTPMethodSearch, AttackLayer7SummaryMitigationProductParamsHTTPMethodSubscribe, AttackLayer7SummaryMitigationProductParamsHTTPMethodTrace, AttackLayer7SummaryMitigationProductParamsHTTPMethodUncheckout, AttackLayer7SummaryMitigationProductParamsHTTPMethodUnlock, AttackLayer7SummaryMitigationProductParamsHTTPMethodUnsubscribe, AttackLayer7SummaryMitigationProductParamsHTTPMethodUpdate, AttackLayer7SummaryMitigationProductParamsHTTPMethodVersioncontrol, AttackLayer7SummaryMitigationProductParamsHTTPMethodBaselinecontrol, AttackLayer7SummaryMitigationProductParamsHTTPMethodXmsenumatts, AttackLayer7SummaryMitigationProductParamsHTTPMethodRpcOutData, AttackLayer7SummaryMitigationProductParamsHTTPMethodRpcInData, AttackLayer7SummaryMitigationProductParamsHTTPMethodJson, AttackLayer7SummaryMitigationProductParamsHTTPMethodCook, AttackLayer7SummaryMitigationProductParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7SummaryMitigationProductParamsHTTPVersion string
 
 const (
@@ -1890,12 +2098,28 @@ const (
 	AttackLayer7SummaryMitigationProductParamsHTTPVersionHttPv3 AttackLayer7SummaryMitigationProductParamsHTTPVersion = "HTTPv3"
 )
 
+func (r AttackLayer7SummaryMitigationProductParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryMitigationProductParamsHTTPVersionHttPv1, AttackLayer7SummaryMitigationProductParamsHTTPVersionHttPv2, AttackLayer7SummaryMitigationProductParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7SummaryMitigationProductParamsIPVersion string
 
 const (
 	AttackLayer7SummaryMitigationProductParamsIPVersionIPv4 AttackLayer7SummaryMitigationProductParamsIPVersion = "IPv4"
 	AttackLayer7SummaryMitigationProductParamsIPVersionIPv6 AttackLayer7SummaryMitigationProductParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7SummaryMitigationProductParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7SummaryMitigationProductParamsIPVersionIPv4, AttackLayer7SummaryMitigationProductParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7SummaryMitigationProductResponseEnvelope struct {
 	Result  AttackLayer7SummaryMitigationProductResponse             `json:"result,required"`

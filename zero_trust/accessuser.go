@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -180,6 +180,14 @@ type AccessUserListResponseEnvelopeSuccess bool
 const (
 	AccessUserListResponseEnvelopeSuccessTrue AccessUserListResponseEnvelopeSuccess = true
 )
+
+func (r AccessUserListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessUserListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessUserListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

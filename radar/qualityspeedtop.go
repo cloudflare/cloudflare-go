@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -443,6 +443,14 @@ const (
 	QualitySpeedTopAsesParamsFormatCsv  QualitySpeedTopAsesParamsFormat = "CSV"
 )
 
+func (r QualitySpeedTopAsesParamsFormat) IsKnown() bool {
+	switch r {
+	case QualitySpeedTopAsesParamsFormatJson, QualitySpeedTopAsesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 // Metric to order the results by.
 type QualitySpeedTopAsesParamsOrderBy string
 
@@ -454,6 +462,14 @@ const (
 	QualitySpeedTopAsesParamsOrderByJitterIdle        QualitySpeedTopAsesParamsOrderBy = "JITTER_IDLE"
 	QualitySpeedTopAsesParamsOrderByJitterLoaded      QualitySpeedTopAsesParamsOrderBy = "JITTER_LOADED"
 )
+
+func (r QualitySpeedTopAsesParamsOrderBy) IsKnown() bool {
+	switch r {
+	case QualitySpeedTopAsesParamsOrderByBandwidthDownload, QualitySpeedTopAsesParamsOrderByBandwidthUpload, QualitySpeedTopAsesParamsOrderByLatencyIdle, QualitySpeedTopAsesParamsOrderByLatencyLoaded, QualitySpeedTopAsesParamsOrderByJitterIdle, QualitySpeedTopAsesParamsOrderByJitterLoaded:
+		return true
+	}
+	return false
+}
 
 type QualitySpeedTopAsesResponseEnvelope struct {
 	Result  QualitySpeedTopAsesResponse             `json:"result,required"`
@@ -522,6 +538,14 @@ const (
 	QualitySpeedTopLocationsParamsFormatCsv  QualitySpeedTopLocationsParamsFormat = "CSV"
 )
 
+func (r QualitySpeedTopLocationsParamsFormat) IsKnown() bool {
+	switch r {
+	case QualitySpeedTopLocationsParamsFormatJson, QualitySpeedTopLocationsParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 // Metric to order the results by.
 type QualitySpeedTopLocationsParamsOrderBy string
 
@@ -533,6 +557,14 @@ const (
 	QualitySpeedTopLocationsParamsOrderByJitterIdle        QualitySpeedTopLocationsParamsOrderBy = "JITTER_IDLE"
 	QualitySpeedTopLocationsParamsOrderByJitterLoaded      QualitySpeedTopLocationsParamsOrderBy = "JITTER_LOADED"
 )
+
+func (r QualitySpeedTopLocationsParamsOrderBy) IsKnown() bool {
+	switch r {
+	case QualitySpeedTopLocationsParamsOrderByBandwidthDownload, QualitySpeedTopLocationsParamsOrderByBandwidthUpload, QualitySpeedTopLocationsParamsOrderByLatencyIdle, QualitySpeedTopLocationsParamsOrderByLatencyLoaded, QualitySpeedTopLocationsParamsOrderByJitterIdle, QualitySpeedTopLocationsParamsOrderByJitterLoaded:
+		return true
+	}
+	return false
+}
 
 type QualitySpeedTopLocationsResponseEnvelope struct {
 	Result  QualitySpeedTopLocationsResponse             `json:"result,required"`

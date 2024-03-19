@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -265,12 +265,28 @@ const (
 	HTTPAseTLSVersionGetParamsTLSVersionTlSvQuic HTTPAseTLSVersionGetParamsTLSVersion = "TLSvQUIC"
 )
 
+func (r HTTPAseTLSVersionGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsTLSVersionTlSv1_0, HTTPAseTLSVersionGetParamsTLSVersionTlSv1_1, HTTPAseTLSVersionGetParamsTLSVersionTlSv1_2, HTTPAseTLSVersionGetParamsTLSVersionTlSv1_3, HTTPAseTLSVersionGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
+
 type HTTPAseTLSVersionGetParamsBotClass string
 
 const (
 	HTTPAseTLSVersionGetParamsBotClassLikelyAutomated HTTPAseTLSVersionGetParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPAseTLSVersionGetParamsBotClassLikelyHuman     HTTPAseTLSVersionGetParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPAseTLSVersionGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsBotClassLikelyAutomated, HTTPAseTLSVersionGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPAseTLSVersionGetParamsDateRange string
 
@@ -292,6 +308,14 @@ const (
 	HTTPAseTLSVersionGetParamsDateRange24wControl HTTPAseTLSVersionGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPAseTLSVersionGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsDateRange1d, HTTPAseTLSVersionGetParamsDateRange2d, HTTPAseTLSVersionGetParamsDateRange7d, HTTPAseTLSVersionGetParamsDateRange14d, HTTPAseTLSVersionGetParamsDateRange28d, HTTPAseTLSVersionGetParamsDateRange12w, HTTPAseTLSVersionGetParamsDateRange24w, HTTPAseTLSVersionGetParamsDateRange52w, HTTPAseTLSVersionGetParamsDateRange1dControl, HTTPAseTLSVersionGetParamsDateRange2dControl, HTTPAseTLSVersionGetParamsDateRange7dControl, HTTPAseTLSVersionGetParamsDateRange14dControl, HTTPAseTLSVersionGetParamsDateRange28dControl, HTTPAseTLSVersionGetParamsDateRange12wControl, HTTPAseTLSVersionGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPAseTLSVersionGetParamsDeviceType string
 
 const (
@@ -299,6 +323,14 @@ const (
 	HTTPAseTLSVersionGetParamsDeviceTypeMobile  HTTPAseTLSVersionGetParamsDeviceType = "MOBILE"
 	HTTPAseTLSVersionGetParamsDeviceTypeOther   HTTPAseTLSVersionGetParamsDeviceType = "OTHER"
 )
+
+func (r HTTPAseTLSVersionGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsDeviceTypeDesktop, HTTPAseTLSVersionGetParamsDeviceTypeMobile, HTTPAseTLSVersionGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPAseTLSVersionGetParamsFormat string
@@ -308,12 +340,28 @@ const (
 	HTTPAseTLSVersionGetParamsFormatCsv  HTTPAseTLSVersionGetParamsFormat = "CSV"
 )
 
+func (r HTTPAseTLSVersionGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsFormatJson, HTTPAseTLSVersionGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseTLSVersionGetParamsHTTPProtocol string
 
 const (
 	HTTPAseTLSVersionGetParamsHTTPProtocolHTTP  HTTPAseTLSVersionGetParamsHTTPProtocol = "HTTP"
 	HTTPAseTLSVersionGetParamsHTTPProtocolHTTPS HTTPAseTLSVersionGetParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPAseTLSVersionGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsHTTPProtocolHTTP, HTTPAseTLSVersionGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPAseTLSVersionGetParamsHTTPVersion string
 
@@ -323,12 +371,28 @@ const (
 	HTTPAseTLSVersionGetParamsHTTPVersionHttPv3 HTTPAseTLSVersionGetParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPAseTLSVersionGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsHTTPVersionHttPv1, HTTPAseTLSVersionGetParamsHTTPVersionHttPv2, HTTPAseTLSVersionGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPAseTLSVersionGetParamsIPVersion string
 
 const (
 	HTTPAseTLSVersionGetParamsIPVersionIPv4 HTTPAseTLSVersionGetParamsIPVersion = "IPv4"
 	HTTPAseTLSVersionGetParamsIPVersionIPv6 HTTPAseTLSVersionGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPAseTLSVersionGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsIPVersionIPv4, HTTPAseTLSVersionGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPAseTLSVersionGetParamsOS string
 
@@ -341,6 +405,14 @@ const (
 	HTTPAseTLSVersionGetParamsOSLinux    HTTPAseTLSVersionGetParamsOS = "LINUX"
 	HTTPAseTLSVersionGetParamsOSSmartTv  HTTPAseTLSVersionGetParamsOS = "SMART_TV"
 )
+
+func (r HTTPAseTLSVersionGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPAseTLSVersionGetParamsOSWindows, HTTPAseTLSVersionGetParamsOSMacosx, HTTPAseTLSVersionGetParamsOSIos, HTTPAseTLSVersionGetParamsOSAndroid, HTTPAseTLSVersionGetParamsOSChromeos, HTTPAseTLSVersionGetParamsOSLinux, HTTPAseTLSVersionGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
 
 type HTTPAseTLSVersionGetResponseEnvelope struct {
 	Result  HTTPAseTLSVersionGetResponse             `json:"result,required"`

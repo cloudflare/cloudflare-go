@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package spectrum
 
@@ -149,3 +149,11 @@ type AnalyticsAggregateCurrentGetResponseEnvelopeSuccess bool
 const (
 	AnalyticsAggregateCurrentGetResponseEnvelopeSuccessTrue AnalyticsAggregateCurrentGetResponseEnvelopeSuccess = true
 )
+
+func (r AnalyticsAggregateCurrentGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AnalyticsAggregateCurrentGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

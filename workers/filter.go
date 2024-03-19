@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers
 
@@ -243,6 +243,14 @@ const (
 	FilterNewResponseEnvelopeSuccessTrue FilterNewResponseEnvelopeSuccess = true
 )
 
+func (r FilterNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FilterUpdateParams struct {
 	// Identifier
 	ZoneID  param.Field[string] `path:"zone_id,required"`
@@ -335,6 +343,14 @@ const (
 	FilterUpdateResponseEnvelopeSuccessTrue FilterUpdateResponseEnvelopeSuccess = true
 )
 
+func (r FilterUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FilterListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -421,6 +437,14 @@ const (
 	FilterListResponseEnvelopeSuccessTrue FilterListResponseEnvelopeSuccess = true
 )
 
+func (r FilterListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FilterDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -506,3 +530,11 @@ type FilterDeleteResponseEnvelopeSuccess bool
 const (
 	FilterDeleteResponseEnvelopeSuccessTrue FilterDeleteResponseEnvelopeSuccess = true
 )
+
+func (r FilterDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

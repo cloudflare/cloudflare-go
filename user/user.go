@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package user
 
@@ -204,6 +204,14 @@ const (
 	UserEditResponseEnvelopeSuccessTrue UserEditResponseEnvelopeSuccess = true
 )
 
+func (r UserEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UserEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type UserGetResponseEnvelope struct {
 	Errors   []UserGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []UserGetResponseEnvelopeMessages `json:"messages,required"`
@@ -284,3 +292,11 @@ type UserGetResponseEnvelopeSuccess bool
 const (
 	UserGetResponseEnvelopeSuccessTrue UserGetResponseEnvelopeSuccess = true
 )
+
+func (r UserGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UserGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

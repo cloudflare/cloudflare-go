@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -140,6 +140,14 @@ const (
 	TrafficAnomalyLocationGetParamsDateRange24wControl TrafficAnomalyLocationGetParamsDateRange = "24wControl"
 )
 
+func (r TrafficAnomalyLocationGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case TrafficAnomalyLocationGetParamsDateRange1d, TrafficAnomalyLocationGetParamsDateRange2d, TrafficAnomalyLocationGetParamsDateRange7d, TrafficAnomalyLocationGetParamsDateRange14d, TrafficAnomalyLocationGetParamsDateRange28d, TrafficAnomalyLocationGetParamsDateRange12w, TrafficAnomalyLocationGetParamsDateRange24w, TrafficAnomalyLocationGetParamsDateRange52w, TrafficAnomalyLocationGetParamsDateRange1dControl, TrafficAnomalyLocationGetParamsDateRange2dControl, TrafficAnomalyLocationGetParamsDateRange7dControl, TrafficAnomalyLocationGetParamsDateRange14dControl, TrafficAnomalyLocationGetParamsDateRange28dControl, TrafficAnomalyLocationGetParamsDateRange12wControl, TrafficAnomalyLocationGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type TrafficAnomalyLocationGetParamsFormat string
 
@@ -148,12 +156,28 @@ const (
 	TrafficAnomalyLocationGetParamsFormatCsv  TrafficAnomalyLocationGetParamsFormat = "CSV"
 )
 
+func (r TrafficAnomalyLocationGetParamsFormat) IsKnown() bool {
+	switch r {
+	case TrafficAnomalyLocationGetParamsFormatJson, TrafficAnomalyLocationGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type TrafficAnomalyLocationGetParamsStatus string
 
 const (
 	TrafficAnomalyLocationGetParamsStatusVerified   TrafficAnomalyLocationGetParamsStatus = "VERIFIED"
 	TrafficAnomalyLocationGetParamsStatusUnverified TrafficAnomalyLocationGetParamsStatus = "UNVERIFIED"
 )
+
+func (r TrafficAnomalyLocationGetParamsStatus) IsKnown() bool {
+	switch r {
+	case TrafficAnomalyLocationGetParamsStatusVerified, TrafficAnomalyLocationGetParamsStatusUnverified:
+		return true
+	}
+	return false
+}
 
 type TrafficAnomalyLocationGetResponseEnvelope struct {
 	Result  TrafficAnomalyLocationGetResponse             `json:"result,required"`

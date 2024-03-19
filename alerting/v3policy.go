@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package alerting
 
@@ -210,6 +210,14 @@ const (
 	AaaPoliciesAlertTypeZoneAopCustomCertificateExpirationType        AaaPoliciesAlertType = "zone_aop_custom_certificate_expiration_type"
 )
 
+func (r AaaPoliciesAlertType) IsKnown() bool {
+	switch r {
+	case AaaPoliciesAlertTypeAccessCustomCertificateExpirationType, AaaPoliciesAlertTypeAdvancedDDOSAttackL4Alert, AaaPoliciesAlertTypeAdvancedDDOSAttackL7Alert, AaaPoliciesAlertTypeAdvancedHTTPAlertError, AaaPoliciesAlertTypeBGPHijackNotification, AaaPoliciesAlertTypeBillingUsageAlert, AaaPoliciesAlertTypeBlockNotificationBlockRemoved, AaaPoliciesAlertTypeBlockNotificationNewBlock, AaaPoliciesAlertTypeBlockNotificationReviewRejected, AaaPoliciesAlertTypeBrandProtectionAlert, AaaPoliciesAlertTypeBrandProtectionDigest, AaaPoliciesAlertTypeClickhouseAlertFwAnomaly, AaaPoliciesAlertTypeClickhouseAlertFwEntAnomaly, AaaPoliciesAlertTypeCustomSSLCertificateEventType, AaaPoliciesAlertTypeDedicatedSSLCertificateEventType, AaaPoliciesAlertTypeDosAttackL4, AaaPoliciesAlertTypeDosAttackL7, AaaPoliciesAlertTypeExpiringServiceTokenAlert, AaaPoliciesAlertTypeFailingLogpushJobDisabledAlert, AaaPoliciesAlertTypeFbmAutoAdvertisement, AaaPoliciesAlertTypeFbmDosdAttack, AaaPoliciesAlertTypeFbmVolumetricAttack, AaaPoliciesAlertTypeHealthCheckStatusNotification, AaaPoliciesAlertTypeHostnameAopCustomCertificateExpirationType, AaaPoliciesAlertTypeHTTPAlertEdgeError, AaaPoliciesAlertTypeHTTPAlertOriginError, AaaPoliciesAlertTypeIncidentAlert, AaaPoliciesAlertTypeLoadBalancingHealthAlert, AaaPoliciesAlertTypeLoadBalancingPoolEnablementAlert, AaaPoliciesAlertTypeLogoMatchAlert, AaaPoliciesAlertTypeMagicTunnelHealthCheckEvent, AaaPoliciesAlertTypeMaintenanceEventNotification, AaaPoliciesAlertTypeMTLSCertificateStoreCertificateExpirationType, AaaPoliciesAlertTypePagesEventAlert, AaaPoliciesAlertTypeRadarNotification, AaaPoliciesAlertTypeRealOriginMonitoring, AaaPoliciesAlertTypeScriptmonitorAlertNewCodeChangeDetections, AaaPoliciesAlertTypeScriptmonitorAlertNewHosts, AaaPoliciesAlertTypeScriptmonitorAlertNewMaliciousHosts, AaaPoliciesAlertTypeScriptmonitorAlertNewMaliciousScripts, AaaPoliciesAlertTypeScriptmonitorAlertNewMaliciousURL, AaaPoliciesAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, AaaPoliciesAlertTypeScriptmonitorAlertNewResources, AaaPoliciesAlertTypeSecondaryDNSAllPrimariesFailing, AaaPoliciesAlertTypeSecondaryDNSPrimariesFailing, AaaPoliciesAlertTypeSecondaryDNSZoneSuccessfullyUpdated, AaaPoliciesAlertTypeSecondaryDNSZoneValidationWarning, AaaPoliciesAlertTypeSentinelAlert, AaaPoliciesAlertTypeStreamLiveNotifications, AaaPoliciesAlertTypeTrafficAnomaliesAlert, AaaPoliciesAlertTypeTunnelHealthEvent, AaaPoliciesAlertTypeTunnelUpdateEvent, AaaPoliciesAlertTypeUniversalSSLEventType, AaaPoliciesAlertTypeWebAnalyticsMetricsUpdate, AaaPoliciesAlertTypeZoneAopCustomCertificateExpirationType:
+		return true
+	}
+	return false
+}
+
 // Optional filters that allow you to be alerted only on a subset of events for
 // that alert type based on some criteria. This is only available for select alert
 // types. See alert type documentation for more details.
@@ -361,6 +369,14 @@ const (
 	AaaPoliciesFiltersAlertTriggerPreferencesValue97_0 AaaPoliciesFiltersAlertTriggerPreferencesValue = "97.0"
 )
 
+func (r AaaPoliciesFiltersAlertTriggerPreferencesValue) IsKnown() bool {
+	switch r {
+	case AaaPoliciesFiltersAlertTriggerPreferencesValue99_0, AaaPoliciesFiltersAlertTriggerPreferencesValue98_0, AaaPoliciesFiltersAlertTriggerPreferencesValue97_0:
+		return true
+	}
+	return false
+}
+
 type AaaPoliciesFiltersIncidentImpact string
 
 const (
@@ -370,11 +386,27 @@ const (
 	AaaPoliciesFiltersIncidentImpactIncidentImpactCritical AaaPoliciesFiltersIncidentImpact = "INCIDENT_IMPACT_CRITICAL"
 )
 
+func (r AaaPoliciesFiltersIncidentImpact) IsKnown() bool {
+	switch r {
+	case AaaPoliciesFiltersIncidentImpactIncidentImpactNone, AaaPoliciesFiltersIncidentImpactIncidentImpactMinor, AaaPoliciesFiltersIncidentImpactIncidentImpactMajor, AaaPoliciesFiltersIncidentImpactIncidentImpactCritical:
+		return true
+	}
+	return false
+}
+
 type AaaPoliciesFiltersTrafficExclusion string
 
 const (
 	AaaPoliciesFiltersTrafficExclusionSecurityEvents AaaPoliciesFiltersTrafficExclusion = "security_events"
 )
+
+func (r AaaPoliciesFiltersTrafficExclusion) IsKnown() bool {
+	switch r {
+	case AaaPoliciesFiltersTrafficExclusionSecurityEvents:
+		return true
+	}
+	return false
+}
 
 type AaaPoliciesMechanisms struct {
 	// UUID
@@ -578,6 +610,14 @@ const (
 	V3PolicyNewParamsAlertTypeZoneAopCustomCertificateExpirationType        V3PolicyNewParamsAlertType = "zone_aop_custom_certificate_expiration_type"
 )
 
+func (r V3PolicyNewParamsAlertType) IsKnown() bool {
+	switch r {
+	case V3PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType, V3PolicyNewParamsAlertTypeAdvancedDDOSAttackL4Alert, V3PolicyNewParamsAlertTypeAdvancedDDOSAttackL7Alert, V3PolicyNewParamsAlertTypeAdvancedHTTPAlertError, V3PolicyNewParamsAlertTypeBGPHijackNotification, V3PolicyNewParamsAlertTypeBillingUsageAlert, V3PolicyNewParamsAlertTypeBlockNotificationBlockRemoved, V3PolicyNewParamsAlertTypeBlockNotificationNewBlock, V3PolicyNewParamsAlertTypeBlockNotificationReviewRejected, V3PolicyNewParamsAlertTypeBrandProtectionAlert, V3PolicyNewParamsAlertTypeBrandProtectionDigest, V3PolicyNewParamsAlertTypeClickhouseAlertFwAnomaly, V3PolicyNewParamsAlertTypeClickhouseAlertFwEntAnomaly, V3PolicyNewParamsAlertTypeCustomSSLCertificateEventType, V3PolicyNewParamsAlertTypeDedicatedSSLCertificateEventType, V3PolicyNewParamsAlertTypeDosAttackL4, V3PolicyNewParamsAlertTypeDosAttackL7, V3PolicyNewParamsAlertTypeExpiringServiceTokenAlert, V3PolicyNewParamsAlertTypeFailingLogpushJobDisabledAlert, V3PolicyNewParamsAlertTypeFbmAutoAdvertisement, V3PolicyNewParamsAlertTypeFbmDosdAttack, V3PolicyNewParamsAlertTypeFbmVolumetricAttack, V3PolicyNewParamsAlertTypeHealthCheckStatusNotification, V3PolicyNewParamsAlertTypeHostnameAopCustomCertificateExpirationType, V3PolicyNewParamsAlertTypeHTTPAlertEdgeError, V3PolicyNewParamsAlertTypeHTTPAlertOriginError, V3PolicyNewParamsAlertTypeIncidentAlert, V3PolicyNewParamsAlertTypeLoadBalancingHealthAlert, V3PolicyNewParamsAlertTypeLoadBalancingPoolEnablementAlert, V3PolicyNewParamsAlertTypeLogoMatchAlert, V3PolicyNewParamsAlertTypeMagicTunnelHealthCheckEvent, V3PolicyNewParamsAlertTypeMaintenanceEventNotification, V3PolicyNewParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, V3PolicyNewParamsAlertTypePagesEventAlert, V3PolicyNewParamsAlertTypeRadarNotification, V3PolicyNewParamsAlertTypeRealOriginMonitoring, V3PolicyNewParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, V3PolicyNewParamsAlertTypeScriptmonitorAlertNewHosts, V3PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, V3PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, V3PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousURL, V3PolicyNewParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, V3PolicyNewParamsAlertTypeScriptmonitorAlertNewResources, V3PolicyNewParamsAlertTypeSecondaryDNSAllPrimariesFailing, V3PolicyNewParamsAlertTypeSecondaryDNSPrimariesFailing, V3PolicyNewParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, V3PolicyNewParamsAlertTypeSecondaryDNSZoneValidationWarning, V3PolicyNewParamsAlertTypeSentinelAlert, V3PolicyNewParamsAlertTypeStreamLiveNotifications, V3PolicyNewParamsAlertTypeTrafficAnomaliesAlert, V3PolicyNewParamsAlertTypeTunnelHealthEvent, V3PolicyNewParamsAlertTypeTunnelUpdateEvent, V3PolicyNewParamsAlertTypeUniversalSSLEventType, V3PolicyNewParamsAlertTypeWebAnalyticsMetricsUpdate, V3PolicyNewParamsAlertTypeZoneAopCustomCertificateExpirationType:
+		return true
+	}
+	return false
+}
+
 type V3PolicyNewParamsMechanisms struct {
 	// UUID
 	ID param.Field[V3PolicyNewParamsMechanismsID] `json:"id"`
@@ -693,6 +733,14 @@ const (
 	V3PolicyNewParamsFiltersAlertTriggerPreferencesValue97_0 V3PolicyNewParamsFiltersAlertTriggerPreferencesValue = "97.0"
 )
 
+func (r V3PolicyNewParamsFiltersAlertTriggerPreferencesValue) IsKnown() bool {
+	switch r {
+	case V3PolicyNewParamsFiltersAlertTriggerPreferencesValue99_0, V3PolicyNewParamsFiltersAlertTriggerPreferencesValue98_0, V3PolicyNewParamsFiltersAlertTriggerPreferencesValue97_0:
+		return true
+	}
+	return false
+}
+
 type V3PolicyNewParamsFiltersIncidentImpact string
 
 const (
@@ -702,11 +750,27 @@ const (
 	V3PolicyNewParamsFiltersIncidentImpactIncidentImpactCritical V3PolicyNewParamsFiltersIncidentImpact = "INCIDENT_IMPACT_CRITICAL"
 )
 
+func (r V3PolicyNewParamsFiltersIncidentImpact) IsKnown() bool {
+	switch r {
+	case V3PolicyNewParamsFiltersIncidentImpactIncidentImpactNone, V3PolicyNewParamsFiltersIncidentImpactIncidentImpactMinor, V3PolicyNewParamsFiltersIncidentImpactIncidentImpactMajor, V3PolicyNewParamsFiltersIncidentImpactIncidentImpactCritical:
+		return true
+	}
+	return false
+}
+
 type V3PolicyNewParamsFiltersTrafficExclusion string
 
 const (
 	V3PolicyNewParamsFiltersTrafficExclusionSecurityEvents V3PolicyNewParamsFiltersTrafficExclusion = "security_events"
 )
+
+func (r V3PolicyNewParamsFiltersTrafficExclusion) IsKnown() bool {
+	switch r {
+	case V3PolicyNewParamsFiltersTrafficExclusionSecurityEvents:
+		return true
+	}
+	return false
+}
 
 type V3PolicyNewResponseEnvelope struct {
 	Errors   []V3PolicyNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -788,6 +852,14 @@ type V3PolicyNewResponseEnvelopeSuccess bool
 const (
 	V3PolicyNewResponseEnvelopeSuccessTrue V3PolicyNewResponseEnvelopeSuccess = true
 )
+
+func (r V3PolicyNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3PolicyNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type V3PolicyUpdateParams struct {
 	// The account id
@@ -877,6 +949,14 @@ const (
 	V3PolicyUpdateParamsAlertTypeWebAnalyticsMetricsUpdate                     V3PolicyUpdateParamsAlertType = "web_analytics_metrics_update"
 	V3PolicyUpdateParamsAlertTypeZoneAopCustomCertificateExpirationType        V3PolicyUpdateParamsAlertType = "zone_aop_custom_certificate_expiration_type"
 )
+
+func (r V3PolicyUpdateParamsAlertType) IsKnown() bool {
+	switch r {
+	case V3PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType, V3PolicyUpdateParamsAlertTypeAdvancedDDOSAttackL4Alert, V3PolicyUpdateParamsAlertTypeAdvancedDDOSAttackL7Alert, V3PolicyUpdateParamsAlertTypeAdvancedHTTPAlertError, V3PolicyUpdateParamsAlertTypeBGPHijackNotification, V3PolicyUpdateParamsAlertTypeBillingUsageAlert, V3PolicyUpdateParamsAlertTypeBlockNotificationBlockRemoved, V3PolicyUpdateParamsAlertTypeBlockNotificationNewBlock, V3PolicyUpdateParamsAlertTypeBlockNotificationReviewRejected, V3PolicyUpdateParamsAlertTypeBrandProtectionAlert, V3PolicyUpdateParamsAlertTypeBrandProtectionDigest, V3PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly, V3PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly, V3PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType, V3PolicyUpdateParamsAlertTypeDedicatedSSLCertificateEventType, V3PolicyUpdateParamsAlertTypeDosAttackL4, V3PolicyUpdateParamsAlertTypeDosAttackL7, V3PolicyUpdateParamsAlertTypeExpiringServiceTokenAlert, V3PolicyUpdateParamsAlertTypeFailingLogpushJobDisabledAlert, V3PolicyUpdateParamsAlertTypeFbmAutoAdvertisement, V3PolicyUpdateParamsAlertTypeFbmDosdAttack, V3PolicyUpdateParamsAlertTypeFbmVolumetricAttack, V3PolicyUpdateParamsAlertTypeHealthCheckStatusNotification, V3PolicyUpdateParamsAlertTypeHostnameAopCustomCertificateExpirationType, V3PolicyUpdateParamsAlertTypeHTTPAlertEdgeError, V3PolicyUpdateParamsAlertTypeHTTPAlertOriginError, V3PolicyUpdateParamsAlertTypeIncidentAlert, V3PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert, V3PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert, V3PolicyUpdateParamsAlertTypeLogoMatchAlert, V3PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent, V3PolicyUpdateParamsAlertTypeMaintenanceEventNotification, V3PolicyUpdateParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, V3PolicyUpdateParamsAlertTypePagesEventAlert, V3PolicyUpdateParamsAlertTypeRadarNotification, V3PolicyUpdateParamsAlertTypeRealOriginMonitoring, V3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, V3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewHosts, V3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, V3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, V3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousURL, V3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, V3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewResources, V3PolicyUpdateParamsAlertTypeSecondaryDNSAllPrimariesFailing, V3PolicyUpdateParamsAlertTypeSecondaryDNSPrimariesFailing, V3PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, V3PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning, V3PolicyUpdateParamsAlertTypeSentinelAlert, V3PolicyUpdateParamsAlertTypeStreamLiveNotifications, V3PolicyUpdateParamsAlertTypeTrafficAnomaliesAlert, V3PolicyUpdateParamsAlertTypeTunnelHealthEvent, V3PolicyUpdateParamsAlertTypeTunnelUpdateEvent, V3PolicyUpdateParamsAlertTypeUniversalSSLEventType, V3PolicyUpdateParamsAlertTypeWebAnalyticsMetricsUpdate, V3PolicyUpdateParamsAlertTypeZoneAopCustomCertificateExpirationType:
+		return true
+	}
+	return false
+}
 
 // Optional filters that allow you to be alerted only on a subset of events for
 // that alert type based on some criteria. This is only available for select alert
@@ -977,6 +1057,14 @@ const (
 	V3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue97_0 V3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue = "97.0"
 )
 
+func (r V3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue) IsKnown() bool {
+	switch r {
+	case V3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue99_0, V3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue98_0, V3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue97_0:
+		return true
+	}
+	return false
+}
+
 type V3PolicyUpdateParamsFiltersIncidentImpact string
 
 const (
@@ -986,11 +1074,27 @@ const (
 	V3PolicyUpdateParamsFiltersIncidentImpactIncidentImpactCritical V3PolicyUpdateParamsFiltersIncidentImpact = "INCIDENT_IMPACT_CRITICAL"
 )
 
+func (r V3PolicyUpdateParamsFiltersIncidentImpact) IsKnown() bool {
+	switch r {
+	case V3PolicyUpdateParamsFiltersIncidentImpactIncidentImpactNone, V3PolicyUpdateParamsFiltersIncidentImpactIncidentImpactMinor, V3PolicyUpdateParamsFiltersIncidentImpactIncidentImpactMajor, V3PolicyUpdateParamsFiltersIncidentImpactIncidentImpactCritical:
+		return true
+	}
+	return false
+}
+
 type V3PolicyUpdateParamsFiltersTrafficExclusion string
 
 const (
 	V3PolicyUpdateParamsFiltersTrafficExclusionSecurityEvents V3PolicyUpdateParamsFiltersTrafficExclusion = "security_events"
 )
+
+func (r V3PolicyUpdateParamsFiltersTrafficExclusion) IsKnown() bool {
+	switch r {
+	case V3PolicyUpdateParamsFiltersTrafficExclusionSecurityEvents:
+		return true
+	}
+	return false
+}
 
 type V3PolicyUpdateParamsMechanisms struct {
 	// UUID
@@ -1089,6 +1193,14 @@ const (
 	V3PolicyUpdateResponseEnvelopeSuccessTrue V3PolicyUpdateResponseEnvelopeSuccess = true
 )
 
+func (r V3PolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3PolicyUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V3PolicyListParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1176,6 +1288,14 @@ type V3PolicyListResponseEnvelopeSuccess bool
 const (
 	V3PolicyListResponseEnvelopeSuccessTrue V3PolicyListResponseEnvelopeSuccess = true
 )
+
+func (r V3PolicyListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3PolicyListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type V3PolicyListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -1296,6 +1416,14 @@ const (
 	V3PolicyDeleteResponseEnvelopeSuccessTrue V3PolicyDeleteResponseEnvelopeSuccess = true
 )
 
+func (r V3PolicyDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3PolicyDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V3PolicyDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -1412,3 +1540,11 @@ type V3PolicyGetResponseEnvelopeSuccess bool
 const (
 	V3PolicyGetResponseEnvelopeSuccessTrue V3PolicyGetResponseEnvelopeSuccess = true
 )
+
+func (r V3PolicyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3PolicyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package load_balancers
 
@@ -78,6 +78,14 @@ const (
 	MonitorReferenceGetResponseReferenceTypeReferral MonitorReferenceGetResponseReferenceType = "referral"
 	MonitorReferenceGetResponseReferenceTypeReferrer MonitorReferenceGetResponseReferenceType = "referrer"
 )
+
+func (r MonitorReferenceGetResponseReferenceType) IsKnown() bool {
+	switch r {
+	case MonitorReferenceGetResponseReferenceTypeStar, MonitorReferenceGetResponseReferenceTypeReferral, MonitorReferenceGetResponseReferenceTypeReferrer:
+		return true
+	}
+	return false
+}
 
 type MonitorReferenceGetParams struct {
 	// Identifier
@@ -167,6 +175,14 @@ type MonitorReferenceGetResponseEnvelopeSuccess bool
 const (
 	MonitorReferenceGetResponseEnvelopeSuccessTrue MonitorReferenceGetResponseEnvelopeSuccess = true
 )
+
+func (r MonitorReferenceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MonitorReferenceGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type MonitorReferenceGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

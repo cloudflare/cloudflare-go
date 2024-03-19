@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -154,6 +154,14 @@ type IPListGetResponseEnvelopeSuccess bool
 const (
 	IPListGetResponseEnvelopeSuccessTrue IPListGetResponseEnvelopeSuccess = true
 )
+
+func (r IPListGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPListGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IPListGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

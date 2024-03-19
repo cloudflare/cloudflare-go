@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package origin_tls_client_auth
 
@@ -195,6 +195,14 @@ const (
 	SettingUpdateResponseEnvelopeSuccessTrue SettingUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SettingGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -280,3 +288,11 @@ type SettingGetResponseEnvelopeSuccess bool
 const (
 	SettingGetResponseEnvelopeSuccessTrue SettingGetResponseEnvelopeSuccess = true
 )
+
+func (r SettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

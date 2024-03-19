@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package images
 
@@ -174,3 +174,11 @@ type V1StatGetResponseEnvelopeSuccess bool
 const (
 	V1StatGetResponseEnvelopeSuccessTrue V1StatGetResponseEnvelopeSuccess = true
 )
+
+func (r V1StatGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1StatGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

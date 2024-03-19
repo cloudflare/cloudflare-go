@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package user
 
@@ -121,6 +121,14 @@ const (
 	IamOrganizationStatusInvited IamOrganizationStatus = "invited"
 )
 
+func (r IamOrganizationStatus) IsKnown() bool {
+	switch r {
+	case IamOrganizationStatusMember, IamOrganizationStatusInvited:
+		return true
+	}
+	return false
+}
+
 type OrganizationDeleteResponse struct {
 	// Identifier
 	ID   string                         `json:"id"`
@@ -193,6 +201,14 @@ const (
 	OrganizationListParamsDirectionDesc OrganizationListParamsDirection = "desc"
 )
 
+func (r OrganizationListParamsDirection) IsKnown() bool {
+	switch r {
+	case OrganizationListParamsDirectionAsc, OrganizationListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Whether to match all search requirements or at least one (any).
 type OrganizationListParamsMatch string
 
@@ -200,6 +216,14 @@ const (
 	OrganizationListParamsMatchAny OrganizationListParamsMatch = "any"
 	OrganizationListParamsMatchAll OrganizationListParamsMatch = "all"
 )
+
+func (r OrganizationListParamsMatch) IsKnown() bool {
+	switch r {
+	case OrganizationListParamsMatchAny, OrganizationListParamsMatchAll:
+		return true
+	}
+	return false
+}
 
 // Field to order organizations by.
 type OrganizationListParamsOrder string
@@ -210,6 +234,14 @@ const (
 	OrganizationListParamsOrderStatus OrganizationListParamsOrder = "status"
 )
 
+func (r OrganizationListParamsOrder) IsKnown() bool {
+	switch r {
+	case OrganizationListParamsOrderID, OrganizationListParamsOrderName, OrganizationListParamsOrderStatus:
+		return true
+	}
+	return false
+}
+
 // Whether the user is a member of the organization or has an inivitation pending.
 type OrganizationListParamsStatus string
 
@@ -217,6 +249,14 @@ const (
 	OrganizationListParamsStatusMember  OrganizationListParamsStatus = "member"
 	OrganizationListParamsStatusInvited OrganizationListParamsStatus = "invited"
 )
+
+func (r OrganizationListParamsStatus) IsKnown() bool {
+	switch r {
+	case OrganizationListParamsStatusMember, OrganizationListParamsStatusInvited:
+		return true
+	}
+	return false
+}
 
 type OrganizationGetResponseEnvelope struct {
 	Errors   []OrganizationGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -298,3 +338,11 @@ type OrganizationGetResponseEnvelopeSuccess bool
 const (
 	OrganizationGetResponseEnvelopeSuccessTrue OrganizationGetResponseEnvelopeSuccess = true
 )
+
+func (r OrganizationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OrganizationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

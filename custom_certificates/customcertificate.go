@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package custom_certificates
 
@@ -212,6 +212,14 @@ const (
 	TLSCertificatesAndHostnamesCustomCertificateBundleMethodForce      TLSCertificatesAndHostnamesCustomCertificateBundleMethod = "force"
 )
 
+func (r TLSCertificatesAndHostnamesCustomCertificateBundleMethod) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesCustomCertificateBundleMethodUbiquitous, TLSCertificatesAndHostnamesCustomCertificateBundleMethodOptimal, TLSCertificatesAndHostnamesCustomCertificateBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 // Status of the zone's custom SSL.
 type TLSCertificatesAndHostnamesCustomCertificateStatus string
 
@@ -222,6 +230,14 @@ const (
 	TLSCertificatesAndHostnamesCustomCertificateStatusPending      TLSCertificatesAndHostnamesCustomCertificateStatus = "pending"
 	TLSCertificatesAndHostnamesCustomCertificateStatusInitializing TLSCertificatesAndHostnamesCustomCertificateStatus = "initializing"
 )
+
+func (r TLSCertificatesAndHostnamesCustomCertificateStatus) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesCustomCertificateStatusActive, TLSCertificatesAndHostnamesCustomCertificateStatusExpired, TLSCertificatesAndHostnamesCustomCertificateStatusDeleted, TLSCertificatesAndHostnamesCustomCertificateStatusPending, TLSCertificatesAndHostnamesCustomCertificateStatusInitializing:
+		return true
+	}
+	return false
+}
 
 // Specify the region where your private key can be held locally for optimal TLS
 // performance. HTTPS connections to any excluded data center will still be fully
@@ -259,6 +275,14 @@ const (
 	TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelEu              TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel = "eu"
 	TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelHighestSecurity TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel = "highest_security"
 )
+
+func (r TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelUs, TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelEu, TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelHighestSecurity:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [custom_certificates.CustomCertificateNewResponseUnknown] or
 // [shared.UnionString].
@@ -384,6 +408,14 @@ const (
 	CustomCertificateNewParamsBundleMethodForce      CustomCertificateNewParamsBundleMethod = "force"
 )
 
+func (r CustomCertificateNewParamsBundleMethod) IsKnown() bool {
+	switch r {
+	case CustomCertificateNewParamsBundleMethodUbiquitous, CustomCertificateNewParamsBundleMethodOptimal, CustomCertificateNewParamsBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 // Specify the region where your private key can be held locally for optimal TLS
 // performance. HTTPS connections to any excluded data center will still be fully
 // encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -407,6 +439,14 @@ const (
 	CustomCertificateNewParamsGeoRestrictionsLabelHighestSecurity CustomCertificateNewParamsGeoRestrictionsLabel = "highest_security"
 )
 
+func (r CustomCertificateNewParamsGeoRestrictionsLabel) IsKnown() bool {
+	switch r {
+	case CustomCertificateNewParamsGeoRestrictionsLabelUs, CustomCertificateNewParamsGeoRestrictionsLabelEu, CustomCertificateNewParamsGeoRestrictionsLabelHighestSecurity:
+		return true
+	}
+	return false
+}
+
 // The type 'legacy_custom' enables support for legacy clients which do not include
 // SNI in the TLS handshake.
 type CustomCertificateNewParamsType string
@@ -415,6 +455,14 @@ const (
 	CustomCertificateNewParamsTypeLegacyCustom CustomCertificateNewParamsType = "legacy_custom"
 	CustomCertificateNewParamsTypeSniCustom    CustomCertificateNewParamsType = "sni_custom"
 )
+
+func (r CustomCertificateNewParamsType) IsKnown() bool {
+	switch r {
+	case CustomCertificateNewParamsTypeLegacyCustom, CustomCertificateNewParamsTypeSniCustom:
+		return true
+	}
+	return false
+}
 
 type CustomCertificateNewResponseEnvelope struct {
 	Errors   []CustomCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -497,6 +545,14 @@ const (
 	CustomCertificateNewResponseEnvelopeSuccessTrue CustomCertificateNewResponseEnvelopeSuccess = true
 )
 
+func (r CustomCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomCertificateNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CustomCertificateListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -524,6 +580,14 @@ const (
 	CustomCertificateListParamsMatchAny CustomCertificateListParamsMatch = "any"
 	CustomCertificateListParamsMatchAll CustomCertificateListParamsMatch = "all"
 )
+
+func (r CustomCertificateListParamsMatch) IsKnown() bool {
+	switch r {
+	case CustomCertificateListParamsMatchAny, CustomCertificateListParamsMatchAll:
+		return true
+	}
+	return false
+}
 
 type CustomCertificateDeleteParams struct {
 	// Identifier
@@ -611,6 +675,14 @@ const (
 	CustomCertificateDeleteResponseEnvelopeSuccessTrue CustomCertificateDeleteResponseEnvelopeSuccess = true
 )
 
+func (r CustomCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomCertificateDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CustomCertificateEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -659,6 +731,14 @@ const (
 	CustomCertificateEditParamsBundleMethodForce      CustomCertificateEditParamsBundleMethod = "force"
 )
 
+func (r CustomCertificateEditParamsBundleMethod) IsKnown() bool {
+	switch r {
+	case CustomCertificateEditParamsBundleMethodUbiquitous, CustomCertificateEditParamsBundleMethodOptimal, CustomCertificateEditParamsBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 // Specify the region where your private key can be held locally for optimal TLS
 // performance. HTTPS connections to any excluded data center will still be fully
 // encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -681,6 +761,14 @@ const (
 	CustomCertificateEditParamsGeoRestrictionsLabelEu              CustomCertificateEditParamsGeoRestrictionsLabel = "eu"
 	CustomCertificateEditParamsGeoRestrictionsLabelHighestSecurity CustomCertificateEditParamsGeoRestrictionsLabel = "highest_security"
 )
+
+func (r CustomCertificateEditParamsGeoRestrictionsLabel) IsKnown() bool {
+	switch r {
+	case CustomCertificateEditParamsGeoRestrictionsLabelUs, CustomCertificateEditParamsGeoRestrictionsLabelEu, CustomCertificateEditParamsGeoRestrictionsLabelHighestSecurity:
+		return true
+	}
+	return false
+}
 
 type CustomCertificateEditResponseEnvelope struct {
 	Errors   []CustomCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -762,6 +850,14 @@ type CustomCertificateEditResponseEnvelopeSuccess bool
 const (
 	CustomCertificateEditResponseEnvelopeSuccessTrue CustomCertificateEditResponseEnvelopeSuccess = true
 )
+
+func (r CustomCertificateEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomCertificateEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type CustomCertificateGetParams struct {
 	// Identifier
@@ -848,3 +944,11 @@ type CustomCertificateGetResponseEnvelopeSuccess bool
 const (
 	CustomCertificateGetResponseEnvelopeSuccessTrue CustomCertificateGetResponseEnvelopeSuccess = true
 )
+
+func (r CustomCertificateGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomCertificateGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package cloudforce_one
 
@@ -151,6 +151,14 @@ const (
 	CloudforceOnePriorityItemTlpRed         CloudforceOnePriorityItemTlp = "red"
 )
 
+func (r CloudforceOnePriorityItemTlp) IsKnown() bool {
+	switch r {
+	case CloudforceOnePriorityItemTlpClear, CloudforceOnePriorityItemTlpAmber, CloudforceOnePriorityItemTlpAmberStrict, CloudforceOnePriorityItemTlpGreen, CloudforceOnePriorityItemTlpRed:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [cloudforce_one.RequestPriorityDeleteResponseUnknown],
 // [cloudforce_one.RequestPriorityDeleteResponseArray] or [shared.UnionString].
 type RequestPriorityDeleteResponse interface {
@@ -201,6 +209,14 @@ const (
 	RequestPriorityNewParamsTlpGreen       RequestPriorityNewParamsTlp = "green"
 	RequestPriorityNewParamsTlpRed         RequestPriorityNewParamsTlp = "red"
 )
+
+func (r RequestPriorityNewParamsTlp) IsKnown() bool {
+	switch r {
+	case RequestPriorityNewParamsTlpClear, RequestPriorityNewParamsTlpAmber, RequestPriorityNewParamsTlpAmberStrict, RequestPriorityNewParamsTlpGreen, RequestPriorityNewParamsTlpRed:
+		return true
+	}
+	return false
+}
 
 type RequestPriorityNewResponseEnvelope struct {
 	Errors   []RequestPriorityNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -283,6 +299,14 @@ const (
 	RequestPriorityNewResponseEnvelopeSuccessTrue RequestPriorityNewResponseEnvelopeSuccess = true
 )
 
+func (r RequestPriorityNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestPriorityNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestPriorityUpdateParams struct {
 	// List of labels
 	Labels param.Field[[]string] `json:"labels,required"`
@@ -308,6 +332,14 @@ const (
 	RequestPriorityUpdateParamsTlpGreen       RequestPriorityUpdateParamsTlp = "green"
 	RequestPriorityUpdateParamsTlpRed         RequestPriorityUpdateParamsTlp = "red"
 )
+
+func (r RequestPriorityUpdateParamsTlp) IsKnown() bool {
+	switch r {
+	case RequestPriorityUpdateParamsTlpClear, RequestPriorityUpdateParamsTlpAmber, RequestPriorityUpdateParamsTlpAmberStrict, RequestPriorityUpdateParamsTlpGreen, RequestPriorityUpdateParamsTlpRed:
+		return true
+	}
+	return false
+}
 
 type RequestPriorityUpdateResponseEnvelope struct {
 	Errors   []RequestPriorityUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -390,6 +422,14 @@ const (
 	RequestPriorityUpdateResponseEnvelopeSuccessTrue RequestPriorityUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RequestPriorityUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestPriorityUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestPriorityDeleteResponseEnvelope struct {
 	Errors   []RequestPriorityDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestPriorityDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -470,6 +510,14 @@ type RequestPriorityDeleteResponseEnvelopeSuccess bool
 const (
 	RequestPriorityDeleteResponseEnvelopeSuccessTrue RequestPriorityDeleteResponseEnvelopeSuccess = true
 )
+
+func (r RequestPriorityDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestPriorityDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RequestPriorityGetResponseEnvelope struct {
 	Errors   []RequestPriorityGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -552,6 +600,14 @@ const (
 	RequestPriorityGetResponseEnvelopeSuccessTrue RequestPriorityGetResponseEnvelopeSuccess = true
 )
 
+func (r RequestPriorityGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestPriorityGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestPriorityQuotaResponseEnvelope struct {
 	Errors   []RequestPriorityQuotaResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestPriorityQuotaResponseEnvelopeMessages `json:"messages,required"`
@@ -632,3 +688,11 @@ type RequestPriorityQuotaResponseEnvelopeSuccess bool
 const (
 	RequestPriorityQuotaResponseEnvelopeSuccessTrue RequestPriorityQuotaResponseEnvelopeSuccess = true
 )
+
+func (r RequestPriorityQuotaResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestPriorityQuotaResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

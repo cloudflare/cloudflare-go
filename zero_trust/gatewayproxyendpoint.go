@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -246,6 +246,14 @@ const (
 	GatewayProxyEndpointNewResponseEnvelopeSuccessTrue GatewayProxyEndpointNewResponseEnvelopeSuccess = true
 )
 
+func (r GatewayProxyEndpointNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayProxyEndpointNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayProxyEndpointListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -332,6 +340,14 @@ type GatewayProxyEndpointListResponseEnvelopeSuccess bool
 const (
 	GatewayProxyEndpointListResponseEnvelopeSuccessTrue GatewayProxyEndpointListResponseEnvelopeSuccess = true
 )
+
+func (r GatewayProxyEndpointListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayProxyEndpointListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type GatewayProxyEndpointListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -449,6 +465,14 @@ const (
 	GatewayProxyEndpointDeleteResponseEnvelopeSuccessTrue GatewayProxyEndpointDeleteResponseEnvelopeSuccess = true
 )
 
+func (r GatewayProxyEndpointDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayProxyEndpointDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayProxyEndpointEditParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// A list of CIDRs to restrict ingress connections.
@@ -544,6 +568,14 @@ const (
 	GatewayProxyEndpointEditResponseEnvelopeSuccessTrue GatewayProxyEndpointEditResponseEnvelopeSuccess = true
 )
 
+func (r GatewayProxyEndpointEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayProxyEndpointEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayProxyEndpointGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -628,3 +660,11 @@ type GatewayProxyEndpointGetResponseEnvelopeSuccess bool
 const (
 	GatewayProxyEndpointGetResponseEnvelopeSuccessTrue GatewayProxyEndpointGetResponseEnvelopeSuccess = true
 )
+
+func (r GatewayProxyEndpointGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayProxyEndpointGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

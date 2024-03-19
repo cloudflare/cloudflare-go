@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package alerting
 
@@ -266,6 +266,14 @@ const (
 	V3DestinationPagerdutyNewResponseEnvelopeSuccessTrue V3DestinationPagerdutyNewResponseEnvelopeSuccess = true
 )
 
+func (r V3DestinationPagerdutyNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationPagerdutyNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V3DestinationPagerdutyDeleteParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -353,6 +361,14 @@ type V3DestinationPagerdutyDeleteResponseEnvelopeSuccess bool
 const (
 	V3DestinationPagerdutyDeleteResponseEnvelopeSuccessTrue V3DestinationPagerdutyDeleteResponseEnvelopeSuccess = true
 )
+
+func (r V3DestinationPagerdutyDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationPagerdutyDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type V3DestinationPagerdutyDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -473,6 +489,14 @@ const (
 	V3DestinationPagerdutyGetResponseEnvelopeSuccessTrue V3DestinationPagerdutyGetResponseEnvelopeSuccess = true
 )
 
+func (r V3DestinationPagerdutyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationPagerdutyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V3DestinationPagerdutyGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -589,3 +613,11 @@ type V3DestinationPagerdutyLinkResponseEnvelopeSuccess bool
 const (
 	V3DestinationPagerdutyLinkResponseEnvelopeSuccessTrue V3DestinationPagerdutyLinkResponseEnvelopeSuccess = true
 )
+
+func (r V3DestinationPagerdutyLinkResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationPagerdutyLinkResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

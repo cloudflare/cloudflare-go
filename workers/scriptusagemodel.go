@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers
 
@@ -191,6 +191,14 @@ const (
 	ScriptUsageModelUpdateResponseEnvelopeSuccessTrue ScriptUsageModelUpdateResponseEnvelopeSuccess = true
 )
 
+func (r ScriptUsageModelUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptUsageModelUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ScriptUsageModelGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -276,3 +284,11 @@ type ScriptUsageModelGetResponseEnvelopeSuccess bool
 const (
 	ScriptUsageModelGetResponseEnvelopeSuccessTrue ScriptUsageModelGetResponseEnvelopeSuccess = true
 )
+
+func (r ScriptUsageModelGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptUsageModelGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package waiting_rooms
 
@@ -501,6 +501,14 @@ const (
 	WaitingroomWaitingroomCookieAttributesSamesiteStrict WaitingroomWaitingroomCookieAttributesSamesite = "strict"
 )
 
+func (r WaitingroomWaitingroomCookieAttributesSamesite) IsKnown() bool {
+	switch r {
+	case WaitingroomWaitingroomCookieAttributesSamesiteAuto, WaitingroomWaitingroomCookieAttributesSamesiteLax, WaitingroomWaitingroomCookieAttributesSamesiteNone, WaitingroomWaitingroomCookieAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on the waiting room cookie. Value `always`
 // indicates that the Secure attribute will be set in the Set-Cookie header,
 // `never` indicates that the Secure attribute will not be set, and `auto` will set
@@ -512,6 +520,14 @@ const (
 	WaitingroomWaitingroomCookieAttributesSecureAlways WaitingroomWaitingroomCookieAttributesSecure = "always"
 	WaitingroomWaitingroomCookieAttributesSecureNever  WaitingroomWaitingroomCookieAttributesSecure = "never"
 )
+
+func (r WaitingroomWaitingroomCookieAttributesSecure) IsKnown() bool {
+	switch r {
+	case WaitingroomWaitingroomCookieAttributesSecureAuto, WaitingroomWaitingroomCookieAttributesSecureAlways, WaitingroomWaitingroomCookieAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // The language of the default page template. If no default_template_language is
 // provided, then `en-US` (English) will be used.
@@ -536,6 +552,14 @@ const (
 	WaitingroomWaitingroomDefaultTemplateLanguageRuRu WaitingroomWaitingroomDefaultTemplateLanguage = "ru-RU"
 	WaitingroomWaitingroomDefaultTemplateLanguageFaIr WaitingroomWaitingroomDefaultTemplateLanguage = "fa-IR"
 )
+
+func (r WaitingroomWaitingroomDefaultTemplateLanguage) IsKnown() bool {
+	switch r {
+	case WaitingroomWaitingroomDefaultTemplateLanguageEnUs, WaitingroomWaitingroomDefaultTemplateLanguageEsEs, WaitingroomWaitingroomDefaultTemplateLanguageDeDe, WaitingroomWaitingroomDefaultTemplateLanguageFrFr, WaitingroomWaitingroomDefaultTemplateLanguageItIt, WaitingroomWaitingroomDefaultTemplateLanguageJaJp, WaitingroomWaitingroomDefaultTemplateLanguageKoKr, WaitingroomWaitingroomDefaultTemplateLanguagePtBr, WaitingroomWaitingroomDefaultTemplateLanguageZhCn, WaitingroomWaitingroomDefaultTemplateLanguageZhTw, WaitingroomWaitingroomDefaultTemplateLanguageNlNl, WaitingroomWaitingroomDefaultTemplateLanguagePlPl, WaitingroomWaitingroomDefaultTemplateLanguageIDID, WaitingroomWaitingroomDefaultTemplateLanguageTrTr, WaitingroomWaitingroomDefaultTemplateLanguageArEg, WaitingroomWaitingroomDefaultTemplateLanguageRuRu, WaitingroomWaitingroomDefaultTemplateLanguageFaIr:
+		return true
+	}
+	return false
+}
 
 // Sets the queueing method used by the waiting room. Changing this parameter from
 // the **default** queueing method is only available for the Waiting Room Advanced
@@ -573,6 +597,14 @@ const (
 	WaitingroomWaitingroomQueueingMethodReject      WaitingroomWaitingroomQueueingMethod = "reject"
 )
 
+func (r WaitingroomWaitingroomQueueingMethod) IsKnown() bool {
+	switch r {
+	case WaitingroomWaitingroomQueueingMethodFifo, WaitingroomWaitingroomQueueingMethodRandom, WaitingroomWaitingroomQueueingMethodPassthrough, WaitingroomWaitingroomQueueingMethodReject:
+		return true
+	}
+	return false
+}
+
 // HTTP status code returned to a user while in the queue.
 type WaitingroomWaitingroomQueueingStatusCode int64
 
@@ -581,6 +613,14 @@ const (
 	WaitingroomWaitingroomQueueingStatusCode202 WaitingroomWaitingroomQueueingStatusCode = 202
 	WaitingroomWaitingroomQueueingStatusCode429 WaitingroomWaitingroomQueueingStatusCode = 429
 )
+
+func (r WaitingroomWaitingroomQueueingStatusCode) IsKnown() bool {
+	switch r {
+	case WaitingroomWaitingroomQueueingStatusCode200, WaitingroomWaitingroomQueueingStatusCode202, WaitingroomWaitingroomQueueingStatusCode429:
+		return true
+	}
+	return false
+}
 
 type WaitingRoomDeleteResponse struct {
 	ID   interface{}                   `json:"id"`
@@ -914,6 +954,14 @@ const (
 	WaitingRoomNewParamsCookieAttributesSamesiteStrict WaitingRoomNewParamsCookieAttributesSamesite = "strict"
 )
 
+func (r WaitingRoomNewParamsCookieAttributesSamesite) IsKnown() bool {
+	switch r {
+	case WaitingRoomNewParamsCookieAttributesSamesiteAuto, WaitingRoomNewParamsCookieAttributesSamesiteLax, WaitingRoomNewParamsCookieAttributesSamesiteNone, WaitingRoomNewParamsCookieAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on the waiting room cookie. Value `always`
 // indicates that the Secure attribute will be set in the Set-Cookie header,
 // `never` indicates that the Secure attribute will not be set, and `auto` will set
@@ -925,6 +973,14 @@ const (
 	WaitingRoomNewParamsCookieAttributesSecureAlways WaitingRoomNewParamsCookieAttributesSecure = "always"
 	WaitingRoomNewParamsCookieAttributesSecureNever  WaitingRoomNewParamsCookieAttributesSecure = "never"
 )
+
+func (r WaitingRoomNewParamsCookieAttributesSecure) IsKnown() bool {
+	switch r {
+	case WaitingRoomNewParamsCookieAttributesSecureAuto, WaitingRoomNewParamsCookieAttributesSecureAlways, WaitingRoomNewParamsCookieAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // The language of the default page template. If no default_template_language is
 // provided, then `en-US` (English) will be used.
@@ -949,6 +1005,14 @@ const (
 	WaitingRoomNewParamsDefaultTemplateLanguageRuRu WaitingRoomNewParamsDefaultTemplateLanguage = "ru-RU"
 	WaitingRoomNewParamsDefaultTemplateLanguageFaIr WaitingRoomNewParamsDefaultTemplateLanguage = "fa-IR"
 )
+
+func (r WaitingRoomNewParamsDefaultTemplateLanguage) IsKnown() bool {
+	switch r {
+	case WaitingRoomNewParamsDefaultTemplateLanguageEnUs, WaitingRoomNewParamsDefaultTemplateLanguageEsEs, WaitingRoomNewParamsDefaultTemplateLanguageDeDe, WaitingRoomNewParamsDefaultTemplateLanguageFrFr, WaitingRoomNewParamsDefaultTemplateLanguageItIt, WaitingRoomNewParamsDefaultTemplateLanguageJaJp, WaitingRoomNewParamsDefaultTemplateLanguageKoKr, WaitingRoomNewParamsDefaultTemplateLanguagePtBr, WaitingRoomNewParamsDefaultTemplateLanguageZhCn, WaitingRoomNewParamsDefaultTemplateLanguageZhTw, WaitingRoomNewParamsDefaultTemplateLanguageNlNl, WaitingRoomNewParamsDefaultTemplateLanguagePlPl, WaitingRoomNewParamsDefaultTemplateLanguageIDID, WaitingRoomNewParamsDefaultTemplateLanguageTrTr, WaitingRoomNewParamsDefaultTemplateLanguageArEg, WaitingRoomNewParamsDefaultTemplateLanguageRuRu, WaitingRoomNewParamsDefaultTemplateLanguageFaIr:
+		return true
+	}
+	return false
+}
 
 // Sets the queueing method used by the waiting room. Changing this parameter from
 // the **default** queueing method is only available for the Waiting Room Advanced
@@ -986,6 +1050,14 @@ const (
 	WaitingRoomNewParamsQueueingMethodReject      WaitingRoomNewParamsQueueingMethod = "reject"
 )
 
+func (r WaitingRoomNewParamsQueueingMethod) IsKnown() bool {
+	switch r {
+	case WaitingRoomNewParamsQueueingMethodFifo, WaitingRoomNewParamsQueueingMethodRandom, WaitingRoomNewParamsQueueingMethodPassthrough, WaitingRoomNewParamsQueueingMethodReject:
+		return true
+	}
+	return false
+}
+
 // HTTP status code returned to a user while in the queue.
 type WaitingRoomNewParamsQueueingStatusCode int64
 
@@ -994,6 +1066,14 @@ const (
 	WaitingRoomNewParamsQueueingStatusCode202 WaitingRoomNewParamsQueueingStatusCode = 202
 	WaitingRoomNewParamsQueueingStatusCode429 WaitingRoomNewParamsQueueingStatusCode = 429
 )
+
+func (r WaitingRoomNewParamsQueueingStatusCode) IsKnown() bool {
+	switch r {
+	case WaitingRoomNewParamsQueueingStatusCode200, WaitingRoomNewParamsQueueingStatusCode202, WaitingRoomNewParamsQueueingStatusCode429:
+		return true
+	}
+	return false
+}
 
 type WaitingRoomNewResponseEnvelope struct {
 	Result WaitingroomWaitingroom             `json:"result,required"`
@@ -1327,6 +1407,14 @@ const (
 	WaitingRoomUpdateParamsCookieAttributesSamesiteStrict WaitingRoomUpdateParamsCookieAttributesSamesite = "strict"
 )
 
+func (r WaitingRoomUpdateParamsCookieAttributesSamesite) IsKnown() bool {
+	switch r {
+	case WaitingRoomUpdateParamsCookieAttributesSamesiteAuto, WaitingRoomUpdateParamsCookieAttributesSamesiteLax, WaitingRoomUpdateParamsCookieAttributesSamesiteNone, WaitingRoomUpdateParamsCookieAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on the waiting room cookie. Value `always`
 // indicates that the Secure attribute will be set in the Set-Cookie header,
 // `never` indicates that the Secure attribute will not be set, and `auto` will set
@@ -1338,6 +1426,14 @@ const (
 	WaitingRoomUpdateParamsCookieAttributesSecureAlways WaitingRoomUpdateParamsCookieAttributesSecure = "always"
 	WaitingRoomUpdateParamsCookieAttributesSecureNever  WaitingRoomUpdateParamsCookieAttributesSecure = "never"
 )
+
+func (r WaitingRoomUpdateParamsCookieAttributesSecure) IsKnown() bool {
+	switch r {
+	case WaitingRoomUpdateParamsCookieAttributesSecureAuto, WaitingRoomUpdateParamsCookieAttributesSecureAlways, WaitingRoomUpdateParamsCookieAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // The language of the default page template. If no default_template_language is
 // provided, then `en-US` (English) will be used.
@@ -1362,6 +1458,14 @@ const (
 	WaitingRoomUpdateParamsDefaultTemplateLanguageRuRu WaitingRoomUpdateParamsDefaultTemplateLanguage = "ru-RU"
 	WaitingRoomUpdateParamsDefaultTemplateLanguageFaIr WaitingRoomUpdateParamsDefaultTemplateLanguage = "fa-IR"
 )
+
+func (r WaitingRoomUpdateParamsDefaultTemplateLanguage) IsKnown() bool {
+	switch r {
+	case WaitingRoomUpdateParamsDefaultTemplateLanguageEnUs, WaitingRoomUpdateParamsDefaultTemplateLanguageEsEs, WaitingRoomUpdateParamsDefaultTemplateLanguageDeDe, WaitingRoomUpdateParamsDefaultTemplateLanguageFrFr, WaitingRoomUpdateParamsDefaultTemplateLanguageItIt, WaitingRoomUpdateParamsDefaultTemplateLanguageJaJp, WaitingRoomUpdateParamsDefaultTemplateLanguageKoKr, WaitingRoomUpdateParamsDefaultTemplateLanguagePtBr, WaitingRoomUpdateParamsDefaultTemplateLanguageZhCn, WaitingRoomUpdateParamsDefaultTemplateLanguageZhTw, WaitingRoomUpdateParamsDefaultTemplateLanguageNlNl, WaitingRoomUpdateParamsDefaultTemplateLanguagePlPl, WaitingRoomUpdateParamsDefaultTemplateLanguageIDID, WaitingRoomUpdateParamsDefaultTemplateLanguageTrTr, WaitingRoomUpdateParamsDefaultTemplateLanguageArEg, WaitingRoomUpdateParamsDefaultTemplateLanguageRuRu, WaitingRoomUpdateParamsDefaultTemplateLanguageFaIr:
+		return true
+	}
+	return false
+}
 
 // Sets the queueing method used by the waiting room. Changing this parameter from
 // the **default** queueing method is only available for the Waiting Room Advanced
@@ -1399,6 +1503,14 @@ const (
 	WaitingRoomUpdateParamsQueueingMethodReject      WaitingRoomUpdateParamsQueueingMethod = "reject"
 )
 
+func (r WaitingRoomUpdateParamsQueueingMethod) IsKnown() bool {
+	switch r {
+	case WaitingRoomUpdateParamsQueueingMethodFifo, WaitingRoomUpdateParamsQueueingMethodRandom, WaitingRoomUpdateParamsQueueingMethodPassthrough, WaitingRoomUpdateParamsQueueingMethodReject:
+		return true
+	}
+	return false
+}
+
 // HTTP status code returned to a user while in the queue.
 type WaitingRoomUpdateParamsQueueingStatusCode int64
 
@@ -1407,6 +1519,14 @@ const (
 	WaitingRoomUpdateParamsQueueingStatusCode202 WaitingRoomUpdateParamsQueueingStatusCode = 202
 	WaitingRoomUpdateParamsQueueingStatusCode429 WaitingRoomUpdateParamsQueueingStatusCode = 429
 )
+
+func (r WaitingRoomUpdateParamsQueueingStatusCode) IsKnown() bool {
+	switch r {
+	case WaitingRoomUpdateParamsQueueingStatusCode200, WaitingRoomUpdateParamsQueueingStatusCode202, WaitingRoomUpdateParamsQueueingStatusCode429:
+		return true
+	}
+	return false
+}
 
 type WaitingRoomUpdateResponseEnvelope struct {
 	Result WaitingroomWaitingroom                `json:"result,required"`
@@ -1511,6 +1631,14 @@ type WaitingRoomListResponseEnvelopeSuccess bool
 const (
 	WaitingRoomListResponseEnvelopeSuccessTrue WaitingRoomListResponseEnvelopeSuccess = true
 )
+
+func (r WaitingRoomListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WaitingRoomListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type WaitingRoomListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -1875,6 +2003,14 @@ const (
 	WaitingRoomEditParamsCookieAttributesSamesiteStrict WaitingRoomEditParamsCookieAttributesSamesite = "strict"
 )
 
+func (r WaitingRoomEditParamsCookieAttributesSamesite) IsKnown() bool {
+	switch r {
+	case WaitingRoomEditParamsCookieAttributesSamesiteAuto, WaitingRoomEditParamsCookieAttributesSamesiteLax, WaitingRoomEditParamsCookieAttributesSamesiteNone, WaitingRoomEditParamsCookieAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on the waiting room cookie. Value `always`
 // indicates that the Secure attribute will be set in the Set-Cookie header,
 // `never` indicates that the Secure attribute will not be set, and `auto` will set
@@ -1886,6 +2022,14 @@ const (
 	WaitingRoomEditParamsCookieAttributesSecureAlways WaitingRoomEditParamsCookieAttributesSecure = "always"
 	WaitingRoomEditParamsCookieAttributesSecureNever  WaitingRoomEditParamsCookieAttributesSecure = "never"
 )
+
+func (r WaitingRoomEditParamsCookieAttributesSecure) IsKnown() bool {
+	switch r {
+	case WaitingRoomEditParamsCookieAttributesSecureAuto, WaitingRoomEditParamsCookieAttributesSecureAlways, WaitingRoomEditParamsCookieAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // The language of the default page template. If no default_template_language is
 // provided, then `en-US` (English) will be used.
@@ -1910,6 +2054,14 @@ const (
 	WaitingRoomEditParamsDefaultTemplateLanguageRuRu WaitingRoomEditParamsDefaultTemplateLanguage = "ru-RU"
 	WaitingRoomEditParamsDefaultTemplateLanguageFaIr WaitingRoomEditParamsDefaultTemplateLanguage = "fa-IR"
 )
+
+func (r WaitingRoomEditParamsDefaultTemplateLanguage) IsKnown() bool {
+	switch r {
+	case WaitingRoomEditParamsDefaultTemplateLanguageEnUs, WaitingRoomEditParamsDefaultTemplateLanguageEsEs, WaitingRoomEditParamsDefaultTemplateLanguageDeDe, WaitingRoomEditParamsDefaultTemplateLanguageFrFr, WaitingRoomEditParamsDefaultTemplateLanguageItIt, WaitingRoomEditParamsDefaultTemplateLanguageJaJp, WaitingRoomEditParamsDefaultTemplateLanguageKoKr, WaitingRoomEditParamsDefaultTemplateLanguagePtBr, WaitingRoomEditParamsDefaultTemplateLanguageZhCn, WaitingRoomEditParamsDefaultTemplateLanguageZhTw, WaitingRoomEditParamsDefaultTemplateLanguageNlNl, WaitingRoomEditParamsDefaultTemplateLanguagePlPl, WaitingRoomEditParamsDefaultTemplateLanguageIDID, WaitingRoomEditParamsDefaultTemplateLanguageTrTr, WaitingRoomEditParamsDefaultTemplateLanguageArEg, WaitingRoomEditParamsDefaultTemplateLanguageRuRu, WaitingRoomEditParamsDefaultTemplateLanguageFaIr:
+		return true
+	}
+	return false
+}
 
 // Sets the queueing method used by the waiting room. Changing this parameter from
 // the **default** queueing method is only available for the Waiting Room Advanced
@@ -1947,6 +2099,14 @@ const (
 	WaitingRoomEditParamsQueueingMethodReject      WaitingRoomEditParamsQueueingMethod = "reject"
 )
 
+func (r WaitingRoomEditParamsQueueingMethod) IsKnown() bool {
+	switch r {
+	case WaitingRoomEditParamsQueueingMethodFifo, WaitingRoomEditParamsQueueingMethodRandom, WaitingRoomEditParamsQueueingMethodPassthrough, WaitingRoomEditParamsQueueingMethodReject:
+		return true
+	}
+	return false
+}
+
 // HTTP status code returned to a user while in the queue.
 type WaitingRoomEditParamsQueueingStatusCode int64
 
@@ -1955,6 +2115,14 @@ const (
 	WaitingRoomEditParamsQueueingStatusCode202 WaitingRoomEditParamsQueueingStatusCode = 202
 	WaitingRoomEditParamsQueueingStatusCode429 WaitingRoomEditParamsQueueingStatusCode = 429
 )
+
+func (r WaitingRoomEditParamsQueueingStatusCode) IsKnown() bool {
+	switch r {
+	case WaitingRoomEditParamsQueueingStatusCode200, WaitingRoomEditParamsQueueingStatusCode202, WaitingRoomEditParamsQueueingStatusCode429:
+		return true
+	}
+	return false
+}
 
 type WaitingRoomEditResponseEnvelope struct {
 	Result WaitingroomWaitingroom              `json:"result,required"`

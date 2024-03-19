@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -132,6 +132,14 @@ type DevicePolicyDefaultPolicyGetResponseEnvelopeSuccess bool
 const (
 	DevicePolicyDefaultPolicyGetResponseEnvelopeSuccessTrue DevicePolicyDefaultPolicyGetResponseEnvelopeSuccess = true
 )
+
+func (r DevicePolicyDefaultPolicyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyDefaultPolicyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePolicyDefaultPolicyGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

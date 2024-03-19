@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package user
 
@@ -134,3 +134,11 @@ type TokenValueUpdateResponseEnvelopeSuccess bool
 const (
 	TokenValueUpdateResponseEnvelopeSuccessTrue TokenValueUpdateResponseEnvelopeSuccess = true
 )
+
+func (r TokenValueUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenValueUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

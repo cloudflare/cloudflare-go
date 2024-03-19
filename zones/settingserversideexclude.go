@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -132,6 +132,14 @@ const (
 	ZonesServerSideExcludeIDServerSideExclude ZonesServerSideExcludeID = "server_side_exclude"
 )
 
+func (r ZonesServerSideExcludeID) IsKnown() bool {
+	switch r {
+	case ZonesServerSideExcludeIDServerSideExclude:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesServerSideExcludeValue string
 
@@ -139,6 +147,14 @@ const (
 	ZonesServerSideExcludeValueOn  ZonesServerSideExcludeValue = "on"
 	ZonesServerSideExcludeValueOff ZonesServerSideExcludeValue = "off"
 )
+
+func (r ZonesServerSideExcludeValue) IsKnown() bool {
+	switch r {
+	case ZonesServerSideExcludeValueOn, ZonesServerSideExcludeValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -148,6 +164,14 @@ const (
 	ZonesServerSideExcludeEditableTrue  ZonesServerSideExcludeEditable = true
 	ZonesServerSideExcludeEditableFalse ZonesServerSideExcludeEditable = false
 )
+
+func (r ZonesServerSideExcludeEditable) IsKnown() bool {
+	switch r {
+	case ZonesServerSideExcludeEditableTrue, ZonesServerSideExcludeEditableFalse:
+		return true
+	}
+	return false
+}
 
 // If there is sensitive content on your website that you want visible to real
 // visitors, but that you want to hide from suspicious visitors, all you have to do
@@ -191,6 +215,14 @@ const (
 	SettingServerSideExcludeEditParamsValueOn  SettingServerSideExcludeEditParamsValue = "on"
 	SettingServerSideExcludeEditParamsValueOff SettingServerSideExcludeEditParamsValue = "off"
 )
+
+func (r SettingServerSideExcludeEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingServerSideExcludeEditParamsValueOn, SettingServerSideExcludeEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingServerSideExcludeEditResponseEnvelope struct {
 	Errors   []SettingServerSideExcludeEditResponseEnvelopeErrors   `json:"errors,required"`

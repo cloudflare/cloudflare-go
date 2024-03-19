@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package stream
 
@@ -152,6 +152,14 @@ const (
 	StreamClippingStatusError         StreamClippingStatus = "error"
 )
 
+func (r StreamClippingStatus) IsKnown() bool {
+	switch r {
+	case StreamClippingStatusPendingupload, StreamClippingStatusDownloading, StreamClippingStatusQueued, StreamClippingStatusInprogress, StreamClippingStatusReady, StreamClippingStatusError:
+		return true
+	}
+	return false
+}
+
 type StreamClippingWatermark struct {
 	// The unique identifier for the watermark profile.
 	Uid  string                      `json:"uid"`
@@ -298,3 +306,11 @@ type ClipNewResponseEnvelopeSuccess bool
 const (
 	ClipNewResponseEnvelopeSuccessTrue ClipNewResponseEnvelopeSuccess = true
 )
+
+func (r ClipNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ClipNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

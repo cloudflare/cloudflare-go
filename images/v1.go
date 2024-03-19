@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package images
 
@@ -291,6 +291,14 @@ const (
 	V1ListResponseSuccessTrue V1ListResponseSuccess = true
 )
 
+func (r V1ListResponseSuccess) IsKnown() bool {
+	switch r {
+	case V1ListResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [images.V1DeleteResponseUnknown] or [shared.UnionString].
 type V1DeleteResponse interface {
 	ImplementsImagesV1DeleteResponse()
@@ -400,6 +408,14 @@ const (
 	V1NewResponseEnvelopeSuccessTrue V1NewResponseEnvelopeSuccess = true
 )
 
+func (r V1NewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1NewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V1ListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -503,6 +519,14 @@ const (
 	V1DeleteResponseEnvelopeSuccessTrue V1DeleteResponseEnvelopeSuccess = true
 )
 
+func (r V1DeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1DeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V1EditParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -600,6 +624,14 @@ const (
 	V1EditResponseEnvelopeSuccessTrue V1EditResponseEnvelopeSuccess = true
 )
 
+func (r V1EditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1EditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V1GetParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -685,3 +717,11 @@ type V1GetResponseEnvelopeSuccess bool
 const (
 	V1GetResponseEnvelopeSuccessTrue V1GetResponseEnvelopeSuccess = true
 )
+
+func (r V1GetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1GetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

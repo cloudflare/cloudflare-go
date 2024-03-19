@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package subscriptions
 
@@ -250,6 +250,14 @@ const (
 	SubscriptionListResponseFrequencyYearly    SubscriptionListResponseFrequency = "yearly"
 )
 
+func (r SubscriptionListResponseFrequency) IsKnown() bool {
+	switch r {
+	case SubscriptionListResponseFrequencyWeekly, SubscriptionListResponseFrequencyMonthly, SubscriptionListResponseFrequencyQuarterly, SubscriptionListResponseFrequencyYearly:
+		return true
+	}
+	return false
+}
+
 // The rate plan applied to the subscription.
 type SubscriptionListResponseRatePlan struct {
 	// The ID of the rate plan.
@@ -303,6 +311,14 @@ const (
 	SubscriptionListResponseStateFailed          SubscriptionListResponseState = "Failed"
 	SubscriptionListResponseStateExpired         SubscriptionListResponseState = "Expired"
 )
+
+func (r SubscriptionListResponseState) IsKnown() bool {
+	switch r {
+	case SubscriptionListResponseStateTrial, SubscriptionListResponseStateProvisioned, SubscriptionListResponseStatePaid, SubscriptionListResponseStateAwaitingPayment, SubscriptionListResponseStateCancelled, SubscriptionListResponseStateFailed, SubscriptionListResponseStateExpired:
+		return true
+	}
+	return false
+}
 
 // A simple zone object. May have null properties if not a zone subscription.
 type SubscriptionListResponseZone struct {
@@ -420,6 +436,14 @@ const (
 	SubscriptionNewParamsFrequencyYearly    SubscriptionNewParamsFrequency = "yearly"
 )
 
+func (r SubscriptionNewParamsFrequency) IsKnown() bool {
+	switch r {
+	case SubscriptionNewParamsFrequencyWeekly, SubscriptionNewParamsFrequencyMonthly, SubscriptionNewParamsFrequencyQuarterly, SubscriptionNewParamsFrequencyYearly:
+		return true
+	}
+	return false
+}
+
 // The rate plan applied to the subscription.
 type SubscriptionNewParamsRatePlan struct {
 	// The ID of the rate plan.
@@ -531,6 +555,14 @@ const (
 	SubscriptionNewResponseEnvelopeSuccessTrue SubscriptionNewResponseEnvelopeSuccess = true
 )
 
+func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SubscriptionUpdateParams struct {
 	App param.Field[SubscriptionUpdateParamsApp] `json:"app"`
 	// The list of add-ons subscribed to.
@@ -581,6 +613,14 @@ const (
 	SubscriptionUpdateParamsFrequencyQuarterly SubscriptionUpdateParamsFrequency = "quarterly"
 	SubscriptionUpdateParamsFrequencyYearly    SubscriptionUpdateParamsFrequency = "yearly"
 )
+
+func (r SubscriptionUpdateParamsFrequency) IsKnown() bool {
+	switch r {
+	case SubscriptionUpdateParamsFrequencyWeekly, SubscriptionUpdateParamsFrequencyMonthly, SubscriptionUpdateParamsFrequencyQuarterly, SubscriptionUpdateParamsFrequencyYearly:
+		return true
+	}
+	return false
+}
 
 // The rate plan applied to the subscription.
 type SubscriptionUpdateParamsRatePlan struct {
@@ -693,6 +733,14 @@ const (
 	SubscriptionUpdateResponseEnvelopeSuccessTrue SubscriptionUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SubscriptionListResponseEnvelope struct {
 	Errors   []SubscriptionListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SubscriptionListResponseEnvelopeMessages `json:"messages,required"`
@@ -775,6 +823,14 @@ type SubscriptionListResponseEnvelopeSuccess bool
 const (
 	SubscriptionListResponseEnvelopeSuccessTrue SubscriptionListResponseEnvelopeSuccess = true
 )
+
+func (r SubscriptionListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SubscriptionListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -888,6 +944,14 @@ const (
 	SubscriptionDeleteResponseEnvelopeSuccessTrue SubscriptionDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SubscriptionGetResponseEnvelope struct {
 	Errors   []SubscriptionGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SubscriptionGetResponseEnvelopeMessages `json:"messages,required"`
@@ -968,3 +1032,11 @@ type SubscriptionGetResponseEnvelopeSuccess bool
 const (
 	SubscriptionGetResponseEnvelopeSuccessTrue SubscriptionGetResponseEnvelopeSuccess = true
 )
+
+func (r SubscriptionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

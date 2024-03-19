@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package logs
 
@@ -154,3 +154,11 @@ const (
 	ReceivedGetParamsTimestampsUnixnano ReceivedGetParamsTimestamps = "unixnano"
 	ReceivedGetParamsTimestampsRfc3339  ReceivedGetParamsTimestamps = "rfc3339"
 )
+
+func (r ReceivedGetParamsTimestamps) IsKnown() bool {
+	switch r {
+	case ReceivedGetParamsTimestampsUnix, ReceivedGetParamsTimestampsUnixnano, ReceivedGetParamsTimestampsRfc3339:
+		return true
+	}
+	return false
+}

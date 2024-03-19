@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package user
 
@@ -240,6 +240,14 @@ const (
 	LoadBalancingMonitorTypeSmtp     LoadBalancingMonitorType = "smtp"
 )
 
+func (r LoadBalancingMonitorType) IsKnown() bool {
+	switch r {
+	case LoadBalancingMonitorTypeHTTP, LoadBalancingMonitorTypeHTTPS, LoadBalancingMonitorTypeTcp, LoadBalancingMonitorTypeUdpIcmp, LoadBalancingMonitorTypeIcmpPing, LoadBalancingMonitorTypeSmtp:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerMonitorDeleteResponse struct {
 	ID   string                                `json:"id"`
 	JSON loadBalancerMonitorDeleteResponseJSON `json:"-"`
@@ -320,6 +328,14 @@ const (
 	LoadBalancerMonitorReferencesResponseReferenceTypeReferrer LoadBalancerMonitorReferencesResponseReferenceType = "referrer"
 )
 
+func (r LoadBalancerMonitorReferencesResponseReferenceType) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorReferencesResponseReferenceTypeStar, LoadBalancerMonitorReferencesResponseReferenceTypeReferral, LoadBalancerMonitorReferencesResponseReferenceTypeReferrer:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerMonitorNewParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
@@ -388,6 +404,14 @@ const (
 	LoadBalancerMonitorNewParamsTypeIcmpPing LoadBalancerMonitorNewParamsType = "icmp_ping"
 	LoadBalancerMonitorNewParamsTypeSmtp     LoadBalancerMonitorNewParamsType = "smtp"
 )
+
+func (r LoadBalancerMonitorNewParamsType) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorNewParamsTypeHTTP, LoadBalancerMonitorNewParamsTypeHTTPS, LoadBalancerMonitorNewParamsTypeTcp, LoadBalancerMonitorNewParamsTypeUdpIcmp, LoadBalancerMonitorNewParamsTypeIcmpPing, LoadBalancerMonitorNewParamsTypeSmtp:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerMonitorNewResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -470,6 +494,14 @@ const (
 	LoadBalancerMonitorNewResponseEnvelopeSuccessTrue LoadBalancerMonitorNewResponseEnvelopeSuccess = true
 )
 
+func (r LoadBalancerMonitorNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerMonitorUpdateParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
@@ -538,6 +570,14 @@ const (
 	LoadBalancerMonitorUpdateParamsTypeIcmpPing LoadBalancerMonitorUpdateParamsType = "icmp_ping"
 	LoadBalancerMonitorUpdateParamsTypeSmtp     LoadBalancerMonitorUpdateParamsType = "smtp"
 )
+
+func (r LoadBalancerMonitorUpdateParamsType) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorUpdateParamsTypeHTTP, LoadBalancerMonitorUpdateParamsTypeHTTPS, LoadBalancerMonitorUpdateParamsTypeTcp, LoadBalancerMonitorUpdateParamsTypeUdpIcmp, LoadBalancerMonitorUpdateParamsTypeIcmpPing, LoadBalancerMonitorUpdateParamsTypeSmtp:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerMonitorUpdateResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -619,6 +659,14 @@ type LoadBalancerMonitorUpdateResponseEnvelopeSuccess bool
 const (
 	LoadBalancerMonitorUpdateResponseEnvelopeSuccessTrue LoadBalancerMonitorUpdateResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerMonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerMonitorListResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorListResponseEnvelopeErrors   `json:"errors,required"`
@@ -702,6 +750,14 @@ type LoadBalancerMonitorListResponseEnvelopeSuccess bool
 const (
 	LoadBalancerMonitorListResponseEnvelopeSuccessTrue LoadBalancerMonitorListResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerMonitorListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerMonitorListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -815,6 +871,14 @@ const (
 	LoadBalancerMonitorDeleteResponseEnvelopeSuccessTrue LoadBalancerMonitorDeleteResponseEnvelopeSuccess = true
 )
 
+func (r LoadBalancerMonitorDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerMonitorEditParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
@@ -883,6 +947,14 @@ const (
 	LoadBalancerMonitorEditParamsTypeIcmpPing LoadBalancerMonitorEditParamsType = "icmp_ping"
 	LoadBalancerMonitorEditParamsTypeSmtp     LoadBalancerMonitorEditParamsType = "smtp"
 )
+
+func (r LoadBalancerMonitorEditParamsType) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorEditParamsTypeHTTP, LoadBalancerMonitorEditParamsTypeHTTPS, LoadBalancerMonitorEditParamsTypeTcp, LoadBalancerMonitorEditParamsTypeUdpIcmp, LoadBalancerMonitorEditParamsTypeIcmpPing, LoadBalancerMonitorEditParamsTypeSmtp:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerMonitorEditResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -965,6 +1037,14 @@ const (
 	LoadBalancerMonitorEditResponseEnvelopeSuccessTrue LoadBalancerMonitorEditResponseEnvelopeSuccess = true
 )
 
+func (r LoadBalancerMonitorEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerMonitorGetResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerMonitorGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1046,6 +1126,14 @@ const (
 	LoadBalancerMonitorGetResponseEnvelopeSuccessTrue LoadBalancerMonitorGetResponseEnvelopeSuccess = true
 )
 
+func (r LoadBalancerMonitorGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerMonitorPreviewParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
@@ -1114,6 +1202,14 @@ const (
 	LoadBalancerMonitorPreviewParamsTypeIcmpPing LoadBalancerMonitorPreviewParamsType = "icmp_ping"
 	LoadBalancerMonitorPreviewParamsTypeSmtp     LoadBalancerMonitorPreviewParamsType = "smtp"
 )
+
+func (r LoadBalancerMonitorPreviewParamsType) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorPreviewParamsTypeHTTP, LoadBalancerMonitorPreviewParamsTypeHTTPS, LoadBalancerMonitorPreviewParamsTypeTcp, LoadBalancerMonitorPreviewParamsTypeUdpIcmp, LoadBalancerMonitorPreviewParamsTypeIcmpPing, LoadBalancerMonitorPreviewParamsTypeSmtp:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerMonitorPreviewResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorPreviewResponseEnvelopeErrors   `json:"errors,required"`
@@ -1195,6 +1291,14 @@ type LoadBalancerMonitorPreviewResponseEnvelopeSuccess bool
 const (
 	LoadBalancerMonitorPreviewResponseEnvelopeSuccessTrue LoadBalancerMonitorPreviewResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerMonitorPreviewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorPreviewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerMonitorReferencesResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorReferencesResponseEnvelopeErrors   `json:"errors,required"`
@@ -1279,6 +1383,14 @@ type LoadBalancerMonitorReferencesResponseEnvelopeSuccess bool
 const (
 	LoadBalancerMonitorReferencesResponseEnvelopeSuccessTrue LoadBalancerMonitorReferencesResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerMonitorReferencesResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerMonitorReferencesResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerMonitorReferencesResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

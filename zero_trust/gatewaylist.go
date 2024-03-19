@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -164,6 +164,14 @@ const (
 	ZeroTrustGatewayListsTypeIP     ZeroTrustGatewayListsType = "IP"
 )
 
+func (r ZeroTrustGatewayListsType) IsKnown() bool {
+	switch r {
+	case ZeroTrustGatewayListsTypeSerial, ZeroTrustGatewayListsTypeURL, ZeroTrustGatewayListsTypeDomain, ZeroTrustGatewayListsTypeEmail, ZeroTrustGatewayListsTypeIP:
+		return true
+	}
+	return false
+}
+
 type GatewayListNewResponse struct {
 	// API Resource UUID tag.
 	ID        string    `json:"id"`
@@ -237,6 +245,14 @@ const (
 	GatewayListNewResponseTypeIP     GatewayListNewResponseType = "IP"
 )
 
+func (r GatewayListNewResponseType) IsKnown() bool {
+	switch r {
+	case GatewayListNewResponseTypeSerial, GatewayListNewResponseTypeURL, GatewayListNewResponseTypeDomain, GatewayListNewResponseTypeEmail, GatewayListNewResponseTypeIP:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [zero_trust.GatewayListDeleteResponseUnknown] or
 // [shared.UnionString].
 type GatewayListDeleteResponse interface {
@@ -280,6 +296,14 @@ const (
 	GatewayListNewParamsTypeEmail  GatewayListNewParamsType = "EMAIL"
 	GatewayListNewParamsTypeIP     GatewayListNewParamsType = "IP"
 )
+
+func (r GatewayListNewParamsType) IsKnown() bool {
+	switch r {
+	case GatewayListNewParamsTypeSerial, GatewayListNewParamsTypeURL, GatewayListNewParamsTypeDomain, GatewayListNewParamsTypeEmail, GatewayListNewParamsTypeIP:
+		return true
+	}
+	return false
+}
 
 type GatewayListNewParamsItem struct {
 	// The value of the item in a list.
@@ -370,6 +394,14 @@ type GatewayListNewResponseEnvelopeSuccess bool
 const (
 	GatewayListNewResponseEnvelopeSuccessTrue GatewayListNewResponseEnvelopeSuccess = true
 )
+
+func (r GatewayListNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayListNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type GatewayListUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -464,6 +496,14 @@ const (
 	GatewayListUpdateResponseEnvelopeSuccessTrue GatewayListUpdateResponseEnvelopeSuccess = true
 )
 
+func (r GatewayListUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayListUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayListListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -550,6 +590,14 @@ type GatewayListListResponseEnvelopeSuccess bool
 const (
 	GatewayListListResponseEnvelopeSuccessTrue GatewayListListResponseEnvelopeSuccess = true
 )
+
+func (r GatewayListListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayListListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type GatewayListListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -667,6 +715,14 @@ const (
 	GatewayListDeleteResponseEnvelopeSuccessTrue GatewayListDeleteResponseEnvelopeSuccess = true
 )
 
+func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayListDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayListEditParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The items in the list.
@@ -769,6 +825,14 @@ const (
 	GatewayListEditResponseEnvelopeSuccessTrue GatewayListEditResponseEnvelopeSuccess = true
 )
 
+func (r GatewayListEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayListEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayListGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -853,3 +917,11 @@ type GatewayListGetResponseEnvelopeSuccess bool
 const (
 	GatewayListGetResponseEnvelopeSuccessTrue GatewayListGetResponseEnvelopeSuccess = true
 )
+
+func (r GatewayListGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayListGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package user
 
@@ -182,6 +182,14 @@ type LoadBalancerAnalyticsEventListResponseEnvelopeSuccess bool
 const (
 	LoadBalancerAnalyticsEventListResponseEnvelopeSuccessTrue LoadBalancerAnalyticsEventListResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerAnalyticsEventListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerAnalyticsEventListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerAnalyticsEventListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

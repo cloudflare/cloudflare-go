@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -176,6 +176,14 @@ const (
 	NetworkRouteNetworkNewResponseEnvelopeSuccessTrue NetworkRouteNetworkNewResponseEnvelopeSuccess = true
 )
 
+func (r NetworkRouteNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkRouteNetworkNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NetworkRouteNetworkDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -202,6 +210,14 @@ const (
 	NetworkRouteNetworkDeleteParamsTunTypeGRE           NetworkRouteNetworkDeleteParamsTunType = "gre"
 	NetworkRouteNetworkDeleteParamsTunTypeCni           NetworkRouteNetworkDeleteParamsTunType = "cni"
 )
+
+func (r NetworkRouteNetworkDeleteParamsTunType) IsKnown() bool {
+	switch r {
+	case NetworkRouteNetworkDeleteParamsTunTypeCfdTunnel, NetworkRouteNetworkDeleteParamsTunTypeWARPConnector, NetworkRouteNetworkDeleteParamsTunTypeIPSec, NetworkRouteNetworkDeleteParamsTunTypeGRE, NetworkRouteNetworkDeleteParamsTunTypeCni:
+		return true
+	}
+	return false
+}
 
 type NetworkRouteNetworkDeleteResponseEnvelope struct {
 	Errors   []NetworkRouteNetworkDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -283,6 +299,14 @@ type NetworkRouteNetworkDeleteResponseEnvelopeSuccess bool
 const (
 	NetworkRouteNetworkDeleteResponseEnvelopeSuccessTrue NetworkRouteNetworkDeleteResponseEnvelopeSuccess = true
 )
+
+func (r NetworkRouteNetworkDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkRouteNetworkDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type NetworkRouteNetworkEditParams struct {
 	// Cloudflare account ID
@@ -369,3 +393,11 @@ type NetworkRouteNetworkEditResponseEnvelopeSuccess bool
 const (
 	NetworkRouteNetworkEditResponseEnvelopeSuccessTrue NetworkRouteNetworkEditResponseEnvelopeSuccess = true
 )
+
+func (r NetworkRouteNetworkEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkRouteNetworkEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

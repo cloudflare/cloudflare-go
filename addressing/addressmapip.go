@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package addressing
 
@@ -198,6 +198,14 @@ const (
 	AddressMapIPUpdateResponseEnvelopeSuccessTrue AddressMapIPUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AddressMapIPUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapIPUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AddressMapIPUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -316,6 +324,14 @@ type AddressMapIPDeleteResponseEnvelopeSuccess bool
 const (
 	AddressMapIPDeleteResponseEnvelopeSuccessTrue AddressMapIPDeleteResponseEnvelopeSuccess = true
 )
+
+func (r AddressMapIPDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapIPDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AddressMapIPDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

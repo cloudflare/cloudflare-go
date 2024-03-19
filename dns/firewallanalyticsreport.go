@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package dns
 
@@ -41,11 +41,11 @@ func NewFirewallAnalyticsReportService(opts ...option.RequestOption) (r *Firewal
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *FirewallAnalyticsReportService) Get(ctx context.Context, accountIdentifier string, identifier string, query FirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReport, err error) {
+func (r *FirewallAnalyticsReportService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReport, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAnalyticsReportGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report", accountIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report", params.AccountID, dnsFirewallID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,6 +54,8 @@ func (r *FirewallAnalyticsReportService) Get(ctx context.Context, accountIdentif
 }
 
 type FirewallAnalyticsReportGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -160,3 +162,11 @@ type FirewallAnalyticsReportGetResponseEnvelopeSuccess bool
 const (
 	FirewallAnalyticsReportGetResponseEnvelopeSuccessTrue FirewallAnalyticsReportGetResponseEnvelopeSuccess = true
 )
+
+func (r FirewallAnalyticsReportGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FirewallAnalyticsReportGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

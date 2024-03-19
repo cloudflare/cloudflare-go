@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package mtls_certificates
 
@@ -156,6 +156,14 @@ type AssociationGetResponseEnvelopeSuccess bool
 const (
 	AssociationGetResponseEnvelopeSuccessTrue AssociationGetResponseEnvelopeSuccess = true
 )
+
+func (r AssociationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AssociationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AssociationGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

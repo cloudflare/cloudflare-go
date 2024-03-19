@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package ssl
 
@@ -175,3 +175,11 @@ type CertificatePackQuotaGetResponseEnvelopeSuccess bool
 const (
 	CertificatePackQuotaGetResponseEnvelopeSuccessTrue CertificatePackQuotaGetResponseEnvelopeSuccess = true
 )
+
+func (r CertificatePackQuotaGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CertificatePackQuotaGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

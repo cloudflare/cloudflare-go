@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -703,6 +703,14 @@ const (
 	AttackLayer3TimeseriesGroupBitrateParamsAggInterval1w  AttackLayer3TimeseriesGroupBitrateParamsAggInterval = "1w"
 )
 
+func (r AttackLayer3TimeseriesGroupBitrateParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupBitrateParamsAggInterval15m, AttackLayer3TimeseriesGroupBitrateParamsAggInterval1h, AttackLayer3TimeseriesGroupBitrateParamsAggInterval1d, AttackLayer3TimeseriesGroupBitrateParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupBitrateParamsDateRange string
 
 const (
@@ -723,6 +731,14 @@ const (
 	AttackLayer3TimeseriesGroupBitrateParamsDateRange24wControl AttackLayer3TimeseriesGroupBitrateParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TimeseriesGroupBitrateParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupBitrateParamsDateRange1d, AttackLayer3TimeseriesGroupBitrateParamsDateRange2d, AttackLayer3TimeseriesGroupBitrateParamsDateRange7d, AttackLayer3TimeseriesGroupBitrateParamsDateRange14d, AttackLayer3TimeseriesGroupBitrateParamsDateRange28d, AttackLayer3TimeseriesGroupBitrateParamsDateRange12w, AttackLayer3TimeseriesGroupBitrateParamsDateRange24w, AttackLayer3TimeseriesGroupBitrateParamsDateRange52w, AttackLayer3TimeseriesGroupBitrateParamsDateRange1dControl, AttackLayer3TimeseriesGroupBitrateParamsDateRange2dControl, AttackLayer3TimeseriesGroupBitrateParamsDateRange7dControl, AttackLayer3TimeseriesGroupBitrateParamsDateRange14dControl, AttackLayer3TimeseriesGroupBitrateParamsDateRange28dControl, AttackLayer3TimeseriesGroupBitrateParamsDateRange12wControl, AttackLayer3TimeseriesGroupBitrateParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3TimeseriesGroupBitrateParamsDirection string
@@ -732,6 +748,14 @@ const (
 	AttackLayer3TimeseriesGroupBitrateParamsDirectionTarget AttackLayer3TimeseriesGroupBitrateParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3TimeseriesGroupBitrateParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupBitrateParamsDirectionOrigin, AttackLayer3TimeseriesGroupBitrateParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TimeseriesGroupBitrateParamsFormat string
 
@@ -740,12 +764,28 @@ const (
 	AttackLayer3TimeseriesGroupBitrateParamsFormatCsv  AttackLayer3TimeseriesGroupBitrateParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TimeseriesGroupBitrateParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupBitrateParamsFormatJson, AttackLayer3TimeseriesGroupBitrateParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupBitrateParamsIPVersion string
 
 const (
 	AttackLayer3TimeseriesGroupBitrateParamsIPVersionIPv4 AttackLayer3TimeseriesGroupBitrateParamsIPVersion = "IPv4"
 	AttackLayer3TimeseriesGroupBitrateParamsIPVersionIPv6 AttackLayer3TimeseriesGroupBitrateParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TimeseriesGroupBitrateParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupBitrateParamsIPVersionIPv4, AttackLayer3TimeseriesGroupBitrateParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -756,6 +796,14 @@ const (
 	AttackLayer3TimeseriesGroupBitrateParamsNormalizationMin0Max    AttackLayer3TimeseriesGroupBitrateParamsNormalization = "MIN0_MAX"
 )
 
+func (r AttackLayer3TimeseriesGroupBitrateParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupBitrateParamsNormalizationPercentage, AttackLayer3TimeseriesGroupBitrateParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupBitrateParamsProtocol string
 
 const (
@@ -764,6 +812,14 @@ const (
 	AttackLayer3TimeseriesGroupBitrateParamsProtocolIcmp AttackLayer3TimeseriesGroupBitrateParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesGroupBitrateParamsProtocolGRE  AttackLayer3TimeseriesGroupBitrateParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TimeseriesGroupBitrateParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupBitrateParamsProtocolUdp, AttackLayer3TimeseriesGroupBitrateParamsProtocolTcp, AttackLayer3TimeseriesGroupBitrateParamsProtocolIcmp, AttackLayer3TimeseriesGroupBitrateParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TimeseriesGroupBitrateResponseEnvelope struct {
 	Result  AttackLayer3TimeseriesGroupBitrateResponse             `json:"result,required"`
@@ -846,6 +902,14 @@ const (
 	AttackLayer3TimeseriesGroupDurationParamsAggInterval1w  AttackLayer3TimeseriesGroupDurationParamsAggInterval = "1w"
 )
 
+func (r AttackLayer3TimeseriesGroupDurationParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupDurationParamsAggInterval15m, AttackLayer3TimeseriesGroupDurationParamsAggInterval1h, AttackLayer3TimeseriesGroupDurationParamsAggInterval1d, AttackLayer3TimeseriesGroupDurationParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupDurationParamsDateRange string
 
 const (
@@ -866,6 +930,14 @@ const (
 	AttackLayer3TimeseriesGroupDurationParamsDateRange24wControl AttackLayer3TimeseriesGroupDurationParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TimeseriesGroupDurationParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupDurationParamsDateRange1d, AttackLayer3TimeseriesGroupDurationParamsDateRange2d, AttackLayer3TimeseriesGroupDurationParamsDateRange7d, AttackLayer3TimeseriesGroupDurationParamsDateRange14d, AttackLayer3TimeseriesGroupDurationParamsDateRange28d, AttackLayer3TimeseriesGroupDurationParamsDateRange12w, AttackLayer3TimeseriesGroupDurationParamsDateRange24w, AttackLayer3TimeseriesGroupDurationParamsDateRange52w, AttackLayer3TimeseriesGroupDurationParamsDateRange1dControl, AttackLayer3TimeseriesGroupDurationParamsDateRange2dControl, AttackLayer3TimeseriesGroupDurationParamsDateRange7dControl, AttackLayer3TimeseriesGroupDurationParamsDateRange14dControl, AttackLayer3TimeseriesGroupDurationParamsDateRange28dControl, AttackLayer3TimeseriesGroupDurationParamsDateRange12wControl, AttackLayer3TimeseriesGroupDurationParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3TimeseriesGroupDurationParamsDirection string
@@ -875,6 +947,14 @@ const (
 	AttackLayer3TimeseriesGroupDurationParamsDirectionTarget AttackLayer3TimeseriesGroupDurationParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3TimeseriesGroupDurationParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupDurationParamsDirectionOrigin, AttackLayer3TimeseriesGroupDurationParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TimeseriesGroupDurationParamsFormat string
 
@@ -883,12 +963,28 @@ const (
 	AttackLayer3TimeseriesGroupDurationParamsFormatCsv  AttackLayer3TimeseriesGroupDurationParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TimeseriesGroupDurationParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupDurationParamsFormatJson, AttackLayer3TimeseriesGroupDurationParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupDurationParamsIPVersion string
 
 const (
 	AttackLayer3TimeseriesGroupDurationParamsIPVersionIPv4 AttackLayer3TimeseriesGroupDurationParamsIPVersion = "IPv4"
 	AttackLayer3TimeseriesGroupDurationParamsIPVersionIPv6 AttackLayer3TimeseriesGroupDurationParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TimeseriesGroupDurationParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupDurationParamsIPVersionIPv4, AttackLayer3TimeseriesGroupDurationParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -899,6 +995,14 @@ const (
 	AttackLayer3TimeseriesGroupDurationParamsNormalizationMin0Max    AttackLayer3TimeseriesGroupDurationParamsNormalization = "MIN0_MAX"
 )
 
+func (r AttackLayer3TimeseriesGroupDurationParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupDurationParamsNormalizationPercentage, AttackLayer3TimeseriesGroupDurationParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupDurationParamsProtocol string
 
 const (
@@ -907,6 +1011,14 @@ const (
 	AttackLayer3TimeseriesGroupDurationParamsProtocolIcmp AttackLayer3TimeseriesGroupDurationParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesGroupDurationParamsProtocolGRE  AttackLayer3TimeseriesGroupDurationParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TimeseriesGroupDurationParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupDurationParamsProtocolUdp, AttackLayer3TimeseriesGroupDurationParamsProtocolTcp, AttackLayer3TimeseriesGroupDurationParamsProtocolIcmp, AttackLayer3TimeseriesGroupDurationParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TimeseriesGroupDurationResponseEnvelope struct {
 	Result  AttackLayer3TimeseriesGroupDurationResponse             `json:"result,required"`
@@ -983,6 +1095,14 @@ const (
 	AttackLayer3TimeseriesGroupGetParamsAggInterval1w  AttackLayer3TimeseriesGroupGetParamsAggInterval = "1w"
 )
 
+func (r AttackLayer3TimeseriesGroupGetParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupGetParamsAggInterval15m, AttackLayer3TimeseriesGroupGetParamsAggInterval1h, AttackLayer3TimeseriesGroupGetParamsAggInterval1d, AttackLayer3TimeseriesGroupGetParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupGetParamsDateRange string
 
 const (
@@ -1003,6 +1123,14 @@ const (
 	AttackLayer3TimeseriesGroupGetParamsDateRange24wControl AttackLayer3TimeseriesGroupGetParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TimeseriesGroupGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupGetParamsDateRange1d, AttackLayer3TimeseriesGroupGetParamsDateRange2d, AttackLayer3TimeseriesGroupGetParamsDateRange7d, AttackLayer3TimeseriesGroupGetParamsDateRange14d, AttackLayer3TimeseriesGroupGetParamsDateRange28d, AttackLayer3TimeseriesGroupGetParamsDateRange12w, AttackLayer3TimeseriesGroupGetParamsDateRange24w, AttackLayer3TimeseriesGroupGetParamsDateRange52w, AttackLayer3TimeseriesGroupGetParamsDateRange1dControl, AttackLayer3TimeseriesGroupGetParamsDateRange2dControl, AttackLayer3TimeseriesGroupGetParamsDateRange7dControl, AttackLayer3TimeseriesGroupGetParamsDateRange14dControl, AttackLayer3TimeseriesGroupGetParamsDateRange28dControl, AttackLayer3TimeseriesGroupGetParamsDateRange12wControl, AttackLayer3TimeseriesGroupGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TimeseriesGroupGetParamsFormat string
 
@@ -1010,6 +1138,14 @@ const (
 	AttackLayer3TimeseriesGroupGetParamsFormatJson AttackLayer3TimeseriesGroupGetParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupGetParamsFormatCsv  AttackLayer3TimeseriesGroupGetParamsFormat = "CSV"
 )
+
+func (r AttackLayer3TimeseriesGroupGetParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupGetParamsFormatJson, AttackLayer3TimeseriesGroupGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TimeseriesGroupGetResponseEnvelope struct {
 	Result  AttackLayer3TimeseriesGroupGetResponse             `json:"result,required"`
@@ -1093,6 +1229,14 @@ const (
 	AttackLayer3TimeseriesGroupIndustryParamsAggInterval1w  AttackLayer3TimeseriesGroupIndustryParamsAggInterval = "1w"
 )
 
+func (r AttackLayer3TimeseriesGroupIndustryParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIndustryParamsAggInterval15m, AttackLayer3TimeseriesGroupIndustryParamsAggInterval1h, AttackLayer3TimeseriesGroupIndustryParamsAggInterval1d, AttackLayer3TimeseriesGroupIndustryParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupIndustryParamsDateRange string
 
 const (
@@ -1113,6 +1257,14 @@ const (
 	AttackLayer3TimeseriesGroupIndustryParamsDateRange24wControl AttackLayer3TimeseriesGroupIndustryParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TimeseriesGroupIndustryParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIndustryParamsDateRange1d, AttackLayer3TimeseriesGroupIndustryParamsDateRange2d, AttackLayer3TimeseriesGroupIndustryParamsDateRange7d, AttackLayer3TimeseriesGroupIndustryParamsDateRange14d, AttackLayer3TimeseriesGroupIndustryParamsDateRange28d, AttackLayer3TimeseriesGroupIndustryParamsDateRange12w, AttackLayer3TimeseriesGroupIndustryParamsDateRange24w, AttackLayer3TimeseriesGroupIndustryParamsDateRange52w, AttackLayer3TimeseriesGroupIndustryParamsDateRange1dControl, AttackLayer3TimeseriesGroupIndustryParamsDateRange2dControl, AttackLayer3TimeseriesGroupIndustryParamsDateRange7dControl, AttackLayer3TimeseriesGroupIndustryParamsDateRange14dControl, AttackLayer3TimeseriesGroupIndustryParamsDateRange28dControl, AttackLayer3TimeseriesGroupIndustryParamsDateRange12wControl, AttackLayer3TimeseriesGroupIndustryParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3TimeseriesGroupIndustryParamsDirection string
@@ -1122,6 +1274,14 @@ const (
 	AttackLayer3TimeseriesGroupIndustryParamsDirectionTarget AttackLayer3TimeseriesGroupIndustryParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3TimeseriesGroupIndustryParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIndustryParamsDirectionOrigin, AttackLayer3TimeseriesGroupIndustryParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TimeseriesGroupIndustryParamsFormat string
 
@@ -1130,12 +1290,28 @@ const (
 	AttackLayer3TimeseriesGroupIndustryParamsFormatCsv  AttackLayer3TimeseriesGroupIndustryParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TimeseriesGroupIndustryParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIndustryParamsFormatJson, AttackLayer3TimeseriesGroupIndustryParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupIndustryParamsIPVersion string
 
 const (
 	AttackLayer3TimeseriesGroupIndustryParamsIPVersionIPv4 AttackLayer3TimeseriesGroupIndustryParamsIPVersion = "IPv4"
 	AttackLayer3TimeseriesGroupIndustryParamsIPVersionIPv6 AttackLayer3TimeseriesGroupIndustryParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TimeseriesGroupIndustryParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIndustryParamsIPVersionIPv4, AttackLayer3TimeseriesGroupIndustryParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1145,6 +1321,14 @@ const (
 	AttackLayer3TimeseriesGroupIndustryParamsNormalizationPercentage AttackLayer3TimeseriesGroupIndustryParamsNormalization = "PERCENTAGE"
 	AttackLayer3TimeseriesGroupIndustryParamsNormalizationMin0Max    AttackLayer3TimeseriesGroupIndustryParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer3TimeseriesGroupIndustryParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIndustryParamsNormalizationPercentage, AttackLayer3TimeseriesGroupIndustryParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TimeseriesGroupIndustryResponseEnvelope struct {
 	Result  AttackLayer3TimeseriesGroupIndustryResponse             `json:"result,required"`
@@ -1225,6 +1409,14 @@ const (
 	AttackLayer3TimeseriesGroupIPVersionParamsAggInterval1w  AttackLayer3TimeseriesGroupIPVersionParamsAggInterval = "1w"
 )
 
+func (r AttackLayer3TimeseriesGroupIPVersionParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIPVersionParamsAggInterval15m, AttackLayer3TimeseriesGroupIPVersionParamsAggInterval1h, AttackLayer3TimeseriesGroupIPVersionParamsAggInterval1d, AttackLayer3TimeseriesGroupIPVersionParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupIPVersionParamsDateRange string
 
 const (
@@ -1245,6 +1437,14 @@ const (
 	AttackLayer3TimeseriesGroupIPVersionParamsDateRange24wControl AttackLayer3TimeseriesGroupIPVersionParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TimeseriesGroupIPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIPVersionParamsDateRange1d, AttackLayer3TimeseriesGroupIPVersionParamsDateRange2d, AttackLayer3TimeseriesGroupIPVersionParamsDateRange7d, AttackLayer3TimeseriesGroupIPVersionParamsDateRange14d, AttackLayer3TimeseriesGroupIPVersionParamsDateRange28d, AttackLayer3TimeseriesGroupIPVersionParamsDateRange12w, AttackLayer3TimeseriesGroupIPVersionParamsDateRange24w, AttackLayer3TimeseriesGroupIPVersionParamsDateRange52w, AttackLayer3TimeseriesGroupIPVersionParamsDateRange1dControl, AttackLayer3TimeseriesGroupIPVersionParamsDateRange2dControl, AttackLayer3TimeseriesGroupIPVersionParamsDateRange7dControl, AttackLayer3TimeseriesGroupIPVersionParamsDateRange14dControl, AttackLayer3TimeseriesGroupIPVersionParamsDateRange28dControl, AttackLayer3TimeseriesGroupIPVersionParamsDateRange12wControl, AttackLayer3TimeseriesGroupIPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3TimeseriesGroupIPVersionParamsDirection string
@@ -1254,6 +1454,14 @@ const (
 	AttackLayer3TimeseriesGroupIPVersionParamsDirectionTarget AttackLayer3TimeseriesGroupIPVersionParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3TimeseriesGroupIPVersionParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIPVersionParamsDirectionOrigin, AttackLayer3TimeseriesGroupIPVersionParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TimeseriesGroupIPVersionParamsFormat string
 
@@ -1261,6 +1469,14 @@ const (
 	AttackLayer3TimeseriesGroupIPVersionParamsFormatJson AttackLayer3TimeseriesGroupIPVersionParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupIPVersionParamsFormatCsv  AttackLayer3TimeseriesGroupIPVersionParamsFormat = "CSV"
 )
+
+func (r AttackLayer3TimeseriesGroupIPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIPVersionParamsFormatJson, AttackLayer3TimeseriesGroupIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1271,6 +1487,14 @@ const (
 	AttackLayer3TimeseriesGroupIPVersionParamsNormalizationMin0Max    AttackLayer3TimeseriesGroupIPVersionParamsNormalization = "MIN0_MAX"
 )
 
+func (r AttackLayer3TimeseriesGroupIPVersionParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIPVersionParamsNormalizationPercentage, AttackLayer3TimeseriesGroupIPVersionParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupIPVersionParamsProtocol string
 
 const (
@@ -1279,6 +1503,14 @@ const (
 	AttackLayer3TimeseriesGroupIPVersionParamsProtocolIcmp AttackLayer3TimeseriesGroupIPVersionParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesGroupIPVersionParamsProtocolGRE  AttackLayer3TimeseriesGroupIPVersionParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TimeseriesGroupIPVersionParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupIPVersionParamsProtocolUdp, AttackLayer3TimeseriesGroupIPVersionParamsProtocolTcp, AttackLayer3TimeseriesGroupIPVersionParamsProtocolIcmp, AttackLayer3TimeseriesGroupIPVersionParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TimeseriesGroupIPVersionResponseEnvelope struct {
 	Result  AttackLayer3TimeseriesGroupIPVersionResponse             `json:"result,required"`
@@ -1359,6 +1591,14 @@ const (
 	AttackLayer3TimeseriesGroupProtocolParamsAggInterval1w  AttackLayer3TimeseriesGroupProtocolParamsAggInterval = "1w"
 )
 
+func (r AttackLayer3TimeseriesGroupProtocolParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupProtocolParamsAggInterval15m, AttackLayer3TimeseriesGroupProtocolParamsAggInterval1h, AttackLayer3TimeseriesGroupProtocolParamsAggInterval1d, AttackLayer3TimeseriesGroupProtocolParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupProtocolParamsDateRange string
 
 const (
@@ -1379,6 +1619,14 @@ const (
 	AttackLayer3TimeseriesGroupProtocolParamsDateRange24wControl AttackLayer3TimeseriesGroupProtocolParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TimeseriesGroupProtocolParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupProtocolParamsDateRange1d, AttackLayer3TimeseriesGroupProtocolParamsDateRange2d, AttackLayer3TimeseriesGroupProtocolParamsDateRange7d, AttackLayer3TimeseriesGroupProtocolParamsDateRange14d, AttackLayer3TimeseriesGroupProtocolParamsDateRange28d, AttackLayer3TimeseriesGroupProtocolParamsDateRange12w, AttackLayer3TimeseriesGroupProtocolParamsDateRange24w, AttackLayer3TimeseriesGroupProtocolParamsDateRange52w, AttackLayer3TimeseriesGroupProtocolParamsDateRange1dControl, AttackLayer3TimeseriesGroupProtocolParamsDateRange2dControl, AttackLayer3TimeseriesGroupProtocolParamsDateRange7dControl, AttackLayer3TimeseriesGroupProtocolParamsDateRange14dControl, AttackLayer3TimeseriesGroupProtocolParamsDateRange28dControl, AttackLayer3TimeseriesGroupProtocolParamsDateRange12wControl, AttackLayer3TimeseriesGroupProtocolParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3TimeseriesGroupProtocolParamsDirection string
@@ -1388,6 +1636,14 @@ const (
 	AttackLayer3TimeseriesGroupProtocolParamsDirectionTarget AttackLayer3TimeseriesGroupProtocolParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3TimeseriesGroupProtocolParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupProtocolParamsDirectionOrigin, AttackLayer3TimeseriesGroupProtocolParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TimeseriesGroupProtocolParamsFormat string
 
@@ -1396,12 +1652,28 @@ const (
 	AttackLayer3TimeseriesGroupProtocolParamsFormatCsv  AttackLayer3TimeseriesGroupProtocolParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TimeseriesGroupProtocolParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupProtocolParamsFormatJson, AttackLayer3TimeseriesGroupProtocolParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupProtocolParamsIPVersion string
 
 const (
 	AttackLayer3TimeseriesGroupProtocolParamsIPVersionIPv4 AttackLayer3TimeseriesGroupProtocolParamsIPVersion = "IPv4"
 	AttackLayer3TimeseriesGroupProtocolParamsIPVersionIPv6 AttackLayer3TimeseriesGroupProtocolParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TimeseriesGroupProtocolParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupProtocolParamsIPVersionIPv4, AttackLayer3TimeseriesGroupProtocolParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1411,6 +1683,14 @@ const (
 	AttackLayer3TimeseriesGroupProtocolParamsNormalizationPercentage AttackLayer3TimeseriesGroupProtocolParamsNormalization = "PERCENTAGE"
 	AttackLayer3TimeseriesGroupProtocolParamsNormalizationMin0Max    AttackLayer3TimeseriesGroupProtocolParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer3TimeseriesGroupProtocolParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupProtocolParamsNormalizationPercentage, AttackLayer3TimeseriesGroupProtocolParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TimeseriesGroupProtocolResponseEnvelope struct {
 	Result  AttackLayer3TimeseriesGroupProtocolResponse             `json:"result,required"`
@@ -1496,6 +1776,14 @@ const (
 	AttackLayer3TimeseriesGroupVectorParamsAggInterval1w  AttackLayer3TimeseriesGroupVectorParamsAggInterval = "1w"
 )
 
+func (r AttackLayer3TimeseriesGroupVectorParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVectorParamsAggInterval15m, AttackLayer3TimeseriesGroupVectorParamsAggInterval1h, AttackLayer3TimeseriesGroupVectorParamsAggInterval1d, AttackLayer3TimeseriesGroupVectorParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupVectorParamsDateRange string
 
 const (
@@ -1516,6 +1804,14 @@ const (
 	AttackLayer3TimeseriesGroupVectorParamsDateRange24wControl AttackLayer3TimeseriesGroupVectorParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TimeseriesGroupVectorParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVectorParamsDateRange1d, AttackLayer3TimeseriesGroupVectorParamsDateRange2d, AttackLayer3TimeseriesGroupVectorParamsDateRange7d, AttackLayer3TimeseriesGroupVectorParamsDateRange14d, AttackLayer3TimeseriesGroupVectorParamsDateRange28d, AttackLayer3TimeseriesGroupVectorParamsDateRange12w, AttackLayer3TimeseriesGroupVectorParamsDateRange24w, AttackLayer3TimeseriesGroupVectorParamsDateRange52w, AttackLayer3TimeseriesGroupVectorParamsDateRange1dControl, AttackLayer3TimeseriesGroupVectorParamsDateRange2dControl, AttackLayer3TimeseriesGroupVectorParamsDateRange7dControl, AttackLayer3TimeseriesGroupVectorParamsDateRange14dControl, AttackLayer3TimeseriesGroupVectorParamsDateRange28dControl, AttackLayer3TimeseriesGroupVectorParamsDateRange12wControl, AttackLayer3TimeseriesGroupVectorParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3TimeseriesGroupVectorParamsDirection string
@@ -1525,6 +1821,14 @@ const (
 	AttackLayer3TimeseriesGroupVectorParamsDirectionTarget AttackLayer3TimeseriesGroupVectorParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3TimeseriesGroupVectorParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVectorParamsDirectionOrigin, AttackLayer3TimeseriesGroupVectorParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TimeseriesGroupVectorParamsFormat string
 
@@ -1533,12 +1837,28 @@ const (
 	AttackLayer3TimeseriesGroupVectorParamsFormatCsv  AttackLayer3TimeseriesGroupVectorParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TimeseriesGroupVectorParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVectorParamsFormatJson, AttackLayer3TimeseriesGroupVectorParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupVectorParamsIPVersion string
 
 const (
 	AttackLayer3TimeseriesGroupVectorParamsIPVersionIPv4 AttackLayer3TimeseriesGroupVectorParamsIPVersion = "IPv4"
 	AttackLayer3TimeseriesGroupVectorParamsIPVersionIPv6 AttackLayer3TimeseriesGroupVectorParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TimeseriesGroupVectorParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVectorParamsIPVersionIPv4, AttackLayer3TimeseriesGroupVectorParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1549,6 +1869,14 @@ const (
 	AttackLayer3TimeseriesGroupVectorParamsNormalizationMin0Max    AttackLayer3TimeseriesGroupVectorParamsNormalization = "MIN0_MAX"
 )
 
+func (r AttackLayer3TimeseriesGroupVectorParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVectorParamsNormalizationPercentage, AttackLayer3TimeseriesGroupVectorParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupVectorParamsProtocol string
 
 const (
@@ -1557,6 +1885,14 @@ const (
 	AttackLayer3TimeseriesGroupVectorParamsProtocolIcmp AttackLayer3TimeseriesGroupVectorParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesGroupVectorParamsProtocolGRE  AttackLayer3TimeseriesGroupVectorParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TimeseriesGroupVectorParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVectorParamsProtocolUdp, AttackLayer3TimeseriesGroupVectorParamsProtocolTcp, AttackLayer3TimeseriesGroupVectorParamsProtocolIcmp, AttackLayer3TimeseriesGroupVectorParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TimeseriesGroupVectorResponseEnvelope struct {
 	Result  AttackLayer3TimeseriesGroupVectorResponse             `json:"result,required"`
@@ -1640,6 +1976,14 @@ const (
 	AttackLayer3TimeseriesGroupVerticalParamsAggInterval1w  AttackLayer3TimeseriesGroupVerticalParamsAggInterval = "1w"
 )
 
+func (r AttackLayer3TimeseriesGroupVerticalParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVerticalParamsAggInterval15m, AttackLayer3TimeseriesGroupVerticalParamsAggInterval1h, AttackLayer3TimeseriesGroupVerticalParamsAggInterval1d, AttackLayer3TimeseriesGroupVerticalParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupVerticalParamsDateRange string
 
 const (
@@ -1660,6 +2004,14 @@ const (
 	AttackLayer3TimeseriesGroupVerticalParamsDateRange24wControl AttackLayer3TimeseriesGroupVerticalParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TimeseriesGroupVerticalParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVerticalParamsDateRange1d, AttackLayer3TimeseriesGroupVerticalParamsDateRange2d, AttackLayer3TimeseriesGroupVerticalParamsDateRange7d, AttackLayer3TimeseriesGroupVerticalParamsDateRange14d, AttackLayer3TimeseriesGroupVerticalParamsDateRange28d, AttackLayer3TimeseriesGroupVerticalParamsDateRange12w, AttackLayer3TimeseriesGroupVerticalParamsDateRange24w, AttackLayer3TimeseriesGroupVerticalParamsDateRange52w, AttackLayer3TimeseriesGroupVerticalParamsDateRange1dControl, AttackLayer3TimeseriesGroupVerticalParamsDateRange2dControl, AttackLayer3TimeseriesGroupVerticalParamsDateRange7dControl, AttackLayer3TimeseriesGroupVerticalParamsDateRange14dControl, AttackLayer3TimeseriesGroupVerticalParamsDateRange28dControl, AttackLayer3TimeseriesGroupVerticalParamsDateRange12wControl, AttackLayer3TimeseriesGroupVerticalParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3TimeseriesGroupVerticalParamsDirection string
@@ -1669,6 +2021,14 @@ const (
 	AttackLayer3TimeseriesGroupVerticalParamsDirectionTarget AttackLayer3TimeseriesGroupVerticalParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3TimeseriesGroupVerticalParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVerticalParamsDirectionOrigin, AttackLayer3TimeseriesGroupVerticalParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TimeseriesGroupVerticalParamsFormat string
 
@@ -1677,12 +2037,28 @@ const (
 	AttackLayer3TimeseriesGroupVerticalParamsFormatCsv  AttackLayer3TimeseriesGroupVerticalParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TimeseriesGroupVerticalParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVerticalParamsFormatJson, AttackLayer3TimeseriesGroupVerticalParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesGroupVerticalParamsIPVersion string
 
 const (
 	AttackLayer3TimeseriesGroupVerticalParamsIPVersionIPv4 AttackLayer3TimeseriesGroupVerticalParamsIPVersion = "IPv4"
 	AttackLayer3TimeseriesGroupVerticalParamsIPVersionIPv6 AttackLayer3TimeseriesGroupVerticalParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TimeseriesGroupVerticalParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVerticalParamsIPVersionIPv4, AttackLayer3TimeseriesGroupVerticalParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1692,6 +2068,14 @@ const (
 	AttackLayer3TimeseriesGroupVerticalParamsNormalizationPercentage AttackLayer3TimeseriesGroupVerticalParamsNormalization = "PERCENTAGE"
 	AttackLayer3TimeseriesGroupVerticalParamsNormalizationMin0Max    AttackLayer3TimeseriesGroupVerticalParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer3TimeseriesGroupVerticalParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesGroupVerticalParamsNormalizationPercentage, AttackLayer3TimeseriesGroupVerticalParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TimeseriesGroupVerticalResponseEnvelope struct {
 	Result  AttackLayer3TimeseriesGroupVerticalResponse             `json:"result,required"`

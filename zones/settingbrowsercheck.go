@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -114,6 +114,14 @@ const (
 	ZonesBrowserCheckIDBrowserCheck ZonesBrowserCheckID = "browser_check"
 )
 
+func (r ZonesBrowserCheckID) IsKnown() bool {
+	switch r {
+	case ZonesBrowserCheckIDBrowserCheck:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesBrowserCheckValue string
 
@@ -121,6 +129,14 @@ const (
 	ZonesBrowserCheckValueOn  ZonesBrowserCheckValue = "on"
 	ZonesBrowserCheckValueOff ZonesBrowserCheckValue = "off"
 )
+
+func (r ZonesBrowserCheckValue) IsKnown() bool {
+	switch r {
+	case ZonesBrowserCheckValueOn, ZonesBrowserCheckValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -130,6 +146,14 @@ const (
 	ZonesBrowserCheckEditableTrue  ZonesBrowserCheckEditable = true
 	ZonesBrowserCheckEditableFalse ZonesBrowserCheckEditable = false
 )
+
+func (r ZonesBrowserCheckEditable) IsKnown() bool {
+	switch r {
+	case ZonesBrowserCheckEditableTrue, ZonesBrowserCheckEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
 // headers abused most commonly by spammers and denies access to your page. It will
@@ -167,6 +191,14 @@ const (
 	SettingBrowserCheckEditParamsValueOn  SettingBrowserCheckEditParamsValue = "on"
 	SettingBrowserCheckEditParamsValueOff SettingBrowserCheckEditParamsValue = "off"
 )
+
+func (r SettingBrowserCheckEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingBrowserCheckEditParamsValueOn, SettingBrowserCheckEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingBrowserCheckEditResponseEnvelope struct {
 	Errors   []SettingBrowserCheckEditResponseEnvelopeErrors   `json:"errors,required"`

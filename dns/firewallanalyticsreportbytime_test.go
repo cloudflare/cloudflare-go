@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package dns_test
 
@@ -32,8 +32,8 @@ func TestFirewallAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Firewall.Analytics.Reports.Bytimes.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		dns.FirewallAnalyticsReportBytimeGetParams{
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Dimensions: cloudflare.F("queryType"),
 			Filters:    cloudflare.F("responseCode==NOERROR,queryType==A"),
 			Limit:      cloudflare.F(int64(100)),

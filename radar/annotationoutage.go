@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -317,6 +317,14 @@ const (
 	AnnotationOutageGetParamsDateRange24wControl AnnotationOutageGetParamsDateRange = "24wControl"
 )
 
+func (r AnnotationOutageGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case AnnotationOutageGetParamsDateRange1d, AnnotationOutageGetParamsDateRange2d, AnnotationOutageGetParamsDateRange7d, AnnotationOutageGetParamsDateRange14d, AnnotationOutageGetParamsDateRange28d, AnnotationOutageGetParamsDateRange12w, AnnotationOutageGetParamsDateRange24w, AnnotationOutageGetParamsDateRange52w, AnnotationOutageGetParamsDateRange1dControl, AnnotationOutageGetParamsDateRange2dControl, AnnotationOutageGetParamsDateRange7dControl, AnnotationOutageGetParamsDateRange14dControl, AnnotationOutageGetParamsDateRange28dControl, AnnotationOutageGetParamsDateRange12wControl, AnnotationOutageGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AnnotationOutageGetParamsFormat string
 
@@ -324,6 +332,14 @@ const (
 	AnnotationOutageGetParamsFormatJson AnnotationOutageGetParamsFormat = "JSON"
 	AnnotationOutageGetParamsFormatCsv  AnnotationOutageGetParamsFormat = "CSV"
 )
+
+func (r AnnotationOutageGetParamsFormat) IsKnown() bool {
+	switch r {
+	case AnnotationOutageGetParamsFormatJson, AnnotationOutageGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AnnotationOutageGetResponseEnvelope struct {
 	Result  AnnotationOutageGetResponse             `json:"result,required"`
@@ -393,6 +409,14 @@ const (
 	AnnotationOutageLocationsParamsDateRange24wControl AnnotationOutageLocationsParamsDateRange = "24wControl"
 )
 
+func (r AnnotationOutageLocationsParamsDateRange) IsKnown() bool {
+	switch r {
+	case AnnotationOutageLocationsParamsDateRange1d, AnnotationOutageLocationsParamsDateRange2d, AnnotationOutageLocationsParamsDateRange7d, AnnotationOutageLocationsParamsDateRange14d, AnnotationOutageLocationsParamsDateRange28d, AnnotationOutageLocationsParamsDateRange12w, AnnotationOutageLocationsParamsDateRange24w, AnnotationOutageLocationsParamsDateRange52w, AnnotationOutageLocationsParamsDateRange1dControl, AnnotationOutageLocationsParamsDateRange2dControl, AnnotationOutageLocationsParamsDateRange7dControl, AnnotationOutageLocationsParamsDateRange14dControl, AnnotationOutageLocationsParamsDateRange28dControl, AnnotationOutageLocationsParamsDateRange12wControl, AnnotationOutageLocationsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AnnotationOutageLocationsParamsFormat string
 
@@ -400,6 +424,14 @@ const (
 	AnnotationOutageLocationsParamsFormatJson AnnotationOutageLocationsParamsFormat = "JSON"
 	AnnotationOutageLocationsParamsFormatCsv  AnnotationOutageLocationsParamsFormat = "CSV"
 )
+
+func (r AnnotationOutageLocationsParamsFormat) IsKnown() bool {
+	switch r {
+	case AnnotationOutageLocationsParamsFormatJson, AnnotationOutageLocationsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AnnotationOutageLocationsResponseEnvelope struct {
 	Result  AnnotationOutageLocationsResponse             `json:"result,required"`

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -114,6 +114,14 @@ const (
 	ZonesChallengeTTLIDChallengeTTL ZonesChallengeTTLID = "challenge_ttl"
 )
 
+func (r ZonesChallengeTTLID) IsKnown() bool {
+	switch r {
+	case ZonesChallengeTTLIDChallengeTTL:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesChallengeTTLValue float64
 
@@ -134,6 +142,14 @@ const (
 	ZonesChallengeTTLValue31536000 ZonesChallengeTTLValue = 31536000
 )
 
+func (r ZonesChallengeTTLValue) IsKnown() bool {
+	switch r {
+	case ZonesChallengeTTLValue300, ZonesChallengeTTLValue900, ZonesChallengeTTLValue1800, ZonesChallengeTTLValue2700, ZonesChallengeTTLValue3600, ZonesChallengeTTLValue7200, ZonesChallengeTTLValue10800, ZonesChallengeTTLValue14400, ZonesChallengeTTLValue28800, ZonesChallengeTTLValue57600, ZonesChallengeTTLValue86400, ZonesChallengeTTLValue604800, ZonesChallengeTTLValue2592000, ZonesChallengeTTLValue31536000:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesChallengeTTLEditable bool
@@ -142,6 +158,14 @@ const (
 	ZonesChallengeTTLEditableTrue  ZonesChallengeTTLEditable = true
 	ZonesChallengeTTLEditableFalse ZonesChallengeTTLEditable = false
 )
+
+func (r ZonesChallengeTTLEditable) IsKnown() bool {
+	switch r {
+	case ZonesChallengeTTLEditableTrue, ZonesChallengeTTLEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Specify how long a visitor is allowed access to your site after successfully
 // completing a challenge (such as a CAPTCHA). After the TTL has expired the
@@ -191,6 +215,14 @@ const (
 	SettingChallengeTTLEditParamsValue2592000  SettingChallengeTTLEditParamsValue = 2592000
 	SettingChallengeTTLEditParamsValue31536000 SettingChallengeTTLEditParamsValue = 31536000
 )
+
+func (r SettingChallengeTTLEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingChallengeTTLEditParamsValue300, SettingChallengeTTLEditParamsValue900, SettingChallengeTTLEditParamsValue1800, SettingChallengeTTLEditParamsValue2700, SettingChallengeTTLEditParamsValue3600, SettingChallengeTTLEditParamsValue7200, SettingChallengeTTLEditParamsValue10800, SettingChallengeTTLEditParamsValue14400, SettingChallengeTTLEditParamsValue28800, SettingChallengeTTLEditParamsValue57600, SettingChallengeTTLEditParamsValue86400, SettingChallengeTTLEditParamsValue604800, SettingChallengeTTLEditParamsValue2592000, SettingChallengeTTLEditParamsValue31536000:
+		return true
+	}
+	return false
+}
 
 type SettingChallengeTTLEditResponseEnvelope struct {
 	Errors   []SettingChallengeTTLEditResponseEnvelopeErrors   `json:"errors,required"`

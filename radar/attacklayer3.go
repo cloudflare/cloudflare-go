@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -162,6 +162,14 @@ const (
 	AttackLayer3TimeseriesParamsAggInterval1w  AttackLayer3TimeseriesParamsAggInterval = "1w"
 )
 
+func (r AttackLayer3TimeseriesParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesParamsAggInterval15m, AttackLayer3TimeseriesParamsAggInterval1h, AttackLayer3TimeseriesParamsAggInterval1d, AttackLayer3TimeseriesParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesParamsDateRange string
 
 const (
@@ -182,6 +190,14 @@ const (
 	AttackLayer3TimeseriesParamsDateRange24wControl AttackLayer3TimeseriesParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TimeseriesParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesParamsDateRange1d, AttackLayer3TimeseriesParamsDateRange2d, AttackLayer3TimeseriesParamsDateRange7d, AttackLayer3TimeseriesParamsDateRange14d, AttackLayer3TimeseriesParamsDateRange28d, AttackLayer3TimeseriesParamsDateRange12w, AttackLayer3TimeseriesParamsDateRange24w, AttackLayer3TimeseriesParamsDateRange52w, AttackLayer3TimeseriesParamsDateRange1dControl, AttackLayer3TimeseriesParamsDateRange2dControl, AttackLayer3TimeseriesParamsDateRange7dControl, AttackLayer3TimeseriesParamsDateRange14dControl, AttackLayer3TimeseriesParamsDateRange28dControl, AttackLayer3TimeseriesParamsDateRange12wControl, AttackLayer3TimeseriesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3TimeseriesParamsDirection string
@@ -191,6 +207,14 @@ const (
 	AttackLayer3TimeseriesParamsDirectionTarget AttackLayer3TimeseriesParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3TimeseriesParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesParamsDirectionOrigin, AttackLayer3TimeseriesParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TimeseriesParamsFormat string
 
@@ -199,12 +223,28 @@ const (
 	AttackLayer3TimeseriesParamsFormatCsv  AttackLayer3TimeseriesParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TimeseriesParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesParamsFormatJson, AttackLayer3TimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesParamsIPVersion string
 
 const (
 	AttackLayer3TimeseriesParamsIPVersionIPv4 AttackLayer3TimeseriesParamsIPVersion = "IPv4"
 	AttackLayer3TimeseriesParamsIPVersionIPv6 AttackLayer3TimeseriesParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TimeseriesParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesParamsIPVersionIPv4, AttackLayer3TimeseriesParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 // Measurement units, eg. bytes.
 type AttackLayer3TimeseriesParamsMetric string
@@ -213,6 +253,14 @@ const (
 	AttackLayer3TimeseriesParamsMetricBytes    AttackLayer3TimeseriesParamsMetric = "BYTES"
 	AttackLayer3TimeseriesParamsMetricBytesOld AttackLayer3TimeseriesParamsMetric = "BYTES_OLD"
 )
+
+func (r AttackLayer3TimeseriesParamsMetric) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesParamsMetricBytes, AttackLayer3TimeseriesParamsMetricBytesOld:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -223,6 +271,14 @@ const (
 	AttackLayer3TimeseriesParamsNormalizationMin0Max          AttackLayer3TimeseriesParamsNormalization = "MIN0_MAX"
 )
 
+func (r AttackLayer3TimeseriesParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesParamsNormalizationPercentageChange, AttackLayer3TimeseriesParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TimeseriesParamsProtocol string
 
 const (
@@ -231,6 +287,14 @@ const (
 	AttackLayer3TimeseriesParamsProtocolIcmp AttackLayer3TimeseriesParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesParamsProtocolGRE  AttackLayer3TimeseriesParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TimeseriesParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TimeseriesParamsProtocolUdp, AttackLayer3TimeseriesParamsProtocolTcp, AttackLayer3TimeseriesParamsProtocolIcmp, AttackLayer3TimeseriesParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TimeseriesResponseEnvelope struct {
 	Result  AttackLayer3TimeseriesResponse             `json:"result,required"`

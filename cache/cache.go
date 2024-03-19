@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package cache
 
@@ -210,3 +210,11 @@ type CachePurgeResponseEnvelopeSuccess bool
 const (
 	CachePurgeResponseEnvelopeSuccessTrue CachePurgeResponseEnvelopeSuccess = true
 )
+
+func (r CachePurgeResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CachePurgeResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

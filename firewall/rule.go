@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package firewall
 
@@ -184,6 +184,14 @@ const (
 	LegacyJhsFilterRuleActionBypass           LegacyJhsFilterRuleAction = "bypass"
 )
 
+func (r LegacyJhsFilterRuleAction) IsKnown() bool {
+	switch r {
+	case LegacyJhsFilterRuleActionBlock, LegacyJhsFilterRuleActionChallenge, LegacyJhsFilterRuleActionJsChallenge, LegacyJhsFilterRuleActionManagedChallenge, LegacyJhsFilterRuleActionAllow, LegacyJhsFilterRuleActionLog, LegacyJhsFilterRuleActionBypass:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [filters.LegacyJhsFilter] or
 // [firewall.LegacyJhsFilterRuleFilterLegacyJhsDeletedFilter].
 type LegacyJhsFilterRuleFilter interface {
@@ -245,6 +253,14 @@ const (
 	LegacyJhsFilterRuleProductRateLimit     LegacyJhsFilterRuleProduct = "rateLimit"
 	LegacyJhsFilterRuleProductWAF           LegacyJhsFilterRuleProduct = "waf"
 )
+
+func (r LegacyJhsFilterRuleProduct) IsKnown() bool {
+	switch r {
+	case LegacyJhsFilterRuleProductZoneLockdown, LegacyJhsFilterRuleProductUABlock, LegacyJhsFilterRuleProductBic, LegacyJhsFilterRuleProductHot, LegacyJhsFilterRuleProductSecurityLevel, LegacyJhsFilterRuleProductRateLimit, LegacyJhsFilterRuleProductWAF:
+		return true
+	}
+	return false
+}
 
 type RuleNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
@@ -336,6 +352,14 @@ type RuleNewResponseEnvelopeSuccess bool
 const (
 	RuleNewResponseEnvelopeSuccessTrue RuleNewResponseEnvelopeSuccess = true
 )
+
+func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RuleNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -457,6 +481,14 @@ const (
 	RuleUpdateResponseEnvelopeSuccessTrue RuleUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleListParams struct {
 	// The action to search for. Must be an exact match.
 	Action param.Field[string] `query:"action"`
@@ -569,6 +601,14 @@ const (
 	RuleDeleteResponseEnvelopeSuccessTrue RuleDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleEditParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -659,6 +699,14 @@ type RuleEditResponseEnvelopeSuccess bool
 const (
 	RuleEditResponseEnvelopeSuccessTrue RuleEditResponseEnvelopeSuccess = true
 )
+
+func (r RuleEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RuleEditResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -774,3 +822,11 @@ type RuleGetResponseEnvelopeSuccess bool
 const (
 	RuleGetResponseEnvelopeSuccessTrue RuleGetResponseEnvelopeSuccess = true
 )
+
+func (r RuleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

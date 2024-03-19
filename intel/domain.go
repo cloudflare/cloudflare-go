@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -315,3 +315,11 @@ type DomainGetResponseEnvelopeSuccess bool
 const (
 	DomainGetResponseEnvelopeSuccessTrue DomainGetResponseEnvelopeSuccess = true
 )
+
+func (r DomainGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

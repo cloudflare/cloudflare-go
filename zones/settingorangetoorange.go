@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -105,6 +105,14 @@ const (
 	ZonesOrangeToOrangeIDOrangeToOrange ZonesOrangeToOrangeID = "orange_to_orange"
 )
 
+func (r ZonesOrangeToOrangeID) IsKnown() bool {
+	switch r {
+	case ZonesOrangeToOrangeIDOrangeToOrange:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesOrangeToOrangeValue string
 
@@ -112,6 +120,14 @@ const (
 	ZonesOrangeToOrangeValueOn  ZonesOrangeToOrangeValue = "on"
 	ZonesOrangeToOrangeValueOff ZonesOrangeToOrangeValue = "off"
 )
+
+func (r ZonesOrangeToOrangeValue) IsKnown() bool {
+	switch r {
+	case ZonesOrangeToOrangeValueOn, ZonesOrangeToOrangeValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -121,6 +137,14 @@ const (
 	ZonesOrangeToOrangeEditableTrue  ZonesOrangeToOrangeEditable = true
 	ZonesOrangeToOrangeEditableFalse ZonesOrangeToOrangeEditable = false
 )
+
+func (r ZonesOrangeToOrangeEditable) IsKnown() bool {
+	switch r {
+	case ZonesOrangeToOrangeEditableTrue, ZonesOrangeToOrangeEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.

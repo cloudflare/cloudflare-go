@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -163,6 +163,14 @@ const (
 	TeamsDevicesDevicesDeviceTypeIos     TeamsDevicesDevicesDeviceType = "ios"
 )
 
+func (r TeamsDevicesDevicesDeviceType) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicesDeviceTypeWindows, TeamsDevicesDevicesDeviceTypeMac, TeamsDevicesDevicesDeviceTypeLinux, TeamsDevicesDevicesDeviceTypeAndroid, TeamsDevicesDevicesDeviceTypeIos:
+		return true
+	}
+	return false
+}
+
 type TeamsDevicesDevicesUser struct {
 	// UUID
 	ID string `json:"id"`
@@ -295,6 +303,14 @@ const (
 	DeviceListResponseEnvelopeSuccessTrue DeviceListResponseEnvelopeSuccess = true
 )
 
+func (r DeviceListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DeviceListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -410,3 +426,11 @@ type DeviceGetResponseEnvelopeSuccess bool
 const (
 	DeviceGetResponseEnvelopeSuccessTrue DeviceGetResponseEnvelopeSuccess = true
 )
+
+func (r DeviceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -102,6 +102,14 @@ const (
 	ZonesSecurityHeaderIDSecurityHeader ZonesSecurityHeaderID = "security_header"
 )
 
+func (r ZonesSecurityHeaderID) IsKnown() bool {
+	switch r {
+	case ZonesSecurityHeaderIDSecurityHeader:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesSecurityHeaderValue struct {
 	// Strict Transport Security.
@@ -165,6 +173,14 @@ const (
 	ZonesSecurityHeaderEditableTrue  ZonesSecurityHeaderEditable = true
 	ZonesSecurityHeaderEditableFalse ZonesSecurityHeaderEditable = false
 )
+
+func (r ZonesSecurityHeaderEditable) IsKnown() bool {
+	switch r {
+	case ZonesSecurityHeaderEditableTrue, ZonesSecurityHeaderEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Cloudflare security header for a zone.
 type ZonesSecurityHeaderParam struct {

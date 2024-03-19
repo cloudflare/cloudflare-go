@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package speed
 
@@ -125,6 +125,14 @@ const (
 	PageListResponseRegionValueUsWest1             PageListResponseRegionValue = "us-west1"
 )
 
+func (r PageListResponseRegionValue) IsKnown() bool {
+	switch r {
+	case PageListResponseRegionValueAsiaEast1, PageListResponseRegionValueAsiaNortheast1, PageListResponseRegionValueAsiaNortheast2, PageListResponseRegionValueAsiaSouth1, PageListResponseRegionValueAsiaSoutheast1, PageListResponseRegionValueAustraliaSoutheast1, PageListResponseRegionValueEuropeNorth1, PageListResponseRegionValueEuropeSouthwest1, PageListResponseRegionValueEuropeWest1, PageListResponseRegionValueEuropeWest2, PageListResponseRegionValueEuropeWest3, PageListResponseRegionValueEuropeWest4, PageListResponseRegionValueEuropeWest8, PageListResponseRegionValueEuropeWest9, PageListResponseRegionValueMeWest1, PageListResponseRegionValueSouthamericaEast1, PageListResponseRegionValueUsCentral1, PageListResponseRegionValueUsEast1, PageListResponseRegionValueUsEast4, PageListResponseRegionValueUsSouth1, PageListResponseRegionValueUsWest1:
+		return true
+	}
+	return false
+}
+
 // The frequency of the test.
 type PageListResponseScheduleFrequency string
 
@@ -132,6 +140,14 @@ const (
 	PageListResponseScheduleFrequencyDaily  PageListResponseScheduleFrequency = "DAILY"
 	PageListResponseScheduleFrequencyWeekly PageListResponseScheduleFrequency = "WEEKLY"
 )
+
+func (r PageListResponseScheduleFrequency) IsKnown() bool {
+	switch r {
+	case PageListResponseScheduleFrequencyDaily, PageListResponseScheduleFrequencyWeekly:
+		return true
+	}
+	return false
+}
 
 type PageListParams struct {
 	// Identifier

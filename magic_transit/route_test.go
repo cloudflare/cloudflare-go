@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit_test
 
@@ -28,13 +28,10 @@ func TestRouteNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Routes.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.RouteNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
-		},
-	)
+	_, err := client.MagicTransit.Routes.New(context.TODO(), magic_transit.RouteNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body:      cloudflare.F[any](map[string]interface{}{}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -61,8 +58,8 @@ func TestRouteUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.MagicTransit.Routes.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.RouteUpdateParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Nexthop:     cloudflare.F("203.0.113.1"),
 			Prefix:      cloudflare.F("192.0.2.0/24"),
 			Priority:    cloudflare.F(int64(0)),
@@ -97,7 +94,9 @@ func TestRouteList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Routes.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.MagicTransit.Routes.List(context.TODO(), magic_transit.RouteListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -124,7 +123,9 @@ func TestRouteDelete(t *testing.T) {
 	_, err := client.MagicTransit.Routes.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.RouteDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -149,13 +150,10 @@ func TestRouteEmpty(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Routes.Empty(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.RouteEmptyParams{
-			Routes: cloudflare.F([]magic_transit.RouteEmptyParamsRoute{{}, {}, {}}),
-		},
-	)
+	_, err := client.MagicTransit.Routes.Empty(context.TODO(), magic_transit.RouteEmptyParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Routes:    cloudflare.F([]magic_transit.RouteEmptyParamsRoute{{}, {}, {}}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -182,7 +180,9 @@ func TestRouteGet(t *testing.T) {
 	_, err := client.MagicTransit.Routes.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.RouteGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

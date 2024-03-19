@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package pages
 
@@ -158,3 +158,11 @@ type ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess bool
 const (
 	ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessTrue ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess = true
 )
+
+func (r ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

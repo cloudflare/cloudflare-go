@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit
 
@@ -33,11 +33,11 @@ func NewRouteService(opts ...option.RequestOption) (r *RouteService) {
 
 // Creates a new Magic static route. Use `?validate_only=true` as an optional query
 // parameter to run validation only without persisting changes.
-func (r *RouteService) New(ctx context.Context, accountIdentifier string, body RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponse, err error) {
+func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/routes", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/routes", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +47,11 @@ func (r *RouteService) New(ctx context.Context, accountIdentifier string, body R
 
 // Update a specific Magic static route. Use `?validate_only=true` as an optional
 // query parameter to run validation only without persisting changes.
-func (r *RouteService) Update(ctx context.Context, accountIdentifier string, routeIdentifier string, body RouteUpdateParams, opts ...option.RequestOption) (res *RouteUpdateResponse, err error) {
+func (r *RouteService) Update(ctx context.Context, routeIdentifier string, params RouteUpdateParams, opts ...option.RequestOption) (res *RouteUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/routes/%s", accountIdentifier, routeIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/routes/%s", params.AccountID, routeIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,10 +60,10 @@ func (r *RouteService) Update(ctx context.Context, accountIdentifier string, rou
 }
 
 // List all Magic static routes.
-func (r *RouteService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RouteListResponse, err error) {
+func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *RouteListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/routes", accountIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/routes", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -73,10 +73,10 @@ func (r *RouteService) List(ctx context.Context, accountIdentifier string, opts 
 }
 
 // Disable and remove a specific Magic static route.
-func (r *RouteService) Delete(ctx context.Context, accountIdentifier string, routeIdentifier string, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
+func (r *RouteService) Delete(ctx context.Context, routeIdentifier string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/routes/%s", accountIdentifier, routeIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/routes/%s", body.AccountID, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -86,11 +86,11 @@ func (r *RouteService) Delete(ctx context.Context, accountIdentifier string, rou
 }
 
 // Delete multiple Magic static routes.
-func (r *RouteService) Empty(ctx context.Context, accountIdentifier string, body RouteEmptyParams, opts ...option.RequestOption) (res *RouteEmptyResponse, err error) {
+func (r *RouteService) Empty(ctx context.Context, params RouteEmptyParams, opts ...option.RequestOption) (res *RouteEmptyResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteEmptyResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/routes", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/routes", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -99,10 +99,10 @@ func (r *RouteService) Empty(ctx context.Context, accountIdentifier string, body
 }
 
 // Get a specific Magic static route.
-func (r *RouteService) Get(ctx context.Context, accountIdentifier string, routeIdentifier string, opts ...option.RequestOption) (res *RouteGetResponse, err error) {
+func (r *RouteService) Get(ctx context.Context, routeIdentifier string, query RouteGetParams, opts ...option.RequestOption) (res *RouteGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/routes/%s", accountIdentifier, routeIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/routes/%s", query.AccountID, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -388,7 +388,9 @@ func (r routeGetResponseJSON) RawJSON() string {
 }
 
 type RouteNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
@@ -476,7 +478,17 @@ const (
 	RouteNewResponseEnvelopeSuccessTrue RouteNewResponseEnvelopeSuccess = true
 )
 
+func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The next-hop IP Address for the static route.
 	Nexthop param.Field[string] `json:"nexthop,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
@@ -588,6 +600,19 @@ const (
 	RouteUpdateResponseEnvelopeSuccessTrue RouteUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RouteUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RouteListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type RouteListResponseEnvelope struct {
 	Errors   []RouteListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteListResponseEnvelopeMessages `json:"messages,required"`
@@ -668,6 +693,19 @@ type RouteListResponseEnvelopeSuccess bool
 const (
 	RouteListResponseEnvelopeSuccessTrue RouteListResponseEnvelopeSuccess = true
 )
+
+func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RouteDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type RouteDeleteResponseEnvelope struct {
 	Errors   []RouteDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -750,8 +788,18 @@ const (
 	RouteDeleteResponseEnvelopeSuccessTrue RouteDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteEmptyParams struct {
-	Routes param.Field[[]RouteEmptyParamsRoute] `json:"routes,required"`
+	// Identifier
+	AccountID param.Field[string]                  `path:"account_id,required"`
+	Routes    param.Field[[]RouteEmptyParamsRoute] `json:"routes,required"`
 }
 
 func (r RouteEmptyParams) MarshalJSON() (data []byte, err error) {
@@ -846,6 +894,19 @@ const (
 	RouteEmptyResponseEnvelopeSuccessTrue RouteEmptyResponseEnvelopeSuccess = true
 )
 
+func (r RouteEmptyResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteEmptyResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RouteGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type RouteGetResponseEnvelope struct {
 	Errors   []RouteGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteGetResponseEnvelopeMessages `json:"messages,required"`
@@ -926,3 +987,11 @@ type RouteGetResponseEnvelopeSuccess bool
 const (
 	RouteGetResponseEnvelopeSuccessTrue RouteGetResponseEnvelopeSuccess = true
 )
+
+func (r RouteGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

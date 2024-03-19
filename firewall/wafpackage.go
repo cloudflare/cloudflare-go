@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package firewall
 
@@ -217,6 +217,14 @@ const (
 	WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccessTrue WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccess = true
 )
 
+func (r WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccess) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -360,6 +368,14 @@ const (
 	WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionModeTraditional WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionMode = "traditional"
 )
 
+func (r WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionMode) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionModeAnomaly, WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionDetectionModeTraditional:
+		return true
+	}
+	return false
+}
+
 // When set to `active`, indicates that the WAF package will be applied to the
 // zone.
 type WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatus string
@@ -367,6 +383,14 @@ type WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatus string
 const (
 	WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatusActive WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatus = "active"
 )
+
+func (r WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatus) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultLegacyJhsPackageDefinitionStatusActive:
+		return true
+	}
+	return false
+}
 
 type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackage struct {
 	// The unique identifier of a WAF package.
@@ -428,6 +452,14 @@ const (
 	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionModeTraditional WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionMode = "traditional"
 )
 
+func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionMode) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionModeAnomaly, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageDetectionModeTraditional:
+		return true
+	}
+	return false
+}
+
 // The default action performed by the rules in the WAF package.
 type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode string
 
@@ -436,6 +468,14 @@ const (
 	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeBlock     WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode = "block"
 	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeChallenge WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode = "challenge"
 )
+
+func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionMode) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeSimulate, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeBlock, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageActionModeChallenge:
+		return true
+	}
+	return false
+}
 
 // The sensitivity of the WAF package.
 type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity string
@@ -447,6 +487,14 @@ const (
 	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityOff    WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity = "off"
 )
 
+func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivity) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityHigh, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityMedium, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityLow, WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageSensitivityOff:
+		return true
+	}
+	return false
+}
+
 // When set to `active`, indicates that the WAF package will be applied to the
 // zone.
 type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatus string
@@ -454,6 +502,14 @@ type WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatus string
 const (
 	WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatusActive WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatus = "active"
 )
+
+func (r WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatus) IsKnown() bool {
+	switch r {
+	case WAFPackageListResponseObjectResultLegacyJhsAnomalyPackageStatusActive:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [firewall.WAFPackageGetResponseLegacyJhsAPIResponseSingle] or
 // [firewall.WAFPackageGetResponseObject].
@@ -577,6 +633,14 @@ const (
 	WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccessTrue WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccess = true
 )
 
+func (r WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccess) IsKnown() bool {
+	switch r {
+	case WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WAFPackageGetResponseObject struct {
 	Result interface{}                     `json:"result"`
 	JSON   wafPackageGetResponseObjectJSON `json:"-"`
@@ -630,6 +694,14 @@ const (
 	WAFPackageListParamsDirectionDesc WAFPackageListParamsDirection = "desc"
 )
 
+func (r WAFPackageListParamsDirection) IsKnown() bool {
+	switch r {
+	case WAFPackageListParamsDirectionAsc, WAFPackageListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // When set to `all`, all the search requirements must match. When set to `any`,
 // only one of the search requirements has to match.
 type WAFPackageListParamsMatch string
@@ -639,9 +711,25 @@ const (
 	WAFPackageListParamsMatchAll WAFPackageListParamsMatch = "all"
 )
 
+func (r WAFPackageListParamsMatch) IsKnown() bool {
+	switch r {
+	case WAFPackageListParamsMatchAny, WAFPackageListParamsMatchAll:
+		return true
+	}
+	return false
+}
+
 // The field used to sort returned packages.
 type WAFPackageListParamsOrder string
 
 const (
 	WAFPackageListParamsOrderName WAFPackageListParamsOrder = "name"
 )
+
+func (r WAFPackageListParamsOrder) IsKnown() bool {
+	switch r {
+	case WAFPackageListParamsOrderName:
+		return true
+	}
+	return false
+}

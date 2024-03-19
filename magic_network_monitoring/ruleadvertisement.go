@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_network_monitoring
 
@@ -147,3 +147,11 @@ type RuleAdvertisementEditResponseEnvelopeSuccess bool
 const (
 	RuleAdvertisementEditResponseEnvelopeSuccessTrue RuleAdvertisementEditResponseEnvelopeSuccess = true
 )
+
+func (r RuleAdvertisementEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleAdvertisementEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

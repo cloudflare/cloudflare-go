@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package user
 
@@ -126,6 +126,14 @@ type TokenPermissionGroupListResponseEnvelopeSuccess bool
 const (
 	TokenPermissionGroupListResponseEnvelopeSuccessTrue TokenPermissionGroupListResponseEnvelopeSuccess = true
 )
+
+func (r TokenPermissionGroupListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenPermissionGroupListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type TokenPermissionGroupListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -101,6 +101,14 @@ const (
 	ZonesHTTP3IDHTTP3 ZonesHTTP3ID = "http3"
 )
 
+func (r ZonesHTTP3ID) IsKnown() bool {
+	switch r {
+	case ZonesHTTP3IDHTTP3:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesHTTP3Value string
 
@@ -108,6 +116,14 @@ const (
 	ZonesHTTP3ValueOn  ZonesHTTP3Value = "on"
 	ZonesHTTP3ValueOff ZonesHTTP3Value = "off"
 )
+
+func (r ZonesHTTP3Value) IsKnown() bool {
+	switch r {
+	case ZonesHTTP3ValueOn, ZonesHTTP3ValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -117,6 +133,14 @@ const (
 	ZonesHTTP3EditableTrue  ZonesHTTP3Editable = true
 	ZonesHTTP3EditableFalse ZonesHTTP3Editable = false
 )
+
+func (r ZonesHTTP3Editable) IsKnown() bool {
+	switch r {
+	case ZonesHTTP3EditableTrue, ZonesHTTP3EditableFalse:
+		return true
+	}
+	return false
+}
 
 // HTTP3 enabled for this zone.
 type ZonesHTTP3Param struct {
@@ -150,6 +174,14 @@ const (
 	SettingHTTP3EditParamsValueOn  SettingHTTP3EditParamsValue = "on"
 	SettingHTTP3EditParamsValueOff SettingHTTP3EditParamsValue = "off"
 )
+
+func (r SettingHTTP3EditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingHTTP3EditParamsValueOn, SettingHTTP3EditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingHTTP3EditResponseEnvelope struct {
 	Errors   []SettingHTTP3EditResponseEnvelopeErrors   `json:"errors,required"`

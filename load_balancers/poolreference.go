@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package load_balancers
 
@@ -78,6 +78,14 @@ const (
 	PoolReferenceGetResponseReferenceTypeReferral PoolReferenceGetResponseReferenceType = "referral"
 	PoolReferenceGetResponseReferenceTypeReferrer PoolReferenceGetResponseReferenceType = "referrer"
 )
+
+func (r PoolReferenceGetResponseReferenceType) IsKnown() bool {
+	switch r {
+	case PoolReferenceGetResponseReferenceTypeStar, PoolReferenceGetResponseReferenceTypeReferral, PoolReferenceGetResponseReferenceTypeReferrer:
+		return true
+	}
+	return false
+}
 
 type PoolReferenceGetParams struct {
 	// Identifier
@@ -167,6 +175,14 @@ type PoolReferenceGetResponseEnvelopeSuccess bool
 const (
 	PoolReferenceGetResponseEnvelopeSuccessTrue PoolReferenceGetResponseEnvelopeSuccess = true
 )
+
+func (r PoolReferenceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolReferenceGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PoolReferenceGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

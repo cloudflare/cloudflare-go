@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package acm
 
@@ -93,12 +93,28 @@ const (
 	TotalTLSNewResponseCertificateAuthorityLetsEncrypt TotalTLSNewResponseCertificateAuthority = "lets_encrypt"
 )
 
+func (r TotalTLSNewResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case TotalTLSNewResponseCertificateAuthorityGoogle, TotalTLSNewResponseCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // The validity period in days for the certificates ordered via Total TLS.
 type TotalTLSNewResponseValidityDays int64
 
 const (
 	TotalTLSNewResponseValidityDays90 TotalTLSNewResponseValidityDays = 90
 )
+
+func (r TotalTLSNewResponseValidityDays) IsKnown() bool {
+	switch r {
+	case TotalTLSNewResponseValidityDays90:
+		return true
+	}
+	return false
+}
 
 type TotalTLSGetResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
@@ -137,12 +153,28 @@ const (
 	TotalTLSGetResponseCertificateAuthorityLetsEncrypt TotalTLSGetResponseCertificateAuthority = "lets_encrypt"
 )
 
+func (r TotalTLSGetResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case TotalTLSGetResponseCertificateAuthorityGoogle, TotalTLSGetResponseCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // The validity period in days for the certificates ordered via Total TLS.
 type TotalTLSGetResponseValidityDays int64
 
 const (
 	TotalTLSGetResponseValidityDays90 TotalTLSGetResponseValidityDays = 90
 )
+
+func (r TotalTLSGetResponseValidityDays) IsKnown() bool {
+	switch r {
+	case TotalTLSGetResponseValidityDays90:
+		return true
+	}
+	return false
+}
 
 type TotalTLSNewParams struct {
 	// Identifier
@@ -165,6 +197,14 @@ const (
 	TotalTLSNewParamsCertificateAuthorityGoogle      TotalTLSNewParamsCertificateAuthority = "google"
 	TotalTLSNewParamsCertificateAuthorityLetsEncrypt TotalTLSNewParamsCertificateAuthority = "lets_encrypt"
 )
+
+func (r TotalTLSNewParamsCertificateAuthority) IsKnown() bool {
+	switch r {
+	case TotalTLSNewParamsCertificateAuthorityGoogle, TotalTLSNewParamsCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
 
 type TotalTLSNewResponseEnvelope struct {
 	Errors   []TotalTLSNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -246,6 +286,14 @@ type TotalTLSNewResponseEnvelopeSuccess bool
 const (
 	TotalTLSNewResponseEnvelopeSuccessTrue TotalTLSNewResponseEnvelopeSuccess = true
 )
+
+func (r TotalTLSNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TotalTLSNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type TotalTLSGetParams struct {
 	// Identifier
@@ -332,3 +380,11 @@ type TotalTLSGetResponseEnvelopeSuccess bool
 const (
 	TotalTLSGetResponseEnvelopeSuccessTrue TotalTLSGetResponseEnvelopeSuccess = true
 )
+
+func (r TotalTLSGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TotalTLSGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

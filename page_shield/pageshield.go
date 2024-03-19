@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package page_shield
 
@@ -223,6 +223,14 @@ const (
 	PageShieldUpdateResponseEnvelopeSuccessTrue PageShieldUpdateResponseEnvelopeSuccess = true
 )
 
+func (r PageShieldUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PageShieldUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PageShieldGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -308,3 +316,11 @@ type PageShieldGetResponseEnvelopeSuccess bool
 const (
 	PageShieldGetResponseEnvelopeSuccessTrue PageShieldGetResponseEnvelopeSuccess = true
 )
+
+func (r PageShieldGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PageShieldGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

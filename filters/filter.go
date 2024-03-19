@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package filters
 
@@ -237,6 +237,14 @@ const (
 	FilterNewResponseEnvelopeSuccessTrue FilterNewResponseEnvelopeSuccess = true
 )
 
+func (r FilterNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FilterNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -357,6 +365,14 @@ const (
 	FilterUpdateResponseEnvelopeSuccessTrue FilterUpdateResponseEnvelopeSuccess = true
 )
 
+func (r FilterUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FilterListParams struct {
 	// A case-insensitive string to find in the description.
 	Description param.Field[string] `query:"description"`
@@ -461,6 +477,14 @@ const (
 	FilterDeleteResponseEnvelopeSuccessTrue FilterDeleteResponseEnvelopeSuccess = true
 )
 
+func (r FilterDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FilterGetResponseEnvelope struct {
 	Errors   []FilterGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterGetResponseEnvelopeMessages `json:"messages,required"`
@@ -541,3 +565,11 @@ type FilterGetResponseEnvelopeSuccess bool
 const (
 	FilterGetResponseEnvelopeSuccessTrue FilterGetResponseEnvelopeSuccess = true
 )
+
+func (r FilterGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -220,3 +220,11 @@ type DNSGetResponseEnvelopeSuccess bool
 const (
 	DNSGetResponseEnvelopeSuccessTrue DNSGetResponseEnvelopeSuccess = true
 )
+
+func (r DNSGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

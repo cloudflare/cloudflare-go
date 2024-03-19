@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -191,6 +191,14 @@ const (
 	DLPPayloadLogUpdateResponseEnvelopeSuccessTrue DLPPayloadLogUpdateResponseEnvelopeSuccess = true
 )
 
+func (r DLPPayloadLogUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPPayloadLogUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DLPPayloadLogGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -276,3 +284,11 @@ type DLPPayloadLogGetResponseEnvelopeSuccess bool
 const (
 	DLPPayloadLogGetResponseEnvelopeSuccessTrue DLPPayloadLogGetResponseEnvelopeSuccess = true
 )
+
+func (r DLPPayloadLogGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPPayloadLogGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

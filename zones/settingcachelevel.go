@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -113,6 +113,14 @@ const (
 	ZonesCacheLevelIDCacheLevel ZonesCacheLevelID = "cache_level"
 )
 
+func (r ZonesCacheLevelID) IsKnown() bool {
+	switch r {
+	case ZonesCacheLevelIDCacheLevel:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesCacheLevelValue string
 
@@ -122,6 +130,14 @@ const (
 	ZonesCacheLevelValueSimplified ZonesCacheLevelValue = "simplified"
 )
 
+func (r ZonesCacheLevelValue) IsKnown() bool {
+	switch r {
+	case ZonesCacheLevelValueAggressive, ZonesCacheLevelValueBasic, ZonesCacheLevelValueSimplified:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesCacheLevelEditable bool
@@ -130,6 +146,14 @@ const (
 	ZonesCacheLevelEditableTrue  ZonesCacheLevelEditable = true
 	ZonesCacheLevelEditableFalse ZonesCacheLevelEditable = false
 )
+
+func (r ZonesCacheLevelEditable) IsKnown() bool {
+	switch r {
+	case ZonesCacheLevelEditableTrue, ZonesCacheLevelEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Cache Level functions based off the setting level. The basic setting will cache
 // most static resources (i.e., css, images, and JavaScript). The simplified
@@ -168,6 +192,14 @@ const (
 	SettingCacheLevelEditParamsValueBasic      SettingCacheLevelEditParamsValue = "basic"
 	SettingCacheLevelEditParamsValueSimplified SettingCacheLevelEditParamsValue = "simplified"
 )
+
+func (r SettingCacheLevelEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingCacheLevelEditParamsValueAggressive, SettingCacheLevelEditParamsValueBasic, SettingCacheLevelEditParamsValueSimplified:
+		return true
+	}
+	return false
+}
 
 type SettingCacheLevelEditResponseEnvelope struct {
 	Errors   []SettingCacheLevelEditResponseEnvelopeErrors   `json:"errors,required"`

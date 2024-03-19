@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package argo
 
@@ -113,6 +113,14 @@ const (
 	SmartRoutingEditParamsValueOff SmartRoutingEditParamsValue = "off"
 )
 
+func (r SmartRoutingEditParamsValue) IsKnown() bool {
+	switch r {
+	case SmartRoutingEditParamsValueOn, SmartRoutingEditParamsValueOff:
+		return true
+	}
+	return false
+}
+
 type SmartRoutingEditResponseEnvelope struct {
 	Errors   []SmartRoutingEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SmartRoutingEditResponseEnvelopeMessages `json:"messages,required"`
@@ -193,6 +201,14 @@ type SmartRoutingEditResponseEnvelopeSuccess bool
 const (
 	SmartRoutingEditResponseEnvelopeSuccessTrue SmartRoutingEditResponseEnvelopeSuccess = true
 )
+
+func (r SmartRoutingEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SmartRoutingEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SmartRoutingGetParams struct {
 	// Identifier
@@ -279,3 +295,11 @@ type SmartRoutingGetResponseEnvelopeSuccess bool
 const (
 	SmartRoutingGetResponseEnvelopeSuccessTrue SmartRoutingGetResponseEnvelopeSuccess = true
 )
+
+func (r SmartRoutingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SmartRoutingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

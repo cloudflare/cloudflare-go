@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package pagerules
 
@@ -195,6 +195,14 @@ const (
 	ZonesPageRuleActionsNameForwardURL ZonesPageRuleActionsName = "forward_url"
 )
 
+func (r ZonesPageRuleActionsName) IsKnown() bool {
+	switch r {
+	case ZonesPageRuleActionsNameForwardURL:
+		return true
+	}
+	return false
+}
+
 type ZonesPageRuleActionsValue struct {
 	// The response type for the URL redirect.
 	Type ZonesPageRuleActionsValueType `json:"type"`
@@ -229,6 +237,14 @@ const (
 	ZonesPageRuleActionsValueTypePermanent ZonesPageRuleActionsValueType = "permanent"
 )
 
+func (r ZonesPageRuleActionsValueType) IsKnown() bool {
+	switch r {
+	case ZonesPageRuleActionsValueTypeTemporary, ZonesPageRuleActionsValueTypePermanent:
+		return true
+	}
+	return false
+}
+
 // The status of the Page Rule.
 type ZonesPageRuleStatus string
 
@@ -236,6 +252,14 @@ const (
 	ZonesPageRuleStatusActive   ZonesPageRuleStatus = "active"
 	ZonesPageRuleStatusDisabled ZonesPageRuleStatus = "disabled"
 )
+
+func (r ZonesPageRuleStatus) IsKnown() bool {
+	switch r {
+	case ZonesPageRuleStatusActive, ZonesPageRuleStatusDisabled:
+		return true
+	}
+	return false
+}
 
 // A request condition target.
 type ZonesPageRuleTarget struct {
@@ -301,12 +325,28 @@ const (
 	ZonesPageRuleTargetsConstraintOperatorNotContain ZonesPageRuleTargetsConstraintOperator = "not_contain"
 )
 
+func (r ZonesPageRuleTargetsConstraintOperator) IsKnown() bool {
+	switch r {
+	case ZonesPageRuleTargetsConstraintOperatorMatches, ZonesPageRuleTargetsConstraintOperatorContains, ZonesPageRuleTargetsConstraintOperatorEquals, ZonesPageRuleTargetsConstraintOperatorNotEqual, ZonesPageRuleTargetsConstraintOperatorNotContain:
+		return true
+	}
+	return false
+}
+
 // A target based on the URL of the request.
 type ZonesPageRuleTargetsTarget string
 
 const (
 	ZonesPageRuleTargetsTargetURL ZonesPageRuleTargetsTarget = "url"
 )
+
+func (r ZonesPageRuleTargetsTarget) IsKnown() bool {
+	switch r {
+	case ZonesPageRuleTargetsTargetURL:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [pagerules.PageruleNewResponseUnknown] or
 // [shared.UnionString].
@@ -437,6 +477,14 @@ const (
 	PageruleNewParamsActionsNameForwardURL PageruleNewParamsActionsName = "forward_url"
 )
 
+func (r PageruleNewParamsActionsName) IsKnown() bool {
+	switch r {
+	case PageruleNewParamsActionsNameForwardURL:
+		return true
+	}
+	return false
+}
+
 type PageruleNewParamsActionsValue struct {
 	// The response type for the URL redirect.
 	Type param.Field[PageruleNewParamsActionsValueType] `json:"type"`
@@ -456,6 +504,14 @@ const (
 	PageruleNewParamsActionsValueTypeTemporary PageruleNewParamsActionsValueType = "temporary"
 	PageruleNewParamsActionsValueTypePermanent PageruleNewParamsActionsValueType = "permanent"
 )
+
+func (r PageruleNewParamsActionsValueType) IsKnown() bool {
+	switch r {
+	case PageruleNewParamsActionsValueTypeTemporary, PageruleNewParamsActionsValueTypePermanent:
+		return true
+	}
+	return false
+}
 
 // A request condition target.
 type PageruleNewParamsTarget struct {
@@ -493,12 +549,28 @@ const (
 	PageruleNewParamsTargetsConstraintOperatorNotContain PageruleNewParamsTargetsConstraintOperator = "not_contain"
 )
 
+func (r PageruleNewParamsTargetsConstraintOperator) IsKnown() bool {
+	switch r {
+	case PageruleNewParamsTargetsConstraintOperatorMatches, PageruleNewParamsTargetsConstraintOperatorContains, PageruleNewParamsTargetsConstraintOperatorEquals, PageruleNewParamsTargetsConstraintOperatorNotEqual, PageruleNewParamsTargetsConstraintOperatorNotContain:
+		return true
+	}
+	return false
+}
+
 // A target based on the URL of the request.
 type PageruleNewParamsTargetsTarget string
 
 const (
 	PageruleNewParamsTargetsTargetURL PageruleNewParamsTargetsTarget = "url"
 )
+
+func (r PageruleNewParamsTargetsTarget) IsKnown() bool {
+	switch r {
+	case PageruleNewParamsTargetsTargetURL:
+		return true
+	}
+	return false
+}
 
 // The status of the Page Rule.
 type PageruleNewParamsStatus string
@@ -507,6 +579,14 @@ const (
 	PageruleNewParamsStatusActive   PageruleNewParamsStatus = "active"
 	PageruleNewParamsStatusDisabled PageruleNewParamsStatus = "disabled"
 )
+
+func (r PageruleNewParamsStatus) IsKnown() bool {
+	switch r {
+	case PageruleNewParamsStatusActive, PageruleNewParamsStatusDisabled:
+		return true
+	}
+	return false
+}
 
 type PageruleNewResponseEnvelope struct {
 	Errors   []PageruleNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -589,6 +669,14 @@ const (
 	PageruleNewResponseEnvelopeSuccessTrue PageruleNewResponseEnvelopeSuccess = true
 )
 
+func (r PageruleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PageruleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PageruleUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -628,6 +716,14 @@ const (
 	PageruleUpdateParamsActionsNameForwardURL PageruleUpdateParamsActionsName = "forward_url"
 )
 
+func (r PageruleUpdateParamsActionsName) IsKnown() bool {
+	switch r {
+	case PageruleUpdateParamsActionsNameForwardURL:
+		return true
+	}
+	return false
+}
+
 type PageruleUpdateParamsActionsValue struct {
 	// The response type for the URL redirect.
 	Type param.Field[PageruleUpdateParamsActionsValueType] `json:"type"`
@@ -647,6 +743,14 @@ const (
 	PageruleUpdateParamsActionsValueTypeTemporary PageruleUpdateParamsActionsValueType = "temporary"
 	PageruleUpdateParamsActionsValueTypePermanent PageruleUpdateParamsActionsValueType = "permanent"
 )
+
+func (r PageruleUpdateParamsActionsValueType) IsKnown() bool {
+	switch r {
+	case PageruleUpdateParamsActionsValueTypeTemporary, PageruleUpdateParamsActionsValueTypePermanent:
+		return true
+	}
+	return false
+}
 
 // A request condition target.
 type PageruleUpdateParamsTarget struct {
@@ -684,12 +788,28 @@ const (
 	PageruleUpdateParamsTargetsConstraintOperatorNotContain PageruleUpdateParamsTargetsConstraintOperator = "not_contain"
 )
 
+func (r PageruleUpdateParamsTargetsConstraintOperator) IsKnown() bool {
+	switch r {
+	case PageruleUpdateParamsTargetsConstraintOperatorMatches, PageruleUpdateParamsTargetsConstraintOperatorContains, PageruleUpdateParamsTargetsConstraintOperatorEquals, PageruleUpdateParamsTargetsConstraintOperatorNotEqual, PageruleUpdateParamsTargetsConstraintOperatorNotContain:
+		return true
+	}
+	return false
+}
+
 // A target based on the URL of the request.
 type PageruleUpdateParamsTargetsTarget string
 
 const (
 	PageruleUpdateParamsTargetsTargetURL PageruleUpdateParamsTargetsTarget = "url"
 )
+
+func (r PageruleUpdateParamsTargetsTarget) IsKnown() bool {
+	switch r {
+	case PageruleUpdateParamsTargetsTargetURL:
+		return true
+	}
+	return false
+}
 
 // The status of the Page Rule.
 type PageruleUpdateParamsStatus string
@@ -698,6 +818,14 @@ const (
 	PageruleUpdateParamsStatusActive   PageruleUpdateParamsStatus = "active"
 	PageruleUpdateParamsStatusDisabled PageruleUpdateParamsStatus = "disabled"
 )
+
+func (r PageruleUpdateParamsStatus) IsKnown() bool {
+	switch r {
+	case PageruleUpdateParamsStatusActive, PageruleUpdateParamsStatusDisabled:
+		return true
+	}
+	return false
+}
 
 type PageruleUpdateResponseEnvelope struct {
 	Errors   []PageruleUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -780,6 +908,14 @@ const (
 	PageruleUpdateResponseEnvelopeSuccessTrue PageruleUpdateResponseEnvelopeSuccess = true
 )
 
+func (r PageruleUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PageruleUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PageruleListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -810,6 +946,14 @@ const (
 	PageruleListParamsDirectionDesc PageruleListParamsDirection = "desc"
 )
 
+func (r PageruleListParamsDirection) IsKnown() bool {
+	switch r {
+	case PageruleListParamsDirectionAsc, PageruleListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // When set to `all`, all the search requirements must match. When set to `any`,
 // only one of the search requirements has to match.
 type PageruleListParamsMatch string
@@ -819,6 +963,14 @@ const (
 	PageruleListParamsMatchAll PageruleListParamsMatch = "all"
 )
 
+func (r PageruleListParamsMatch) IsKnown() bool {
+	switch r {
+	case PageruleListParamsMatchAny, PageruleListParamsMatchAll:
+		return true
+	}
+	return false
+}
+
 // The field used to sort returned Page Rules.
 type PageruleListParamsOrder string
 
@@ -827,6 +979,14 @@ const (
 	PageruleListParamsOrderPriority PageruleListParamsOrder = "priority"
 )
 
+func (r PageruleListParamsOrder) IsKnown() bool {
+	switch r {
+	case PageruleListParamsOrderStatus, PageruleListParamsOrderPriority:
+		return true
+	}
+	return false
+}
+
 // The status of the Page Rule.
 type PageruleListParamsStatus string
 
@@ -834,6 +994,14 @@ const (
 	PageruleListParamsStatusActive   PageruleListParamsStatus = "active"
 	PageruleListParamsStatusDisabled PageruleListParamsStatus = "disabled"
 )
+
+func (r PageruleListParamsStatus) IsKnown() bool {
+	switch r {
+	case PageruleListParamsStatusActive, PageruleListParamsStatusDisabled:
+		return true
+	}
+	return false
+}
 
 type PageruleListResponseEnvelope struct {
 	Errors   []PageruleListResponseEnvelopeErrors   `json:"errors,required"`
@@ -915,6 +1083,14 @@ type PageruleListResponseEnvelopeSuccess bool
 const (
 	PageruleListResponseEnvelopeSuccessTrue PageruleListResponseEnvelopeSuccess = true
 )
+
+func (r PageruleListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PageruleListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PageruleDeleteParams struct {
 	// Identifier
@@ -1002,6 +1178,14 @@ const (
 	PageruleDeleteResponseEnvelopeSuccessTrue PageruleDeleteResponseEnvelopeSuccess = true
 )
 
+func (r PageruleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PageruleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PageruleEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -1041,6 +1225,14 @@ const (
 	PageruleEditParamsActionsNameForwardURL PageruleEditParamsActionsName = "forward_url"
 )
 
+func (r PageruleEditParamsActionsName) IsKnown() bool {
+	switch r {
+	case PageruleEditParamsActionsNameForwardURL:
+		return true
+	}
+	return false
+}
+
 type PageruleEditParamsActionsValue struct {
 	// The response type for the URL redirect.
 	Type param.Field[PageruleEditParamsActionsValueType] `json:"type"`
@@ -1061,6 +1253,14 @@ const (
 	PageruleEditParamsActionsValueTypePermanent PageruleEditParamsActionsValueType = "permanent"
 )
 
+func (r PageruleEditParamsActionsValueType) IsKnown() bool {
+	switch r {
+	case PageruleEditParamsActionsValueTypeTemporary, PageruleEditParamsActionsValueTypePermanent:
+		return true
+	}
+	return false
+}
+
 // The status of the Page Rule.
 type PageruleEditParamsStatus string
 
@@ -1068,6 +1268,14 @@ const (
 	PageruleEditParamsStatusActive   PageruleEditParamsStatus = "active"
 	PageruleEditParamsStatusDisabled PageruleEditParamsStatus = "disabled"
 )
+
+func (r PageruleEditParamsStatus) IsKnown() bool {
+	switch r {
+	case PageruleEditParamsStatusActive, PageruleEditParamsStatusDisabled:
+		return true
+	}
+	return false
+}
 
 // A request condition target.
 type PageruleEditParamsTarget struct {
@@ -1105,12 +1313,28 @@ const (
 	PageruleEditParamsTargetsConstraintOperatorNotContain PageruleEditParamsTargetsConstraintOperator = "not_contain"
 )
 
+func (r PageruleEditParamsTargetsConstraintOperator) IsKnown() bool {
+	switch r {
+	case PageruleEditParamsTargetsConstraintOperatorMatches, PageruleEditParamsTargetsConstraintOperatorContains, PageruleEditParamsTargetsConstraintOperatorEquals, PageruleEditParamsTargetsConstraintOperatorNotEqual, PageruleEditParamsTargetsConstraintOperatorNotContain:
+		return true
+	}
+	return false
+}
+
 // A target based on the URL of the request.
 type PageruleEditParamsTargetsTarget string
 
 const (
 	PageruleEditParamsTargetsTargetURL PageruleEditParamsTargetsTarget = "url"
 )
+
+func (r PageruleEditParamsTargetsTarget) IsKnown() bool {
+	switch r {
+	case PageruleEditParamsTargetsTargetURL:
+		return true
+	}
+	return false
+}
 
 type PageruleEditResponseEnvelope struct {
 	Errors   []PageruleEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -1192,6 +1416,14 @@ type PageruleEditResponseEnvelopeSuccess bool
 const (
 	PageruleEditResponseEnvelopeSuccessTrue PageruleEditResponseEnvelopeSuccess = true
 )
+
+func (r PageruleEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PageruleEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PageruleGetParams struct {
 	// Identifier
@@ -1278,3 +1510,11 @@ type PageruleGetResponseEnvelopeSuccess bool
 const (
 	PageruleGetResponseEnvelopeSuccessTrue PageruleGetResponseEnvelopeSuccess = true
 )
+
+func (r PageruleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PageruleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

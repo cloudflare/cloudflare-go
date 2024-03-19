@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package calls
 
@@ -253,6 +253,14 @@ const (
 	CallNewResponseEnvelopeSuccessTrue CallNewResponseEnvelopeSuccess = true
 )
 
+func (r CallNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CallNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CallUpdateParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -345,6 +353,14 @@ const (
 	CallUpdateResponseEnvelopeSuccessTrue CallUpdateResponseEnvelopeSuccess = true
 )
 
+func (r CallUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CallUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CallListParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -430,6 +446,14 @@ type CallListResponseEnvelopeSuccess bool
 const (
 	CallListResponseEnvelopeSuccessTrue CallListResponseEnvelopeSuccess = true
 )
+
+func (r CallListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CallListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type CallDeleteParams struct {
 	// The account identifier tag.
@@ -517,6 +541,14 @@ const (
 	CallDeleteResponseEnvelopeSuccessTrue CallDeleteResponseEnvelopeSuccess = true
 )
 
+func (r CallDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CallDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CallGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -602,3 +634,11 @@ type CallGetResponseEnvelopeSuccess bool
 const (
 	CallGetResponseEnvelopeSuccessTrue CallGetResponseEnvelopeSuccess = true
 )
+
+func (r CallGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CallGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

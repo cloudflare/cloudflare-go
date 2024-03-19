@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers
 
@@ -198,6 +198,14 @@ const (
 	ServiceEnvironmentSettingEditResponseBindingsWorkersKVNamespaceBindingTypeKVNamespace ServiceEnvironmentSettingEditResponseBindingsWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
+func (r ServiceEnvironmentSettingEditResponseBindingsWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponseBindingsWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingEditResponseBindingsWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment,required"`
@@ -239,6 +247,14 @@ type ServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingType stri
 const (
 	ServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingTypeService ServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingType = "service"
 )
+
+func (r ServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingTypeService:
+		return true
+	}
+	return false
+}
 
 type ServiceEnvironmentSettingEditResponseBindingsWorkersDoBinding struct {
 	// The exported class name of the Durable Object
@@ -288,6 +304,14 @@ const (
 	ServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingTypeDurableObjectNamespace ServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingType = "durable_object_namespace"
 )
 
+func (r ServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingEditResponseBindingsWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName string `json:"bucket_name,required"`
@@ -327,6 +351,14 @@ const (
 	ServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingTypeR2Bucket ServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingType = "r2_bucket"
 )
 
+func (r ServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingEditResponseBindingsWorkersQueueBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -365,6 +397,14 @@ type ServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingType string
 const (
 	ServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingTypeQueue ServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingType = "queue"
 )
+
+func (r ServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingTypeQueue:
+		return true
+	}
+	return false
+}
 
 type ServiceEnvironmentSettingEditResponseBindingsWorkersD1Binding struct {
 	// ID of the D1 database to bind to
@@ -408,6 +448,14 @@ const (
 	ServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingTypeD1 ServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingType = "d1"
 )
 
+func (r ServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingTypeD1:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -449,6 +497,14 @@ type ServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindin
 const (
 	ServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace ServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
+
+func (r ServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace:
+		return true
+	}
+	return false
+}
 
 // Outbound worker
 type ServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutbound struct {
@@ -543,6 +599,14 @@ type ServiceEnvironmentSettingEditResponseBindingsWorkersMTLSCertBindingType str
 const (
 	ServiceEnvironmentSettingEditResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate ServiceEnvironmentSettingEditResponseBindingsWorkersMTLSCertBindingType = "mtls_certificate"
 )
+
+func (r ServiceEnvironmentSettingEditResponseBindingsWorkersMTLSCertBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
@@ -812,6 +876,14 @@ const (
 	ServiceEnvironmentSettingEditResponsePlacementModeSmart ServiceEnvironmentSettingEditResponsePlacementMode = "smart"
 )
 
+func (r ServiceEnvironmentSettingEditResponsePlacementMode) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponsePlacementModeSmart:
+		return true
+	}
+	return false
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type ServiceEnvironmentSettingEditResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -979,6 +1051,14 @@ const (
 	ServiceEnvironmentSettingGetResponseBindingsWorkersKVNamespaceBindingTypeKVNamespace ServiceEnvironmentSettingGetResponseBindingsWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
+func (r ServiceEnvironmentSettingGetResponseBindingsWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponseBindingsWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingGetResponseBindingsWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment,required"`
@@ -1020,6 +1100,14 @@ type ServiceEnvironmentSettingGetResponseBindingsWorkersServiceBindingType strin
 const (
 	ServiceEnvironmentSettingGetResponseBindingsWorkersServiceBindingTypeService ServiceEnvironmentSettingGetResponseBindingsWorkersServiceBindingType = "service"
 )
+
+func (r ServiceEnvironmentSettingGetResponseBindingsWorkersServiceBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponseBindingsWorkersServiceBindingTypeService:
+		return true
+	}
+	return false
+}
 
 type ServiceEnvironmentSettingGetResponseBindingsWorkersDoBinding struct {
 	// The exported class name of the Durable Object
@@ -1069,6 +1157,14 @@ const (
 	ServiceEnvironmentSettingGetResponseBindingsWorkersDoBindingTypeDurableObjectNamespace ServiceEnvironmentSettingGetResponseBindingsWorkersDoBindingType = "durable_object_namespace"
 )
 
+func (r ServiceEnvironmentSettingGetResponseBindingsWorkersDoBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponseBindingsWorkersDoBindingTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingGetResponseBindingsWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName string `json:"bucket_name,required"`
@@ -1108,6 +1204,14 @@ const (
 	ServiceEnvironmentSettingGetResponseBindingsWorkersR2BindingTypeR2Bucket ServiceEnvironmentSettingGetResponseBindingsWorkersR2BindingType = "r2_bucket"
 )
 
+func (r ServiceEnvironmentSettingGetResponseBindingsWorkersR2BindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponseBindingsWorkersR2BindingTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingGetResponseBindingsWorkersQueueBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -1146,6 +1250,14 @@ type ServiceEnvironmentSettingGetResponseBindingsWorkersQueueBindingType string
 const (
 	ServiceEnvironmentSettingGetResponseBindingsWorkersQueueBindingTypeQueue ServiceEnvironmentSettingGetResponseBindingsWorkersQueueBindingType = "queue"
 )
+
+func (r ServiceEnvironmentSettingGetResponseBindingsWorkersQueueBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponseBindingsWorkersQueueBindingTypeQueue:
+		return true
+	}
+	return false
+}
 
 type ServiceEnvironmentSettingGetResponseBindingsWorkersD1Binding struct {
 	// ID of the D1 database to bind to
@@ -1189,6 +1301,14 @@ const (
 	ServiceEnvironmentSettingGetResponseBindingsWorkersD1BindingTypeD1 ServiceEnvironmentSettingGetResponseBindingsWorkersD1BindingType = "d1"
 )
 
+func (r ServiceEnvironmentSettingGetResponseBindingsWorkersD1BindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponseBindingsWorkersD1BindingTypeD1:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingGetResponseBindingsWorkersDispatchNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -1230,6 +1350,14 @@ type ServiceEnvironmentSettingGetResponseBindingsWorkersDispatchNamespaceBinding
 const (
 	ServiceEnvironmentSettingGetResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace ServiceEnvironmentSettingGetResponseBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
+
+func (r ServiceEnvironmentSettingGetResponseBindingsWorkersDispatchNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace:
+		return true
+	}
+	return false
+}
 
 // Outbound worker
 type ServiceEnvironmentSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound struct {
@@ -1324,6 +1452,14 @@ type ServiceEnvironmentSettingGetResponseBindingsWorkersMTLSCertBindingType stri
 const (
 	ServiceEnvironmentSettingGetResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate ServiceEnvironmentSettingGetResponseBindingsWorkersMTLSCertBindingType = "mtls_certificate"
 )
+
+func (r ServiceEnvironmentSettingGetResponseBindingsWorkersMTLSCertBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
@@ -1593,6 +1729,14 @@ const (
 	ServiceEnvironmentSettingGetResponsePlacementModeSmart ServiceEnvironmentSettingGetResponsePlacementMode = "smart"
 )
 
+func (r ServiceEnvironmentSettingGetResponsePlacementMode) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponsePlacementModeSmart:
+		return true
+	}
+	return false
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type ServiceEnvironmentSettingGetResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -1712,6 +1856,14 @@ const (
 	ServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace ServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
+func (r ServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment,required"`
@@ -1734,6 +1886,14 @@ type ServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBindingType 
 const (
 	ServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBindingTypeService ServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBindingType = "service"
 )
+
+func (r ServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBindingTypeService:
+		return true
+	}
+	return false
+}
 
 type ServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBinding struct {
 	// The exported class name of the Durable Object
@@ -1760,6 +1920,14 @@ const (
 	ServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBindingTypeDurableObjectNamespace ServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBindingType = "durable_object_namespace"
 )
 
+func (r ServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBindingTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingEditParamsResultBindingsWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName param.Field[string] `json:"bucket_name,required"`
@@ -1781,6 +1949,14 @@ const (
 	ServiceEnvironmentSettingEditParamsResultBindingsWorkersR2BindingTypeR2Bucket ServiceEnvironmentSettingEditParamsResultBindingsWorkersR2BindingType = "r2_bucket"
 )
 
+func (r ServiceEnvironmentSettingEditParamsResultBindingsWorkersR2BindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsResultBindingsWorkersR2BindingTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBinding struct {
 	// Name of the Queue to bind to
 	QueueName param.Field[string] `json:"queue_name,required"`
@@ -1801,6 +1977,14 @@ type ServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBindingType st
 const (
 	ServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBindingTypeQueue ServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBindingType = "queue"
 )
+
+func (r ServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBindingTypeQueue:
+		return true
+	}
+	return false
+}
 
 type ServiceEnvironmentSettingEditParamsResultBindingsWorkersD1Binding struct {
 	// ID of the D1 database to bind to
@@ -1825,6 +2009,14 @@ const (
 	ServiceEnvironmentSettingEditParamsResultBindingsWorkersD1BindingTypeD1 ServiceEnvironmentSettingEditParamsResultBindingsWorkersD1BindingType = "d1"
 )
 
+func (r ServiceEnvironmentSettingEditParamsResultBindingsWorkersD1BindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsResultBindingsWorkersD1BindingTypeD1:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBinding struct {
 	// Namespace to bind to
 	Namespace param.Field[string] `json:"namespace,required"`
@@ -1847,6 +2039,14 @@ type ServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBi
 const (
 	ServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace ServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
+
+func (r ServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace:
+		return true
+	}
+	return false
+}
 
 // Outbound worker
 type ServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingOutbound struct {
@@ -1893,6 +2093,14 @@ type ServiceEnvironmentSettingEditParamsResultBindingsWorkersMTLSCertBindingType
 const (
 	ServiceEnvironmentSettingEditParamsResultBindingsWorkersMTLSCertBindingTypeMTLSCertificate ServiceEnvironmentSettingEditParamsResultBindingsWorkersMTLSCertBindingType = "mtls_certificate"
 )
+
+func (r ServiceEnvironmentSettingEditParamsResultBindingsWorkersMTLSCertBindingType) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsResultBindingsWorkersMTLSCertBindingTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
@@ -2019,6 +2227,14 @@ const (
 	ServiceEnvironmentSettingEditParamsResultPlacementModeSmart ServiceEnvironmentSettingEditParamsResultPlacementMode = "smart"
 )
 
+func (r ServiceEnvironmentSettingEditParamsResultPlacementMode) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsResultPlacementModeSmart:
+		return true
+	}
+	return false
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type ServiceEnvironmentSettingEditParamsResultTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -2039,6 +2255,14 @@ type ServiceEnvironmentSettingEditParamsSuccess bool
 const (
 	ServiceEnvironmentSettingEditParamsSuccessTrue ServiceEnvironmentSettingEditParamsSuccess = true
 )
+
+func (r ServiceEnvironmentSettingEditParamsSuccess) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditParamsSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ServiceEnvironmentSettingEditResponseEnvelope struct {
 	Errors   []ServiceEnvironmentSettingEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -2120,6 +2344,14 @@ type ServiceEnvironmentSettingEditResponseEnvelopeSuccess bool
 const (
 	ServiceEnvironmentSettingEditResponseEnvelopeSuccessTrue ServiceEnvironmentSettingEditResponseEnvelopeSuccess = true
 )
+
+func (r ServiceEnvironmentSettingEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ServiceEnvironmentSettingGetParams struct {
 	// Identifier
@@ -2206,3 +2438,11 @@ type ServiceEnvironmentSettingGetResponseEnvelopeSuccess bool
 const (
 	ServiceEnvironmentSettingGetResponseEnvelopeSuccessTrue ServiceEnvironmentSettingGetResponseEnvelopeSuccess = true
 )
+
+func (r ServiceEnvironmentSettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentSettingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

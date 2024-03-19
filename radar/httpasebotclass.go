@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -262,6 +262,14 @@ const (
 	HTTPAseBotClassGetParamsBotClassLikelyHuman     HTTPAseBotClassGetParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPAseBotClassGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsBotClassLikelyAutomated, HTTPAseBotClassGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPAseBotClassGetParamsDateRange string
 
 const (
@@ -282,6 +290,14 @@ const (
 	HTTPAseBotClassGetParamsDateRange24wControl HTTPAseBotClassGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPAseBotClassGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsDateRange1d, HTTPAseBotClassGetParamsDateRange2d, HTTPAseBotClassGetParamsDateRange7d, HTTPAseBotClassGetParamsDateRange14d, HTTPAseBotClassGetParamsDateRange28d, HTTPAseBotClassGetParamsDateRange12w, HTTPAseBotClassGetParamsDateRange24w, HTTPAseBotClassGetParamsDateRange52w, HTTPAseBotClassGetParamsDateRange1dControl, HTTPAseBotClassGetParamsDateRange2dControl, HTTPAseBotClassGetParamsDateRange7dControl, HTTPAseBotClassGetParamsDateRange14dControl, HTTPAseBotClassGetParamsDateRange28dControl, HTTPAseBotClassGetParamsDateRange12wControl, HTTPAseBotClassGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPAseBotClassGetParamsDeviceType string
 
 const (
@@ -289,6 +305,14 @@ const (
 	HTTPAseBotClassGetParamsDeviceTypeMobile  HTTPAseBotClassGetParamsDeviceType = "MOBILE"
 	HTTPAseBotClassGetParamsDeviceTypeOther   HTTPAseBotClassGetParamsDeviceType = "OTHER"
 )
+
+func (r HTTPAseBotClassGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsDeviceTypeDesktop, HTTPAseBotClassGetParamsDeviceTypeMobile, HTTPAseBotClassGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPAseBotClassGetParamsFormat string
@@ -298,12 +322,28 @@ const (
 	HTTPAseBotClassGetParamsFormatCsv  HTTPAseBotClassGetParamsFormat = "CSV"
 )
 
+func (r HTTPAseBotClassGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsFormatJson, HTTPAseBotClassGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseBotClassGetParamsHTTPProtocol string
 
 const (
 	HTTPAseBotClassGetParamsHTTPProtocolHTTP  HTTPAseBotClassGetParamsHTTPProtocol = "HTTP"
 	HTTPAseBotClassGetParamsHTTPProtocolHTTPS HTTPAseBotClassGetParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPAseBotClassGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsHTTPProtocolHTTP, HTTPAseBotClassGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPAseBotClassGetParamsHTTPVersion string
 
@@ -313,12 +353,28 @@ const (
 	HTTPAseBotClassGetParamsHTTPVersionHttPv3 HTTPAseBotClassGetParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPAseBotClassGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsHTTPVersionHttPv1, HTTPAseBotClassGetParamsHTTPVersionHttPv2, HTTPAseBotClassGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPAseBotClassGetParamsIPVersion string
 
 const (
 	HTTPAseBotClassGetParamsIPVersionIPv4 HTTPAseBotClassGetParamsIPVersion = "IPv4"
 	HTTPAseBotClassGetParamsIPVersionIPv6 HTTPAseBotClassGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPAseBotClassGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsIPVersionIPv4, HTTPAseBotClassGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPAseBotClassGetParamsOS string
 
@@ -332,6 +388,14 @@ const (
 	HTTPAseBotClassGetParamsOSSmartTv  HTTPAseBotClassGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPAseBotClassGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsOSWindows, HTTPAseBotClassGetParamsOSMacosx, HTTPAseBotClassGetParamsOSIos, HTTPAseBotClassGetParamsOSAndroid, HTTPAseBotClassGetParamsOSChromeos, HTTPAseBotClassGetParamsOSLinux, HTTPAseBotClassGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseBotClassGetParamsTLSVersion string
 
 const (
@@ -341,6 +405,14 @@ const (
 	HTTPAseBotClassGetParamsTLSVersionTlSv1_3  HTTPAseBotClassGetParamsTLSVersion = "TLSv1_3"
 	HTTPAseBotClassGetParamsTLSVersionTlSvQuic HTTPAseBotClassGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPAseBotClassGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseBotClassGetParamsTLSVersionTlSv1_0, HTTPAseBotClassGetParamsTLSVersionTlSv1_1, HTTPAseBotClassGetParamsTLSVersionTlSv1_2, HTTPAseBotClassGetParamsTLSVersionTlSv1_3, HTTPAseBotClassGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPAseBotClassGetResponseEnvelope struct {
 	Result  HTTPAseBotClassGetResponse             `json:"result,required"`

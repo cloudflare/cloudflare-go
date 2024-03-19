@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package diagnostics
 
@@ -135,6 +135,14 @@ const (
 	MagicTransitTargetResultColosErrorCouldNotGatherTracerouteDataCode4 MagicTransitTargetResultColosError = "Could not gather traceroute data: Code 4"
 )
 
+func (r MagicTransitTargetResultColosError) IsKnown() bool {
+	switch r {
+	case MagicTransitTargetResultColosErrorEmpty, MagicTransitTargetResultColosErrorCouldNotGatherTracerouteDataCode1, MagicTransitTargetResultColosErrorCouldNotGatherTracerouteDataCode2, MagicTransitTargetResultColosErrorCouldNotGatherTracerouteDataCode3, MagicTransitTargetResultColosErrorCouldNotGatherTracerouteDataCode4:
+		return true
+	}
+	return false
+}
+
 type MagicTransitTargetResultColosHop struct {
 	// An array of node objects.
 	Nodes []MagicTransitTargetResultColosHopsNode `json:"nodes"`
@@ -258,6 +266,14 @@ const (
 	TracerouteNewParamsOptionsPacketTypeGREIcmp TracerouteNewParamsOptionsPacketType = "gre+icmp"
 )
 
+func (r TracerouteNewParamsOptionsPacketType) IsKnown() bool {
+	switch r {
+	case TracerouteNewParamsOptionsPacketTypeIcmp, TracerouteNewParamsOptionsPacketTypeTcp, TracerouteNewParamsOptionsPacketTypeUdp, TracerouteNewParamsOptionsPacketTypeGRE, TracerouteNewParamsOptionsPacketTypeGREIcmp:
+		return true
+	}
+	return false
+}
+
 type TracerouteNewResponseEnvelope struct {
 	Errors   []TracerouteNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TracerouteNewResponseEnvelopeMessages `json:"messages,required"`
@@ -340,6 +356,14 @@ type TracerouteNewResponseEnvelopeSuccess bool
 const (
 	TracerouteNewResponseEnvelopeSuccessTrue TracerouteNewResponseEnvelopeSuccess = true
 )
+
+func (r TracerouteNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TracerouteNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type TracerouteNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -256,6 +256,14 @@ const (
 	AS112TimeseriesParamsAggInterval1w  AS112TimeseriesParamsAggInterval = "1w"
 )
 
+func (r AS112TimeseriesParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesParamsAggInterval15m, AS112TimeseriesParamsAggInterval1h, AS112TimeseriesParamsAggInterval1d, AS112TimeseriesParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AS112TimeseriesParamsDateRange string
 
 const (
@@ -276,6 +284,14 @@ const (
 	AS112TimeseriesParamsDateRange24wControl AS112TimeseriesParamsDateRange = "24wControl"
 )
 
+func (r AS112TimeseriesParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesParamsDateRange1d, AS112TimeseriesParamsDateRange2d, AS112TimeseriesParamsDateRange7d, AS112TimeseriesParamsDateRange14d, AS112TimeseriesParamsDateRange28d, AS112TimeseriesParamsDateRange12w, AS112TimeseriesParamsDateRange24w, AS112TimeseriesParamsDateRange52w, AS112TimeseriesParamsDateRange1dControl, AS112TimeseriesParamsDateRange2dControl, AS112TimeseriesParamsDateRange7dControl, AS112TimeseriesParamsDateRange14dControl, AS112TimeseriesParamsDateRange28dControl, AS112TimeseriesParamsDateRange12wControl, AS112TimeseriesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TimeseriesParamsFormat string
 
@@ -283,6 +299,14 @@ const (
 	AS112TimeseriesParamsFormatJson AS112TimeseriesParamsFormat = "JSON"
 	AS112TimeseriesParamsFormatCsv  AS112TimeseriesParamsFormat = "CSV"
 )
+
+func (r AS112TimeseriesParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesParamsFormatJson, AS112TimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TimeseriesResponseEnvelope struct {
 	Result  AS112TimeseriesResponse             `json:"result,required"`

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package email_routing
 
@@ -187,6 +187,14 @@ const (
 	RoutingRuleNewResponseActionsTypeWorker  RoutingRuleNewResponseActionsType = "worker"
 )
 
+func (r RoutingRuleNewResponseActionsType) IsKnown() bool {
+	switch r {
+	case RoutingRuleNewResponseActionsTypeDrop, RoutingRuleNewResponseActionsTypeForward, RoutingRuleNewResponseActionsTypeWorker:
+		return true
+	}
+	return false
+}
+
 // Routing rule status.
 type RoutingRuleNewResponseEnabled bool
 
@@ -194,6 +202,14 @@ const (
 	RoutingRuleNewResponseEnabledTrue  RoutingRuleNewResponseEnabled = true
 	RoutingRuleNewResponseEnabledFalse RoutingRuleNewResponseEnabled = false
 )
+
+func (r RoutingRuleNewResponseEnabled) IsKnown() bool {
+	switch r {
+	case RoutingRuleNewResponseEnabledTrue, RoutingRuleNewResponseEnabledFalse:
+		return true
+	}
+	return false
+}
 
 // Matching pattern to forward your actions.
 type RoutingRuleNewResponseMatcher struct {
@@ -231,12 +247,28 @@ const (
 	RoutingRuleNewResponseMatchersFieldTo RoutingRuleNewResponseMatchersField = "to"
 )
 
+func (r RoutingRuleNewResponseMatchersField) IsKnown() bool {
+	switch r {
+	case RoutingRuleNewResponseMatchersFieldTo:
+		return true
+	}
+	return false
+}
+
 // Type of matcher.
 type RoutingRuleNewResponseMatchersType string
 
 const (
 	RoutingRuleNewResponseMatchersTypeLiteral RoutingRuleNewResponseMatchersType = "literal"
 )
+
+func (r RoutingRuleNewResponseMatchersType) IsKnown() bool {
+	switch r {
+	case RoutingRuleNewResponseMatchersTypeLiteral:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleUpdateResponse struct {
 	// Routing rule identifier.
@@ -312,6 +344,14 @@ const (
 	RoutingRuleUpdateResponseActionsTypeWorker  RoutingRuleUpdateResponseActionsType = "worker"
 )
 
+func (r RoutingRuleUpdateResponseActionsType) IsKnown() bool {
+	switch r {
+	case RoutingRuleUpdateResponseActionsTypeDrop, RoutingRuleUpdateResponseActionsTypeForward, RoutingRuleUpdateResponseActionsTypeWorker:
+		return true
+	}
+	return false
+}
+
 // Routing rule status.
 type RoutingRuleUpdateResponseEnabled bool
 
@@ -319,6 +359,14 @@ const (
 	RoutingRuleUpdateResponseEnabledTrue  RoutingRuleUpdateResponseEnabled = true
 	RoutingRuleUpdateResponseEnabledFalse RoutingRuleUpdateResponseEnabled = false
 )
+
+func (r RoutingRuleUpdateResponseEnabled) IsKnown() bool {
+	switch r {
+	case RoutingRuleUpdateResponseEnabledTrue, RoutingRuleUpdateResponseEnabledFalse:
+		return true
+	}
+	return false
+}
 
 // Matching pattern to forward your actions.
 type RoutingRuleUpdateResponseMatcher struct {
@@ -356,12 +404,28 @@ const (
 	RoutingRuleUpdateResponseMatchersFieldTo RoutingRuleUpdateResponseMatchersField = "to"
 )
 
+func (r RoutingRuleUpdateResponseMatchersField) IsKnown() bool {
+	switch r {
+	case RoutingRuleUpdateResponseMatchersFieldTo:
+		return true
+	}
+	return false
+}
+
 // Type of matcher.
 type RoutingRuleUpdateResponseMatchersType string
 
 const (
 	RoutingRuleUpdateResponseMatchersTypeLiteral RoutingRuleUpdateResponseMatchersType = "literal"
 )
+
+func (r RoutingRuleUpdateResponseMatchersType) IsKnown() bool {
+	switch r {
+	case RoutingRuleUpdateResponseMatchersTypeLiteral:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleListResponse struct {
 	// Routing rule identifier.
@@ -437,6 +501,14 @@ const (
 	RoutingRuleListResponseActionsTypeWorker  RoutingRuleListResponseActionsType = "worker"
 )
 
+func (r RoutingRuleListResponseActionsType) IsKnown() bool {
+	switch r {
+	case RoutingRuleListResponseActionsTypeDrop, RoutingRuleListResponseActionsTypeForward, RoutingRuleListResponseActionsTypeWorker:
+		return true
+	}
+	return false
+}
+
 // Routing rule status.
 type RoutingRuleListResponseEnabled bool
 
@@ -444,6 +516,14 @@ const (
 	RoutingRuleListResponseEnabledTrue  RoutingRuleListResponseEnabled = true
 	RoutingRuleListResponseEnabledFalse RoutingRuleListResponseEnabled = false
 )
+
+func (r RoutingRuleListResponseEnabled) IsKnown() bool {
+	switch r {
+	case RoutingRuleListResponseEnabledTrue, RoutingRuleListResponseEnabledFalse:
+		return true
+	}
+	return false
+}
 
 // Matching pattern to forward your actions.
 type RoutingRuleListResponseMatcher struct {
@@ -481,12 +561,28 @@ const (
 	RoutingRuleListResponseMatchersFieldTo RoutingRuleListResponseMatchersField = "to"
 )
 
+func (r RoutingRuleListResponseMatchersField) IsKnown() bool {
+	switch r {
+	case RoutingRuleListResponseMatchersFieldTo:
+		return true
+	}
+	return false
+}
+
 // Type of matcher.
 type RoutingRuleListResponseMatchersType string
 
 const (
 	RoutingRuleListResponseMatchersTypeLiteral RoutingRuleListResponseMatchersType = "literal"
 )
+
+func (r RoutingRuleListResponseMatchersType) IsKnown() bool {
+	switch r {
+	case RoutingRuleListResponseMatchersTypeLiteral:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleDeleteResponse struct {
 	// Routing rule identifier.
@@ -562,6 +658,14 @@ const (
 	RoutingRuleDeleteResponseActionsTypeWorker  RoutingRuleDeleteResponseActionsType = "worker"
 )
 
+func (r RoutingRuleDeleteResponseActionsType) IsKnown() bool {
+	switch r {
+	case RoutingRuleDeleteResponseActionsTypeDrop, RoutingRuleDeleteResponseActionsTypeForward, RoutingRuleDeleteResponseActionsTypeWorker:
+		return true
+	}
+	return false
+}
+
 // Routing rule status.
 type RoutingRuleDeleteResponseEnabled bool
 
@@ -569,6 +673,14 @@ const (
 	RoutingRuleDeleteResponseEnabledTrue  RoutingRuleDeleteResponseEnabled = true
 	RoutingRuleDeleteResponseEnabledFalse RoutingRuleDeleteResponseEnabled = false
 )
+
+func (r RoutingRuleDeleteResponseEnabled) IsKnown() bool {
+	switch r {
+	case RoutingRuleDeleteResponseEnabledTrue, RoutingRuleDeleteResponseEnabledFalse:
+		return true
+	}
+	return false
+}
 
 // Matching pattern to forward your actions.
 type RoutingRuleDeleteResponseMatcher struct {
@@ -606,12 +718,28 @@ const (
 	RoutingRuleDeleteResponseMatchersFieldTo RoutingRuleDeleteResponseMatchersField = "to"
 )
 
+func (r RoutingRuleDeleteResponseMatchersField) IsKnown() bool {
+	switch r {
+	case RoutingRuleDeleteResponseMatchersFieldTo:
+		return true
+	}
+	return false
+}
+
 // Type of matcher.
 type RoutingRuleDeleteResponseMatchersType string
 
 const (
 	RoutingRuleDeleteResponseMatchersTypeLiteral RoutingRuleDeleteResponseMatchersType = "literal"
 )
+
+func (r RoutingRuleDeleteResponseMatchersType) IsKnown() bool {
+	switch r {
+	case RoutingRuleDeleteResponseMatchersTypeLiteral:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleGetResponse struct {
 	// Routing rule identifier.
@@ -687,6 +815,14 @@ const (
 	RoutingRuleGetResponseActionsTypeWorker  RoutingRuleGetResponseActionsType = "worker"
 )
 
+func (r RoutingRuleGetResponseActionsType) IsKnown() bool {
+	switch r {
+	case RoutingRuleGetResponseActionsTypeDrop, RoutingRuleGetResponseActionsTypeForward, RoutingRuleGetResponseActionsTypeWorker:
+		return true
+	}
+	return false
+}
+
 // Routing rule status.
 type RoutingRuleGetResponseEnabled bool
 
@@ -694,6 +830,14 @@ const (
 	RoutingRuleGetResponseEnabledTrue  RoutingRuleGetResponseEnabled = true
 	RoutingRuleGetResponseEnabledFalse RoutingRuleGetResponseEnabled = false
 )
+
+func (r RoutingRuleGetResponseEnabled) IsKnown() bool {
+	switch r {
+	case RoutingRuleGetResponseEnabledTrue, RoutingRuleGetResponseEnabledFalse:
+		return true
+	}
+	return false
+}
 
 // Matching pattern to forward your actions.
 type RoutingRuleGetResponseMatcher struct {
@@ -731,12 +875,28 @@ const (
 	RoutingRuleGetResponseMatchersFieldTo RoutingRuleGetResponseMatchersField = "to"
 )
 
+func (r RoutingRuleGetResponseMatchersField) IsKnown() bool {
+	switch r {
+	case RoutingRuleGetResponseMatchersFieldTo:
+		return true
+	}
+	return false
+}
+
 // Type of matcher.
 type RoutingRuleGetResponseMatchersType string
 
 const (
 	RoutingRuleGetResponseMatchersTypeLiteral RoutingRuleGetResponseMatchersType = "literal"
 )
+
+func (r RoutingRuleGetResponseMatchersType) IsKnown() bool {
+	switch r {
+	case RoutingRuleGetResponseMatchersTypeLiteral:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleNewParams struct {
 	// List actions patterns.
@@ -775,6 +935,14 @@ const (
 	RoutingRuleNewParamsActionsTypeWorker  RoutingRuleNewParamsActionsType = "worker"
 )
 
+func (r RoutingRuleNewParamsActionsType) IsKnown() bool {
+	switch r {
+	case RoutingRuleNewParamsActionsTypeDrop, RoutingRuleNewParamsActionsTypeForward, RoutingRuleNewParamsActionsTypeWorker:
+		return true
+	}
+	return false
+}
+
 // Matching pattern to forward your actions.
 type RoutingRuleNewParamsMatcher struct {
 	// Field for type matcher.
@@ -796,12 +964,28 @@ const (
 	RoutingRuleNewParamsMatchersFieldTo RoutingRuleNewParamsMatchersField = "to"
 )
 
+func (r RoutingRuleNewParamsMatchersField) IsKnown() bool {
+	switch r {
+	case RoutingRuleNewParamsMatchersFieldTo:
+		return true
+	}
+	return false
+}
+
 // Type of matcher.
 type RoutingRuleNewParamsMatchersType string
 
 const (
 	RoutingRuleNewParamsMatchersTypeLiteral RoutingRuleNewParamsMatchersType = "literal"
 )
+
+func (r RoutingRuleNewParamsMatchersType) IsKnown() bool {
+	switch r {
+	case RoutingRuleNewParamsMatchersTypeLiteral:
+		return true
+	}
+	return false
+}
 
 // Routing rule status.
 type RoutingRuleNewParamsEnabled bool
@@ -810,6 +994,14 @@ const (
 	RoutingRuleNewParamsEnabledTrue  RoutingRuleNewParamsEnabled = true
 	RoutingRuleNewParamsEnabledFalse RoutingRuleNewParamsEnabled = false
 )
+
+func (r RoutingRuleNewParamsEnabled) IsKnown() bool {
+	switch r {
+	case RoutingRuleNewParamsEnabledTrue, RoutingRuleNewParamsEnabledFalse:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleNewResponseEnvelope struct {
 	Errors   []RoutingRuleNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -892,6 +1084,14 @@ const (
 	RoutingRuleNewResponseEnvelopeSuccessTrue RoutingRuleNewResponseEnvelopeSuccess = true
 )
 
+func (r RoutingRuleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingRuleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RoutingRuleUpdateParams struct {
 	// List actions patterns.
 	Actions param.Field[[]RoutingRuleUpdateParamsAction] `json:"actions,required"`
@@ -929,6 +1129,14 @@ const (
 	RoutingRuleUpdateParamsActionsTypeWorker  RoutingRuleUpdateParamsActionsType = "worker"
 )
 
+func (r RoutingRuleUpdateParamsActionsType) IsKnown() bool {
+	switch r {
+	case RoutingRuleUpdateParamsActionsTypeDrop, RoutingRuleUpdateParamsActionsTypeForward, RoutingRuleUpdateParamsActionsTypeWorker:
+		return true
+	}
+	return false
+}
+
 // Matching pattern to forward your actions.
 type RoutingRuleUpdateParamsMatcher struct {
 	// Field for type matcher.
@@ -950,12 +1158,28 @@ const (
 	RoutingRuleUpdateParamsMatchersFieldTo RoutingRuleUpdateParamsMatchersField = "to"
 )
 
+func (r RoutingRuleUpdateParamsMatchersField) IsKnown() bool {
+	switch r {
+	case RoutingRuleUpdateParamsMatchersFieldTo:
+		return true
+	}
+	return false
+}
+
 // Type of matcher.
 type RoutingRuleUpdateParamsMatchersType string
 
 const (
 	RoutingRuleUpdateParamsMatchersTypeLiteral RoutingRuleUpdateParamsMatchersType = "literal"
 )
+
+func (r RoutingRuleUpdateParamsMatchersType) IsKnown() bool {
+	switch r {
+	case RoutingRuleUpdateParamsMatchersTypeLiteral:
+		return true
+	}
+	return false
+}
 
 // Routing rule status.
 type RoutingRuleUpdateParamsEnabled bool
@@ -964,6 +1188,14 @@ const (
 	RoutingRuleUpdateParamsEnabledTrue  RoutingRuleUpdateParamsEnabled = true
 	RoutingRuleUpdateParamsEnabledFalse RoutingRuleUpdateParamsEnabled = false
 )
+
+func (r RoutingRuleUpdateParamsEnabled) IsKnown() bool {
+	switch r {
+	case RoutingRuleUpdateParamsEnabledTrue, RoutingRuleUpdateParamsEnabledFalse:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleUpdateResponseEnvelope struct {
 	Errors   []RoutingRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -1046,6 +1278,14 @@ const (
 	RoutingRuleUpdateResponseEnvelopeSuccessTrue RoutingRuleUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RoutingRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingRuleUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RoutingRuleListParams struct {
 	// Filter by enabled routing rules.
 	Enabled param.Field[RoutingRuleListParamsEnabled] `query:"enabled"`
@@ -1070,6 +1310,14 @@ const (
 	RoutingRuleListParamsEnabledTrue  RoutingRuleListParamsEnabled = true
 	RoutingRuleListParamsEnabledFalse RoutingRuleListParamsEnabled = false
 )
+
+func (r RoutingRuleListParamsEnabled) IsKnown() bool {
+	switch r {
+	case RoutingRuleListParamsEnabledTrue, RoutingRuleListParamsEnabledFalse:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleDeleteResponseEnvelope struct {
 	Errors   []RoutingRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1152,6 +1400,14 @@ const (
 	RoutingRuleDeleteResponseEnvelopeSuccessTrue RoutingRuleDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RoutingRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingRuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RoutingRuleGetResponseEnvelope struct {
 	Errors   []RoutingRuleGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RoutingRuleGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1232,3 +1488,11 @@ type RoutingRuleGetResponseEnvelopeSuccess bool
 const (
 	RoutingRuleGetResponseEnvelopeSuccessTrue RoutingRuleGetResponseEnvelopeSuccess = true
 )
+
+func (r RoutingRuleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingRuleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

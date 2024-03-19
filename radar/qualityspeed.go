@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -318,6 +318,14 @@ const (
 	QualitySpeedHistogramParamsFormatCsv  QualitySpeedHistogramParamsFormat = "CSV"
 )
 
+func (r QualitySpeedHistogramParamsFormat) IsKnown() bool {
+	switch r {
+	case QualitySpeedHistogramParamsFormatJson, QualitySpeedHistogramParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 // Metrics to be returned.
 type QualitySpeedHistogramParamsMetricGroup string
 
@@ -326,6 +334,14 @@ const (
 	QualitySpeedHistogramParamsMetricGroupLatency   QualitySpeedHistogramParamsMetricGroup = "LATENCY"
 	QualitySpeedHistogramParamsMetricGroupJitter    QualitySpeedHistogramParamsMetricGroup = "JITTER"
 )
+
+func (r QualitySpeedHistogramParamsMetricGroup) IsKnown() bool {
+	switch r {
+	case QualitySpeedHistogramParamsMetricGroupBandwidth, QualitySpeedHistogramParamsMetricGroupLatency, QualitySpeedHistogramParamsMetricGroupJitter:
+		return true
+	}
+	return false
+}
 
 type QualitySpeedHistogramResponseEnvelope struct {
 	Result  QualitySpeedHistogramResponse             `json:"result,required"`
@@ -387,6 +403,14 @@ const (
 	QualitySpeedSummaryParamsFormatJson QualitySpeedSummaryParamsFormat = "JSON"
 	QualitySpeedSummaryParamsFormatCsv  QualitySpeedSummaryParamsFormat = "CSV"
 )
+
+func (r QualitySpeedSummaryParamsFormat) IsKnown() bool {
+	switch r {
+	case QualitySpeedSummaryParamsFormatJson, QualitySpeedSummaryParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type QualitySpeedSummaryResponseEnvelope struct {
 	Result  QualitySpeedSummaryResponse             `json:"result,required"`

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package user
 
@@ -177,3 +177,11 @@ type LoadBalancerPreviewGetResponseEnvelopeSuccess bool
 const (
 	LoadBalancerPreviewGetResponseEnvelopeSuccessTrue LoadBalancerPreviewGetResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerPreviewGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPreviewGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

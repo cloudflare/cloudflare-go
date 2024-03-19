@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -110,6 +110,14 @@ const (
 	ZonesMirageIDMirage ZonesMirageID = "mirage"
 )
 
+func (r ZonesMirageID) IsKnown() bool {
+	switch r {
+	case ZonesMirageIDMirage:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesMirageValue string
 
@@ -117,6 +125,14 @@ const (
 	ZonesMirageValueOn  ZonesMirageValue = "on"
 	ZonesMirageValueOff ZonesMirageValue = "off"
 )
+
+func (r ZonesMirageValue) IsKnown() bool {
+	switch r {
+	case ZonesMirageValueOn, ZonesMirageValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -126,6 +142,14 @@ const (
 	ZonesMirageEditableTrue  ZonesMirageEditable = true
 	ZonesMirageEditableFalse ZonesMirageEditable = false
 )
+
+func (r ZonesMirageEditable) IsKnown() bool {
+	switch r {
+	case ZonesMirageEditableTrue, ZonesMirageEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to
@@ -162,6 +186,14 @@ const (
 	SettingMirageEditParamsValueOn  SettingMirageEditParamsValue = "on"
 	SettingMirageEditParamsValueOff SettingMirageEditParamsValue = "off"
 )
+
+func (r SettingMirageEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingMirageEditParamsValueOn, SettingMirageEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingMirageEditResponseEnvelope struct {
 	Errors   []SettingMirageEditResponseEnvelopeErrors   `json:"errors,required"`

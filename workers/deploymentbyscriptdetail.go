@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers
 
@@ -156,3 +156,11 @@ type DeploymentByScriptDetailGetResponseEnvelopeSuccess bool
 const (
 	DeploymentByScriptDetailGetResponseEnvelopeSuccessTrue DeploymentByScriptDetailGetResponseEnvelopeSuccess = true
 )
+
+func (r DeploymentByScriptDetailGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeploymentByScriptDetailGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit_test
 
@@ -28,13 +28,10 @@ func TestGRETunnelNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.GRETunnels.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.GRETunnelNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
-		},
-	)
+	_, err := client.MagicTransit.GRETunnels.New(context.TODO(), magic_transit.GRETunnelNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body:      cloudflare.F[any](map[string]interface{}{}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -61,8 +58,8 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.MagicTransit.GRETunnels.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.GRETunnelUpdateParams{
+			AccountID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CloudflareGREEndpoint: cloudflare.F("203.0.113.1"),
 			CustomerGREEndpoint:   cloudflare.F("203.0.113.1"),
 			InterfaceAddress:      cloudflare.F("192.0.2.0/31"),
@@ -102,7 +99,9 @@ func TestGRETunnelList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.GRETunnels.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.MagicTransit.GRETunnels.List(context.TODO(), magic_transit.GRETunnelListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -129,7 +128,9 @@ func TestGRETunnelDelete(t *testing.T) {
 	_, err := client.MagicTransit.GRETunnels.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.GRETunnelDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -157,7 +158,9 @@ func TestGRETunnelGet(t *testing.T) {
 	_, err := client.MagicTransit.GRETunnels.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.GRETunnelGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

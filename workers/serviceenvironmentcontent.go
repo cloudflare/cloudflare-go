@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers
 
@@ -183,6 +183,14 @@ type ServiceEnvironmentContentUpdateResponseEnvelopeSuccess bool
 const (
 	ServiceEnvironmentContentUpdateResponseEnvelopeSuccessTrue ServiceEnvironmentContentUpdateResponseEnvelopeSuccess = true
 )
+
+func (r ServiceEnvironmentContentUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentContentUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ServiceEnvironmentContentGetParams struct {
 	// Identifier

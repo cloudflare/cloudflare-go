@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package kv
 
@@ -260,6 +260,14 @@ const (
 	NamespaceNewResponseEnvelopeSuccessTrue NamespaceNewResponseEnvelopeSuccess = true
 )
 
+func (r NamespaceNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NamespaceUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -352,6 +360,14 @@ const (
 	NamespaceUpdateResponseEnvelopeSuccessTrue NamespaceUpdateResponseEnvelopeSuccess = true
 )
 
+func (r NamespaceUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NamespaceListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -381,6 +397,14 @@ const (
 	NamespaceListParamsDirectionDesc NamespaceListParamsDirection = "desc"
 )
 
+func (r NamespaceListParamsDirection) IsKnown() bool {
+	switch r {
+	case NamespaceListParamsDirectionAsc, NamespaceListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Field to order results by.
 type NamespaceListParamsOrder string
 
@@ -388,6 +412,14 @@ const (
 	NamespaceListParamsOrderID    NamespaceListParamsOrder = "id"
 	NamespaceListParamsOrderTitle NamespaceListParamsOrder = "title"
 )
+
+func (r NamespaceListParamsOrder) IsKnown() bool {
+	switch r {
+	case NamespaceListParamsOrderID, NamespaceListParamsOrderTitle:
+		return true
+	}
+	return false
+}
 
 type NamespaceDeleteParams struct {
 	// Identifier
@@ -474,3 +506,11 @@ type NamespaceDeleteResponseEnvelopeSuccess bool
 const (
 	NamespaceDeleteResponseEnvelopeSuccessTrue NamespaceDeleteResponseEnvelopeSuccess = true
 )
+
+func (r NamespaceDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

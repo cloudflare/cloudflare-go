@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -208,6 +208,14 @@ const (
 	DevicePolicyExcludeUpdateResponseEnvelopeSuccessTrue DevicePolicyExcludeUpdateResponseEnvelopeSuccess = true
 )
 
+func (r DevicePolicyExcludeUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyExcludeUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePolicyExcludeUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -326,6 +334,14 @@ const (
 	DevicePolicyExcludeListResponseEnvelopeSuccessTrue DevicePolicyExcludeListResponseEnvelopeSuccess = true
 )
 
+func (r DevicePolicyExcludeListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyExcludeListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePolicyExcludeListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -443,6 +459,14 @@ type DevicePolicyExcludeGetResponseEnvelopeSuccess bool
 const (
 	DevicePolicyExcludeGetResponseEnvelopeSuccessTrue DevicePolicyExcludeGetResponseEnvelopeSuccess = true
 )
+
+func (r DevicePolicyExcludeGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyExcludeGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePolicyExcludeGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

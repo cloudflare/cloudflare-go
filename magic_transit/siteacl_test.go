@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit_test
 
@@ -32,8 +32,8 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 	_, err := client.MagicTransit.Sites.ACLs.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteACLNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ACL: cloudflare.F(magic_transit.SiteACLNewParamsACL{
 				Description: cloudflare.F("Allows local traffic between PIN pads and cash register."),
 				Lan1: cloudflare.F(magic_transit.SiteACLNewParamsACLLan1{
@@ -80,8 +80,8 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteACLUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ACL: cloudflare.F(magic_transit.SiteACLUpdateParamsACL{
 				Description: cloudflare.F("Allows local traffic between PIN pads and cash register."),
 				Lan1: cloudflare.F(magic_transit.SiteACLUpdateParamsACLLan1{
@@ -127,7 +127,9 @@ func TestSiteACLList(t *testing.T) {
 	_, err := client.MagicTransit.Sites.ACLs.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteACLListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -156,7 +158,9 @@ func TestSiteACLDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteACLDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -185,7 +189,9 @@ func TestSiteACLGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteACLGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

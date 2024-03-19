@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package rules
 
@@ -129,3 +129,11 @@ type ListBulkOperationGetResponseEnvelopeSuccess bool
 const (
 	ListBulkOperationGetResponseEnvelopeSuccessTrue ListBulkOperationGetResponseEnvelopeSuccess = true
 )
+
+func (r ListBulkOperationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListBulkOperationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

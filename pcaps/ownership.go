@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package pcaps
 
@@ -124,6 +124,14 @@ const (
 	MagicVisibilityPCAPsOwnershipStatusFailed  MagicVisibilityPCAPsOwnershipStatus = "failed"
 )
 
+func (r MagicVisibilityPCAPsOwnershipStatus) IsKnown() bool {
+	switch r {
+	case MagicVisibilityPCAPsOwnershipStatusPending, MagicVisibilityPCAPsOwnershipStatusSuccess, MagicVisibilityPCAPsOwnershipStatusFailed:
+		return true
+	}
+	return false
+}
+
 type OwnershipNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -215,6 +223,14 @@ type OwnershipNewResponseEnvelopeSuccess bool
 const (
 	OwnershipNewResponseEnvelopeSuccessTrue OwnershipNewResponseEnvelopeSuccess = true
 )
+
+func (r OwnershipNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OwnershipNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type OwnershipDeleteParams struct {
 	// Identifier
@@ -308,6 +324,14 @@ type OwnershipGetResponseEnvelopeSuccess bool
 const (
 	OwnershipGetResponseEnvelopeSuccessTrue OwnershipGetResponseEnvelopeSuccess = true
 )
+
+func (r OwnershipGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OwnershipGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type OwnershipGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -433,3 +457,11 @@ type OwnershipValidateResponseEnvelopeSuccess bool
 const (
 	OwnershipValidateResponseEnvelopeSuccessTrue OwnershipValidateResponseEnvelopeSuccess = true
 )
+
+func (r OwnershipValidateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OwnershipValidateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

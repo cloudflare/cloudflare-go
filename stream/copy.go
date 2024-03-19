@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package stream
 
@@ -174,3 +174,11 @@ type CopyNewResponseEnvelopeSuccess bool
 const (
 	CopyNewResponseEnvelopeSuccessTrue CopyNewResponseEnvelopeSuccess = true
 )
+
+func (r CopyNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CopyNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

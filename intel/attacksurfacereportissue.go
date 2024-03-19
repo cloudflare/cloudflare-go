@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -267,6 +267,14 @@ const (
 	AttackSurfaceReportIssueListResponseResultIssuesIssueTypeWeakAuthentication    AttackSurfaceReportIssueListResponseResultIssuesIssueType = "weak_authentication"
 )
 
+func (r AttackSurfaceReportIssueListResponseResultIssuesIssueType) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListResponseResultIssuesIssueTypeComplianceViolation, AttackSurfaceReportIssueListResponseResultIssuesIssueTypeEmailSecurity, AttackSurfaceReportIssueListResponseResultIssuesIssueTypeExposedInfrastructure, AttackSurfaceReportIssueListResponseResultIssuesIssueTypeInsecureConfiguration, AttackSurfaceReportIssueListResponseResultIssuesIssueTypeWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueListResponseResultIssuesSeverity string
 
 const (
@@ -275,12 +283,28 @@ const (
 	AttackSurfaceReportIssueListResponseResultIssuesSeverityCritical AttackSurfaceReportIssueListResponseResultIssuesSeverity = "Critical"
 )
 
+func (r AttackSurfaceReportIssueListResponseResultIssuesSeverity) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListResponseResultIssuesSeverityLow, AttackSurfaceReportIssueListResponseResultIssuesSeverityModerate, AttackSurfaceReportIssueListResponseResultIssuesSeverityCritical:
+		return true
+	}
+	return false
+}
+
 // Whether the API call was successful
 type AttackSurfaceReportIssueListResponseSuccess bool
 
 const (
 	AttackSurfaceReportIssueListResponseSuccessTrue AttackSurfaceReportIssueListResponseSuccess = true
 )
+
+func (r AttackSurfaceReportIssueListResponseSuccess) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListResponseSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AttackSurfaceReportIssueClassResponse struct {
 	Count int64                                     `json:"count"`
@@ -407,6 +431,14 @@ const (
 	AttackSurfaceReportIssueListParamsIssueTypeWeakAuthentication    AttackSurfaceReportIssueListParamsIssueType = "weak_authentication"
 )
 
+func (r AttackSurfaceReportIssueListParamsIssueType) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListParamsIssueTypeComplianceViolation, AttackSurfaceReportIssueListParamsIssueTypeEmailSecurity, AttackSurfaceReportIssueListParamsIssueTypeExposedInfrastructure, AttackSurfaceReportIssueListParamsIssueTypeInsecureConfiguration, AttackSurfaceReportIssueListParamsIssueTypeWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueListParamsIssueTypeNeq string
 
 const (
@@ -417,6 +449,14 @@ const (
 	AttackSurfaceReportIssueListParamsIssueTypeNeqWeakAuthentication    AttackSurfaceReportIssueListParamsIssueTypeNeq = "weak_authentication"
 )
 
+func (r AttackSurfaceReportIssueListParamsIssueTypeNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListParamsIssueTypeNeqComplianceViolation, AttackSurfaceReportIssueListParamsIssueTypeNeqEmailSecurity, AttackSurfaceReportIssueListParamsIssueTypeNeqExposedInfrastructure, AttackSurfaceReportIssueListParamsIssueTypeNeqInsecureConfiguration, AttackSurfaceReportIssueListParamsIssueTypeNeqWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueListParamsSeverity string
 
 const (
@@ -425,6 +465,14 @@ const (
 	AttackSurfaceReportIssueListParamsSeverityCritical AttackSurfaceReportIssueListParamsSeverity = "critical"
 )
 
+func (r AttackSurfaceReportIssueListParamsSeverity) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListParamsSeverityLow, AttackSurfaceReportIssueListParamsSeverityModerate, AttackSurfaceReportIssueListParamsSeverityCritical:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueListParamsSeverityNeq string
 
 const (
@@ -432,6 +480,14 @@ const (
 	AttackSurfaceReportIssueListParamsSeverityNeqModerate AttackSurfaceReportIssueListParamsSeverityNeq = "moderate"
 	AttackSurfaceReportIssueListParamsSeverityNeqCritical AttackSurfaceReportIssueListParamsSeverityNeq = "critical"
 )
+
+func (r AttackSurfaceReportIssueListParamsSeverityNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueListParamsSeverityNeqLow, AttackSurfaceReportIssueListParamsSeverityNeqModerate, AttackSurfaceReportIssueListParamsSeverityNeqCritical:
+		return true
+	}
+	return false
+}
 
 type AttackSurfaceReportIssueClassParams struct {
 	// Identifier
@@ -468,6 +524,14 @@ const (
 	AttackSurfaceReportIssueClassParamsIssueTypeWeakAuthentication    AttackSurfaceReportIssueClassParamsIssueType = "weak_authentication"
 )
 
+func (r AttackSurfaceReportIssueClassParamsIssueType) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueClassParamsIssueTypeComplianceViolation, AttackSurfaceReportIssueClassParamsIssueTypeEmailSecurity, AttackSurfaceReportIssueClassParamsIssueTypeExposedInfrastructure, AttackSurfaceReportIssueClassParamsIssueTypeInsecureConfiguration, AttackSurfaceReportIssueClassParamsIssueTypeWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueClassParamsIssueTypeNeq string
 
 const (
@@ -478,6 +542,14 @@ const (
 	AttackSurfaceReportIssueClassParamsIssueTypeNeqWeakAuthentication    AttackSurfaceReportIssueClassParamsIssueTypeNeq = "weak_authentication"
 )
 
+func (r AttackSurfaceReportIssueClassParamsIssueTypeNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueClassParamsIssueTypeNeqComplianceViolation, AttackSurfaceReportIssueClassParamsIssueTypeNeqEmailSecurity, AttackSurfaceReportIssueClassParamsIssueTypeNeqExposedInfrastructure, AttackSurfaceReportIssueClassParamsIssueTypeNeqInsecureConfiguration, AttackSurfaceReportIssueClassParamsIssueTypeNeqWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueClassParamsSeverity string
 
 const (
@@ -486,6 +558,14 @@ const (
 	AttackSurfaceReportIssueClassParamsSeverityCritical AttackSurfaceReportIssueClassParamsSeverity = "critical"
 )
 
+func (r AttackSurfaceReportIssueClassParamsSeverity) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueClassParamsSeverityLow, AttackSurfaceReportIssueClassParamsSeverityModerate, AttackSurfaceReportIssueClassParamsSeverityCritical:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueClassParamsSeverityNeq string
 
 const (
@@ -493,6 +573,14 @@ const (
 	AttackSurfaceReportIssueClassParamsSeverityNeqModerate AttackSurfaceReportIssueClassParamsSeverityNeq = "moderate"
 	AttackSurfaceReportIssueClassParamsSeverityNeqCritical AttackSurfaceReportIssueClassParamsSeverityNeq = "critical"
 )
+
+func (r AttackSurfaceReportIssueClassParamsSeverityNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueClassParamsSeverityNeqLow, AttackSurfaceReportIssueClassParamsSeverityNeqModerate, AttackSurfaceReportIssueClassParamsSeverityNeqCritical:
+		return true
+	}
+	return false
+}
 
 type AttackSurfaceReportIssueClassResponseEnvelope struct {
 	Errors   []AttackSurfaceReportIssueClassResponseEnvelopeErrors   `json:"errors,required"`
@@ -574,6 +662,14 @@ type AttackSurfaceReportIssueClassResponseEnvelopeSuccess bool
 const (
 	AttackSurfaceReportIssueClassResponseEnvelopeSuccessTrue AttackSurfaceReportIssueClassResponseEnvelopeSuccess = true
 )
+
+func (r AttackSurfaceReportIssueClassResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueClassResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AttackSurfaceReportIssueDismissParams struct {
 	// Identifier
@@ -667,6 +763,14 @@ const (
 	AttackSurfaceReportIssueDismissResponseEnvelopeSuccessTrue AttackSurfaceReportIssueDismissResponseEnvelopeSuccess = true
 )
 
+func (r AttackSurfaceReportIssueDismissResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueDismissResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueSeverityParams struct {
 	// Identifier
 	AccountID     param.Field[string]                                               `path:"account_id,required"`
@@ -702,6 +806,14 @@ const (
 	AttackSurfaceReportIssueSeverityParamsIssueTypeWeakAuthentication    AttackSurfaceReportIssueSeverityParamsIssueType = "weak_authentication"
 )
 
+func (r AttackSurfaceReportIssueSeverityParamsIssueType) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueSeverityParamsIssueTypeComplianceViolation, AttackSurfaceReportIssueSeverityParamsIssueTypeEmailSecurity, AttackSurfaceReportIssueSeverityParamsIssueTypeExposedInfrastructure, AttackSurfaceReportIssueSeverityParamsIssueTypeInsecureConfiguration, AttackSurfaceReportIssueSeverityParamsIssueTypeWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueSeverityParamsIssueTypeNeq string
 
 const (
@@ -712,6 +824,14 @@ const (
 	AttackSurfaceReportIssueSeverityParamsIssueTypeNeqWeakAuthentication    AttackSurfaceReportIssueSeverityParamsIssueTypeNeq = "weak_authentication"
 )
 
+func (r AttackSurfaceReportIssueSeverityParamsIssueTypeNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueSeverityParamsIssueTypeNeqComplianceViolation, AttackSurfaceReportIssueSeverityParamsIssueTypeNeqEmailSecurity, AttackSurfaceReportIssueSeverityParamsIssueTypeNeqExposedInfrastructure, AttackSurfaceReportIssueSeverityParamsIssueTypeNeqInsecureConfiguration, AttackSurfaceReportIssueSeverityParamsIssueTypeNeqWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueSeverityParamsSeverity string
 
 const (
@@ -720,6 +840,14 @@ const (
 	AttackSurfaceReportIssueSeverityParamsSeverityCritical AttackSurfaceReportIssueSeverityParamsSeverity = "critical"
 )
 
+func (r AttackSurfaceReportIssueSeverityParamsSeverity) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueSeverityParamsSeverityLow, AttackSurfaceReportIssueSeverityParamsSeverityModerate, AttackSurfaceReportIssueSeverityParamsSeverityCritical:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueSeverityParamsSeverityNeq string
 
 const (
@@ -727,6 +855,14 @@ const (
 	AttackSurfaceReportIssueSeverityParamsSeverityNeqModerate AttackSurfaceReportIssueSeverityParamsSeverityNeq = "moderate"
 	AttackSurfaceReportIssueSeverityParamsSeverityNeqCritical AttackSurfaceReportIssueSeverityParamsSeverityNeq = "critical"
 )
+
+func (r AttackSurfaceReportIssueSeverityParamsSeverityNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueSeverityParamsSeverityNeqLow, AttackSurfaceReportIssueSeverityParamsSeverityNeqModerate, AttackSurfaceReportIssueSeverityParamsSeverityNeqCritical:
+		return true
+	}
+	return false
+}
 
 type AttackSurfaceReportIssueSeverityResponseEnvelope struct {
 	Errors   []AttackSurfaceReportIssueSeverityResponseEnvelopeErrors   `json:"errors,required"`
@@ -810,6 +946,14 @@ const (
 	AttackSurfaceReportIssueSeverityResponseEnvelopeSuccessTrue AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess = true
 )
 
+func (r AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueSeverityResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueTypeParams struct {
 	// Identifier
 	AccountID     param.Field[string]                                           `path:"account_id,required"`
@@ -845,6 +989,14 @@ const (
 	AttackSurfaceReportIssueTypeParamsIssueTypeWeakAuthentication    AttackSurfaceReportIssueTypeParamsIssueType = "weak_authentication"
 )
 
+func (r AttackSurfaceReportIssueTypeParamsIssueType) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueTypeParamsIssueTypeComplianceViolation, AttackSurfaceReportIssueTypeParamsIssueTypeEmailSecurity, AttackSurfaceReportIssueTypeParamsIssueTypeExposedInfrastructure, AttackSurfaceReportIssueTypeParamsIssueTypeInsecureConfiguration, AttackSurfaceReportIssueTypeParamsIssueTypeWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueTypeParamsIssueTypeNeq string
 
 const (
@@ -855,6 +1007,14 @@ const (
 	AttackSurfaceReportIssueTypeParamsIssueTypeNeqWeakAuthentication    AttackSurfaceReportIssueTypeParamsIssueTypeNeq = "weak_authentication"
 )
 
+func (r AttackSurfaceReportIssueTypeParamsIssueTypeNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueTypeParamsIssueTypeNeqComplianceViolation, AttackSurfaceReportIssueTypeParamsIssueTypeNeqEmailSecurity, AttackSurfaceReportIssueTypeParamsIssueTypeNeqExposedInfrastructure, AttackSurfaceReportIssueTypeParamsIssueTypeNeqInsecureConfiguration, AttackSurfaceReportIssueTypeParamsIssueTypeNeqWeakAuthentication:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueTypeParamsSeverity string
 
 const (
@@ -863,6 +1023,14 @@ const (
 	AttackSurfaceReportIssueTypeParamsSeverityCritical AttackSurfaceReportIssueTypeParamsSeverity = "critical"
 )
 
+func (r AttackSurfaceReportIssueTypeParamsSeverity) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueTypeParamsSeverityLow, AttackSurfaceReportIssueTypeParamsSeverityModerate, AttackSurfaceReportIssueTypeParamsSeverityCritical:
+		return true
+	}
+	return false
+}
+
 type AttackSurfaceReportIssueTypeParamsSeverityNeq string
 
 const (
@@ -870,6 +1038,14 @@ const (
 	AttackSurfaceReportIssueTypeParamsSeverityNeqModerate AttackSurfaceReportIssueTypeParamsSeverityNeq = "moderate"
 	AttackSurfaceReportIssueTypeParamsSeverityNeqCritical AttackSurfaceReportIssueTypeParamsSeverityNeq = "critical"
 )
+
+func (r AttackSurfaceReportIssueTypeParamsSeverityNeq) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueTypeParamsSeverityNeqLow, AttackSurfaceReportIssueTypeParamsSeverityNeqModerate, AttackSurfaceReportIssueTypeParamsSeverityNeqCritical:
+		return true
+	}
+	return false
+}
 
 type AttackSurfaceReportIssueTypeResponseEnvelope struct {
 	Errors   []AttackSurfaceReportIssueTypeResponseEnvelopeErrors   `json:"errors,required"`
@@ -951,3 +1127,11 @@ type AttackSurfaceReportIssueTypeResponseEnvelopeSuccess bool
 const (
 	AttackSurfaceReportIssueTypeResponseEnvelopeSuccessTrue AttackSurfaceReportIssueTypeResponseEnvelopeSuccess = true
 )
+
+func (r AttackSurfaceReportIssueTypeResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueTypeResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

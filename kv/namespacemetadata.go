@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package kv
 
@@ -134,3 +134,11 @@ type NamespaceMetadataGetResponseEnvelopeSuccess bool
 const (
 	NamespaceMetadataGetResponseEnvelopeSuccessTrue NamespaceMetadataGetResponseEnvelopeSuccess = true
 )
+
+func (r NamespaceMetadataGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceMetadataGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package logpush
 
@@ -134,6 +134,14 @@ const (
 	LogpushLogpushJobFrequencyLow  LogpushLogpushJobFrequency = "low"
 )
 
+func (r LogpushLogpushJobFrequency) IsKnown() bool {
+	switch r {
+	case LogpushLogpushJobFrequencyHigh, LogpushLogpushJobFrequencyLow:
+		return true
+	}
+	return false
+}
+
 // The structured replacement for `logpull_options`. When including this field, the
 // `logpull_option` field will be ignored.
 type LogpushLogpushJobOutputOptions struct {
@@ -211,6 +219,14 @@ const (
 	LogpushLogpushJobOutputOptionsOutputTypeCsv    LogpushLogpushJobOutputOptionsOutputType = "csv"
 )
 
+func (r LogpushLogpushJobOutputOptionsOutputType) IsKnown() bool {
+	switch r {
+	case LogpushLogpushJobOutputOptionsOutputTypeNdjson, LogpushLogpushJobOutputOptionsOutputTypeCsv:
+		return true
+	}
+	return false
+}
+
 // String to specify the format for timestamps, such as `unixnano`, `unix`, or
 // `rfc3339`.
 type LogpushLogpushJobOutputOptionsTimestampFormat string
@@ -220,6 +236,14 @@ const (
 	LogpushLogpushJobOutputOptionsTimestampFormatUnix     LogpushLogpushJobOutputOptionsTimestampFormat = "unix"
 	LogpushLogpushJobOutputOptionsTimestampFormatRfc3339  LogpushLogpushJobOutputOptionsTimestampFormat = "rfc3339"
 )
+
+func (r LogpushLogpushJobOutputOptionsTimestampFormat) IsKnown() bool {
+	switch r {
+	case LogpushLogpushJobOutputOptionsTimestampFormatUnixnano, LogpushLogpushJobOutputOptionsTimestampFormatUnix, LogpushLogpushJobOutputOptionsTimestampFormatRfc3339:
+		return true
+	}
+	return false
+}
 
 type DatasetJobGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -308,3 +332,11 @@ type DatasetJobGetResponseEnvelopeSuccess bool
 const (
 	DatasetJobGetResponseEnvelopeSuccessTrue DatasetJobGetResponseEnvelopeSuccess = true
 )
+
+func (r DatasetJobGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatasetJobGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

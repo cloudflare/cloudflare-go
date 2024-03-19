@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit
 
@@ -34,11 +34,11 @@ func NewSiteACLService(opts ...option.RequestOption) (r *SiteACLService) {
 }
 
 // Creates a new Site ACL.
-func (r *SiteACLService) New(ctx context.Context, accountIdentifier string, siteIdentifier string, body SiteACLNewParams, opts ...option.RequestOption) (res *SiteACLNewResponse, err error) {
+func (r *SiteACLService) New(ctx context.Context, siteID string, params SiteACLNewParams, opts ...option.RequestOption) (res *SiteACLNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", accountIdentifier, siteIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", params.AccountID, siteID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +47,11 @@ func (r *SiteACLService) New(ctx context.Context, accountIdentifier string, site
 }
 
 // Update a specific Site ACL.
-func (r *SiteACLService) Update(ctx context.Context, accountIdentifier string, siteIdentifier string, aclIdentifier string, body SiteACLUpdateParams, opts ...option.RequestOption) (res *SiteACLUpdateResponse, err error) {
+func (r *SiteACLService) Update(ctx context.Context, siteID string, aclIdentifier string, params SiteACLUpdateParams, opts ...option.RequestOption) (res *SiteACLUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", accountIdentifier, siteIdentifier, aclIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", params.AccountID, siteID, aclIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,10 +60,10 @@ func (r *SiteACLService) Update(ctx context.Context, accountIdentifier string, s
 }
 
 // Lists Site ACLs associated with an account.
-func (r *SiteACLService) List(ctx context.Context, accountIdentifier string, siteIdentifier string, opts ...option.RequestOption) (res *SiteACLListResponse, err error) {
+func (r *SiteACLService) List(ctx context.Context, siteID string, query SiteACLListParams, opts ...option.RequestOption) (res *SiteACLListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", accountIdentifier, siteIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls", query.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -73,10 +73,10 @@ func (r *SiteACLService) List(ctx context.Context, accountIdentifier string, sit
 }
 
 // Remove a specific Site ACL.
-func (r *SiteACLService) Delete(ctx context.Context, accountIdentifier string, siteIdentifier string, aclIdentifier string, opts ...option.RequestOption) (res *SiteACLDeleteResponse, err error) {
+func (r *SiteACLService) Delete(ctx context.Context, siteID string, aclIdentifier string, body SiteACLDeleteParams, opts ...option.RequestOption) (res *SiteACLDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", accountIdentifier, siteIdentifier, aclIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", body.AccountID, siteID, aclIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -86,10 +86,10 @@ func (r *SiteACLService) Delete(ctx context.Context, accountIdentifier string, s
 }
 
 // Get a specific Site ACL.
-func (r *SiteACLService) Get(ctx context.Context, accountIdentifier string, siteIdentifier string, aclIdentifier string, opts ...option.RequestOption) (res *SiteACLGetResponse, err error) {
+func (r *SiteACLService) Get(ctx context.Context, siteID string, aclIdentifier string, query SiteACLGetParams, opts ...option.RequestOption) (res *SiteACLGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteACLGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", accountIdentifier, siteIdentifier, aclIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/acls/%s", query.AccountID, siteID, aclIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -274,6 +274,14 @@ const (
 	SiteACLNewResponseACLsProtocolIcmp SiteACLNewResponseACLsProtocol = "icmp"
 )
 
+func (r SiteACLNewResponseACLsProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLNewResponseACLsProtocolTcp, SiteACLNewResponseACLsProtocolUdp, SiteACLNewResponseACLsProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 type SiteACLUpdateResponse struct {
 	// Bidirectional ACL policy for local network traffic within a site.
 	ACL  SiteACLUpdateResponseACL  `json:"acl"`
@@ -451,6 +459,14 @@ const (
 	SiteACLUpdateResponseACLProtocolIcmp SiteACLUpdateResponseACLProtocol = "icmp"
 )
 
+func (r SiteACLUpdateResponseACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLUpdateResponseACLProtocolTcp, SiteACLUpdateResponseACLProtocolUdp, SiteACLUpdateResponseACLProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 type SiteACLListResponse struct {
 	ACLs []SiteACLListResponseACL `json:"acls"`
 	JSON siteACLListResponseJSON  `json:"-"`
@@ -626,6 +642,14 @@ const (
 	SiteACLListResponseACLsProtocolUdp  SiteACLListResponseACLsProtocol = "udp"
 	SiteACLListResponseACLsProtocolIcmp SiteACLListResponseACLsProtocol = "icmp"
 )
+
+func (r SiteACLListResponseACLsProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLListResponseACLsProtocolTcp, SiteACLListResponseACLsProtocolUdp, SiteACLListResponseACLsProtocolIcmp:
+		return true
+	}
+	return false
+}
 
 type SiteACLDeleteResponse struct {
 	Deleted bool `json:"deleted"`
@@ -806,6 +830,14 @@ const (
 	SiteACLDeleteResponseDeletedACLProtocolIcmp SiteACLDeleteResponseDeletedACLProtocol = "icmp"
 )
 
+func (r SiteACLDeleteResponseDeletedACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLDeleteResponseDeletedACLProtocolTcp, SiteACLDeleteResponseDeletedACLProtocolUdp, SiteACLDeleteResponseDeletedACLProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 type SiteACLGetResponse struct {
 	// Bidirectional ACL policy for local network traffic within a site.
 	ACL  SiteACLGetResponseACL  `json:"acl"`
@@ -983,8 +1015,18 @@ const (
 	SiteACLGetResponseACLProtocolIcmp SiteACLGetResponseACLProtocol = "icmp"
 )
 
+func (r SiteACLGetResponseACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLGetResponseACLProtocolTcp, SiteACLGetResponseACLProtocolUdp, SiteACLGetResponseACLProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 type SiteACLNewParams struct {
-	ACL param.Field[SiteACLNewParamsACL] `json:"acl"`
+	// Identifier
+	AccountID param.Field[string]              `path:"account_id,required"`
+	ACL       param.Field[SiteACLNewParamsACL] `json:"acl"`
 }
 
 func (r SiteACLNewParams) MarshalJSON() (data []byte, err error) {
@@ -1062,6 +1104,14 @@ const (
 	SiteACLNewParamsACLProtocolUdp  SiteACLNewParamsACLProtocol = "udp"
 	SiteACLNewParamsACLProtocolIcmp SiteACLNewParamsACLProtocol = "icmp"
 )
+
+func (r SiteACLNewParamsACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLNewParamsACLProtocolTcp, SiteACLNewParamsACLProtocolUdp, SiteACLNewParamsACLProtocolIcmp:
+		return true
+	}
+	return false
+}
 
 type SiteACLNewResponseEnvelope struct {
 	Errors   []SiteACLNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -1144,8 +1194,18 @@ const (
 	SiteACLNewResponseEnvelopeSuccessTrue SiteACLNewResponseEnvelopeSuccess = true
 )
 
+func (r SiteACLNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteACLUpdateParams struct {
-	ACL param.Field[SiteACLUpdateParamsACL] `json:"acl"`
+	// Identifier
+	AccountID param.Field[string]                 `path:"account_id,required"`
+	ACL       param.Field[SiteACLUpdateParamsACL] `json:"acl"`
 }
 
 func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1223,6 +1283,14 @@ const (
 	SiteACLUpdateParamsACLProtocolUdp  SiteACLUpdateParamsACLProtocol = "udp"
 	SiteACLUpdateParamsACLProtocolIcmp SiteACLUpdateParamsACLProtocol = "icmp"
 )
+
+func (r SiteACLUpdateParamsACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLUpdateParamsACLProtocolTcp, SiteACLUpdateParamsACLProtocolUdp, SiteACLUpdateParamsACLProtocolIcmp:
+		return true
+	}
+	return false
+}
 
 type SiteACLUpdateResponseEnvelope struct {
 	Errors   []SiteACLUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -1305,6 +1373,19 @@ const (
 	SiteACLUpdateResponseEnvelopeSuccessTrue SiteACLUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SiteACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteACLListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type SiteACLListResponseEnvelope struct {
 	Errors   []SiteACLListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteACLListResponseEnvelopeMessages `json:"messages,required"`
@@ -1385,6 +1466,19 @@ type SiteACLListResponseEnvelopeSuccess bool
 const (
 	SiteACLListResponseEnvelopeSuccessTrue SiteACLListResponseEnvelopeSuccess = true
 )
+
+func (r SiteACLListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteACLDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type SiteACLDeleteResponseEnvelope struct {
 	Errors   []SiteACLDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1467,6 +1561,19 @@ const (
 	SiteACLDeleteResponseEnvelopeSuccessTrue SiteACLDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SiteACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SiteACLGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type SiteACLGetResponseEnvelope struct {
 	Errors   []SiteACLGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteACLGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1547,3 +1654,11 @@ type SiteACLGetResponseEnvelopeSuccess bool
 const (
 	SiteACLGetResponseEnvelopeSuccessTrue SiteACLGetResponseEnvelopeSuccess = true
 )
+
+func (r SiteACLGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

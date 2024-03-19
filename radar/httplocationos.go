@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -266,12 +266,28 @@ const (
 	HTTPLocationOSGetParamsOSSmartTv  HTTPLocationOSGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPLocationOSGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsOSWindows, HTTPLocationOSGetParamsOSMacosx, HTTPLocationOSGetParamsOSIos, HTTPLocationOSGetParamsOSAndroid, HTTPLocationOSGetParamsOSChromeos, HTTPLocationOSGetParamsOSLinux, HTTPLocationOSGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationOSGetParamsBotClass string
 
 const (
 	HTTPLocationOSGetParamsBotClassLikelyAutomated HTTPLocationOSGetParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPLocationOSGetParamsBotClassLikelyHuman     HTTPLocationOSGetParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPLocationOSGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsBotClassLikelyAutomated, HTTPLocationOSGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationOSGetParamsDateRange string
 
@@ -293,6 +309,14 @@ const (
 	HTTPLocationOSGetParamsDateRange24wControl HTTPLocationOSGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPLocationOSGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsDateRange1d, HTTPLocationOSGetParamsDateRange2d, HTTPLocationOSGetParamsDateRange7d, HTTPLocationOSGetParamsDateRange14d, HTTPLocationOSGetParamsDateRange28d, HTTPLocationOSGetParamsDateRange12w, HTTPLocationOSGetParamsDateRange24w, HTTPLocationOSGetParamsDateRange52w, HTTPLocationOSGetParamsDateRange1dControl, HTTPLocationOSGetParamsDateRange2dControl, HTTPLocationOSGetParamsDateRange7dControl, HTTPLocationOSGetParamsDateRange14dControl, HTTPLocationOSGetParamsDateRange28dControl, HTTPLocationOSGetParamsDateRange12wControl, HTTPLocationOSGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationOSGetParamsDeviceType string
 
 const (
@@ -300,6 +324,14 @@ const (
 	HTTPLocationOSGetParamsDeviceTypeMobile  HTTPLocationOSGetParamsDeviceType = "MOBILE"
 	HTTPLocationOSGetParamsDeviceTypeOther   HTTPLocationOSGetParamsDeviceType = "OTHER"
 )
+
+func (r HTTPLocationOSGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsDeviceTypeDesktop, HTTPLocationOSGetParamsDeviceTypeMobile, HTTPLocationOSGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPLocationOSGetParamsFormat string
@@ -309,12 +341,28 @@ const (
 	HTTPLocationOSGetParamsFormatCsv  HTTPLocationOSGetParamsFormat = "CSV"
 )
 
+func (r HTTPLocationOSGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsFormatJson, HTTPLocationOSGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationOSGetParamsHTTPProtocol string
 
 const (
 	HTTPLocationOSGetParamsHTTPProtocolHTTP  HTTPLocationOSGetParamsHTTPProtocol = "HTTP"
 	HTTPLocationOSGetParamsHTTPProtocolHTTPS HTTPLocationOSGetParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPLocationOSGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsHTTPProtocolHTTP, HTTPLocationOSGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationOSGetParamsHTTPVersion string
 
@@ -324,12 +372,28 @@ const (
 	HTTPLocationOSGetParamsHTTPVersionHttPv3 HTTPLocationOSGetParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPLocationOSGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsHTTPVersionHttPv1, HTTPLocationOSGetParamsHTTPVersionHttPv2, HTTPLocationOSGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationOSGetParamsIPVersion string
 
 const (
 	HTTPLocationOSGetParamsIPVersionIPv4 HTTPLocationOSGetParamsIPVersion = "IPv4"
 	HTTPLocationOSGetParamsIPVersionIPv6 HTTPLocationOSGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPLocationOSGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsIPVersionIPv4, HTTPLocationOSGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationOSGetParamsTLSVersion string
 
@@ -340,6 +404,14 @@ const (
 	HTTPLocationOSGetParamsTLSVersionTlSv1_3  HTTPLocationOSGetParamsTLSVersion = "TLSv1_3"
 	HTTPLocationOSGetParamsTLSVersionTlSvQuic HTTPLocationOSGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPLocationOSGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationOSGetParamsTLSVersionTlSv1_0, HTTPLocationOSGetParamsTLSVersionTlSv1_1, HTTPLocationOSGetParamsTLSVersionTlSv1_2, HTTPLocationOSGetParamsTLSVersionTlSv1_3, HTTPLocationOSGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationOSGetResponseEnvelope struct {
 	Result  HTTPLocationOSGetResponse             `json:"result,required"`

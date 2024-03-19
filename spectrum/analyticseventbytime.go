@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package spectrum
 
@@ -136,6 +136,14 @@ const (
 	AnalyticsEventBytimeGetParamsDimensionIPVersion AnalyticsEventBytimeGetParamsDimension = "ipVersion"
 )
 
+func (r AnalyticsEventBytimeGetParamsDimension) IsKnown() bool {
+	switch r {
+	case AnalyticsEventBytimeGetParamsDimensionEvent, AnalyticsEventBytimeGetParamsDimensionAppID, AnalyticsEventBytimeGetParamsDimensionColoName, AnalyticsEventBytimeGetParamsDimensionIPVersion:
+		return true
+	}
+	return false
+}
+
 type AnalyticsEventBytimeGetParamsMetric string
 
 const (
@@ -147,6 +155,14 @@ const (
 	AnalyticsEventBytimeGetParamsMetricDuration90th   AnalyticsEventBytimeGetParamsMetric = "duration90th"
 	AnalyticsEventBytimeGetParamsMetricDuration99th   AnalyticsEventBytimeGetParamsMetric = "duration99th"
 )
+
+func (r AnalyticsEventBytimeGetParamsMetric) IsKnown() bool {
+	switch r {
+	case AnalyticsEventBytimeGetParamsMetricCount, AnalyticsEventBytimeGetParamsMetricBytesIngress, AnalyticsEventBytimeGetParamsMetricBytesEgress, AnalyticsEventBytimeGetParamsMetricDurationAvg, AnalyticsEventBytimeGetParamsMetricDurationMedian, AnalyticsEventBytimeGetParamsMetricDuration90th, AnalyticsEventBytimeGetParamsMetricDuration99th:
+		return true
+	}
+	return false
+}
 
 // Used to select time series resolution.
 type AnalyticsEventBytimeGetParamsTimeDelta string
@@ -161,6 +177,14 @@ const (
 	AnalyticsEventBytimeGetParamsTimeDeltaDekaminute AnalyticsEventBytimeGetParamsTimeDelta = "dekaminute"
 	AnalyticsEventBytimeGetParamsTimeDeltaMinute     AnalyticsEventBytimeGetParamsTimeDelta = "minute"
 )
+
+func (r AnalyticsEventBytimeGetParamsTimeDelta) IsKnown() bool {
+	switch r {
+	case AnalyticsEventBytimeGetParamsTimeDeltaYear, AnalyticsEventBytimeGetParamsTimeDeltaQuarter, AnalyticsEventBytimeGetParamsTimeDeltaMonth, AnalyticsEventBytimeGetParamsTimeDeltaWeek, AnalyticsEventBytimeGetParamsTimeDeltaDay, AnalyticsEventBytimeGetParamsTimeDeltaHour, AnalyticsEventBytimeGetParamsTimeDeltaDekaminute, AnalyticsEventBytimeGetParamsTimeDeltaMinute:
+		return true
+	}
+	return false
+}
 
 type AnalyticsEventBytimeGetResponseEnvelope struct {
 	Errors   []AnalyticsEventBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -242,3 +266,11 @@ type AnalyticsEventBytimeGetResponseEnvelopeSuccess bool
 const (
 	AnalyticsEventBytimeGetResponseEnvelopeSuccessTrue AnalyticsEventBytimeGetResponseEnvelopeSuccess = true
 )
+
+func (r AnalyticsEventBytimeGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AnalyticsEventBytimeGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

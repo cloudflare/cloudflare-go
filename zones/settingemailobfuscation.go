@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -105,6 +105,14 @@ const (
 	ZonesEmailObfuscationIDEmailObfuscation ZonesEmailObfuscationID = "email_obfuscation"
 )
 
+func (r ZonesEmailObfuscationID) IsKnown() bool {
+	switch r {
+	case ZonesEmailObfuscationIDEmailObfuscation:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesEmailObfuscationValue string
 
@@ -112,6 +120,14 @@ const (
 	ZonesEmailObfuscationValueOn  ZonesEmailObfuscationValue = "on"
 	ZonesEmailObfuscationValueOff ZonesEmailObfuscationValue = "off"
 )
+
+func (r ZonesEmailObfuscationValue) IsKnown() bool {
+	switch r {
+	case ZonesEmailObfuscationValueOn, ZonesEmailObfuscationValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -121,6 +137,14 @@ const (
 	ZonesEmailObfuscationEditableTrue  ZonesEmailObfuscationEditable = true
 	ZonesEmailObfuscationEditableFalse ZonesEmailObfuscationEditable = false
 )
+
+func (r ZonesEmailObfuscationEditable) IsKnown() bool {
+	switch r {
+	case ZonesEmailObfuscationEditableTrue, ZonesEmailObfuscationEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Encrypt email adresses on your web page from bots, while keeping them visible to
 // humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
@@ -155,6 +179,14 @@ const (
 	SettingEmailObfuscationEditParamsValueOn  SettingEmailObfuscationEditParamsValue = "on"
 	SettingEmailObfuscationEditParamsValueOff SettingEmailObfuscationEditParamsValue = "off"
 )
+
+func (r SettingEmailObfuscationEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingEmailObfuscationEditParamsValueOn, SettingEmailObfuscationEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingEmailObfuscationEditResponseEnvelope struct {
 	Errors   []SettingEmailObfuscationEditResponseEnvelopeErrors   `json:"errors,required"`

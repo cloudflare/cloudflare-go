@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit_test
 
@@ -31,8 +31,8 @@ func TestCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.MagicTransit.CfInterconnects.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.CfInterconnectUpdateParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Description: cloudflare.F("Tunnel for Interconnect to ORD"),
 			GRE: cloudflare.F(magic_transit.CfInterconnectUpdateParamsGRE{
 				CloudflareEndpoint: cloudflare.F("203.0.113.1"),
@@ -70,7 +70,9 @@ func TestCfInterconnectList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.CfInterconnects.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.MagicTransit.CfInterconnects.List(context.TODO(), magic_transit.CfInterconnectListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -97,7 +99,9 @@ func TestCfInterconnectGet(t *testing.T) {
 	_, err := client.MagicTransit.CfInterconnects.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.CfInterconnectGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

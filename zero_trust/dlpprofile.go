@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -171,6 +171,14 @@ const (
 	DLPProfilesDLPIntegrationProfileTypeIntegration DLPProfilesDLPIntegrationProfileType = "integration"
 )
 
+func (r DLPProfilesDLPIntegrationProfileType) IsKnown() bool {
+	switch r {
+	case DLPProfilesDLPIntegrationProfileTypeIntegration:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [zero_trust.DLPPredefinedProfile],
 // [zero_trust.DLPCustomProfile] or
 // [zero_trust.DLPProfileGetResponseDLPIntegrationProfile].
@@ -280,6 +288,14 @@ const (
 	DLPProfileGetResponseDLPIntegrationProfileTypeIntegration DLPProfileGetResponseDLPIntegrationProfileType = "integration"
 )
 
+func (r DLPProfileGetResponseDLPIntegrationProfileType) IsKnown() bool {
+	switch r {
+	case DLPProfileGetResponseDLPIntegrationProfileTypeIntegration:
+		return true
+	}
+	return false
+}
+
 type DLPProfileListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -367,6 +383,14 @@ type DLPProfileListResponseEnvelopeSuccess bool
 const (
 	DLPProfileListResponseEnvelopeSuccessTrue DLPProfileListResponseEnvelopeSuccess = true
 )
+
+func (r DLPProfileListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfileListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DLPProfileListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -484,3 +508,11 @@ type DLPProfileGetResponseEnvelopeSuccess bool
 const (
 	DLPProfileGetResponseEnvelopeSuccessTrue DLPProfileGetResponseEnvelopeSuccess = true
 )
+
+func (r DLPProfileGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfileGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package addressing
 
@@ -156,3 +156,11 @@ type ServiceListResponseEnvelopeSuccess bool
 const (
 	ServiceListResponseEnvelopeSuccessTrue ServiceListResponseEnvelopeSuccess = true
 )
+
+func (r ServiceListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ServiceListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

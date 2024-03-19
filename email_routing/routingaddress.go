@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package email_routing
 
@@ -344,6 +344,14 @@ const (
 	RoutingAddressNewResponseEnvelopeSuccessTrue RoutingAddressNewResponseEnvelopeSuccess = true
 )
 
+func (r RoutingAddressNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingAddressNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RoutingAddressListParams struct {
 	// Sorts results in an ascending or descending order.
 	Direction param.Field[RoutingAddressListParamsDirection] `query:"direction"`
@@ -372,6 +380,14 @@ const (
 	RoutingAddressListParamsDirectionDesc RoutingAddressListParamsDirection = "desc"
 )
 
+func (r RoutingAddressListParamsDirection) IsKnown() bool {
+	switch r {
+	case RoutingAddressListParamsDirectionAsc, RoutingAddressListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Filter by verified destination addresses.
 type RoutingAddressListParamsVerified bool
 
@@ -379,6 +395,14 @@ const (
 	RoutingAddressListParamsVerifiedTrue  RoutingAddressListParamsVerified = true
 	RoutingAddressListParamsVerifiedFalse RoutingAddressListParamsVerified = false
 )
+
+func (r RoutingAddressListParamsVerified) IsKnown() bool {
+	switch r {
+	case RoutingAddressListParamsVerifiedTrue, RoutingAddressListParamsVerifiedFalse:
+		return true
+	}
+	return false
+}
 
 type RoutingAddressDeleteResponseEnvelope struct {
 	Errors   []RoutingAddressDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -461,6 +485,14 @@ const (
 	RoutingAddressDeleteResponseEnvelopeSuccessTrue RoutingAddressDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RoutingAddressDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingAddressDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RoutingAddressGetResponseEnvelope struct {
 	Errors   []RoutingAddressGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RoutingAddressGetResponseEnvelopeMessages `json:"messages,required"`
@@ -541,3 +573,11 @@ type RoutingAddressGetResponseEnvelopeSuccess bool
 const (
 	RoutingAddressGetResponseEnvelopeSuccessTrue RoutingAddressGetResponseEnvelopeSuccess = true
 )
+
+func (r RoutingAddressGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingAddressGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -325,6 +325,14 @@ type DEXFleetStatusLiveResponseEnvelopeSuccess bool
 const (
 	DEXFleetStatusLiveResponseEnvelopeSuccessTrue DEXFleetStatusLiveResponseEnvelopeSuccess = true
 )
+
+func (r DEXFleetStatusLiveResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXFleetStatusLiveResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DEXFleetStatusOverTimeParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`

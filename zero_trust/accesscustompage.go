@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -143,6 +143,14 @@ const (
 	AccessCustomPageTypeForbidden      AccessCustomPageType = "forbidden"
 )
 
+func (r AccessCustomPageType) IsKnown() bool {
+	switch r {
+	case AccessCustomPageTypeIdentityDenied, AccessCustomPageTypeForbidden:
+		return true
+	}
+	return false
+}
+
 type AccessCustomPageWithoutHTML struct {
 	// Custom page name.
 	Name string `json:"name,required"`
@@ -185,6 +193,14 @@ const (
 	AccessCustomPageWithoutHTMLTypeIdentityDenied AccessCustomPageWithoutHTMLType = "identity_denied"
 	AccessCustomPageWithoutHTMLTypeForbidden      AccessCustomPageWithoutHTMLType = "forbidden"
 )
+
+func (r AccessCustomPageWithoutHTMLType) IsKnown() bool {
+	switch r {
+	case AccessCustomPageWithoutHTMLTypeIdentityDenied, AccessCustomPageWithoutHTMLTypeForbidden:
+		return true
+	}
+	return false
+}
 
 type AccessCustomPageDeleteResponse struct {
 	// UUID
@@ -230,6 +246,14 @@ const (
 	AccessCustomPageNewParamsTypeIdentityDenied AccessCustomPageNewParamsType = "identity_denied"
 	AccessCustomPageNewParamsTypeForbidden      AccessCustomPageNewParamsType = "forbidden"
 )
+
+func (r AccessCustomPageNewParamsType) IsKnown() bool {
+	switch r {
+	case AccessCustomPageNewParamsTypeIdentityDenied, AccessCustomPageNewParamsTypeForbidden:
+		return true
+	}
+	return false
+}
 
 type AccessCustomPageNewResponseEnvelope struct {
 	Errors   []AccessCustomPageNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -312,6 +336,14 @@ const (
 	AccessCustomPageNewResponseEnvelopeSuccessTrue AccessCustomPageNewResponseEnvelopeSuccess = true
 )
 
+func (r AccessCustomPageNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCustomPageNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessCustomPageUpdateParams struct {
 	// Custom page HTML.
 	CustomHTML param.Field[string] `json:"custom_html,required"`
@@ -334,6 +366,14 @@ const (
 	AccessCustomPageUpdateParamsTypeIdentityDenied AccessCustomPageUpdateParamsType = "identity_denied"
 	AccessCustomPageUpdateParamsTypeForbidden      AccessCustomPageUpdateParamsType = "forbidden"
 )
+
+func (r AccessCustomPageUpdateParamsType) IsKnown() bool {
+	switch r {
+	case AccessCustomPageUpdateParamsTypeIdentityDenied, AccessCustomPageUpdateParamsTypeForbidden:
+		return true
+	}
+	return false
+}
 
 type AccessCustomPageUpdateResponseEnvelope struct {
 	Errors   []AccessCustomPageUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -415,6 +455,14 @@ type AccessCustomPageUpdateResponseEnvelopeSuccess bool
 const (
 	AccessCustomPageUpdateResponseEnvelopeSuccessTrue AccessCustomPageUpdateResponseEnvelopeSuccess = true
 )
+
+func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCustomPageUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessCustomPageListResponseEnvelope struct {
 	Errors   []AccessCustomPageListResponseEnvelopeErrors   `json:"errors,required"`
@@ -498,6 +546,14 @@ type AccessCustomPageListResponseEnvelopeSuccess bool
 const (
 	AccessCustomPageListResponseEnvelopeSuccessTrue AccessCustomPageListResponseEnvelopeSuccess = true
 )
+
+func (r AccessCustomPageListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCustomPageListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessCustomPageListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -611,6 +667,14 @@ const (
 	AccessCustomPageDeleteResponseEnvelopeSuccessTrue AccessCustomPageDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessCustomPageDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCustomPageDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessCustomPageGetResponseEnvelope struct {
 	Errors   []AccessCustomPageGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCustomPageGetResponseEnvelopeMessages `json:"messages,required"`
@@ -691,3 +755,11 @@ type AccessCustomPageGetResponseEnvelopeSuccess bool
 const (
 	AccessCustomPageGetResponseEnvelopeSuccessTrue AccessCustomPageGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessCustomPageGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessCustomPageGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

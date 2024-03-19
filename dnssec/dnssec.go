@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package dnssec
 
@@ -154,6 +154,14 @@ const (
 	DNSSECDNSSECStatusError           DNSSECDNSSECStatus = "error"
 )
 
+func (r DNSSECDNSSECStatus) IsKnown() bool {
+	switch r {
+	case DNSSECDNSSECStatusActive, DNSSECDNSSECStatusPending, DNSSECDNSSECStatusDisabled, DNSSECDNSSECStatusPendingDisabled, DNSSECDNSSECStatusError:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [dnssec.DNSSECDeleteResponseUnknown] or [shared.UnionString].
 type DNSSECDeleteResponse interface {
 	ImplementsDNSSECDNSSECDeleteResponse()
@@ -256,6 +264,14 @@ const (
 	DNSSECDeleteResponseEnvelopeSuccessTrue DNSSECDeleteResponseEnvelopeSuccess = true
 )
 
+func (r DNSSECDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSSECDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DNSSECEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -291,6 +307,14 @@ const (
 	DNSSECEditParamsStatusActive   DNSSECEditParamsStatus = "active"
 	DNSSECEditParamsStatusDisabled DNSSECEditParamsStatus = "disabled"
 )
+
+func (r DNSSECEditParamsStatus) IsKnown() bool {
+	switch r {
+	case DNSSECEditParamsStatusActive, DNSSECEditParamsStatusDisabled:
+		return true
+	}
+	return false
+}
 
 type DNSSECEditResponseEnvelope struct {
 	Errors   []DNSSECEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -372,6 +396,14 @@ type DNSSECEditResponseEnvelopeSuccess bool
 const (
 	DNSSECEditResponseEnvelopeSuccessTrue DNSSECEditResponseEnvelopeSuccess = true
 )
+
+func (r DNSSECEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSSECEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DNSSECGetParams struct {
 	// Identifier
@@ -458,3 +490,11 @@ type DNSSECGetResponseEnvelopeSuccess bool
 const (
 	DNSSECGetResponseEnvelopeSuccessTrue DNSSECGetResponseEnvelopeSuccess = true
 )
+
+func (r DNSSECGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSSECGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

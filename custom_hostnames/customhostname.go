@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package custom_hostnames
 
@@ -237,6 +237,14 @@ const (
 	CustomHostnameNewResponseSSLBundleMethodForce      CustomHostnameNewResponseSSLBundleMethod = "force"
 )
 
+func (r CustomHostnameNewResponseSSLBundleMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLBundleMethodUbiquitous, CustomHostnameNewResponseSSLBundleMethodOptimal, CustomHostnameNewResponseSSLBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 // The Certificate Authority that will issue the certificate
 type CustomHostnameNewResponseSSLCertificateAuthority string
 
@@ -246,6 +254,14 @@ const (
 	CustomHostnameNewResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameNewResponseSSLCertificateAuthority = "lets_encrypt"
 )
 
+func (r CustomHostnameNewResponseSSLCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLCertificateAuthorityDigicert, CustomHostnameNewResponseSSLCertificateAuthorityGoogle, CustomHostnameNewResponseSSLCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Domain control validation (DCV) method used for this hostname.
 type CustomHostnameNewResponseSSLMethod string
 
@@ -254,6 +270,14 @@ const (
 	CustomHostnameNewResponseSSLMethodTXT   CustomHostnameNewResponseSSLMethod = "txt"
 	CustomHostnameNewResponseSSLMethodEmail CustomHostnameNewResponseSSLMethod = "email"
 )
+
+func (r CustomHostnameNewResponseSSLMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLMethodHTTP, CustomHostnameNewResponseSSLMethodTXT, CustomHostnameNewResponseSSLMethodEmail:
+		return true
+	}
+	return false
+}
 
 // SSL specific settings.
 type CustomHostnameNewResponseSSLSettings struct {
@@ -299,6 +323,14 @@ const (
 	CustomHostnameNewResponseSSLSettingsEarlyHintsOff CustomHostnameNewResponseSSLSettingsEarlyHints = "off"
 )
 
+func (r CustomHostnameNewResponseSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLSettingsEarlyHintsOn, CustomHostnameNewResponseSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
+}
+
 // Whether or not HTTP2 is enabled.
 type CustomHostnameNewResponseSSLSettingsHTTP2 string
 
@@ -306,6 +338,14 @@ const (
 	CustomHostnameNewResponseSSLSettingsHTTP2On  CustomHostnameNewResponseSSLSettingsHTTP2 = "on"
 	CustomHostnameNewResponseSSLSettingsHTTP2Off CustomHostnameNewResponseSSLSettingsHTTP2 = "off"
 )
+
+func (r CustomHostnameNewResponseSSLSettingsHTTP2) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLSettingsHTTP2On, CustomHostnameNewResponseSSLSettingsHTTP2Off:
+		return true
+	}
+	return false
+}
 
 // The minimum TLS version supported.
 type CustomHostnameNewResponseSSLSettingsMinTLSVersion string
@@ -317,6 +357,14 @@ const (
 	CustomHostnameNewResponseSSLSettingsMinTLSVersion1_3 CustomHostnameNewResponseSSLSettingsMinTLSVersion = "1.3"
 )
 
+func (r CustomHostnameNewResponseSSLSettingsMinTLSVersion) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLSettingsMinTLSVersion1_0, CustomHostnameNewResponseSSLSettingsMinTLSVersion1_1, CustomHostnameNewResponseSSLSettingsMinTLSVersion1_2, CustomHostnameNewResponseSSLSettingsMinTLSVersion1_3:
+		return true
+	}
+	return false
+}
+
 // Whether or not TLS 1.3 is enabled.
 type CustomHostnameNewResponseSSLSettingsTLS1_3 string
 
@@ -324,6 +372,14 @@ const (
 	CustomHostnameNewResponseSSLSettingsTLS1_3On  CustomHostnameNewResponseSSLSettingsTLS1_3 = "on"
 	CustomHostnameNewResponseSSLSettingsTLS1_3Off CustomHostnameNewResponseSSLSettingsTLS1_3 = "off"
 )
+
+func (r CustomHostnameNewResponseSSLSettingsTLS1_3) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLSettingsTLS1_3On, CustomHostnameNewResponseSSLSettingsTLS1_3Off:
+		return true
+	}
+	return false
+}
 
 // Status of the hostname's SSL certificates.
 type CustomHostnameNewResponseSSLStatus string
@@ -352,6 +408,14 @@ const (
 	CustomHostnameNewResponseSSLStatusHoldingDeployment    CustomHostnameNewResponseSSLStatus = "holding_deployment"
 )
 
+func (r CustomHostnameNewResponseSSLStatus) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLStatusInitializing, CustomHostnameNewResponseSSLStatusPendingValidation, CustomHostnameNewResponseSSLStatusDeleted, CustomHostnameNewResponseSSLStatusPendingIssuance, CustomHostnameNewResponseSSLStatusPendingDeployment, CustomHostnameNewResponseSSLStatusPendingDeletion, CustomHostnameNewResponseSSLStatusPendingExpiration, CustomHostnameNewResponseSSLStatusExpired, CustomHostnameNewResponseSSLStatusActive, CustomHostnameNewResponseSSLStatusInitializingTimedOut, CustomHostnameNewResponseSSLStatusValidationTimedOut, CustomHostnameNewResponseSSLStatusIssuanceTimedOut, CustomHostnameNewResponseSSLStatusDeploymentTimedOut, CustomHostnameNewResponseSSLStatusDeletionTimedOut, CustomHostnameNewResponseSSLStatusPendingCleanup, CustomHostnameNewResponseSSLStatusStagingDeployment, CustomHostnameNewResponseSSLStatusStagingActive, CustomHostnameNewResponseSSLStatusDeactivating, CustomHostnameNewResponseSSLStatusInactive, CustomHostnameNewResponseSSLStatusBackupIssued, CustomHostnameNewResponseSSLStatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
 // Level of validation to be used for this hostname. Domain validation (dv) must be
 // used.
 type CustomHostnameNewResponseSSLType string
@@ -359,6 +423,14 @@ type CustomHostnameNewResponseSSLType string
 const (
 	CustomHostnameNewResponseSSLTypeDv CustomHostnameNewResponseSSLType = "dv"
 )
+
+func (r CustomHostnameNewResponseSSLType) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLTypeDv:
+		return true
+	}
+	return false
+}
 
 type CustomHostnameNewResponseSSLValidationError struct {
 	// A domain validation error.
@@ -542,6 +614,14 @@ const (
 	CustomHostnameListResponseSSLBundleMethodForce      CustomHostnameListResponseSSLBundleMethod = "force"
 )
 
+func (r CustomHostnameListResponseSSLBundleMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLBundleMethodUbiquitous, CustomHostnameListResponseSSLBundleMethodOptimal, CustomHostnameListResponseSSLBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 // The Certificate Authority that will issue the certificate
 type CustomHostnameListResponseSSLCertificateAuthority string
 
@@ -551,6 +631,14 @@ const (
 	CustomHostnameListResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameListResponseSSLCertificateAuthority = "lets_encrypt"
 )
 
+func (r CustomHostnameListResponseSSLCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLCertificateAuthorityDigicert, CustomHostnameListResponseSSLCertificateAuthorityGoogle, CustomHostnameListResponseSSLCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Domain control validation (DCV) method used for this hostname.
 type CustomHostnameListResponseSSLMethod string
 
@@ -559,6 +647,14 @@ const (
 	CustomHostnameListResponseSSLMethodTXT   CustomHostnameListResponseSSLMethod = "txt"
 	CustomHostnameListResponseSSLMethodEmail CustomHostnameListResponseSSLMethod = "email"
 )
+
+func (r CustomHostnameListResponseSSLMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLMethodHTTP, CustomHostnameListResponseSSLMethodTXT, CustomHostnameListResponseSSLMethodEmail:
+		return true
+	}
+	return false
+}
 
 // SSL specific settings.
 type CustomHostnameListResponseSSLSettings struct {
@@ -604,6 +700,14 @@ const (
 	CustomHostnameListResponseSSLSettingsEarlyHintsOff CustomHostnameListResponseSSLSettingsEarlyHints = "off"
 )
 
+func (r CustomHostnameListResponseSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLSettingsEarlyHintsOn, CustomHostnameListResponseSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
+}
+
 // Whether or not HTTP2 is enabled.
 type CustomHostnameListResponseSSLSettingsHTTP2 string
 
@@ -611,6 +715,14 @@ const (
 	CustomHostnameListResponseSSLSettingsHTTP2On  CustomHostnameListResponseSSLSettingsHTTP2 = "on"
 	CustomHostnameListResponseSSLSettingsHTTP2Off CustomHostnameListResponseSSLSettingsHTTP2 = "off"
 )
+
+func (r CustomHostnameListResponseSSLSettingsHTTP2) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLSettingsHTTP2On, CustomHostnameListResponseSSLSettingsHTTP2Off:
+		return true
+	}
+	return false
+}
 
 // The minimum TLS version supported.
 type CustomHostnameListResponseSSLSettingsMinTLSVersion string
@@ -622,6 +734,14 @@ const (
 	CustomHostnameListResponseSSLSettingsMinTLSVersion1_3 CustomHostnameListResponseSSLSettingsMinTLSVersion = "1.3"
 )
 
+func (r CustomHostnameListResponseSSLSettingsMinTLSVersion) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLSettingsMinTLSVersion1_0, CustomHostnameListResponseSSLSettingsMinTLSVersion1_1, CustomHostnameListResponseSSLSettingsMinTLSVersion1_2, CustomHostnameListResponseSSLSettingsMinTLSVersion1_3:
+		return true
+	}
+	return false
+}
+
 // Whether or not TLS 1.3 is enabled.
 type CustomHostnameListResponseSSLSettingsTLS1_3 string
 
@@ -629,6 +749,14 @@ const (
 	CustomHostnameListResponseSSLSettingsTLS1_3On  CustomHostnameListResponseSSLSettingsTLS1_3 = "on"
 	CustomHostnameListResponseSSLSettingsTLS1_3Off CustomHostnameListResponseSSLSettingsTLS1_3 = "off"
 )
+
+func (r CustomHostnameListResponseSSLSettingsTLS1_3) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLSettingsTLS1_3On, CustomHostnameListResponseSSLSettingsTLS1_3Off:
+		return true
+	}
+	return false
+}
 
 // Status of the hostname's SSL certificates.
 type CustomHostnameListResponseSSLStatus string
@@ -657,6 +785,14 @@ const (
 	CustomHostnameListResponseSSLStatusHoldingDeployment    CustomHostnameListResponseSSLStatus = "holding_deployment"
 )
 
+func (r CustomHostnameListResponseSSLStatus) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLStatusInitializing, CustomHostnameListResponseSSLStatusPendingValidation, CustomHostnameListResponseSSLStatusDeleted, CustomHostnameListResponseSSLStatusPendingIssuance, CustomHostnameListResponseSSLStatusPendingDeployment, CustomHostnameListResponseSSLStatusPendingDeletion, CustomHostnameListResponseSSLStatusPendingExpiration, CustomHostnameListResponseSSLStatusExpired, CustomHostnameListResponseSSLStatusActive, CustomHostnameListResponseSSLStatusInitializingTimedOut, CustomHostnameListResponseSSLStatusValidationTimedOut, CustomHostnameListResponseSSLStatusIssuanceTimedOut, CustomHostnameListResponseSSLStatusDeploymentTimedOut, CustomHostnameListResponseSSLStatusDeletionTimedOut, CustomHostnameListResponseSSLStatusPendingCleanup, CustomHostnameListResponseSSLStatusStagingDeployment, CustomHostnameListResponseSSLStatusStagingActive, CustomHostnameListResponseSSLStatusDeactivating, CustomHostnameListResponseSSLStatusInactive, CustomHostnameListResponseSSLStatusBackupIssued, CustomHostnameListResponseSSLStatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
 // Level of validation to be used for this hostname. Domain validation (dv) must be
 // used.
 type CustomHostnameListResponseSSLType string
@@ -664,6 +800,14 @@ type CustomHostnameListResponseSSLType string
 const (
 	CustomHostnameListResponseSSLTypeDv CustomHostnameListResponseSSLType = "dv"
 )
+
+func (r CustomHostnameListResponseSSLType) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLTypeDv:
+		return true
+	}
+	return false
+}
 
 type CustomHostnameListResponseSSLValidationError struct {
 	// A domain validation error.
@@ -869,6 +1013,14 @@ const (
 	CustomHostnameEditResponseSSLBundleMethodForce      CustomHostnameEditResponseSSLBundleMethod = "force"
 )
 
+func (r CustomHostnameEditResponseSSLBundleMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLBundleMethodUbiquitous, CustomHostnameEditResponseSSLBundleMethodOptimal, CustomHostnameEditResponseSSLBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 // The Certificate Authority that will issue the certificate
 type CustomHostnameEditResponseSSLCertificateAuthority string
 
@@ -878,6 +1030,14 @@ const (
 	CustomHostnameEditResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameEditResponseSSLCertificateAuthority = "lets_encrypt"
 )
 
+func (r CustomHostnameEditResponseSSLCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLCertificateAuthorityDigicert, CustomHostnameEditResponseSSLCertificateAuthorityGoogle, CustomHostnameEditResponseSSLCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Domain control validation (DCV) method used for this hostname.
 type CustomHostnameEditResponseSSLMethod string
 
@@ -886,6 +1046,14 @@ const (
 	CustomHostnameEditResponseSSLMethodTXT   CustomHostnameEditResponseSSLMethod = "txt"
 	CustomHostnameEditResponseSSLMethodEmail CustomHostnameEditResponseSSLMethod = "email"
 )
+
+func (r CustomHostnameEditResponseSSLMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLMethodHTTP, CustomHostnameEditResponseSSLMethodTXT, CustomHostnameEditResponseSSLMethodEmail:
+		return true
+	}
+	return false
+}
 
 // SSL specific settings.
 type CustomHostnameEditResponseSSLSettings struct {
@@ -931,6 +1099,14 @@ const (
 	CustomHostnameEditResponseSSLSettingsEarlyHintsOff CustomHostnameEditResponseSSLSettingsEarlyHints = "off"
 )
 
+func (r CustomHostnameEditResponseSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLSettingsEarlyHintsOn, CustomHostnameEditResponseSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
+}
+
 // Whether or not HTTP2 is enabled.
 type CustomHostnameEditResponseSSLSettingsHTTP2 string
 
@@ -938,6 +1114,14 @@ const (
 	CustomHostnameEditResponseSSLSettingsHTTP2On  CustomHostnameEditResponseSSLSettingsHTTP2 = "on"
 	CustomHostnameEditResponseSSLSettingsHTTP2Off CustomHostnameEditResponseSSLSettingsHTTP2 = "off"
 )
+
+func (r CustomHostnameEditResponseSSLSettingsHTTP2) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLSettingsHTTP2On, CustomHostnameEditResponseSSLSettingsHTTP2Off:
+		return true
+	}
+	return false
+}
 
 // The minimum TLS version supported.
 type CustomHostnameEditResponseSSLSettingsMinTLSVersion string
@@ -949,6 +1133,14 @@ const (
 	CustomHostnameEditResponseSSLSettingsMinTLSVersion1_3 CustomHostnameEditResponseSSLSettingsMinTLSVersion = "1.3"
 )
 
+func (r CustomHostnameEditResponseSSLSettingsMinTLSVersion) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLSettingsMinTLSVersion1_0, CustomHostnameEditResponseSSLSettingsMinTLSVersion1_1, CustomHostnameEditResponseSSLSettingsMinTLSVersion1_2, CustomHostnameEditResponseSSLSettingsMinTLSVersion1_3:
+		return true
+	}
+	return false
+}
+
 // Whether or not TLS 1.3 is enabled.
 type CustomHostnameEditResponseSSLSettingsTLS1_3 string
 
@@ -956,6 +1148,14 @@ const (
 	CustomHostnameEditResponseSSLSettingsTLS1_3On  CustomHostnameEditResponseSSLSettingsTLS1_3 = "on"
 	CustomHostnameEditResponseSSLSettingsTLS1_3Off CustomHostnameEditResponseSSLSettingsTLS1_3 = "off"
 )
+
+func (r CustomHostnameEditResponseSSLSettingsTLS1_3) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLSettingsTLS1_3On, CustomHostnameEditResponseSSLSettingsTLS1_3Off:
+		return true
+	}
+	return false
+}
 
 // Status of the hostname's SSL certificates.
 type CustomHostnameEditResponseSSLStatus string
@@ -984,6 +1184,14 @@ const (
 	CustomHostnameEditResponseSSLStatusHoldingDeployment    CustomHostnameEditResponseSSLStatus = "holding_deployment"
 )
 
+func (r CustomHostnameEditResponseSSLStatus) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLStatusInitializing, CustomHostnameEditResponseSSLStatusPendingValidation, CustomHostnameEditResponseSSLStatusDeleted, CustomHostnameEditResponseSSLStatusPendingIssuance, CustomHostnameEditResponseSSLStatusPendingDeployment, CustomHostnameEditResponseSSLStatusPendingDeletion, CustomHostnameEditResponseSSLStatusPendingExpiration, CustomHostnameEditResponseSSLStatusExpired, CustomHostnameEditResponseSSLStatusActive, CustomHostnameEditResponseSSLStatusInitializingTimedOut, CustomHostnameEditResponseSSLStatusValidationTimedOut, CustomHostnameEditResponseSSLStatusIssuanceTimedOut, CustomHostnameEditResponseSSLStatusDeploymentTimedOut, CustomHostnameEditResponseSSLStatusDeletionTimedOut, CustomHostnameEditResponseSSLStatusPendingCleanup, CustomHostnameEditResponseSSLStatusStagingDeployment, CustomHostnameEditResponseSSLStatusStagingActive, CustomHostnameEditResponseSSLStatusDeactivating, CustomHostnameEditResponseSSLStatusInactive, CustomHostnameEditResponseSSLStatusBackupIssued, CustomHostnameEditResponseSSLStatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
 // Level of validation to be used for this hostname. Domain validation (dv) must be
 // used.
 type CustomHostnameEditResponseSSLType string
@@ -991,6 +1199,14 @@ type CustomHostnameEditResponseSSLType string
 const (
 	CustomHostnameEditResponseSSLTypeDv CustomHostnameEditResponseSSLType = "dv"
 )
+
+func (r CustomHostnameEditResponseSSLType) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLTypeDv:
+		return true
+	}
+	return false
+}
 
 type CustomHostnameEditResponseSSLValidationError struct {
 	// A domain validation error.
@@ -1174,6 +1390,14 @@ const (
 	CustomHostnameGetResponseSSLBundleMethodForce      CustomHostnameGetResponseSSLBundleMethod = "force"
 )
 
+func (r CustomHostnameGetResponseSSLBundleMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLBundleMethodUbiquitous, CustomHostnameGetResponseSSLBundleMethodOptimal, CustomHostnameGetResponseSSLBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 // The Certificate Authority that will issue the certificate
 type CustomHostnameGetResponseSSLCertificateAuthority string
 
@@ -1183,6 +1407,14 @@ const (
 	CustomHostnameGetResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameGetResponseSSLCertificateAuthority = "lets_encrypt"
 )
 
+func (r CustomHostnameGetResponseSSLCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLCertificateAuthorityDigicert, CustomHostnameGetResponseSSLCertificateAuthorityGoogle, CustomHostnameGetResponseSSLCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Domain control validation (DCV) method used for this hostname.
 type CustomHostnameGetResponseSSLMethod string
 
@@ -1191,6 +1423,14 @@ const (
 	CustomHostnameGetResponseSSLMethodTXT   CustomHostnameGetResponseSSLMethod = "txt"
 	CustomHostnameGetResponseSSLMethodEmail CustomHostnameGetResponseSSLMethod = "email"
 )
+
+func (r CustomHostnameGetResponseSSLMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLMethodHTTP, CustomHostnameGetResponseSSLMethodTXT, CustomHostnameGetResponseSSLMethodEmail:
+		return true
+	}
+	return false
+}
 
 // SSL specific settings.
 type CustomHostnameGetResponseSSLSettings struct {
@@ -1236,6 +1476,14 @@ const (
 	CustomHostnameGetResponseSSLSettingsEarlyHintsOff CustomHostnameGetResponseSSLSettingsEarlyHints = "off"
 )
 
+func (r CustomHostnameGetResponseSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLSettingsEarlyHintsOn, CustomHostnameGetResponseSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
+}
+
 // Whether or not HTTP2 is enabled.
 type CustomHostnameGetResponseSSLSettingsHTTP2 string
 
@@ -1243,6 +1491,14 @@ const (
 	CustomHostnameGetResponseSSLSettingsHTTP2On  CustomHostnameGetResponseSSLSettingsHTTP2 = "on"
 	CustomHostnameGetResponseSSLSettingsHTTP2Off CustomHostnameGetResponseSSLSettingsHTTP2 = "off"
 )
+
+func (r CustomHostnameGetResponseSSLSettingsHTTP2) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLSettingsHTTP2On, CustomHostnameGetResponseSSLSettingsHTTP2Off:
+		return true
+	}
+	return false
+}
 
 // The minimum TLS version supported.
 type CustomHostnameGetResponseSSLSettingsMinTLSVersion string
@@ -1254,6 +1510,14 @@ const (
 	CustomHostnameGetResponseSSLSettingsMinTLSVersion1_3 CustomHostnameGetResponseSSLSettingsMinTLSVersion = "1.3"
 )
 
+func (r CustomHostnameGetResponseSSLSettingsMinTLSVersion) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLSettingsMinTLSVersion1_0, CustomHostnameGetResponseSSLSettingsMinTLSVersion1_1, CustomHostnameGetResponseSSLSettingsMinTLSVersion1_2, CustomHostnameGetResponseSSLSettingsMinTLSVersion1_3:
+		return true
+	}
+	return false
+}
+
 // Whether or not TLS 1.3 is enabled.
 type CustomHostnameGetResponseSSLSettingsTLS1_3 string
 
@@ -1261,6 +1525,14 @@ const (
 	CustomHostnameGetResponseSSLSettingsTLS1_3On  CustomHostnameGetResponseSSLSettingsTLS1_3 = "on"
 	CustomHostnameGetResponseSSLSettingsTLS1_3Off CustomHostnameGetResponseSSLSettingsTLS1_3 = "off"
 )
+
+func (r CustomHostnameGetResponseSSLSettingsTLS1_3) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLSettingsTLS1_3On, CustomHostnameGetResponseSSLSettingsTLS1_3Off:
+		return true
+	}
+	return false
+}
 
 // Status of the hostname's SSL certificates.
 type CustomHostnameGetResponseSSLStatus string
@@ -1289,6 +1561,14 @@ const (
 	CustomHostnameGetResponseSSLStatusHoldingDeployment    CustomHostnameGetResponseSSLStatus = "holding_deployment"
 )
 
+func (r CustomHostnameGetResponseSSLStatus) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLStatusInitializing, CustomHostnameGetResponseSSLStatusPendingValidation, CustomHostnameGetResponseSSLStatusDeleted, CustomHostnameGetResponseSSLStatusPendingIssuance, CustomHostnameGetResponseSSLStatusPendingDeployment, CustomHostnameGetResponseSSLStatusPendingDeletion, CustomHostnameGetResponseSSLStatusPendingExpiration, CustomHostnameGetResponseSSLStatusExpired, CustomHostnameGetResponseSSLStatusActive, CustomHostnameGetResponseSSLStatusInitializingTimedOut, CustomHostnameGetResponseSSLStatusValidationTimedOut, CustomHostnameGetResponseSSLStatusIssuanceTimedOut, CustomHostnameGetResponseSSLStatusDeploymentTimedOut, CustomHostnameGetResponseSSLStatusDeletionTimedOut, CustomHostnameGetResponseSSLStatusPendingCleanup, CustomHostnameGetResponseSSLStatusStagingDeployment, CustomHostnameGetResponseSSLStatusStagingActive, CustomHostnameGetResponseSSLStatusDeactivating, CustomHostnameGetResponseSSLStatusInactive, CustomHostnameGetResponseSSLStatusBackupIssued, CustomHostnameGetResponseSSLStatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
 // Level of validation to be used for this hostname. Domain validation (dv) must be
 // used.
 type CustomHostnameGetResponseSSLType string
@@ -1296,6 +1576,14 @@ type CustomHostnameGetResponseSSLType string
 const (
 	CustomHostnameGetResponseSSLTypeDv CustomHostnameGetResponseSSLType = "dv"
 )
+
+func (r CustomHostnameGetResponseSSLType) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLTypeDv:
+		return true
+	}
+	return false
+}
 
 type CustomHostnameGetResponseSSLValidationError struct {
 	// A domain validation error.
@@ -1413,6 +1701,14 @@ const (
 	CustomHostnameNewParamsSSLBundleMethodForce      CustomHostnameNewParamsSSLBundleMethod = "force"
 )
 
+func (r CustomHostnameNewParamsSSLBundleMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewParamsSSLBundleMethodUbiquitous, CustomHostnameNewParamsSSLBundleMethodOptimal, CustomHostnameNewParamsSSLBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 // The Certificate Authority that will issue the certificate
 type CustomHostnameNewParamsSSLCertificateAuthority string
 
@@ -1422,6 +1718,14 @@ const (
 	CustomHostnameNewParamsSSLCertificateAuthorityLetsEncrypt CustomHostnameNewParamsSSLCertificateAuthority = "lets_encrypt"
 )
 
+func (r CustomHostnameNewParamsSSLCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewParamsSSLCertificateAuthorityDigicert, CustomHostnameNewParamsSSLCertificateAuthorityGoogle, CustomHostnameNewParamsSSLCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Domain control validation (DCV) method used for this hostname.
 type CustomHostnameNewParamsSSLMethod string
 
@@ -1430,6 +1734,14 @@ const (
 	CustomHostnameNewParamsSSLMethodTXT   CustomHostnameNewParamsSSLMethod = "txt"
 	CustomHostnameNewParamsSSLMethodEmail CustomHostnameNewParamsSSLMethod = "email"
 )
+
+func (r CustomHostnameNewParamsSSLMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewParamsSSLMethodHTTP, CustomHostnameNewParamsSSLMethodTXT, CustomHostnameNewParamsSSLMethodEmail:
+		return true
+	}
+	return false
+}
 
 // SSL specific settings.
 type CustomHostnameNewParamsSSLSettings struct {
@@ -1458,6 +1770,14 @@ const (
 	CustomHostnameNewParamsSSLSettingsEarlyHintsOff CustomHostnameNewParamsSSLSettingsEarlyHints = "off"
 )
 
+func (r CustomHostnameNewParamsSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewParamsSSLSettingsEarlyHintsOn, CustomHostnameNewParamsSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
+}
+
 // Whether or not HTTP2 is enabled.
 type CustomHostnameNewParamsSSLSettingsHTTP2 string
 
@@ -1465,6 +1785,14 @@ const (
 	CustomHostnameNewParamsSSLSettingsHTTP2On  CustomHostnameNewParamsSSLSettingsHTTP2 = "on"
 	CustomHostnameNewParamsSSLSettingsHTTP2Off CustomHostnameNewParamsSSLSettingsHTTP2 = "off"
 )
+
+func (r CustomHostnameNewParamsSSLSettingsHTTP2) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewParamsSSLSettingsHTTP2On, CustomHostnameNewParamsSSLSettingsHTTP2Off:
+		return true
+	}
+	return false
+}
 
 // The minimum TLS version supported.
 type CustomHostnameNewParamsSSLSettingsMinTLSVersion string
@@ -1476,6 +1804,14 @@ const (
 	CustomHostnameNewParamsSSLSettingsMinTLSVersion1_3 CustomHostnameNewParamsSSLSettingsMinTLSVersion = "1.3"
 )
 
+func (r CustomHostnameNewParamsSSLSettingsMinTLSVersion) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewParamsSSLSettingsMinTLSVersion1_0, CustomHostnameNewParamsSSLSettingsMinTLSVersion1_1, CustomHostnameNewParamsSSLSettingsMinTLSVersion1_2, CustomHostnameNewParamsSSLSettingsMinTLSVersion1_3:
+		return true
+	}
+	return false
+}
+
 // Whether or not TLS 1.3 is enabled.
 type CustomHostnameNewParamsSSLSettingsTLS1_3 string
 
@@ -1484,6 +1820,14 @@ const (
 	CustomHostnameNewParamsSSLSettingsTLS1_3Off CustomHostnameNewParamsSSLSettingsTLS1_3 = "off"
 )
 
+func (r CustomHostnameNewParamsSSLSettingsTLS1_3) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewParamsSSLSettingsTLS1_3On, CustomHostnameNewParamsSSLSettingsTLS1_3Off:
+		return true
+	}
+	return false
+}
+
 // Level of validation to be used for this hostname. Domain validation (dv) must be
 // used.
 type CustomHostnameNewParamsSSLType string
@@ -1491,6 +1835,14 @@ type CustomHostnameNewParamsSSLType string
 const (
 	CustomHostnameNewParamsSSLTypeDv CustomHostnameNewParamsSSLType = "dv"
 )
+
+func (r CustomHostnameNewParamsSSLType) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewParamsSSLTypeDv:
+		return true
+	}
+	return false
+}
 
 // These are per-hostname (customer) settings.
 type CustomHostnameNewParamsCustomMetadata struct {
@@ -1583,6 +1935,14 @@ const (
 	CustomHostnameNewResponseEnvelopeSuccessTrue CustomHostnameNewResponseEnvelopeSuccess = true
 )
 
+func (r CustomHostnameNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CustomHostnameListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -1622,6 +1982,14 @@ const (
 	CustomHostnameListParamsDirectionDesc CustomHostnameListParamsDirection = "desc"
 )
 
+func (r CustomHostnameListParamsDirection) IsKnown() bool {
+	switch r {
+	case CustomHostnameListParamsDirectionAsc, CustomHostnameListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Field to order hostnames by.
 type CustomHostnameListParamsOrder string
 
@@ -1630,6 +1998,14 @@ const (
 	CustomHostnameListParamsOrderSSLStatus CustomHostnameListParamsOrder = "ssl_status"
 )
 
+func (r CustomHostnameListParamsOrder) IsKnown() bool {
+	switch r {
+	case CustomHostnameListParamsOrderSSL, CustomHostnameListParamsOrderSSLStatus:
+		return true
+	}
+	return false
+}
+
 // Whether to filter hostnames based on if they have SSL enabled.
 type CustomHostnameListParamsSSL float64
 
@@ -1637,6 +2013,14 @@ const (
 	CustomHostnameListParamsSSL0 CustomHostnameListParamsSSL = 0
 	CustomHostnameListParamsSSL1 CustomHostnameListParamsSSL = 1
 )
+
+func (r CustomHostnameListParamsSSL) IsKnown() bool {
+	switch r {
+	case CustomHostnameListParamsSSL0, CustomHostnameListParamsSSL1:
+		return true
+	}
+	return false
+}
 
 type CustomHostnameDeleteParams struct {
 	// Identifier
@@ -1715,6 +2099,14 @@ const (
 	CustomHostnameEditParamsSSLBundleMethodForce      CustomHostnameEditParamsSSLBundleMethod = "force"
 )
 
+func (r CustomHostnameEditParamsSSLBundleMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditParamsSSLBundleMethodUbiquitous, CustomHostnameEditParamsSSLBundleMethodOptimal, CustomHostnameEditParamsSSLBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 // The Certificate Authority that will issue the certificate
 type CustomHostnameEditParamsSSLCertificateAuthority string
 
@@ -1724,6 +2116,14 @@ const (
 	CustomHostnameEditParamsSSLCertificateAuthorityLetsEncrypt CustomHostnameEditParamsSSLCertificateAuthority = "lets_encrypt"
 )
 
+func (r CustomHostnameEditParamsSSLCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditParamsSSLCertificateAuthorityDigicert, CustomHostnameEditParamsSSLCertificateAuthorityGoogle, CustomHostnameEditParamsSSLCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Domain control validation (DCV) method used for this hostname.
 type CustomHostnameEditParamsSSLMethod string
 
@@ -1732,6 +2132,14 @@ const (
 	CustomHostnameEditParamsSSLMethodTXT   CustomHostnameEditParamsSSLMethod = "txt"
 	CustomHostnameEditParamsSSLMethodEmail CustomHostnameEditParamsSSLMethod = "email"
 )
+
+func (r CustomHostnameEditParamsSSLMethod) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditParamsSSLMethodHTTP, CustomHostnameEditParamsSSLMethodTXT, CustomHostnameEditParamsSSLMethodEmail:
+		return true
+	}
+	return false
+}
 
 // SSL specific settings.
 type CustomHostnameEditParamsSSLSettings struct {
@@ -1760,6 +2168,14 @@ const (
 	CustomHostnameEditParamsSSLSettingsEarlyHintsOff CustomHostnameEditParamsSSLSettingsEarlyHints = "off"
 )
 
+func (r CustomHostnameEditParamsSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditParamsSSLSettingsEarlyHintsOn, CustomHostnameEditParamsSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
+}
+
 // Whether or not HTTP2 is enabled.
 type CustomHostnameEditParamsSSLSettingsHTTP2 string
 
@@ -1767,6 +2183,14 @@ const (
 	CustomHostnameEditParamsSSLSettingsHTTP2On  CustomHostnameEditParamsSSLSettingsHTTP2 = "on"
 	CustomHostnameEditParamsSSLSettingsHTTP2Off CustomHostnameEditParamsSSLSettingsHTTP2 = "off"
 )
+
+func (r CustomHostnameEditParamsSSLSettingsHTTP2) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditParamsSSLSettingsHTTP2On, CustomHostnameEditParamsSSLSettingsHTTP2Off:
+		return true
+	}
+	return false
+}
 
 // The minimum TLS version supported.
 type CustomHostnameEditParamsSSLSettingsMinTLSVersion string
@@ -1778,6 +2202,14 @@ const (
 	CustomHostnameEditParamsSSLSettingsMinTLSVersion1_3 CustomHostnameEditParamsSSLSettingsMinTLSVersion = "1.3"
 )
 
+func (r CustomHostnameEditParamsSSLSettingsMinTLSVersion) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditParamsSSLSettingsMinTLSVersion1_0, CustomHostnameEditParamsSSLSettingsMinTLSVersion1_1, CustomHostnameEditParamsSSLSettingsMinTLSVersion1_2, CustomHostnameEditParamsSSLSettingsMinTLSVersion1_3:
+		return true
+	}
+	return false
+}
+
 // Whether or not TLS 1.3 is enabled.
 type CustomHostnameEditParamsSSLSettingsTLS1_3 string
 
@@ -1786,6 +2218,14 @@ const (
 	CustomHostnameEditParamsSSLSettingsTLS1_3Off CustomHostnameEditParamsSSLSettingsTLS1_3 = "off"
 )
 
+func (r CustomHostnameEditParamsSSLSettingsTLS1_3) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditParamsSSLSettingsTLS1_3On, CustomHostnameEditParamsSSLSettingsTLS1_3Off:
+		return true
+	}
+	return false
+}
+
 // Level of validation to be used for this hostname. Domain validation (dv) must be
 // used.
 type CustomHostnameEditParamsSSLType string
@@ -1793,6 +2233,14 @@ type CustomHostnameEditParamsSSLType string
 const (
 	CustomHostnameEditParamsSSLTypeDv CustomHostnameEditParamsSSLType = "dv"
 )
+
+func (r CustomHostnameEditParamsSSLType) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditParamsSSLTypeDv:
+		return true
+	}
+	return false
+}
 
 type CustomHostnameEditResponseEnvelope struct {
 	Errors   []CustomHostnameEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -1874,6 +2322,14 @@ type CustomHostnameEditResponseEnvelopeSuccess bool
 const (
 	CustomHostnameEditResponseEnvelopeSuccessTrue CustomHostnameEditResponseEnvelopeSuccess = true
 )
+
+func (r CustomHostnameEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type CustomHostnameGetParams struct {
 	// Identifier
@@ -1960,3 +2416,11 @@ type CustomHostnameGetResponseEnvelopeSuccess bool
 const (
 	CustomHostnameGetResponseEnvelopeSuccessTrue CustomHostnameGetResponseEnvelopeSuccess = true
 )
+
+func (r CustomHostnameGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package rulesets
 
@@ -146,6 +146,14 @@ const (
 	VersionListResponseKindZone    VersionListResponseKind = "zone"
 )
 
+func (r VersionListResponseKind) IsKnown() bool {
+	switch r {
+	case VersionListResponseKindManaged, VersionListResponseKindCustom, VersionListResponseKindRoot, VersionListResponseKindZone:
+		return true
+	}
+	return false
+}
+
 // The phase of the ruleset.
 type VersionListResponsePhase string
 
@@ -174,6 +182,14 @@ const (
 	VersionListResponsePhaseMagicTransitIDsManaged         VersionListResponsePhase = "magic_transit_ids_managed"
 	VersionListResponsePhaseMagicTransitManaged            VersionListResponsePhase = "magic_transit_managed"
 )
+
+func (r VersionListResponsePhase) IsKnown() bool {
+	switch r {
+	case VersionListResponsePhaseDDOSL4, VersionListResponsePhaseDDOSL7, VersionListResponsePhaseHTTPConfigSettings, VersionListResponsePhaseHTTPCustomErrors, VersionListResponsePhaseHTTPLogCustomFields, VersionListResponsePhaseHTTPRatelimit, VersionListResponsePhaseHTTPRequestCacheSettings, VersionListResponsePhaseHTTPRequestDynamicRedirect, VersionListResponsePhaseHTTPRequestFirewallCustom, VersionListResponsePhaseHTTPRequestFirewallManaged, VersionListResponsePhaseHTTPRequestLateTransform, VersionListResponsePhaseHTTPRequestOrigin, VersionListResponsePhaseHTTPRequestRedirect, VersionListResponsePhaseHTTPRequestSanitize, VersionListResponsePhaseHTTPRequestSbfm, VersionListResponsePhaseHTTPRequestSelectConfiguration, VersionListResponsePhaseHTTPRequestTransform, VersionListResponsePhaseHTTPResponseCompression, VersionListResponsePhaseHTTPResponseFirewallManaged, VersionListResponsePhaseHTTPResponseHeadersTransform, VersionListResponsePhaseMagicTransit, VersionListResponsePhaseMagicTransitIDsManaged, VersionListResponsePhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 type VersionListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -324,6 +340,14 @@ type VersionListResponseEnvelopeSuccess bool
 const (
 	VersionListResponseEnvelopeSuccessTrue VersionListResponseEnvelopeSuccess = true
 )
+
+func (r VersionListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VersionListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type VersionDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -481,3 +505,11 @@ type VersionGetResponseEnvelopeSuccess bool
 const (
 	VersionGetResponseEnvelopeSuccessTrue VersionGetResponseEnvelopeSuccess = true
 )
+
+func (r VersionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VersionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

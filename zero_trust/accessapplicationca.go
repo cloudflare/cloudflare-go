@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -294,6 +294,14 @@ const (
 	AccessApplicationCANewResponseEnvelopeSuccessTrue AccessApplicationCANewResponseEnvelopeSuccess = true
 )
 
+func (r AccessApplicationCANewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationCANewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationCAListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -383,6 +391,14 @@ type AccessApplicationCAListResponseEnvelopeSuccess bool
 const (
 	AccessApplicationCAListResponseEnvelopeSuccessTrue AccessApplicationCAListResponseEnvelopeSuccess = true
 )
+
+func (r AccessApplicationCAListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationCAListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationCAListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -503,6 +519,14 @@ const (
 	AccessApplicationCADeleteResponseEnvelopeSuccessTrue AccessApplicationCADeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessApplicationCADeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationCADeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationCAGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -590,3 +614,11 @@ type AccessApplicationCAGetResponseEnvelopeSuccess bool
 const (
 	AccessApplicationCAGetResponseEnvelopeSuccessTrue AccessApplicationCAGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessApplicationCAGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationCAGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers
 
@@ -249,6 +249,14 @@ const (
 	RouteNewResponseEnvelopeSuccessTrue RouteNewResponseEnvelopeSuccess = true
 )
 
+func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteUpdateParams struct {
 	// Identifier
 	ZoneID  param.Field[string] `path:"zone_id,required"`
@@ -342,6 +350,14 @@ const (
 	RouteUpdateResponseEnvelopeSuccessTrue RouteUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RouteUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -427,6 +443,14 @@ type RouteListResponseEnvelopeSuccess bool
 const (
 	RouteListResponseEnvelopeSuccessTrue RouteListResponseEnvelopeSuccess = true
 )
+
+func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RouteDeleteParams struct {
 	// Identifier
@@ -514,6 +538,14 @@ const (
 	RouteDeleteResponseEnvelopeSuccessTrue RouteDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -599,3 +631,11 @@ type RouteGetResponseEnvelopeSuccess bool
 const (
 	RouteGetResponseEnvelopeSuccessTrue RouteGetResponseEnvelopeSuccess = true
 )
+
+func (r RouteGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

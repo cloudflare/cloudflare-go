@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -262,12 +262,28 @@ const (
 	HTTPAseIPVersionGetParamsIPVersionIPv6 HTTPAseIPVersionGetParamsIPVersion = "IPv6"
 )
 
+func (r HTTPAseIPVersionGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsIPVersionIPv4, HTTPAseIPVersionGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
 type HTTPAseIPVersionGetParamsBotClass string
 
 const (
 	HTTPAseIPVersionGetParamsBotClassLikelyAutomated HTTPAseIPVersionGetParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPAseIPVersionGetParamsBotClassLikelyHuman     HTTPAseIPVersionGetParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPAseIPVersionGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsBotClassLikelyAutomated, HTTPAseIPVersionGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPAseIPVersionGetParamsDateRange string
 
@@ -289,6 +305,14 @@ const (
 	HTTPAseIPVersionGetParamsDateRange24wControl HTTPAseIPVersionGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPAseIPVersionGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsDateRange1d, HTTPAseIPVersionGetParamsDateRange2d, HTTPAseIPVersionGetParamsDateRange7d, HTTPAseIPVersionGetParamsDateRange14d, HTTPAseIPVersionGetParamsDateRange28d, HTTPAseIPVersionGetParamsDateRange12w, HTTPAseIPVersionGetParamsDateRange24w, HTTPAseIPVersionGetParamsDateRange52w, HTTPAseIPVersionGetParamsDateRange1dControl, HTTPAseIPVersionGetParamsDateRange2dControl, HTTPAseIPVersionGetParamsDateRange7dControl, HTTPAseIPVersionGetParamsDateRange14dControl, HTTPAseIPVersionGetParamsDateRange28dControl, HTTPAseIPVersionGetParamsDateRange12wControl, HTTPAseIPVersionGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPAseIPVersionGetParamsDeviceType string
 
 const (
@@ -296,6 +320,14 @@ const (
 	HTTPAseIPVersionGetParamsDeviceTypeMobile  HTTPAseIPVersionGetParamsDeviceType = "MOBILE"
 	HTTPAseIPVersionGetParamsDeviceTypeOther   HTTPAseIPVersionGetParamsDeviceType = "OTHER"
 )
+
+func (r HTTPAseIPVersionGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsDeviceTypeDesktop, HTTPAseIPVersionGetParamsDeviceTypeMobile, HTTPAseIPVersionGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPAseIPVersionGetParamsFormat string
@@ -305,12 +337,28 @@ const (
 	HTTPAseIPVersionGetParamsFormatCsv  HTTPAseIPVersionGetParamsFormat = "CSV"
 )
 
+func (r HTTPAseIPVersionGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsFormatJson, HTTPAseIPVersionGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseIPVersionGetParamsHTTPProtocol string
 
 const (
 	HTTPAseIPVersionGetParamsHTTPProtocolHTTP  HTTPAseIPVersionGetParamsHTTPProtocol = "HTTP"
 	HTTPAseIPVersionGetParamsHTTPProtocolHTTPS HTTPAseIPVersionGetParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPAseIPVersionGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsHTTPProtocolHTTP, HTTPAseIPVersionGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPAseIPVersionGetParamsHTTPVersion string
 
@@ -319,6 +367,14 @@ const (
 	HTTPAseIPVersionGetParamsHTTPVersionHttPv2 HTTPAseIPVersionGetParamsHTTPVersion = "HTTPv2"
 	HTTPAseIPVersionGetParamsHTTPVersionHttPv3 HTTPAseIPVersionGetParamsHTTPVersion = "HTTPv3"
 )
+
+func (r HTTPAseIPVersionGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsHTTPVersionHttPv1, HTTPAseIPVersionGetParamsHTTPVersionHttPv2, HTTPAseIPVersionGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
 
 type HTTPAseIPVersionGetParamsOS string
 
@@ -332,6 +388,14 @@ const (
 	HTTPAseIPVersionGetParamsOSSmartTv  HTTPAseIPVersionGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPAseIPVersionGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsOSWindows, HTTPAseIPVersionGetParamsOSMacosx, HTTPAseIPVersionGetParamsOSIos, HTTPAseIPVersionGetParamsOSAndroid, HTTPAseIPVersionGetParamsOSChromeos, HTTPAseIPVersionGetParamsOSLinux, HTTPAseIPVersionGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseIPVersionGetParamsTLSVersion string
 
 const (
@@ -341,6 +405,14 @@ const (
 	HTTPAseIPVersionGetParamsTLSVersionTlSv1_3  HTTPAseIPVersionGetParamsTLSVersion = "TLSv1_3"
 	HTTPAseIPVersionGetParamsTLSVersionTlSvQuic HTTPAseIPVersionGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPAseIPVersionGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseIPVersionGetParamsTLSVersionTlSv1_0, HTTPAseIPVersionGetParamsTLSVersionTlSv1_1, HTTPAseIPVersionGetParamsTLSVersionTlSv1_2, HTTPAseIPVersionGetParamsTLSVersionTlSv1_3, HTTPAseIPVersionGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPAseIPVersionGetResponseEnvelope struct {
 	Result  HTTPAseIPVersionGetResponse             `json:"result,required"`

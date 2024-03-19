@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package ips
 
@@ -223,3 +223,11 @@ type IPListResponseEnvelopeSuccess bool
 const (
 	IPListResponseEnvelopeSuccessTrue IPListResponseEnvelopeSuccess = true
 )
+
+func (r IPListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

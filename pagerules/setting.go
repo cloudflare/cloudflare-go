@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package pagerules
 
@@ -134,3 +134,11 @@ type SettingListResponseEnvelopeSuccess bool
 const (
 	SettingListResponseEnvelopeSuccessTrue SettingListResponseEnvelopeSuccess = true
 )
+
+func (r SettingListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

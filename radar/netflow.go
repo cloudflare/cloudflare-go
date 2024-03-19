@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -259,6 +259,14 @@ const (
 	NetflowTimeseriesParamsAggInterval1w  NetflowTimeseriesParamsAggInterval = "1w"
 )
 
+func (r NetflowTimeseriesParamsAggInterval) IsKnown() bool {
+	switch r {
+	case NetflowTimeseriesParamsAggInterval15m, NetflowTimeseriesParamsAggInterval1h, NetflowTimeseriesParamsAggInterval1d, NetflowTimeseriesParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type NetflowTimeseriesParamsDateRange string
 
 const (
@@ -279,6 +287,14 @@ const (
 	NetflowTimeseriesParamsDateRange24wControl NetflowTimeseriesParamsDateRange = "24wControl"
 )
 
+func (r NetflowTimeseriesParamsDateRange) IsKnown() bool {
+	switch r {
+	case NetflowTimeseriesParamsDateRange1d, NetflowTimeseriesParamsDateRange2d, NetflowTimeseriesParamsDateRange7d, NetflowTimeseriesParamsDateRange14d, NetflowTimeseriesParamsDateRange28d, NetflowTimeseriesParamsDateRange12w, NetflowTimeseriesParamsDateRange24w, NetflowTimeseriesParamsDateRange52w, NetflowTimeseriesParamsDateRange1dControl, NetflowTimeseriesParamsDateRange2dControl, NetflowTimeseriesParamsDateRange7dControl, NetflowTimeseriesParamsDateRange14dControl, NetflowTimeseriesParamsDateRange28dControl, NetflowTimeseriesParamsDateRange12wControl, NetflowTimeseriesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type NetflowTimeseriesParamsFormat string
 
@@ -286,6 +302,14 @@ const (
 	NetflowTimeseriesParamsFormatJson NetflowTimeseriesParamsFormat = "JSON"
 	NetflowTimeseriesParamsFormatCsv  NetflowTimeseriesParamsFormat = "CSV"
 )
+
+func (r NetflowTimeseriesParamsFormat) IsKnown() bool {
+	switch r {
+	case NetflowTimeseriesParamsFormatJson, NetflowTimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -296,12 +320,28 @@ const (
 	NetflowTimeseriesParamsNormalizationMin0Max          NetflowTimeseriesParamsNormalization = "MIN0_MAX"
 )
 
+func (r NetflowTimeseriesParamsNormalization) IsKnown() bool {
+	switch r {
+	case NetflowTimeseriesParamsNormalizationPercentageChange, NetflowTimeseriesParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
+
 type NetflowTimeseriesParamsProduct string
 
 const (
 	NetflowTimeseriesParamsProductHTTP NetflowTimeseriesParamsProduct = "HTTP"
 	NetflowTimeseriesParamsProductAll  NetflowTimeseriesParamsProduct = "ALL"
 )
+
+func (r NetflowTimeseriesParamsProduct) IsKnown() bool {
+	switch r {
+	case NetflowTimeseriesParamsProductHTTP, NetflowTimeseriesParamsProductAll:
+		return true
+	}
+	return false
+}
 
 type NetflowTimeseriesResponseEnvelope struct {
 	Result  NetflowTimeseriesResponse             `json:"result,required"`

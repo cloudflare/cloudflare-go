@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -101,6 +101,14 @@ const (
 	ZonesTLS1_3IDTLS1_3 ZonesTLS1_3ID = "tls_1_3"
 )
 
+func (r ZonesTLS1_3ID) IsKnown() bool {
+	switch r {
+	case ZonesTLS1_3IDTLS1_3:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesTLS1_3Value string
 
@@ -110,6 +118,14 @@ const (
 	ZonesTLS1_3ValueZrt ZonesTLS1_3Value = "zrt"
 )
 
+func (r ZonesTLS1_3Value) IsKnown() bool {
+	switch r {
+	case ZonesTLS1_3ValueOn, ZonesTLS1_3ValueOff, ZonesTLS1_3ValueZrt:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesTLS1_3Editable bool
@@ -118,6 +134,14 @@ const (
 	ZonesTLS1_3EditableTrue  ZonesTLS1_3Editable = true
 	ZonesTLS1_3EditableFalse ZonesTLS1_3Editable = false
 )
+
+func (r ZonesTLS1_3Editable) IsKnown() bool {
+	switch r {
+	case ZonesTLS1_3EditableTrue, ZonesTLS1_3EditableFalse:
+		return true
+	}
+	return false
+}
 
 // Enables Crypto TLS 1.3 feature for a zone.
 type ZonesTLS1_3Param struct {
@@ -154,6 +178,14 @@ const (
 	SettingTls1_3EditParamsValueOff SettingTls1_3EditParamsValue = "off"
 	SettingTls1_3EditParamsValueZrt SettingTls1_3EditParamsValue = "zrt"
 )
+
+func (r SettingTls1_3EditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingTls1_3EditParamsValueOn, SettingTls1_3EditParamsValueOff, SettingTls1_3EditParamsValueZrt:
+		return true
+	}
+	return false
+}
 
 type SettingTls1_3EditResponseEnvelope struct {
 	Errors   []SettingTls1_3EditResponseEnvelopeErrors   `json:"errors,required"`

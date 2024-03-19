@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package rulesets
 
@@ -191,3 +191,11 @@ type VersionByTagGetResponseEnvelopeSuccess bool
 const (
 	VersionByTagGetResponseEnvelopeSuccessTrue VersionByTagGetResponseEnvelopeSuccess = true
 )
+
+func (r VersionByTagGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VersionByTagGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

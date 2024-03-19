@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -114,6 +114,14 @@ const (
 	IntelSchemasIPBelongsToRefTypeIsp             IntelSchemasIPBelongsToRefType = "isp"
 	IntelSchemasIPBelongsToRefTypeOrganization    IntelSchemasIPBelongsToRefType = "organization"
 )
+
+func (r IntelSchemasIPBelongsToRefType) IsKnown() bool {
+	switch r {
+	case IntelSchemasIPBelongsToRefTypeHostingProvider, IntelSchemasIPBelongsToRefTypeIsp, IntelSchemasIPBelongsToRefTypeOrganization:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
 type IntelSchemasIPIP interface {
@@ -232,6 +240,14 @@ type IPGetResponseEnvelopeSuccess bool
 const (
 	IPGetResponseEnvelopeSuccessTrue IPGetResponseEnvelopeSuccess = true
 )
+
+func (r IPGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IPGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

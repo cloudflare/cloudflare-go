@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package rulesets
 
@@ -199,6 +199,14 @@ const (
 	RulesetsRulesetResponseKindZone    RulesetsRulesetResponseKind = "zone"
 )
 
+func (r RulesetsRulesetResponseKind) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseKindManaged, RulesetsRulesetResponseKindCustom, RulesetsRulesetResponseKindRoot, RulesetsRulesetResponseKindZone:
+		return true
+	}
+	return false
+}
+
 // The phase of the ruleset.
 type RulesetsRulesetResponsePhase string
 
@@ -227,6 +235,14 @@ const (
 	RulesetsRulesetResponsePhaseMagicTransitIDsManaged         RulesetsRulesetResponsePhase = "magic_transit_ids_managed"
 	RulesetsRulesetResponsePhaseMagicTransitManaged            RulesetsRulesetResponsePhase = "magic_transit_managed"
 )
+
+func (r RulesetsRulesetResponsePhase) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponsePhaseDDOSL4, RulesetsRulesetResponsePhaseDDOSL7, RulesetsRulesetResponsePhaseHTTPConfigSettings, RulesetsRulesetResponsePhaseHTTPCustomErrors, RulesetsRulesetResponsePhaseHTTPLogCustomFields, RulesetsRulesetResponsePhaseHTTPRatelimit, RulesetsRulesetResponsePhaseHTTPRequestCacheSettings, RulesetsRulesetResponsePhaseHTTPRequestDynamicRedirect, RulesetsRulesetResponsePhaseHTTPRequestFirewallCustom, RulesetsRulesetResponsePhaseHTTPRequestFirewallManaged, RulesetsRulesetResponsePhaseHTTPRequestLateTransform, RulesetsRulesetResponsePhaseHTTPRequestOrigin, RulesetsRulesetResponsePhaseHTTPRequestRedirect, RulesetsRulesetResponsePhaseHTTPRequestSanitize, RulesetsRulesetResponsePhaseHTTPRequestSbfm, RulesetsRulesetResponsePhaseHTTPRequestSelectConfiguration, RulesetsRulesetResponsePhaseHTTPRequestTransform, RulesetsRulesetResponsePhaseHTTPResponseCompression, RulesetsRulesetResponsePhaseHTTPResponseFirewallManaged, RulesetsRulesetResponsePhaseHTTPResponseHeadersTransform, RulesetsRulesetResponsePhaseMagicTransit, RulesetsRulesetResponsePhaseMagicTransitIDsManaged, RulesetsRulesetResponsePhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [rulesets.RulesetsRulesetResponseRulesRulesetsBlockRule],
 // [rulesets.RulesetsRulesetResponseRulesRulesetsExecuteRule],
@@ -324,6 +340,14 @@ type RulesetsRulesetResponseRulesRulesetsBlockRuleAction string
 const (
 	RulesetsRulesetResponseRulesRulesetsBlockRuleActionBlock RulesetsRulesetResponseRulesRulesetsBlockRuleAction = "block"
 )
+
+func (r RulesetsRulesetResponseRulesRulesetsBlockRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsBlockRuleActionBlock:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type RulesetsRulesetResponseRulesRulesetsBlockRuleActionParameters struct {
@@ -464,6 +488,14 @@ const (
 	RulesetsRulesetResponseRulesRulesetsExecuteRuleActionExecute RulesetsRulesetResponseRulesRulesetsExecuteRuleAction = "execute"
 )
 
+func (r RulesetsRulesetResponseRulesRulesetsExecuteRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsExecuteRuleActionExecute:
+		return true
+	}
+	return false
+}
+
 // The parameters configuring the rule's action.
 type RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParameters struct {
 	// The ID of the ruleset to execute.
@@ -601,6 +633,14 @@ const (
 	RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
 )
 
+func (r RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
+
 // A rule-level override
 type RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
 	// The ID of the rule to override.
@@ -647,6 +687,14 @@ const (
 	RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
 )
 
+func (r RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
+
 // A sensitivity level to set for all rules. This option has lower precedence than
 // rule and category overrides and is only applicable for DDoS phases.
 type RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
@@ -657,6 +705,14 @@ const (
 	RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
 	RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
 )
+
+func (r RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow, RulesetsRulesetResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
 
 // An object configuring the rule's logging behavior.
 type RulesetsRulesetResponseRulesRulesetsExecuteRuleLogging struct {
@@ -743,6 +799,14 @@ const (
 	RulesetsRulesetResponseRulesRulesetsLogRuleActionLog RulesetsRulesetResponseRulesRulesetsLogRuleAction = "log"
 )
 
+func (r RulesetsRulesetResponseRulesRulesetsLogRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsLogRuleActionLog:
+		return true
+	}
+	return false
+}
+
 // An object configuring the rule's logging behavior.
 type RulesetsRulesetResponseRulesRulesetsLogRuleLogging struct {
 	// Whether to generate a log when the rule matches.
@@ -828,6 +892,14 @@ const (
 	RulesetsRulesetResponseRulesRulesetsSkipRuleActionSkip RulesetsRulesetResponseRulesRulesetsSkipRuleAction = "skip"
 )
 
+func (r RulesetsRulesetResponseRulesRulesetsSkipRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsSkipRuleActionSkip:
+		return true
+	}
+	return false
+}
+
 // The parameters configuring the rule's action.
 type RulesetsRulesetResponseRulesRulesetsSkipRuleActionParameters struct {
 	// A list of phases to skip the execution of. This option is incompatible with the
@@ -897,6 +969,14 @@ const (
 	RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
 )
 
+func (r RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL4, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL7, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
+
 // The name of a legacy security product to skip the execution of.
 type RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProduct string
 
@@ -910,6 +990,14 @@ const (
 	RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )
 
+func (r RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProductBic, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProductHot, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProductRateLimit, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProductUABlock, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProductWAF, RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown:
+		return true
+	}
+	return false
+}
+
 // A ruleset to skip the execution of. This option is incompatible with the
 // rulesets, rules and phases options.
 type RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersRuleset string
@@ -917,6 +1005,14 @@ type RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersRuleset string
 const (
 	RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersRuleset = "current"
 )
+
+func (r RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
+	switch r {
+	case RulesetsRulesetResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent:
+		return true
+	}
+	return false
+}
 
 // An object configuring the rule's logging behavior.
 type RulesetsRulesetResponseRulesRulesetsSkipRuleLogging struct {
@@ -994,6 +1090,14 @@ const (
 	RulesetListResponseKindZone    RulesetListResponseKind = "zone"
 )
 
+func (r RulesetListResponseKind) IsKnown() bool {
+	switch r {
+	case RulesetListResponseKindManaged, RulesetListResponseKindCustom, RulesetListResponseKindRoot, RulesetListResponseKindZone:
+		return true
+	}
+	return false
+}
+
 // The phase of the ruleset.
 type RulesetListResponsePhase string
 
@@ -1022,6 +1126,14 @@ const (
 	RulesetListResponsePhaseMagicTransitIDsManaged         RulesetListResponsePhase = "magic_transit_ids_managed"
 	RulesetListResponsePhaseMagicTransitManaged            RulesetListResponsePhase = "magic_transit_managed"
 )
+
+func (r RulesetListResponsePhase) IsKnown() bool {
+	switch r {
+	case RulesetListResponsePhaseDDOSL4, RulesetListResponsePhaseDDOSL7, RulesetListResponsePhaseHTTPConfigSettings, RulesetListResponsePhaseHTTPCustomErrors, RulesetListResponsePhaseHTTPLogCustomFields, RulesetListResponsePhaseHTTPRatelimit, RulesetListResponsePhaseHTTPRequestCacheSettings, RulesetListResponsePhaseHTTPRequestDynamicRedirect, RulesetListResponsePhaseHTTPRequestFirewallCustom, RulesetListResponsePhaseHTTPRequestFirewallManaged, RulesetListResponsePhaseHTTPRequestLateTransform, RulesetListResponsePhaseHTTPRequestOrigin, RulesetListResponsePhaseHTTPRequestRedirect, RulesetListResponsePhaseHTTPRequestSanitize, RulesetListResponsePhaseHTTPRequestSbfm, RulesetListResponsePhaseHTTPRequestSelectConfiguration, RulesetListResponsePhaseHTTPRequestTransform, RulesetListResponsePhaseHTTPResponseCompression, RulesetListResponsePhaseHTTPResponseFirewallManaged, RulesetListResponsePhaseHTTPResponseHeadersTransform, RulesetListResponsePhaseMagicTransit, RulesetListResponsePhaseMagicTransitIDsManaged, RulesetListResponsePhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 type RulesetNewParams struct {
 	// The kind of the ruleset.
@@ -1054,6 +1166,14 @@ const (
 	RulesetNewParamsKindZone    RulesetNewParamsKind = "zone"
 )
 
+func (r RulesetNewParamsKind) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsKindManaged, RulesetNewParamsKindCustom, RulesetNewParamsKindRoot, RulesetNewParamsKindZone:
+		return true
+	}
+	return false
+}
+
 // The phase of the ruleset.
 type RulesetNewParamsPhase string
 
@@ -1082,6 +1202,14 @@ const (
 	RulesetNewParamsPhaseMagicTransitIDsManaged         RulesetNewParamsPhase = "magic_transit_ids_managed"
 	RulesetNewParamsPhaseMagicTransitManaged            RulesetNewParamsPhase = "magic_transit_managed"
 )
+
+func (r RulesetNewParamsPhase) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsPhaseDDOSL4, RulesetNewParamsPhaseDDOSL7, RulesetNewParamsPhaseHTTPConfigSettings, RulesetNewParamsPhaseHTTPCustomErrors, RulesetNewParamsPhaseHTTPLogCustomFields, RulesetNewParamsPhaseHTTPRatelimit, RulesetNewParamsPhaseHTTPRequestCacheSettings, RulesetNewParamsPhaseHTTPRequestDynamicRedirect, RulesetNewParamsPhaseHTTPRequestFirewallCustom, RulesetNewParamsPhaseHTTPRequestFirewallManaged, RulesetNewParamsPhaseHTTPRequestLateTransform, RulesetNewParamsPhaseHTTPRequestOrigin, RulesetNewParamsPhaseHTTPRequestRedirect, RulesetNewParamsPhaseHTTPRequestSanitize, RulesetNewParamsPhaseHTTPRequestSbfm, RulesetNewParamsPhaseHTTPRequestSelectConfiguration, RulesetNewParamsPhaseHTTPRequestTransform, RulesetNewParamsPhaseHTTPResponseCompression, RulesetNewParamsPhaseHTTPResponseFirewallManaged, RulesetNewParamsPhaseHTTPResponseHeadersTransform, RulesetNewParamsPhaseMagicTransit, RulesetNewParamsPhaseMagicTransitIDsManaged, RulesetNewParamsPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 // Satisfied by [rulesets.RulesetNewParamsRulesRulesetsBlockRule],
 // [rulesets.RulesetNewParamsRulesRulesetsExecuteRule],
@@ -1122,6 +1250,14 @@ type RulesetNewParamsRulesRulesetsBlockRuleAction string
 const (
 	RulesetNewParamsRulesRulesetsBlockRuleActionBlock RulesetNewParamsRulesRulesetsBlockRuleAction = "block"
 )
+
+func (r RulesetNewParamsRulesRulesetsBlockRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsBlockRuleActionBlock:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type RulesetNewParamsRulesRulesetsBlockRuleActionParameters struct {
@@ -1188,6 +1324,14 @@ type RulesetNewParamsRulesRulesetsExecuteRuleAction string
 const (
 	RulesetNewParamsRulesRulesetsExecuteRuleActionExecute RulesetNewParamsRulesRulesetsExecuteRuleAction = "execute"
 )
+
+func (r RulesetNewParamsRulesRulesetsExecuteRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsExecuteRuleActionExecute:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type RulesetNewParamsRulesRulesetsExecuteRuleActionParameters struct {
@@ -1261,6 +1405,14 @@ const (
 	RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
 )
 
+func (r RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
+
 // A rule-level override
 type RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
 	// The ID of the rule to override.
@@ -1289,6 +1441,14 @@ const (
 	RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
 )
 
+func (r RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
+
 // A sensitivity level to set for all rules. This option has lower precedence than
 // rule and category overrides and is only applicable for DDoS phases.
 type RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
@@ -1299,6 +1459,14 @@ const (
 	RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
 	RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
 )
+
+func (r RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow, RulesetNewParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
 
 // An object configuring the rule's logging behavior.
 type RulesetNewParamsRulesRulesetsExecuteRuleLogging struct {
@@ -1342,6 +1510,14 @@ const (
 	RulesetNewParamsRulesRulesetsLogRuleActionLog RulesetNewParamsRulesRulesetsLogRuleAction = "log"
 )
 
+func (r RulesetNewParamsRulesRulesetsLogRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsLogRuleActionLog:
+		return true
+	}
+	return false
+}
+
 // An object configuring the rule's logging behavior.
 type RulesetNewParamsRulesRulesetsLogRuleLogging struct {
 	// Whether to generate a log when the rule matches.
@@ -1383,6 +1559,14 @@ type RulesetNewParamsRulesRulesetsSkipRuleAction string
 const (
 	RulesetNewParamsRulesRulesetsSkipRuleActionSkip RulesetNewParamsRulesRulesetsSkipRuleAction = "skip"
 )
+
+func (r RulesetNewParamsRulesRulesetsSkipRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsSkipRuleActionSkip:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type RulesetNewParamsRulesRulesetsSkipRuleActionParameters struct {
@@ -1435,6 +1619,14 @@ const (
 	RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
 )
 
+func (r RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL4, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL7, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransit, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RulesetNewParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
+
 // The name of a legacy security product to skip the execution of.
 type RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct string
 
@@ -1448,6 +1640,14 @@ const (
 	RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )
 
+func (r RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductBic, RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductHot, RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductRateLimit, RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductSecurityLevel, RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductUABlock, RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductWAF, RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown:
+		return true
+	}
+	return false
+}
+
 // A ruleset to skip the execution of. This option is incompatible with the
 // rulesets, rules and phases options.
 type RulesetNewParamsRulesRulesetsSkipRuleActionParametersRuleset string
@@ -1455,6 +1655,14 @@ type RulesetNewParamsRulesRulesetsSkipRuleActionParametersRuleset string
 const (
 	RulesetNewParamsRulesRulesetsSkipRuleActionParametersRulesetCurrent RulesetNewParamsRulesRulesetsSkipRuleActionParametersRuleset = "current"
 )
+
+func (r RulesetNewParamsRulesRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsSkipRuleActionParametersRulesetCurrent:
+		return true
+	}
+	return false
+}
 
 // An object configuring the rule's logging behavior.
 type RulesetNewParamsRulesRulesetsSkipRuleLogging struct {
@@ -1609,6 +1817,14 @@ const (
 	RulesetNewResponseEnvelopeSuccessTrue RulesetNewResponseEnvelopeSuccess = true
 )
 
+func (r RulesetNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RulesetNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RulesetUpdateParams struct {
 	// The unique ID of the ruleset.
 	ID param.Field[string] `json:"id,required"`
@@ -1671,6 +1887,14 @@ type RulesetUpdateParamsRulesRulesetsBlockRuleAction string
 const (
 	RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock RulesetUpdateParamsRulesRulesetsBlockRuleAction = "block"
 )
+
+func (r RulesetUpdateParamsRulesRulesetsBlockRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters struct {
@@ -1737,6 +1961,14 @@ type RulesetUpdateParamsRulesRulesetsExecuteRuleAction string
 const (
 	RulesetUpdateParamsRulesRulesetsExecuteRuleActionExecute RulesetUpdateParamsRulesRulesetsExecuteRuleAction = "execute"
 )
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsExecuteRuleActionExecute:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParameters struct {
@@ -1810,6 +2042,14 @@ const (
 	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
 )
 
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
+
 // A rule-level override
 type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
 	// The ID of the rule to override.
@@ -1838,6 +2078,14 @@ const (
 	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
 )
 
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
+
 // A sensitivity level to set for all rules. This option has lower precedence than
 // rule and category overrides and is only applicable for DDoS phases.
 type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
@@ -1848,6 +2096,14 @@ const (
 	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
 	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
 )
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault, RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium, RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow, RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
 
 // An object configuring the rule's logging behavior.
 type RulesetUpdateParamsRulesRulesetsExecuteRuleLogging struct {
@@ -1891,6 +2147,14 @@ const (
 	RulesetUpdateParamsRulesRulesetsLogRuleActionLog RulesetUpdateParamsRulesRulesetsLogRuleAction = "log"
 )
 
+func (r RulesetUpdateParamsRulesRulesetsLogRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsLogRuleActionLog:
+		return true
+	}
+	return false
+}
+
 // An object configuring the rule's logging behavior.
 type RulesetUpdateParamsRulesRulesetsLogRuleLogging struct {
 	// Whether to generate a log when the rule matches.
@@ -1932,6 +2196,14 @@ type RulesetUpdateParamsRulesRulesetsSkipRuleAction string
 const (
 	RulesetUpdateParamsRulesRulesetsSkipRuleActionSkip RulesetUpdateParamsRulesRulesetsSkipRuleAction = "skip"
 )
+
+func (r RulesetUpdateParamsRulesRulesetsSkipRuleAction) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsSkipRuleActionSkip:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type RulesetUpdateParamsRulesRulesetsSkipRuleActionParameters struct {
@@ -1984,6 +2256,14 @@ const (
 	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
 )
 
+func (r RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL4, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL7, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransit, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
+
 // The name of a legacy security product to skip the execution of.
 type RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct string
 
@@ -1997,6 +2277,14 @@ const (
 	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )
 
+func (r RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductBic, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductHot, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductRateLimit, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductSecurityLevel, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductUABlock, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductWAF, RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown:
+		return true
+	}
+	return false
+}
+
 // A ruleset to skip the execution of. This option is incompatible with the
 // rulesets, rules and phases options.
 type RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset string
@@ -2004,6 +2292,14 @@ type RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset string
 const (
 	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRulesetCurrent RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset = "current"
 )
+
+func (r RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRulesetCurrent:
+		return true
+	}
+	return false
+}
 
 // An object configuring the rule's logging behavior.
 type RulesetUpdateParamsRulesRulesetsSkipRuleLogging struct {
@@ -2024,6 +2320,14 @@ const (
 	RulesetUpdateParamsKindRoot    RulesetUpdateParamsKind = "root"
 	RulesetUpdateParamsKindZone    RulesetUpdateParamsKind = "zone"
 )
+
+func (r RulesetUpdateParamsKind) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsKindManaged, RulesetUpdateParamsKindCustom, RulesetUpdateParamsKindRoot, RulesetUpdateParamsKindZone:
+		return true
+	}
+	return false
+}
 
 // The phase of the ruleset.
 type RulesetUpdateParamsPhase string
@@ -2053,6 +2357,14 @@ const (
 	RulesetUpdateParamsPhaseMagicTransitIDsManaged         RulesetUpdateParamsPhase = "magic_transit_ids_managed"
 	RulesetUpdateParamsPhaseMagicTransitManaged            RulesetUpdateParamsPhase = "magic_transit_managed"
 )
+
+func (r RulesetUpdateParamsPhase) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsPhaseDDOSL4, RulesetUpdateParamsPhaseDDOSL7, RulesetUpdateParamsPhaseHTTPConfigSettings, RulesetUpdateParamsPhaseHTTPCustomErrors, RulesetUpdateParamsPhaseHTTPLogCustomFields, RulesetUpdateParamsPhaseHTTPRatelimit, RulesetUpdateParamsPhaseHTTPRequestCacheSettings, RulesetUpdateParamsPhaseHTTPRequestDynamicRedirect, RulesetUpdateParamsPhaseHTTPRequestFirewallCustom, RulesetUpdateParamsPhaseHTTPRequestFirewallManaged, RulesetUpdateParamsPhaseHTTPRequestLateTransform, RulesetUpdateParamsPhaseHTTPRequestOrigin, RulesetUpdateParamsPhaseHTTPRequestRedirect, RulesetUpdateParamsPhaseHTTPRequestSanitize, RulesetUpdateParamsPhaseHTTPRequestSbfm, RulesetUpdateParamsPhaseHTTPRequestSelectConfiguration, RulesetUpdateParamsPhaseHTTPRequestTransform, RulesetUpdateParamsPhaseHTTPResponseCompression, RulesetUpdateParamsPhaseHTTPResponseFirewallManaged, RulesetUpdateParamsPhaseHTTPResponseHeadersTransform, RulesetUpdateParamsPhaseMagicTransit, RulesetUpdateParamsPhaseMagicTransitIDsManaged, RulesetUpdateParamsPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 // A response object.
 type RulesetUpdateResponseEnvelope struct {
@@ -2196,6 +2508,14 @@ type RulesetUpdateResponseEnvelopeSuccess bool
 const (
 	RulesetUpdateResponseEnvelopeSuccessTrue RulesetUpdateResponseEnvelopeSuccess = true
 )
+
+func (r RulesetUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RulesetUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RulesetListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -2346,6 +2666,14 @@ type RulesetListResponseEnvelopeSuccess bool
 const (
 	RulesetListResponseEnvelopeSuccessTrue RulesetListResponseEnvelopeSuccess = true
 )
+
+func (r RulesetListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RulesetListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RulesetDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -2503,3 +2831,11 @@ type RulesetGetResponseEnvelopeSuccess bool
 const (
 	RulesetGetResponseEnvelopeSuccessTrue RulesetGetResponseEnvelopeSuccess = true
 )
+
+func (r RulesetGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RulesetGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

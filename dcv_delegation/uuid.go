@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package dcv_delegation
 
@@ -151,3 +151,11 @@ type UUIDGetResponseEnvelopeSuccess bool
 const (
 	UUIDGetResponseEnvelopeSuccessTrue UUIDGetResponseEnvelopeSuccess = true
 )
+
+func (r UUIDGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UUIDGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

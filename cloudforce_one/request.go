@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package cloudforce_one
 
@@ -220,6 +220,14 @@ const (
 	CloudforceOneRequestConstantsPriorityUrgent  CloudforceOneRequestConstantsPriority = "urgent"
 )
 
+func (r CloudforceOneRequestConstantsPriority) IsKnown() bool {
+	switch r {
+	case CloudforceOneRequestConstantsPriorityRoutine, CloudforceOneRequestConstantsPriorityHigh, CloudforceOneRequestConstantsPriorityUrgent:
+		return true
+	}
+	return false
+}
+
 // Request Status
 type CloudforceOneRequestConstantsStatus string
 
@@ -232,6 +240,14 @@ const (
 	CloudforceOneRequestConstantsStatusDeclined  CloudforceOneRequestConstantsStatus = "declined"
 )
 
+func (r CloudforceOneRequestConstantsStatus) IsKnown() bool {
+	switch r {
+	case CloudforceOneRequestConstantsStatusOpen, CloudforceOneRequestConstantsStatusAccepted, CloudforceOneRequestConstantsStatusReported, CloudforceOneRequestConstantsStatusApproved, CloudforceOneRequestConstantsStatusCompleted, CloudforceOneRequestConstantsStatusDeclined:
+		return true
+	}
+	return false
+}
+
 // The CISA defined Traffic Light Protocol (TLP)
 type CloudforceOneRequestConstantsTlp string
 
@@ -242,6 +258,14 @@ const (
 	CloudforceOneRequestConstantsTlpGreen       CloudforceOneRequestConstantsTlp = "green"
 	CloudforceOneRequestConstantsTlpRed         CloudforceOneRequestConstantsTlp = "red"
 )
+
+func (r CloudforceOneRequestConstantsTlp) IsKnown() bool {
+	switch r {
+	case CloudforceOneRequestConstantsTlpClear, CloudforceOneRequestConstantsTlpAmber, CloudforceOneRequestConstantsTlpAmberStrict, CloudforceOneRequestConstantsTlpGreen, CloudforceOneRequestConstantsTlpRed:
+		return true
+	}
+	return false
+}
 
 type CloudforceOneRequestItem struct {
 	// UUID
@@ -308,6 +332,14 @@ const (
 	CloudforceOneRequestItemTlpRed         CloudforceOneRequestItemTlp = "red"
 )
 
+func (r CloudforceOneRequestItemTlp) IsKnown() bool {
+	switch r {
+	case CloudforceOneRequestItemTlpClear, CloudforceOneRequestItemTlpAmber, CloudforceOneRequestItemTlpAmberStrict, CloudforceOneRequestItemTlpGreen, CloudforceOneRequestItemTlpRed:
+		return true
+	}
+	return false
+}
+
 // Request Status
 type CloudforceOneRequestItemStatus string
 
@@ -319,6 +351,14 @@ const (
 	CloudforceOneRequestItemStatusCompleted CloudforceOneRequestItemStatus = "completed"
 	CloudforceOneRequestItemStatusDeclined  CloudforceOneRequestItemStatus = "declined"
 )
+
+func (r CloudforceOneRequestItemStatus) IsKnown() bool {
+	switch r {
+	case CloudforceOneRequestItemStatusOpen, CloudforceOneRequestItemStatusAccepted, CloudforceOneRequestItemStatusReported, CloudforceOneRequestItemStatusApproved, CloudforceOneRequestItemStatusCompleted, CloudforceOneRequestItemStatusDeclined:
+		return true
+	}
+	return false
+}
 
 type CloudforceOneRequestListItem struct {
 	// UUID
@@ -382,6 +422,14 @@ const (
 	CloudforceOneRequestListItemPriorityUrgent  CloudforceOneRequestListItemPriority = "urgent"
 )
 
+func (r CloudforceOneRequestListItemPriority) IsKnown() bool {
+	switch r {
+	case CloudforceOneRequestListItemPriorityRoutine, CloudforceOneRequestListItemPriorityHigh, CloudforceOneRequestListItemPriorityUrgent:
+		return true
+	}
+	return false
+}
+
 // The CISA defined Traffic Light Protocol (TLP)
 type CloudforceOneRequestListItemTlp string
 
@@ -392,6 +440,14 @@ const (
 	CloudforceOneRequestListItemTlpGreen       CloudforceOneRequestListItemTlp = "green"
 	CloudforceOneRequestListItemTlpRed         CloudforceOneRequestListItemTlp = "red"
 )
+
+func (r CloudforceOneRequestListItemTlp) IsKnown() bool {
+	switch r {
+	case CloudforceOneRequestListItemTlpClear, CloudforceOneRequestListItemTlpAmber, CloudforceOneRequestListItemTlpAmberStrict, CloudforceOneRequestListItemTlpGreen, CloudforceOneRequestListItemTlpRed:
+		return true
+	}
+	return false
+}
 
 // Request Status
 type CloudforceOneRequestListItemStatus string
@@ -404,6 +460,14 @@ const (
 	CloudforceOneRequestListItemStatusCompleted CloudforceOneRequestListItemStatus = "completed"
 	CloudforceOneRequestListItemStatusDeclined  CloudforceOneRequestListItemStatus = "declined"
 )
+
+func (r CloudforceOneRequestListItemStatus) IsKnown() bool {
+	switch r {
+	case CloudforceOneRequestListItemStatusOpen, CloudforceOneRequestListItemStatusAccepted, CloudforceOneRequestListItemStatusReported, CloudforceOneRequestListItemStatusApproved, CloudforceOneRequestListItemStatusCompleted, CloudforceOneRequestListItemStatusDeclined:
+		return true
+	}
+	return false
+}
 
 type CloudforceOneRequestTypes []string
 
@@ -459,6 +523,14 @@ const (
 	RequestNewParamsTlpGreen       RequestNewParamsTlp = "green"
 	RequestNewParamsTlpRed         RequestNewParamsTlp = "red"
 )
+
+func (r RequestNewParamsTlp) IsKnown() bool {
+	switch r {
+	case RequestNewParamsTlpClear, RequestNewParamsTlpAmber, RequestNewParamsTlpAmberStrict, RequestNewParamsTlpGreen, RequestNewParamsTlpRed:
+		return true
+	}
+	return false
+}
 
 type RequestNewResponseEnvelope struct {
 	Errors   []RequestNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -541,6 +613,14 @@ const (
 	RequestNewResponseEnvelopeSuccessTrue RequestNewResponseEnvelopeSuccess = true
 )
 
+func (r RequestNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestUpdateParams struct {
 	// Request content
 	Content param.Field[string] `json:"content"`
@@ -568,6 +648,14 @@ const (
 	RequestUpdateParamsTlpGreen       RequestUpdateParamsTlp = "green"
 	RequestUpdateParamsTlpRed         RequestUpdateParamsTlp = "red"
 )
+
+func (r RequestUpdateParamsTlp) IsKnown() bool {
+	switch r {
+	case RequestUpdateParamsTlpClear, RequestUpdateParamsTlpAmber, RequestUpdateParamsTlpAmberStrict, RequestUpdateParamsTlpGreen, RequestUpdateParamsTlpRed:
+		return true
+	}
+	return false
+}
 
 type RequestUpdateResponseEnvelope struct {
 	Errors   []RequestUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -650,6 +738,14 @@ const (
 	RequestUpdateResponseEnvelopeSuccessTrue RequestUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RequestUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestListParams struct {
 	// Page number of results
 	Page param.Field[int64] `json:"page,required"`
@@ -685,6 +781,14 @@ const (
 	RequestListParamsSortOrderDesc RequestListParamsSortOrder = "desc"
 )
 
+func (r RequestListParamsSortOrder) IsKnown() bool {
+	switch r {
+	case RequestListParamsSortOrderAsc, RequestListParamsSortOrderDesc:
+		return true
+	}
+	return false
+}
+
 // Request Status
 type RequestListParamsStatus string
 
@@ -696,6 +800,14 @@ const (
 	RequestListParamsStatusCompleted RequestListParamsStatus = "completed"
 	RequestListParamsStatusDeclined  RequestListParamsStatus = "declined"
 )
+
+func (r RequestListParamsStatus) IsKnown() bool {
+	switch r {
+	case RequestListParamsStatusOpen, RequestListParamsStatusAccepted, RequestListParamsStatusReported, RequestListParamsStatusApproved, RequestListParamsStatusCompleted, RequestListParamsStatusDeclined:
+		return true
+	}
+	return false
+}
 
 type RequestDeleteResponseEnvelope struct {
 	Errors   []RequestDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -778,6 +890,14 @@ const (
 	RequestDeleteResponseEnvelopeSuccessTrue RequestDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RequestDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestConstantsResponseEnvelope struct {
 	Errors   []RequestConstantsResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestConstantsResponseEnvelopeMessages `json:"messages,required"`
@@ -858,6 +978,14 @@ type RequestConstantsResponseEnvelopeSuccess bool
 const (
 	RequestConstantsResponseEnvelopeSuccessTrue RequestConstantsResponseEnvelopeSuccess = true
 )
+
+func (r RequestConstantsResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestConstantsResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RequestGetResponseEnvelope struct {
 	Errors   []RequestGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -940,6 +1068,14 @@ const (
 	RequestGetResponseEnvelopeSuccessTrue RequestGetResponseEnvelopeSuccess = true
 )
 
+func (r RequestGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestQuotaResponseEnvelope struct {
 	Errors   []RequestQuotaResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestQuotaResponseEnvelopeMessages `json:"messages,required"`
@@ -1021,6 +1157,14 @@ const (
 	RequestQuotaResponseEnvelopeSuccessTrue RequestQuotaResponseEnvelopeSuccess = true
 )
 
+func (r RequestQuotaResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestQuotaResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestTypesResponseEnvelope struct {
 	Errors   []RequestTypesResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestTypesResponseEnvelopeMessages `json:"messages,required"`
@@ -1101,3 +1245,11 @@ type RequestTypesResponseEnvelopeSuccess bool
 const (
 	RequestTypesResponseEnvelopeSuccessTrue RequestTypesResponseEnvelopeSuccess = true
 )
+
+func (r RequestTypesResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestTypesResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

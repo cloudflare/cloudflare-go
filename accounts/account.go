@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package accounts
 
@@ -178,6 +178,14 @@ const (
 	AccountSettingsDefaultNameserversCustomTenant       AccountSettingsDefaultNameservers = "custom.tenant"
 )
 
+func (r AccountSettingsDefaultNameservers) IsKnown() bool {
+	switch r {
+	case AccountSettingsDefaultNameserversCloudflareStandard, AccountSettingsDefaultNameserversCustomAccount, AccountSettingsDefaultNameserversCustomTenant:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [accounts.AccountUpdateResponseUnknown] or
 // [shared.UnionString].
 type AccountUpdateResponse interface {
@@ -270,6 +278,14 @@ const (
 	AccountUpdateParamsSettingsDefaultNameserversCustomTenant       AccountUpdateParamsSettingsDefaultNameservers = "custom.tenant"
 )
 
+func (r AccountUpdateParamsSettingsDefaultNameservers) IsKnown() bool {
+	switch r {
+	case AccountUpdateParamsSettingsDefaultNameserversCloudflareStandard, AccountUpdateParamsSettingsDefaultNameserversCustomAccount, AccountUpdateParamsSettingsDefaultNameserversCustomTenant:
+		return true
+	}
+	return false
+}
+
 type AccountUpdateResponseEnvelope struct {
 	Errors   []AccountUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccountUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -351,6 +367,14 @@ const (
 	AccountUpdateResponseEnvelopeSuccessTrue AccountUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AccountUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccountListParams struct {
 	// Direction to order results.
 	Direction param.Field[AccountListParamsDirection] `query:"direction"`
@@ -375,6 +399,14 @@ const (
 	AccountListParamsDirectionAsc  AccountListParamsDirection = "asc"
 	AccountListParamsDirectionDesc AccountListParamsDirection = "desc"
 )
+
+func (r AccountListParamsDirection) IsKnown() bool {
+	switch r {
+	case AccountListParamsDirectionAsc, AccountListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
 
 type AccountGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -460,3 +492,11 @@ type AccountGetResponseEnvelopeSuccess bool
 const (
 	AccountGetResponseEnvelopeSuccessTrue AccountGetResponseEnvelopeSuccess = true
 )
+
+func (r AccountGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

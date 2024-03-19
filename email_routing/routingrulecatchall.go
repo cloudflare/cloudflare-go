@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package email_routing
 
@@ -129,6 +129,14 @@ const (
 	EmailCatchAllRuleActionsTypeWorker  EmailCatchAllRuleActionsType = "worker"
 )
 
+func (r EmailCatchAllRuleActionsType) IsKnown() bool {
+	switch r {
+	case EmailCatchAllRuleActionsTypeDrop, EmailCatchAllRuleActionsTypeForward, EmailCatchAllRuleActionsTypeWorker:
+		return true
+	}
+	return false
+}
+
 // Routing rule status.
 type EmailCatchAllRuleEnabled bool
 
@@ -136,6 +144,14 @@ const (
 	EmailCatchAllRuleEnabledTrue  EmailCatchAllRuleEnabled = true
 	EmailCatchAllRuleEnabledFalse EmailCatchAllRuleEnabled = false
 )
+
+func (r EmailCatchAllRuleEnabled) IsKnown() bool {
+	switch r {
+	case EmailCatchAllRuleEnabledTrue, EmailCatchAllRuleEnabledFalse:
+		return true
+	}
+	return false
+}
 
 // Matcher for catch-all routing rule.
 type EmailCatchAllRuleMatcher struct {
@@ -166,6 +182,14 @@ type EmailCatchAllRuleMatchersType string
 const (
 	EmailCatchAllRuleMatchersTypeAll EmailCatchAllRuleMatchersType = "all"
 )
+
+func (r EmailCatchAllRuleMatchersType) IsKnown() bool {
+	switch r {
+	case EmailCatchAllRuleMatchersTypeAll:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleCatchAllUpdateParams struct {
 	// List actions for the catch-all routing rule.
@@ -202,6 +226,14 @@ const (
 	RoutingRuleCatchAllUpdateParamsActionsTypeWorker  RoutingRuleCatchAllUpdateParamsActionsType = "worker"
 )
 
+func (r RoutingRuleCatchAllUpdateParamsActionsType) IsKnown() bool {
+	switch r {
+	case RoutingRuleCatchAllUpdateParamsActionsTypeDrop, RoutingRuleCatchAllUpdateParamsActionsTypeForward, RoutingRuleCatchAllUpdateParamsActionsTypeWorker:
+		return true
+	}
+	return false
+}
+
 // Matcher for catch-all routing rule.
 type RoutingRuleCatchAllUpdateParamsMatcher struct {
 	// Type of matcher. Default is 'all'.
@@ -219,6 +251,14 @@ const (
 	RoutingRuleCatchAllUpdateParamsMatchersTypeAll RoutingRuleCatchAllUpdateParamsMatchersType = "all"
 )
 
+func (r RoutingRuleCatchAllUpdateParamsMatchersType) IsKnown() bool {
+	switch r {
+	case RoutingRuleCatchAllUpdateParamsMatchersTypeAll:
+		return true
+	}
+	return false
+}
+
 // Routing rule status.
 type RoutingRuleCatchAllUpdateParamsEnabled bool
 
@@ -226,6 +266,14 @@ const (
 	RoutingRuleCatchAllUpdateParamsEnabledTrue  RoutingRuleCatchAllUpdateParamsEnabled = true
 	RoutingRuleCatchAllUpdateParamsEnabledFalse RoutingRuleCatchAllUpdateParamsEnabled = false
 )
+
+func (r RoutingRuleCatchAllUpdateParamsEnabled) IsKnown() bool {
+	switch r {
+	case RoutingRuleCatchAllUpdateParamsEnabledTrue, RoutingRuleCatchAllUpdateParamsEnabledFalse:
+		return true
+	}
+	return false
+}
 
 type RoutingRuleCatchAllUpdateResponseEnvelope struct {
 	Errors   []RoutingRuleCatchAllUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -308,6 +356,14 @@ const (
 	RoutingRuleCatchAllUpdateResponseEnvelopeSuccessTrue RoutingRuleCatchAllUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RoutingRuleCatchAllUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingRuleCatchAllUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RoutingRuleCatchAllGetResponseEnvelope struct {
 	Errors   []RoutingRuleCatchAllGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RoutingRuleCatchAllGetResponseEnvelopeMessages `json:"messages,required"`
@@ -388,3 +444,11 @@ type RoutingRuleCatchAllGetResponseEnvelopeSuccess bool
 const (
 	RoutingRuleCatchAllGetResponseEnvelopeSuccessTrue RoutingRuleCatchAllGetResponseEnvelopeSuccess = true
 )
+
+func (r RoutingRuleCatchAllGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingRuleCatchAllGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

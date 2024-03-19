@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers
 
@@ -189,6 +189,14 @@ const (
 	SubdomainUpdateResponseEnvelopeSuccessTrue SubdomainUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SubdomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubdomainUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SubdomainGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -274,3 +282,11 @@ type SubdomainGetResponseEnvelopeSuccess bool
 const (
 	SubdomainGetResponseEnvelopeSuccessTrue SubdomainGetResponseEnvelopeSuccess = true
 )
+
+func (r SubdomainGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubdomainGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

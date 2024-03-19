@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package user
 
@@ -142,3 +142,11 @@ type BillingProfileGetResponseEnvelopeSuccess bool
 const (
 	BillingProfileGetResponseEnvelopeSuccessTrue BillingProfileGetResponseEnvelopeSuccess = true
 )
+
+func (r BillingProfileGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BillingProfileGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

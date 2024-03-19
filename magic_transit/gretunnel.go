@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit
 
@@ -33,11 +33,11 @@ func NewGRETunnelService(opts ...option.RequestOption) (r *GRETunnelService) {
 
 // Creates new GRE tunnels. Use `?validate_only=true` as an optional query
 // parameter to only run validation without persisting changes.
-func (r *GRETunnelService) New(ctx context.Context, accountIdentifier string, body GRETunnelNewParams, opts ...option.RequestOption) (res *GRETunnelNewResponse, err error) {
+func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, opts ...option.RequestOption) (res *GRETunnelNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +47,11 @@ func (r *GRETunnelService) New(ctx context.Context, accountIdentifier string, bo
 
 // Updates a specific GRE tunnel. Use `?validate_only=true` as an optional query
 // parameter to only run validation without persisting changes.
-func (r *GRETunnelService) Update(ctx context.Context, accountIdentifier string, tunnelIdentifier string, body GRETunnelUpdateParams, opts ...option.RequestOption) (res *GRETunnelUpdateResponse, err error) {
+func (r *GRETunnelService) Update(ctx context.Context, tunnelIdentifier string, params GRETunnelUpdateParams, opts ...option.RequestOption) (res *GRETunnelUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", accountIdentifier, tunnelIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", params.AccountID, tunnelIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,10 +60,10 @@ func (r *GRETunnelService) Update(ctx context.Context, accountIdentifier string,
 }
 
 // Lists GRE tunnels associated with an account.
-func (r *GRETunnelService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *GRETunnelListResponse, err error) {
+func (r *GRETunnelService) List(ctx context.Context, query GRETunnelListParams, opts ...option.RequestOption) (res *GRETunnelListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", accountIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -74,10 +74,10 @@ func (r *GRETunnelService) List(ctx context.Context, accountIdentifier string, o
 
 // Disables and removes a specific static GRE tunnel. Use `?validate_only=true` as
 // an optional query parameter to only run validation without persisting changes.
-func (r *GRETunnelService) Delete(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
+func (r *GRETunnelService) Delete(ctx context.Context, tunnelIdentifier string, body GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", accountIdentifier, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", body.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -87,10 +87,10 @@ func (r *GRETunnelService) Delete(ctx context.Context, accountIdentifier string,
 }
 
 // Lists informtion for a specific GRE tunnel.
-func (r *GRETunnelService) Get(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
+func (r *GRETunnelService) Get(ctx context.Context, tunnelIdentifier string, query GRETunnelGetParams, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", accountIdentifier, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", query.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -231,6 +231,14 @@ const (
 	GRETunnelNewResponseGRETunnelsHealthCheckDirectionBidirectional  GRETunnelNewResponseGRETunnelsHealthCheckDirection = "bidirectional"
 )
 
+func (r GRETunnelNewResponseGRETunnelsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case GRETunnelNewResponseGRETunnelsHealthCheckDirectionUnidirectional, GRETunnelNewResponseGRETunnelsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
 // How frequent the health check is run. The default value is `mid`.
 type GRETunnelNewResponseGRETunnelsHealthCheckRate string
 
@@ -240,6 +248,14 @@ const (
 	GRETunnelNewResponseGRETunnelsHealthCheckRateHigh GRETunnelNewResponseGRETunnelsHealthCheckRate = "high"
 )
 
+func (r GRETunnelNewResponseGRETunnelsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case GRETunnelNewResponseGRETunnelsHealthCheckRateLow, GRETunnelNewResponseGRETunnelsHealthCheckRateMid, GRETunnelNewResponseGRETunnelsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type GRETunnelNewResponseGRETunnelsHealthCheckType string
 
@@ -247,6 +263,14 @@ const (
 	GRETunnelNewResponseGRETunnelsHealthCheckTypeReply   GRETunnelNewResponseGRETunnelsHealthCheckType = "reply"
 	GRETunnelNewResponseGRETunnelsHealthCheckTypeRequest GRETunnelNewResponseGRETunnelsHealthCheckType = "request"
 )
+
+func (r GRETunnelNewResponseGRETunnelsHealthCheckType) IsKnown() bool {
+	switch r {
+	case GRETunnelNewResponseGRETunnelsHealthCheckTypeReply, GRETunnelNewResponseGRETunnelsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type GRETunnelUpdateResponse struct {
 	Modified          bool                        `json:"modified"`
@@ -403,6 +427,14 @@ const (
 	GRETunnelListResponseGRETunnelsHealthCheckDirectionBidirectional  GRETunnelListResponseGRETunnelsHealthCheckDirection = "bidirectional"
 )
 
+func (r GRETunnelListResponseGRETunnelsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case GRETunnelListResponseGRETunnelsHealthCheckDirectionUnidirectional, GRETunnelListResponseGRETunnelsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
 // How frequent the health check is run. The default value is `mid`.
 type GRETunnelListResponseGRETunnelsHealthCheckRate string
 
@@ -412,6 +444,14 @@ const (
 	GRETunnelListResponseGRETunnelsHealthCheckRateHigh GRETunnelListResponseGRETunnelsHealthCheckRate = "high"
 )
 
+func (r GRETunnelListResponseGRETunnelsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case GRETunnelListResponseGRETunnelsHealthCheckRateLow, GRETunnelListResponseGRETunnelsHealthCheckRateMid, GRETunnelListResponseGRETunnelsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type GRETunnelListResponseGRETunnelsHealthCheckType string
 
@@ -419,6 +459,14 @@ const (
 	GRETunnelListResponseGRETunnelsHealthCheckTypeReply   GRETunnelListResponseGRETunnelsHealthCheckType = "reply"
 	GRETunnelListResponseGRETunnelsHealthCheckTypeRequest GRETunnelListResponseGRETunnelsHealthCheckType = "request"
 )
+
+func (r GRETunnelListResponseGRETunnelsHealthCheckType) IsKnown() bool {
+	switch r {
+	case GRETunnelListResponseGRETunnelsHealthCheckTypeReply, GRETunnelListResponseGRETunnelsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type GRETunnelDeleteResponse struct {
 	Deleted          bool                        `json:"deleted"`
@@ -465,7 +513,9 @@ func (r greTunnelGetResponseJSON) RawJSON() string {
 }
 
 type GRETunnelNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r GRETunnelNewParams) MarshalJSON() (data []byte, err error) {
@@ -553,7 +603,17 @@ const (
 	GRETunnelNewResponseEnvelopeSuccessTrue GRETunnelNewResponseEnvelopeSuccess = true
 )
 
+func (r GRETunnelNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GRETunnelNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GRETunnelUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
 	CloudflareGREEndpoint param.Field[string] `json:"cloudflare_gre_endpoint,required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
@@ -618,6 +678,14 @@ const (
 	GRETunnelUpdateParamsHealthCheckDirectionBidirectional  GRETunnelUpdateParamsHealthCheckDirection = "bidirectional"
 )
 
+func (r GRETunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case GRETunnelUpdateParamsHealthCheckDirectionUnidirectional, GRETunnelUpdateParamsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
 // How frequent the health check is run. The default value is `mid`.
 type GRETunnelUpdateParamsHealthCheckRate string
 
@@ -627,6 +695,14 @@ const (
 	GRETunnelUpdateParamsHealthCheckRateHigh GRETunnelUpdateParamsHealthCheckRate = "high"
 )
 
+func (r GRETunnelUpdateParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case GRETunnelUpdateParamsHealthCheckRateLow, GRETunnelUpdateParamsHealthCheckRateMid, GRETunnelUpdateParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type GRETunnelUpdateParamsHealthCheckType string
 
@@ -634,6 +710,14 @@ const (
 	GRETunnelUpdateParamsHealthCheckTypeReply   GRETunnelUpdateParamsHealthCheckType = "reply"
 	GRETunnelUpdateParamsHealthCheckTypeRequest GRETunnelUpdateParamsHealthCheckType = "request"
 )
+
+func (r GRETunnelUpdateParamsHealthCheckType) IsKnown() bool {
+	switch r {
+	case GRETunnelUpdateParamsHealthCheckTypeReply, GRETunnelUpdateParamsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type GRETunnelUpdateResponseEnvelope struct {
 	Errors   []GRETunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -716,6 +800,19 @@ const (
 	GRETunnelUpdateResponseEnvelopeSuccessTrue GRETunnelUpdateResponseEnvelopeSuccess = true
 )
 
+func (r GRETunnelUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GRETunnelUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GRETunnelListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type GRETunnelListResponseEnvelope struct {
 	Errors   []GRETunnelListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []GRETunnelListResponseEnvelopeMessages `json:"messages,required"`
@@ -796,6 +893,19 @@ type GRETunnelListResponseEnvelopeSuccess bool
 const (
 	GRETunnelListResponseEnvelopeSuccessTrue GRETunnelListResponseEnvelopeSuccess = true
 )
+
+func (r GRETunnelListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GRETunnelListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GRETunnelDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type GRETunnelDeleteResponseEnvelope struct {
 	Errors   []GRETunnelDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -878,6 +988,19 @@ const (
 	GRETunnelDeleteResponseEnvelopeSuccessTrue GRETunnelDeleteResponseEnvelopeSuccess = true
 )
 
+func (r GRETunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GRETunnelDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GRETunnelGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type GRETunnelGetResponseEnvelope struct {
 	Errors   []GRETunnelGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []GRETunnelGetResponseEnvelopeMessages `json:"messages,required"`
@@ -958,3 +1081,11 @@ type GRETunnelGetResponseEnvelopeSuccess bool
 const (
 	GRETunnelGetResponseEnvelopeSuccessTrue GRETunnelGetResponseEnvelopeSuccess = true
 )
+
+func (r GRETunnelGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GRETunnelGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

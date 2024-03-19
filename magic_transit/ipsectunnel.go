@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit
 
@@ -35,11 +35,11 @@ func NewIPSECTunnelService(opts ...option.RequestOption) (r *IPSECTunnelService)
 // Creates new IPsec tunnels associated with an account. Use `?validate_only=true`
 // as an optional query parameter to only run validation without persisting
 // changes.
-func (r *IPSECTunnelService) New(ctx context.Context, accountIdentifier string, body IPSECTunnelNewParams, opts ...option.RequestOption) (res *IPSECTunnelNewResponse, err error) {
+func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParams, opts ...option.RequestOption) (res *IPSECTunnelNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *IPSECTunnelService) New(ctx context.Context, accountIdentifier string, 
 // Updates a specific IPsec tunnel associated with an account. Use
 // `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *IPSECTunnelService) Update(ctx context.Context, accountIdentifier string, tunnelIdentifier string, body IPSECTunnelUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelUpdateResponse, err error) {
+func (r *IPSECTunnelService) Update(ctx context.Context, tunnelIdentifier string, params IPSECTunnelUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", accountIdentifier, tunnelIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, tunnelIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,10 +63,10 @@ func (r *IPSECTunnelService) Update(ctx context.Context, accountIdentifier strin
 }
 
 // Lists IPsec tunnels associated with an account.
-func (r *IPSECTunnelService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *IPSECTunnelListResponse, err error) {
+func (r *IPSECTunnelService) List(ctx context.Context, query IPSECTunnelListParams, opts ...option.RequestOption) (res *IPSECTunnelListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", accountIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -78,10 +78,10 @@ func (r *IPSECTunnelService) List(ctx context.Context, accountIdentifier string,
 // Disables and removes a specific static IPsec Tunnel associated with an account.
 // Use `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *IPSECTunnelService) Delete(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
+func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string, body IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", accountIdentifier, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", body.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -91,10 +91,10 @@ func (r *IPSECTunnelService) Delete(ctx context.Context, accountIdentifier strin
 }
 
 // Lists details for a specific IPsec tunnel.
-func (r *IPSECTunnelService) Get(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *IPSECTunnelGetResponse, err error) {
+func (r *IPSECTunnelService) Get(ctx context.Context, tunnelIdentifier string, query IPSECTunnelGetParams, opts ...option.RequestOption) (res *IPSECTunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", accountIdentifier, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", query.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -108,10 +108,10 @@ func (r *IPSECTunnelService) Get(ctx context.Context, accountIdentifier string, 
 // without persisting changes. After a PSK is generated, the PSK is immediately
 // persisted to Cloudflare's edge and cannot be retrieved later. Note the PSK in a
 // safe place.
-func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
+func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, tunnelIdentifier string, body IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelPSKGenerateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", accountIdentifier, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", body.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -264,6 +264,14 @@ const (
 	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateHigh IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate = "high"
 )
 
+func (r IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateLow, IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateMid, IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType string
 
@@ -271,6 +279,14 @@ const (
 	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeReply   IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType = "reply"
 	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeRequest IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType = "request"
 )
+
+func (r IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeReply, IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type IPSECTunnelUpdateResponse struct {
 	Modified            bool                          `json:"modified"`
@@ -439,6 +455,14 @@ const (
 	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateHigh IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate = "high"
 )
 
+func (r IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate) IsKnown() bool {
+	switch r {
+	case IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateLow, IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateMid, IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType string
 
@@ -446,6 +470,14 @@ const (
 	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeReply   IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType = "reply"
 	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeRequest IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType = "request"
 )
+
+func (r IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeReply, IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type IPSECTunnelDeleteResponse struct {
 	Deleted            bool                          `json:"deleted"`
@@ -543,6 +575,8 @@ func (r ipsecTunnelPSKGenerateResponsePSKMetadataJSON) RawJSON() string {
 }
 
 type IPSECTunnelNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
@@ -606,6 +640,14 @@ const (
 	IPSECTunnelNewParamsHealthCheckDirectionBidirectional  IPSECTunnelNewParamsHealthCheckDirection = "bidirectional"
 )
 
+func (r IPSECTunnelNewParamsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewParamsHealthCheckDirectionUnidirectional, IPSECTunnelNewParamsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
 // How frequent the health check is run. The default value is `mid`.
 type IPSECTunnelNewParamsHealthCheckRate string
 
@@ -615,6 +657,14 @@ const (
 	IPSECTunnelNewParamsHealthCheckRateHigh IPSECTunnelNewParamsHealthCheckRate = "high"
 )
 
+func (r IPSECTunnelNewParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewParamsHealthCheckRateLow, IPSECTunnelNewParamsHealthCheckRateMid, IPSECTunnelNewParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type IPSECTunnelNewParamsHealthCheckType string
 
@@ -622,6 +672,14 @@ const (
 	IPSECTunnelNewParamsHealthCheckTypeReply   IPSECTunnelNewParamsHealthCheckType = "reply"
 	IPSECTunnelNewParamsHealthCheckTypeRequest IPSECTunnelNewParamsHealthCheckType = "request"
 )
+
+func (r IPSECTunnelNewParamsHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewParamsHealthCheckTypeReply, IPSECTunnelNewParamsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type IPSECTunnelNewResponseEnvelope struct {
 	Errors   []IPSECTunnelNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -704,7 +762,17 @@ const (
 	IPSECTunnelNewResponseEnvelopeSuccessTrue IPSECTunnelNewResponseEnvelopeSuccess = true
 )
 
+func (r IPSECTunnelNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
@@ -768,6 +836,14 @@ const (
 	IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional  IPSECTunnelUpdateParamsHealthCheckDirection = "bidirectional"
 )
 
+func (r IPSECTunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateParamsHealthCheckDirectionUnidirectional, IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
 // How frequent the health check is run. The default value is `mid`.
 type IPSECTunnelUpdateParamsHealthCheckRate string
 
@@ -777,6 +853,14 @@ const (
 	IPSECTunnelUpdateParamsHealthCheckRateHigh IPSECTunnelUpdateParamsHealthCheckRate = "high"
 )
 
+func (r IPSECTunnelUpdateParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateParamsHealthCheckRateLow, IPSECTunnelUpdateParamsHealthCheckRateMid, IPSECTunnelUpdateParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type IPSECTunnelUpdateParamsHealthCheckType string
 
@@ -784,6 +868,14 @@ const (
 	IPSECTunnelUpdateParamsHealthCheckTypeReply   IPSECTunnelUpdateParamsHealthCheckType = "reply"
 	IPSECTunnelUpdateParamsHealthCheckTypeRequest IPSECTunnelUpdateParamsHealthCheckType = "request"
 )
+
+func (r IPSECTunnelUpdateParamsHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateParamsHealthCheckTypeReply, IPSECTunnelUpdateParamsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type IPSECTunnelUpdateResponseEnvelope struct {
 	Errors   []IPSECTunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -866,6 +958,19 @@ const (
 	IPSECTunnelUpdateResponseEnvelopeSuccessTrue IPSECTunnelUpdateResponseEnvelopeSuccess = true
 )
 
+func (r IPSECTunnelUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type IPSECTunnelListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type IPSECTunnelListResponseEnvelope struct {
 	Errors   []IPSECTunnelListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IPSECTunnelListResponseEnvelopeMessages `json:"messages,required"`
@@ -946,6 +1051,19 @@ type IPSECTunnelListResponseEnvelopeSuccess bool
 const (
 	IPSECTunnelListResponseEnvelopeSuccessTrue IPSECTunnelListResponseEnvelopeSuccess = true
 )
+
+func (r IPSECTunnelListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type IPSECTunnelDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type IPSECTunnelDeleteResponseEnvelope struct {
 	Errors   []IPSECTunnelDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1028,6 +1146,19 @@ const (
 	IPSECTunnelDeleteResponseEnvelopeSuccessTrue IPSECTunnelDeleteResponseEnvelopeSuccess = true
 )
 
+func (r IPSECTunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type IPSECTunnelGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type IPSECTunnelGetResponseEnvelope struct {
 	Errors   []IPSECTunnelGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IPSECTunnelGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1109,6 +1240,19 @@ const (
 	IPSECTunnelGetResponseEnvelopeSuccessTrue IPSECTunnelGetResponseEnvelopeSuccess = true
 )
 
+func (r IPSECTunnelGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type IPSECTunnelPSKGenerateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type IPSECTunnelPSKGenerateResponseEnvelope struct {
 	Errors   []IPSECTunnelPSKGenerateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IPSECTunnelPSKGenerateResponseEnvelopeMessages `json:"messages,required"`
@@ -1189,3 +1333,11 @@ type IPSECTunnelPSKGenerateResponseEnvelopeSuccess bool
 const (
 	IPSECTunnelPSKGenerateResponseEnvelopeSuccessTrue IPSECTunnelPSKGenerateResponseEnvelopeSuccess = true
 )
+
+func (r IPSECTunnelPSKGenerateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelPSKGenerateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -1294,6 +1294,14 @@ const (
 	HTTPSummaryBotClassParamsDateRange24wControl HTTPSummaryBotClassParamsDateRange = "24wControl"
 )
 
+func (r HTTPSummaryBotClassParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPSummaryBotClassParamsDateRange1d, HTTPSummaryBotClassParamsDateRange2d, HTTPSummaryBotClassParamsDateRange7d, HTTPSummaryBotClassParamsDateRange14d, HTTPSummaryBotClassParamsDateRange28d, HTTPSummaryBotClassParamsDateRange12w, HTTPSummaryBotClassParamsDateRange24w, HTTPSummaryBotClassParamsDateRange52w, HTTPSummaryBotClassParamsDateRange1dControl, HTTPSummaryBotClassParamsDateRange2dControl, HTTPSummaryBotClassParamsDateRange7dControl, HTTPSummaryBotClassParamsDateRange14dControl, HTTPSummaryBotClassParamsDateRange28dControl, HTTPSummaryBotClassParamsDateRange12wControl, HTTPSummaryBotClassParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryBotClassParamsDeviceType string
 
 const (
@@ -1301,6 +1309,14 @@ const (
 	HTTPSummaryBotClassParamsDeviceTypeMobile  HTTPSummaryBotClassParamsDeviceType = "MOBILE"
 	HTTPSummaryBotClassParamsDeviceTypeOther   HTTPSummaryBotClassParamsDeviceType = "OTHER"
 )
+
+func (r HTTPSummaryBotClassParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPSummaryBotClassParamsDeviceTypeDesktop, HTTPSummaryBotClassParamsDeviceTypeMobile, HTTPSummaryBotClassParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPSummaryBotClassParamsFormat string
@@ -1310,12 +1326,28 @@ const (
 	HTTPSummaryBotClassParamsFormatCsv  HTTPSummaryBotClassParamsFormat = "CSV"
 )
 
+func (r HTTPSummaryBotClassParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPSummaryBotClassParamsFormatJson, HTTPSummaryBotClassParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryBotClassParamsHTTPProtocol string
 
 const (
 	HTTPSummaryBotClassParamsHTTPProtocolHTTP  HTTPSummaryBotClassParamsHTTPProtocol = "HTTP"
 	HTTPSummaryBotClassParamsHTTPProtocolHTTPS HTTPSummaryBotClassParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPSummaryBotClassParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPSummaryBotClassParamsHTTPProtocolHTTP, HTTPSummaryBotClassParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryBotClassParamsHTTPVersion string
 
@@ -1325,12 +1357,28 @@ const (
 	HTTPSummaryBotClassParamsHTTPVersionHttPv3 HTTPSummaryBotClassParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPSummaryBotClassParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryBotClassParamsHTTPVersionHttPv1, HTTPSummaryBotClassParamsHTTPVersionHttPv2, HTTPSummaryBotClassParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryBotClassParamsIPVersion string
 
 const (
 	HTTPSummaryBotClassParamsIPVersionIPv4 HTTPSummaryBotClassParamsIPVersion = "IPv4"
 	HTTPSummaryBotClassParamsIPVersionIPv6 HTTPSummaryBotClassParamsIPVersion = "IPv6"
 )
+
+func (r HTTPSummaryBotClassParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryBotClassParamsIPVersionIPv4, HTTPSummaryBotClassParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryBotClassParamsOS string
 
@@ -1344,6 +1392,14 @@ const (
 	HTTPSummaryBotClassParamsOSSmartTv  HTTPSummaryBotClassParamsOS = "SMART_TV"
 )
 
+func (r HTTPSummaryBotClassParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPSummaryBotClassParamsOSWindows, HTTPSummaryBotClassParamsOSMacosx, HTTPSummaryBotClassParamsOSIos, HTTPSummaryBotClassParamsOSAndroid, HTTPSummaryBotClassParamsOSChromeos, HTTPSummaryBotClassParamsOSLinux, HTTPSummaryBotClassParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryBotClassParamsTLSVersion string
 
 const (
@@ -1353,6 +1409,14 @@ const (
 	HTTPSummaryBotClassParamsTLSVersionTlSv1_3  HTTPSummaryBotClassParamsTLSVersion = "TLSv1_3"
 	HTTPSummaryBotClassParamsTLSVersionTlSvQuic HTTPSummaryBotClassParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPSummaryBotClassParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryBotClassParamsTLSVersionTlSv1_0, HTTPSummaryBotClassParamsTLSVersionTlSv1_1, HTTPSummaryBotClassParamsTLSVersionTlSv1_2, HTTPSummaryBotClassParamsTLSVersionTlSv1_3, HTTPSummaryBotClassParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryBotClassResponseEnvelope struct {
 	Result  HTTPSummaryBotClassResponse             `json:"result,required"`
@@ -1433,6 +1497,14 @@ const (
 	HTTPSummaryDeviceTypeParamsBotClassLikelyHuman     HTTPSummaryDeviceTypeParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPSummaryDeviceTypeParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPSummaryDeviceTypeParamsBotClassLikelyAutomated, HTTPSummaryDeviceTypeParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryDeviceTypeParamsDateRange string
 
 const (
@@ -1453,6 +1525,14 @@ const (
 	HTTPSummaryDeviceTypeParamsDateRange24wControl HTTPSummaryDeviceTypeParamsDateRange = "24wControl"
 )
 
+func (r HTTPSummaryDeviceTypeParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPSummaryDeviceTypeParamsDateRange1d, HTTPSummaryDeviceTypeParamsDateRange2d, HTTPSummaryDeviceTypeParamsDateRange7d, HTTPSummaryDeviceTypeParamsDateRange14d, HTTPSummaryDeviceTypeParamsDateRange28d, HTTPSummaryDeviceTypeParamsDateRange12w, HTTPSummaryDeviceTypeParamsDateRange24w, HTTPSummaryDeviceTypeParamsDateRange52w, HTTPSummaryDeviceTypeParamsDateRange1dControl, HTTPSummaryDeviceTypeParamsDateRange2dControl, HTTPSummaryDeviceTypeParamsDateRange7dControl, HTTPSummaryDeviceTypeParamsDateRange14dControl, HTTPSummaryDeviceTypeParamsDateRange28dControl, HTTPSummaryDeviceTypeParamsDateRange12wControl, HTTPSummaryDeviceTypeParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type HTTPSummaryDeviceTypeParamsFormat string
 
@@ -1461,12 +1541,28 @@ const (
 	HTTPSummaryDeviceTypeParamsFormatCsv  HTTPSummaryDeviceTypeParamsFormat = "CSV"
 )
 
+func (r HTTPSummaryDeviceTypeParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPSummaryDeviceTypeParamsFormatJson, HTTPSummaryDeviceTypeParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryDeviceTypeParamsHTTPProtocol string
 
 const (
 	HTTPSummaryDeviceTypeParamsHTTPProtocolHTTP  HTTPSummaryDeviceTypeParamsHTTPProtocol = "HTTP"
 	HTTPSummaryDeviceTypeParamsHTTPProtocolHTTPS HTTPSummaryDeviceTypeParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPSummaryDeviceTypeParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPSummaryDeviceTypeParamsHTTPProtocolHTTP, HTTPSummaryDeviceTypeParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryDeviceTypeParamsHTTPVersion string
 
@@ -1476,12 +1572,28 @@ const (
 	HTTPSummaryDeviceTypeParamsHTTPVersionHttPv3 HTTPSummaryDeviceTypeParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPSummaryDeviceTypeParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryDeviceTypeParamsHTTPVersionHttPv1, HTTPSummaryDeviceTypeParamsHTTPVersionHttPv2, HTTPSummaryDeviceTypeParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryDeviceTypeParamsIPVersion string
 
 const (
 	HTTPSummaryDeviceTypeParamsIPVersionIPv4 HTTPSummaryDeviceTypeParamsIPVersion = "IPv4"
 	HTTPSummaryDeviceTypeParamsIPVersionIPv6 HTTPSummaryDeviceTypeParamsIPVersion = "IPv6"
 )
+
+func (r HTTPSummaryDeviceTypeParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryDeviceTypeParamsIPVersionIPv4, HTTPSummaryDeviceTypeParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryDeviceTypeParamsOS string
 
@@ -1495,6 +1607,14 @@ const (
 	HTTPSummaryDeviceTypeParamsOSSmartTv  HTTPSummaryDeviceTypeParamsOS = "SMART_TV"
 )
 
+func (r HTTPSummaryDeviceTypeParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPSummaryDeviceTypeParamsOSWindows, HTTPSummaryDeviceTypeParamsOSMacosx, HTTPSummaryDeviceTypeParamsOSIos, HTTPSummaryDeviceTypeParamsOSAndroid, HTTPSummaryDeviceTypeParamsOSChromeos, HTTPSummaryDeviceTypeParamsOSLinux, HTTPSummaryDeviceTypeParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryDeviceTypeParamsTLSVersion string
 
 const (
@@ -1504,6 +1624,14 @@ const (
 	HTTPSummaryDeviceTypeParamsTLSVersionTlSv1_3  HTTPSummaryDeviceTypeParamsTLSVersion = "TLSv1_3"
 	HTTPSummaryDeviceTypeParamsTLSVersionTlSvQuic HTTPSummaryDeviceTypeParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPSummaryDeviceTypeParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryDeviceTypeParamsTLSVersionTlSv1_0, HTTPSummaryDeviceTypeParamsTLSVersionTlSv1_1, HTTPSummaryDeviceTypeParamsTLSVersionTlSv1_2, HTTPSummaryDeviceTypeParamsTLSVersionTlSv1_3, HTTPSummaryDeviceTypeParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryDeviceTypeResponseEnvelope struct {
 	Result  HTTPSummaryDeviceTypeResponse             `json:"result,required"`
@@ -1584,6 +1712,14 @@ const (
 	HTTPSummaryHTTPProtocolParamsBotClassLikelyHuman     HTTPSummaryHTTPProtocolParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPSummaryHTTPProtocolParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPProtocolParamsBotClassLikelyAutomated, HTTPSummaryHTTPProtocolParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPProtocolParamsDateRange string
 
 const (
@@ -1604,6 +1740,14 @@ const (
 	HTTPSummaryHTTPProtocolParamsDateRange24wControl HTTPSummaryHTTPProtocolParamsDateRange = "24wControl"
 )
 
+func (r HTTPSummaryHTTPProtocolParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPProtocolParamsDateRange1d, HTTPSummaryHTTPProtocolParamsDateRange2d, HTTPSummaryHTTPProtocolParamsDateRange7d, HTTPSummaryHTTPProtocolParamsDateRange14d, HTTPSummaryHTTPProtocolParamsDateRange28d, HTTPSummaryHTTPProtocolParamsDateRange12w, HTTPSummaryHTTPProtocolParamsDateRange24w, HTTPSummaryHTTPProtocolParamsDateRange52w, HTTPSummaryHTTPProtocolParamsDateRange1dControl, HTTPSummaryHTTPProtocolParamsDateRange2dControl, HTTPSummaryHTTPProtocolParamsDateRange7dControl, HTTPSummaryHTTPProtocolParamsDateRange14dControl, HTTPSummaryHTTPProtocolParamsDateRange28dControl, HTTPSummaryHTTPProtocolParamsDateRange12wControl, HTTPSummaryHTTPProtocolParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPProtocolParamsDeviceType string
 
 const (
@@ -1611,6 +1755,14 @@ const (
 	HTTPSummaryHTTPProtocolParamsDeviceTypeMobile  HTTPSummaryHTTPProtocolParamsDeviceType = "MOBILE"
 	HTTPSummaryHTTPProtocolParamsDeviceTypeOther   HTTPSummaryHTTPProtocolParamsDeviceType = "OTHER"
 )
+
+func (r HTTPSummaryHTTPProtocolParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPProtocolParamsDeviceTypeDesktop, HTTPSummaryHTTPProtocolParamsDeviceTypeMobile, HTTPSummaryHTTPProtocolParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPSummaryHTTPProtocolParamsFormat string
@@ -1620,6 +1772,14 @@ const (
 	HTTPSummaryHTTPProtocolParamsFormatCsv  HTTPSummaryHTTPProtocolParamsFormat = "CSV"
 )
 
+func (r HTTPSummaryHTTPProtocolParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPProtocolParamsFormatJson, HTTPSummaryHTTPProtocolParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPProtocolParamsHTTPVersion string
 
 const (
@@ -1628,12 +1788,28 @@ const (
 	HTTPSummaryHTTPProtocolParamsHTTPVersionHttPv3 HTTPSummaryHTTPProtocolParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPSummaryHTTPProtocolParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPProtocolParamsHTTPVersionHttPv1, HTTPSummaryHTTPProtocolParamsHTTPVersionHttPv2, HTTPSummaryHTTPProtocolParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPProtocolParamsIPVersion string
 
 const (
 	HTTPSummaryHTTPProtocolParamsIPVersionIPv4 HTTPSummaryHTTPProtocolParamsIPVersion = "IPv4"
 	HTTPSummaryHTTPProtocolParamsIPVersionIPv6 HTTPSummaryHTTPProtocolParamsIPVersion = "IPv6"
 )
+
+func (r HTTPSummaryHTTPProtocolParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPProtocolParamsIPVersionIPv4, HTTPSummaryHTTPProtocolParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryHTTPProtocolParamsOS string
 
@@ -1647,6 +1823,14 @@ const (
 	HTTPSummaryHTTPProtocolParamsOSSmartTv  HTTPSummaryHTTPProtocolParamsOS = "SMART_TV"
 )
 
+func (r HTTPSummaryHTTPProtocolParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPProtocolParamsOSWindows, HTTPSummaryHTTPProtocolParamsOSMacosx, HTTPSummaryHTTPProtocolParamsOSIos, HTTPSummaryHTTPProtocolParamsOSAndroid, HTTPSummaryHTTPProtocolParamsOSChromeos, HTTPSummaryHTTPProtocolParamsOSLinux, HTTPSummaryHTTPProtocolParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPProtocolParamsTLSVersion string
 
 const (
@@ -1656,6 +1840,14 @@ const (
 	HTTPSummaryHTTPProtocolParamsTLSVersionTlSv1_3  HTTPSummaryHTTPProtocolParamsTLSVersion = "TLSv1_3"
 	HTTPSummaryHTTPProtocolParamsTLSVersionTlSvQuic HTTPSummaryHTTPProtocolParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPSummaryHTTPProtocolParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPProtocolParamsTLSVersionTlSv1_0, HTTPSummaryHTTPProtocolParamsTLSVersionTlSv1_1, HTTPSummaryHTTPProtocolParamsTLSVersionTlSv1_2, HTTPSummaryHTTPProtocolParamsTLSVersionTlSv1_3, HTTPSummaryHTTPProtocolParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryHTTPProtocolResponseEnvelope struct {
 	Result  HTTPSummaryHTTPProtocolResponse             `json:"result,required"`
@@ -1736,6 +1928,14 @@ const (
 	HTTPSummaryHTTPVersionParamsBotClassLikelyHuman     HTTPSummaryHTTPVersionParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPSummaryHTTPVersionParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPVersionParamsBotClassLikelyAutomated, HTTPSummaryHTTPVersionParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPVersionParamsDateRange string
 
 const (
@@ -1756,6 +1956,14 @@ const (
 	HTTPSummaryHTTPVersionParamsDateRange24wControl HTTPSummaryHTTPVersionParamsDateRange = "24wControl"
 )
 
+func (r HTTPSummaryHTTPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPVersionParamsDateRange1d, HTTPSummaryHTTPVersionParamsDateRange2d, HTTPSummaryHTTPVersionParamsDateRange7d, HTTPSummaryHTTPVersionParamsDateRange14d, HTTPSummaryHTTPVersionParamsDateRange28d, HTTPSummaryHTTPVersionParamsDateRange12w, HTTPSummaryHTTPVersionParamsDateRange24w, HTTPSummaryHTTPVersionParamsDateRange52w, HTTPSummaryHTTPVersionParamsDateRange1dControl, HTTPSummaryHTTPVersionParamsDateRange2dControl, HTTPSummaryHTTPVersionParamsDateRange7dControl, HTTPSummaryHTTPVersionParamsDateRange14dControl, HTTPSummaryHTTPVersionParamsDateRange28dControl, HTTPSummaryHTTPVersionParamsDateRange12wControl, HTTPSummaryHTTPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPVersionParamsDeviceType string
 
 const (
@@ -1763,6 +1971,14 @@ const (
 	HTTPSummaryHTTPVersionParamsDeviceTypeMobile  HTTPSummaryHTTPVersionParamsDeviceType = "MOBILE"
 	HTTPSummaryHTTPVersionParamsDeviceTypeOther   HTTPSummaryHTTPVersionParamsDeviceType = "OTHER"
 )
+
+func (r HTTPSummaryHTTPVersionParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPVersionParamsDeviceTypeDesktop, HTTPSummaryHTTPVersionParamsDeviceTypeMobile, HTTPSummaryHTTPVersionParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPSummaryHTTPVersionParamsFormat string
@@ -1772,6 +1988,14 @@ const (
 	HTTPSummaryHTTPVersionParamsFormatCsv  HTTPSummaryHTTPVersionParamsFormat = "CSV"
 )
 
+func (r HTTPSummaryHTTPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPVersionParamsFormatJson, HTTPSummaryHTTPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPVersionParamsHTTPProtocol string
 
 const (
@@ -1779,12 +2003,28 @@ const (
 	HTTPSummaryHTTPVersionParamsHTTPProtocolHTTPS HTTPSummaryHTTPVersionParamsHTTPProtocol = "HTTPS"
 )
 
+func (r HTTPSummaryHTTPVersionParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPVersionParamsHTTPProtocolHTTP, HTTPSummaryHTTPVersionParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPVersionParamsIPVersion string
 
 const (
 	HTTPSummaryHTTPVersionParamsIPVersionIPv4 HTTPSummaryHTTPVersionParamsIPVersion = "IPv4"
 	HTTPSummaryHTTPVersionParamsIPVersionIPv6 HTTPSummaryHTTPVersionParamsIPVersion = "IPv6"
 )
+
+func (r HTTPSummaryHTTPVersionParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPVersionParamsIPVersionIPv4, HTTPSummaryHTTPVersionParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryHTTPVersionParamsOS string
 
@@ -1798,6 +2038,14 @@ const (
 	HTTPSummaryHTTPVersionParamsOSSmartTv  HTTPSummaryHTTPVersionParamsOS = "SMART_TV"
 )
 
+func (r HTTPSummaryHTTPVersionParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPVersionParamsOSWindows, HTTPSummaryHTTPVersionParamsOSMacosx, HTTPSummaryHTTPVersionParamsOSIos, HTTPSummaryHTTPVersionParamsOSAndroid, HTTPSummaryHTTPVersionParamsOSChromeos, HTTPSummaryHTTPVersionParamsOSLinux, HTTPSummaryHTTPVersionParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryHTTPVersionParamsTLSVersion string
 
 const (
@@ -1807,6 +2055,14 @@ const (
 	HTTPSummaryHTTPVersionParamsTLSVersionTlSv1_3  HTTPSummaryHTTPVersionParamsTLSVersion = "TLSv1_3"
 	HTTPSummaryHTTPVersionParamsTLSVersionTlSvQuic HTTPSummaryHTTPVersionParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPSummaryHTTPVersionParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryHTTPVersionParamsTLSVersionTlSv1_0, HTTPSummaryHTTPVersionParamsTLSVersionTlSv1_1, HTTPSummaryHTTPVersionParamsTLSVersionTlSv1_2, HTTPSummaryHTTPVersionParamsTLSVersionTlSv1_3, HTTPSummaryHTTPVersionParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryHTTPVersionResponseEnvelope struct {
 	Result  HTTPSummaryHTTPVersionResponse             `json:"result,required"`
@@ -1887,6 +2143,14 @@ const (
 	HTTPSummaryIPVersionParamsBotClassLikelyHuman     HTTPSummaryIPVersionParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPSummaryIPVersionParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPSummaryIPVersionParamsBotClassLikelyAutomated, HTTPSummaryIPVersionParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryIPVersionParamsDateRange string
 
 const (
@@ -1907,6 +2171,14 @@ const (
 	HTTPSummaryIPVersionParamsDateRange24wControl HTTPSummaryIPVersionParamsDateRange = "24wControl"
 )
 
+func (r HTTPSummaryIPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPSummaryIPVersionParamsDateRange1d, HTTPSummaryIPVersionParamsDateRange2d, HTTPSummaryIPVersionParamsDateRange7d, HTTPSummaryIPVersionParamsDateRange14d, HTTPSummaryIPVersionParamsDateRange28d, HTTPSummaryIPVersionParamsDateRange12w, HTTPSummaryIPVersionParamsDateRange24w, HTTPSummaryIPVersionParamsDateRange52w, HTTPSummaryIPVersionParamsDateRange1dControl, HTTPSummaryIPVersionParamsDateRange2dControl, HTTPSummaryIPVersionParamsDateRange7dControl, HTTPSummaryIPVersionParamsDateRange14dControl, HTTPSummaryIPVersionParamsDateRange28dControl, HTTPSummaryIPVersionParamsDateRange12wControl, HTTPSummaryIPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryIPVersionParamsDeviceType string
 
 const (
@@ -1914,6 +2186,14 @@ const (
 	HTTPSummaryIPVersionParamsDeviceTypeMobile  HTTPSummaryIPVersionParamsDeviceType = "MOBILE"
 	HTTPSummaryIPVersionParamsDeviceTypeOther   HTTPSummaryIPVersionParamsDeviceType = "OTHER"
 )
+
+func (r HTTPSummaryIPVersionParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPSummaryIPVersionParamsDeviceTypeDesktop, HTTPSummaryIPVersionParamsDeviceTypeMobile, HTTPSummaryIPVersionParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPSummaryIPVersionParamsFormat string
@@ -1923,12 +2203,28 @@ const (
 	HTTPSummaryIPVersionParamsFormatCsv  HTTPSummaryIPVersionParamsFormat = "CSV"
 )
 
+func (r HTTPSummaryIPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPSummaryIPVersionParamsFormatJson, HTTPSummaryIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryIPVersionParamsHTTPProtocol string
 
 const (
 	HTTPSummaryIPVersionParamsHTTPProtocolHTTP  HTTPSummaryIPVersionParamsHTTPProtocol = "HTTP"
 	HTTPSummaryIPVersionParamsHTTPProtocolHTTPS HTTPSummaryIPVersionParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPSummaryIPVersionParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPSummaryIPVersionParamsHTTPProtocolHTTP, HTTPSummaryIPVersionParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryIPVersionParamsHTTPVersion string
 
@@ -1937,6 +2233,14 @@ const (
 	HTTPSummaryIPVersionParamsHTTPVersionHttPv2 HTTPSummaryIPVersionParamsHTTPVersion = "HTTPv2"
 	HTTPSummaryIPVersionParamsHTTPVersionHttPv3 HTTPSummaryIPVersionParamsHTTPVersion = "HTTPv3"
 )
+
+func (r HTTPSummaryIPVersionParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryIPVersionParamsHTTPVersionHttPv1, HTTPSummaryIPVersionParamsHTTPVersionHttPv2, HTTPSummaryIPVersionParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryIPVersionParamsOS string
 
@@ -1950,6 +2254,14 @@ const (
 	HTTPSummaryIPVersionParamsOSSmartTv  HTTPSummaryIPVersionParamsOS = "SMART_TV"
 )
 
+func (r HTTPSummaryIPVersionParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPSummaryIPVersionParamsOSWindows, HTTPSummaryIPVersionParamsOSMacosx, HTTPSummaryIPVersionParamsOSIos, HTTPSummaryIPVersionParamsOSAndroid, HTTPSummaryIPVersionParamsOSChromeos, HTTPSummaryIPVersionParamsOSLinux, HTTPSummaryIPVersionParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryIPVersionParamsTLSVersion string
 
 const (
@@ -1959,6 +2271,14 @@ const (
 	HTTPSummaryIPVersionParamsTLSVersionTlSv1_3  HTTPSummaryIPVersionParamsTLSVersion = "TLSv1_3"
 	HTTPSummaryIPVersionParamsTLSVersionTlSvQuic HTTPSummaryIPVersionParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPSummaryIPVersionParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryIPVersionParamsTLSVersionTlSv1_0, HTTPSummaryIPVersionParamsTLSVersionTlSv1_1, HTTPSummaryIPVersionParamsTLSVersionTlSv1_2, HTTPSummaryIPVersionParamsTLSVersionTlSv1_3, HTTPSummaryIPVersionParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryIPVersionResponseEnvelope struct {
 	Result  HTTPSummaryIPVersionResponse             `json:"result,required"`
@@ -2038,6 +2358,14 @@ const (
 	HTTPSummaryOSParamsBotClassLikelyHuman     HTTPSummaryOSParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPSummaryOSParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPSummaryOSParamsBotClassLikelyAutomated, HTTPSummaryOSParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryOSParamsDateRange string
 
 const (
@@ -2058,6 +2386,14 @@ const (
 	HTTPSummaryOSParamsDateRange24wControl HTTPSummaryOSParamsDateRange = "24wControl"
 )
 
+func (r HTTPSummaryOSParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPSummaryOSParamsDateRange1d, HTTPSummaryOSParamsDateRange2d, HTTPSummaryOSParamsDateRange7d, HTTPSummaryOSParamsDateRange14d, HTTPSummaryOSParamsDateRange28d, HTTPSummaryOSParamsDateRange12w, HTTPSummaryOSParamsDateRange24w, HTTPSummaryOSParamsDateRange52w, HTTPSummaryOSParamsDateRange1dControl, HTTPSummaryOSParamsDateRange2dControl, HTTPSummaryOSParamsDateRange7dControl, HTTPSummaryOSParamsDateRange14dControl, HTTPSummaryOSParamsDateRange28dControl, HTTPSummaryOSParamsDateRange12wControl, HTTPSummaryOSParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryOSParamsDeviceType string
 
 const (
@@ -2065,6 +2401,14 @@ const (
 	HTTPSummaryOSParamsDeviceTypeMobile  HTTPSummaryOSParamsDeviceType = "MOBILE"
 	HTTPSummaryOSParamsDeviceTypeOther   HTTPSummaryOSParamsDeviceType = "OTHER"
 )
+
+func (r HTTPSummaryOSParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPSummaryOSParamsDeviceTypeDesktop, HTTPSummaryOSParamsDeviceTypeMobile, HTTPSummaryOSParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPSummaryOSParamsFormat string
@@ -2074,12 +2418,28 @@ const (
 	HTTPSummaryOSParamsFormatCsv  HTTPSummaryOSParamsFormat = "CSV"
 )
 
+func (r HTTPSummaryOSParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPSummaryOSParamsFormatJson, HTTPSummaryOSParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryOSParamsHTTPProtocol string
 
 const (
 	HTTPSummaryOSParamsHTTPProtocolHTTP  HTTPSummaryOSParamsHTTPProtocol = "HTTP"
 	HTTPSummaryOSParamsHTTPProtocolHTTPS HTTPSummaryOSParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPSummaryOSParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPSummaryOSParamsHTTPProtocolHTTP, HTTPSummaryOSParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryOSParamsHTTPVersion string
 
@@ -2089,12 +2449,28 @@ const (
 	HTTPSummaryOSParamsHTTPVersionHttPv3 HTTPSummaryOSParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPSummaryOSParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryOSParamsHTTPVersionHttPv1, HTTPSummaryOSParamsHTTPVersionHttPv2, HTTPSummaryOSParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryOSParamsIPVersion string
 
 const (
 	HTTPSummaryOSParamsIPVersionIPv4 HTTPSummaryOSParamsIPVersion = "IPv4"
 	HTTPSummaryOSParamsIPVersionIPv6 HTTPSummaryOSParamsIPVersion = "IPv6"
 )
+
+func (r HTTPSummaryOSParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryOSParamsIPVersionIPv4, HTTPSummaryOSParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryOSParamsTLSVersion string
 
@@ -2105,6 +2481,14 @@ const (
 	HTTPSummaryOSParamsTLSVersionTlSv1_3  HTTPSummaryOSParamsTLSVersion = "TLSv1_3"
 	HTTPSummaryOSParamsTLSVersionTlSvQuic HTTPSummaryOSParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPSummaryOSParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryOSParamsTLSVersionTlSv1_0, HTTPSummaryOSParamsTLSVersionTlSv1_1, HTTPSummaryOSParamsTLSVersionTlSv1_2, HTTPSummaryOSParamsTLSVersionTlSv1_3, HTTPSummaryOSParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryOSResponseEnvelope struct {
 	Result  HTTPSummaryOSResponse             `json:"result,required"`
@@ -2185,6 +2569,14 @@ const (
 	HTTPSummaryTLSVersionParamsBotClassLikelyHuman     HTTPSummaryTLSVersionParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPSummaryTLSVersionParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPSummaryTLSVersionParamsBotClassLikelyAutomated, HTTPSummaryTLSVersionParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryTLSVersionParamsDateRange string
 
 const (
@@ -2205,6 +2597,14 @@ const (
 	HTTPSummaryTLSVersionParamsDateRange24wControl HTTPSummaryTLSVersionParamsDateRange = "24wControl"
 )
 
+func (r HTTPSummaryTLSVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPSummaryTLSVersionParamsDateRange1d, HTTPSummaryTLSVersionParamsDateRange2d, HTTPSummaryTLSVersionParamsDateRange7d, HTTPSummaryTLSVersionParamsDateRange14d, HTTPSummaryTLSVersionParamsDateRange28d, HTTPSummaryTLSVersionParamsDateRange12w, HTTPSummaryTLSVersionParamsDateRange24w, HTTPSummaryTLSVersionParamsDateRange52w, HTTPSummaryTLSVersionParamsDateRange1dControl, HTTPSummaryTLSVersionParamsDateRange2dControl, HTTPSummaryTLSVersionParamsDateRange7dControl, HTTPSummaryTLSVersionParamsDateRange14dControl, HTTPSummaryTLSVersionParamsDateRange28dControl, HTTPSummaryTLSVersionParamsDateRange12wControl, HTTPSummaryTLSVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryTLSVersionParamsDeviceType string
 
 const (
@@ -2212,6 +2612,14 @@ const (
 	HTTPSummaryTLSVersionParamsDeviceTypeMobile  HTTPSummaryTLSVersionParamsDeviceType = "MOBILE"
 	HTTPSummaryTLSVersionParamsDeviceTypeOther   HTTPSummaryTLSVersionParamsDeviceType = "OTHER"
 )
+
+func (r HTTPSummaryTLSVersionParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPSummaryTLSVersionParamsDeviceTypeDesktop, HTTPSummaryTLSVersionParamsDeviceTypeMobile, HTTPSummaryTLSVersionParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPSummaryTLSVersionParamsFormat string
@@ -2221,12 +2629,28 @@ const (
 	HTTPSummaryTLSVersionParamsFormatCsv  HTTPSummaryTLSVersionParamsFormat = "CSV"
 )
 
+func (r HTTPSummaryTLSVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPSummaryTLSVersionParamsFormatJson, HTTPSummaryTLSVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryTLSVersionParamsHTTPProtocol string
 
 const (
 	HTTPSummaryTLSVersionParamsHTTPProtocolHTTP  HTTPSummaryTLSVersionParamsHTTPProtocol = "HTTP"
 	HTTPSummaryTLSVersionParamsHTTPProtocolHTTPS HTTPSummaryTLSVersionParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPSummaryTLSVersionParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPSummaryTLSVersionParamsHTTPProtocolHTTP, HTTPSummaryTLSVersionParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryTLSVersionParamsHTTPVersion string
 
@@ -2236,12 +2660,28 @@ const (
 	HTTPSummaryTLSVersionParamsHTTPVersionHttPv3 HTTPSummaryTLSVersionParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPSummaryTLSVersionParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryTLSVersionParamsHTTPVersionHttPv1, HTTPSummaryTLSVersionParamsHTTPVersionHttPv2, HTTPSummaryTLSVersionParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPSummaryTLSVersionParamsIPVersion string
 
 const (
 	HTTPSummaryTLSVersionParamsIPVersionIPv4 HTTPSummaryTLSVersionParamsIPVersion = "IPv4"
 	HTTPSummaryTLSVersionParamsIPVersionIPv6 HTTPSummaryTLSVersionParamsIPVersion = "IPv6"
 )
+
+func (r HTTPSummaryTLSVersionParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPSummaryTLSVersionParamsIPVersionIPv4, HTTPSummaryTLSVersionParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryTLSVersionParamsOS string
 
@@ -2254,6 +2694,14 @@ const (
 	HTTPSummaryTLSVersionParamsOSLinux    HTTPSummaryTLSVersionParamsOS = "LINUX"
 	HTTPSummaryTLSVersionParamsOSSmartTv  HTTPSummaryTLSVersionParamsOS = "SMART_TV"
 )
+
+func (r HTTPSummaryTLSVersionParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPSummaryTLSVersionParamsOSWindows, HTTPSummaryTLSVersionParamsOSMacosx, HTTPSummaryTLSVersionParamsOSIos, HTTPSummaryTLSVersionParamsOSAndroid, HTTPSummaryTLSVersionParamsOSChromeos, HTTPSummaryTLSVersionParamsOSLinux, HTTPSummaryTLSVersionParamsOSSmartTv:
+		return true
+	}
+	return false
+}
 
 type HTTPSummaryTLSVersionResponseEnvelope struct {
 	Result  HTTPSummaryTLSVersionResponse             `json:"result,required"`

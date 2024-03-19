@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -144,3 +144,11 @@ type NetworkRouteIPGetResponseEnvelopeSuccess bool
 const (
 	NetworkRouteIPGetResponseEnvelopeSuccessTrue NetworkRouteIPGetResponseEnvelopeSuccess = true
 )
+
+func (r NetworkRouteIPGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkRouteIPGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

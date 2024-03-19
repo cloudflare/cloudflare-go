@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package dns
 
@@ -39,11 +39,11 @@ func NewFirewallAnalyticsReportBytimeService(opts ...option.RequestOption) (r *F
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, accountIdentifier string, identifier string, query FirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReportBytime, err error) {
+func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReportBytime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAnalyticsReportBytimeGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report/bytime", accountIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report/bytime", params.AccountID, dnsFirewallID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,6 +52,8 @@ func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, accountI
 }
 
 type FirewallAnalyticsReportBytimeGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -95,6 +97,14 @@ const (
 	FirewallAnalyticsReportBytimeGetParamsTimeDeltaDekaminute FirewallAnalyticsReportBytimeGetParamsTimeDelta = "dekaminute"
 	FirewallAnalyticsReportBytimeGetParamsTimeDeltaMinute     FirewallAnalyticsReportBytimeGetParamsTimeDelta = "minute"
 )
+
+func (r FirewallAnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
+	switch r {
+	case FirewallAnalyticsReportBytimeGetParamsTimeDeltaAll, FirewallAnalyticsReportBytimeGetParamsTimeDeltaAuto, FirewallAnalyticsReportBytimeGetParamsTimeDeltaYear, FirewallAnalyticsReportBytimeGetParamsTimeDeltaQuarter, FirewallAnalyticsReportBytimeGetParamsTimeDeltaMonth, FirewallAnalyticsReportBytimeGetParamsTimeDeltaWeek, FirewallAnalyticsReportBytimeGetParamsTimeDeltaDay, FirewallAnalyticsReportBytimeGetParamsTimeDeltaHour, FirewallAnalyticsReportBytimeGetParamsTimeDeltaDekaminute, FirewallAnalyticsReportBytimeGetParamsTimeDeltaMinute:
+		return true
+	}
+	return false
+}
 
 type FirewallAnalyticsReportBytimeGetResponseEnvelope struct {
 	Errors   []FirewallAnalyticsReportBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -177,3 +187,11 @@ type FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess bool
 const (
 	FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccessTrue FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess = true
 )
+
+func (r FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -265,6 +265,14 @@ const (
 	AttackLayer7TimeseriesParamsAggInterval1w  AttackLayer7TimeseriesParamsAggInterval = "1w"
 )
 
+func (r AttackLayer7TimeseriesParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesParamsAggInterval15m, AttackLayer7TimeseriesParamsAggInterval1h, AttackLayer7TimeseriesParamsAggInterval1d, AttackLayer7TimeseriesParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesParamsAttack string
 
 const (
@@ -276,6 +284,14 @@ const (
 	AttackLayer7TimeseriesParamsAttackAPIShield          AttackLayer7TimeseriesParamsAttack = "API_SHIELD"
 	AttackLayer7TimeseriesParamsAttackDataLossPrevention AttackLayer7TimeseriesParamsAttack = "DATA_LOSS_PREVENTION"
 )
+
+func (r AttackLayer7TimeseriesParamsAttack) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesParamsAttackDDOS, AttackLayer7TimeseriesParamsAttackWAF, AttackLayer7TimeseriesParamsAttackBotManagement, AttackLayer7TimeseriesParamsAttackAccessRules, AttackLayer7TimeseriesParamsAttackIPReputation, AttackLayer7TimeseriesParamsAttackAPIShield, AttackLayer7TimeseriesParamsAttackDataLossPrevention:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesParamsDateRange string
 
@@ -297,6 +313,14 @@ const (
 	AttackLayer7TimeseriesParamsDateRange24wControl AttackLayer7TimeseriesParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TimeseriesParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesParamsDateRange1d, AttackLayer7TimeseriesParamsDateRange2d, AttackLayer7TimeseriesParamsDateRange7d, AttackLayer7TimeseriesParamsDateRange14d, AttackLayer7TimeseriesParamsDateRange28d, AttackLayer7TimeseriesParamsDateRange12w, AttackLayer7TimeseriesParamsDateRange24w, AttackLayer7TimeseriesParamsDateRange52w, AttackLayer7TimeseriesParamsDateRange1dControl, AttackLayer7TimeseriesParamsDateRange2dControl, AttackLayer7TimeseriesParamsDateRange7dControl, AttackLayer7TimeseriesParamsDateRange14dControl, AttackLayer7TimeseriesParamsDateRange28dControl, AttackLayer7TimeseriesParamsDateRange12wControl, AttackLayer7TimeseriesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TimeseriesParamsFormat string
 
@@ -304,6 +328,14 @@ const (
 	AttackLayer7TimeseriesParamsFormatJson AttackLayer7TimeseriesParamsFormat = "JSON"
 	AttackLayer7TimeseriesParamsFormatCsv  AttackLayer7TimeseriesParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TimeseriesParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesParamsFormatJson, AttackLayer7TimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -313,6 +345,14 @@ const (
 	AttackLayer7TimeseriesParamsNormalizationPercentageChange AttackLayer7TimeseriesParamsNormalization = "PERCENTAGE_CHANGE"
 	AttackLayer7TimeseriesParamsNormalizationMin0Max          AttackLayer7TimeseriesParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer7TimeseriesParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesParamsNormalizationPercentageChange, AttackLayer7TimeseriesParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesResponseEnvelope struct {
 	Result  AttackLayer7TimeseriesResponse             `json:"result,required"`

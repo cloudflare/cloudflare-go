@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -110,6 +110,14 @@ const (
 	ZonesEarlyHintsIDEarlyHints ZonesEarlyHintsID = "early_hints"
 )
 
+func (r ZonesEarlyHintsID) IsKnown() bool {
+	switch r {
+	case ZonesEarlyHintsIDEarlyHints:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesEarlyHintsValue string
 
@@ -117,6 +125,14 @@ const (
 	ZonesEarlyHintsValueOn  ZonesEarlyHintsValue = "on"
 	ZonesEarlyHintsValueOff ZonesEarlyHintsValue = "off"
 )
+
+func (r ZonesEarlyHintsValue) IsKnown() bool {
+	switch r {
+	case ZonesEarlyHintsValueOn, ZonesEarlyHintsValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -126,6 +142,14 @@ const (
 	ZonesEarlyHintsEditableTrue  ZonesEarlyHintsEditable = true
 	ZonesEarlyHintsEditableFalse ZonesEarlyHintsEditable = false
 )
+
+func (r ZonesEarlyHintsEditable) IsKnown() bool {
+	switch r {
+	case ZonesEarlyHintsEditableTrue, ZonesEarlyHintsEditableFalse:
+		return true
+	}
+	return false
+}
 
 // When enabled, Cloudflare will attempt to speed up overall page loads by serving
 // `103` responses with `Link` headers from the final response. Refer to
@@ -162,6 +186,14 @@ const (
 	SettingEarlyHintEditParamsValueOn  SettingEarlyHintEditParamsValue = "on"
 	SettingEarlyHintEditParamsValueOff SettingEarlyHintEditParamsValue = "off"
 )
+
+func (r SettingEarlyHintEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingEarlyHintEditParamsValueOn, SettingEarlyHintEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingEarlyHintEditResponseEnvelope struct {
 	Errors   []SettingEarlyHintEditResponseEnvelopeErrors   `json:"errors,required"`

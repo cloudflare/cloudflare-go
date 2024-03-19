@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package magic_transit_test
 
@@ -28,23 +28,20 @@ func TestSiteNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteNewParams{
-			Site: cloudflare.F(magic_transit.SiteNewParamsSite{
-				ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
-				Description: cloudflare.F("string"),
-				HaMode:      cloudflare.F(true),
-				Location: cloudflare.F(magic_transit.SiteNewParamsSiteLocation{
-					Lat: cloudflare.F("string"),
-					Lon: cloudflare.F("string"),
-				}),
-				Name:                 cloudflare.F("site_1"),
-				SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
+	_, err := client.MagicTransit.Sites.New(context.TODO(), magic_transit.SiteNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Site: cloudflare.F(magic_transit.SiteNewParamsSite{
+			ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
+			Description: cloudflare.F("string"),
+			HaMode:      cloudflare.F(true),
+			Location: cloudflare.F(magic_transit.SiteNewParamsSiteLocation{
+				Lat: cloudflare.F("string"),
+				Lon: cloudflare.F("string"),
 			}),
-		},
-	)
+			Name:                 cloudflare.F("site_1"),
+			SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
+		}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -71,8 +68,8 @@ func TestSiteUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.MagicTransit.Sites.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Site: cloudflare.F(magic_transit.SiteUpdateParamsSite{
 				ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
 				Description: cloudflare.F("string"),
@@ -108,11 +105,9 @@ func TestSiteList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteListParams{},
-	)
+	_, err := client.MagicTransit.Sites.List(context.TODO(), magic_transit.SiteListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -139,7 +134,9 @@ func TestSiteDelete(t *testing.T) {
 	_, err := client.MagicTransit.Sites.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -167,7 +164,9 @@ func TestSiteGet(t *testing.T) {
 	_, err := client.MagicTransit.Sites.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

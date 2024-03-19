@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers
 
@@ -213,6 +213,14 @@ const (
 	DomainUpdateResponseEnvelopeSuccessTrue DomainUpdateResponseEnvelopeSuccess = true
 )
 
+func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DomainListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Worker environment associated with the zone and hostname.
@@ -316,6 +324,14 @@ const (
 	DomainListResponseEnvelopeSuccessTrue DomainListResponseEnvelopeSuccess = true
 )
 
+func (r DomainListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DomainDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -404,3 +420,11 @@ type DomainGetResponseEnvelopeSuccess bool
 const (
 	DomainGetResponseEnvelopeSuccessTrue DomainGetResponseEnvelopeSuccess = true
 )
+
+func (r DomainGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

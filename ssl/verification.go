@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package ssl
 
@@ -119,6 +119,14 @@ const (
 	TLSCertificatesAndHostnamesVerificationCertificateStatusPendingDeployment TLSCertificatesAndHostnamesVerificationCertificateStatus = "pending_deployment"
 )
 
+func (r TLSCertificatesAndHostnamesVerificationCertificateStatus) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesVerificationCertificateStatusInitializing, TLSCertificatesAndHostnamesVerificationCertificateStatusAuthorizing, TLSCertificatesAndHostnamesVerificationCertificateStatusActive, TLSCertificatesAndHostnamesVerificationCertificateStatusExpired, TLSCertificatesAndHostnamesVerificationCertificateStatusIssuing, TLSCertificatesAndHostnamesVerificationCertificateStatusTimingOut, TLSCertificatesAndHostnamesVerificationCertificateStatusPendingDeployment:
+		return true
+	}
+	return false
+}
+
 // Certificate's signature algorithm.
 type TLSCertificatesAndHostnamesVerificationSignature string
 
@@ -128,6 +136,14 @@ const (
 	TLSCertificatesAndHostnamesVerificationSignatureSha256WithRsa   TLSCertificatesAndHostnamesVerificationSignature = "SHA256WithRSA"
 )
 
+func (r TLSCertificatesAndHostnamesVerificationSignature) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesVerificationSignatureEcdsaWithSha256, TLSCertificatesAndHostnamesVerificationSignatureSha1WithRsa, TLSCertificatesAndHostnamesVerificationSignatureSha256WithRsa:
+		return true
+	}
+	return false
+}
+
 // Validation method in use for a certificate pack order.
 type TLSCertificatesAndHostnamesVerificationValidationMethod string
 
@@ -136,6 +152,14 @@ const (
 	TLSCertificatesAndHostnamesVerificationValidationMethodCNAME TLSCertificatesAndHostnamesVerificationValidationMethod = "cname"
 	TLSCertificatesAndHostnamesVerificationValidationMethodTXT   TLSCertificatesAndHostnamesVerificationValidationMethod = "txt"
 )
+
+func (r TLSCertificatesAndHostnamesVerificationValidationMethod) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesVerificationValidationMethodHTTP, TLSCertificatesAndHostnamesVerificationValidationMethodCNAME, TLSCertificatesAndHostnamesVerificationValidationMethodTXT:
+		return true
+	}
+	return false
+}
 
 // Certificate's required verification information.
 type TLSCertificatesAndHostnamesVerificationVerificationInfo struct {
@@ -174,6 +198,14 @@ const (
 	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameTXTName    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName = "txt_name"
 )
 
+func (r TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameRecordName, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameHTTPURL, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameCNAME, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameTXTName:
+		return true
+	}
+	return false
+}
+
 // Target of CNAME record.
 type TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget string
 
@@ -184,6 +216,14 @@ const (
 	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetTXTValue    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget = "txt_value"
 )
 
+func (r TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetRecordValue, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetHTTPBody, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetCNAMETarget, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetTXTValue:
+		return true
+	}
+	return false
+}
+
 // Method of verification.
 type TLSCertificatesAndHostnamesVerificationVerificationType string
 
@@ -191,6 +231,14 @@ const (
 	TLSCertificatesAndHostnamesVerificationVerificationTypeCNAME   TLSCertificatesAndHostnamesVerificationVerificationType = "cname"
 	TLSCertificatesAndHostnamesVerificationVerificationTypeMetaTag TLSCertificatesAndHostnamesVerificationVerificationType = "meta tag"
 )
+
+func (r TLSCertificatesAndHostnamesVerificationVerificationType) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesVerificationVerificationTypeCNAME, TLSCertificatesAndHostnamesVerificationVerificationTypeMetaTag:
+		return true
+	}
+	return false
+}
 
 type VerificationEditResponse struct {
 	// Result status.
@@ -227,6 +275,14 @@ const (
 	VerificationEditResponseValidationMethodEmail VerificationEditResponseValidationMethod = "email"
 )
 
+func (r VerificationEditResponseValidationMethod) IsKnown() bool {
+	switch r {
+	case VerificationEditResponseValidationMethodHTTP, VerificationEditResponseValidationMethodCNAME, VerificationEditResponseValidationMethodTXT, VerificationEditResponseValidationMethodEmail:
+		return true
+	}
+	return false
+}
+
 type VerificationEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -247,6 +303,14 @@ const (
 	VerificationEditParamsValidationMethodTXT   VerificationEditParamsValidationMethod = "txt"
 	VerificationEditParamsValidationMethodEmail VerificationEditParamsValidationMethod = "email"
 )
+
+func (r VerificationEditParamsValidationMethod) IsKnown() bool {
+	switch r {
+	case VerificationEditParamsValidationMethodHTTP, VerificationEditParamsValidationMethodCNAME, VerificationEditParamsValidationMethodTXT, VerificationEditParamsValidationMethodEmail:
+		return true
+	}
+	return false
+}
 
 type VerificationEditResponseEnvelope struct {
 	Errors   []VerificationEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -329,6 +393,14 @@ const (
 	VerificationEditResponseEnvelopeSuccessTrue VerificationEditResponseEnvelopeSuccess = true
 )
 
+func (r VerificationEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VerificationEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type VerificationGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -350,6 +422,14 @@ type VerificationGetParamsRetry bool
 const (
 	VerificationGetParamsRetryTrue VerificationGetParamsRetry = true
 )
+
+func (r VerificationGetParamsRetry) IsKnown() bool {
+	switch r {
+	case VerificationGetParamsRetryTrue:
+		return true
+	}
+	return false
+}
 
 type VerificationGetResponseEnvelope struct {
 	Result []TLSCertificatesAndHostnamesVerification `json:"result"`

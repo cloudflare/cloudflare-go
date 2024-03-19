@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -238,6 +238,14 @@ const (
 	AccessTagNewResponseEnvelopeSuccessTrue AccessTagNewResponseEnvelopeSuccess = true
 )
 
+func (r AccessTagNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessTagNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessTagUpdateParams struct {
 	// The name of the tag
 	Name param.Field[string] `json:"name,required"`
@@ -329,6 +337,14 @@ const (
 	AccessTagUpdateResponseEnvelopeSuccessTrue AccessTagUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AccessTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessTagUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessTagListResponseEnvelope struct {
 	Errors   []AccessTagListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessTagListResponseEnvelopeMessages `json:"messages,required"`
@@ -411,6 +427,14 @@ type AccessTagListResponseEnvelopeSuccess bool
 const (
 	AccessTagListResponseEnvelopeSuccessTrue AccessTagListResponseEnvelopeSuccess = true
 )
+
+func (r AccessTagListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessTagListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessTagListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -524,6 +548,14 @@ const (
 	AccessTagDeleteResponseEnvelopeSuccessTrue AccessTagDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessTagDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessTagDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessTagGetResponseEnvelope struct {
 	Errors   []AccessTagGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessTagGetResponseEnvelopeMessages `json:"messages,required"`
@@ -605,3 +637,11 @@ type AccessTagGetResponseEnvelopeSuccess bool
 const (
 	AccessTagGetResponseEnvelopeSuccessTrue AccessTagGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessTagGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessTagGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

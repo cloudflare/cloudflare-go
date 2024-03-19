@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -108,6 +108,14 @@ const (
 	ZonesAlwaysUseHTTPSIDAlwaysUseHTTPS ZonesAlwaysUseHTTPSID = "always_use_https"
 )
 
+func (r ZonesAlwaysUseHTTPSID) IsKnown() bool {
+	switch r {
+	case ZonesAlwaysUseHTTPSIDAlwaysUseHTTPS:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesAlwaysUseHTTPSValue string
 
@@ -115,6 +123,14 @@ const (
 	ZonesAlwaysUseHTTPSValueOn  ZonesAlwaysUseHTTPSValue = "on"
 	ZonesAlwaysUseHTTPSValueOff ZonesAlwaysUseHTTPSValue = "off"
 )
+
+func (r ZonesAlwaysUseHTTPSValue) IsKnown() bool {
+	switch r {
+	case ZonesAlwaysUseHTTPSValueOn, ZonesAlwaysUseHTTPSValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -124,6 +140,14 @@ const (
 	ZonesAlwaysUseHTTPSEditableTrue  ZonesAlwaysUseHTTPSEditable = true
 	ZonesAlwaysUseHTTPSEditableFalse ZonesAlwaysUseHTTPSEditable = false
 )
+
+func (r ZonesAlwaysUseHTTPSEditable) IsKnown() bool {
+	switch r {
+	case ZonesAlwaysUseHTTPSEditableTrue, ZonesAlwaysUseHTTPSEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
@@ -159,6 +183,14 @@ const (
 	SettingAlwaysUseHTTPSEditParamsValueOn  SettingAlwaysUseHTTPSEditParamsValue = "on"
 	SettingAlwaysUseHTTPSEditParamsValueOff SettingAlwaysUseHTTPSEditParamsValue = "off"
 )
+
+func (r SettingAlwaysUseHTTPSEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingAlwaysUseHTTPSEditParamsValueOn, SettingAlwaysUseHTTPSEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingAlwaysUseHTTPSEditResponseEnvelope struct {
 	Errors   []SettingAlwaysUseHTTPSEditResponseEnvelopeErrors   `json:"errors,required"`

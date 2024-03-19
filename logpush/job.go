@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package logpush
 
@@ -216,6 +216,14 @@ const (
 	JobNewParamsFrequencyLow  JobNewParamsFrequency = "low"
 )
 
+func (r JobNewParamsFrequency) IsKnown() bool {
+	switch r {
+	case JobNewParamsFrequencyHigh, JobNewParamsFrequencyLow:
+		return true
+	}
+	return false
+}
+
 // The structured replacement for `logpull_options`. When including this field, the
 // `logpull_option` field will be ignored.
 type JobNewParamsOutputOptions struct {
@@ -269,6 +277,14 @@ const (
 	JobNewParamsOutputOptionsOutputTypeCsv    JobNewParamsOutputOptionsOutputType = "csv"
 )
 
+func (r JobNewParamsOutputOptionsOutputType) IsKnown() bool {
+	switch r {
+	case JobNewParamsOutputOptionsOutputTypeNdjson, JobNewParamsOutputOptionsOutputTypeCsv:
+		return true
+	}
+	return false
+}
+
 // String to specify the format for timestamps, such as `unixnano`, `unix`, or
 // `rfc3339`.
 type JobNewParamsOutputOptionsTimestampFormat string
@@ -278,6 +294,14 @@ const (
 	JobNewParamsOutputOptionsTimestampFormatUnix     JobNewParamsOutputOptionsTimestampFormat = "unix"
 	JobNewParamsOutputOptionsTimestampFormatRfc3339  JobNewParamsOutputOptionsTimestampFormat = "rfc3339"
 )
+
+func (r JobNewParamsOutputOptionsTimestampFormat) IsKnown() bool {
+	switch r {
+	case JobNewParamsOutputOptionsTimestampFormatUnixnano, JobNewParamsOutputOptionsTimestampFormatUnix, JobNewParamsOutputOptionsTimestampFormatRfc3339:
+		return true
+	}
+	return false
+}
 
 type JobNewResponseEnvelope struct {
 	Errors   []JobNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -360,6 +384,14 @@ const (
 	JobNewResponseEnvelopeSuccessTrue JobNewResponseEnvelopeSuccess = true
 )
 
+func (r JobNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case JobNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type JobUpdateParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -401,6 +433,14 @@ const (
 	JobUpdateParamsFrequencyHigh JobUpdateParamsFrequency = "high"
 	JobUpdateParamsFrequencyLow  JobUpdateParamsFrequency = "low"
 )
+
+func (r JobUpdateParamsFrequency) IsKnown() bool {
+	switch r {
+	case JobUpdateParamsFrequencyHigh, JobUpdateParamsFrequencyLow:
+		return true
+	}
+	return false
+}
 
 // The structured replacement for `logpull_options`. When including this field, the
 // `logpull_option` field will be ignored.
@@ -455,6 +495,14 @@ const (
 	JobUpdateParamsOutputOptionsOutputTypeCsv    JobUpdateParamsOutputOptionsOutputType = "csv"
 )
 
+func (r JobUpdateParamsOutputOptionsOutputType) IsKnown() bool {
+	switch r {
+	case JobUpdateParamsOutputOptionsOutputTypeNdjson, JobUpdateParamsOutputOptionsOutputTypeCsv:
+		return true
+	}
+	return false
+}
+
 // String to specify the format for timestamps, such as `unixnano`, `unix`, or
 // `rfc3339`.
 type JobUpdateParamsOutputOptionsTimestampFormat string
@@ -464,6 +512,14 @@ const (
 	JobUpdateParamsOutputOptionsTimestampFormatUnix     JobUpdateParamsOutputOptionsTimestampFormat = "unix"
 	JobUpdateParamsOutputOptionsTimestampFormatRfc3339  JobUpdateParamsOutputOptionsTimestampFormat = "rfc3339"
 )
+
+func (r JobUpdateParamsOutputOptionsTimestampFormat) IsKnown() bool {
+	switch r {
+	case JobUpdateParamsOutputOptionsTimestampFormatUnixnano, JobUpdateParamsOutputOptionsTimestampFormatUnix, JobUpdateParamsOutputOptionsTimestampFormatRfc3339:
+		return true
+	}
+	return false
+}
 
 type JobUpdateResponseEnvelope struct {
 	Errors   []JobUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -545,6 +601,14 @@ type JobUpdateResponseEnvelopeSuccess bool
 const (
 	JobUpdateResponseEnvelopeSuccessTrue JobUpdateResponseEnvelopeSuccess = true
 )
+
+func (r JobUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case JobUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type JobListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -634,6 +698,14 @@ const (
 	JobListResponseEnvelopeSuccessTrue JobListResponseEnvelopeSuccess = true
 )
 
+func (r JobListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case JobListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type JobDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -722,6 +794,14 @@ const (
 	JobDeleteResponseEnvelopeSuccessTrue JobDeleteResponseEnvelopeSuccess = true
 )
 
+func (r JobDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case JobDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type JobGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -809,3 +889,11 @@ type JobGetResponseEnvelopeSuccess bool
 const (
 	JobGetResponseEnvelopeSuccessTrue JobGetResponseEnvelopeSuccess = true
 )
+
+func (r JobGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case JobGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

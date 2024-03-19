@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -1096,6 +1096,14 @@ const (
 	AttackLayer3SummaryBitrateParamsDateRange24wControl AttackLayer3SummaryBitrateParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3SummaryBitrateParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryBitrateParamsDateRange1d, AttackLayer3SummaryBitrateParamsDateRange2d, AttackLayer3SummaryBitrateParamsDateRange7d, AttackLayer3SummaryBitrateParamsDateRange14d, AttackLayer3SummaryBitrateParamsDateRange28d, AttackLayer3SummaryBitrateParamsDateRange12w, AttackLayer3SummaryBitrateParamsDateRange24w, AttackLayer3SummaryBitrateParamsDateRange52w, AttackLayer3SummaryBitrateParamsDateRange1dControl, AttackLayer3SummaryBitrateParamsDateRange2dControl, AttackLayer3SummaryBitrateParamsDateRange7dControl, AttackLayer3SummaryBitrateParamsDateRange14dControl, AttackLayer3SummaryBitrateParamsDateRange28dControl, AttackLayer3SummaryBitrateParamsDateRange12wControl, AttackLayer3SummaryBitrateParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3SummaryBitrateParamsDirection string
@@ -1105,6 +1113,14 @@ const (
 	AttackLayer3SummaryBitrateParamsDirectionTarget AttackLayer3SummaryBitrateParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3SummaryBitrateParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryBitrateParamsDirectionOrigin, AttackLayer3SummaryBitrateParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3SummaryBitrateParamsFormat string
 
@@ -1113,12 +1129,28 @@ const (
 	AttackLayer3SummaryBitrateParamsFormatCsv  AttackLayer3SummaryBitrateParamsFormat = "CSV"
 )
 
+func (r AttackLayer3SummaryBitrateParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryBitrateParamsFormatJson, AttackLayer3SummaryBitrateParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3SummaryBitrateParamsIPVersion string
 
 const (
 	AttackLayer3SummaryBitrateParamsIPVersionIPv4 AttackLayer3SummaryBitrateParamsIPVersion = "IPv4"
 	AttackLayer3SummaryBitrateParamsIPVersionIPv6 AttackLayer3SummaryBitrateParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3SummaryBitrateParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryBitrateParamsIPVersionIPv4, AttackLayer3SummaryBitrateParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryBitrateParamsProtocol string
 
@@ -1128,6 +1160,14 @@ const (
 	AttackLayer3SummaryBitrateParamsProtocolIcmp AttackLayer3SummaryBitrateParamsProtocol = "ICMP"
 	AttackLayer3SummaryBitrateParamsProtocolGRE  AttackLayer3SummaryBitrateParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3SummaryBitrateParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryBitrateParamsProtocolUdp, AttackLayer3SummaryBitrateParamsProtocolTcp, AttackLayer3SummaryBitrateParamsProtocolIcmp, AttackLayer3SummaryBitrateParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryBitrateResponseEnvelope struct {
 	Result  AttackLayer3SummaryBitrateResponse             `json:"result,required"`
@@ -1211,6 +1251,14 @@ const (
 	AttackLayer3SummaryDurationParamsDateRange24wControl AttackLayer3SummaryDurationParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3SummaryDurationParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryDurationParamsDateRange1d, AttackLayer3SummaryDurationParamsDateRange2d, AttackLayer3SummaryDurationParamsDateRange7d, AttackLayer3SummaryDurationParamsDateRange14d, AttackLayer3SummaryDurationParamsDateRange28d, AttackLayer3SummaryDurationParamsDateRange12w, AttackLayer3SummaryDurationParamsDateRange24w, AttackLayer3SummaryDurationParamsDateRange52w, AttackLayer3SummaryDurationParamsDateRange1dControl, AttackLayer3SummaryDurationParamsDateRange2dControl, AttackLayer3SummaryDurationParamsDateRange7dControl, AttackLayer3SummaryDurationParamsDateRange14dControl, AttackLayer3SummaryDurationParamsDateRange28dControl, AttackLayer3SummaryDurationParamsDateRange12wControl, AttackLayer3SummaryDurationParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3SummaryDurationParamsDirection string
@@ -1220,6 +1268,14 @@ const (
 	AttackLayer3SummaryDurationParamsDirectionTarget AttackLayer3SummaryDurationParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3SummaryDurationParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryDurationParamsDirectionOrigin, AttackLayer3SummaryDurationParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3SummaryDurationParamsFormat string
 
@@ -1228,12 +1284,28 @@ const (
 	AttackLayer3SummaryDurationParamsFormatCsv  AttackLayer3SummaryDurationParamsFormat = "CSV"
 )
 
+func (r AttackLayer3SummaryDurationParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryDurationParamsFormatJson, AttackLayer3SummaryDurationParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3SummaryDurationParamsIPVersion string
 
 const (
 	AttackLayer3SummaryDurationParamsIPVersionIPv4 AttackLayer3SummaryDurationParamsIPVersion = "IPv4"
 	AttackLayer3SummaryDurationParamsIPVersionIPv6 AttackLayer3SummaryDurationParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3SummaryDurationParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryDurationParamsIPVersionIPv4, AttackLayer3SummaryDurationParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryDurationParamsProtocol string
 
@@ -1243,6 +1315,14 @@ const (
 	AttackLayer3SummaryDurationParamsProtocolIcmp AttackLayer3SummaryDurationParamsProtocol = "ICMP"
 	AttackLayer3SummaryDurationParamsProtocolGRE  AttackLayer3SummaryDurationParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3SummaryDurationParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryDurationParamsProtocolUdp, AttackLayer3SummaryDurationParamsProtocolTcp, AttackLayer3SummaryDurationParamsProtocolIcmp, AttackLayer3SummaryDurationParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryDurationResponseEnvelope struct {
 	Result  AttackLayer3SummaryDurationResponse             `json:"result,required"`
@@ -1323,6 +1403,14 @@ const (
 	AttackLayer3SummaryGetParamsDateRange24wControl AttackLayer3SummaryGetParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3SummaryGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryGetParamsDateRange1d, AttackLayer3SummaryGetParamsDateRange2d, AttackLayer3SummaryGetParamsDateRange7d, AttackLayer3SummaryGetParamsDateRange14d, AttackLayer3SummaryGetParamsDateRange28d, AttackLayer3SummaryGetParamsDateRange12w, AttackLayer3SummaryGetParamsDateRange24w, AttackLayer3SummaryGetParamsDateRange52w, AttackLayer3SummaryGetParamsDateRange1dControl, AttackLayer3SummaryGetParamsDateRange2dControl, AttackLayer3SummaryGetParamsDateRange7dControl, AttackLayer3SummaryGetParamsDateRange14dControl, AttackLayer3SummaryGetParamsDateRange28dControl, AttackLayer3SummaryGetParamsDateRange12wControl, AttackLayer3SummaryGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3SummaryGetParamsFormat string
 
@@ -1330,6 +1418,14 @@ const (
 	AttackLayer3SummaryGetParamsFormatJson AttackLayer3SummaryGetParamsFormat = "JSON"
 	AttackLayer3SummaryGetParamsFormatCsv  AttackLayer3SummaryGetParamsFormat = "CSV"
 )
+
+func (r AttackLayer3SummaryGetParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryGetParamsFormatJson, AttackLayer3SummaryGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryGetResponseEnvelope struct {
 	Result  AttackLayer3SummaryGetResponse             `json:"result,required"`
@@ -1411,6 +1507,14 @@ const (
 	AttackLayer3SummaryIPVersionParamsDateRange24wControl AttackLayer3SummaryIPVersionParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3SummaryIPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryIPVersionParamsDateRange1d, AttackLayer3SummaryIPVersionParamsDateRange2d, AttackLayer3SummaryIPVersionParamsDateRange7d, AttackLayer3SummaryIPVersionParamsDateRange14d, AttackLayer3SummaryIPVersionParamsDateRange28d, AttackLayer3SummaryIPVersionParamsDateRange12w, AttackLayer3SummaryIPVersionParamsDateRange24w, AttackLayer3SummaryIPVersionParamsDateRange52w, AttackLayer3SummaryIPVersionParamsDateRange1dControl, AttackLayer3SummaryIPVersionParamsDateRange2dControl, AttackLayer3SummaryIPVersionParamsDateRange7dControl, AttackLayer3SummaryIPVersionParamsDateRange14dControl, AttackLayer3SummaryIPVersionParamsDateRange28dControl, AttackLayer3SummaryIPVersionParamsDateRange12wControl, AttackLayer3SummaryIPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3SummaryIPVersionParamsDirection string
@@ -1420,6 +1524,14 @@ const (
 	AttackLayer3SummaryIPVersionParamsDirectionTarget AttackLayer3SummaryIPVersionParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3SummaryIPVersionParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryIPVersionParamsDirectionOrigin, AttackLayer3SummaryIPVersionParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3SummaryIPVersionParamsFormat string
 
@@ -1427,6 +1539,14 @@ const (
 	AttackLayer3SummaryIPVersionParamsFormatJson AttackLayer3SummaryIPVersionParamsFormat = "JSON"
 	AttackLayer3SummaryIPVersionParamsFormatCsv  AttackLayer3SummaryIPVersionParamsFormat = "CSV"
 )
+
+func (r AttackLayer3SummaryIPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryIPVersionParamsFormatJson, AttackLayer3SummaryIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryIPVersionParamsProtocol string
 
@@ -1436,6 +1556,14 @@ const (
 	AttackLayer3SummaryIPVersionParamsProtocolIcmp AttackLayer3SummaryIPVersionParamsProtocol = "ICMP"
 	AttackLayer3SummaryIPVersionParamsProtocolGRE  AttackLayer3SummaryIPVersionParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3SummaryIPVersionParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryIPVersionParamsProtocolUdp, AttackLayer3SummaryIPVersionParamsProtocolTcp, AttackLayer3SummaryIPVersionParamsProtocolIcmp, AttackLayer3SummaryIPVersionParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryIPVersionResponseEnvelope struct {
 	Result  AttackLayer3SummaryIPVersionResponse             `json:"result,required"`
@@ -1517,6 +1645,14 @@ const (
 	AttackLayer3SummaryProtocolParamsDateRange24wControl AttackLayer3SummaryProtocolParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3SummaryProtocolParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryProtocolParamsDateRange1d, AttackLayer3SummaryProtocolParamsDateRange2d, AttackLayer3SummaryProtocolParamsDateRange7d, AttackLayer3SummaryProtocolParamsDateRange14d, AttackLayer3SummaryProtocolParamsDateRange28d, AttackLayer3SummaryProtocolParamsDateRange12w, AttackLayer3SummaryProtocolParamsDateRange24w, AttackLayer3SummaryProtocolParamsDateRange52w, AttackLayer3SummaryProtocolParamsDateRange1dControl, AttackLayer3SummaryProtocolParamsDateRange2dControl, AttackLayer3SummaryProtocolParamsDateRange7dControl, AttackLayer3SummaryProtocolParamsDateRange14dControl, AttackLayer3SummaryProtocolParamsDateRange28dControl, AttackLayer3SummaryProtocolParamsDateRange12wControl, AttackLayer3SummaryProtocolParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3SummaryProtocolParamsDirection string
@@ -1526,6 +1662,14 @@ const (
 	AttackLayer3SummaryProtocolParamsDirectionTarget AttackLayer3SummaryProtocolParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3SummaryProtocolParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryProtocolParamsDirectionOrigin, AttackLayer3SummaryProtocolParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3SummaryProtocolParamsFormat string
 
@@ -1534,12 +1678,28 @@ const (
 	AttackLayer3SummaryProtocolParamsFormatCsv  AttackLayer3SummaryProtocolParamsFormat = "CSV"
 )
 
+func (r AttackLayer3SummaryProtocolParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryProtocolParamsFormatJson, AttackLayer3SummaryProtocolParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3SummaryProtocolParamsIPVersion string
 
 const (
 	AttackLayer3SummaryProtocolParamsIPVersionIPv4 AttackLayer3SummaryProtocolParamsIPVersion = "IPv4"
 	AttackLayer3SummaryProtocolParamsIPVersionIPv6 AttackLayer3SummaryProtocolParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3SummaryProtocolParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryProtocolParamsIPVersionIPv4, AttackLayer3SummaryProtocolParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryProtocolResponseEnvelope struct {
 	Result  AttackLayer3SummaryProtocolResponse             `json:"result,required"`
@@ -1623,6 +1783,14 @@ const (
 	AttackLayer3SummaryVectorParamsDateRange24wControl AttackLayer3SummaryVectorParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3SummaryVectorParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryVectorParamsDateRange1d, AttackLayer3SummaryVectorParamsDateRange2d, AttackLayer3SummaryVectorParamsDateRange7d, AttackLayer3SummaryVectorParamsDateRange14d, AttackLayer3SummaryVectorParamsDateRange28d, AttackLayer3SummaryVectorParamsDateRange12w, AttackLayer3SummaryVectorParamsDateRange24w, AttackLayer3SummaryVectorParamsDateRange52w, AttackLayer3SummaryVectorParamsDateRange1dControl, AttackLayer3SummaryVectorParamsDateRange2dControl, AttackLayer3SummaryVectorParamsDateRange7dControl, AttackLayer3SummaryVectorParamsDateRange14dControl, AttackLayer3SummaryVectorParamsDateRange28dControl, AttackLayer3SummaryVectorParamsDateRange12wControl, AttackLayer3SummaryVectorParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Together with the `location` parameter, will apply the filter to origin or
 // target location.
 type AttackLayer3SummaryVectorParamsDirection string
@@ -1632,6 +1800,14 @@ const (
 	AttackLayer3SummaryVectorParamsDirectionTarget AttackLayer3SummaryVectorParamsDirection = "TARGET"
 )
 
+func (r AttackLayer3SummaryVectorParamsDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryVectorParamsDirectionOrigin, AttackLayer3SummaryVectorParamsDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3SummaryVectorParamsFormat string
 
@@ -1640,12 +1816,28 @@ const (
 	AttackLayer3SummaryVectorParamsFormatCsv  AttackLayer3SummaryVectorParamsFormat = "CSV"
 )
 
+func (r AttackLayer3SummaryVectorParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryVectorParamsFormatJson, AttackLayer3SummaryVectorParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3SummaryVectorParamsIPVersion string
 
 const (
 	AttackLayer3SummaryVectorParamsIPVersionIPv4 AttackLayer3SummaryVectorParamsIPVersion = "IPv4"
 	AttackLayer3SummaryVectorParamsIPVersionIPv6 AttackLayer3SummaryVectorParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3SummaryVectorParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryVectorParamsIPVersionIPv4, AttackLayer3SummaryVectorParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryVectorParamsProtocol string
 
@@ -1655,6 +1847,14 @@ const (
 	AttackLayer3SummaryVectorParamsProtocolIcmp AttackLayer3SummaryVectorParamsProtocol = "ICMP"
 	AttackLayer3SummaryVectorParamsProtocolGRE  AttackLayer3SummaryVectorParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3SummaryVectorParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3SummaryVectorParamsProtocolUdp, AttackLayer3SummaryVectorParamsProtocolTcp, AttackLayer3SummaryVectorParamsProtocolIcmp, AttackLayer3SummaryVectorParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3SummaryVectorResponseEnvelope struct {
 	Result  AttackLayer3SummaryVectorResponse             `json:"result,required"`

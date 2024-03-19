@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package waiting_rooms
 
@@ -95,6 +95,14 @@ const (
 	StatusGetResponseStatusNotQueueing      StatusGetResponseStatus = "not_queueing"
 	StatusGetResponseStatusQueueing         StatusGetResponseStatus = "queueing"
 )
+
+func (r StatusGetResponseStatus) IsKnown() bool {
+	switch r {
+	case StatusGetResponseStatusEventPrequeueing, StatusGetResponseStatusNotQueueing, StatusGetResponseStatusQueueing:
+		return true
+	}
+	return false
+}
 
 type StatusGetResponseEnvelope struct {
 	Result StatusGetResponse             `json:"result,required"`

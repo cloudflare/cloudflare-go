@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers_for_platforms
 
@@ -137,6 +137,14 @@ const (
 	DispatchNamespaceScriptContentBindingGetResponseWorkersKVNamespaceBindingTypeKVNamespace DispatchNamespaceScriptContentBindingGetResponseWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentBindingGetResponseWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptContentBindingGetResponseWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment,required"`
@@ -178,6 +186,14 @@ type DispatchNamespaceScriptContentBindingGetResponseWorkersServiceBindingType s
 const (
 	DispatchNamespaceScriptContentBindingGetResponseWorkersServiceBindingTypeService DispatchNamespaceScriptContentBindingGetResponseWorkersServiceBindingType = "service"
 )
+
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersServiceBindingType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentBindingGetResponseWorkersServiceBindingTypeService:
+		return true
+	}
+	return false
+}
 
 type DispatchNamespaceScriptContentBindingGetResponseWorkersDoBinding struct {
 	// The exported class name of the Durable Object
@@ -227,6 +243,14 @@ const (
 	DispatchNamespaceScriptContentBindingGetResponseWorkersDoBindingTypeDurableObjectNamespace DispatchNamespaceScriptContentBindingGetResponseWorkersDoBindingType = "durable_object_namespace"
 )
 
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersDoBindingType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentBindingGetResponseWorkersDoBindingTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptContentBindingGetResponseWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName string `json:"bucket_name,required"`
@@ -266,6 +290,14 @@ const (
 	DispatchNamespaceScriptContentBindingGetResponseWorkersR2BindingTypeR2Bucket DispatchNamespaceScriptContentBindingGetResponseWorkersR2BindingType = "r2_bucket"
 )
 
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersR2BindingType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentBindingGetResponseWorkersR2BindingTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptContentBindingGetResponseWorkersQueueBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -304,6 +336,14 @@ type DispatchNamespaceScriptContentBindingGetResponseWorkersQueueBindingType str
 const (
 	DispatchNamespaceScriptContentBindingGetResponseWorkersQueueBindingTypeQueue DispatchNamespaceScriptContentBindingGetResponseWorkersQueueBindingType = "queue"
 )
+
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersQueueBindingType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentBindingGetResponseWorkersQueueBindingTypeQueue:
+		return true
+	}
+	return false
+}
 
 type DispatchNamespaceScriptContentBindingGetResponseWorkersD1Binding struct {
 	// ID of the D1 database to bind to
@@ -347,6 +387,14 @@ const (
 	DispatchNamespaceScriptContentBindingGetResponseWorkersD1BindingTypeD1 DispatchNamespaceScriptContentBindingGetResponseWorkersD1BindingType = "d1"
 )
 
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersD1BindingType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentBindingGetResponseWorkersD1BindingTypeD1:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -388,6 +436,14 @@ type DispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBin
 const (
 	DispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingTypeDispatchNamespace DispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
+
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingTypeDispatchNamespace:
+		return true
+	}
+	return false
+}
 
 // Outbound worker
 type DispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingOutbound struct {
@@ -482,6 +538,14 @@ type DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingType 
 const (
 	DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingTypeMTLSCertificate DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingType = "mtls_certificate"
 )
+
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
 
 type DispatchNamespaceScriptContentBindingGetParams struct {
 	// Identifier

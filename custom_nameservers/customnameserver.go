@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package custom_nameservers
 
@@ -167,6 +167,14 @@ const (
 	DNSCustomNameserversCustomNSDNSRecordsTypeAAAA DNSCustomNameserversCustomNSDNSRecordsType = "AAAA"
 )
 
+func (r DNSCustomNameserversCustomNSDNSRecordsType) IsKnown() bool {
+	switch r {
+	case DNSCustomNameserversCustomNSDNSRecordsTypeA, DNSCustomNameserversCustomNSDNSRecordsTypeAAAA:
+		return true
+	}
+	return false
+}
+
 // Verification status of the nameserver.
 type DNSCustomNameserversCustomNSStatus string
 
@@ -175,6 +183,14 @@ const (
 	DNSCustomNameserversCustomNSStatusPending  DNSCustomNameserversCustomNSStatus = "pending"
 	DNSCustomNameserversCustomNSStatusVerified DNSCustomNameserversCustomNSStatus = "verified"
 )
+
+func (r DNSCustomNameserversCustomNSStatus) IsKnown() bool {
+	switch r {
+	case DNSCustomNameserversCustomNSStatusMoved, DNSCustomNameserversCustomNSStatusPending, DNSCustomNameserversCustomNSStatusVerified:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [custom_nameservers.CustomNameserverDeleteResponseUnknown],
 // [custom_nameservers.CustomNameserverDeleteResponseArray] or
@@ -298,6 +314,14 @@ const (
 	CustomNameserverNewResponseEnvelopeSuccessTrue CustomNameserverNewResponseEnvelopeSuccess = true
 )
 
+func (r CustomNameserverNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomNameserverNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CustomNameserverDeleteParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -385,6 +409,14 @@ type CustomNameserverDeleteResponseEnvelopeSuccess bool
 const (
 	CustomNameserverDeleteResponseEnvelopeSuccessTrue CustomNameserverDeleteResponseEnvelopeSuccess = true
 )
+
+func (r CustomNameserverDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomNameserverDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type CustomNameserverDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -505,6 +537,14 @@ const (
 	CustomNameserverAvailabiltyResponseEnvelopeSuccessTrue CustomNameserverAvailabiltyResponseEnvelopeSuccess = true
 )
 
+func (r CustomNameserverAvailabiltyResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomNameserverAvailabiltyResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CustomNameserverAvailabiltyResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -624,6 +664,14 @@ const (
 	CustomNameserverGetResponseEnvelopeSuccessTrue CustomNameserverGetResponseEnvelopeSuccess = true
 )
 
+func (r CustomNameserverGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomNameserverGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CustomNameserverGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -742,6 +790,14 @@ type CustomNameserverVerifyResponseEnvelopeSuccess bool
 const (
 	CustomNameserverVerifyResponseEnvelopeSuccessTrue CustomNameserverVerifyResponseEnvelopeSuccess = true
 )
+
+func (r CustomNameserverVerifyResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomNameserverVerifyResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type CustomNameserverVerifyResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

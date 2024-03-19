@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -111,6 +111,14 @@ const (
 	ZonesSecurityLevelIDSecurityLevel ZonesSecurityLevelID = "security_level"
 )
 
+func (r ZonesSecurityLevelID) IsKnown() bool {
+	switch r {
+	case ZonesSecurityLevelIDSecurityLevel:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesSecurityLevelValue string
 
@@ -123,6 +131,14 @@ const (
 	ZonesSecurityLevelValueUnderAttack    ZonesSecurityLevelValue = "under_attack"
 )
 
+func (r ZonesSecurityLevelValue) IsKnown() bool {
+	switch r {
+	case ZonesSecurityLevelValueOff, ZonesSecurityLevelValueEssentiallyOff, ZonesSecurityLevelValueLow, ZonesSecurityLevelValueMedium, ZonesSecurityLevelValueHigh, ZonesSecurityLevelValueUnderAttack:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesSecurityLevelEditable bool
@@ -131,6 +147,14 @@ const (
 	ZonesSecurityLevelEditableTrue  ZonesSecurityLevelEditable = true
 	ZonesSecurityLevelEditableFalse ZonesSecurityLevelEditable = false
 )
+
+func (r ZonesSecurityLevelEditable) IsKnown() bool {
+	switch r {
+	case ZonesSecurityLevelEditableTrue, ZonesSecurityLevelEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Choose the appropriate security profile for your website, which will
 // automatically adjust each of the security settings. If you choose to customize
@@ -171,6 +195,14 @@ const (
 	SettingSecurityLevelEditParamsValueHigh           SettingSecurityLevelEditParamsValue = "high"
 	SettingSecurityLevelEditParamsValueUnderAttack    SettingSecurityLevelEditParamsValue = "under_attack"
 )
+
+func (r SettingSecurityLevelEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingSecurityLevelEditParamsValueOff, SettingSecurityLevelEditParamsValueEssentiallyOff, SettingSecurityLevelEditParamsValueLow, SettingSecurityLevelEditParamsValueMedium, SettingSecurityLevelEditParamsValueHigh, SettingSecurityLevelEditParamsValueUnderAttack:
+		return true
+	}
+	return false
+}
 
 type SettingSecurityLevelEditResponseEnvelope struct {
 	Errors   []SettingSecurityLevelEditResponseEnvelopeErrors   `json:"errors,required"`

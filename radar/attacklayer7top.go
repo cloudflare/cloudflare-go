@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -613,6 +613,14 @@ const (
 	AttackLayer7TopAttacksParamsDateRange24wControl AttackLayer7TopAttacksParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TopAttacksParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAttacksParamsDateRange1d, AttackLayer7TopAttacksParamsDateRange2d, AttackLayer7TopAttacksParamsDateRange7d, AttackLayer7TopAttacksParamsDateRange14d, AttackLayer7TopAttacksParamsDateRange28d, AttackLayer7TopAttacksParamsDateRange12w, AttackLayer7TopAttacksParamsDateRange24w, AttackLayer7TopAttacksParamsDateRange52w, AttackLayer7TopAttacksParamsDateRange1dControl, AttackLayer7TopAttacksParamsDateRange2dControl, AttackLayer7TopAttacksParamsDateRange7dControl, AttackLayer7TopAttacksParamsDateRange14dControl, AttackLayer7TopAttacksParamsDateRange28dControl, AttackLayer7TopAttacksParamsDateRange12wControl, AttackLayer7TopAttacksParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TopAttacksParamsFormat string
 
@@ -620,6 +628,14 @@ const (
 	AttackLayer7TopAttacksParamsFormatJson AttackLayer7TopAttacksParamsFormat = "JSON"
 	AttackLayer7TopAttacksParamsFormatCsv  AttackLayer7TopAttacksParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TopAttacksParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAttacksParamsFormatJson, AttackLayer7TopAttacksParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 // Array of attack origin/target location attack limits. Together with
 // `limitPerLocation`, limits how many objects will be fetched per origin/target
@@ -631,6 +647,14 @@ const (
 	AttackLayer7TopAttacksParamsLimitDirectionTarget AttackLayer7TopAttacksParamsLimitDirection = "TARGET"
 )
 
+func (r AttackLayer7TopAttacksParamsLimitDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAttacksParamsLimitDirectionOrigin, AttackLayer7TopAttacksParamsLimitDirectionTarget:
+		return true
+	}
+	return false
+}
+
 // Attack magnitude can be defined by total requests mitigated or by total zones
 // attacked.
 type AttackLayer7TopAttacksParamsMagnitude string
@@ -639,6 +663,14 @@ const (
 	AttackLayer7TopAttacksParamsMagnitudeAffectedZones     AttackLayer7TopAttacksParamsMagnitude = "AFFECTED_ZONES"
 	AttackLayer7TopAttacksParamsMagnitudeMitigatedRequests AttackLayer7TopAttacksParamsMagnitude = "MITIGATED_REQUESTS"
 )
+
+func (r AttackLayer7TopAttacksParamsMagnitude) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAttacksParamsMagnitudeAffectedZones, AttackLayer7TopAttacksParamsMagnitudeMitigatedRequests:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TopAttacksResponseEnvelope struct {
 	Result  AttackLayer7TopAttacksResponse             `json:"result,required"`
@@ -721,6 +753,14 @@ const (
 	AttackLayer7TopIndustryParamsDateRange24wControl AttackLayer7TopIndustryParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TopIndustryParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopIndustryParamsDateRange1d, AttackLayer7TopIndustryParamsDateRange2d, AttackLayer7TopIndustryParamsDateRange7d, AttackLayer7TopIndustryParamsDateRange14d, AttackLayer7TopIndustryParamsDateRange28d, AttackLayer7TopIndustryParamsDateRange12w, AttackLayer7TopIndustryParamsDateRange24w, AttackLayer7TopIndustryParamsDateRange52w, AttackLayer7TopIndustryParamsDateRange1dControl, AttackLayer7TopIndustryParamsDateRange2dControl, AttackLayer7TopIndustryParamsDateRange7dControl, AttackLayer7TopIndustryParamsDateRange14dControl, AttackLayer7TopIndustryParamsDateRange28dControl, AttackLayer7TopIndustryParamsDateRange12wControl, AttackLayer7TopIndustryParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TopIndustryParamsFormat string
 
@@ -728,6 +768,14 @@ const (
 	AttackLayer7TopIndustryParamsFormatJson AttackLayer7TopIndustryParamsFormat = "JSON"
 	AttackLayer7TopIndustryParamsFormatCsv  AttackLayer7TopIndustryParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TopIndustryParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopIndustryParamsFormatJson, AttackLayer7TopIndustryParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TopIndustryResponseEnvelope struct {
 	Result  AttackLayer7TopIndustryResponse             `json:"result,required"`
@@ -810,6 +858,14 @@ const (
 	AttackLayer7TopVerticalParamsDateRange24wControl AttackLayer7TopVerticalParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TopVerticalParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopVerticalParamsDateRange1d, AttackLayer7TopVerticalParamsDateRange2d, AttackLayer7TopVerticalParamsDateRange7d, AttackLayer7TopVerticalParamsDateRange14d, AttackLayer7TopVerticalParamsDateRange28d, AttackLayer7TopVerticalParamsDateRange12w, AttackLayer7TopVerticalParamsDateRange24w, AttackLayer7TopVerticalParamsDateRange52w, AttackLayer7TopVerticalParamsDateRange1dControl, AttackLayer7TopVerticalParamsDateRange2dControl, AttackLayer7TopVerticalParamsDateRange7dControl, AttackLayer7TopVerticalParamsDateRange14dControl, AttackLayer7TopVerticalParamsDateRange28dControl, AttackLayer7TopVerticalParamsDateRange12wControl, AttackLayer7TopVerticalParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TopVerticalParamsFormat string
 
@@ -817,6 +873,14 @@ const (
 	AttackLayer7TopVerticalParamsFormatJson AttackLayer7TopVerticalParamsFormat = "JSON"
 	AttackLayer7TopVerticalParamsFormatCsv  AttackLayer7TopVerticalParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TopVerticalParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopVerticalParamsFormatJson, AttackLayer7TopVerticalParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TopVerticalResponseEnvelope struct {
 	Result  AttackLayer7TopVerticalResponse             `json:"result,required"`

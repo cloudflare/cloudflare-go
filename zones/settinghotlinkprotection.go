@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -120,6 +120,14 @@ const (
 	ZonesHotlinkProtectionIDHotlinkProtection ZonesHotlinkProtectionID = "hotlink_protection"
 )
 
+func (r ZonesHotlinkProtectionID) IsKnown() bool {
+	switch r {
+	case ZonesHotlinkProtectionIDHotlinkProtection:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesHotlinkProtectionValue string
 
@@ -127,6 +135,14 @@ const (
 	ZonesHotlinkProtectionValueOn  ZonesHotlinkProtectionValue = "on"
 	ZonesHotlinkProtectionValueOff ZonesHotlinkProtectionValue = "off"
 )
+
+func (r ZonesHotlinkProtectionValue) IsKnown() bool {
+	switch r {
+	case ZonesHotlinkProtectionValueOn, ZonesHotlinkProtectionValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -136,6 +152,14 @@ const (
 	ZonesHotlinkProtectionEditableTrue  ZonesHotlinkProtectionEditable = true
 	ZonesHotlinkProtectionEditableFalse ZonesHotlinkProtectionEditable = false
 )
+
+func (r ZonesHotlinkProtectionEditable) IsKnown() bool {
+	switch r {
+	case ZonesHotlinkProtectionEditableTrue, ZonesHotlinkProtectionEditableFalse:
+		return true
+	}
+	return false
+}
 
 // When enabled, the Hotlink Protection option ensures that other sites cannot suck
 // up your bandwidth by building pages that use images hosted on your site. Anytime
@@ -175,6 +199,14 @@ const (
 	SettingHotlinkProtectionEditParamsValueOn  SettingHotlinkProtectionEditParamsValue = "on"
 	SettingHotlinkProtectionEditParamsValueOff SettingHotlinkProtectionEditParamsValue = "off"
 )
+
+func (r SettingHotlinkProtectionEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingHotlinkProtectionEditParamsValueOn, SettingHotlinkProtectionEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingHotlinkProtectionEditResponseEnvelope struct {
 	Errors   []SettingHotlinkProtectionEditResponseEnvelopeErrors   `json:"errors,required"`

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -263,12 +263,28 @@ const (
 	HTTPAseDeviceTypeGetParamsDeviceTypeOther   HTTPAseDeviceTypeGetParamsDeviceType = "OTHER"
 )
 
+func (r HTTPAseDeviceTypeGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetParamsDeviceTypeDesktop, HTTPAseDeviceTypeGetParamsDeviceTypeMobile, HTTPAseDeviceTypeGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
+
 type HTTPAseDeviceTypeGetParamsBotClass string
 
 const (
 	HTTPAseDeviceTypeGetParamsBotClassLikelyAutomated HTTPAseDeviceTypeGetParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPAseDeviceTypeGetParamsBotClassLikelyHuman     HTTPAseDeviceTypeGetParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPAseDeviceTypeGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetParamsBotClassLikelyAutomated, HTTPAseDeviceTypeGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPAseDeviceTypeGetParamsDateRange string
 
@@ -290,6 +306,14 @@ const (
 	HTTPAseDeviceTypeGetParamsDateRange24wControl HTTPAseDeviceTypeGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPAseDeviceTypeGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetParamsDateRange1d, HTTPAseDeviceTypeGetParamsDateRange2d, HTTPAseDeviceTypeGetParamsDateRange7d, HTTPAseDeviceTypeGetParamsDateRange14d, HTTPAseDeviceTypeGetParamsDateRange28d, HTTPAseDeviceTypeGetParamsDateRange12w, HTTPAseDeviceTypeGetParamsDateRange24w, HTTPAseDeviceTypeGetParamsDateRange52w, HTTPAseDeviceTypeGetParamsDateRange1dControl, HTTPAseDeviceTypeGetParamsDateRange2dControl, HTTPAseDeviceTypeGetParamsDateRange7dControl, HTTPAseDeviceTypeGetParamsDateRange14dControl, HTTPAseDeviceTypeGetParamsDateRange28dControl, HTTPAseDeviceTypeGetParamsDateRange12wControl, HTTPAseDeviceTypeGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type HTTPAseDeviceTypeGetParamsFormat string
 
@@ -298,12 +322,28 @@ const (
 	HTTPAseDeviceTypeGetParamsFormatCsv  HTTPAseDeviceTypeGetParamsFormat = "CSV"
 )
 
+func (r HTTPAseDeviceTypeGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetParamsFormatJson, HTTPAseDeviceTypeGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseDeviceTypeGetParamsHTTPProtocol string
 
 const (
 	HTTPAseDeviceTypeGetParamsHTTPProtocolHTTP  HTTPAseDeviceTypeGetParamsHTTPProtocol = "HTTP"
 	HTTPAseDeviceTypeGetParamsHTTPProtocolHTTPS HTTPAseDeviceTypeGetParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPAseDeviceTypeGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetParamsHTTPProtocolHTTP, HTTPAseDeviceTypeGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPAseDeviceTypeGetParamsHTTPVersion string
 
@@ -313,12 +353,28 @@ const (
 	HTTPAseDeviceTypeGetParamsHTTPVersionHttPv3 HTTPAseDeviceTypeGetParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPAseDeviceTypeGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetParamsHTTPVersionHttPv1, HTTPAseDeviceTypeGetParamsHTTPVersionHttPv2, HTTPAseDeviceTypeGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPAseDeviceTypeGetParamsIPVersion string
 
 const (
 	HTTPAseDeviceTypeGetParamsIPVersionIPv4 HTTPAseDeviceTypeGetParamsIPVersion = "IPv4"
 	HTTPAseDeviceTypeGetParamsIPVersionIPv6 HTTPAseDeviceTypeGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPAseDeviceTypeGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetParamsIPVersionIPv4, HTTPAseDeviceTypeGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPAseDeviceTypeGetParamsOS string
 
@@ -332,6 +388,14 @@ const (
 	HTTPAseDeviceTypeGetParamsOSSmartTv  HTTPAseDeviceTypeGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPAseDeviceTypeGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetParamsOSWindows, HTTPAseDeviceTypeGetParamsOSMacosx, HTTPAseDeviceTypeGetParamsOSIos, HTTPAseDeviceTypeGetParamsOSAndroid, HTTPAseDeviceTypeGetParamsOSChromeos, HTTPAseDeviceTypeGetParamsOSLinux, HTTPAseDeviceTypeGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseDeviceTypeGetParamsTLSVersion string
 
 const (
@@ -341,6 +405,14 @@ const (
 	HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_3  HTTPAseDeviceTypeGetParamsTLSVersion = "TLSv1_3"
 	HTTPAseDeviceTypeGetParamsTLSVersionTlSvQuic HTTPAseDeviceTypeGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPAseDeviceTypeGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_0, HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_1, HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_2, HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_3, HTTPAseDeviceTypeGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPAseDeviceTypeGetResponseEnvelope struct {
 	Result  HTTPAseDeviceTypeGetResponse             `json:"result,required"`

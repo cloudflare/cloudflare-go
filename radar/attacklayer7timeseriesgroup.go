@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -681,6 +681,14 @@ const (
 	AttackLayer7TimeseriesGroupGetParamsAggInterval1w  AttackLayer7TimeseriesGroupGetParamsAggInterval = "1w"
 )
 
+func (r AttackLayer7TimeseriesGroupGetParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupGetParamsAggInterval15m, AttackLayer7TimeseriesGroupGetParamsAggInterval1h, AttackLayer7TimeseriesGroupGetParamsAggInterval1d, AttackLayer7TimeseriesGroupGetParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupGetParamsDateRange string
 
 const (
@@ -701,6 +709,14 @@ const (
 	AttackLayer7TimeseriesGroupGetParamsDateRange24wControl AttackLayer7TimeseriesGroupGetParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TimeseriesGroupGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupGetParamsDateRange1d, AttackLayer7TimeseriesGroupGetParamsDateRange2d, AttackLayer7TimeseriesGroupGetParamsDateRange7d, AttackLayer7TimeseriesGroupGetParamsDateRange14d, AttackLayer7TimeseriesGroupGetParamsDateRange28d, AttackLayer7TimeseriesGroupGetParamsDateRange12w, AttackLayer7TimeseriesGroupGetParamsDateRange24w, AttackLayer7TimeseriesGroupGetParamsDateRange52w, AttackLayer7TimeseriesGroupGetParamsDateRange1dControl, AttackLayer7TimeseriesGroupGetParamsDateRange2dControl, AttackLayer7TimeseriesGroupGetParamsDateRange7dControl, AttackLayer7TimeseriesGroupGetParamsDateRange14dControl, AttackLayer7TimeseriesGroupGetParamsDateRange28dControl, AttackLayer7TimeseriesGroupGetParamsDateRange12wControl, AttackLayer7TimeseriesGroupGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TimeseriesGroupGetParamsFormat string
 
@@ -708,6 +724,14 @@ const (
 	AttackLayer7TimeseriesGroupGetParamsFormatJson AttackLayer7TimeseriesGroupGetParamsFormat = "JSON"
 	AttackLayer7TimeseriesGroupGetParamsFormatCsv  AttackLayer7TimeseriesGroupGetParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TimeseriesGroupGetParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupGetParamsFormatJson, AttackLayer7TimeseriesGroupGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupGetResponseEnvelope struct {
 	Result  AttackLayer7TimeseriesGroupGetResponse             `json:"result,required"`
@@ -793,6 +817,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1w  AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval = "1w"
 )
 
+func (r AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval15m, AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1h, AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1d, AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange string
 
 const (
@@ -813,6 +845,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange24wControl AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange1d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange2d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange7d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange14d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange28d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange12w, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange24w, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange52w, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange1dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange2dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange7dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange14dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange28dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange12wControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TimeseriesGroupHTTPMethodParamsFormat string
 
@@ -820,6 +860,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPMethodParamsFormatJson AttackLayer7TimeseriesGroupHTTPMethodParamsFormat = "JSON"
 	AttackLayer7TimeseriesGroupHTTPMethodParamsFormatCsv  AttackLayer7TimeseriesGroupHTTPMethodParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TimeseriesGroupHTTPMethodParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPMethodParamsFormatJson, AttackLayer7TimeseriesGroupHTTPMethodParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion string
 
@@ -829,12 +877,28 @@ const (
 	AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion = "HTTPv3"
 )
 
+func (r AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv1, AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv2, AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion string
 
 const (
 	AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersionIPv4 AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion = "IPv4"
 	AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersionIPv6 AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersionIPv4, AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct string
 
@@ -848,6 +912,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
 
+func (r AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductWAF, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 type AttackLayer7TimeseriesGroupHTTPMethodParamsNormalization string
@@ -856,6 +928,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPMethodParamsNormalizationPercentage AttackLayer7TimeseriesGroupHTTPMethodParamsNormalization = "PERCENTAGE"
 	AttackLayer7TimeseriesGroupHTTPMethodParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupHTTPMethodParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer7TimeseriesGroupHTTPMethodParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPMethodParamsNormalizationPercentage, AttackLayer7TimeseriesGroupHTTPMethodParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupHTTPMethodResponseEnvelope struct {
 	Result  AttackLayer7TimeseriesGroupHTTPMethodResponse             `json:"result,required"`
@@ -941,6 +1021,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1w  AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval = "1w"
 )
 
+func (r AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval15m, AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1h, AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1d, AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange string
 
 const (
@@ -961,6 +1049,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange24wControl AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange1d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange2d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange7d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange14d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange28d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange12w, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange24w, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange52w, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange1dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange2dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange7dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange14dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange28dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange12wControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TimeseriesGroupHTTPVersionParamsFormat string
 
@@ -968,6 +1064,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPVersionParamsFormatJson AttackLayer7TimeseriesGroupHTTPVersionParamsFormat = "JSON"
 	AttackLayer7TimeseriesGroupHTTPVersionParamsFormatCsv  AttackLayer7TimeseriesGroupHTTPVersionParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TimeseriesGroupHTTPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPVersionParamsFormatJson, AttackLayer7TimeseriesGroupHTTPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod string
 
@@ -1020,12 +1124,28 @@ const (
 	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodGet, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPost, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodDelete, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPut, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodHead, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPurge, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodOptions, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPropfind, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMkcol, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPatch, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodACL, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBcopy, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBdelete, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBmove, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBpropfind, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBproppatch, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodCheckin, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodCheckout, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodConnect, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodCopy, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodLabel, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodLock, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMerge, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMkactivity, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMkworkspace, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMove, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodNotify, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodOrderpatch, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPoll, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodProppatch, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodReport, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodSearch, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodSubscribe, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodTrace, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodUncheckout, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodUnlock, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodUnsubscribe, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodUpdate, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodVersioncontrol, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBaselinecontrol, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodXmsenumatts, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodRpcOutData, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodRpcInData, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodJson, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodCook, AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion string
 
 const (
 	AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersionIPv4 AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion = "IPv4"
 	AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersionIPv6 AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersionIPv4, AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct string
 
@@ -1039,6 +1159,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
 
+func (r AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductWAF, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 type AttackLayer7TimeseriesGroupHTTPVersionParamsNormalization string
@@ -1047,6 +1175,14 @@ const (
 	AttackLayer7TimeseriesGroupHTTPVersionParamsNormalizationPercentage AttackLayer7TimeseriesGroupHTTPVersionParamsNormalization = "PERCENTAGE"
 	AttackLayer7TimeseriesGroupHTTPVersionParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupHTTPVersionParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer7TimeseriesGroupHTTPVersionParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupHTTPVersionParamsNormalizationPercentage, AttackLayer7TimeseriesGroupHTTPVersionParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupHTTPVersionResponseEnvelope struct {
 	Result  AttackLayer7TimeseriesGroupHTTPVersionResponse             `json:"result,required"`
@@ -1137,6 +1273,14 @@ const (
 	AttackLayer7TimeseriesGroupIndustryParamsAggInterval1w  AttackLayer7TimeseriesGroupIndustryParamsAggInterval = "1w"
 )
 
+func (r AttackLayer7TimeseriesGroupIndustryParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIndustryParamsAggInterval15m, AttackLayer7TimeseriesGroupIndustryParamsAggInterval1h, AttackLayer7TimeseriesGroupIndustryParamsAggInterval1d, AttackLayer7TimeseriesGroupIndustryParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupIndustryParamsDateRange string
 
 const (
@@ -1157,6 +1301,14 @@ const (
 	AttackLayer7TimeseriesGroupIndustryParamsDateRange24wControl AttackLayer7TimeseriesGroupIndustryParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TimeseriesGroupIndustryParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIndustryParamsDateRange1d, AttackLayer7TimeseriesGroupIndustryParamsDateRange2d, AttackLayer7TimeseriesGroupIndustryParamsDateRange7d, AttackLayer7TimeseriesGroupIndustryParamsDateRange14d, AttackLayer7TimeseriesGroupIndustryParamsDateRange28d, AttackLayer7TimeseriesGroupIndustryParamsDateRange12w, AttackLayer7TimeseriesGroupIndustryParamsDateRange24w, AttackLayer7TimeseriesGroupIndustryParamsDateRange52w, AttackLayer7TimeseriesGroupIndustryParamsDateRange1dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange2dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange7dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange14dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange28dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange12wControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TimeseriesGroupIndustryParamsFormat string
 
@@ -1164,6 +1316,14 @@ const (
 	AttackLayer7TimeseriesGroupIndustryParamsFormatJson AttackLayer7TimeseriesGroupIndustryParamsFormat = "JSON"
 	AttackLayer7TimeseriesGroupIndustryParamsFormatCsv  AttackLayer7TimeseriesGroupIndustryParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TimeseriesGroupIndustryParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIndustryParamsFormatJson, AttackLayer7TimeseriesGroupIndustryParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod string
 
@@ -1216,6 +1376,14 @@ const (
 	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodGet, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPost, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodDelete, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPut, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodHead, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPurge, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodOptions, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPropfind, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMkcol, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPatch, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodACL, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBcopy, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBdelete, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBmove, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBpropfind, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBproppatch, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodCheckin, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodCheckout, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodConnect, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodCopy, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodLabel, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodLock, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMerge, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMkactivity, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMkworkspace, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMove, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodNotify, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodOrderpatch, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPoll, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodProppatch, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodReport, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodSearch, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodSubscribe, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodTrace, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodUncheckout, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodUnlock, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodUnsubscribe, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodUpdate, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodVersioncontrol, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBaselinecontrol, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodXmsenumatts, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodRpcOutData, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodRpcInData, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodJson, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodCook, AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupIndustryParamsHTTPVersion string
 
 const (
@@ -1224,12 +1392,28 @@ const (
 	AttackLayer7TimeseriesGroupIndustryParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupIndustryParamsHTTPVersion = "HTTPv3"
 )
 
+func (r AttackLayer7TimeseriesGroupIndustryParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIndustryParamsHTTPVersionHttPv1, AttackLayer7TimeseriesGroupIndustryParamsHTTPVersionHttPv2, AttackLayer7TimeseriesGroupIndustryParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupIndustryParamsIPVersion string
 
 const (
 	AttackLayer7TimeseriesGroupIndustryParamsIPVersionIPv4 AttackLayer7TimeseriesGroupIndustryParamsIPVersion = "IPv4"
 	AttackLayer7TimeseriesGroupIndustryParamsIPVersionIPv6 AttackLayer7TimeseriesGroupIndustryParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7TimeseriesGroupIndustryParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIndustryParamsIPVersionIPv4, AttackLayer7TimeseriesGroupIndustryParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct string
 
@@ -1243,6 +1427,14 @@ const (
 	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
 
+func (r AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductWAF, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 type AttackLayer7TimeseriesGroupIndustryParamsNormalization string
@@ -1251,6 +1443,14 @@ const (
 	AttackLayer7TimeseriesGroupIndustryParamsNormalizationPercentage AttackLayer7TimeseriesGroupIndustryParamsNormalization = "PERCENTAGE"
 	AttackLayer7TimeseriesGroupIndustryParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupIndustryParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer7TimeseriesGroupIndustryParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIndustryParamsNormalizationPercentage, AttackLayer7TimeseriesGroupIndustryParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupIndustryResponseEnvelope struct {
 	Result  AttackLayer7TimeseriesGroupIndustryResponse             `json:"result,required"`
@@ -1336,6 +1536,14 @@ const (
 	AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1w  AttackLayer7TimeseriesGroupIPVersionParamsAggInterval = "1w"
 )
 
+func (r AttackLayer7TimeseriesGroupIPVersionParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIPVersionParamsAggInterval15m, AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1h, AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1d, AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupIPVersionParamsDateRange string
 
 const (
@@ -1356,6 +1564,14 @@ const (
 	AttackLayer7TimeseriesGroupIPVersionParamsDateRange24wControl AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TimeseriesGroupIPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIPVersionParamsDateRange1d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange2d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange7d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange14d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange28d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange12w, AttackLayer7TimeseriesGroupIPVersionParamsDateRange24w, AttackLayer7TimeseriesGroupIPVersionParamsDateRange52w, AttackLayer7TimeseriesGroupIPVersionParamsDateRange1dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange2dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange7dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange14dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange28dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange12wControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TimeseriesGroupIPVersionParamsFormat string
 
@@ -1363,6 +1579,14 @@ const (
 	AttackLayer7TimeseriesGroupIPVersionParamsFormatJson AttackLayer7TimeseriesGroupIPVersionParamsFormat = "JSON"
 	AttackLayer7TimeseriesGroupIPVersionParamsFormatCsv  AttackLayer7TimeseriesGroupIPVersionParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TimeseriesGroupIPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIPVersionParamsFormatJson, AttackLayer7TimeseriesGroupIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod string
 
@@ -1415,6 +1639,14 @@ const (
 	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodGet, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPost, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodDelete, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPut, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodHead, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPurge, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodOptions, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPropfind, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMkcol, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPatch, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodACL, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBcopy, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBdelete, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBmove, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBpropfind, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBproppatch, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodCheckin, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodCheckout, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodConnect, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodCopy, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodLabel, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodLock, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMerge, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMkactivity, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMkworkspace, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMove, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodNotify, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodOrderpatch, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPoll, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodProppatch, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodReport, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodSearch, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodSubscribe, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodTrace, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodUncheckout, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodUnlock, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodUnsubscribe, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodUpdate, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodVersioncontrol, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBaselinecontrol, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodXmsenumatts, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodRpcOutData, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodRpcInData, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodJson, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodCook, AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion string
 
 const (
@@ -1422,6 +1654,14 @@ const (
 	AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv2 AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion = "HTTPv2"
 	AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion = "HTTPv3"
 )
+
+func (r AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv1, AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv2, AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct string
 
@@ -1435,6 +1675,14 @@ const (
 	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
 
+func (r AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductWAF, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 type AttackLayer7TimeseriesGroupIPVersionParamsNormalization string
@@ -1443,6 +1691,14 @@ const (
 	AttackLayer7TimeseriesGroupIPVersionParamsNormalizationPercentage AttackLayer7TimeseriesGroupIPVersionParamsNormalization = "PERCENTAGE"
 	AttackLayer7TimeseriesGroupIPVersionParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupIPVersionParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer7TimeseriesGroupIPVersionParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupIPVersionParamsNormalizationPercentage, AttackLayer7TimeseriesGroupIPVersionParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupIPVersionResponseEnvelope struct {
 	Result  AttackLayer7TimeseriesGroupIPVersionResponse             `json:"result,required"`
@@ -1530,6 +1786,14 @@ const (
 	AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1w  AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval = "1w"
 )
 
+func (r AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval15m, AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1h, AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1d, AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupManagedRulesParamsDateRange string
 
 const (
@@ -1550,6 +1814,14 @@ const (
 	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange24wControl AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TimeseriesGroupManagedRulesParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupManagedRulesParamsDateRange1d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange2d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange7d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange14d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange28d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange12w, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange24w, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange52w, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange1dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange2dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange7dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange14dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange28dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange12wControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TimeseriesGroupManagedRulesParamsFormat string
 
@@ -1557,6 +1829,14 @@ const (
 	AttackLayer7TimeseriesGroupManagedRulesParamsFormatJson AttackLayer7TimeseriesGroupManagedRulesParamsFormat = "JSON"
 	AttackLayer7TimeseriesGroupManagedRulesParamsFormatCsv  AttackLayer7TimeseriesGroupManagedRulesParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TimeseriesGroupManagedRulesParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupManagedRulesParamsFormatJson, AttackLayer7TimeseriesGroupManagedRulesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod string
 
@@ -1609,6 +1889,14 @@ const (
 	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodGet, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPost, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodDelete, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPut, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodHead, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPurge, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodOptions, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPropfind, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMkcol, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPatch, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodACL, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBcopy, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBdelete, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBmove, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBpropfind, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBproppatch, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodCheckin, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodCheckout, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodConnect, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodCopy, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodLabel, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodLock, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMerge, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMkactivity, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMkworkspace, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMove, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodNotify, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodOrderpatch, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPoll, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodProppatch, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodReport, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodSearch, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodSubscribe, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodTrace, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodUncheckout, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodUnlock, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodUnsubscribe, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodUpdate, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodVersioncontrol, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBaselinecontrol, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodXmsenumatts, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodRpcOutData, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodRpcInData, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodJson, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodCook, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion string
 
 const (
@@ -1617,12 +1905,28 @@ const (
 	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion = "HTTPv3"
 )
 
+func (r AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv1, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv2, AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion string
 
 const (
 	AttackLayer7TimeseriesGroupManagedRulesParamsIPVersionIPv4 AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion = "IPv4"
 	AttackLayer7TimeseriesGroupManagedRulesParamsIPVersionIPv6 AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupManagedRulesParamsIPVersionIPv4, AttackLayer7TimeseriesGroupManagedRulesParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct string
 
@@ -1636,6 +1940,14 @@ const (
 	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
 
+func (r AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductWAF, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 type AttackLayer7TimeseriesGroupManagedRulesParamsNormalization string
@@ -1644,6 +1956,14 @@ const (
 	AttackLayer7TimeseriesGroupManagedRulesParamsNormalizationPercentage AttackLayer7TimeseriesGroupManagedRulesParamsNormalization = "PERCENTAGE"
 	AttackLayer7TimeseriesGroupManagedRulesParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupManagedRulesParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer7TimeseriesGroupManagedRulesParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupManagedRulesParamsNormalizationPercentage, AttackLayer7TimeseriesGroupManagedRulesParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupManagedRulesResponseEnvelope struct {
 	Result  AttackLayer7TimeseriesGroupManagedRulesResponse             `json:"result,required"`
@@ -1730,6 +2050,14 @@ const (
 	AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1w  AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval = "1w"
 )
 
+func (r AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval15m, AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1h, AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1d, AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupMitigationProductParamsDateRange string
 
 const (
@@ -1750,6 +2078,14 @@ const (
 	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange24wControl AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TimeseriesGroupMitigationProductParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupMitigationProductParamsDateRange1d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange2d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange7d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange14d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange28d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange12w, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange24w, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange52w, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange1dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange2dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange7dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange14dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange28dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange12wControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TimeseriesGroupMitigationProductParamsFormat string
 
@@ -1757,6 +2093,14 @@ const (
 	AttackLayer7TimeseriesGroupMitigationProductParamsFormatJson AttackLayer7TimeseriesGroupMitigationProductParamsFormat = "JSON"
 	AttackLayer7TimeseriesGroupMitigationProductParamsFormatCsv  AttackLayer7TimeseriesGroupMitigationProductParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TimeseriesGroupMitigationProductParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupMitigationProductParamsFormatJson, AttackLayer7TimeseriesGroupMitigationProductParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod string
 
@@ -1809,6 +2153,14 @@ const (
 	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodGet, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPost, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodDelete, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPut, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodHead, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPurge, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodOptions, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPropfind, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMkcol, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPatch, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodACL, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBcopy, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBdelete, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBmove, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBpropfind, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBproppatch, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodCheckin, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodCheckout, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodConnect, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodCopy, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodLabel, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodLock, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMerge, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMkactivity, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMkworkspace, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMove, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodNotify, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodOrderpatch, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPoll, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodProppatch, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodReport, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodSearch, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodSubscribe, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodTrace, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodUncheckout, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodUnlock, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodUnsubscribe, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodUpdate, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodVersioncontrol, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBaselinecontrol, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodXmsenumatts, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodRpcOutData, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodRpcInData, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodJson, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodCook, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion string
 
 const (
@@ -1817,12 +2169,28 @@ const (
 	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion = "HTTPv3"
 )
 
+func (r AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersionHttPv1, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersionHttPv2, AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion string
 
 const (
 	AttackLayer7TimeseriesGroupMitigationProductParamsIPVersionIPv4 AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion = "IPv4"
 	AttackLayer7TimeseriesGroupMitigationProductParamsIPVersionIPv6 AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupMitigationProductParamsIPVersionIPv4, AttackLayer7TimeseriesGroupMitigationProductParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
@@ -1832,6 +2200,14 @@ const (
 	AttackLayer7TimeseriesGroupMitigationProductParamsNormalizationPercentage AttackLayer7TimeseriesGroupMitigationProductParamsNormalization = "PERCENTAGE"
 	AttackLayer7TimeseriesGroupMitigationProductParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupMitigationProductParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer7TimeseriesGroupMitigationProductParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupMitigationProductParamsNormalizationPercentage, AttackLayer7TimeseriesGroupMitigationProductParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupMitigationProductResponseEnvelope struct {
 	Result  AttackLayer7TimeseriesGroupMitigationProductResponse             `json:"result,required"`
@@ -1923,6 +2299,14 @@ const (
 	AttackLayer7TimeseriesGroupVerticalParamsAggInterval1w  AttackLayer7TimeseriesGroupVerticalParamsAggInterval = "1w"
 )
 
+func (r AttackLayer7TimeseriesGroupVerticalParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupVerticalParamsAggInterval15m, AttackLayer7TimeseriesGroupVerticalParamsAggInterval1h, AttackLayer7TimeseriesGroupVerticalParamsAggInterval1d, AttackLayer7TimeseriesGroupVerticalParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupVerticalParamsDateRange string
 
 const (
@@ -1943,6 +2327,14 @@ const (
 	AttackLayer7TimeseriesGroupVerticalParamsDateRange24wControl AttackLayer7TimeseriesGroupVerticalParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TimeseriesGroupVerticalParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupVerticalParamsDateRange1d, AttackLayer7TimeseriesGroupVerticalParamsDateRange2d, AttackLayer7TimeseriesGroupVerticalParamsDateRange7d, AttackLayer7TimeseriesGroupVerticalParamsDateRange14d, AttackLayer7TimeseriesGroupVerticalParamsDateRange28d, AttackLayer7TimeseriesGroupVerticalParamsDateRange12w, AttackLayer7TimeseriesGroupVerticalParamsDateRange24w, AttackLayer7TimeseriesGroupVerticalParamsDateRange52w, AttackLayer7TimeseriesGroupVerticalParamsDateRange1dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange2dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange7dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange14dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange28dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange12wControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TimeseriesGroupVerticalParamsFormat string
 
@@ -1950,6 +2342,14 @@ const (
 	AttackLayer7TimeseriesGroupVerticalParamsFormatJson AttackLayer7TimeseriesGroupVerticalParamsFormat = "JSON"
 	AttackLayer7TimeseriesGroupVerticalParamsFormatCsv  AttackLayer7TimeseriesGroupVerticalParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TimeseriesGroupVerticalParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupVerticalParamsFormatJson, AttackLayer7TimeseriesGroupVerticalParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod string
 
@@ -2002,6 +2402,14 @@ const (
 	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "TRACK"
 )
 
+func (r AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodGet, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPost, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodDelete, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPut, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodHead, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPurge, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodOptions, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPropfind, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMkcol, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPatch, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodACL, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBcopy, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBdelete, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBmove, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBpropfind, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBproppatch, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodCheckin, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodCheckout, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodConnect, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodCopy, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodLabel, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodLock, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMerge, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMkactivity, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMkworkspace, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMove, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodNotify, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodOrderpatch, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPoll, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodProppatch, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodReport, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodSearch, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodSubscribe, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodTrace, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodUncheckout, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodUnlock, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodUnsubscribe, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodUpdate, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodVersioncontrol, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBaselinecontrol, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodXmsenumatts, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodRpcOutData, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodRpcInData, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodJson, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodCook, AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupVerticalParamsHTTPVersion string
 
 const (
@@ -2010,12 +2418,28 @@ const (
 	AttackLayer7TimeseriesGroupVerticalParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupVerticalParamsHTTPVersion = "HTTPv3"
 )
 
+func (r AttackLayer7TimeseriesGroupVerticalParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupVerticalParamsHTTPVersionHttPv1, AttackLayer7TimeseriesGroupVerticalParamsHTTPVersionHttPv2, AttackLayer7TimeseriesGroupVerticalParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type AttackLayer7TimeseriesGroupVerticalParamsIPVersion string
 
 const (
 	AttackLayer7TimeseriesGroupVerticalParamsIPVersionIPv4 AttackLayer7TimeseriesGroupVerticalParamsIPVersion = "IPv4"
 	AttackLayer7TimeseriesGroupVerticalParamsIPVersionIPv6 AttackLayer7TimeseriesGroupVerticalParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer7TimeseriesGroupVerticalParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupVerticalParamsIPVersionIPv4, AttackLayer7TimeseriesGroupVerticalParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct string
 
@@ -2029,6 +2453,14 @@ const (
 	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "DATA_LOSS_PREVENTION"
 )
 
+func (r AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductWAF, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDataLossPrevention:
+		return true
+	}
+	return false
+}
+
 // Normalization method applied. Refer to
 // [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 type AttackLayer7TimeseriesGroupVerticalParamsNormalization string
@@ -2037,6 +2469,14 @@ const (
 	AttackLayer7TimeseriesGroupVerticalParamsNormalizationPercentage AttackLayer7TimeseriesGroupVerticalParamsNormalization = "PERCENTAGE"
 	AttackLayer7TimeseriesGroupVerticalParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupVerticalParamsNormalization = "MIN0_MAX"
 )
+
+func (r AttackLayer7TimeseriesGroupVerticalParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesGroupVerticalParamsNormalizationPercentage, AttackLayer7TimeseriesGroupVerticalParamsNormalizationMin0Max:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TimeseriesGroupVerticalResponseEnvelope struct {
 	Result  AttackLayer7TimeseriesGroupVerticalResponse             `json:"result,required"`

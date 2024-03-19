@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package page_shield
 
@@ -122,6 +122,14 @@ const (
 	PageShieldPageshieldPolicyActionLog   PageShieldPageshieldPolicyAction = "log"
 )
 
+func (r PageShieldPageshieldPolicyAction) IsKnown() bool {
+	switch r {
+	case PageShieldPageshieldPolicyActionAllow, PageShieldPageshieldPolicyActionLog:
+		return true
+	}
+	return false
+}
+
 type PolicyNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -150,6 +158,14 @@ const (
 	PolicyNewParamsActionLog   PolicyNewParamsAction = "log"
 )
 
+func (r PolicyNewParamsAction) IsKnown() bool {
+	switch r {
+	case PolicyNewParamsActionAllow, PolicyNewParamsActionLog:
+		return true
+	}
+	return false
+}
+
 type PolicyUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -177,6 +193,14 @@ const (
 	PolicyUpdateParamsActionAllow PolicyUpdateParamsAction = "allow"
 	PolicyUpdateParamsActionLog   PolicyUpdateParamsAction = "log"
 )
+
+func (r PolicyUpdateParamsAction) IsKnown() bool {
+	switch r {
+	case PolicyUpdateParamsActionAllow, PolicyUpdateParamsActionLog:
+		return true
+	}
+	return false
+}
 
 type PolicyListParams struct {
 	// Identifier
@@ -265,6 +289,14 @@ type PolicyListResponseEnvelopeSuccess bool
 const (
 	PolicyListResponseEnvelopeSuccessTrue PolicyListResponseEnvelopeSuccess = true
 )
+
+func (r PolicyListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PolicyListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PolicyListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

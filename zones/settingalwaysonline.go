@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -114,6 +114,14 @@ const (
 	ZonesAlwaysOnlineIDAlwaysOnline ZonesAlwaysOnlineID = "always_online"
 )
 
+func (r ZonesAlwaysOnlineID) IsKnown() bool {
+	switch r {
+	case ZonesAlwaysOnlineIDAlwaysOnline:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesAlwaysOnlineValue string
 
@@ -121,6 +129,14 @@ const (
 	ZonesAlwaysOnlineValueOn  ZonesAlwaysOnlineValue = "on"
 	ZonesAlwaysOnlineValueOff ZonesAlwaysOnlineValue = "off"
 )
+
+func (r ZonesAlwaysOnlineValue) IsKnown() bool {
+	switch r {
+	case ZonesAlwaysOnlineValueOn, ZonesAlwaysOnlineValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -130,6 +146,14 @@ const (
 	ZonesAlwaysOnlineEditableTrue  ZonesAlwaysOnlineEditable = true
 	ZonesAlwaysOnlineEditableFalse ZonesAlwaysOnlineEditable = false
 )
+
+func (r ZonesAlwaysOnlineEditable) IsKnown() bool {
+	switch r {
+	case ZonesAlwaysOnlineEditableTrue, ZonesAlwaysOnlineEditableFalse:
+		return true
+	}
+	return false
+}
 
 // When enabled, Cloudflare serves limited copies of web pages available from the
 // [Internet Archive's Wayback Machine](https://archive.org/web/) if your server is
@@ -167,6 +191,14 @@ const (
 	SettingAlwaysOnlineEditParamsValueOn  SettingAlwaysOnlineEditParamsValue = "on"
 	SettingAlwaysOnlineEditParamsValueOff SettingAlwaysOnlineEditParamsValue = "off"
 )
+
+func (r SettingAlwaysOnlineEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingAlwaysOnlineEditParamsValueOn, SettingAlwaysOnlineEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingAlwaysOnlineEditResponseEnvelope struct {
 	Errors   []SettingAlwaysOnlineEditResponseEnvelopeErrors   `json:"errors,required"`

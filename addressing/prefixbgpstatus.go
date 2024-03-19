@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package addressing
 
@@ -202,6 +202,14 @@ const (
 	PrefixBGPStatusEditResponseEnvelopeSuccessTrue PrefixBGPStatusEditResponseEnvelopeSuccess = true
 )
 
+func (r PrefixBGPStatusEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPStatusEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixBGPStatusGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -287,3 +295,11 @@ type PrefixBGPStatusGetResponseEnvelopeSuccess bool
 const (
 	PrefixBGPStatusGetResponseEnvelopeSuccessTrue PrefixBGPStatusGetResponseEnvelopeSuccess = true
 )
+
+func (r PrefixBGPStatusGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPStatusGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

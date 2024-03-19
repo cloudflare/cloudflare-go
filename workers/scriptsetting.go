@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers
 
@@ -197,6 +197,14 @@ const (
 	ScriptSettingEditResponseBindingsWorkersKVNamespaceBindingTypeKVNamespace ScriptSettingEditResponseBindingsWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
+func (r ScriptSettingEditResponseBindingsWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponseBindingsWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingEditResponseBindingsWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment,required"`
@@ -237,6 +245,14 @@ type ScriptSettingEditResponseBindingsWorkersServiceBindingType string
 const (
 	ScriptSettingEditResponseBindingsWorkersServiceBindingTypeService ScriptSettingEditResponseBindingsWorkersServiceBindingType = "service"
 )
+
+func (r ScriptSettingEditResponseBindingsWorkersServiceBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponseBindingsWorkersServiceBindingTypeService:
+		return true
+	}
+	return false
+}
 
 type ScriptSettingEditResponseBindingsWorkersDoBinding struct {
 	// The exported class name of the Durable Object
@@ -285,6 +301,14 @@ const (
 	ScriptSettingEditResponseBindingsWorkersDoBindingTypeDurableObjectNamespace ScriptSettingEditResponseBindingsWorkersDoBindingType = "durable_object_namespace"
 )
 
+func (r ScriptSettingEditResponseBindingsWorkersDoBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponseBindingsWorkersDoBindingTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingEditResponseBindingsWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName string `json:"bucket_name,required"`
@@ -323,6 +347,14 @@ const (
 	ScriptSettingEditResponseBindingsWorkersR2BindingTypeR2Bucket ScriptSettingEditResponseBindingsWorkersR2BindingType = "r2_bucket"
 )
 
+func (r ScriptSettingEditResponseBindingsWorkersR2BindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponseBindingsWorkersR2BindingTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingEditResponseBindingsWorkersQueueBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -360,6 +392,14 @@ type ScriptSettingEditResponseBindingsWorkersQueueBindingType string
 const (
 	ScriptSettingEditResponseBindingsWorkersQueueBindingTypeQueue ScriptSettingEditResponseBindingsWorkersQueueBindingType = "queue"
 )
+
+func (r ScriptSettingEditResponseBindingsWorkersQueueBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponseBindingsWorkersQueueBindingTypeQueue:
+		return true
+	}
+	return false
+}
 
 type ScriptSettingEditResponseBindingsWorkersD1Binding struct {
 	// ID of the D1 database to bind to
@@ -402,6 +442,14 @@ const (
 	ScriptSettingEditResponseBindingsWorkersD1BindingTypeD1 ScriptSettingEditResponseBindingsWorkersD1BindingType = "d1"
 )
 
+func (r ScriptSettingEditResponseBindingsWorkersD1BindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponseBindingsWorkersD1BindingTypeD1:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingEditResponseBindingsWorkersDispatchNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -443,6 +491,14 @@ type ScriptSettingEditResponseBindingsWorkersDispatchNamespaceBindingType string
 const (
 	ScriptSettingEditResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace ScriptSettingEditResponseBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
+
+func (r ScriptSettingEditResponseBindingsWorkersDispatchNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace:
+		return true
+	}
+	return false
+}
 
 // Outbound worker
 type ScriptSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutbound struct {
@@ -537,6 +593,14 @@ type ScriptSettingEditResponseBindingsWorkersMTLSCertBindingType string
 const (
 	ScriptSettingEditResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate ScriptSettingEditResponseBindingsWorkersMTLSCertBindingType = "mtls_certificate"
 )
+
+func (r ScriptSettingEditResponseBindingsWorkersMTLSCertBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
@@ -805,6 +869,14 @@ const (
 	ScriptSettingEditResponsePlacementModeSmart ScriptSettingEditResponsePlacementMode = "smart"
 )
 
+func (r ScriptSettingEditResponsePlacementMode) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponsePlacementModeSmart:
+		return true
+	}
+	return false
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type ScriptSettingEditResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -972,6 +1044,14 @@ const (
 	ScriptSettingGetResponseBindingsWorkersKVNamespaceBindingTypeKVNamespace ScriptSettingGetResponseBindingsWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
+func (r ScriptSettingGetResponseBindingsWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseBindingsWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingGetResponseBindingsWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment,required"`
@@ -1012,6 +1092,14 @@ type ScriptSettingGetResponseBindingsWorkersServiceBindingType string
 const (
 	ScriptSettingGetResponseBindingsWorkersServiceBindingTypeService ScriptSettingGetResponseBindingsWorkersServiceBindingType = "service"
 )
+
+func (r ScriptSettingGetResponseBindingsWorkersServiceBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseBindingsWorkersServiceBindingTypeService:
+		return true
+	}
+	return false
+}
 
 type ScriptSettingGetResponseBindingsWorkersDoBinding struct {
 	// The exported class name of the Durable Object
@@ -1060,6 +1148,14 @@ const (
 	ScriptSettingGetResponseBindingsWorkersDoBindingTypeDurableObjectNamespace ScriptSettingGetResponseBindingsWorkersDoBindingType = "durable_object_namespace"
 )
 
+func (r ScriptSettingGetResponseBindingsWorkersDoBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseBindingsWorkersDoBindingTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingGetResponseBindingsWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName string `json:"bucket_name,required"`
@@ -1098,6 +1194,14 @@ const (
 	ScriptSettingGetResponseBindingsWorkersR2BindingTypeR2Bucket ScriptSettingGetResponseBindingsWorkersR2BindingType = "r2_bucket"
 )
 
+func (r ScriptSettingGetResponseBindingsWorkersR2BindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseBindingsWorkersR2BindingTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingGetResponseBindingsWorkersQueueBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -1135,6 +1239,14 @@ type ScriptSettingGetResponseBindingsWorkersQueueBindingType string
 const (
 	ScriptSettingGetResponseBindingsWorkersQueueBindingTypeQueue ScriptSettingGetResponseBindingsWorkersQueueBindingType = "queue"
 )
+
+func (r ScriptSettingGetResponseBindingsWorkersQueueBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseBindingsWorkersQueueBindingTypeQueue:
+		return true
+	}
+	return false
+}
 
 type ScriptSettingGetResponseBindingsWorkersD1Binding struct {
 	// ID of the D1 database to bind to
@@ -1177,6 +1289,14 @@ const (
 	ScriptSettingGetResponseBindingsWorkersD1BindingTypeD1 ScriptSettingGetResponseBindingsWorkersD1BindingType = "d1"
 )
 
+func (r ScriptSettingGetResponseBindingsWorkersD1BindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseBindingsWorkersD1BindingTypeD1:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -1218,6 +1338,14 @@ type ScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingType string
 const (
 	ScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace ScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
+
+func (r ScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace:
+		return true
+	}
+	return false
+}
 
 // Outbound worker
 type ScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound struct {
@@ -1311,6 +1439,14 @@ type ScriptSettingGetResponseBindingsWorkersMTLSCertBindingType string
 const (
 	ScriptSettingGetResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate ScriptSettingGetResponseBindingsWorkersMTLSCertBindingType = "mtls_certificate"
 )
+
+func (r ScriptSettingGetResponseBindingsWorkersMTLSCertBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
@@ -1579,6 +1715,14 @@ const (
 	ScriptSettingGetResponsePlacementModeSmart ScriptSettingGetResponsePlacementMode = "smart"
 )
 
+func (r ScriptSettingGetResponsePlacementMode) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponsePlacementModeSmart:
+		return true
+	}
+	return false
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type ScriptSettingGetResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -1706,6 +1850,14 @@ const (
 	ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
+func (r ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment,required"`
@@ -1728,6 +1880,14 @@ type ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingType stri
 const (
 	ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingTypeService ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingType = "service"
 )
+
+func (r ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingTypeService:
+		return true
+	}
+	return false
+}
 
 type ScriptSettingEditParamsSettingsResultBindingsWorkersDoBinding struct {
 	// The exported class name of the Durable Object
@@ -1754,6 +1914,14 @@ const (
 	ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingTypeDurableObjectNamespace ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingType = "durable_object_namespace"
 )
 
+func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingEditParamsSettingsResultBindingsWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName param.Field[string] `json:"bucket_name,required"`
@@ -1775,6 +1943,14 @@ const (
 	ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingTypeR2Bucket ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingType = "r2_bucket"
 )
 
+func (r ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBinding struct {
 	// Name of the Queue to bind to
 	QueueName param.Field[string] `json:"queue_name,required"`
@@ -1795,6 +1971,14 @@ type ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingType string
 const (
 	ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingTypeQueue ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingType = "queue"
 )
+
+func (r ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingTypeQueue:
+		return true
+	}
+	return false
+}
 
 type ScriptSettingEditParamsSettingsResultBindingsWorkersD1Binding struct {
 	// ID of the D1 database to bind to
@@ -1819,6 +2003,14 @@ const (
 	ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingTypeD1 ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingType = "d1"
 )
 
+func (r ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingTypeD1:
+		return true
+	}
+	return false
+}
+
 type ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBinding struct {
 	// Namespace to bind to
 	Namespace param.Field[string] `json:"namespace,required"`
@@ -1841,6 +2033,14 @@ type ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindin
 const (
 	ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
+
+func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace:
+		return true
+	}
+	return false
+}
 
 // Outbound worker
 type ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingOutbound struct {
@@ -1887,6 +2087,14 @@ type ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCertBindingType str
 const (
 	ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCertBindingTypeMTLSCertificate ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCertBindingType = "mtls_certificate"
 )
+
+func (r ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCertBindingType) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCertBindingTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
@@ -2013,6 +2221,14 @@ const (
 	ScriptSettingEditParamsSettingsResultPlacementModeSmart ScriptSettingEditParamsSettingsResultPlacementMode = "smart"
 )
 
+func (r ScriptSettingEditParamsSettingsResultPlacementMode) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsResultPlacementModeSmart:
+		return true
+	}
+	return false
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type ScriptSettingEditParamsSettingsResultTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -2033,6 +2249,14 @@ type ScriptSettingEditParamsSettingsSuccess bool
 const (
 	ScriptSettingEditParamsSettingsSuccessTrue ScriptSettingEditParamsSettingsSuccess = true
 )
+
+func (r ScriptSettingEditParamsSettingsSuccess) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditParamsSettingsSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ScriptSettingEditResponseEnvelope struct {
 	Errors   []ScriptSettingEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -2114,6 +2338,14 @@ type ScriptSettingEditResponseEnvelopeSuccess bool
 const (
 	ScriptSettingEditResponseEnvelopeSuccessTrue ScriptSettingEditResponseEnvelopeSuccess = true
 )
+
+func (r ScriptSettingEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptSettingEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ScriptSettingGetParams struct {
 	// Identifier
@@ -2200,3 +2432,11 @@ type ScriptSettingGetResponseEnvelopeSuccess bool
 const (
 	ScriptSettingGetResponseEnvelopeSuccessTrue ScriptSettingGetResponseEnvelopeSuccess = true
 )
+
+func (r ScriptSettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptSettingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

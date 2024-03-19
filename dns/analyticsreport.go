@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package dns
 
@@ -41,11 +41,11 @@ func NewAnalyticsReportService(opts ...option.RequestOption) (r *AnalyticsReport
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *AnalyticsReportService) Get(ctx context.Context, identifier string, query AnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReport, err error) {
+func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReport, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsReportGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_analytics/report", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_analytics/report", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -164,6 +164,8 @@ func (r dnsdnsAnalyticsAPIReportQueryJSON) RawJSON() string {
 }
 
 type AnalyticsReportGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -270,3 +272,11 @@ type AnalyticsReportGetResponseEnvelopeSuccess bool
 const (
 	AnalyticsReportGetResponseEnvelopeSuccessTrue AnalyticsReportGetResponseEnvelopeSuccess = true
 )
+
+func (r AnalyticsReportGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AnalyticsReportGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

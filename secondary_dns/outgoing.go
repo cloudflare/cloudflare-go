@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package secondary_dns
 
@@ -361,6 +361,14 @@ const (
 	OutgoingNewResponseEnvelopeSuccessTrue OutgoingNewResponseEnvelopeSuccess = true
 )
 
+func (r OutgoingNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OutgoingNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OutgoingUpdateParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 	// Zone name.
@@ -454,6 +462,14 @@ const (
 	OutgoingUpdateResponseEnvelopeSuccessTrue OutgoingUpdateResponseEnvelopeSuccess = true
 )
 
+func (r OutgoingUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OutgoingUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OutgoingDeleteParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 }
@@ -538,6 +554,14 @@ type OutgoingDeleteResponseEnvelopeSuccess bool
 const (
 	OutgoingDeleteResponseEnvelopeSuccessTrue OutgoingDeleteResponseEnvelopeSuccess = true
 )
+
+func (r OutgoingDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OutgoingDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type OutgoingDisableParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
@@ -625,6 +649,14 @@ const (
 	OutgoingDisableResponseEnvelopeSuccessTrue OutgoingDisableResponseEnvelopeSuccess = true
 )
 
+func (r OutgoingDisableResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OutgoingDisableResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OutgoingEnableParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 }
@@ -710,6 +742,14 @@ type OutgoingEnableResponseEnvelopeSuccess bool
 const (
 	OutgoingEnableResponseEnvelopeSuccessTrue OutgoingEnableResponseEnvelopeSuccess = true
 )
+
+func (r OutgoingEnableResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OutgoingEnableResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type OutgoingForceNotifyParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
@@ -798,6 +838,14 @@ const (
 	OutgoingForceNotifyResponseEnvelopeSuccessTrue OutgoingForceNotifyResponseEnvelopeSuccess = true
 )
 
+func (r OutgoingForceNotifyResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OutgoingForceNotifyResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OutgoingGetParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 }
@@ -882,3 +930,11 @@ type OutgoingGetResponseEnvelopeSuccess bool
 const (
 	OutgoingGetResponseEnvelopeSuccessTrue OutgoingGetResponseEnvelopeSuccess = true
 )
+
+func (r OutgoingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OutgoingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

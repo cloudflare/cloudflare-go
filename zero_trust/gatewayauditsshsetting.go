@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -180,6 +180,14 @@ const (
 	GatewayAuditSSHSettingUpdateResponseEnvelopeSuccessTrue GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess = true
 )
 
+func (r GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayAuditSSHSettingUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayAuditSSHSettingGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -264,3 +272,11 @@ type GatewayAuditSSHSettingGetResponseEnvelopeSuccess bool
 const (
 	GatewayAuditSSHSettingGetResponseEnvelopeSuccessTrue GatewayAuditSSHSettingGetResponseEnvelopeSuccess = true
 )
+
+func (r GatewayAuditSSHSettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayAuditSSHSettingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

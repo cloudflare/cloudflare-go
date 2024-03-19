@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package available_plans
 
@@ -115,6 +115,14 @@ const (
 	BillSubsAPIAvailableRatePlanFrequencyYearly    BillSubsAPIAvailableRatePlanFrequency = "yearly"
 )
 
+func (r BillSubsAPIAvailableRatePlanFrequency) IsKnown() bool {
+	switch r {
+	case BillSubsAPIAvailableRatePlanFrequencyWeekly, BillSubsAPIAvailableRatePlanFrequencyMonthly, BillSubsAPIAvailableRatePlanFrequencyQuarterly, BillSubsAPIAvailableRatePlanFrequencyYearly:
+		return true
+	}
+	return false
+}
+
 type AvailablePlanListResponseEnvelope struct {
 	Errors   []AvailablePlanListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AvailablePlanListResponseEnvelopeMessages `json:"messages,required"`
@@ -197,6 +205,14 @@ type AvailablePlanListResponseEnvelopeSuccess bool
 const (
 	AvailablePlanListResponseEnvelopeSuccessTrue AvailablePlanListResponseEnvelopeSuccess = true
 )
+
+func (r AvailablePlanListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AvailablePlanListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AvailablePlanListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -309,3 +325,11 @@ type AvailablePlanGetResponseEnvelopeSuccess bool
 const (
 	AvailablePlanGetResponseEnvelopeSuccessTrue AvailablePlanGetResponseEnvelopeSuccess = true
 )
+
+func (r AvailablePlanGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AvailablePlanGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

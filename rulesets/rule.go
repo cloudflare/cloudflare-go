@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package rulesets
 
@@ -300,6 +300,14 @@ const (
 	RuleNewResponseEnvelopeSuccessTrue RuleNewResponseEnvelopeSuccess = true
 )
 
+func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -449,6 +457,14 @@ type RuleDeleteResponseEnvelopeSuccess bool
 const (
 	RuleDeleteResponseEnvelopeSuccessTrue RuleDeleteResponseEnvelopeSuccess = true
 )
+
+func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RuleEditParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -652,3 +668,11 @@ type RuleEditResponseEnvelopeSuccess bool
 const (
 	RuleEditResponseEnvelopeSuccessTrue RuleEditResponseEnvelopeSuccess = true
 )
+
+func (r RuleEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

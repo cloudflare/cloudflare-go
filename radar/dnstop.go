@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -422,6 +422,14 @@ const (
 	DNSTopAsesParamsDateRange24wControl DNSTopAsesParamsDateRange = "24wControl"
 )
 
+func (r DNSTopAsesParamsDateRange) IsKnown() bool {
+	switch r {
+	case DNSTopAsesParamsDateRange1d, DNSTopAsesParamsDateRange2d, DNSTopAsesParamsDateRange7d, DNSTopAsesParamsDateRange14d, DNSTopAsesParamsDateRange28d, DNSTopAsesParamsDateRange12w, DNSTopAsesParamsDateRange24w, DNSTopAsesParamsDateRange52w, DNSTopAsesParamsDateRange1dControl, DNSTopAsesParamsDateRange2dControl, DNSTopAsesParamsDateRange7dControl, DNSTopAsesParamsDateRange14dControl, DNSTopAsesParamsDateRange28dControl, DNSTopAsesParamsDateRange12wControl, DNSTopAsesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type DNSTopAsesParamsFormat string
 
@@ -429,6 +437,14 @@ const (
 	DNSTopAsesParamsFormatJson DNSTopAsesParamsFormat = "JSON"
 	DNSTopAsesParamsFormatCsv  DNSTopAsesParamsFormat = "CSV"
 )
+
+func (r DNSTopAsesParamsFormat) IsKnown() bool {
+	switch r {
+	case DNSTopAsesParamsFormatJson, DNSTopAsesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type DNSTopAsesResponseEnvelope struct {
 	Result  DNSTopAsesResponse             `json:"result,required"`
@@ -512,6 +528,14 @@ const (
 	DNSTopLocationsParamsDateRange24wControl DNSTopLocationsParamsDateRange = "24wControl"
 )
 
+func (r DNSTopLocationsParamsDateRange) IsKnown() bool {
+	switch r {
+	case DNSTopLocationsParamsDateRange1d, DNSTopLocationsParamsDateRange2d, DNSTopLocationsParamsDateRange7d, DNSTopLocationsParamsDateRange14d, DNSTopLocationsParamsDateRange28d, DNSTopLocationsParamsDateRange12w, DNSTopLocationsParamsDateRange24w, DNSTopLocationsParamsDateRange52w, DNSTopLocationsParamsDateRange1dControl, DNSTopLocationsParamsDateRange2dControl, DNSTopLocationsParamsDateRange7dControl, DNSTopLocationsParamsDateRange14dControl, DNSTopLocationsParamsDateRange28dControl, DNSTopLocationsParamsDateRange12wControl, DNSTopLocationsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type DNSTopLocationsParamsFormat string
 
@@ -519,6 +543,14 @@ const (
 	DNSTopLocationsParamsFormatJson DNSTopLocationsParamsFormat = "JSON"
 	DNSTopLocationsParamsFormatCsv  DNSTopLocationsParamsFormat = "CSV"
 )
+
+func (r DNSTopLocationsParamsFormat) IsKnown() bool {
+	switch r {
+	case DNSTopLocationsParamsFormatJson, DNSTopLocationsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type DNSTopLocationsResponseEnvelope struct {
 	Result  DNSTopLocationsResponse             `json:"result,required"`

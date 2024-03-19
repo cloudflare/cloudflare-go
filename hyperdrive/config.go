@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package hyperdrive
 
@@ -340,6 +340,14 @@ const (
 	ConfigNewResponseEnvelopeSuccessTrue ConfigNewResponseEnvelopeSuccess = true
 )
 
+func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConfigUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string]                   `path:"account_id,required"`
@@ -441,6 +449,14 @@ const (
 	ConfigUpdateResponseEnvelopeSuccessTrue ConfigUpdateResponseEnvelopeSuccess = true
 )
 
+func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConfigListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -527,6 +543,14 @@ const (
 	ConfigListResponseEnvelopeSuccessTrue ConfigListResponseEnvelopeSuccess = true
 )
 
+func (r ConfigListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConfigDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -612,6 +636,14 @@ type ConfigDeleteResponseEnvelopeSuccess bool
 const (
 	ConfigDeleteResponseEnvelopeSuccessTrue ConfigDeleteResponseEnvelopeSuccess = true
 )
+
+func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ConfigEditParams struct {
 	// Identifier
@@ -714,6 +746,14 @@ const (
 	ConfigEditResponseEnvelopeSuccessTrue ConfigEditResponseEnvelopeSuccess = true
 )
 
+func (r ConfigEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConfigGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -799,3 +839,11 @@ type ConfigGetResponseEnvelopeSuccess bool
 const (
 	ConfigGetResponseEnvelopeSuccessTrue ConfigGetResponseEnvelopeSuccess = true
 )
+
+func (r ConfigGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

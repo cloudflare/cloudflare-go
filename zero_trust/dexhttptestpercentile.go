@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -271,3 +271,11 @@ type DexhttpTestPercentileGetResponseEnvelopeSuccess bool
 const (
 	DexhttpTestPercentileGetResponseEnvelopeSuccessTrue DexhttpTestPercentileGetResponseEnvelopeSuccess = true
 )
+
+func (r DexhttpTestPercentileGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DexhttpTestPercentileGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

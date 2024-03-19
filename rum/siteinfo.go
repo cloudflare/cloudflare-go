@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package rum
 
@@ -298,6 +298,14 @@ const (
 	SiteInfoListParamsOrderByHost    SiteInfoListParamsOrderBy = "host"
 	SiteInfoListParamsOrderByCreated SiteInfoListParamsOrderBy = "created"
 )
+
+func (r SiteInfoListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case SiteInfoListParamsOrderByHost, SiteInfoListParamsOrderByCreated:
+		return true
+	}
+	return false
+}
 
 type SiteInfoDeleteParams struct {
 	// Identifier

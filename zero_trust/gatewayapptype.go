@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -225,6 +225,14 @@ type GatewayAppTypeListResponseEnvelopeSuccess bool
 const (
 	GatewayAppTypeListResponseEnvelopeSuccessTrue GatewayAppTypeListResponseEnvelopeSuccess = true
 )
+
+func (r GatewayAppTypeListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayAppTypeListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type GatewayAppTypeListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

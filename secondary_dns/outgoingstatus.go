@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package secondary_dns
 
@@ -129,3 +129,11 @@ type OutgoingStatusGetResponseEnvelopeSuccess bool
 const (
 	OutgoingStatusGetResponseEnvelopeSuccessTrue OutgoingStatusGetResponseEnvelopeSuccess = true
 )
+
+func (r OutgoingStatusGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OutgoingStatusGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package load_balancers
 
@@ -140,6 +140,14 @@ const (
 	MonitorPreviewNewParamsTypeSmtp     MonitorPreviewNewParamsType = "smtp"
 )
 
+func (r MonitorPreviewNewParamsType) IsKnown() bool {
+	switch r {
+	case MonitorPreviewNewParamsTypeHTTP, MonitorPreviewNewParamsTypeHTTPS, MonitorPreviewNewParamsTypeTcp, MonitorPreviewNewParamsTypeUdpIcmp, MonitorPreviewNewParamsTypeIcmpPing, MonitorPreviewNewParamsTypeSmtp:
+		return true
+	}
+	return false
+}
+
 type MonitorPreviewNewResponseEnvelope struct {
 	Errors   []MonitorPreviewNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MonitorPreviewNewResponseEnvelopeMessages `json:"messages,required"`
@@ -220,3 +228,11 @@ type MonitorPreviewNewResponseEnvelopeSuccess bool
 const (
 	MonitorPreviewNewResponseEnvelopeSuccessTrue MonitorPreviewNewResponseEnvelopeSuccess = true
 )
+
+func (r MonitorPreviewNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MonitorPreviewNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

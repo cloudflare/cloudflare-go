@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -246,6 +246,14 @@ const (
 	HoldNewResponseEnvelopeSuccessTrue HoldNewResponseEnvelopeSuccess = true
 )
 
+func (r HoldNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HoldNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HoldDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -369,3 +377,11 @@ type HoldGetResponseEnvelopeSuccess bool
 const (
 	HoldGetResponseEnvelopeSuccessTrue HoldGetResponseEnvelopeSuccess = true
 )
+
+func (r HoldGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HoldGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

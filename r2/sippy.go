@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package r2
 
@@ -132,6 +132,14 @@ const (
 	R2SippyDestinationProviderR2 R2SippyDestinationProvider = "r2"
 )
 
+func (r R2SippyDestinationProvider) IsKnown() bool {
+	switch r {
+	case R2SippyDestinationProviderR2:
+		return true
+	}
+	return false
+}
+
 // Details about the configured source bucket
 type R2SippySource struct {
 	// Name of the bucket on the provider
@@ -166,6 +174,14 @@ const (
 	R2SippySourceProviderGcs R2SippySourceProvider = "gcs"
 )
 
+func (r R2SippySourceProvider) IsKnown() bool {
+	switch r {
+	case R2SippySourceProviderAws, R2SippySourceProviderGcs:
+		return true
+	}
+	return false
+}
+
 type SippyDeleteResponse struct {
 	Enabled SippyDeleteResponseEnabled `json:"enabled"`
 	JSON    sippyDeleteResponseJSON    `json:"-"`
@@ -192,6 +208,14 @@ type SippyDeleteResponseEnabled bool
 const (
 	SippyDeleteResponseEnabledFalse SippyDeleteResponseEnabled = false
 )
+
+func (r SippyDeleteResponseEnabled) IsKnown() bool {
+	switch r {
+	case SippyDeleteResponseEnabledFalse:
+		return true
+	}
+	return false
+}
 
 type SippyUpdateParams struct {
 	// Account ID
@@ -232,6 +256,14 @@ const (
 	SippyUpdateParamsDestinationProviderR2 SippyUpdateParamsDestinationProvider = "r2"
 )
 
+func (r SippyUpdateParamsDestinationProvider) IsKnown() bool {
+	switch r {
+	case SippyUpdateParamsDestinationProviderR2:
+		return true
+	}
+	return false
+}
+
 type SippyUpdateParamsSource struct {
 	// Access Key ID of an IAM credential (ideally scoped to a single S3 bucket)
 	AccessKeyID param.Field[string] `json:"accessKeyId"`
@@ -258,6 +290,14 @@ const (
 	SippyUpdateParamsSourceProviderGcs SippyUpdateParamsSourceProvider = "gcs"
 	SippyUpdateParamsSourceProviderAws SippyUpdateParamsSourceProvider = "aws"
 )
+
+func (r SippyUpdateParamsSourceProvider) IsKnown() bool {
+	switch r {
+	case SippyUpdateParamsSourceProviderGcs, SippyUpdateParamsSourceProviderAws:
+		return true
+	}
+	return false
+}
 
 type SippyUpdateResponseEnvelope struct {
 	Errors   []SippyUpdateResponseEnvelopeErrors `json:"errors,required"`
@@ -316,6 +356,14 @@ type SippyUpdateResponseEnvelopeSuccess bool
 const (
 	SippyUpdateResponseEnvelopeSuccessTrue SippyUpdateResponseEnvelopeSuccess = true
 )
+
+func (r SippyUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SippyUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SippyDeleteParams struct {
 	// Account ID
@@ -380,6 +428,14 @@ const (
 	SippyDeleteResponseEnvelopeSuccessTrue SippyDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SippyDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SippyDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SippyGetParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -442,3 +498,11 @@ type SippyGetResponseEnvelopeSuccess bool
 const (
 	SippyGetResponseEnvelopeSuccessTrue SippyGetResponseEnvelopeSuccess = true
 )
+
+func (r SippyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SippyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package radar
 
@@ -324,6 +324,14 @@ const (
 	RankingTimeseriesGroupsParamsDateRange24wControl RankingTimeseriesGroupsParamsDateRange = "24wControl"
 )
 
+func (r RankingTimeseriesGroupsParamsDateRange) IsKnown() bool {
+	switch r {
+	case RankingTimeseriesGroupsParamsDateRange1d, RankingTimeseriesGroupsParamsDateRange2d, RankingTimeseriesGroupsParamsDateRange7d, RankingTimeseriesGroupsParamsDateRange14d, RankingTimeseriesGroupsParamsDateRange28d, RankingTimeseriesGroupsParamsDateRange12w, RankingTimeseriesGroupsParamsDateRange24w, RankingTimeseriesGroupsParamsDateRange52w, RankingTimeseriesGroupsParamsDateRange1dControl, RankingTimeseriesGroupsParamsDateRange2dControl, RankingTimeseriesGroupsParamsDateRange7dControl, RankingTimeseriesGroupsParamsDateRange14dControl, RankingTimeseriesGroupsParamsDateRange28dControl, RankingTimeseriesGroupsParamsDateRange12wControl, RankingTimeseriesGroupsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type RankingTimeseriesGroupsParamsFormat string
 
@@ -331,6 +339,14 @@ const (
 	RankingTimeseriesGroupsParamsFormatJson RankingTimeseriesGroupsParamsFormat = "JSON"
 	RankingTimeseriesGroupsParamsFormatCsv  RankingTimeseriesGroupsParamsFormat = "CSV"
 )
+
+func (r RankingTimeseriesGroupsParamsFormat) IsKnown() bool {
+	switch r {
+	case RankingTimeseriesGroupsParamsFormatJson, RankingTimeseriesGroupsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 // The ranking type.
 type RankingTimeseriesGroupsParamsRankingType string
@@ -340,6 +356,14 @@ const (
 	RankingTimeseriesGroupsParamsRankingTypeTrendingRise   RankingTimeseriesGroupsParamsRankingType = "TRENDING_RISE"
 	RankingTimeseriesGroupsParamsRankingTypeTrendingSteady RankingTimeseriesGroupsParamsRankingType = "TRENDING_STEADY"
 )
+
+func (r RankingTimeseriesGroupsParamsRankingType) IsKnown() bool {
+	switch r {
+	case RankingTimeseriesGroupsParamsRankingTypePopular, RankingTimeseriesGroupsParamsRankingTypeTrendingRise, RankingTimeseriesGroupsParamsRankingTypeTrendingSteady:
+		return true
+	}
+	return false
+}
 
 type RankingTimeseriesGroupsResponseEnvelope struct {
 	Result  RankingTimeseriesGroupsResponse             `json:"result,required"`
@@ -395,6 +419,14 @@ const (
 	RankingTopParamsFormatCsv  RankingTopParamsFormat = "CSV"
 )
 
+func (r RankingTopParamsFormat) IsKnown() bool {
+	switch r {
+	case RankingTopParamsFormatJson, RankingTopParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 // The ranking type.
 type RankingTopParamsRankingType string
 
@@ -403,6 +435,14 @@ const (
 	RankingTopParamsRankingTypeTrendingRise   RankingTopParamsRankingType = "TRENDING_RISE"
 	RankingTopParamsRankingTypeTrendingSteady RankingTopParamsRankingType = "TRENDING_STEADY"
 )
+
+func (r RankingTopParamsRankingType) IsKnown() bool {
+	switch r {
+	case RankingTopParamsRankingTypePopular, RankingTopParamsRankingTypeTrendingRise, RankingTopParamsRankingTypeTrendingSteady:
+		return true
+	}
+	return false
+}
 
 type RankingTopResponseEnvelope struct {
 	Result  RankingTopResponse             `json:"result,required"`

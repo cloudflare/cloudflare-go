@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -104,6 +104,14 @@ const (
 	SpeedCloudflareFontsIDFonts SpeedCloudflareFontsID = "fonts"
 )
 
+func (r SpeedCloudflareFontsID) IsKnown() bool {
+	switch r {
+	case SpeedCloudflareFontsIDFonts:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SpeedCloudflareFontsValue string
 
@@ -111,6 +119,14 @@ const (
 	SpeedCloudflareFontsValueOn  SpeedCloudflareFontsValue = "on"
 	SpeedCloudflareFontsValueOff SpeedCloudflareFontsValue = "off"
 )
+
+func (r SpeedCloudflareFontsValue) IsKnown() bool {
+	switch r {
+	case SpeedCloudflareFontsValueOn, SpeedCloudflareFontsValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -120,6 +136,14 @@ const (
 	SpeedCloudflareFontsEditableTrue  SpeedCloudflareFontsEditable = true
 	SpeedCloudflareFontsEditableFalse SpeedCloudflareFontsEditable = false
 )
+
+func (r SpeedCloudflareFontsEditable) IsKnown() bool {
+	switch r {
+	case SpeedCloudflareFontsEditableTrue, SpeedCloudflareFontsEditableFalse:
+		return true
+	}
+	return false
+}
 
 type SettingFontSettingEditParams struct {
 	// Identifier
@@ -139,6 +163,14 @@ const (
 	SettingFontSettingEditParamsValueOn  SettingFontSettingEditParamsValue = "on"
 	SettingFontSettingEditParamsValueOff SettingFontSettingEditParamsValue = "off"
 )
+
+func (r SettingFontSettingEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingFontSettingEditParamsValueOn, SettingFontSettingEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingFontSettingEditResponseEnvelope struct {
 	Errors   []SettingFontSettingEditResponseEnvelopeErrors   `json:"errors,required"`

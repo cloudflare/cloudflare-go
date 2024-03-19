@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zones
 
@@ -108,6 +108,14 @@ const (
 	ZonesIPGeolocationIDIPGeolocation ZonesIPGeolocationID = "ip_geolocation"
 )
 
+func (r ZonesIPGeolocationID) IsKnown() bool {
+	switch r {
+	case ZonesIPGeolocationIDIPGeolocation:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesIPGeolocationValue string
 
@@ -115,6 +123,14 @@ const (
 	ZonesIPGeolocationValueOn  ZonesIPGeolocationValue = "on"
 	ZonesIPGeolocationValueOff ZonesIPGeolocationValue = "off"
 )
+
+func (r ZonesIPGeolocationValue) IsKnown() bool {
+	switch r {
+	case ZonesIPGeolocationValueOn, ZonesIPGeolocationValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -124,6 +140,14 @@ const (
 	ZonesIPGeolocationEditableTrue  ZonesIPGeolocationEditable = true
 	ZonesIPGeolocationEditableFalse ZonesIPGeolocationEditable = false
 )
+
+func (r ZonesIPGeolocationEditable) IsKnown() bool {
+	switch r {
+	case ZonesIPGeolocationEditableTrue, ZonesIPGeolocationEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 // pass the country code to you.
@@ -159,6 +183,14 @@ const (
 	SettingIPGeolocationEditParamsValueOn  SettingIPGeolocationEditParamsValue = "on"
 	SettingIPGeolocationEditParamsValueOff SettingIPGeolocationEditParamsValue = "off"
 )
+
+func (r SettingIPGeolocationEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingIPGeolocationEditParamsValueOn, SettingIPGeolocationEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingIPGeolocationEditResponseEnvelope struct {
 	Errors   []SettingIPGeolocationEditResponseEnvelopeErrors   `json:"errors,required"`

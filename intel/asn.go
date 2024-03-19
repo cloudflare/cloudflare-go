@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package intel
 
@@ -134,3 +134,11 @@ type ASNGetResponseEnvelopeSuccess bool
 const (
 	ASNGetResponseEnvelopeSuccessTrue ASNGetResponseEnvelopeSuccess = true
 )
+
+func (r ASNGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ASNGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

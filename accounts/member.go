@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package accounts
 
@@ -978,6 +978,14 @@ const (
 	MemberListResponseStatusInvited  MemberListResponseStatus = "invited"
 )
 
+func (r MemberListResponseStatus) IsKnown() bool {
+	switch r {
+	case MemberListResponseStatusAccepted, MemberListResponseStatusInvited:
+		return true
+	}
+	return false
+}
+
 type MemberDeleteResponse struct {
 	// Identifier
 	ID   string                   `json:"id,required"`
@@ -1019,6 +1027,14 @@ const (
 	MemberNewParamsStatusAccepted MemberNewParamsStatus = "accepted"
 	MemberNewParamsStatusPending  MemberNewParamsStatus = "pending"
 )
+
+func (r MemberNewParamsStatus) IsKnown() bool {
+	switch r {
+	case MemberNewParamsStatusAccepted, MemberNewParamsStatusPending:
+		return true
+	}
+	return false
+}
 
 type MemberNewResponseEnvelope struct {
 	Errors   []MemberNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -1100,6 +1116,14 @@ type MemberNewResponseEnvelopeSuccess bool
 const (
 	MemberNewResponseEnvelopeSuccessTrue MemberNewResponseEnvelopeSuccess = true
 )
+
+func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MemberNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type MemberUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -1328,6 +1352,14 @@ const (
 	MemberUpdateResponseEnvelopeSuccessTrue MemberUpdateResponseEnvelopeSuccess = true
 )
 
+func (r MemberUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MemberUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type MemberListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Direction to order results.
@@ -1358,6 +1390,14 @@ const (
 	MemberListParamsDirectionDesc MemberListParamsDirection = "desc"
 )
 
+func (r MemberListParamsDirection) IsKnown() bool {
+	switch r {
+	case MemberListParamsDirectionAsc, MemberListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Field to order results by.
 type MemberListParamsOrder string
 
@@ -1368,6 +1408,14 @@ const (
 	MemberListParamsOrderStatus        MemberListParamsOrder = "status"
 )
 
+func (r MemberListParamsOrder) IsKnown() bool {
+	switch r {
+	case MemberListParamsOrderUserFirstName, MemberListParamsOrderUserLastName, MemberListParamsOrderUserEmail, MemberListParamsOrderStatus:
+		return true
+	}
+	return false
+}
+
 // A member's status in the account.
 type MemberListParamsStatus string
 
@@ -1376,6 +1424,14 @@ const (
 	MemberListParamsStatusPending  MemberListParamsStatus = "pending"
 	MemberListParamsStatusRejected MemberListParamsStatus = "rejected"
 )
+
+func (r MemberListParamsStatus) IsKnown() bool {
+	switch r {
+	case MemberListParamsStatusAccepted, MemberListParamsStatusPending, MemberListParamsStatusRejected:
+		return true
+	}
+	return false
+}
 
 type MemberDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -1462,6 +1518,14 @@ const (
 	MemberDeleteResponseEnvelopeSuccessTrue MemberDeleteResponseEnvelopeSuccess = true
 )
 
+func (r MemberDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MemberDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type MemberGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -1546,3 +1610,11 @@ type MemberGetResponseEnvelopeSuccess bool
 const (
 	MemberGetResponseEnvelopeSuccessTrue MemberGetResponseEnvelopeSuccess = true
 )
+
+func (r MemberGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MemberGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

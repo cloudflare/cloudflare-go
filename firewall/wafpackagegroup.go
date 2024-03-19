@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package firewall
 
@@ -152,6 +152,14 @@ const (
 	WAFManagedRulesSchemasGroupModeOff WAFManagedRulesSchemasGroupMode = "off"
 )
 
+func (r WAFManagedRulesSchemasGroupMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesSchemasGroupModeOn, WAFManagedRulesSchemasGroupModeOff:
+		return true
+	}
+	return false
+}
+
 // The state of the rules contained in the rule group. When `on`, the rules in the
 // group are configurable/usable.
 type WAFManagedRulesSchemasGroupAllowedMode string
@@ -160,6 +168,14 @@ const (
 	WAFManagedRulesSchemasGroupAllowedModeOn  WAFManagedRulesSchemasGroupAllowedMode = "on"
 	WAFManagedRulesSchemasGroupAllowedModeOff WAFManagedRulesSchemasGroupAllowedMode = "off"
 )
+
+func (r WAFManagedRulesSchemasGroupAllowedMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesSchemasGroupAllowedModeOn, WAFManagedRulesSchemasGroupAllowedModeOff:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [firewall.WAFPackageGroupEditResponseUnknown],
 // [firewall.WAFPackageGroupEditResponseArray] or [shared.UnionString].
@@ -247,6 +263,14 @@ const (
 	WAFPackageGroupListParamsDirectionDesc WAFPackageGroupListParamsDirection = "desc"
 )
 
+func (r WAFPackageGroupListParamsDirection) IsKnown() bool {
+	switch r {
+	case WAFPackageGroupListParamsDirectionAsc, WAFPackageGroupListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // When set to `all`, all the search requirements must match. When set to `any`,
 // only one of the search requirements has to match.
 type WAFPackageGroupListParamsMatch string
@@ -255,6 +279,14 @@ const (
 	WAFPackageGroupListParamsMatchAny WAFPackageGroupListParamsMatch = "any"
 	WAFPackageGroupListParamsMatchAll WAFPackageGroupListParamsMatch = "all"
 )
+
+func (r WAFPackageGroupListParamsMatch) IsKnown() bool {
+	switch r {
+	case WAFPackageGroupListParamsMatchAny, WAFPackageGroupListParamsMatchAll:
+		return true
+	}
+	return false
+}
 
 // The state of the rules contained in the rule group. When `on`, the rules in the
 // group are configurable/usable.
@@ -265,6 +297,14 @@ const (
 	WAFPackageGroupListParamsModeOff WAFPackageGroupListParamsMode = "off"
 )
 
+func (r WAFPackageGroupListParamsMode) IsKnown() bool {
+	switch r {
+	case WAFPackageGroupListParamsModeOn, WAFPackageGroupListParamsModeOff:
+		return true
+	}
+	return false
+}
+
 // The field used to sort returned rule groups.
 type WAFPackageGroupListParamsOrder string
 
@@ -272,6 +312,14 @@ const (
 	WAFPackageGroupListParamsOrderMode       WAFPackageGroupListParamsOrder = "mode"
 	WAFPackageGroupListParamsOrderRulesCount WAFPackageGroupListParamsOrder = "rules_count"
 )
+
+func (r WAFPackageGroupListParamsOrder) IsKnown() bool {
+	switch r {
+	case WAFPackageGroupListParamsOrderMode, WAFPackageGroupListParamsOrderRulesCount:
+		return true
+	}
+	return false
+}
 
 type WAFPackageGroupEditParams struct {
 	// Identifier
@@ -293,6 +341,14 @@ const (
 	WAFPackageGroupEditParamsModeOn  WAFPackageGroupEditParamsMode = "on"
 	WAFPackageGroupEditParamsModeOff WAFPackageGroupEditParamsMode = "off"
 )
+
+func (r WAFPackageGroupEditParamsMode) IsKnown() bool {
+	switch r {
+	case WAFPackageGroupEditParamsModeOn, WAFPackageGroupEditParamsModeOff:
+		return true
+	}
+	return false
+}
 
 type WAFPackageGroupEditResponseEnvelope struct {
 	Errors   []WAFPackageGroupEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -374,6 +430,14 @@ type WAFPackageGroupEditResponseEnvelopeSuccess bool
 const (
 	WAFPackageGroupEditResponseEnvelopeSuccessTrue WAFPackageGroupEditResponseEnvelopeSuccess = true
 )
+
+func (r WAFPackageGroupEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WAFPackageGroupEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type WAFPackageGroupGetParams struct {
 	// Identifier
@@ -460,3 +524,11 @@ type WAFPackageGroupGetResponseEnvelopeSuccess bool
 const (
 	WAFPackageGroupGetResponseEnvelopeSuccessTrue WAFPackageGroupGetResponseEnvelopeSuccess = true
 )
+
+func (r WAFPackageGroupGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WAFPackageGroupGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

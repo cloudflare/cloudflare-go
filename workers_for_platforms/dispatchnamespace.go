@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package workers_for_platforms
 
@@ -291,6 +291,14 @@ const (
 	DispatchNamespaceNewResponseEnvelopeSuccessTrue DispatchNamespaceNewResponseEnvelopeSuccess = true
 )
 
+func (r DispatchNamespaceNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -376,6 +384,14 @@ type DispatchNamespaceListResponseEnvelopeSuccess bool
 const (
 	DispatchNamespaceListResponseEnvelopeSuccessTrue DispatchNamespaceListResponseEnvelopeSuccess = true
 )
+
+func (r DispatchNamespaceListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DispatchNamespaceDeleteParams struct {
 	// Identifier
@@ -463,6 +479,14 @@ const (
 	DispatchNamespaceDeleteResponseEnvelopeSuccessTrue DispatchNamespaceDeleteResponseEnvelopeSuccess = true
 )
 
+func (r DispatchNamespaceDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -548,3 +572,11 @@ type DispatchNamespaceGetResponseEnvelopeSuccess bool
 const (
 	DispatchNamespaceGetResponseEnvelopeSuccessTrue DispatchNamespaceGetResponseEnvelopeSuccess = true
 )
+
+func (r DispatchNamespaceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

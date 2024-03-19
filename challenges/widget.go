@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package challenges
 
@@ -192,6 +192,14 @@ const (
 	NcChallengesAdminWidgetDetailClearanceLevelInteractive NcChallengesAdminWidgetDetailClearanceLevel = "interactive"
 )
 
+func (r NcChallengesAdminWidgetDetailClearanceLevel) IsKnown() bool {
+	switch r {
+	case NcChallengesAdminWidgetDetailClearanceLevelNoClearance, NcChallengesAdminWidgetDetailClearanceLevelJschallenge, NcChallengesAdminWidgetDetailClearanceLevelManaged, NcChallengesAdminWidgetDetailClearanceLevelInteractive:
+		return true
+	}
+	return false
+}
+
 // Widget Mode
 type NcChallengesAdminWidgetDetailMode string
 
@@ -201,12 +209,28 @@ const (
 	NcChallengesAdminWidgetDetailModeManaged        NcChallengesAdminWidgetDetailMode = "managed"
 )
 
+func (r NcChallengesAdminWidgetDetailMode) IsKnown() bool {
+	switch r {
+	case NcChallengesAdminWidgetDetailModeNonInteractive, NcChallengesAdminWidgetDetailModeInvisible, NcChallengesAdminWidgetDetailModeManaged:
+		return true
+	}
+	return false
+}
+
 // Region where this widget can be used.
 type NcChallengesAdminWidgetDetailRegion string
 
 const (
 	NcChallengesAdminWidgetDetailRegionWorld NcChallengesAdminWidgetDetailRegion = "world"
 )
+
+func (r NcChallengesAdminWidgetDetailRegion) IsKnown() bool {
+	switch r {
+	case NcChallengesAdminWidgetDetailRegionWorld:
+		return true
+	}
+	return false
+}
 
 // A Turnstile Widgets configuration as it appears in listings
 type NcChallengesAdminWidgetList struct {
@@ -272,6 +296,14 @@ const (
 	NcChallengesAdminWidgetListClearanceLevelInteractive NcChallengesAdminWidgetListClearanceLevel = "interactive"
 )
 
+func (r NcChallengesAdminWidgetListClearanceLevel) IsKnown() bool {
+	switch r {
+	case NcChallengesAdminWidgetListClearanceLevelNoClearance, NcChallengesAdminWidgetListClearanceLevelJschallenge, NcChallengesAdminWidgetListClearanceLevelManaged, NcChallengesAdminWidgetListClearanceLevelInteractive:
+		return true
+	}
+	return false
+}
+
 // Widget Mode
 type NcChallengesAdminWidgetListMode string
 
@@ -281,12 +313,28 @@ const (
 	NcChallengesAdminWidgetListModeManaged        NcChallengesAdminWidgetListMode = "managed"
 )
 
+func (r NcChallengesAdminWidgetListMode) IsKnown() bool {
+	switch r {
+	case NcChallengesAdminWidgetListModeNonInteractive, NcChallengesAdminWidgetListModeInvisible, NcChallengesAdminWidgetListModeManaged:
+		return true
+	}
+	return false
+}
+
 // Region where this widget can be used.
 type NcChallengesAdminWidgetListRegion string
 
 const (
 	NcChallengesAdminWidgetListRegionWorld NcChallengesAdminWidgetListRegion = "world"
 )
+
+func (r NcChallengesAdminWidgetListRegion) IsKnown() bool {
+	switch r {
+	case NcChallengesAdminWidgetListRegionWorld:
+		return true
+	}
+	return false
+}
 
 type WidgetNewParams struct {
 	// Identifier
@@ -339,6 +387,14 @@ const (
 	WidgetNewParamsModeManaged        WidgetNewParamsMode = "managed"
 )
 
+func (r WidgetNewParamsMode) IsKnown() bool {
+	switch r {
+	case WidgetNewParamsModeNonInteractive, WidgetNewParamsModeInvisible, WidgetNewParamsModeManaged:
+		return true
+	}
+	return false
+}
+
 // Direction to order widgets.
 type WidgetNewParamsDirection string
 
@@ -346,6 +402,14 @@ const (
 	WidgetNewParamsDirectionAsc  WidgetNewParamsDirection = "asc"
 	WidgetNewParamsDirectionDesc WidgetNewParamsDirection = "desc"
 )
+
+func (r WidgetNewParamsDirection) IsKnown() bool {
+	switch r {
+	case WidgetNewParamsDirectionAsc, WidgetNewParamsDirectionDesc:
+		return true
+	}
+	return false
+}
 
 // Field to order widgets by.
 type WidgetNewParamsOrder string
@@ -358,6 +422,14 @@ const (
 	WidgetNewParamsOrderModifiedOn WidgetNewParamsOrder = "modified_on"
 )
 
+func (r WidgetNewParamsOrder) IsKnown() bool {
+	switch r {
+	case WidgetNewParamsOrderID, WidgetNewParamsOrderSitekey, WidgetNewParamsOrderName, WidgetNewParamsOrderCreatedOn, WidgetNewParamsOrderModifiedOn:
+		return true
+	}
+	return false
+}
+
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
 type WidgetNewParamsClearanceLevel string
@@ -369,12 +441,28 @@ const (
 	WidgetNewParamsClearanceLevelInteractive WidgetNewParamsClearanceLevel = "interactive"
 )
 
+func (r WidgetNewParamsClearanceLevel) IsKnown() bool {
+	switch r {
+	case WidgetNewParamsClearanceLevelNoClearance, WidgetNewParamsClearanceLevelJschallenge, WidgetNewParamsClearanceLevelManaged, WidgetNewParamsClearanceLevelInteractive:
+		return true
+	}
+	return false
+}
+
 // Region where this widget can be used.
 type WidgetNewParamsRegion string
 
 const (
 	WidgetNewParamsRegionWorld WidgetNewParamsRegion = "world"
 )
+
+func (r WidgetNewParamsRegion) IsKnown() bool {
+	switch r {
+	case WidgetNewParamsRegionWorld:
+		return true
+	}
+	return false
+}
 
 type WidgetNewResponseEnvelope struct {
 	Errors   []WidgetNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -517,6 +605,14 @@ const (
 	WidgetUpdateParamsModeManaged        WidgetUpdateParamsMode = "managed"
 )
 
+func (r WidgetUpdateParamsMode) IsKnown() bool {
+	switch r {
+	case WidgetUpdateParamsModeNonInteractive, WidgetUpdateParamsModeInvisible, WidgetUpdateParamsModeManaged:
+		return true
+	}
+	return false
+}
+
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
 type WidgetUpdateParamsClearanceLevel string
@@ -527,6 +623,14 @@ const (
 	WidgetUpdateParamsClearanceLevelManaged     WidgetUpdateParamsClearanceLevel = "managed"
 	WidgetUpdateParamsClearanceLevelInteractive WidgetUpdateParamsClearanceLevel = "interactive"
 )
+
+func (r WidgetUpdateParamsClearanceLevel) IsKnown() bool {
+	switch r {
+	case WidgetUpdateParamsClearanceLevelNoClearance, WidgetUpdateParamsClearanceLevelJschallenge, WidgetUpdateParamsClearanceLevelManaged, WidgetUpdateParamsClearanceLevelInteractive:
+		return true
+	}
+	return false
+}
 
 type WidgetUpdateResponseEnvelope struct {
 	Errors   []WidgetUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -632,6 +736,14 @@ const (
 	WidgetListParamsDirectionDesc WidgetListParamsDirection = "desc"
 )
 
+func (r WidgetListParamsDirection) IsKnown() bool {
+	switch r {
+	case WidgetListParamsDirectionAsc, WidgetListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Field to order widgets by.
 type WidgetListParamsOrder string
 
@@ -642,6 +754,14 @@ const (
 	WidgetListParamsOrderCreatedOn  WidgetListParamsOrder = "created_on"
 	WidgetListParamsOrderModifiedOn WidgetListParamsOrder = "modified_on"
 )
+
+func (r WidgetListParamsOrder) IsKnown() bool {
+	switch r {
+	case WidgetListParamsOrderID, WidgetListParamsOrderSitekey, WidgetListParamsOrderName, WidgetListParamsOrderCreatedOn, WidgetListParamsOrderModifiedOn:
+		return true
+	}
+	return false
+}
 
 type WidgetDeleteParams struct {
 	// Identifier

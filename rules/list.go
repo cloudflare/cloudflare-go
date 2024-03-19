@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package rules
 
@@ -153,6 +153,14 @@ const (
 	ListsListKindASN      ListsListKind = "asn"
 )
 
+func (r ListsListKind) IsKnown() bool {
+	switch r {
+	case ListsListKindIP, ListsListKindRedirect, ListsListKindHostname, ListsListKindASN:
+		return true
+	}
+	return false
+}
+
 type ListNewResponse = interface{}
 
 type ListUpdateResponse = interface{}
@@ -207,6 +215,14 @@ const (
 	ListNewParamsKindHostname ListNewParamsKind = "hostname"
 	ListNewParamsKindASN      ListNewParamsKind = "asn"
 )
+
+func (r ListNewParamsKind) IsKnown() bool {
+	switch r {
+	case ListNewParamsKindIP, ListNewParamsKindRedirect, ListNewParamsKindHostname, ListNewParamsKindASN:
+		return true
+	}
+	return false
+}
 
 type ListNewResponseEnvelope struct {
 	Errors   []ListNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -288,6 +304,14 @@ type ListNewResponseEnvelopeSuccess bool
 const (
 	ListNewResponseEnvelopeSuccessTrue ListNewResponseEnvelopeSuccess = true
 )
+
+func (r ListNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ListUpdateParams struct {
 	// Identifier
@@ -381,6 +405,14 @@ const (
 	ListUpdateResponseEnvelopeSuccessTrue ListUpdateResponseEnvelopeSuccess = true
 )
 
+func (r ListUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ListListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -466,6 +498,14 @@ type ListListResponseEnvelopeSuccess bool
 const (
 	ListListResponseEnvelopeSuccessTrue ListListResponseEnvelopeSuccess = true
 )
+
+func (r ListListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ListDeleteParams struct {
 	// Identifier
@@ -553,6 +593,14 @@ const (
 	ListDeleteResponseEnvelopeSuccessTrue ListDeleteResponseEnvelopeSuccess = true
 )
 
+func (r ListDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ListGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -638,3 +686,11 @@ type ListGetResponseEnvelopeSuccess bool
 const (
 	ListGetResponseEnvelopeSuccessTrue ListGetResponseEnvelopeSuccess = true
 )
+
+func (r ListGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

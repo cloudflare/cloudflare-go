@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package zero_trust
 
@@ -331,3 +331,11 @@ type AccessUserLastSeenIdentityGetResponseEnvelopeSuccess bool
 const (
 	AccessUserLastSeenIdentityGetResponseEnvelopeSuccessTrue AccessUserLastSeenIdentityGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessUserLastSeenIdentityGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessUserLastSeenIdentityGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

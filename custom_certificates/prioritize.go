@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package custom_certificates
 
@@ -150,6 +150,14 @@ type PrioritizeUpdateResponseEnvelopeSuccess bool
 const (
 	PrioritizeUpdateResponseEnvelopeSuccessTrue PrioritizeUpdateResponseEnvelopeSuccess = true
 )
+
+func (r PrioritizeUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrioritizeUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PrioritizeUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

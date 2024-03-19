@@ -1,4 +1,4 @@
-// File generated from our OpenAPI spec by Stainless.
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 package alerting
 
@@ -116,6 +116,14 @@ const (
 	AaaHistoryMechanismTypePagerduty AaaHistoryMechanismType = "pagerduty"
 	AaaHistoryMechanismTypeWebhook   AaaHistoryMechanismType = "webhook"
 )
+
+func (r AaaHistoryMechanismType) IsKnown() bool {
+	switch r {
+	case AaaHistoryMechanismTypeEmail, AaaHistoryMechanismTypePagerduty, AaaHistoryMechanismTypeWebhook:
+		return true
+	}
+	return false
+}
 
 type V3HistoryListParams struct {
 	// The account id
