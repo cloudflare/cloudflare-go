@@ -176,6 +176,14 @@ const (
 	TeamsDevicesDevicePostureIntegrationsTypeSentineloneS2s TeamsDevicesDevicePostureIntegrationsType = "sentinelone_s2s"
 )
 
+func (r TeamsDevicesDevicePostureIntegrationsType) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureIntegrationsTypeWorkspaceOne, TeamsDevicesDevicePostureIntegrationsTypeCrowdstrikeS2s, TeamsDevicesDevicePostureIntegrationsTypeUptycs, TeamsDevicesDevicePostureIntegrationsTypeIntune, TeamsDevicesDevicePostureIntegrationsTypeKolide, TeamsDevicesDevicePostureIntegrationsTypeTanium, TeamsDevicesDevicePostureIntegrationsTypeSentineloneS2s:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [zero_trust.DevicePostureIntegrationDeleteResponseUnknown] or
 // [shared.UnionString].
 type DevicePostureIntegrationDeleteResponse interface {
@@ -355,6 +363,14 @@ const (
 	DevicePostureIntegrationNewParamsTypeSentineloneS2s DevicePostureIntegrationNewParamsType = "sentinelone_s2s"
 )
 
+func (r DevicePostureIntegrationNewParamsType) IsKnown() bool {
+	switch r {
+	case DevicePostureIntegrationNewParamsTypeWorkspaceOne, DevicePostureIntegrationNewParamsTypeCrowdstrikeS2s, DevicePostureIntegrationNewParamsTypeUptycs, DevicePostureIntegrationNewParamsTypeIntune, DevicePostureIntegrationNewParamsTypeKolide, DevicePostureIntegrationNewParamsTypeTanium, DevicePostureIntegrationNewParamsTypeSentineloneS2s:
+		return true
+	}
+	return false
+}
+
 type DevicePostureIntegrationNewResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureIntegrationNewResponseEnvelopeMessages `json:"messages,required"`
@@ -435,6 +451,14 @@ type DevicePostureIntegrationNewResponseEnvelopeSuccess bool
 const (
 	DevicePostureIntegrationNewResponseEnvelopeSuccessTrue DevicePostureIntegrationNewResponseEnvelopeSuccess = true
 )
+
+func (r DevicePostureIntegrationNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureIntegrationNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePostureIntegrationListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -522,6 +546,14 @@ type DevicePostureIntegrationListResponseEnvelopeSuccess bool
 const (
 	DevicePostureIntegrationListResponseEnvelopeSuccessTrue DevicePostureIntegrationListResponseEnvelopeSuccess = true
 )
+
+func (r DevicePostureIntegrationListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureIntegrationListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePostureIntegrationListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -638,6 +670,14 @@ type DevicePostureIntegrationDeleteResponseEnvelopeSuccess bool
 const (
 	DevicePostureIntegrationDeleteResponseEnvelopeSuccessTrue DevicePostureIntegrationDeleteResponseEnvelopeSuccess = true
 )
+
+func (r DevicePostureIntegrationDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureIntegrationDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePostureIntegrationEditParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -801,6 +841,14 @@ const (
 	DevicePostureIntegrationEditParamsTypeSentineloneS2s DevicePostureIntegrationEditParamsType = "sentinelone_s2s"
 )
 
+func (r DevicePostureIntegrationEditParamsType) IsKnown() bool {
+	switch r {
+	case DevicePostureIntegrationEditParamsTypeWorkspaceOne, DevicePostureIntegrationEditParamsTypeCrowdstrikeS2s, DevicePostureIntegrationEditParamsTypeUptycs, DevicePostureIntegrationEditParamsTypeIntune, DevicePostureIntegrationEditParamsTypeKolide, DevicePostureIntegrationEditParamsTypeTanium, DevicePostureIntegrationEditParamsTypeSentineloneS2s:
+		return true
+	}
+	return false
+}
+
 type DevicePostureIntegrationEditResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureIntegrationEditResponseEnvelopeMessages `json:"messages,required"`
@@ -881,6 +929,14 @@ type DevicePostureIntegrationEditResponseEnvelopeSuccess bool
 const (
 	DevicePostureIntegrationEditResponseEnvelopeSuccessTrue DevicePostureIntegrationEditResponseEnvelopeSuccess = true
 )
+
+func (r DevicePostureIntegrationEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureIntegrationEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePostureIntegrationGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -966,3 +1022,11 @@ type DevicePostureIntegrationGetResponseEnvelopeSuccess bool
 const (
 	DevicePostureIntegrationGetResponseEnvelopeSuccessTrue DevicePostureIntegrationGetResponseEnvelopeSuccess = true
 )
+
+func (r DevicePostureIntegrationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureIntegrationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

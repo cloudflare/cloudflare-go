@@ -169,3 +169,11 @@ type SinkholeListResponseEnvelopeSuccess bool
 const (
 	SinkholeListResponseEnvelopeSuccessTrue SinkholeListResponseEnvelopeSuccess = true
 )
+
+func (r SinkholeListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SinkholeListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

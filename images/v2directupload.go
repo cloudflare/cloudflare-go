@@ -174,3 +174,11 @@ type V2DirectUploadNewResponseEnvelopeSuccess bool
 const (
 	V2DirectUploadNewResponseEnvelopeSuccessTrue V2DirectUploadNewResponseEnvelopeSuccess = true
 )
+
+func (r V2DirectUploadNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V2DirectUploadNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

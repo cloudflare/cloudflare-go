@@ -101,6 +101,14 @@ const (
 	ZonesPseudoIPV4IDPseudoIPV4 ZonesPseudoIPV4ID = "pseudo_ipv4"
 )
 
+func (r ZonesPseudoIPV4ID) IsKnown() bool {
+	switch r {
+	case ZonesPseudoIPV4IDPseudoIPV4:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesPseudoIPV4Value string
 
@@ -110,6 +118,14 @@ const (
 	ZonesPseudoIPV4ValueOverwriteHeader ZonesPseudoIPV4Value = "overwrite_header"
 )
 
+func (r ZonesPseudoIPV4Value) IsKnown() bool {
+	switch r {
+	case ZonesPseudoIPV4ValueOff, ZonesPseudoIPV4ValueAddHeader, ZonesPseudoIPV4ValueOverwriteHeader:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesPseudoIPV4Editable bool
@@ -118,6 +134,14 @@ const (
 	ZonesPseudoIPV4EditableTrue  ZonesPseudoIPV4Editable = true
 	ZonesPseudoIPV4EditableFalse ZonesPseudoIPV4Editable = false
 )
+
+func (r ZonesPseudoIPV4Editable) IsKnown() bool {
+	switch r {
+	case ZonesPseudoIPV4EditableTrue, ZonesPseudoIPV4EditableFalse:
+		return true
+	}
+	return false
+}
 
 // The value set for the Pseudo IPv4 setting.
 type ZonesPseudoIPV4Param struct {
@@ -152,6 +176,14 @@ const (
 	SettingPseudoIPV4EditParamsValueAddHeader       SettingPseudoIPV4EditParamsValue = "add_header"
 	SettingPseudoIPV4EditParamsValueOverwriteHeader SettingPseudoIPV4EditParamsValue = "overwrite_header"
 )
+
+func (r SettingPseudoIPV4EditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingPseudoIPV4EditParamsValueOff, SettingPseudoIPV4EditParamsValueAddHeader, SettingPseudoIPV4EditParamsValueOverwriteHeader:
+		return true
+	}
+	return false
+}
 
 type SettingPseudoIPV4EditResponseEnvelope struct {
 	Errors   []SettingPseudoIPV4EditResponseEnvelopeErrors   `json:"errors,required"`

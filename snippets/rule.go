@@ -215,6 +215,14 @@ const (
 	RuleUpdateResponseEnvelopeSuccessTrue RuleUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleListResponseEnvelope struct {
 	Errors   []RuleListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleListResponseEnvelopeMessages `json:"messages,required"`
@@ -296,3 +304,11 @@ type RuleListResponseEnvelopeSuccess bool
 const (
 	RuleListResponseEnvelopeSuccessTrue RuleListResponseEnvelopeSuccess = true
 )
+
+func (r RuleListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

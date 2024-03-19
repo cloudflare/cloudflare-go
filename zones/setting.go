@@ -457,6 +457,14 @@ const (
 	SettingEditResponseZonesCNAMEFlatteningIDCNAMEFlattening SettingEditResponseZonesCNAMEFlatteningID = "cname_flattening"
 )
 
+func (r SettingEditResponseZonesCNAMEFlatteningID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCNAMEFlatteningIDCNAMEFlattening:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingEditResponseZonesCNAMEFlatteningValue string
 
@@ -464,6 +472,14 @@ const (
 	SettingEditResponseZonesCNAMEFlatteningValueFlattenAtRoot SettingEditResponseZonesCNAMEFlatteningValue = "flatten_at_root"
 	SettingEditResponseZonesCNAMEFlatteningValueFlattenAll    SettingEditResponseZonesCNAMEFlatteningValue = "flatten_all"
 )
+
+func (r SettingEditResponseZonesCNAMEFlatteningValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCNAMEFlatteningValueFlattenAtRoot, SettingEditResponseZonesCNAMEFlatteningValueFlattenAll:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -473,6 +489,14 @@ const (
 	SettingEditResponseZonesCNAMEFlatteningEditableTrue  SettingEditResponseZonesCNAMEFlatteningEditable = true
 	SettingEditResponseZonesCNAMEFlatteningEditableFalse SettingEditResponseZonesCNAMEFlatteningEditable = false
 )
+
+func (r SettingEditResponseZonesCNAMEFlatteningEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesCNAMEFlatteningEditableTrue, SettingEditResponseZonesCNAMEFlatteningEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Time (in seconds) that a resource will be ensured to remain on Cloudflare's
 // cache servers.
@@ -517,6 +541,14 @@ const (
 	SettingEditResponseZonesEdgeCacheTTLIDEdgeCacheTTL SettingEditResponseZonesEdgeCacheTTLID = "edge_cache_ttl"
 )
 
+func (r SettingEditResponseZonesEdgeCacheTTLID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesEdgeCacheTTLIDEdgeCacheTTL:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingEditResponseZonesEdgeCacheTTLValue float64
 
@@ -544,6 +576,14 @@ const (
 	SettingEditResponseZonesEdgeCacheTTLValue604800 SettingEditResponseZonesEdgeCacheTTLValue = 604800
 )
 
+func (r SettingEditResponseZonesEdgeCacheTTLValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesEdgeCacheTTLValue30, SettingEditResponseZonesEdgeCacheTTLValue60, SettingEditResponseZonesEdgeCacheTTLValue300, SettingEditResponseZonesEdgeCacheTTLValue1200, SettingEditResponseZonesEdgeCacheTTLValue1800, SettingEditResponseZonesEdgeCacheTTLValue3600, SettingEditResponseZonesEdgeCacheTTLValue7200, SettingEditResponseZonesEdgeCacheTTLValue10800, SettingEditResponseZonesEdgeCacheTTLValue14400, SettingEditResponseZonesEdgeCacheTTLValue18000, SettingEditResponseZonesEdgeCacheTTLValue28800, SettingEditResponseZonesEdgeCacheTTLValue43200, SettingEditResponseZonesEdgeCacheTTLValue57600, SettingEditResponseZonesEdgeCacheTTLValue72000, SettingEditResponseZonesEdgeCacheTTLValue86400, SettingEditResponseZonesEdgeCacheTTLValue172800, SettingEditResponseZonesEdgeCacheTTLValue259200, SettingEditResponseZonesEdgeCacheTTLValue345600, SettingEditResponseZonesEdgeCacheTTLValue432000, SettingEditResponseZonesEdgeCacheTTLValue518400, SettingEditResponseZonesEdgeCacheTTLValue604800:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditResponseZonesEdgeCacheTTLEditable bool
@@ -552,6 +592,14 @@ const (
 	SettingEditResponseZonesEdgeCacheTTLEditableTrue  SettingEditResponseZonesEdgeCacheTTLEditable = true
 	SettingEditResponseZonesEdgeCacheTTLEditableFalse SettingEditResponseZonesEdgeCacheTTLEditable = false
 )
+
+func (r SettingEditResponseZonesEdgeCacheTTLEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesEdgeCacheTTLEditableTrue, SettingEditResponseZonesEdgeCacheTTLEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Maximum size of an allowable upload.
 type SettingEditResponseZonesMaxUpload struct {
@@ -595,6 +643,14 @@ const (
 	SettingEditResponseZonesMaxUploadIDMaxUpload SettingEditResponseZonesMaxUploadID = "max_upload"
 )
 
+func (r SettingEditResponseZonesMaxUploadID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesMaxUploadIDMaxUpload:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingEditResponseZonesMaxUploadValue float64
 
@@ -604,6 +660,14 @@ const (
 	SettingEditResponseZonesMaxUploadValue500 SettingEditResponseZonesMaxUploadValue = 500
 )
 
+func (r SettingEditResponseZonesMaxUploadValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesMaxUploadValue100, SettingEditResponseZonesMaxUploadValue200, SettingEditResponseZonesMaxUploadValue500:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditResponseZonesMaxUploadEditable bool
@@ -612,6 +676,14 @@ const (
 	SettingEditResponseZonesMaxUploadEditableTrue  SettingEditResponseZonesMaxUploadEditable = true
 	SettingEditResponseZonesMaxUploadEditableFalse SettingEditResponseZonesMaxUploadEditable = false
 )
+
+func (r SettingEditResponseZonesMaxUploadEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesMaxUploadEditableTrue, SettingEditResponseZonesMaxUploadEditableFalse:
+		return true
+	}
+	return false
+}
 
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
@@ -659,6 +731,14 @@ const (
 	SettingEditResponseZonesSchemasAutomaticPlatformOptimizationIDAutomaticPlatformOptimization SettingEditResponseZonesSchemasAutomaticPlatformOptimizationID = "automatic_platform_optimization"
 )
 
+func (r SettingEditResponseZonesSchemasAutomaticPlatformOptimizationID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesSchemasAutomaticPlatformOptimizationIDAutomaticPlatformOptimization:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditable bool
@@ -667,6 +747,14 @@ const (
 	SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditableTrue  SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditable = true
 	SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditableFalse SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditable = false
 )
+
+func (r SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditableTrue, SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Allow SHA1 support.
 type SettingEditResponseZonesSha1Support struct {
@@ -710,6 +798,14 @@ const (
 	SettingEditResponseZonesSha1SupportIDSha1Support SettingEditResponseZonesSha1SupportID = "sha1_support"
 )
 
+func (r SettingEditResponseZonesSha1SupportID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesSha1SupportIDSha1Support:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingEditResponseZonesSha1SupportValue string
 
@@ -717,6 +813,14 @@ const (
 	SettingEditResponseZonesSha1SupportValueOff SettingEditResponseZonesSha1SupportValue = "off"
 	SettingEditResponseZonesSha1SupportValueOn  SettingEditResponseZonesSha1SupportValue = "on"
 )
+
+func (r SettingEditResponseZonesSha1SupportValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesSha1SupportValueOff, SettingEditResponseZonesSha1SupportValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -726,6 +830,14 @@ const (
 	SettingEditResponseZonesSha1SupportEditableTrue  SettingEditResponseZonesSha1SupportEditable = true
 	SettingEditResponseZonesSha1SupportEditableFalse SettingEditResponseZonesSha1SupportEditable = false
 )
+
+func (r SettingEditResponseZonesSha1SupportEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesSha1SupportEditableTrue, SettingEditResponseZonesSha1SupportEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Only allows TLS1.2.
 type SettingEditResponseZonesTLS1_2Only struct {
@@ -769,6 +881,14 @@ const (
 	SettingEditResponseZonesTLS1_2OnlyIDTLS1_2Only SettingEditResponseZonesTLS1_2OnlyID = "tls_1_2_only"
 )
 
+func (r SettingEditResponseZonesTLS1_2OnlyID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesTLS1_2OnlyIDTLS1_2Only:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingEditResponseZonesTLS1_2OnlyValue string
 
@@ -776,6 +896,14 @@ const (
 	SettingEditResponseZonesTLS1_2OnlyValueOff SettingEditResponseZonesTLS1_2OnlyValue = "off"
 	SettingEditResponseZonesTLS1_2OnlyValueOn  SettingEditResponseZonesTLS1_2OnlyValue = "on"
 )
+
+func (r SettingEditResponseZonesTLS1_2OnlyValue) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesTLS1_2OnlyValueOff, SettingEditResponseZonesTLS1_2OnlyValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -785,6 +913,14 @@ const (
 	SettingEditResponseZonesTLS1_2OnlyEditableTrue  SettingEditResponseZonesTLS1_2OnlyEditable = true
 	SettingEditResponseZonesTLS1_2OnlyEditableFalse SettingEditResponseZonesTLS1_2OnlyEditable = false
 )
+
+func (r SettingEditResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZonesTLS1_2OnlyEditableTrue, SettingEditResponseZonesTLS1_2OnlyEditableFalse:
+		return true
+	}
+	return false
+}
 
 // 0-RTT session resumption enabled for this zone.
 //
@@ -1082,6 +1218,14 @@ const (
 	SettingGetResponseZonesCNAMEFlatteningIDCNAMEFlattening SettingGetResponseZonesCNAMEFlatteningID = "cname_flattening"
 )
 
+func (r SettingGetResponseZonesCNAMEFlatteningID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCNAMEFlatteningIDCNAMEFlattening:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingGetResponseZonesCNAMEFlatteningValue string
 
@@ -1089,6 +1233,14 @@ const (
 	SettingGetResponseZonesCNAMEFlatteningValueFlattenAtRoot SettingGetResponseZonesCNAMEFlatteningValue = "flatten_at_root"
 	SettingGetResponseZonesCNAMEFlatteningValueFlattenAll    SettingGetResponseZonesCNAMEFlatteningValue = "flatten_all"
 )
+
+func (r SettingGetResponseZonesCNAMEFlatteningValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCNAMEFlatteningValueFlattenAtRoot, SettingGetResponseZonesCNAMEFlatteningValueFlattenAll:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1098,6 +1250,14 @@ const (
 	SettingGetResponseZonesCNAMEFlatteningEditableTrue  SettingGetResponseZonesCNAMEFlatteningEditable = true
 	SettingGetResponseZonesCNAMEFlatteningEditableFalse SettingGetResponseZonesCNAMEFlatteningEditable = false
 )
+
+func (r SettingGetResponseZonesCNAMEFlatteningEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesCNAMEFlatteningEditableTrue, SettingGetResponseZonesCNAMEFlatteningEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Time (in seconds) that a resource will be ensured to remain on Cloudflare's
 // cache servers.
@@ -1142,6 +1302,14 @@ const (
 	SettingGetResponseZonesEdgeCacheTTLIDEdgeCacheTTL SettingGetResponseZonesEdgeCacheTTLID = "edge_cache_ttl"
 )
 
+func (r SettingGetResponseZonesEdgeCacheTTLID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesEdgeCacheTTLIDEdgeCacheTTL:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingGetResponseZonesEdgeCacheTTLValue float64
 
@@ -1169,6 +1337,14 @@ const (
 	SettingGetResponseZonesEdgeCacheTTLValue604800 SettingGetResponseZonesEdgeCacheTTLValue = 604800
 )
 
+func (r SettingGetResponseZonesEdgeCacheTTLValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesEdgeCacheTTLValue30, SettingGetResponseZonesEdgeCacheTTLValue60, SettingGetResponseZonesEdgeCacheTTLValue300, SettingGetResponseZonesEdgeCacheTTLValue1200, SettingGetResponseZonesEdgeCacheTTLValue1800, SettingGetResponseZonesEdgeCacheTTLValue3600, SettingGetResponseZonesEdgeCacheTTLValue7200, SettingGetResponseZonesEdgeCacheTTLValue10800, SettingGetResponseZonesEdgeCacheTTLValue14400, SettingGetResponseZonesEdgeCacheTTLValue18000, SettingGetResponseZonesEdgeCacheTTLValue28800, SettingGetResponseZonesEdgeCacheTTLValue43200, SettingGetResponseZonesEdgeCacheTTLValue57600, SettingGetResponseZonesEdgeCacheTTLValue72000, SettingGetResponseZonesEdgeCacheTTLValue86400, SettingGetResponseZonesEdgeCacheTTLValue172800, SettingGetResponseZonesEdgeCacheTTLValue259200, SettingGetResponseZonesEdgeCacheTTLValue345600, SettingGetResponseZonesEdgeCacheTTLValue432000, SettingGetResponseZonesEdgeCacheTTLValue518400, SettingGetResponseZonesEdgeCacheTTLValue604800:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingGetResponseZonesEdgeCacheTTLEditable bool
@@ -1177,6 +1353,14 @@ const (
 	SettingGetResponseZonesEdgeCacheTTLEditableTrue  SettingGetResponseZonesEdgeCacheTTLEditable = true
 	SettingGetResponseZonesEdgeCacheTTLEditableFalse SettingGetResponseZonesEdgeCacheTTLEditable = false
 )
+
+func (r SettingGetResponseZonesEdgeCacheTTLEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesEdgeCacheTTLEditableTrue, SettingGetResponseZonesEdgeCacheTTLEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Maximum size of an allowable upload.
 type SettingGetResponseZonesMaxUpload struct {
@@ -1220,6 +1404,14 @@ const (
 	SettingGetResponseZonesMaxUploadIDMaxUpload SettingGetResponseZonesMaxUploadID = "max_upload"
 )
 
+func (r SettingGetResponseZonesMaxUploadID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesMaxUploadIDMaxUpload:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingGetResponseZonesMaxUploadValue float64
 
@@ -1229,6 +1421,14 @@ const (
 	SettingGetResponseZonesMaxUploadValue500 SettingGetResponseZonesMaxUploadValue = 500
 )
 
+func (r SettingGetResponseZonesMaxUploadValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesMaxUploadValue100, SettingGetResponseZonesMaxUploadValue200, SettingGetResponseZonesMaxUploadValue500:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingGetResponseZonesMaxUploadEditable bool
@@ -1237,6 +1437,14 @@ const (
 	SettingGetResponseZonesMaxUploadEditableTrue  SettingGetResponseZonesMaxUploadEditable = true
 	SettingGetResponseZonesMaxUploadEditableFalse SettingGetResponseZonesMaxUploadEditable = false
 )
+
+func (r SettingGetResponseZonesMaxUploadEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesMaxUploadEditableTrue, SettingGetResponseZonesMaxUploadEditableFalse:
+		return true
+	}
+	return false
+}
 
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
@@ -1284,6 +1492,14 @@ const (
 	SettingGetResponseZonesSchemasAutomaticPlatformOptimizationIDAutomaticPlatformOptimization SettingGetResponseZonesSchemasAutomaticPlatformOptimizationID = "automatic_platform_optimization"
 )
 
+func (r SettingGetResponseZonesSchemasAutomaticPlatformOptimizationID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesSchemasAutomaticPlatformOptimizationIDAutomaticPlatformOptimization:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable bool
@@ -1292,6 +1508,14 @@ const (
 	SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditableTrue  SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable = true
 	SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditableFalse SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable = false
 )
+
+func (r SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditableTrue, SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Allow SHA1 support.
 type SettingGetResponseZonesSha1Support struct {
@@ -1335,6 +1559,14 @@ const (
 	SettingGetResponseZonesSha1SupportIDSha1Support SettingGetResponseZonesSha1SupportID = "sha1_support"
 )
 
+func (r SettingGetResponseZonesSha1SupportID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesSha1SupportIDSha1Support:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingGetResponseZonesSha1SupportValue string
 
@@ -1342,6 +1574,14 @@ const (
 	SettingGetResponseZonesSha1SupportValueOff SettingGetResponseZonesSha1SupportValue = "off"
 	SettingGetResponseZonesSha1SupportValueOn  SettingGetResponseZonesSha1SupportValue = "on"
 )
+
+func (r SettingGetResponseZonesSha1SupportValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesSha1SupportValueOff, SettingGetResponseZonesSha1SupportValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1351,6 +1591,14 @@ const (
 	SettingGetResponseZonesSha1SupportEditableTrue  SettingGetResponseZonesSha1SupportEditable = true
 	SettingGetResponseZonesSha1SupportEditableFalse SettingGetResponseZonesSha1SupportEditable = false
 )
+
+func (r SettingGetResponseZonesSha1SupportEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesSha1SupportEditableTrue, SettingGetResponseZonesSha1SupportEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Only allows TLS1.2.
 type SettingGetResponseZonesTLS1_2Only struct {
@@ -1394,6 +1642,14 @@ const (
 	SettingGetResponseZonesTLS1_2OnlyIDTLS1_2Only SettingGetResponseZonesTLS1_2OnlyID = "tls_1_2_only"
 )
 
+func (r SettingGetResponseZonesTLS1_2OnlyID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesTLS1_2OnlyIDTLS1_2Only:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingGetResponseZonesTLS1_2OnlyValue string
 
@@ -1401,6 +1657,14 @@ const (
 	SettingGetResponseZonesTLS1_2OnlyValueOff SettingGetResponseZonesTLS1_2OnlyValue = "off"
 	SettingGetResponseZonesTLS1_2OnlyValueOn  SettingGetResponseZonesTLS1_2OnlyValue = "on"
 )
+
+func (r SettingGetResponseZonesTLS1_2OnlyValue) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesTLS1_2OnlyValueOff, SettingGetResponseZonesTLS1_2OnlyValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1410,6 +1674,14 @@ const (
 	SettingGetResponseZonesTLS1_2OnlyEditableTrue  SettingGetResponseZonesTLS1_2OnlyEditable = true
 	SettingGetResponseZonesTLS1_2OnlyEditableFalse SettingGetResponseZonesTLS1_2OnlyEditable = false
 )
+
+func (r SettingGetResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZonesTLS1_2OnlyEditableTrue, SettingGetResponseZonesTLS1_2OnlyEditableFalse:
+		return true
+	}
+	return false
+}
 
 type SettingEditParams struct {
 	// Identifier
@@ -1478,6 +1750,14 @@ const (
 	SettingEditParamsItemsZonesCNAMEFlatteningIDCNAMEFlattening SettingEditParamsItemsZonesCNAMEFlatteningID = "cname_flattening"
 )
 
+func (r SettingEditParamsItemsZonesCNAMEFlatteningID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesCNAMEFlatteningIDCNAMEFlattening:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingEditParamsItemsZonesCNAMEFlatteningValue string
 
@@ -1485,6 +1765,14 @@ const (
 	SettingEditParamsItemsZonesCNAMEFlatteningValueFlattenAtRoot SettingEditParamsItemsZonesCNAMEFlatteningValue = "flatten_at_root"
 	SettingEditParamsItemsZonesCNAMEFlatteningValueFlattenAll    SettingEditParamsItemsZonesCNAMEFlatteningValue = "flatten_all"
 )
+
+func (r SettingEditParamsItemsZonesCNAMEFlatteningValue) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesCNAMEFlatteningValueFlattenAtRoot, SettingEditParamsItemsZonesCNAMEFlatteningValueFlattenAll:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1494,6 +1782,14 @@ const (
 	SettingEditParamsItemsZonesCNAMEFlatteningEditableTrue  SettingEditParamsItemsZonesCNAMEFlatteningEditable = true
 	SettingEditParamsItemsZonesCNAMEFlatteningEditableFalse SettingEditParamsItemsZonesCNAMEFlatteningEditable = false
 )
+
+func (r SettingEditParamsItemsZonesCNAMEFlatteningEditable) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesCNAMEFlatteningEditableTrue, SettingEditParamsItemsZonesCNAMEFlatteningEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Time (in seconds) that a resource will be ensured to remain on Cloudflare's
 // cache servers.
@@ -1516,6 +1812,14 @@ type SettingEditParamsItemsZonesEdgeCacheTTLID string
 const (
 	SettingEditParamsItemsZonesEdgeCacheTTLIDEdgeCacheTTL SettingEditParamsItemsZonesEdgeCacheTTLID = "edge_cache_ttl"
 )
+
+func (r SettingEditParamsItemsZonesEdgeCacheTTLID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesEdgeCacheTTLIDEdgeCacheTTL:
+		return true
+	}
+	return false
+}
 
 // Current value of the zone setting.
 type SettingEditParamsItemsZonesEdgeCacheTTLValue float64
@@ -1544,6 +1848,14 @@ const (
 	SettingEditParamsItemsZonesEdgeCacheTTLValue604800 SettingEditParamsItemsZonesEdgeCacheTTLValue = 604800
 )
 
+func (r SettingEditParamsItemsZonesEdgeCacheTTLValue) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesEdgeCacheTTLValue30, SettingEditParamsItemsZonesEdgeCacheTTLValue60, SettingEditParamsItemsZonesEdgeCacheTTLValue300, SettingEditParamsItemsZonesEdgeCacheTTLValue1200, SettingEditParamsItemsZonesEdgeCacheTTLValue1800, SettingEditParamsItemsZonesEdgeCacheTTLValue3600, SettingEditParamsItemsZonesEdgeCacheTTLValue7200, SettingEditParamsItemsZonesEdgeCacheTTLValue10800, SettingEditParamsItemsZonesEdgeCacheTTLValue14400, SettingEditParamsItemsZonesEdgeCacheTTLValue18000, SettingEditParamsItemsZonesEdgeCacheTTLValue28800, SettingEditParamsItemsZonesEdgeCacheTTLValue43200, SettingEditParamsItemsZonesEdgeCacheTTLValue57600, SettingEditParamsItemsZonesEdgeCacheTTLValue72000, SettingEditParamsItemsZonesEdgeCacheTTLValue86400, SettingEditParamsItemsZonesEdgeCacheTTLValue172800, SettingEditParamsItemsZonesEdgeCacheTTLValue259200, SettingEditParamsItemsZonesEdgeCacheTTLValue345600, SettingEditParamsItemsZonesEdgeCacheTTLValue432000, SettingEditParamsItemsZonesEdgeCacheTTLValue518400, SettingEditParamsItemsZonesEdgeCacheTTLValue604800:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditParamsItemsZonesEdgeCacheTTLEditable bool
@@ -1552,6 +1864,14 @@ const (
 	SettingEditParamsItemsZonesEdgeCacheTTLEditableTrue  SettingEditParamsItemsZonesEdgeCacheTTLEditable = true
 	SettingEditParamsItemsZonesEdgeCacheTTLEditableFalse SettingEditParamsItemsZonesEdgeCacheTTLEditable = false
 )
+
+func (r SettingEditParamsItemsZonesEdgeCacheTTLEditable) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesEdgeCacheTTLEditableTrue, SettingEditParamsItemsZonesEdgeCacheTTLEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Maximum size of an allowable upload.
 type SettingEditParamsItemsZonesMaxUpload struct {
@@ -1574,6 +1894,14 @@ const (
 	SettingEditParamsItemsZonesMaxUploadIDMaxUpload SettingEditParamsItemsZonesMaxUploadID = "max_upload"
 )
 
+func (r SettingEditParamsItemsZonesMaxUploadID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesMaxUploadIDMaxUpload:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingEditParamsItemsZonesMaxUploadValue float64
 
@@ -1583,6 +1911,14 @@ const (
 	SettingEditParamsItemsZonesMaxUploadValue500 SettingEditParamsItemsZonesMaxUploadValue = 500
 )
 
+func (r SettingEditParamsItemsZonesMaxUploadValue) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesMaxUploadValue100, SettingEditParamsItemsZonesMaxUploadValue200, SettingEditParamsItemsZonesMaxUploadValue500:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditParamsItemsZonesMaxUploadEditable bool
@@ -1591,6 +1927,14 @@ const (
 	SettingEditParamsItemsZonesMaxUploadEditableTrue  SettingEditParamsItemsZonesMaxUploadEditable = true
 	SettingEditParamsItemsZonesMaxUploadEditableFalse SettingEditParamsItemsZonesMaxUploadEditable = false
 )
+
+func (r SettingEditParamsItemsZonesMaxUploadEditable) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesMaxUploadEditableTrue, SettingEditParamsItemsZonesMaxUploadEditableFalse:
+		return true
+	}
+	return false
+}
 
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
@@ -1616,6 +1960,14 @@ const (
 	SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationIDAutomaticPlatformOptimization SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationID = "automatic_platform_optimization"
 )
 
+func (r SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationIDAutomaticPlatformOptimization:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationEditable bool
@@ -1624,6 +1976,14 @@ const (
 	SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationEditableTrue  SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationEditable = true
 	SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationEditableFalse SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationEditable = false
 )
+
+func (r SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationEditable) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationEditableTrue, SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Allow SHA1 support.
 type SettingEditParamsItemsZonesSha1Support struct {
@@ -1646,6 +2006,14 @@ const (
 	SettingEditParamsItemsZonesSha1SupportIDSha1Support SettingEditParamsItemsZonesSha1SupportID = "sha1_support"
 )
 
+func (r SettingEditParamsItemsZonesSha1SupportID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesSha1SupportIDSha1Support:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingEditParamsItemsZonesSha1SupportValue string
 
@@ -1653,6 +2021,14 @@ const (
 	SettingEditParamsItemsZonesSha1SupportValueOff SettingEditParamsItemsZonesSha1SupportValue = "off"
 	SettingEditParamsItemsZonesSha1SupportValueOn  SettingEditParamsItemsZonesSha1SupportValue = "on"
 )
+
+func (r SettingEditParamsItemsZonesSha1SupportValue) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesSha1SupportValueOff, SettingEditParamsItemsZonesSha1SupportValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1662,6 +2038,14 @@ const (
 	SettingEditParamsItemsZonesSha1SupportEditableTrue  SettingEditParamsItemsZonesSha1SupportEditable = true
 	SettingEditParamsItemsZonesSha1SupportEditableFalse SettingEditParamsItemsZonesSha1SupportEditable = false
 )
+
+func (r SettingEditParamsItemsZonesSha1SupportEditable) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesSha1SupportEditableTrue, SettingEditParamsItemsZonesSha1SupportEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Only allows TLS1.2.
 type SettingEditParamsItemsZonesTLS1_2Only struct {
@@ -1684,6 +2068,14 @@ const (
 	SettingEditParamsItemsZonesTLS1_2OnlyIDTLS1_2Only SettingEditParamsItemsZonesTLS1_2OnlyID = "tls_1_2_only"
 )
 
+func (r SettingEditParamsItemsZonesTLS1_2OnlyID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesTLS1_2OnlyIDTLS1_2Only:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type SettingEditParamsItemsZonesTLS1_2OnlyValue string
 
@@ -1691,6 +2083,14 @@ const (
 	SettingEditParamsItemsZonesTLS1_2OnlyValueOff SettingEditParamsItemsZonesTLS1_2OnlyValue = "off"
 	SettingEditParamsItemsZonesTLS1_2OnlyValueOn  SettingEditParamsItemsZonesTLS1_2OnlyValue = "on"
 )
+
+func (r SettingEditParamsItemsZonesTLS1_2OnlyValue) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesTLS1_2OnlyValueOff, SettingEditParamsItemsZonesTLS1_2OnlyValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -1700,6 +2100,14 @@ const (
 	SettingEditParamsItemsZonesTLS1_2OnlyEditableTrue  SettingEditParamsItemsZonesTLS1_2OnlyEditable = true
 	SettingEditParamsItemsZonesTLS1_2OnlyEditableFalse SettingEditParamsItemsZonesTLS1_2OnlyEditable = false
 )
+
+func (r SettingEditParamsItemsZonesTLS1_2OnlyEditable) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsZonesTLS1_2OnlyEditableTrue, SettingEditParamsItemsZonesTLS1_2OnlyEditableFalse:
+		return true
+	}
+	return false
+}
 
 type SettingEditResponseEnvelope struct {
 	Errors   []SettingEditResponseEnvelopeErrors   `json:"errors,required"`

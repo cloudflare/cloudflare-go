@@ -134,3 +134,11 @@ type NamespaceMetadataGetResponseEnvelopeSuccess bool
 const (
 	NamespaceMetadataGetResponseEnvelopeSuccessTrue NamespaceMetadataGetResponseEnvelopeSuccess = true
 )
+
+func (r NamespaceMetadataGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceMetadataGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

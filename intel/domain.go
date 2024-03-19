@@ -315,3 +315,11 @@ type DomainGetResponseEnvelopeSuccess bool
 const (
 	DomainGetResponseEnvelopeSuccessTrue DomainGetResponseEnvelopeSuccess = true
 )
+
+func (r DomainGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

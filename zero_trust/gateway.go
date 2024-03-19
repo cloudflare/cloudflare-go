@@ -215,6 +215,14 @@ const (
 	GatewayNewResponseEnvelopeSuccessTrue GatewayNewResponseEnvelopeSuccess = true
 )
 
+func (r GatewayNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -299,3 +307,11 @@ type GatewayListResponseEnvelopeSuccess bool
 const (
 	GatewayListResponseEnvelopeSuccessTrue GatewayListResponseEnvelopeSuccess = true
 )
+
+func (r GatewayListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

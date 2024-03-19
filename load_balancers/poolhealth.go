@@ -175,6 +175,14 @@ const (
 	PoolHealthNewParamsTypeSmtp     PoolHealthNewParamsType = "smtp"
 )
 
+func (r PoolHealthNewParamsType) IsKnown() bool {
+	switch r {
+	case PoolHealthNewParamsTypeHTTP, PoolHealthNewParamsTypeHTTPS, PoolHealthNewParamsTypeTcp, PoolHealthNewParamsTypeUdpIcmp, PoolHealthNewParamsTypeIcmpPing, PoolHealthNewParamsTypeSmtp:
+		return true
+	}
+	return false
+}
+
 type PoolHealthNewResponseEnvelope struct {
 	Errors   []PoolHealthNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PoolHealthNewResponseEnvelopeMessages `json:"messages,required"`
@@ -255,6 +263,14 @@ type PoolHealthNewResponseEnvelopeSuccess bool
 const (
 	PoolHealthNewResponseEnvelopeSuccessTrue PoolHealthNewResponseEnvelopeSuccess = true
 )
+
+func (r PoolHealthNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolHealthNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PoolHealthGetParams struct {
 	// Identifier
@@ -343,3 +359,11 @@ type PoolHealthGetResponseEnvelopeSuccess bool
 const (
 	PoolHealthGetResponseEnvelopeSuccessTrue PoolHealthGetResponseEnvelopeSuccess = true
 )
+
+func (r PoolHealthGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolHealthGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -375,6 +375,14 @@ const (
 	ScriptUpdateParamsMetadataPlacementModeSmart ScriptUpdateParamsMetadataPlacementMode = "smart"
 )
 
+func (r ScriptUpdateParamsMetadataPlacementMode) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataPlacementModeSmart:
+		return true
+	}
+	return false
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type ScriptUpdateParamsMetadataTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -396,6 +404,14 @@ const (
 	ScriptUpdateParamsMetadataUsageModelBundled ScriptUpdateParamsMetadataUsageModel = "bundled"
 	ScriptUpdateParamsMetadataUsageModelUnbound ScriptUpdateParamsMetadataUsageModel = "unbound"
 )
+
+func (r ScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataUsageModelBundled, ScriptUpdateParamsMetadataUsageModelUnbound:
+		return true
+	}
+	return false
+}
 
 type ScriptUpdateResponseEnvelope struct {
 	Errors   []ScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -477,6 +493,14 @@ type ScriptUpdateResponseEnvelopeSuccess bool
 const (
 	ScriptUpdateResponseEnvelopeSuccessTrue ScriptUpdateResponseEnvelopeSuccess = true
 )
+
+func (r ScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ScriptListParams struct {
 	// Identifier
@@ -563,6 +587,14 @@ type ScriptListResponseEnvelopeSuccess bool
 const (
 	ScriptListResponseEnvelopeSuccessTrue ScriptListResponseEnvelopeSuccess = true
 )
+
+func (r ScriptListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ScriptDeleteParams struct {
 	// Identifier

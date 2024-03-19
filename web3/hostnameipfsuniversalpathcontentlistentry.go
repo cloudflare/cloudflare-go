@@ -142,6 +142,14 @@ const (
 	DwebConfigContentListEntryTypeContentPath DwebConfigContentListEntryType = "content_path"
 )
 
+func (r DwebConfigContentListEntryType) IsKnown() bool {
+	switch r {
+	case DwebConfigContentListEntryTypeCid, DwebConfigContentListEntryTypeContentPath:
+		return true
+	}
+	return false
+}
+
 // Content list entry to be blocked.
 type DwebConfigContentListEntryParam struct {
 	// CID or content path of content to block.
@@ -221,6 +229,14 @@ const (
 	HostnameIPFSUniversalPathContentListEntryNewParamsTypeCid         HostnameIPFSUniversalPathContentListEntryNewParamsType = "cid"
 	HostnameIPFSUniversalPathContentListEntryNewParamsTypeContentPath HostnameIPFSUniversalPathContentListEntryNewParamsType = "content_path"
 )
+
+func (r HostnameIPFSUniversalPathContentListEntryNewParamsType) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListEntryNewParamsTypeCid, HostnameIPFSUniversalPathContentListEntryNewParamsTypeContentPath:
+		return true
+	}
+	return false
+}
 
 type HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -307,6 +323,14 @@ const (
 	HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccessTrue HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccess = true
 )
 
+func (r HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HostnameIPFSUniversalPathContentListEntryUpdateParams struct {
 	// CID or content path of content to block.
 	Content param.Field[string] `json:"content,required"`
@@ -327,6 +351,14 @@ const (
 	HostnameIPFSUniversalPathContentListEntryUpdateParamsTypeCid         HostnameIPFSUniversalPathContentListEntryUpdateParamsType = "cid"
 	HostnameIPFSUniversalPathContentListEntryUpdateParamsTypeContentPath HostnameIPFSUniversalPathContentListEntryUpdateParamsType = "content_path"
 )
+
+func (r HostnameIPFSUniversalPathContentListEntryUpdateParamsType) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListEntryUpdateParamsTypeCid, HostnameIPFSUniversalPathContentListEntryUpdateParamsTypeContentPath:
+		return true
+	}
+	return false
+}
 
 type HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -413,6 +445,14 @@ const (
 	HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccessTrue HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccess = true
 )
 
+func (r HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HostnameIPFSUniversalPathContentListEntryListResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeMessages `json:"messages,required"`
@@ -498,6 +538,14 @@ type HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccess bool
 const (
 	HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccessTrue HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccess = true
 )
+
+func (r HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -615,6 +663,14 @@ const (
 	HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccessTrue HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess = true
 )
 
+func (r HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeMessages `json:"messages,required"`
@@ -699,3 +755,11 @@ type HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeSuccess bool
 const (
 	HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeSuccessTrue HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeSuccess = true
 )
+
+func (r HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

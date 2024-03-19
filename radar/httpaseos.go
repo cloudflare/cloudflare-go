@@ -264,12 +264,28 @@ const (
 	HTTPAseOSGetParamsOSSmartTv  HTTPAseOSGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPAseOSGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetParamsOSWindows, HTTPAseOSGetParamsOSMacosx, HTTPAseOSGetParamsOSIos, HTTPAseOSGetParamsOSAndroid, HTTPAseOSGetParamsOSChromeos, HTTPAseOSGetParamsOSLinux, HTTPAseOSGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseOSGetParamsBotClass string
 
 const (
 	HTTPAseOSGetParamsBotClassLikelyAutomated HTTPAseOSGetParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPAseOSGetParamsBotClassLikelyHuman     HTTPAseOSGetParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPAseOSGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetParamsBotClassLikelyAutomated, HTTPAseOSGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPAseOSGetParamsDateRange string
 
@@ -291,6 +307,14 @@ const (
 	HTTPAseOSGetParamsDateRange24wControl HTTPAseOSGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPAseOSGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetParamsDateRange1d, HTTPAseOSGetParamsDateRange2d, HTTPAseOSGetParamsDateRange7d, HTTPAseOSGetParamsDateRange14d, HTTPAseOSGetParamsDateRange28d, HTTPAseOSGetParamsDateRange12w, HTTPAseOSGetParamsDateRange24w, HTTPAseOSGetParamsDateRange52w, HTTPAseOSGetParamsDateRange1dControl, HTTPAseOSGetParamsDateRange2dControl, HTTPAseOSGetParamsDateRange7dControl, HTTPAseOSGetParamsDateRange14dControl, HTTPAseOSGetParamsDateRange28dControl, HTTPAseOSGetParamsDateRange12wControl, HTTPAseOSGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPAseOSGetParamsDeviceType string
 
 const (
@@ -298,6 +322,14 @@ const (
 	HTTPAseOSGetParamsDeviceTypeMobile  HTTPAseOSGetParamsDeviceType = "MOBILE"
 	HTTPAseOSGetParamsDeviceTypeOther   HTTPAseOSGetParamsDeviceType = "OTHER"
 )
+
+func (r HTTPAseOSGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetParamsDeviceTypeDesktop, HTTPAseOSGetParamsDeviceTypeMobile, HTTPAseOSGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPAseOSGetParamsFormat string
@@ -307,12 +339,28 @@ const (
 	HTTPAseOSGetParamsFormatCsv  HTTPAseOSGetParamsFormat = "CSV"
 )
 
+func (r HTTPAseOSGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetParamsFormatJson, HTTPAseOSGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseOSGetParamsHTTPProtocol string
 
 const (
 	HTTPAseOSGetParamsHTTPProtocolHTTP  HTTPAseOSGetParamsHTTPProtocol = "HTTP"
 	HTTPAseOSGetParamsHTTPProtocolHTTPS HTTPAseOSGetParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPAseOSGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetParamsHTTPProtocolHTTP, HTTPAseOSGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPAseOSGetParamsHTTPVersion string
 
@@ -322,12 +370,28 @@ const (
 	HTTPAseOSGetParamsHTTPVersionHttPv3 HTTPAseOSGetParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPAseOSGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetParamsHTTPVersionHttPv1, HTTPAseOSGetParamsHTTPVersionHttPv2, HTTPAseOSGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPAseOSGetParamsIPVersion string
 
 const (
 	HTTPAseOSGetParamsIPVersionIPv4 HTTPAseOSGetParamsIPVersion = "IPv4"
 	HTTPAseOSGetParamsIPVersionIPv6 HTTPAseOSGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPAseOSGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetParamsIPVersionIPv4, HTTPAseOSGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPAseOSGetParamsTLSVersion string
 
@@ -338,6 +402,14 @@ const (
 	HTTPAseOSGetParamsTLSVersionTlSv1_3  HTTPAseOSGetParamsTLSVersion = "TLSv1_3"
 	HTTPAseOSGetParamsTLSVersionTlSvQuic HTTPAseOSGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPAseOSGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseOSGetParamsTLSVersionTlSv1_0, HTTPAseOSGetParamsTLSVersionTlSv1_1, HTTPAseOSGetParamsTLSVersionTlSv1_2, HTTPAseOSGetParamsTLSVersionTlSv1_3, HTTPAseOSGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPAseOSGetResponseEnvelope struct {
 	Result  HTTPAseOSGetResponse             `json:"result,required"`

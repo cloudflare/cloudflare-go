@@ -5324,6 +5324,14 @@ const (
 	AccessGroupNewResponseEnvelopeSuccessTrue AccessGroupNewResponseEnvelopeSuccess = true
 )
 
+func (r AccessGroupNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessGroupNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessGroupUpdateParams struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
@@ -6668,6 +6676,14 @@ const (
 	AccessGroupUpdateResponseEnvelopeSuccessTrue AccessGroupUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AccessGroupUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessGroupUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessGroupListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -6757,6 +6773,14 @@ type AccessGroupListResponseEnvelopeSuccess bool
 const (
 	AccessGroupListResponseEnvelopeSuccessTrue AccessGroupListResponseEnvelopeSuccess = true
 )
+
+func (r AccessGroupListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessGroupListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessGroupListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -6877,6 +6901,14 @@ const (
 	AccessGroupDeleteResponseEnvelopeSuccessTrue AccessGroupDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessGroupDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessGroupDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessGroupGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -6964,3 +6996,11 @@ type AccessGroupGetResponseEnvelopeSuccess bool
 const (
 	AccessGroupGetResponseEnvelopeSuccessTrue AccessGroupGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessGroupGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessGroupGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

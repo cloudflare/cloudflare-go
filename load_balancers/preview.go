@@ -130,3 +130,11 @@ type PreviewGetResponseEnvelopeSuccess bool
 const (
 	PreviewGetResponseEnvelopeSuccessTrue PreviewGetResponseEnvelopeSuccess = true
 )
+
+func (r PreviewGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PreviewGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

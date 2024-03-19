@@ -158,3 +158,11 @@ type ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess bool
 const (
 	ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessTrue ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess = true
 )
+
+func (r ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

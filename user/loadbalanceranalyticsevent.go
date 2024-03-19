@@ -183,6 +183,14 @@ const (
 	LoadBalancerAnalyticsEventListResponseEnvelopeSuccessTrue LoadBalancerAnalyticsEventListResponseEnvelopeSuccess = true
 )
 
+func (r LoadBalancerAnalyticsEventListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerAnalyticsEventListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerAnalyticsEventListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

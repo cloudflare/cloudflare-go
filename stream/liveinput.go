@@ -216,6 +216,14 @@ const (
 	StreamLiveInputRecordingModeAutomatic StreamLiveInputRecordingMode = "automatic"
 )
 
+func (r StreamLiveInputRecordingMode) IsKnown() bool {
+	switch r {
+	case StreamLiveInputRecordingModeOff, StreamLiveInputRecordingModeAutomatic:
+		return true
+	}
+	return false
+}
+
 // Details for streaming to an live input using RTMPS.
 type StreamLiveInputRtmps struct {
 	// The secret key to use when streaming via RTMPS to a live input.
@@ -339,6 +347,14 @@ const (
 	StreamLiveInputStatusFailedToReconnect        StreamLiveInputStatus = "failed_to_reconnect"
 	StreamLiveInputStatusNewConfigurationAccepted StreamLiveInputStatus = "new_configuration_accepted"
 )
+
+func (r StreamLiveInputStatus) IsKnown() bool {
+	switch r {
+	case StreamLiveInputStatusConnected, StreamLiveInputStatusReconnected, StreamLiveInputStatusReconnecting, StreamLiveInputStatusClientDisconnect, StreamLiveInputStatusTTLExceeded, StreamLiveInputStatusFailedToConnect, StreamLiveInputStatusFailedToReconnect, StreamLiveInputStatusNewConfigurationAccepted:
+		return true
+	}
+	return false
+}
 
 // Details for streaming to a live input using WebRTC.
 type StreamLiveInputWebRtc struct {
@@ -512,6 +528,14 @@ const (
 	LiveInputNewParamsRecordingModeAutomatic LiveInputNewParamsRecordingMode = "automatic"
 )
 
+func (r LiveInputNewParamsRecordingMode) IsKnown() bool {
+	switch r {
+	case LiveInputNewParamsRecordingModeOff, LiveInputNewParamsRecordingModeAutomatic:
+		return true
+	}
+	return false
+}
+
 type LiveInputNewResponseEnvelope struct {
 	Errors   []LiveInputNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LiveInputNewResponseEnvelopeMessages `json:"messages,required"`
@@ -594,6 +618,14 @@ const (
 	LiveInputNewResponseEnvelopeSuccessTrue LiveInputNewResponseEnvelopeSuccess = true
 )
 
+func (r LiveInputNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LiveInputNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LiveInputUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -653,6 +685,14 @@ const (
 	LiveInputUpdateParamsRecordingModeOff       LiveInputUpdateParamsRecordingMode = "off"
 	LiveInputUpdateParamsRecordingModeAutomatic LiveInputUpdateParamsRecordingMode = "automatic"
 )
+
+func (r LiveInputUpdateParamsRecordingMode) IsKnown() bool {
+	switch r {
+	case LiveInputUpdateParamsRecordingModeOff, LiveInputUpdateParamsRecordingModeAutomatic:
+		return true
+	}
+	return false
+}
 
 type LiveInputUpdateResponseEnvelope struct {
 	Errors   []LiveInputUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -735,6 +775,14 @@ type LiveInputUpdateResponseEnvelopeSuccess bool
 const (
 	LiveInputUpdateResponseEnvelopeSuccessTrue LiveInputUpdateResponseEnvelopeSuccess = true
 )
+
+func (r LiveInputUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LiveInputUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LiveInputListParams struct {
 	// Identifier
@@ -833,6 +881,14 @@ const (
 	LiveInputListResponseEnvelopeSuccessTrue LiveInputListResponseEnvelopeSuccess = true
 )
 
+func (r LiveInputListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LiveInputListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LiveInputDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -924,3 +980,11 @@ type LiveInputGetResponseEnvelopeSuccess bool
 const (
 	LiveInputGetResponseEnvelopeSuccessTrue LiveInputGetResponseEnvelopeSuccess = true
 )
+
+func (r LiveInputGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LiveInputGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

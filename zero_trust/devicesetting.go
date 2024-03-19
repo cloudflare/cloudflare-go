@@ -185,6 +185,14 @@ const (
 	DeviceSettingUpdateResponseEnvelopeSuccessTrue DeviceSettingUpdateResponseEnvelopeSuccess = true
 )
 
+func (r DeviceSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceSettingUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DeviceSettingListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -269,3 +277,11 @@ type DeviceSettingListResponseEnvelopeSuccess bool
 const (
 	DeviceSettingListResponseEnvelopeSuccessTrue DeviceSettingListResponseEnvelopeSuccess = true
 )
+
+func (r DeviceSettingListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceSettingListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

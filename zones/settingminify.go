@@ -107,6 +107,14 @@ const (
 	ZonesMinifyIDMinify ZonesMinifyID = "minify"
 )
 
+func (r ZonesMinifyID) IsKnown() bool {
+	switch r {
+	case ZonesMinifyIDMinify:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesMinifyValue struct {
 	// Automatically minify all CSS files for your website.
@@ -144,6 +152,14 @@ const (
 	ZonesMinifyValueCssOff ZonesMinifyValueCss = "off"
 )
 
+func (r ZonesMinifyValueCss) IsKnown() bool {
+	switch r {
+	case ZonesMinifyValueCssOn, ZonesMinifyValueCssOff:
+		return true
+	}
+	return false
+}
+
 // Automatically minify all HTML files for your website.
 type ZonesMinifyValueHTML string
 
@@ -151,6 +167,14 @@ const (
 	ZonesMinifyValueHTMLOn  ZonesMinifyValueHTML = "on"
 	ZonesMinifyValueHTMLOff ZonesMinifyValueHTML = "off"
 )
+
+func (r ZonesMinifyValueHTML) IsKnown() bool {
+	switch r {
+	case ZonesMinifyValueHTMLOn, ZonesMinifyValueHTMLOff:
+		return true
+	}
+	return false
+}
 
 // Automatically minify all JavaScript files for your website.
 type ZonesMinifyValueJs string
@@ -160,6 +184,14 @@ const (
 	ZonesMinifyValueJsOff ZonesMinifyValueJs = "off"
 )
 
+func (r ZonesMinifyValueJs) IsKnown() bool {
+	switch r {
+	case ZonesMinifyValueJsOn, ZonesMinifyValueJsOff:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesMinifyEditable bool
@@ -168,6 +200,14 @@ const (
 	ZonesMinifyEditableTrue  ZonesMinifyEditable = true
 	ZonesMinifyEditableFalse ZonesMinifyEditable = false
 )
+
+func (r ZonesMinifyEditable) IsKnown() bool {
+	switch r {
+	case ZonesMinifyEditableTrue, ZonesMinifyEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Automatically minify certain assets for your website. Refer to
 // [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
@@ -232,6 +272,14 @@ const (
 	SettingMinifyEditParamsValueCssOff SettingMinifyEditParamsValueCss = "off"
 )
 
+func (r SettingMinifyEditParamsValueCss) IsKnown() bool {
+	switch r {
+	case SettingMinifyEditParamsValueCssOn, SettingMinifyEditParamsValueCssOff:
+		return true
+	}
+	return false
+}
+
 // Automatically minify all HTML files for your website.
 type SettingMinifyEditParamsValueHTML string
 
@@ -240,6 +288,14 @@ const (
 	SettingMinifyEditParamsValueHTMLOff SettingMinifyEditParamsValueHTML = "off"
 )
 
+func (r SettingMinifyEditParamsValueHTML) IsKnown() bool {
+	switch r {
+	case SettingMinifyEditParamsValueHTMLOn, SettingMinifyEditParamsValueHTMLOff:
+		return true
+	}
+	return false
+}
+
 // Automatically minify all JavaScript files for your website.
 type SettingMinifyEditParamsValueJs string
 
@@ -247,6 +303,14 @@ const (
 	SettingMinifyEditParamsValueJsOn  SettingMinifyEditParamsValueJs = "on"
 	SettingMinifyEditParamsValueJsOff SettingMinifyEditParamsValueJs = "off"
 )
+
+func (r SettingMinifyEditParamsValueJs) IsKnown() bool {
+	switch r {
+	case SettingMinifyEditParamsValueJsOn, SettingMinifyEditParamsValueJsOff:
+		return true
+	}
+	return false
+}
 
 type SettingMinifyEditResponseEnvelope struct {
 	Errors   []SettingMinifyEditResponseEnvelopeErrors   `json:"errors,required"`

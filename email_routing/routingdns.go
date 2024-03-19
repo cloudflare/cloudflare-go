@@ -111,6 +111,14 @@ const (
 	EmailDNSRecordTTLNumber1 EmailDNSRecordTTLNumber = 1
 )
 
+func (r EmailDNSRecordTTLNumber) IsKnown() bool {
+	switch r {
+	case EmailDNSRecordTTLNumber1:
+		return true
+	}
+	return false
+}
+
 // DNS record type.
 type EmailDNSRecordType string
 
@@ -134,6 +142,14 @@ const (
 	EmailDNSRecordTypeTLSA   EmailDNSRecordType = "TLSA"
 	EmailDNSRecordTypeURI    EmailDNSRecordType = "URI"
 )
+
+func (r EmailDNSRecordType) IsKnown() bool {
+	switch r {
+	case EmailDNSRecordTypeA, EmailDNSRecordTypeAAAA, EmailDNSRecordTypeCNAME, EmailDNSRecordTypeHTTPS, EmailDNSRecordTypeTXT, EmailDNSRecordTypeSRV, EmailDNSRecordTypeLOC, EmailDNSRecordTypeMX, EmailDNSRecordTypeNS, EmailDNSRecordTypeCert, EmailDNSRecordTypeDNSKEY, EmailDNSRecordTypeDS, EmailDNSRecordTypeNAPTR, EmailDNSRecordTypeSmimea, EmailDNSRecordTypeSSHFP, EmailDNSRecordTypeSVCB, EmailDNSRecordTypeTLSA, EmailDNSRecordTypeURI:
+		return true
+	}
+	return false
+}
 
 type RoutingDNSGetResponseEnvelope struct {
 	Errors   []RoutingDNSGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -217,6 +233,14 @@ type RoutingDNSGetResponseEnvelopeSuccess bool
 const (
 	RoutingDNSGetResponseEnvelopeSuccessTrue RoutingDNSGetResponseEnvelopeSuccess = true
 )
+
+func (r RoutingDNSGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingDNSGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RoutingDNSGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

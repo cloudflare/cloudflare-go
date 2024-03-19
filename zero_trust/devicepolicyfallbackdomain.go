@@ -209,6 +209,14 @@ const (
 	DevicePolicyFallbackDomainUpdateResponseEnvelopeSuccessTrue DevicePolicyFallbackDomainUpdateResponseEnvelopeSuccess = true
 )
 
+func (r DevicePolicyFallbackDomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyFallbackDomainUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePolicyFallbackDomainUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -328,6 +336,14 @@ const (
 	DevicePolicyFallbackDomainListResponseEnvelopeSuccessTrue DevicePolicyFallbackDomainListResponseEnvelopeSuccess = true
 )
 
+func (r DevicePolicyFallbackDomainListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyFallbackDomainListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePolicyFallbackDomainListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -446,6 +462,14 @@ type DevicePolicyFallbackDomainGetResponseEnvelopeSuccess bool
 const (
 	DevicePolicyFallbackDomainGetResponseEnvelopeSuccessTrue DevicePolicyFallbackDomainGetResponseEnvelopeSuccess = true
 )
+
+func (r DevicePolicyFallbackDomainGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyFallbackDomainGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePolicyFallbackDomainGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

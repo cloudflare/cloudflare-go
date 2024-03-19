@@ -431,6 +431,14 @@ const (
 	AccessUserActiveSessionListResponseEnvelopeSuccessTrue AccessUserActiveSessionListResponseEnvelopeSuccess = true
 )
 
+func (r AccessUserActiveSessionListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessUserActiveSessionListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessUserActiveSessionListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -542,3 +550,11 @@ type AccessUserActiveSessionGetResponseEnvelopeSuccess bool
 const (
 	AccessUserActiveSessionGetResponseEnvelopeSuccessTrue AccessUserActiveSessionGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessUserActiveSessionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessUserActiveSessionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

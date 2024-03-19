@@ -216,6 +216,14 @@ const (
 	FallbackOriginUpdateResponseEnvelopeSuccessTrue FallbackOriginUpdateResponseEnvelopeSuccess = true
 )
 
+func (r FallbackOriginUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FallbackOriginUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FallbackOriginDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -302,6 +310,14 @@ const (
 	FallbackOriginDeleteResponseEnvelopeSuccessTrue FallbackOriginDeleteResponseEnvelopeSuccess = true
 )
 
+func (r FallbackOriginDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FallbackOriginDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FallbackOriginGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -387,3 +403,11 @@ type FallbackOriginGetResponseEnvelopeSuccess bool
 const (
 	FallbackOriginGetResponseEnvelopeSuccessTrue FallbackOriginGetResponseEnvelopeSuccess = true
 )
+
+func (r FallbackOriginGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FallbackOriginGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

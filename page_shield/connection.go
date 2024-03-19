@@ -159,6 +159,14 @@ const (
 	ConnectionListParamsDirectionDesc ConnectionListParamsDirection = "desc"
 )
 
+func (r ConnectionListParamsDirection) IsKnown() bool {
+	switch r {
+	case ConnectionListParamsDirectionAsc, ConnectionListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Export the list of connections as a file. Cannot be used with per_page or page
 // options.
 type ConnectionListParamsExport string
@@ -167,6 +175,14 @@ const (
 	ConnectionListParamsExportCsv ConnectionListParamsExport = "csv"
 )
 
+func (r ConnectionListParamsExport) IsKnown() bool {
+	switch r {
+	case ConnectionListParamsExportCsv:
+		return true
+	}
+	return false
+}
+
 // The field used to sort returned connections.
 type ConnectionListParamsOrderBy string
 
@@ -174,6 +190,14 @@ const (
 	ConnectionListParamsOrderByFirstSeenAt ConnectionListParamsOrderBy = "first_seen_at"
 	ConnectionListParamsOrderByLastSeenAt  ConnectionListParamsOrderBy = "last_seen_at"
 )
+
+func (r ConnectionListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case ConnectionListParamsOrderByFirstSeenAt, ConnectionListParamsOrderByLastSeenAt:
+		return true
+	}
+	return false
+}
 
 type ConnectionListResponseEnvelope struct {
 	Errors   []ConnectionListResponseEnvelopeErrors   `json:"errors,required"`
@@ -257,6 +281,14 @@ type ConnectionListResponseEnvelopeSuccess bool
 const (
 	ConnectionListResponseEnvelopeSuccessTrue ConnectionListResponseEnvelopeSuccess = true
 )
+
+func (r ConnectionListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConnectionListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ConnectionListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

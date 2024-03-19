@@ -101,6 +101,14 @@ const (
 	ZonesHTTP2IDHTTP2 ZonesHTTP2ID = "http2"
 )
 
+func (r ZonesHTTP2ID) IsKnown() bool {
+	switch r {
+	case ZonesHTTP2IDHTTP2:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesHTTP2Value string
 
@@ -108,6 +116,14 @@ const (
 	ZonesHTTP2ValueOn  ZonesHTTP2Value = "on"
 	ZonesHTTP2ValueOff ZonesHTTP2Value = "off"
 )
+
+func (r ZonesHTTP2Value) IsKnown() bool {
+	switch r {
+	case ZonesHTTP2ValueOn, ZonesHTTP2ValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -117,6 +133,14 @@ const (
 	ZonesHTTP2EditableTrue  ZonesHTTP2Editable = true
 	ZonesHTTP2EditableFalse ZonesHTTP2Editable = false
 )
+
+func (r ZonesHTTP2Editable) IsKnown() bool {
+	switch r {
+	case ZonesHTTP2EditableTrue, ZonesHTTP2EditableFalse:
+		return true
+	}
+	return false
+}
 
 // HTTP2 enabled for this zone.
 type ZonesHTTP2Param struct {
@@ -150,6 +174,14 @@ const (
 	SettingHTTP2EditParamsValueOn  SettingHTTP2EditParamsValue = "on"
 	SettingHTTP2EditParamsValueOff SettingHTTP2EditParamsValue = "off"
 )
+
+func (r SettingHTTP2EditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingHTTP2EditParamsValueOn, SettingHTTP2EditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingHTTP2EditResponseEnvelope struct {
 	Errors   []SettingHTTP2EditResponseEnvelopeErrors   `json:"errors,required"`

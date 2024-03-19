@@ -156,3 +156,11 @@ type ServiceListResponseEnvelopeSuccess bool
 const (
 	ServiceListResponseEnvelopeSuccessTrue ServiceListResponseEnvelopeSuccess = true
 )
+
+func (r ServiceListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ServiceListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

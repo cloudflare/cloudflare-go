@@ -134,3 +134,11 @@ type SettingListResponseEnvelopeSuccess bool
 const (
 	SettingListResponseEnvelopeSuccessTrue SettingListResponseEnvelopeSuccess = true
 )
+
+func (r SettingListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

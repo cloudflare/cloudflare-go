@@ -1103,6 +1103,14 @@ const (
 	EmailRoutingSummaryARCParamsDateRange24wControl EmailRoutingSummaryARCParamsDateRange = "24wControl"
 )
 
+func (r EmailRoutingSummaryARCParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryARCParamsDateRange1d, EmailRoutingSummaryARCParamsDateRange2d, EmailRoutingSummaryARCParamsDateRange7d, EmailRoutingSummaryARCParamsDateRange14d, EmailRoutingSummaryARCParamsDateRange28d, EmailRoutingSummaryARCParamsDateRange12w, EmailRoutingSummaryARCParamsDateRange24w, EmailRoutingSummaryARCParamsDateRange52w, EmailRoutingSummaryARCParamsDateRange1dControl, EmailRoutingSummaryARCParamsDateRange2dControl, EmailRoutingSummaryARCParamsDateRange7dControl, EmailRoutingSummaryARCParamsDateRange14dControl, EmailRoutingSummaryARCParamsDateRange28dControl, EmailRoutingSummaryARCParamsDateRange12wControl, EmailRoutingSummaryARCParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryARCParamsDKIM string
 
 const (
@@ -1110,6 +1118,14 @@ const (
 	EmailRoutingSummaryARCParamsDKIMNone EmailRoutingSummaryARCParamsDKIM = "NONE"
 	EmailRoutingSummaryARCParamsDKIMFail EmailRoutingSummaryARCParamsDKIM = "FAIL"
 )
+
+func (r EmailRoutingSummaryARCParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryARCParamsDKIMPass, EmailRoutingSummaryARCParamsDKIMNone, EmailRoutingSummaryARCParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryARCParamsDMARC string
 
@@ -1119,12 +1135,28 @@ const (
 	EmailRoutingSummaryARCParamsDMARCFail EmailRoutingSummaryARCParamsDMARC = "FAIL"
 )
 
+func (r EmailRoutingSummaryARCParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryARCParamsDMARCPass, EmailRoutingSummaryARCParamsDMARCNone, EmailRoutingSummaryARCParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryARCParamsEncrypted string
 
 const (
 	EmailRoutingSummaryARCParamsEncryptedEncrypted    EmailRoutingSummaryARCParamsEncrypted = "ENCRYPTED"
 	EmailRoutingSummaryARCParamsEncryptedNotEncrypted EmailRoutingSummaryARCParamsEncrypted = "NOT_ENCRYPTED"
 )
+
+func (r EmailRoutingSummaryARCParamsEncrypted) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryARCParamsEncryptedEncrypted, EmailRoutingSummaryARCParamsEncryptedNotEncrypted:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type EmailRoutingSummaryARCParamsFormat string
@@ -1134,12 +1166,28 @@ const (
 	EmailRoutingSummaryARCParamsFormatCsv  EmailRoutingSummaryARCParamsFormat = "CSV"
 )
 
+func (r EmailRoutingSummaryARCParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryARCParamsFormatJson, EmailRoutingSummaryARCParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryARCParamsIPVersion string
 
 const (
 	EmailRoutingSummaryARCParamsIPVersionIPv4 EmailRoutingSummaryARCParamsIPVersion = "IPv4"
 	EmailRoutingSummaryARCParamsIPVersionIPv6 EmailRoutingSummaryARCParamsIPVersion = "IPv6"
 )
+
+func (r EmailRoutingSummaryARCParamsIPVersion) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryARCParamsIPVersionIPv4, EmailRoutingSummaryARCParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryARCParamsSPF string
 
@@ -1148,6 +1196,14 @@ const (
 	EmailRoutingSummaryARCParamsSPFNone EmailRoutingSummaryARCParamsSPF = "NONE"
 	EmailRoutingSummaryARCParamsSPFFail EmailRoutingSummaryARCParamsSPF = "FAIL"
 )
+
+func (r EmailRoutingSummaryARCParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryARCParamsSPFPass, EmailRoutingSummaryARCParamsSPFNone, EmailRoutingSummaryARCParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryARCResponseEnvelope struct {
 	Result  EmailRoutingSummaryARCResponse             `json:"result,required"`
@@ -1214,6 +1270,14 @@ const (
 	EmailRoutingSummaryDKIMParamsARCFail EmailRoutingSummaryDKIMParamsARC = "FAIL"
 )
 
+func (r EmailRoutingSummaryDKIMParamsARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDKIMParamsARCPass, EmailRoutingSummaryDKIMParamsARCNone, EmailRoutingSummaryDKIMParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryDKIMParamsDateRange string
 
 const (
@@ -1234,6 +1298,14 @@ const (
 	EmailRoutingSummaryDKIMParamsDateRange24wControl EmailRoutingSummaryDKIMParamsDateRange = "24wControl"
 )
 
+func (r EmailRoutingSummaryDKIMParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDKIMParamsDateRange1d, EmailRoutingSummaryDKIMParamsDateRange2d, EmailRoutingSummaryDKIMParamsDateRange7d, EmailRoutingSummaryDKIMParamsDateRange14d, EmailRoutingSummaryDKIMParamsDateRange28d, EmailRoutingSummaryDKIMParamsDateRange12w, EmailRoutingSummaryDKIMParamsDateRange24w, EmailRoutingSummaryDKIMParamsDateRange52w, EmailRoutingSummaryDKIMParamsDateRange1dControl, EmailRoutingSummaryDKIMParamsDateRange2dControl, EmailRoutingSummaryDKIMParamsDateRange7dControl, EmailRoutingSummaryDKIMParamsDateRange14dControl, EmailRoutingSummaryDKIMParamsDateRange28dControl, EmailRoutingSummaryDKIMParamsDateRange12wControl, EmailRoutingSummaryDKIMParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryDKIMParamsDMARC string
 
 const (
@@ -1242,12 +1314,28 @@ const (
 	EmailRoutingSummaryDKIMParamsDMARCFail EmailRoutingSummaryDKIMParamsDMARC = "FAIL"
 )
 
+func (r EmailRoutingSummaryDKIMParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDKIMParamsDMARCPass, EmailRoutingSummaryDKIMParamsDMARCNone, EmailRoutingSummaryDKIMParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryDKIMParamsEncrypted string
 
 const (
 	EmailRoutingSummaryDKIMParamsEncryptedEncrypted    EmailRoutingSummaryDKIMParamsEncrypted = "ENCRYPTED"
 	EmailRoutingSummaryDKIMParamsEncryptedNotEncrypted EmailRoutingSummaryDKIMParamsEncrypted = "NOT_ENCRYPTED"
 )
+
+func (r EmailRoutingSummaryDKIMParamsEncrypted) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDKIMParamsEncryptedEncrypted, EmailRoutingSummaryDKIMParamsEncryptedNotEncrypted:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type EmailRoutingSummaryDKIMParamsFormat string
@@ -1257,12 +1345,28 @@ const (
 	EmailRoutingSummaryDKIMParamsFormatCsv  EmailRoutingSummaryDKIMParamsFormat = "CSV"
 )
 
+func (r EmailRoutingSummaryDKIMParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDKIMParamsFormatJson, EmailRoutingSummaryDKIMParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryDKIMParamsIPVersion string
 
 const (
 	EmailRoutingSummaryDKIMParamsIPVersionIPv4 EmailRoutingSummaryDKIMParamsIPVersion = "IPv4"
 	EmailRoutingSummaryDKIMParamsIPVersionIPv6 EmailRoutingSummaryDKIMParamsIPVersion = "IPv6"
 )
+
+func (r EmailRoutingSummaryDKIMParamsIPVersion) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDKIMParamsIPVersionIPv4, EmailRoutingSummaryDKIMParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryDKIMParamsSPF string
 
@@ -1271,6 +1375,14 @@ const (
 	EmailRoutingSummaryDKIMParamsSPFNone EmailRoutingSummaryDKIMParamsSPF = "NONE"
 	EmailRoutingSummaryDKIMParamsSPFFail EmailRoutingSummaryDKIMParamsSPF = "FAIL"
 )
+
+func (r EmailRoutingSummaryDKIMParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDKIMParamsSPFPass, EmailRoutingSummaryDKIMParamsSPFNone, EmailRoutingSummaryDKIMParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryDKIMResponseEnvelope struct {
 	Result  EmailRoutingSummaryDKIMResponse             `json:"result,required"`
@@ -1337,6 +1449,14 @@ const (
 	EmailRoutingSummaryDMARCParamsARCFail EmailRoutingSummaryDMARCParamsARC = "FAIL"
 )
 
+func (r EmailRoutingSummaryDMARCParamsARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDMARCParamsARCPass, EmailRoutingSummaryDMARCParamsARCNone, EmailRoutingSummaryDMARCParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryDMARCParamsDateRange string
 
 const (
@@ -1357,6 +1477,14 @@ const (
 	EmailRoutingSummaryDMARCParamsDateRange24wControl EmailRoutingSummaryDMARCParamsDateRange = "24wControl"
 )
 
+func (r EmailRoutingSummaryDMARCParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDMARCParamsDateRange1d, EmailRoutingSummaryDMARCParamsDateRange2d, EmailRoutingSummaryDMARCParamsDateRange7d, EmailRoutingSummaryDMARCParamsDateRange14d, EmailRoutingSummaryDMARCParamsDateRange28d, EmailRoutingSummaryDMARCParamsDateRange12w, EmailRoutingSummaryDMARCParamsDateRange24w, EmailRoutingSummaryDMARCParamsDateRange52w, EmailRoutingSummaryDMARCParamsDateRange1dControl, EmailRoutingSummaryDMARCParamsDateRange2dControl, EmailRoutingSummaryDMARCParamsDateRange7dControl, EmailRoutingSummaryDMARCParamsDateRange14dControl, EmailRoutingSummaryDMARCParamsDateRange28dControl, EmailRoutingSummaryDMARCParamsDateRange12wControl, EmailRoutingSummaryDMARCParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryDMARCParamsDKIM string
 
 const (
@@ -1365,12 +1493,28 @@ const (
 	EmailRoutingSummaryDMARCParamsDKIMFail EmailRoutingSummaryDMARCParamsDKIM = "FAIL"
 )
 
+func (r EmailRoutingSummaryDMARCParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDMARCParamsDKIMPass, EmailRoutingSummaryDMARCParamsDKIMNone, EmailRoutingSummaryDMARCParamsDKIMFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryDMARCParamsEncrypted string
 
 const (
 	EmailRoutingSummaryDMARCParamsEncryptedEncrypted    EmailRoutingSummaryDMARCParamsEncrypted = "ENCRYPTED"
 	EmailRoutingSummaryDMARCParamsEncryptedNotEncrypted EmailRoutingSummaryDMARCParamsEncrypted = "NOT_ENCRYPTED"
 )
+
+func (r EmailRoutingSummaryDMARCParamsEncrypted) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDMARCParamsEncryptedEncrypted, EmailRoutingSummaryDMARCParamsEncryptedNotEncrypted:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type EmailRoutingSummaryDMARCParamsFormat string
@@ -1380,12 +1524,28 @@ const (
 	EmailRoutingSummaryDMARCParamsFormatCsv  EmailRoutingSummaryDMARCParamsFormat = "CSV"
 )
 
+func (r EmailRoutingSummaryDMARCParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDMARCParamsFormatJson, EmailRoutingSummaryDMARCParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryDMARCParamsIPVersion string
 
 const (
 	EmailRoutingSummaryDMARCParamsIPVersionIPv4 EmailRoutingSummaryDMARCParamsIPVersion = "IPv4"
 	EmailRoutingSummaryDMARCParamsIPVersionIPv6 EmailRoutingSummaryDMARCParamsIPVersion = "IPv6"
 )
+
+func (r EmailRoutingSummaryDMARCParamsIPVersion) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDMARCParamsIPVersionIPv4, EmailRoutingSummaryDMARCParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryDMARCParamsSPF string
 
@@ -1394,6 +1554,14 @@ const (
 	EmailRoutingSummaryDMARCParamsSPFNone EmailRoutingSummaryDMARCParamsSPF = "NONE"
 	EmailRoutingSummaryDMARCParamsSPFFail EmailRoutingSummaryDMARCParamsSPF = "FAIL"
 )
+
+func (r EmailRoutingSummaryDMARCParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryDMARCParamsSPFPass, EmailRoutingSummaryDMARCParamsSPFNone, EmailRoutingSummaryDMARCParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryDMARCResponseEnvelope struct {
 	Result  EmailRoutingSummaryDMARCResponse             `json:"result,required"`
@@ -1460,6 +1628,14 @@ const (
 	EmailRoutingSummaryEncryptedParamsARCFail EmailRoutingSummaryEncryptedParamsARC = "FAIL"
 )
 
+func (r EmailRoutingSummaryEncryptedParamsARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryEncryptedParamsARCPass, EmailRoutingSummaryEncryptedParamsARCNone, EmailRoutingSummaryEncryptedParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryEncryptedParamsDateRange string
 
 const (
@@ -1480,6 +1656,14 @@ const (
 	EmailRoutingSummaryEncryptedParamsDateRange24wControl EmailRoutingSummaryEncryptedParamsDateRange = "24wControl"
 )
 
+func (r EmailRoutingSummaryEncryptedParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryEncryptedParamsDateRange1d, EmailRoutingSummaryEncryptedParamsDateRange2d, EmailRoutingSummaryEncryptedParamsDateRange7d, EmailRoutingSummaryEncryptedParamsDateRange14d, EmailRoutingSummaryEncryptedParamsDateRange28d, EmailRoutingSummaryEncryptedParamsDateRange12w, EmailRoutingSummaryEncryptedParamsDateRange24w, EmailRoutingSummaryEncryptedParamsDateRange52w, EmailRoutingSummaryEncryptedParamsDateRange1dControl, EmailRoutingSummaryEncryptedParamsDateRange2dControl, EmailRoutingSummaryEncryptedParamsDateRange7dControl, EmailRoutingSummaryEncryptedParamsDateRange14dControl, EmailRoutingSummaryEncryptedParamsDateRange28dControl, EmailRoutingSummaryEncryptedParamsDateRange12wControl, EmailRoutingSummaryEncryptedParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryEncryptedParamsDKIM string
 
 const (
@@ -1487,6 +1671,14 @@ const (
 	EmailRoutingSummaryEncryptedParamsDKIMNone EmailRoutingSummaryEncryptedParamsDKIM = "NONE"
 	EmailRoutingSummaryEncryptedParamsDKIMFail EmailRoutingSummaryEncryptedParamsDKIM = "FAIL"
 )
+
+func (r EmailRoutingSummaryEncryptedParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryEncryptedParamsDKIMPass, EmailRoutingSummaryEncryptedParamsDKIMNone, EmailRoutingSummaryEncryptedParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryEncryptedParamsDMARC string
 
@@ -1496,6 +1688,14 @@ const (
 	EmailRoutingSummaryEncryptedParamsDMARCFail EmailRoutingSummaryEncryptedParamsDMARC = "FAIL"
 )
 
+func (r EmailRoutingSummaryEncryptedParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryEncryptedParamsDMARCPass, EmailRoutingSummaryEncryptedParamsDMARCNone, EmailRoutingSummaryEncryptedParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailRoutingSummaryEncryptedParamsFormat string
 
@@ -1504,12 +1704,28 @@ const (
 	EmailRoutingSummaryEncryptedParamsFormatCsv  EmailRoutingSummaryEncryptedParamsFormat = "CSV"
 )
 
+func (r EmailRoutingSummaryEncryptedParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryEncryptedParamsFormatJson, EmailRoutingSummaryEncryptedParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryEncryptedParamsIPVersion string
 
 const (
 	EmailRoutingSummaryEncryptedParamsIPVersionIPv4 EmailRoutingSummaryEncryptedParamsIPVersion = "IPv4"
 	EmailRoutingSummaryEncryptedParamsIPVersionIPv6 EmailRoutingSummaryEncryptedParamsIPVersion = "IPv6"
 )
+
+func (r EmailRoutingSummaryEncryptedParamsIPVersion) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryEncryptedParamsIPVersionIPv4, EmailRoutingSummaryEncryptedParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryEncryptedParamsSPF string
 
@@ -1518,6 +1734,14 @@ const (
 	EmailRoutingSummaryEncryptedParamsSPFNone EmailRoutingSummaryEncryptedParamsSPF = "NONE"
 	EmailRoutingSummaryEncryptedParamsSPFFail EmailRoutingSummaryEncryptedParamsSPF = "FAIL"
 )
+
+func (r EmailRoutingSummaryEncryptedParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryEncryptedParamsSPFPass, EmailRoutingSummaryEncryptedParamsSPFNone, EmailRoutingSummaryEncryptedParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryEncryptedResponseEnvelope struct {
 	Result  EmailRoutingSummaryEncryptedResponse             `json:"result,required"`
@@ -1584,6 +1808,14 @@ const (
 	EmailRoutingSummaryIPVersionParamsARCFail EmailRoutingSummaryIPVersionParamsARC = "FAIL"
 )
 
+func (r EmailRoutingSummaryIPVersionParamsARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryIPVersionParamsARCPass, EmailRoutingSummaryIPVersionParamsARCNone, EmailRoutingSummaryIPVersionParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryIPVersionParamsDateRange string
 
 const (
@@ -1604,6 +1836,14 @@ const (
 	EmailRoutingSummaryIPVersionParamsDateRange24wControl EmailRoutingSummaryIPVersionParamsDateRange = "24wControl"
 )
 
+func (r EmailRoutingSummaryIPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryIPVersionParamsDateRange1d, EmailRoutingSummaryIPVersionParamsDateRange2d, EmailRoutingSummaryIPVersionParamsDateRange7d, EmailRoutingSummaryIPVersionParamsDateRange14d, EmailRoutingSummaryIPVersionParamsDateRange28d, EmailRoutingSummaryIPVersionParamsDateRange12w, EmailRoutingSummaryIPVersionParamsDateRange24w, EmailRoutingSummaryIPVersionParamsDateRange52w, EmailRoutingSummaryIPVersionParamsDateRange1dControl, EmailRoutingSummaryIPVersionParamsDateRange2dControl, EmailRoutingSummaryIPVersionParamsDateRange7dControl, EmailRoutingSummaryIPVersionParamsDateRange14dControl, EmailRoutingSummaryIPVersionParamsDateRange28dControl, EmailRoutingSummaryIPVersionParamsDateRange12wControl, EmailRoutingSummaryIPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryIPVersionParamsDKIM string
 
 const (
@@ -1611,6 +1851,14 @@ const (
 	EmailRoutingSummaryIPVersionParamsDKIMNone EmailRoutingSummaryIPVersionParamsDKIM = "NONE"
 	EmailRoutingSummaryIPVersionParamsDKIMFail EmailRoutingSummaryIPVersionParamsDKIM = "FAIL"
 )
+
+func (r EmailRoutingSummaryIPVersionParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryIPVersionParamsDKIMPass, EmailRoutingSummaryIPVersionParamsDKIMNone, EmailRoutingSummaryIPVersionParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryIPVersionParamsDMARC string
 
@@ -1620,12 +1868,28 @@ const (
 	EmailRoutingSummaryIPVersionParamsDMARCFail EmailRoutingSummaryIPVersionParamsDMARC = "FAIL"
 )
 
+func (r EmailRoutingSummaryIPVersionParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryIPVersionParamsDMARCPass, EmailRoutingSummaryIPVersionParamsDMARCNone, EmailRoutingSummaryIPVersionParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryIPVersionParamsEncrypted string
 
 const (
 	EmailRoutingSummaryIPVersionParamsEncryptedEncrypted    EmailRoutingSummaryIPVersionParamsEncrypted = "ENCRYPTED"
 	EmailRoutingSummaryIPVersionParamsEncryptedNotEncrypted EmailRoutingSummaryIPVersionParamsEncrypted = "NOT_ENCRYPTED"
 )
+
+func (r EmailRoutingSummaryIPVersionParamsEncrypted) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryIPVersionParamsEncryptedEncrypted, EmailRoutingSummaryIPVersionParamsEncryptedNotEncrypted:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type EmailRoutingSummaryIPVersionParamsFormat string
@@ -1635,6 +1899,14 @@ const (
 	EmailRoutingSummaryIPVersionParamsFormatCsv  EmailRoutingSummaryIPVersionParamsFormat = "CSV"
 )
 
+func (r EmailRoutingSummaryIPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryIPVersionParamsFormatJson, EmailRoutingSummaryIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummaryIPVersionParamsSPF string
 
 const (
@@ -1642,6 +1914,14 @@ const (
 	EmailRoutingSummaryIPVersionParamsSPFNone EmailRoutingSummaryIPVersionParamsSPF = "NONE"
 	EmailRoutingSummaryIPVersionParamsSPFFail EmailRoutingSummaryIPVersionParamsSPF = "FAIL"
 )
+
+func (r EmailRoutingSummaryIPVersionParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummaryIPVersionParamsSPFPass, EmailRoutingSummaryIPVersionParamsSPFNone, EmailRoutingSummaryIPVersionParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummaryIPVersionResponseEnvelope struct {
 	Result  EmailRoutingSummaryIPVersionResponse             `json:"result,required"`
@@ -1708,6 +1988,14 @@ const (
 	EmailRoutingSummarySPFParamsARCFail EmailRoutingSummarySPFParamsARC = "FAIL"
 )
 
+func (r EmailRoutingSummarySPFParamsARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummarySPFParamsARCPass, EmailRoutingSummarySPFParamsARCNone, EmailRoutingSummarySPFParamsARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummarySPFParamsDateRange string
 
 const (
@@ -1728,6 +2016,14 @@ const (
 	EmailRoutingSummarySPFParamsDateRange24wControl EmailRoutingSummarySPFParamsDateRange = "24wControl"
 )
 
+func (r EmailRoutingSummarySPFParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummarySPFParamsDateRange1d, EmailRoutingSummarySPFParamsDateRange2d, EmailRoutingSummarySPFParamsDateRange7d, EmailRoutingSummarySPFParamsDateRange14d, EmailRoutingSummarySPFParamsDateRange28d, EmailRoutingSummarySPFParamsDateRange12w, EmailRoutingSummarySPFParamsDateRange24w, EmailRoutingSummarySPFParamsDateRange52w, EmailRoutingSummarySPFParamsDateRange1dControl, EmailRoutingSummarySPFParamsDateRange2dControl, EmailRoutingSummarySPFParamsDateRange7dControl, EmailRoutingSummarySPFParamsDateRange14dControl, EmailRoutingSummarySPFParamsDateRange28dControl, EmailRoutingSummarySPFParamsDateRange12wControl, EmailRoutingSummarySPFParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummarySPFParamsDKIM string
 
 const (
@@ -1735,6 +2031,14 @@ const (
 	EmailRoutingSummarySPFParamsDKIMNone EmailRoutingSummarySPFParamsDKIM = "NONE"
 	EmailRoutingSummarySPFParamsDKIMFail EmailRoutingSummarySPFParamsDKIM = "FAIL"
 )
+
+func (r EmailRoutingSummarySPFParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummarySPFParamsDKIMPass, EmailRoutingSummarySPFParamsDKIMNone, EmailRoutingSummarySPFParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummarySPFParamsDMARC string
 
@@ -1744,12 +2048,28 @@ const (
 	EmailRoutingSummarySPFParamsDMARCFail EmailRoutingSummarySPFParamsDMARC = "FAIL"
 )
 
+func (r EmailRoutingSummarySPFParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummarySPFParamsDMARCPass, EmailRoutingSummarySPFParamsDMARCNone, EmailRoutingSummarySPFParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummarySPFParamsEncrypted string
 
 const (
 	EmailRoutingSummarySPFParamsEncryptedEncrypted    EmailRoutingSummarySPFParamsEncrypted = "ENCRYPTED"
 	EmailRoutingSummarySPFParamsEncryptedNotEncrypted EmailRoutingSummarySPFParamsEncrypted = "NOT_ENCRYPTED"
 )
+
+func (r EmailRoutingSummarySPFParamsEncrypted) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummarySPFParamsEncryptedEncrypted, EmailRoutingSummarySPFParamsEncryptedNotEncrypted:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type EmailRoutingSummarySPFParamsFormat string
@@ -1759,12 +2079,28 @@ const (
 	EmailRoutingSummarySPFParamsFormatCsv  EmailRoutingSummarySPFParamsFormat = "CSV"
 )
 
+func (r EmailRoutingSummarySPFParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummarySPFParamsFormatJson, EmailRoutingSummarySPFParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailRoutingSummarySPFParamsIPVersion string
 
 const (
 	EmailRoutingSummarySPFParamsIPVersionIPv4 EmailRoutingSummarySPFParamsIPVersion = "IPv4"
 	EmailRoutingSummarySPFParamsIPVersionIPv6 EmailRoutingSummarySPFParamsIPVersion = "IPv6"
 )
+
+func (r EmailRoutingSummarySPFParamsIPVersion) IsKnown() bool {
+	switch r {
+	case EmailRoutingSummarySPFParamsIPVersionIPv4, EmailRoutingSummarySPFParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type EmailRoutingSummarySPFResponseEnvelope struct {
 	Result  EmailRoutingSummarySPFResponse             `json:"result,required"`

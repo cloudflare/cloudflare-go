@@ -101,3 +101,11 @@ const (
 	RayidGetParamsTimestampsUnixnano RayidGetParamsTimestamps = "unixnano"
 	RayidGetParamsTimestampsRfc3339  RayidGetParamsTimestamps = "rfc3339"
 )
+
+func (r RayidGetParamsTimestamps) IsKnown() bool {
+	switch r {
+	case RayidGetParamsTimestampsUnix, RayidGetParamsTimestampsUnixnano, RayidGetParamsTimestampsRfc3339:
+		return true
+	}
+	return false
+}

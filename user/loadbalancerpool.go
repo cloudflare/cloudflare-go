@@ -263,6 +263,14 @@ const (
 	LoadBalancingPoolCheckRegionAllRegions LoadBalancingPoolCheckRegion = "ALL_REGIONS"
 )
 
+func (r LoadBalancingPoolCheckRegion) IsKnown() bool {
+	switch r {
+	case LoadBalancingPoolCheckRegionWnam, LoadBalancingPoolCheckRegionEnam, LoadBalancingPoolCheckRegionWeu, LoadBalancingPoolCheckRegionEeu, LoadBalancingPoolCheckRegionNsam, LoadBalancingPoolCheckRegionSsam, LoadBalancingPoolCheckRegionOc, LoadBalancingPoolCheckRegionMe, LoadBalancingPoolCheckRegionNaf, LoadBalancingPoolCheckRegionSaf, LoadBalancingPoolCheckRegionSas, LoadBalancingPoolCheckRegionSeas, LoadBalancingPoolCheckRegionNeas, LoadBalancingPoolCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Configures load shedding policies and percentages for the pool.
 type LoadBalancingPoolLoadShedding struct {
 	// The percent of traffic to shed from the pool, according to the default policy.
@@ -312,6 +320,14 @@ const (
 	LoadBalancingPoolLoadSheddingDefaultPolicyHash   LoadBalancingPoolLoadSheddingDefaultPolicy = "hash"
 )
 
+func (r LoadBalancingPoolLoadSheddingDefaultPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancingPoolLoadSheddingDefaultPolicyRandom, LoadBalancingPoolLoadSheddingDefaultPolicyHash:
+		return true
+	}
+	return false
+}
+
 // Only the hash policy is supported for existing sessions (to avoid exponential
 // decay).
 type LoadBalancingPoolLoadSheddingSessionPolicy string
@@ -319,6 +335,14 @@ type LoadBalancingPoolLoadSheddingSessionPolicy string
 const (
 	LoadBalancingPoolLoadSheddingSessionPolicyHash LoadBalancingPoolLoadSheddingSessionPolicy = "hash"
 )
+
+func (r LoadBalancingPoolLoadSheddingSessionPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancingPoolLoadSheddingSessionPolicyHash:
+		return true
+	}
+	return false
+}
 
 // Filter pool and origin health notifications by resource type or health status.
 // Use null to reset.
@@ -462,6 +486,14 @@ const (
 	LoadBalancingPoolOriginSteeringPolicyLeastOutstandingRequests LoadBalancingPoolOriginSteeringPolicy = "least_outstanding_requests"
 	LoadBalancingPoolOriginSteeringPolicyLeastConnections         LoadBalancingPoolOriginSteeringPolicy = "least_connections"
 )
+
+func (r LoadBalancingPoolOriginSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancingPoolOriginSteeringPolicyRandom, LoadBalancingPoolOriginSteeringPolicyHash, LoadBalancingPoolOriginSteeringPolicyLeastOutstandingRequests, LoadBalancingPoolOriginSteeringPolicyLeastConnections:
+		return true
+	}
+	return false
+}
 
 type LoadBalancingPoolOrigin struct {
 	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
@@ -643,6 +675,14 @@ const (
 	LoadBalancerPoolReferencesResponseReferenceTypeReferrer LoadBalancerPoolReferencesResponseReferenceType = "referrer"
 )
 
+func (r LoadBalancerPoolReferencesResponseReferenceType) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolReferencesResponseReferenceTypeStar, LoadBalancerPoolReferencesResponseReferenceTypeReferral, LoadBalancerPoolReferencesResponseReferenceTypeReferrer:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerPoolNewParams struct {
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
@@ -761,6 +801,14 @@ const (
 	LoadBalancerPoolNewParamsCheckRegionAllRegions LoadBalancerPoolNewParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r LoadBalancerPoolNewParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolNewParamsCheckRegionWnam, LoadBalancerPoolNewParamsCheckRegionEnam, LoadBalancerPoolNewParamsCheckRegionWeu, LoadBalancerPoolNewParamsCheckRegionEeu, LoadBalancerPoolNewParamsCheckRegionNsam, LoadBalancerPoolNewParamsCheckRegionSsam, LoadBalancerPoolNewParamsCheckRegionOc, LoadBalancerPoolNewParamsCheckRegionMe, LoadBalancerPoolNewParamsCheckRegionNaf, LoadBalancerPoolNewParamsCheckRegionSaf, LoadBalancerPoolNewParamsCheckRegionSas, LoadBalancerPoolNewParamsCheckRegionSeas, LoadBalancerPoolNewParamsCheckRegionNeas, LoadBalancerPoolNewParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Configures load shedding policies and percentages for the pool.
 type LoadBalancerPoolNewParamsLoadShedding struct {
 	// The percent of traffic to shed from the pool, according to the default policy.
@@ -794,6 +842,14 @@ const (
 	LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyHash   LoadBalancerPoolNewParamsLoadSheddingDefaultPolicy = "hash"
 )
 
+func (r LoadBalancerPoolNewParamsLoadSheddingDefaultPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyRandom, LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyHash:
+		return true
+	}
+	return false
+}
+
 // Only the hash policy is supported for existing sessions (to avoid exponential
 // decay).
 type LoadBalancerPoolNewParamsLoadSheddingSessionPolicy string
@@ -801,6 +857,14 @@ type LoadBalancerPoolNewParamsLoadSheddingSessionPolicy string
 const (
 	LoadBalancerPoolNewParamsLoadSheddingSessionPolicyHash LoadBalancerPoolNewParamsLoadSheddingSessionPolicy = "hash"
 )
+
+func (r LoadBalancerPoolNewParamsLoadSheddingSessionPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolNewParamsLoadSheddingSessionPolicyHash:
+		return true
+	}
+	return false
+}
 
 // Filter pool and origin health notifications by resource type or health status.
 // Use null to reset.
@@ -890,6 +954,14 @@ const (
 	LoadBalancerPoolNewParamsOriginSteeringPolicyLeastConnections         LoadBalancerPoolNewParamsOriginSteeringPolicy = "least_connections"
 )
 
+func (r LoadBalancerPoolNewParamsOriginSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolNewParamsOriginSteeringPolicyRandom, LoadBalancerPoolNewParamsOriginSteeringPolicyHash, LoadBalancerPoolNewParamsOriginSteeringPolicyLeastOutstandingRequests, LoadBalancerPoolNewParamsOriginSteeringPolicyLeastConnections:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerPoolNewResponseEnvelope struct {
 	Errors   []LoadBalancerPoolNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerPoolNewResponseEnvelopeMessages `json:"messages,required"`
@@ -970,6 +1042,14 @@ type LoadBalancerPoolNewResponseEnvelopeSuccess bool
 const (
 	LoadBalancerPoolNewResponseEnvelopeSuccessTrue LoadBalancerPoolNewResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerPoolNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerPoolUpdateParams struct {
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
@@ -1089,6 +1169,14 @@ const (
 	LoadBalancerPoolUpdateParamsCheckRegionAllRegions LoadBalancerPoolUpdateParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r LoadBalancerPoolUpdateParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolUpdateParamsCheckRegionWnam, LoadBalancerPoolUpdateParamsCheckRegionEnam, LoadBalancerPoolUpdateParamsCheckRegionWeu, LoadBalancerPoolUpdateParamsCheckRegionEeu, LoadBalancerPoolUpdateParamsCheckRegionNsam, LoadBalancerPoolUpdateParamsCheckRegionSsam, LoadBalancerPoolUpdateParamsCheckRegionOc, LoadBalancerPoolUpdateParamsCheckRegionMe, LoadBalancerPoolUpdateParamsCheckRegionNaf, LoadBalancerPoolUpdateParamsCheckRegionSaf, LoadBalancerPoolUpdateParamsCheckRegionSas, LoadBalancerPoolUpdateParamsCheckRegionSeas, LoadBalancerPoolUpdateParamsCheckRegionNeas, LoadBalancerPoolUpdateParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Configures load shedding policies and percentages for the pool.
 type LoadBalancerPoolUpdateParamsLoadShedding struct {
 	// The percent of traffic to shed from the pool, according to the default policy.
@@ -1122,6 +1210,14 @@ const (
 	LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyHash   LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy = "hash"
 )
 
+func (r LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyRandom, LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyHash:
+		return true
+	}
+	return false
+}
+
 // Only the hash policy is supported for existing sessions (to avoid exponential
 // decay).
 type LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy string
@@ -1129,6 +1225,14 @@ type LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy string
 const (
 	LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicyHash LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy = "hash"
 )
+
+func (r LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicyHash:
+		return true
+	}
+	return false
+}
 
 // Filter pool and origin health notifications by resource type or health status.
 // Use null to reset.
@@ -1218,6 +1322,14 @@ const (
 	LoadBalancerPoolUpdateParamsOriginSteeringPolicyLeastConnections         LoadBalancerPoolUpdateParamsOriginSteeringPolicy = "least_connections"
 )
 
+func (r LoadBalancerPoolUpdateParamsOriginSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolUpdateParamsOriginSteeringPolicyRandom, LoadBalancerPoolUpdateParamsOriginSteeringPolicyHash, LoadBalancerPoolUpdateParamsOriginSteeringPolicyLeastOutstandingRequests, LoadBalancerPoolUpdateParamsOriginSteeringPolicyLeastConnections:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerPoolUpdateResponseEnvelope struct {
 	Errors   []LoadBalancerPoolUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerPoolUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -1298,6 +1410,14 @@ type LoadBalancerPoolUpdateResponseEnvelopeSuccess bool
 const (
 	LoadBalancerPoolUpdateResponseEnvelopeSuccessTrue LoadBalancerPoolUpdateResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerPoolUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerPoolListParams struct {
 	// The ID of the Monitor to use for checking the health of origins within this
@@ -1396,6 +1516,14 @@ type LoadBalancerPoolListResponseEnvelopeSuccess bool
 const (
 	LoadBalancerPoolListResponseEnvelopeSuccessTrue LoadBalancerPoolListResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerPoolListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerPoolListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -1509,6 +1637,14 @@ const (
 	LoadBalancerPoolDeleteResponseEnvelopeSuccessTrue LoadBalancerPoolDeleteResponseEnvelopeSuccess = true
 )
 
+func (r LoadBalancerPoolDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerPoolEditParams struct {
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
@@ -1582,6 +1718,14 @@ const (
 	LoadBalancerPoolEditParamsCheckRegionAllRegions LoadBalancerPoolEditParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r LoadBalancerPoolEditParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolEditParamsCheckRegionWnam, LoadBalancerPoolEditParamsCheckRegionEnam, LoadBalancerPoolEditParamsCheckRegionWeu, LoadBalancerPoolEditParamsCheckRegionEeu, LoadBalancerPoolEditParamsCheckRegionNsam, LoadBalancerPoolEditParamsCheckRegionSsam, LoadBalancerPoolEditParamsCheckRegionOc, LoadBalancerPoolEditParamsCheckRegionMe, LoadBalancerPoolEditParamsCheckRegionNaf, LoadBalancerPoolEditParamsCheckRegionSaf, LoadBalancerPoolEditParamsCheckRegionSas, LoadBalancerPoolEditParamsCheckRegionSeas, LoadBalancerPoolEditParamsCheckRegionNeas, LoadBalancerPoolEditParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Configures load shedding policies and percentages for the pool.
 type LoadBalancerPoolEditParamsLoadShedding struct {
 	// The percent of traffic to shed from the pool, according to the default policy.
@@ -1615,6 +1759,14 @@ const (
 	LoadBalancerPoolEditParamsLoadSheddingDefaultPolicyHash   LoadBalancerPoolEditParamsLoadSheddingDefaultPolicy = "hash"
 )
 
+func (r LoadBalancerPoolEditParamsLoadSheddingDefaultPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolEditParamsLoadSheddingDefaultPolicyRandom, LoadBalancerPoolEditParamsLoadSheddingDefaultPolicyHash:
+		return true
+	}
+	return false
+}
+
 // Only the hash policy is supported for existing sessions (to avoid exponential
 // decay).
 type LoadBalancerPoolEditParamsLoadSheddingSessionPolicy string
@@ -1622,6 +1774,14 @@ type LoadBalancerPoolEditParamsLoadSheddingSessionPolicy string
 const (
 	LoadBalancerPoolEditParamsLoadSheddingSessionPolicyHash LoadBalancerPoolEditParamsLoadSheddingSessionPolicy = "hash"
 )
+
+func (r LoadBalancerPoolEditParamsLoadSheddingSessionPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolEditParamsLoadSheddingSessionPolicyHash:
+		return true
+	}
+	return false
+}
 
 // Filter pool and origin health notifications by resource type or health status.
 // Use null to reset.
@@ -1710,6 +1870,14 @@ const (
 	LoadBalancerPoolEditParamsOriginSteeringPolicyLeastOutstandingRequests LoadBalancerPoolEditParamsOriginSteeringPolicy = "least_outstanding_requests"
 	LoadBalancerPoolEditParamsOriginSteeringPolicyLeastConnections         LoadBalancerPoolEditParamsOriginSteeringPolicy = "least_connections"
 )
+
+func (r LoadBalancerPoolEditParamsOriginSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolEditParamsOriginSteeringPolicyRandom, LoadBalancerPoolEditParamsOriginSteeringPolicyHash, LoadBalancerPoolEditParamsOriginSteeringPolicyLeastOutstandingRequests, LoadBalancerPoolEditParamsOriginSteeringPolicyLeastConnections:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerPoolEditParamsOrigin struct {
 	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
@@ -1837,6 +2005,14 @@ const (
 	LoadBalancerPoolEditResponseEnvelopeSuccessTrue LoadBalancerPoolEditResponseEnvelopeSuccess = true
 )
 
+func (r LoadBalancerPoolEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerPoolGetResponseEnvelope struct {
 	Errors   []LoadBalancerPoolGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerPoolGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1917,6 +2093,14 @@ type LoadBalancerPoolGetResponseEnvelopeSuccess bool
 const (
 	LoadBalancerPoolGetResponseEnvelopeSuccessTrue LoadBalancerPoolGetResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerPoolGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerPoolHealthResponseEnvelope struct {
 	Errors   []LoadBalancerPoolHealthResponseEnvelopeErrors   `json:"errors,required"`
@@ -2001,6 +2185,14 @@ const (
 	LoadBalancerPoolHealthResponseEnvelopeSuccessTrue LoadBalancerPoolHealthResponseEnvelopeSuccess = true
 )
 
+func (r LoadBalancerPoolHealthResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolHealthResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LoadBalancerPoolPreviewParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
@@ -2069,6 +2261,14 @@ const (
 	LoadBalancerPoolPreviewParamsTypeIcmpPing LoadBalancerPoolPreviewParamsType = "icmp_ping"
 	LoadBalancerPoolPreviewParamsTypeSmtp     LoadBalancerPoolPreviewParamsType = "smtp"
 )
+
+func (r LoadBalancerPoolPreviewParamsType) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolPreviewParamsTypeHTTP, LoadBalancerPoolPreviewParamsTypeHTTPS, LoadBalancerPoolPreviewParamsTypeTcp, LoadBalancerPoolPreviewParamsTypeUdpIcmp, LoadBalancerPoolPreviewParamsTypeIcmpPing, LoadBalancerPoolPreviewParamsTypeSmtp:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerPoolPreviewResponseEnvelope struct {
 	Errors   []LoadBalancerPoolPreviewResponseEnvelopeErrors   `json:"errors,required"`
@@ -2150,6 +2350,14 @@ type LoadBalancerPoolPreviewResponseEnvelopeSuccess bool
 const (
 	LoadBalancerPoolPreviewResponseEnvelopeSuccessTrue LoadBalancerPoolPreviewResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerPoolPreviewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolPreviewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerPoolReferencesResponseEnvelope struct {
 	Errors   []LoadBalancerPoolReferencesResponseEnvelopeErrors   `json:"errors,required"`
@@ -2234,6 +2442,14 @@ type LoadBalancerPoolReferencesResponseEnvelopeSuccess bool
 const (
 	LoadBalancerPoolReferencesResponseEnvelopeSuccessTrue LoadBalancerPoolReferencesResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerPoolReferencesResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerPoolReferencesResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerPoolReferencesResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

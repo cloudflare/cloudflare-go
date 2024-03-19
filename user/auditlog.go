@@ -170,6 +170,14 @@ const (
 	AuditLogListResponseActorTypeCloudflare AuditLogListResponseActorType = "Cloudflare"
 )
 
+func (r AuditLogListResponseActorType) IsKnown() bool {
+	switch r {
+	case AuditLogListResponseActorTypeUser, AuditLogListResponseActorTypeAdmin, AuditLogListResponseActorTypeCloudflare:
+		return true
+	}
+	return false
+}
+
 type AuditLogListResponseOwner struct {
 	// Identifier
 	ID   string                        `json:"id"`
@@ -287,6 +295,14 @@ const (
 	AuditLogListParamsDirectionDesc AuditLogListParamsDirection = "desc"
 	AuditLogListParamsDirectionAsc  AuditLogListParamsDirection = "asc"
 )
+
+func (r AuditLogListParamsDirection) IsKnown() bool {
+	switch r {
+	case AuditLogListParamsDirectionDesc, AuditLogListParamsDirectionAsc:
+		return true
+	}
+	return false
+}
 
 type AuditLogListParamsZone struct {
 	// Filters by the name of the zone associated to the change.

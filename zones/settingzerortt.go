@@ -101,6 +101,14 @@ const (
 	Zones0rttID0rtt Zones0rttID = "0rtt"
 )
 
+func (r Zones0rttID) IsKnown() bool {
+	switch r {
+	case Zones0rttID0rtt:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type Zones0rttValue string
 
@@ -108,6 +116,14 @@ const (
 	Zones0rttValueOn  Zones0rttValue = "on"
 	Zones0rttValueOff Zones0rttValue = "off"
 )
+
+func (r Zones0rttValue) IsKnown() bool {
+	switch r {
+	case Zones0rttValueOn, Zones0rttValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -117,6 +133,14 @@ const (
 	Zones0rttEditableTrue  Zones0rttEditable = true
 	Zones0rttEditableFalse Zones0rttEditable = false
 )
+
+func (r Zones0rttEditable) IsKnown() bool {
+	switch r {
+	case Zones0rttEditableTrue, Zones0rttEditableFalse:
+		return true
+	}
+	return false
+}
 
 // 0-RTT session resumption enabled for this zone.
 type Zones0rttParam struct {
@@ -150,6 +174,14 @@ const (
 	SettingZeroRTTEditParamsValueOn  SettingZeroRTTEditParamsValue = "on"
 	SettingZeroRTTEditParamsValueOff SettingZeroRTTEditParamsValue = "off"
 )
+
+func (r SettingZeroRTTEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingZeroRTTEditParamsValueOn, SettingZeroRTTEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingZeroRTTEditResponseEnvelope struct {
 	Errors   []SettingZeroRTTEditResponseEnvelopeErrors   `json:"errors,required"`

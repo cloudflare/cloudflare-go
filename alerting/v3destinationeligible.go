@@ -160,6 +160,14 @@ const (
 	V3DestinationEligibleGetResponseEnvelopeSuccessTrue V3DestinationEligibleGetResponseEnvelopeSuccess = true
 )
 
+func (r V3DestinationEligibleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationEligibleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V3DestinationEligibleGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

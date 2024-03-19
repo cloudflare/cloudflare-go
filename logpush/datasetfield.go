@@ -143,3 +143,11 @@ type DatasetFieldGetResponseEnvelopeSuccess bool
 const (
 	DatasetFieldGetResponseEnvelopeSuccessTrue DatasetFieldGetResponseEnvelopeSuccess = true
 )
+
+func (r DatasetFieldGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatasetFieldGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

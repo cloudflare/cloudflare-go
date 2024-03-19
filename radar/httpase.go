@@ -273,6 +273,14 @@ const (
 	HTTPAseGetParamsBotClassLikelyHuman     HTTPAseGetParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPAseGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsBotClassLikelyAutomated, HTTPAseGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPAseGetParamsDateRange string
 
 const (
@@ -293,6 +301,14 @@ const (
 	HTTPAseGetParamsDateRange24wControl HTTPAseGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPAseGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsDateRange1d, HTTPAseGetParamsDateRange2d, HTTPAseGetParamsDateRange7d, HTTPAseGetParamsDateRange14d, HTTPAseGetParamsDateRange28d, HTTPAseGetParamsDateRange12w, HTTPAseGetParamsDateRange24w, HTTPAseGetParamsDateRange52w, HTTPAseGetParamsDateRange1dControl, HTTPAseGetParamsDateRange2dControl, HTTPAseGetParamsDateRange7dControl, HTTPAseGetParamsDateRange14dControl, HTTPAseGetParamsDateRange28dControl, HTTPAseGetParamsDateRange12wControl, HTTPAseGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPAseGetParamsDeviceType string
 
 const (
@@ -300,6 +316,14 @@ const (
 	HTTPAseGetParamsDeviceTypeMobile  HTTPAseGetParamsDeviceType = "MOBILE"
 	HTTPAseGetParamsDeviceTypeOther   HTTPAseGetParamsDeviceType = "OTHER"
 )
+
+func (r HTTPAseGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsDeviceTypeDesktop, HTTPAseGetParamsDeviceTypeMobile, HTTPAseGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPAseGetParamsFormat string
@@ -309,12 +333,28 @@ const (
 	HTTPAseGetParamsFormatCsv  HTTPAseGetParamsFormat = "CSV"
 )
 
+func (r HTTPAseGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsFormatJson, HTTPAseGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseGetParamsHTTPProtocol string
 
 const (
 	HTTPAseGetParamsHTTPProtocolHTTP  HTTPAseGetParamsHTTPProtocol = "HTTP"
 	HTTPAseGetParamsHTTPProtocolHTTPS HTTPAseGetParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPAseGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsHTTPProtocolHTTP, HTTPAseGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPAseGetParamsHTTPVersion string
 
@@ -324,12 +364,28 @@ const (
 	HTTPAseGetParamsHTTPVersionHttPv3 HTTPAseGetParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPAseGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsHTTPVersionHttPv1, HTTPAseGetParamsHTTPVersionHttPv2, HTTPAseGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPAseGetParamsIPVersion string
 
 const (
 	HTTPAseGetParamsIPVersionIPv4 HTTPAseGetParamsIPVersion = "IPv4"
 	HTTPAseGetParamsIPVersionIPv6 HTTPAseGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPAseGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsIPVersionIPv4, HTTPAseGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPAseGetParamsOS string
 
@@ -343,6 +399,14 @@ const (
 	HTTPAseGetParamsOSSmartTv  HTTPAseGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPAseGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsOSWindows, HTTPAseGetParamsOSMacosx, HTTPAseGetParamsOSIos, HTTPAseGetParamsOSAndroid, HTTPAseGetParamsOSChromeos, HTTPAseGetParamsOSLinux, HTTPAseGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPAseGetParamsTLSVersion string
 
 const (
@@ -352,6 +416,14 @@ const (
 	HTTPAseGetParamsTLSVersionTlSv1_3  HTTPAseGetParamsTLSVersion = "TLSv1_3"
 	HTTPAseGetParamsTLSVersionTlSvQuic HTTPAseGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPAseGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPAseGetParamsTLSVersionTlSv1_0, HTTPAseGetParamsTLSVersionTlSv1_1, HTTPAseGetParamsTLSVersionTlSv1_2, HTTPAseGetParamsTLSVersionTlSv1_3, HTTPAseGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPAseGetResponseEnvelope struct {
 	Result  HTTPAseGetResponse             `json:"result,required"`

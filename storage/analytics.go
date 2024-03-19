@@ -363,6 +363,14 @@ const (
 	AnalyticsListParamsQueryDimensionRequestType  AnalyticsListParamsQueryDimension = "requestType"
 )
 
+func (r AnalyticsListParamsQueryDimension) IsKnown() bool {
+	switch r {
+	case AnalyticsListParamsQueryDimensionAccountID, AnalyticsListParamsQueryDimensionResponseCode, AnalyticsListParamsQueryDimensionRequestType:
+		return true
+	}
+	return false
+}
+
 // A quantitative measurement of KV usage.
 type AnalyticsListParamsQueryMetric string
 
@@ -371,6 +379,14 @@ const (
 	AnalyticsListParamsQueryMetricWriteKiB AnalyticsListParamsQueryMetric = "writeKiB"
 	AnalyticsListParamsQueryMetricReadKiB  AnalyticsListParamsQueryMetric = "readKiB"
 )
+
+func (r AnalyticsListParamsQueryMetric) IsKnown() bool {
+	switch r {
+	case AnalyticsListParamsQueryMetricRequests, AnalyticsListParamsQueryMetricWriteKiB, AnalyticsListParamsQueryMetricReadKiB:
+		return true
+	}
+	return false
+}
 
 type AnalyticsListResponseEnvelope struct {
 	Errors   []AnalyticsListResponseEnvelopeErrors   `json:"errors,required"`
@@ -454,6 +470,14 @@ const (
 	AnalyticsListResponseEnvelopeSuccessTrue AnalyticsListResponseEnvelopeSuccess = true
 )
 
+func (r AnalyticsListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AnalyticsListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AnalyticsStoredParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -518,6 +542,14 @@ const (
 	AnalyticsStoredParamsQueryDimensionNamespaceID AnalyticsStoredParamsQueryDimension = "namespaceId"
 )
 
+func (r AnalyticsStoredParamsQueryDimension) IsKnown() bool {
+	switch r {
+	case AnalyticsStoredParamsQueryDimensionNamespaceID:
+		return true
+	}
+	return false
+}
+
 // A quantitative measurement of KV usage.
 type AnalyticsStoredParamsQueryMetric string
 
@@ -525,6 +557,14 @@ const (
 	AnalyticsStoredParamsQueryMetricStoredBytes AnalyticsStoredParamsQueryMetric = "storedBytes"
 	AnalyticsStoredParamsQueryMetricStoredKeys  AnalyticsStoredParamsQueryMetric = "storedKeys"
 )
+
+func (r AnalyticsStoredParamsQueryMetric) IsKnown() bool {
+	switch r {
+	case AnalyticsStoredParamsQueryMetricStoredBytes, AnalyticsStoredParamsQueryMetricStoredKeys:
+		return true
+	}
+	return false
+}
 
 type AnalyticsStoredResponseEnvelope struct {
 	Errors   []AnalyticsStoredResponseEnvelopeErrors   `json:"errors,required"`
@@ -607,3 +647,11 @@ type AnalyticsStoredResponseEnvelopeSuccess bool
 const (
 	AnalyticsStoredResponseEnvelopeSuccessTrue AnalyticsStoredResponseEnvelopeSuccess = true
 )
+
+func (r AnalyticsStoredResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AnalyticsStoredResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

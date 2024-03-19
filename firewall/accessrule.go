@@ -295,6 +295,14 @@ const (
 	AccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP AccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTarget = "ip"
 )
 
+func (r AccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP:
+		return true
+	}
+	return false
+}
+
 type AccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
@@ -317,6 +325,14 @@ type AccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTarget string
 const (
 	AccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTargetIp6 AccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
 )
+
+func (r AccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTargetIp6:
+		return true
+	}
+	return false
+}
 
 type AccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
@@ -342,6 +358,14 @@ const (
 	AccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTargetIPRange AccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
 )
 
+func (r AccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTargetIPRange:
+		return true
+	}
+	return false
+}
+
 type AccessRuleNewParamsConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
@@ -364,6 +388,14 @@ type AccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget string
 const (
 	AccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTargetASN AccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
+
+func (r AccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTargetASN:
+		return true
+	}
+	return false
+}
 
 type AccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
@@ -389,6 +421,14 @@ const (
 	AccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTargetCountry AccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTarget = "country"
 )
 
+func (r AccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
 // The action to apply to a matched request.
 type AccessRuleNewParamsMode string
 
@@ -399,6 +439,14 @@ const (
 	AccessRuleNewParamsModeJsChallenge      AccessRuleNewParamsMode = "js_challenge"
 	AccessRuleNewParamsModeManagedChallenge AccessRuleNewParamsMode = "managed_challenge"
 )
+
+func (r AccessRuleNewParamsMode) IsKnown() bool {
+	switch r {
+	case AccessRuleNewParamsModeBlock, AccessRuleNewParamsModeChallenge, AccessRuleNewParamsModeWhitelist, AccessRuleNewParamsModeJsChallenge, AccessRuleNewParamsModeManagedChallenge:
+		return true
+	}
+	return false
+}
 
 type AccessRuleNewResponseEnvelope struct {
 	Errors   []AccessRuleNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -481,6 +529,14 @@ const (
 	AccessRuleNewResponseEnvelopeSuccessTrue AccessRuleNewResponseEnvelopeSuccess = true
 )
 
+func (r AccessRuleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessRuleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessRuleListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -513,6 +569,14 @@ const (
 	AccessRuleListParamsDirectionAsc  AccessRuleListParamsDirection = "asc"
 	AccessRuleListParamsDirectionDesc AccessRuleListParamsDirection = "desc"
 )
+
+func (r AccessRuleListParamsDirection) IsKnown() bool {
+	switch r {
+	case AccessRuleListParamsDirectionAsc, AccessRuleListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
 
 type AccessRuleListParamsEgsPagination struct {
 	Json param.Field[AccessRuleListParamsEgsPaginationJson] `query:"json"`
@@ -582,6 +646,14 @@ const (
 	AccessRuleListParamsFiltersConfigurationTargetCountry AccessRuleListParamsFiltersConfigurationTarget = "country"
 )
 
+func (r AccessRuleListParamsFiltersConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleListParamsFiltersConfigurationTargetIP, AccessRuleListParamsFiltersConfigurationTargetIPRange, AccessRuleListParamsFiltersConfigurationTargetASN, AccessRuleListParamsFiltersConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
 // When set to `all`, all the search requirements must match. When set to `any`,
 // only one of the search requirements has to match.
 type AccessRuleListParamsFiltersMatch string
@@ -590,6 +662,14 @@ const (
 	AccessRuleListParamsFiltersMatchAny AccessRuleListParamsFiltersMatch = "any"
 	AccessRuleListParamsFiltersMatchAll AccessRuleListParamsFiltersMatch = "all"
 )
+
+func (r AccessRuleListParamsFiltersMatch) IsKnown() bool {
+	switch r {
+	case AccessRuleListParamsFiltersMatchAny, AccessRuleListParamsFiltersMatchAll:
+		return true
+	}
+	return false
+}
 
 // The action to apply to a matched request.
 type AccessRuleListParamsFiltersMode string
@@ -602,6 +682,14 @@ const (
 	AccessRuleListParamsFiltersModeManagedChallenge AccessRuleListParamsFiltersMode = "managed_challenge"
 )
 
+func (r AccessRuleListParamsFiltersMode) IsKnown() bool {
+	switch r {
+	case AccessRuleListParamsFiltersModeBlock, AccessRuleListParamsFiltersModeChallenge, AccessRuleListParamsFiltersModeWhitelist, AccessRuleListParamsFiltersModeJsChallenge, AccessRuleListParamsFiltersModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // The field used to sort returned rules.
 type AccessRuleListParamsOrder string
 
@@ -610,6 +698,14 @@ const (
 	AccessRuleListParamsOrderConfigurationValue  AccessRuleListParamsOrder = "configuration.value"
 	AccessRuleListParamsOrderMode                AccessRuleListParamsOrder = "mode"
 )
+
+func (r AccessRuleListParamsOrder) IsKnown() bool {
+	switch r {
+	case AccessRuleListParamsOrderConfigurationTarget, AccessRuleListParamsOrderConfigurationValue, AccessRuleListParamsOrderMode:
+		return true
+	}
+	return false
+}
 
 type AccessRuleDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -699,6 +795,14 @@ const (
 	AccessRuleDeleteResponseEnvelopeSuccessTrue AccessRuleDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessRuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessRuleEditParams struct {
 	// The rule configuration.
 	Configuration param.Field[AccessRuleEditParamsConfiguration] `json:"configuration,required"`
@@ -752,6 +856,14 @@ const (
 	AccessRuleEditParamsConfigurationLegacyJhsIPConfigurationTargetIP AccessRuleEditParamsConfigurationLegacyJhsIPConfigurationTarget = "ip"
 )
 
+func (r AccessRuleEditParamsConfigurationLegacyJhsIPConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleEditParamsConfigurationLegacyJhsIPConfigurationTargetIP:
+		return true
+	}
+	return false
+}
+
 type AccessRuleEditParamsConfigurationLegacyJhsIPV6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
@@ -774,6 +886,14 @@ type AccessRuleEditParamsConfigurationLegacyJhsIPV6ConfigurationTarget string
 const (
 	AccessRuleEditParamsConfigurationLegacyJhsIPV6ConfigurationTargetIp6 AccessRuleEditParamsConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
 )
+
+func (r AccessRuleEditParamsConfigurationLegacyJhsIPV6ConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleEditParamsConfigurationLegacyJhsIPV6ConfigurationTargetIp6:
+		return true
+	}
+	return false
+}
 
 type AccessRuleEditParamsConfigurationLegacyJhsCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
@@ -799,6 +919,14 @@ const (
 	AccessRuleEditParamsConfigurationLegacyJhsCIDRConfigurationTargetIPRange AccessRuleEditParamsConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
 )
 
+func (r AccessRuleEditParamsConfigurationLegacyJhsCIDRConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleEditParamsConfigurationLegacyJhsCIDRConfigurationTargetIPRange:
+		return true
+	}
+	return false
+}
+
 type AccessRuleEditParamsConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
@@ -821,6 +949,14 @@ type AccessRuleEditParamsConfigurationLegacyJhsASNConfigurationTarget string
 const (
 	AccessRuleEditParamsConfigurationLegacyJhsASNConfigurationTargetASN AccessRuleEditParamsConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
+
+func (r AccessRuleEditParamsConfigurationLegacyJhsASNConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleEditParamsConfigurationLegacyJhsASNConfigurationTargetASN:
+		return true
+	}
+	return false
+}
 
 type AccessRuleEditParamsConfigurationLegacyJhsCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
@@ -846,6 +982,14 @@ const (
 	AccessRuleEditParamsConfigurationLegacyJhsCountryConfigurationTargetCountry AccessRuleEditParamsConfigurationLegacyJhsCountryConfigurationTarget = "country"
 )
 
+func (r AccessRuleEditParamsConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleEditParamsConfigurationLegacyJhsCountryConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
 // The action to apply to a matched request.
 type AccessRuleEditParamsMode string
 
@@ -856,6 +1000,14 @@ const (
 	AccessRuleEditParamsModeJsChallenge      AccessRuleEditParamsMode = "js_challenge"
 	AccessRuleEditParamsModeManagedChallenge AccessRuleEditParamsMode = "managed_challenge"
 )
+
+func (r AccessRuleEditParamsMode) IsKnown() bool {
+	switch r {
+	case AccessRuleEditParamsModeBlock, AccessRuleEditParamsModeChallenge, AccessRuleEditParamsModeWhitelist, AccessRuleEditParamsModeJsChallenge, AccessRuleEditParamsModeManagedChallenge:
+		return true
+	}
+	return false
+}
 
 type AccessRuleEditResponseEnvelope struct {
 	Errors   []AccessRuleEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -937,6 +1089,14 @@ type AccessRuleEditResponseEnvelopeSuccess bool
 const (
 	AccessRuleEditResponseEnvelopeSuccessTrue AccessRuleEditResponseEnvelopeSuccess = true
 )
+
+func (r AccessRuleEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessRuleEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessRuleGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -1025,3 +1185,11 @@ type AccessRuleGetResponseEnvelopeSuccess bool
 const (
 	AccessRuleGetResponseEnvelopeSuccessTrue AccessRuleGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessRuleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessRuleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

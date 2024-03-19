@@ -267,6 +267,14 @@ const (
 	TunnelConnectionDeleteResponseEnvelopeSuccessTrue TunnelConnectionDeleteResponseEnvelopeSuccess = true
 )
 
+func (r TunnelConnectionDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelConnectionDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TunnelConnectionGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -354,6 +362,14 @@ type TunnelConnectionGetResponseEnvelopeSuccess bool
 const (
 	TunnelConnectionGetResponseEnvelopeSuccessTrue TunnelConnectionGetResponseEnvelopeSuccess = true
 )
+
+func (r TunnelConnectionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelConnectionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type TunnelConnectionGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

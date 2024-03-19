@@ -269,3 +269,11 @@ type AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess bool
 const (
 	AccessApplicationUserPolicyCheckListResponseEnvelopeSuccessTrue AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess = true
 )
+
+func (r AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationUserPolicyCheckListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

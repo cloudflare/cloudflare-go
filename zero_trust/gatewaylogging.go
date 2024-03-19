@@ -221,6 +221,14 @@ const (
 	GatewayLoggingUpdateResponseEnvelopeSuccessTrue GatewayLoggingUpdateResponseEnvelopeSuccess = true
 )
 
+func (r GatewayLoggingUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayLoggingUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayLoggingGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -305,3 +313,11 @@ type GatewayLoggingGetResponseEnvelopeSuccess bool
 const (
 	GatewayLoggingGetResponseEnvelopeSuccessTrue GatewayLoggingGetResponseEnvelopeSuccess = true
 )
+
+func (r GatewayLoggingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayLoggingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

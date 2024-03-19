@@ -603,6 +603,14 @@ const (
 	AttackLayer3TopAttacksParamsDateRange24wControl AttackLayer3TopAttacksParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TopAttacksParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopAttacksParamsDateRange1d, AttackLayer3TopAttacksParamsDateRange2d, AttackLayer3TopAttacksParamsDateRange7d, AttackLayer3TopAttacksParamsDateRange14d, AttackLayer3TopAttacksParamsDateRange28d, AttackLayer3TopAttacksParamsDateRange12w, AttackLayer3TopAttacksParamsDateRange24w, AttackLayer3TopAttacksParamsDateRange52w, AttackLayer3TopAttacksParamsDateRange1dControl, AttackLayer3TopAttacksParamsDateRange2dControl, AttackLayer3TopAttacksParamsDateRange7dControl, AttackLayer3TopAttacksParamsDateRange14dControl, AttackLayer3TopAttacksParamsDateRange28dControl, AttackLayer3TopAttacksParamsDateRange12wControl, AttackLayer3TopAttacksParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TopAttacksParamsFormat string
 
@@ -611,12 +619,28 @@ const (
 	AttackLayer3TopAttacksParamsFormatCsv  AttackLayer3TopAttacksParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TopAttacksParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopAttacksParamsFormatJson, AttackLayer3TopAttacksParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TopAttacksParamsIPVersion string
 
 const (
 	AttackLayer3TopAttacksParamsIPVersionIPv4 AttackLayer3TopAttacksParamsIPVersion = "IPv4"
 	AttackLayer3TopAttacksParamsIPVersionIPv6 AttackLayer3TopAttacksParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TopAttacksParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopAttacksParamsIPVersionIPv4, AttackLayer3TopAttacksParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 // Array of attack origin/target location attack limits. Together with
 // `limitPerLocation`, limits how many objects will be fetched per origin/target
@@ -628,6 +652,14 @@ const (
 	AttackLayer3TopAttacksParamsLimitDirectionTarget AttackLayer3TopAttacksParamsLimitDirection = "TARGET"
 )
 
+func (r AttackLayer3TopAttacksParamsLimitDirection) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopAttacksParamsLimitDirectionOrigin, AttackLayer3TopAttacksParamsLimitDirectionTarget:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TopAttacksParamsProtocol string
 
 const (
@@ -636,6 +668,14 @@ const (
 	AttackLayer3TopAttacksParamsProtocolIcmp AttackLayer3TopAttacksParamsProtocol = "ICMP"
 	AttackLayer3TopAttacksParamsProtocolGRE  AttackLayer3TopAttacksParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TopAttacksParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopAttacksParamsProtocolUdp, AttackLayer3TopAttacksParamsProtocolTcp, AttackLayer3TopAttacksParamsProtocolIcmp, AttackLayer3TopAttacksParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TopAttacksResponseEnvelope struct {
 	Result  AttackLayer3TopAttacksResponse             `json:"result,required"`
@@ -718,6 +758,14 @@ const (
 	AttackLayer3TopIndustryParamsDateRange24wControl AttackLayer3TopIndustryParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TopIndustryParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopIndustryParamsDateRange1d, AttackLayer3TopIndustryParamsDateRange2d, AttackLayer3TopIndustryParamsDateRange7d, AttackLayer3TopIndustryParamsDateRange14d, AttackLayer3TopIndustryParamsDateRange28d, AttackLayer3TopIndustryParamsDateRange12w, AttackLayer3TopIndustryParamsDateRange24w, AttackLayer3TopIndustryParamsDateRange52w, AttackLayer3TopIndustryParamsDateRange1dControl, AttackLayer3TopIndustryParamsDateRange2dControl, AttackLayer3TopIndustryParamsDateRange7dControl, AttackLayer3TopIndustryParamsDateRange14dControl, AttackLayer3TopIndustryParamsDateRange28dControl, AttackLayer3TopIndustryParamsDateRange12wControl, AttackLayer3TopIndustryParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TopIndustryParamsFormat string
 
@@ -726,12 +774,28 @@ const (
 	AttackLayer3TopIndustryParamsFormatCsv  AttackLayer3TopIndustryParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TopIndustryParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopIndustryParamsFormatJson, AttackLayer3TopIndustryParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TopIndustryParamsIPVersion string
 
 const (
 	AttackLayer3TopIndustryParamsIPVersionIPv4 AttackLayer3TopIndustryParamsIPVersion = "IPv4"
 	AttackLayer3TopIndustryParamsIPVersionIPv6 AttackLayer3TopIndustryParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TopIndustryParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopIndustryParamsIPVersionIPv4, AttackLayer3TopIndustryParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TopIndustryParamsProtocol string
 
@@ -741,6 +805,14 @@ const (
 	AttackLayer3TopIndustryParamsProtocolIcmp AttackLayer3TopIndustryParamsProtocol = "ICMP"
 	AttackLayer3TopIndustryParamsProtocolGRE  AttackLayer3TopIndustryParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TopIndustryParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopIndustryParamsProtocolUdp, AttackLayer3TopIndustryParamsProtocolTcp, AttackLayer3TopIndustryParamsProtocolIcmp, AttackLayer3TopIndustryParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TopIndustryResponseEnvelope struct {
 	Result  AttackLayer3TopIndustryResponse             `json:"result,required"`
@@ -823,6 +895,14 @@ const (
 	AttackLayer3TopVerticalParamsDateRange24wControl AttackLayer3TopVerticalParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TopVerticalParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopVerticalParamsDateRange1d, AttackLayer3TopVerticalParamsDateRange2d, AttackLayer3TopVerticalParamsDateRange7d, AttackLayer3TopVerticalParamsDateRange14d, AttackLayer3TopVerticalParamsDateRange28d, AttackLayer3TopVerticalParamsDateRange12w, AttackLayer3TopVerticalParamsDateRange24w, AttackLayer3TopVerticalParamsDateRange52w, AttackLayer3TopVerticalParamsDateRange1dControl, AttackLayer3TopVerticalParamsDateRange2dControl, AttackLayer3TopVerticalParamsDateRange7dControl, AttackLayer3TopVerticalParamsDateRange14dControl, AttackLayer3TopVerticalParamsDateRange28dControl, AttackLayer3TopVerticalParamsDateRange12wControl, AttackLayer3TopVerticalParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TopVerticalParamsFormat string
 
@@ -831,12 +911,28 @@ const (
 	AttackLayer3TopVerticalParamsFormatCsv  AttackLayer3TopVerticalParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TopVerticalParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopVerticalParamsFormatJson, AttackLayer3TopVerticalParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TopVerticalParamsIPVersion string
 
 const (
 	AttackLayer3TopVerticalParamsIPVersionIPv4 AttackLayer3TopVerticalParamsIPVersion = "IPv4"
 	AttackLayer3TopVerticalParamsIPVersionIPv6 AttackLayer3TopVerticalParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TopVerticalParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopVerticalParamsIPVersionIPv4, AttackLayer3TopVerticalParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TopVerticalParamsProtocol string
 
@@ -846,6 +942,14 @@ const (
 	AttackLayer3TopVerticalParamsProtocolIcmp AttackLayer3TopVerticalParamsProtocol = "ICMP"
 	AttackLayer3TopVerticalParamsProtocolGRE  AttackLayer3TopVerticalParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TopVerticalParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopVerticalParamsProtocolUdp, AttackLayer3TopVerticalParamsProtocolTcp, AttackLayer3TopVerticalParamsProtocolIcmp, AttackLayer3TopVerticalParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TopVerticalResponseEnvelope struct {
 	Result  AttackLayer3TopVerticalResponse             `json:"result,required"`

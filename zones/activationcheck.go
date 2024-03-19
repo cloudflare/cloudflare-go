@@ -152,3 +152,11 @@ type ActivationCheckTriggerResponseEnvelopeSuccess bool
 const (
 	ActivationCheckTriggerResponseEnvelopeSuccessTrue ActivationCheckTriggerResponseEnvelopeSuccess = true
 )
+
+func (r ActivationCheckTriggerResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ActivationCheckTriggerResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

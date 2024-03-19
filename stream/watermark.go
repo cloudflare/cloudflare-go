@@ -309,6 +309,14 @@ const (
 	WatermarkNewResponseEnvelopeSuccessTrue WatermarkNewResponseEnvelopeSuccess = true
 )
 
+func (r WatermarkNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WatermarkNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WatermarkListParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -394,6 +402,14 @@ type WatermarkListResponseEnvelopeSuccess bool
 const (
 	WatermarkListResponseEnvelopeSuccessTrue WatermarkListResponseEnvelopeSuccess = true
 )
+
+func (r WatermarkListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WatermarkListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type WatermarkDeleteParams struct {
 	// The account identifier tag.
@@ -481,6 +497,14 @@ const (
 	WatermarkDeleteResponseEnvelopeSuccessTrue WatermarkDeleteResponseEnvelopeSuccess = true
 )
 
+func (r WatermarkDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WatermarkDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WatermarkGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -566,3 +590,11 @@ type WatermarkGetResponseEnvelopeSuccess bool
 const (
 	WatermarkGetResponseEnvelopeSuccessTrue WatermarkGetResponseEnvelopeSuccess = true
 )
+
+func (r WatermarkGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WatermarkGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

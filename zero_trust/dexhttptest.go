@@ -544,6 +544,14 @@ const (
 	DigitalExperienceMonitoringHTTPDetailsKindHTTP DigitalExperienceMonitoringHTTPDetailsKind = "http"
 )
 
+func (r DigitalExperienceMonitoringHTTPDetailsKind) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringHTTPDetailsKindHTTP:
+		return true
+	}
+	return false
+}
+
 type DEXHTTPTestGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Time interval for aggregate time slots.
@@ -575,6 +583,14 @@ const (
 	DexhttpTestGetParamsIntervalMinute DexhttpTestGetParamsInterval = "minute"
 	DexhttpTestGetParamsIntervalHour   DexhttpTestGetParamsInterval = "hour"
 )
+
+func (r DexhttpTestGetParamsInterval) IsKnown() bool {
+	switch r {
+	case DexhttpTestGetParamsIntervalMinute, DexhttpTestGetParamsIntervalHour:
+		return true
+	}
+	return false
+}
 
 type DexhttpTestGetResponseEnvelope struct {
 	Errors   []DexhttpTestGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -656,3 +672,11 @@ type DexhttpTestGetResponseEnvelopeSuccess bool
 const (
 	DexhttpTestGetResponseEnvelopeSuccessTrue DexhttpTestGetResponseEnvelopeSuccess = true
 )
+
+func (r DexhttpTestGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DexhttpTestGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

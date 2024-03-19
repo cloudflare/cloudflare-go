@@ -96,6 +96,14 @@ const (
 	StatusGetResponseStatusQueueing         StatusGetResponseStatus = "queueing"
 )
 
+func (r StatusGetResponseStatus) IsKnown() bool {
+	switch r {
+	case StatusGetResponseStatusEventPrequeueing, StatusGetResponseStatusNotQueueing, StatusGetResponseStatusQueueing:
+		return true
+	}
+	return false
+}
+
 type StatusGetResponseEnvelope struct {
 	Result StatusGetResponse             `json:"result,required"`
 	JSON   statusGetResponseEnvelopeJSON `json:"-"`

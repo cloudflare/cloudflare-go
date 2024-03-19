@@ -285,6 +285,14 @@ const (
 	BGPTopAseGetParamsDateRange24wControl BGPTopAseGetParamsDateRange = "24wControl"
 )
 
+func (r BGPTopAseGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case BGPTopAseGetParamsDateRange1d, BGPTopAseGetParamsDateRange2d, BGPTopAseGetParamsDateRange7d, BGPTopAseGetParamsDateRange14d, BGPTopAseGetParamsDateRange28d, BGPTopAseGetParamsDateRange12w, BGPTopAseGetParamsDateRange24w, BGPTopAseGetParamsDateRange52w, BGPTopAseGetParamsDateRange1dControl, BGPTopAseGetParamsDateRange2dControl, BGPTopAseGetParamsDateRange7dControl, BGPTopAseGetParamsDateRange14dControl, BGPTopAseGetParamsDateRange28dControl, BGPTopAseGetParamsDateRange12wControl, BGPTopAseGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type BGPTopAseGetParamsFormat string
 
@@ -293,12 +301,28 @@ const (
 	BGPTopAseGetParamsFormatCsv  BGPTopAseGetParamsFormat = "CSV"
 )
 
+func (r BGPTopAseGetParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPTopAseGetParamsFormatJson, BGPTopAseGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type BGPTopAseGetParamsUpdateType string
 
 const (
 	BGPTopAseGetParamsUpdateTypeAnnouncement BGPTopAseGetParamsUpdateType = "ANNOUNCEMENT"
 	BGPTopAseGetParamsUpdateTypeWithdrawal   BGPTopAseGetParamsUpdateType = "WITHDRAWAL"
 )
+
+func (r BGPTopAseGetParamsUpdateType) IsKnown() bool {
+	switch r {
+	case BGPTopAseGetParamsUpdateTypeAnnouncement, BGPTopAseGetParamsUpdateTypeWithdrawal:
+		return true
+	}
+	return false
+}
 
 type BGPTopAseGetResponseEnvelope struct {
 	Result  BGPTopAseGetResponse             `json:"result,required"`
@@ -348,6 +372,14 @@ const (
 	BGPTopAsePrefixesParamsFormatJson BGPTopAsePrefixesParamsFormat = "JSON"
 	BGPTopAsePrefixesParamsFormatCsv  BGPTopAsePrefixesParamsFormat = "CSV"
 )
+
+func (r BGPTopAsePrefixesParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPTopAsePrefixesParamsFormatJson, BGPTopAsePrefixesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type BGPTopAsePrefixesResponseEnvelope struct {
 	Result  BGPTopAsePrefixesResponse             `json:"result,required"`

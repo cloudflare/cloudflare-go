@@ -151,3 +151,11 @@ type UUIDGetResponseEnvelopeSuccess bool
 const (
 	UUIDGetResponseEnvelopeSuccessTrue UUIDGetResponseEnvelopeSuccess = true
 )
+
+func (r UUIDGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UUIDGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

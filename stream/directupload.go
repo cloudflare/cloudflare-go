@@ -207,3 +207,11 @@ type DirectUploadNewResponseEnvelopeSuccess bool
 const (
 	DirectUploadNewResponseEnvelopeSuccessTrue DirectUploadNewResponseEnvelopeSuccess = true
 )
+
+func (r DirectUploadNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DirectUploadNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

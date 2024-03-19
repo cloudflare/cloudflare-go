@@ -100,6 +100,14 @@ const (
 	ZonesSSLRecommenderIDSSLRecommender ZonesSSLRecommenderID = "ssl_recommender"
 )
 
+func (r ZonesSSLRecommenderID) IsKnown() bool {
+	switch r {
+	case ZonesSSLRecommenderIDSSLRecommender:
+		return true
+	}
+	return false
+}
+
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
 // origin servers support.

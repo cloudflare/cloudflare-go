@@ -104,6 +104,14 @@ const (
 	WorkersSchemasBindingWorkersKVNamespaceBindingTypeKVNamespace WorkersSchemasBindingWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
+func (r WorkersSchemasBindingWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case WorkersSchemasBindingWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
 type WorkersSchemasBindingWorkersWasmModuleBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -137,6 +145,14 @@ type WorkersSchemasBindingWorkersWasmModuleBindingType string
 const (
 	WorkersSchemasBindingWorkersWasmModuleBindingTypeWasmModule WorkersSchemasBindingWorkersWasmModuleBindingType = "wasm_module"
 )
+
+func (r WorkersSchemasBindingWorkersWasmModuleBindingType) IsKnown() bool {
+	switch r {
+	case WorkersSchemasBindingWorkersWasmModuleBindingTypeWasmModule:
+		return true
+	}
+	return false
+}
 
 type ScriptBindingGetParams struct {
 	// Identifier
@@ -223,3 +239,11 @@ type ScriptBindingGetResponseEnvelopeSuccess bool
 const (
 	ScriptBindingGetResponseEnvelopeSuccessTrue ScriptBindingGetResponseEnvelopeSuccess = true
 )
+
+func (r ScriptBindingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptBindingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

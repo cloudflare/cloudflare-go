@@ -335,6 +335,14 @@ const (
 	DatabaseNewResponseEnvelopeSuccessTrue DatabaseNewResponseEnvelopeSuccess = true
 )
 
+func (r DatabaseNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatabaseNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DatabaseListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -435,6 +443,14 @@ const (
 	DatabaseDeleteResponseEnvelopeSuccessTrue DatabaseDeleteResponseEnvelopeSuccess = true
 )
 
+func (r DatabaseDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatabaseDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DatabaseGetResponseEnvelope struct {
 	Errors   []DatabaseGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DatabaseGetResponseEnvelopeMessages `json:"messages,required"`
@@ -515,6 +531,14 @@ type DatabaseGetResponseEnvelopeSuccess bool
 const (
 	DatabaseGetResponseEnvelopeSuccessTrue DatabaseGetResponseEnvelopeSuccess = true
 )
+
+func (r DatabaseGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatabaseGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DatabaseQueryParams struct {
 	Sql    param.Field[string]   `json:"sql,required"`
@@ -605,3 +629,11 @@ type DatabaseQueryResponseEnvelopeSuccess bool
 const (
 	DatabaseQueryResponseEnvelopeSuccessTrue DatabaseQueryResponseEnvelopeSuccess = true
 )
+
+func (r DatabaseQueryResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DatabaseQueryResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

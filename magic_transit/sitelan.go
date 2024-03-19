@@ -1406,6 +1406,14 @@ const (
 	SiteLanNewResponseEnvelopeSuccessTrue SiteLanNewResponseEnvelopeSuccess = true
 )
 
+func (r SiteLanNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteLanUpdateParams struct {
 	Lan param.Field[SiteLanUpdateParamsLan] `json:"lan"`
 }
@@ -1584,6 +1592,14 @@ const (
 	SiteLanUpdateResponseEnvelopeSuccessTrue SiteLanUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SiteLanUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteLanListResponseEnvelope struct {
 	Errors   []SiteLanListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteLanListResponseEnvelopeMessages `json:"messages,required"`
@@ -1664,6 +1680,14 @@ type SiteLanListResponseEnvelopeSuccess bool
 const (
 	SiteLanListResponseEnvelopeSuccessTrue SiteLanListResponseEnvelopeSuccess = true
 )
+
+func (r SiteLanListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SiteLanDeleteResponseEnvelope struct {
 	Errors   []SiteLanDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1746,6 +1770,14 @@ const (
 	SiteLanDeleteResponseEnvelopeSuccessTrue SiteLanDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SiteLanDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteLanGetResponseEnvelope struct {
 	Errors   []SiteLanGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteLanGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1826,3 +1858,11 @@ type SiteLanGetResponseEnvelopeSuccess bool
 const (
 	SiteLanGetResponseEnvelopeSuccessTrue SiteLanGetResponseEnvelopeSuccess = true
 )
+
+func (r SiteLanGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteLanGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

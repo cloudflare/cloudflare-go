@@ -155,6 +155,14 @@ const (
 	ObservatoryAvailabilitiesRegionsValueUsWest1             ObservatoryAvailabilitiesRegionsValue = "us-west1"
 )
 
+func (r ObservatoryAvailabilitiesRegionsValue) IsKnown() bool {
+	switch r {
+	case ObservatoryAvailabilitiesRegionsValueAsiaEast1, ObservatoryAvailabilitiesRegionsValueAsiaNortheast1, ObservatoryAvailabilitiesRegionsValueAsiaNortheast2, ObservatoryAvailabilitiesRegionsValueAsiaSouth1, ObservatoryAvailabilitiesRegionsValueAsiaSoutheast1, ObservatoryAvailabilitiesRegionsValueAustraliaSoutheast1, ObservatoryAvailabilitiesRegionsValueEuropeNorth1, ObservatoryAvailabilitiesRegionsValueEuropeSouthwest1, ObservatoryAvailabilitiesRegionsValueEuropeWest1, ObservatoryAvailabilitiesRegionsValueEuropeWest2, ObservatoryAvailabilitiesRegionsValueEuropeWest3, ObservatoryAvailabilitiesRegionsValueEuropeWest4, ObservatoryAvailabilitiesRegionsValueEuropeWest8, ObservatoryAvailabilitiesRegionsValueEuropeWest9, ObservatoryAvailabilitiesRegionsValueMeWest1, ObservatoryAvailabilitiesRegionsValueSouthamericaEast1, ObservatoryAvailabilitiesRegionsValueUsCentral1, ObservatoryAvailabilitiesRegionsValueUsEast1, ObservatoryAvailabilitiesRegionsValueUsEast4, ObservatoryAvailabilitiesRegionsValueUsSouth1, ObservatoryAvailabilitiesRegionsValueUsWest1:
+		return true
+	}
+	return false
+}
+
 type AvailabilityListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`

@@ -192,6 +192,14 @@ const (
 	RoleListResponseEnvelopeSuccessTrue RoleListResponseEnvelopeSuccess = true
 )
 
+func (r RoleListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoleListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RoleListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -307,3 +315,11 @@ type RoleGetResponseEnvelopeSuccess bool
 const (
 	RoleGetResponseEnvelopeSuccessTrue RoleGetResponseEnvelopeSuccess = true
 )
+
+func (r RoleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

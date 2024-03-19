@@ -117,6 +117,14 @@ const (
 	AaaHistoryMechanismTypeWebhook   AaaHistoryMechanismType = "webhook"
 )
 
+func (r AaaHistoryMechanismType) IsKnown() bool {
+	switch r {
+	case AaaHistoryMechanismTypeEmail, AaaHistoryMechanismTypePagerduty, AaaHistoryMechanismTypeWebhook:
+		return true
+	}
+	return false
+}
+
 type V3HistoryListParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`

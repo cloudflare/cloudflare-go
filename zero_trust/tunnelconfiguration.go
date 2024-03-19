@@ -370,6 +370,14 @@ const (
 	TunnelConfigurationUpdateResponseEnvelopeSuccessTrue TunnelConfigurationUpdateResponseEnvelopeSuccess = true
 )
 
+func (r TunnelConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelConfigurationUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TunnelConfigurationGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -455,3 +463,11 @@ type TunnelConfigurationGetResponseEnvelopeSuccess bool
 const (
 	TunnelConfigurationGetResponseEnvelopeSuccessTrue TunnelConfigurationGetResponseEnvelopeSuccess = true
 )
+
+func (r TunnelConfigurationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelConfigurationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

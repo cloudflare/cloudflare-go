@@ -157,6 +157,14 @@ const (
 	TLSCertificatesAndHostnamesBaseStatusDeleted TLSCertificatesAndHostnamesBaseStatus = "deleted"
 )
 
+func (r TLSCertificatesAndHostnamesBaseStatus) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesBaseStatusActive, TLSCertificatesAndHostnamesBaseStatusDeleted:
+		return true
+	}
+	return false
+}
+
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
 type TLSCertificatesAndHostnamesBaseTunnel struct {
 	// Private IP of the Key Server Host
@@ -241,6 +249,14 @@ const (
 	KeylessCertificateNewParamsBundleMethodOptimal    KeylessCertificateNewParamsBundleMethod = "optimal"
 	KeylessCertificateNewParamsBundleMethodForce      KeylessCertificateNewParamsBundleMethod = "force"
 )
+
+func (r KeylessCertificateNewParamsBundleMethod) IsKnown() bool {
+	switch r {
+	case KeylessCertificateNewParamsBundleMethodUbiquitous, KeylessCertificateNewParamsBundleMethodOptimal, KeylessCertificateNewParamsBundleMethodForce:
+		return true
+	}
+	return false
+}
 
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
 type KeylessCertificateNewParamsTunnel struct {
@@ -335,6 +351,14 @@ const (
 	KeylessCertificateNewResponseEnvelopeSuccessTrue KeylessCertificateNewResponseEnvelopeSuccess = true
 )
 
+func (r KeylessCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case KeylessCertificateNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type KeylessCertificateListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -422,6 +446,14 @@ type KeylessCertificateListResponseEnvelopeSuccess bool
 const (
 	KeylessCertificateListResponseEnvelopeSuccessTrue KeylessCertificateListResponseEnvelopeSuccess = true
 )
+
+func (r KeylessCertificateListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case KeylessCertificateListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type KeylessCertificateListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -540,6 +572,14 @@ const (
 	KeylessCertificateDeleteResponseEnvelopeSuccessTrue KeylessCertificateDeleteResponseEnvelopeSuccess = true
 )
 
+func (r KeylessCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case KeylessCertificateDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type KeylessCertificateEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -653,6 +693,14 @@ const (
 	KeylessCertificateEditResponseEnvelopeSuccessTrue KeylessCertificateEditResponseEnvelopeSuccess = true
 )
 
+func (r KeylessCertificateEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case KeylessCertificateEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type KeylessCertificateGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -738,3 +786,11 @@ type KeylessCertificateGetResponseEnvelopeSuccess bool
 const (
 	KeylessCertificateGetResponseEnvelopeSuccessTrue KeylessCertificateGetResponseEnvelopeSuccess = true
 )
+
+func (r KeylessCertificateGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case KeylessCertificateGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

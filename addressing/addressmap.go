@@ -273,6 +273,14 @@ const (
 	AddressMapNewResponseMembershipsKindAccount AddressMapNewResponseMembershipsKind = "account"
 )
 
+func (r AddressMapNewResponseMembershipsKind) IsKnown() bool {
+	switch r {
+	case AddressMapNewResponseMembershipsKindZone, AddressMapNewResponseMembershipsKindAccount:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [addressing.AddressMapDeleteResponseUnknown],
 // [addressing.AddressMapDeleteResponseArray] or [shared.UnionString].
 type AddressMapDeleteResponse interface {
@@ -416,6 +424,14 @@ const (
 	AddressMapGetResponseMembershipsKindAccount AddressMapGetResponseMembershipsKind = "account"
 )
 
+func (r AddressMapGetResponseMembershipsKind) IsKnown() bool {
+	switch r {
+	case AddressMapGetResponseMembershipsKindZone, AddressMapGetResponseMembershipsKindAccount:
+		return true
+	}
+	return false
+}
+
 type AddressMapNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -512,6 +528,14 @@ const (
 	AddressMapNewResponseEnvelopeSuccessTrue AddressMapNewResponseEnvelopeSuccess = true
 )
 
+func (r AddressMapNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AddressMapListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -599,6 +623,14 @@ type AddressMapListResponseEnvelopeSuccess bool
 const (
 	AddressMapListResponseEnvelopeSuccessTrue AddressMapListResponseEnvelopeSuccess = true
 )
+
+func (r AddressMapListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AddressMapListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -718,6 +750,14 @@ type AddressMapDeleteResponseEnvelopeSuccess bool
 const (
 	AddressMapDeleteResponseEnvelopeSuccessTrue AddressMapDeleteResponseEnvelopeSuccess = true
 )
+
+func (r AddressMapDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AddressMapDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -852,6 +892,14 @@ const (
 	AddressMapEditResponseEnvelopeSuccessTrue AddressMapEditResponseEnvelopeSuccess = true
 )
 
+func (r AddressMapEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AddressMapGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -937,3 +985,11 @@ type AddressMapGetResponseEnvelopeSuccess bool
 const (
 	AddressMapGetResponseEnvelopeSuccessTrue AddressMapGetResponseEnvelopeSuccess = true
 )
+
+func (r AddressMapGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

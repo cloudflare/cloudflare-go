@@ -109,6 +109,14 @@ const (
 	SettingOriginMaxHTTPVersionEditResponseIDOriginMaxHTTPVersion SettingOriginMaxHTTPVersionEditResponseID = "origin_max_http_version"
 )
 
+func (r SettingOriginMaxHTTPVersionEditResponseID) IsKnown() bool {
+	switch r {
+	case SettingOriginMaxHTTPVersionEditResponseIDOriginMaxHTTPVersion:
+		return true
+	}
+	return false
+}
+
 // Value of the Origin Max HTTP Version Setting.
 type SettingOriginMaxHTTPVersionEditResponseValue string
 
@@ -116,6 +124,14 @@ const (
 	SettingOriginMaxHTTPVersionEditResponseValue2 SettingOriginMaxHTTPVersionEditResponseValue = "2"
 	SettingOriginMaxHTTPVersionEditResponseValue1 SettingOriginMaxHTTPVersionEditResponseValue = "1"
 )
+
+func (r SettingOriginMaxHTTPVersionEditResponseValue) IsKnown() bool {
+	switch r {
+	case SettingOriginMaxHTTPVersionEditResponseValue2, SettingOriginMaxHTTPVersionEditResponseValue1:
+		return true
+	}
+	return false
+}
 
 // Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
 // attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
@@ -158,6 +174,14 @@ const (
 	SettingOriginMaxHTTPVersionGetResponseIDOriginMaxHTTPVersion SettingOriginMaxHTTPVersionGetResponseID = "origin_max_http_version"
 )
 
+func (r SettingOriginMaxHTTPVersionGetResponseID) IsKnown() bool {
+	switch r {
+	case SettingOriginMaxHTTPVersionGetResponseIDOriginMaxHTTPVersion:
+		return true
+	}
+	return false
+}
+
 // Value of the Origin Max HTTP Version Setting.
 type SettingOriginMaxHTTPVersionGetResponseValue string
 
@@ -165,6 +189,14 @@ const (
 	SettingOriginMaxHTTPVersionGetResponseValue2 SettingOriginMaxHTTPVersionGetResponseValue = "2"
 	SettingOriginMaxHTTPVersionGetResponseValue1 SettingOriginMaxHTTPVersionGetResponseValue = "1"
 )
+
+func (r SettingOriginMaxHTTPVersionGetResponseValue) IsKnown() bool {
+	switch r {
+	case SettingOriginMaxHTTPVersionGetResponseValue2, SettingOriginMaxHTTPVersionGetResponseValue1:
+		return true
+	}
+	return false
+}
 
 type SettingOriginMaxHTTPVersionEditParams struct {
 	// Identifier
@@ -184,6 +216,14 @@ const (
 	SettingOriginMaxHTTPVersionEditParamsValue2 SettingOriginMaxHTTPVersionEditParamsValue = "2"
 	SettingOriginMaxHTTPVersionEditParamsValue1 SettingOriginMaxHTTPVersionEditParamsValue = "1"
 )
+
+func (r SettingOriginMaxHTTPVersionEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingOriginMaxHTTPVersionEditParamsValue2, SettingOriginMaxHTTPVersionEditParamsValue1:
+		return true
+	}
+	return false
+}
 
 type SettingOriginMaxHTTPVersionEditResponseEnvelope struct {
 	Errors   []SettingOriginMaxHTTPVersionEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -272,6 +312,14 @@ type SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccess bool
 const (
 	SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccessTrue SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccess = true
 )
+
+func (r SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SettingOriginMaxHTTPVersionGetParams struct {
 	// Identifier
@@ -364,3 +412,11 @@ type SettingOriginMaxHTTPVersionGetResponseEnvelopeSuccess bool
 const (
 	SettingOriginMaxHTTPVersionGetResponseEnvelopeSuccessTrue SettingOriginMaxHTTPVersionGetResponseEnvelopeSuccess = true
 )
+
+func (r SettingOriginMaxHTTPVersionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SettingOriginMaxHTTPVersionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

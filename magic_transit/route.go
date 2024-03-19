@@ -476,6 +476,14 @@ const (
 	RouteNewResponseEnvelopeSuccessTrue RouteNewResponseEnvelopeSuccess = true
 )
 
+func (r RouteNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteUpdateParams struct {
 	// The next-hop IP Address for the static route.
 	Nexthop param.Field[string] `json:"nexthop,required"`
@@ -588,6 +596,14 @@ const (
 	RouteUpdateResponseEnvelopeSuccessTrue RouteUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RouteUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteListResponseEnvelope struct {
 	Errors   []RouteListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteListResponseEnvelopeMessages `json:"messages,required"`
@@ -669,6 +685,14 @@ const (
 	RouteListResponseEnvelopeSuccessTrue RouteListResponseEnvelopeSuccess = true
 )
 
+func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteDeleteResponseEnvelope struct {
 	Errors   []RouteDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -749,6 +773,14 @@ type RouteDeleteResponseEnvelopeSuccess bool
 const (
 	RouteDeleteResponseEnvelopeSuccessTrue RouteDeleteResponseEnvelopeSuccess = true
 )
+
+func (r RouteDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RouteEmptyParams struct {
 	Routes param.Field[[]RouteEmptyParamsRoute] `json:"routes,required"`
@@ -846,6 +878,14 @@ const (
 	RouteEmptyResponseEnvelopeSuccessTrue RouteEmptyResponseEnvelopeSuccess = true
 )
 
+func (r RouteEmptyResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteEmptyResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RouteGetResponseEnvelope struct {
 	Errors   []RouteGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteGetResponseEnvelopeMessages `json:"messages,required"`
@@ -926,3 +966,11 @@ type RouteGetResponseEnvelopeSuccess bool
 const (
 	RouteGetResponseEnvelopeSuccessTrue RouteGetResponseEnvelopeSuccess = true
 )
+
+func (r RouteGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RouteGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

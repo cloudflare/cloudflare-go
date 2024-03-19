@@ -231,6 +231,14 @@ const (
 	CaptionUpdateResponseEnvelopeSuccessTrue CaptionUpdateResponseEnvelopeSuccess = true
 )
 
+func (r CaptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CaptionUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CaptionDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -317,6 +325,14 @@ const (
 	CaptionDeleteResponseEnvelopeSuccessTrue CaptionDeleteResponseEnvelopeSuccess = true
 )
 
+func (r CaptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CaptionDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CaptionGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -402,3 +418,11 @@ type CaptionGetResponseEnvelopeSuccess bool
 const (
 	CaptionGetResponseEnvelopeSuccessTrue CaptionGetResponseEnvelopeSuccess = true
 )
+
+func (r CaptionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CaptionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

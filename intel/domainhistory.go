@@ -192,6 +192,14 @@ const (
 	DomainHistoryGetResponseEnvelopeSuccessTrue DomainHistoryGetResponseEnvelopeSuccess = true
 )
 
+func (r DomainHistoryGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainHistoryGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DomainHistoryGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

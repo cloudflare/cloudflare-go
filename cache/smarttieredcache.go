@@ -210,6 +210,14 @@ const (
 	SmartTieredCacheDeleteResponseEnvelopeSuccessTrue SmartTieredCacheDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SmartTieredCacheDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SmartTieredCacheEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -228,6 +236,14 @@ const (
 	SmartTieredCacheEditParamsValueOn  SmartTieredCacheEditParamsValue = "on"
 	SmartTieredCacheEditParamsValueOff SmartTieredCacheEditParamsValue = "off"
 )
+
+func (r SmartTieredCacheEditParamsValue) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheEditParamsValueOn, SmartTieredCacheEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SmartTieredCacheEditResponseEnvelope struct {
 	Errors   []SmartTieredCacheEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -309,6 +325,14 @@ type SmartTieredCacheEditResponseEnvelopeSuccess bool
 const (
 	SmartTieredCacheEditResponseEnvelopeSuccessTrue SmartTieredCacheEditResponseEnvelopeSuccess = true
 )
+
+func (r SmartTieredCacheEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SmartTieredCacheGetParams struct {
 	// Identifier
@@ -395,3 +419,11 @@ type SmartTieredCacheGetResponseEnvelopeSuccess bool
 const (
 	SmartTieredCacheGetResponseEnvelopeSuccessTrue SmartTieredCacheGetResponseEnvelopeSuccess = true
 )
+
+func (r SmartTieredCacheGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SmartTieredCacheGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

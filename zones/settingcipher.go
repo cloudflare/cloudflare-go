@@ -102,6 +102,14 @@ const (
 	ZonesCiphersIDCiphers ZonesCiphersID = "ciphers"
 )
 
+func (r ZonesCiphersID) IsKnown() bool {
+	switch r {
+	case ZonesCiphersIDCiphers:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesCiphersEditable bool
@@ -110,6 +118,14 @@ const (
 	ZonesCiphersEditableTrue  ZonesCiphersEditable = true
 	ZonesCiphersEditableFalse ZonesCiphersEditable = false
 )
+
+func (r ZonesCiphersEditable) IsKnown() bool {
+	switch r {
+	case ZonesCiphersEditableTrue, ZonesCiphersEditableFalse:
+		return true
+	}
+	return false
+}
 
 // An allowlist of ciphers for TLS termination. These ciphers must be in the
 // BoringSSL format.

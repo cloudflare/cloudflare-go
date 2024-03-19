@@ -214,6 +214,14 @@ const (
 	ValidateDestinationResponseEnvelopeSuccessTrue ValidateDestinationResponseEnvelopeSuccess = true
 )
 
+func (r ValidateDestinationResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ValidateDestinationResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ValidateOriginParams struct {
 	// This field is deprecated. Use `output_options` instead. Configuration string. It
 	// specifies things like requested fields and timestamp formats. If migrating from
@@ -311,3 +319,11 @@ type ValidateOriginResponseEnvelopeSuccess bool
 const (
 	ValidateOriginResponseEnvelopeSuccessTrue ValidateOriginResponseEnvelopeSuccess = true
 )
+
+func (r ValidateOriginResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ValidateOriginResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

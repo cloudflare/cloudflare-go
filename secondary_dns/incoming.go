@@ -328,6 +328,14 @@ const (
 	IncomingNewResponseEnvelopeSuccessTrue IncomingNewResponseEnvelopeSuccess = true
 )
 
+func (r IncomingNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IncomingNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IncomingUpdateParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
@@ -424,6 +432,14 @@ const (
 	IncomingUpdateResponseEnvelopeSuccessTrue IncomingUpdateResponseEnvelopeSuccess = true
 )
 
+func (r IncomingUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IncomingUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IncomingDeleteParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 }
@@ -509,6 +525,14 @@ const (
 	IncomingDeleteResponseEnvelopeSuccessTrue IncomingDeleteResponseEnvelopeSuccess = true
 )
 
+func (r IncomingDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IncomingDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IncomingGetParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 }
@@ -593,3 +617,11 @@ type IncomingGetResponseEnvelopeSuccess bool
 const (
 	IncomingGetResponseEnvelopeSuccessTrue IncomingGetResponseEnvelopeSuccess = true
 )
+
+func (r IncomingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IncomingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

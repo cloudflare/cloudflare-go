@@ -102,6 +102,14 @@ const (
 	ZonesNELIDNEL ZonesNELID = "nel"
 )
 
+func (r ZonesNELID) IsKnown() bool {
+	switch r {
+	case ZonesNELIDNEL:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesNELValue struct {
 	Enabled bool              `json:"enabled"`
@@ -131,6 +139,14 @@ const (
 	ZonesNELEditableTrue  ZonesNELEditable = true
 	ZonesNELEditableFalse ZonesNELEditable = false
 )
+
+func (r ZonesNELEditable) IsKnown() bool {
+	switch r {
+	case ZonesNELEditableTrue, ZonesNELEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Enable Network Error Logging reporting on your zone. (Beta)
 type ZonesNELParam struct {

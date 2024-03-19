@@ -223,3 +223,11 @@ type IPListResponseEnvelopeSuccess bool
 const (
 	IPListResponseEnvelopeSuccessTrue IPListResponseEnvelopeSuccess = true
 )
+
+func (r IPListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

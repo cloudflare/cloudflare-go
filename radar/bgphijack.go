@@ -239,6 +239,14 @@ const (
 	BGPHijackEventsParamsDateRange24wControl BGPHijackEventsParamsDateRange = "24wControl"
 )
 
+func (r BGPHijackEventsParamsDateRange) IsKnown() bool {
+	switch r {
+	case BGPHijackEventsParamsDateRange1d, BGPHijackEventsParamsDateRange2d, BGPHijackEventsParamsDateRange7d, BGPHijackEventsParamsDateRange14d, BGPHijackEventsParamsDateRange28d, BGPHijackEventsParamsDateRange12w, BGPHijackEventsParamsDateRange24w, BGPHijackEventsParamsDateRange52w, BGPHijackEventsParamsDateRange1dControl, BGPHijackEventsParamsDateRange2dControl, BGPHijackEventsParamsDateRange7dControl, BGPHijackEventsParamsDateRange14dControl, BGPHijackEventsParamsDateRange28dControl, BGPHijackEventsParamsDateRange12wControl, BGPHijackEventsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type BGPHijackEventsParamsFormat string
 
@@ -246,6 +254,14 @@ const (
 	BGPHijackEventsParamsFormatJson BGPHijackEventsParamsFormat = "JSON"
 	BGPHijackEventsParamsFormatCsv  BGPHijackEventsParamsFormat = "CSV"
 )
+
+func (r BGPHijackEventsParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPHijackEventsParamsFormatJson, BGPHijackEventsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 // Sort events by field
 type BGPHijackEventsParamsSortBy string
@@ -256,6 +272,14 @@ const (
 	BGPHijackEventsParamsSortByConfidence BGPHijackEventsParamsSortBy = "CONFIDENCE"
 )
 
+func (r BGPHijackEventsParamsSortBy) IsKnown() bool {
+	switch r {
+	case BGPHijackEventsParamsSortByID, BGPHijackEventsParamsSortByTime, BGPHijackEventsParamsSortByConfidence:
+		return true
+	}
+	return false
+}
+
 // Sort order
 type BGPHijackEventsParamsSortOrder string
 
@@ -263,6 +287,14 @@ const (
 	BGPHijackEventsParamsSortOrderAsc  BGPHijackEventsParamsSortOrder = "ASC"
 	BGPHijackEventsParamsSortOrderDesc BGPHijackEventsParamsSortOrder = "DESC"
 )
+
+func (r BGPHijackEventsParamsSortOrder) IsKnown() bool {
+	switch r {
+	case BGPHijackEventsParamsSortOrderAsc, BGPHijackEventsParamsSortOrderDesc:
+		return true
+	}
+	return false
+}
 
 type BGPHijackEventsResponseEnvelope struct {
 	Result     BGPHijackEventsResponse                   `json:"result,required"`

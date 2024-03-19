@@ -157,6 +157,14 @@ const (
 	LegacyJhsRuleAllowedModeManagedChallenge LegacyJhsRuleAllowedMode = "managed_challenge"
 )
 
+func (r LegacyJhsRuleAllowedMode) IsKnown() bool {
+	switch r {
+	case LegacyJhsRuleAllowedModeBlock, LegacyJhsRuleAllowedModeChallenge, LegacyJhsRuleAllowedModeWhitelist, LegacyJhsRuleAllowedModeJsChallenge, LegacyJhsRuleAllowedModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // The rule configuration.
 //
 // Union satisfied by [user.LegacyJhsRuleConfigurationLegacyJhsIPConfiguration],
@@ -233,6 +241,14 @@ const (
 	LegacyJhsRuleConfigurationLegacyJhsIPConfigurationTargetIP LegacyJhsRuleConfigurationLegacyJhsIPConfigurationTarget = "ip"
 )
 
+func (r LegacyJhsRuleConfigurationLegacyJhsIPConfigurationTarget) IsKnown() bool {
+	switch r {
+	case LegacyJhsRuleConfigurationLegacyJhsIPConfigurationTargetIP:
+		return true
+	}
+	return false
+}
+
 type LegacyJhsRuleConfigurationLegacyJhsIPV6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
@@ -269,6 +285,14 @@ type LegacyJhsRuleConfigurationLegacyJhsIPV6ConfigurationTarget string
 const (
 	LegacyJhsRuleConfigurationLegacyJhsIPV6ConfigurationTargetIp6 LegacyJhsRuleConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
 )
+
+func (r LegacyJhsRuleConfigurationLegacyJhsIPV6ConfigurationTarget) IsKnown() bool {
+	switch r {
+	case LegacyJhsRuleConfigurationLegacyJhsIPV6ConfigurationTargetIp6:
+		return true
+	}
+	return false
+}
 
 type LegacyJhsRuleConfigurationLegacyJhsCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
@@ -308,6 +332,14 @@ const (
 	LegacyJhsRuleConfigurationLegacyJhsCIDRConfigurationTargetIPRange LegacyJhsRuleConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
 )
 
+func (r LegacyJhsRuleConfigurationLegacyJhsCIDRConfigurationTarget) IsKnown() bool {
+	switch r {
+	case LegacyJhsRuleConfigurationLegacyJhsCIDRConfigurationTargetIPRange:
+		return true
+	}
+	return false
+}
+
 type LegacyJhsRuleConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
@@ -344,6 +376,14 @@ type LegacyJhsRuleConfigurationLegacyJhsASNConfigurationTarget string
 const (
 	LegacyJhsRuleConfigurationLegacyJhsASNConfigurationTargetASN LegacyJhsRuleConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
+
+func (r LegacyJhsRuleConfigurationLegacyJhsASNConfigurationTarget) IsKnown() bool {
+	switch r {
+	case LegacyJhsRuleConfigurationLegacyJhsASNConfigurationTargetASN:
+		return true
+	}
+	return false
+}
 
 type LegacyJhsRuleConfigurationLegacyJhsCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
@@ -384,6 +424,14 @@ const (
 	LegacyJhsRuleConfigurationLegacyJhsCountryConfigurationTargetCountry LegacyJhsRuleConfigurationLegacyJhsCountryConfigurationTarget = "country"
 )
 
+func (r LegacyJhsRuleConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bool {
+	switch r {
+	case LegacyJhsRuleConfigurationLegacyJhsCountryConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
 // The action to apply to a matched request.
 type LegacyJhsRuleMode string
 
@@ -394,6 +442,14 @@ const (
 	LegacyJhsRuleModeJsChallenge      LegacyJhsRuleMode = "js_challenge"
 	LegacyJhsRuleModeManagedChallenge LegacyJhsRuleMode = "managed_challenge"
 )
+
+func (r LegacyJhsRuleMode) IsKnown() bool {
+	switch r {
+	case LegacyJhsRuleModeBlock, LegacyJhsRuleModeChallenge, LegacyJhsRuleModeWhitelist, LegacyJhsRuleModeJsChallenge, LegacyJhsRuleModeManagedChallenge:
+		return true
+	}
+	return false
+}
 
 type FirewallAccessRuleDeleteResponse struct {
 	// The unique identifier of the IP Access rule.
@@ -466,6 +522,14 @@ const (
 	FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTarget = "ip"
 )
 
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTarget) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP:
+		return true
+	}
+	return false
+}
+
 type FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
@@ -488,6 +552,14 @@ type FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTarget st
 const (
 	FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTargetIp6 FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
 )
+
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTarget) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTargetIp6:
+		return true
+	}
+	return false
+}
 
 type FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
@@ -513,6 +585,14 @@ const (
 	FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTargetIPRange FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
 )
 
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTargetIPRange:
+		return true
+	}
+	return false
+}
+
 type FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
@@ -535,6 +615,14 @@ type FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget str
 const (
 	FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTargetASN FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
+
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTargetASN:
+		return true
+	}
+	return false
+}
 
 type FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
@@ -560,6 +648,14 @@ const (
 	FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTargetCountry FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTarget = "country"
 )
 
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
 // The action to apply to a matched request.
 type FirewallAccessRuleNewParamsMode string
 
@@ -570,6 +666,14 @@ const (
 	FirewallAccessRuleNewParamsModeJsChallenge      FirewallAccessRuleNewParamsMode = "js_challenge"
 	FirewallAccessRuleNewParamsModeManagedChallenge FirewallAccessRuleNewParamsMode = "managed_challenge"
 )
+
+func (r FirewallAccessRuleNewParamsMode) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleNewParamsModeBlock, FirewallAccessRuleNewParamsModeChallenge, FirewallAccessRuleNewParamsModeWhitelist, FirewallAccessRuleNewParamsModeJsChallenge, FirewallAccessRuleNewParamsModeManagedChallenge:
+		return true
+	}
+	return false
+}
 
 type FirewallAccessRuleNewResponseEnvelope struct {
 	Errors   []FirewallAccessRuleNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -652,6 +756,14 @@ const (
 	FirewallAccessRuleNewResponseEnvelopeSuccessTrue FirewallAccessRuleNewResponseEnvelopeSuccess = true
 )
 
+func (r FirewallAccessRuleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FirewallAccessRuleListParams struct {
 	// The direction used to sort returned rules.
 	Direction     param.Field[FirewallAccessRuleListParamsDirection]     `query:"direction"`
@@ -681,6 +793,14 @@ const (
 	FirewallAccessRuleListParamsDirectionAsc  FirewallAccessRuleListParamsDirection = "asc"
 	FirewallAccessRuleListParamsDirectionDesc FirewallAccessRuleListParamsDirection = "desc"
 )
+
+func (r FirewallAccessRuleListParamsDirection) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleListParamsDirectionAsc, FirewallAccessRuleListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
 
 type FirewallAccessRuleListParamsEgsPagination struct {
 	Json param.Field[FirewallAccessRuleListParamsEgsPaginationJson] `query:"json"`
@@ -750,6 +870,14 @@ const (
 	FirewallAccessRuleListParamsFiltersConfigurationTargetCountry FirewallAccessRuleListParamsFiltersConfigurationTarget = "country"
 )
 
+func (r FirewallAccessRuleListParamsFiltersConfigurationTarget) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleListParamsFiltersConfigurationTargetIP, FirewallAccessRuleListParamsFiltersConfigurationTargetIPRange, FirewallAccessRuleListParamsFiltersConfigurationTargetASN, FirewallAccessRuleListParamsFiltersConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
 // When set to `all`, all the search requirements must match. When set to `any`,
 // only one of the search requirements has to match.
 type FirewallAccessRuleListParamsFiltersMatch string
@@ -758,6 +886,14 @@ const (
 	FirewallAccessRuleListParamsFiltersMatchAny FirewallAccessRuleListParamsFiltersMatch = "any"
 	FirewallAccessRuleListParamsFiltersMatchAll FirewallAccessRuleListParamsFiltersMatch = "all"
 )
+
+func (r FirewallAccessRuleListParamsFiltersMatch) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleListParamsFiltersMatchAny, FirewallAccessRuleListParamsFiltersMatchAll:
+		return true
+	}
+	return false
+}
 
 // The action to apply to a matched request.
 type FirewallAccessRuleListParamsFiltersMode string
@@ -770,6 +906,14 @@ const (
 	FirewallAccessRuleListParamsFiltersModeManagedChallenge FirewallAccessRuleListParamsFiltersMode = "managed_challenge"
 )
 
+func (r FirewallAccessRuleListParamsFiltersMode) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleListParamsFiltersModeBlock, FirewallAccessRuleListParamsFiltersModeChallenge, FirewallAccessRuleListParamsFiltersModeWhitelist, FirewallAccessRuleListParamsFiltersModeJsChallenge, FirewallAccessRuleListParamsFiltersModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // The field used to sort returned rules.
 type FirewallAccessRuleListParamsOrder string
 
@@ -778,6 +922,14 @@ const (
 	FirewallAccessRuleListParamsOrderConfigurationValue  FirewallAccessRuleListParamsOrder = "configuration.value"
 	FirewallAccessRuleListParamsOrderMode                FirewallAccessRuleListParamsOrder = "mode"
 )
+
+func (r FirewallAccessRuleListParamsOrder) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleListParamsOrderConfigurationTarget, FirewallAccessRuleListParamsOrderConfigurationValue, FirewallAccessRuleListParamsOrderMode:
+		return true
+	}
+	return false
+}
 
 type FirewallAccessRuleDeleteResponseEnvelope struct {
 	Errors   []FirewallAccessRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -860,6 +1012,14 @@ const (
 	FirewallAccessRuleDeleteResponseEnvelopeSuccessTrue FirewallAccessRuleDeleteResponseEnvelopeSuccess = true
 )
 
+func (r FirewallAccessRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type FirewallAccessRuleEditParams struct {
 	// The action to apply to a matched request.
 	Mode param.Field[FirewallAccessRuleEditParamsMode] `json:"mode"`
@@ -881,6 +1041,14 @@ const (
 	FirewallAccessRuleEditParamsModeJsChallenge      FirewallAccessRuleEditParamsMode = "js_challenge"
 	FirewallAccessRuleEditParamsModeManagedChallenge FirewallAccessRuleEditParamsMode = "managed_challenge"
 )
+
+func (r FirewallAccessRuleEditParamsMode) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleEditParamsModeBlock, FirewallAccessRuleEditParamsModeChallenge, FirewallAccessRuleEditParamsModeWhitelist, FirewallAccessRuleEditParamsModeJsChallenge, FirewallAccessRuleEditParamsModeManagedChallenge:
+		return true
+	}
+	return false
+}
 
 type FirewallAccessRuleEditResponseEnvelope struct {
 	Errors   []FirewallAccessRuleEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -962,3 +1130,11 @@ type FirewallAccessRuleEditResponseEnvelopeSuccess bool
 const (
 	FirewallAccessRuleEditResponseEnvelopeSuccessTrue FirewallAccessRuleEditResponseEnvelopeSuccess = true
 )
+
+func (r FirewallAccessRuleEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

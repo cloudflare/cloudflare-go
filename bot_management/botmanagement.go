@@ -188,6 +188,14 @@ const (
 	BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedManagedChallenge BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomated = "managed_challenge"
 )
 
+func (r BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomated) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedAllow, BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedBlock, BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
 type BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBots string
 
@@ -195,6 +203,14 @@ const (
 	BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsAllow BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBots = "allow"
 	BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsBlock BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBots = "block"
 )
+
+func (r BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBots) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsAllow, BotManagementUpdateResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsBlock:
+		return true
+	}
+	return false
+}
 
 type BotManagementUpdateResponseBotManagementSbfmLikelyConfig struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -253,6 +269,14 @@ const (
 	BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedManagedChallenge BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomated = "managed_challenge"
 )
 
+func (r BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomated) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedAllow, BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedBlock, BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on likely automated requests.
 type BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomated string
 
@@ -262,6 +286,14 @@ const (
 	BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomatedManagedChallenge BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomated = "managed_challenge"
 )
 
+func (r BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomated) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomatedAllow, BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomatedBlock, BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomatedManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
 type BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmVerifiedBots string
 
@@ -269,6 +301,14 @@ const (
 	BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmVerifiedBotsAllow BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmVerifiedBots = "allow"
 	BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmVerifiedBotsBlock BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmVerifiedBots = "block"
 )
+
+func (r BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmVerifiedBots) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmVerifiedBotsAllow, BotManagementUpdateResponseBotManagementSbfmLikelyConfigSbfmVerifiedBotsBlock:
+		return true
+	}
+	return false
+}
 
 type BotManagementUpdateResponseBotManagementBmSubscriptionConfig struct {
 	// Automatically update to the newest bot detection models created by Cloudflare as
@@ -430,6 +470,14 @@ const (
 	BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedManagedChallenge BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomated = "managed_challenge"
 )
 
+func (r BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomated) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedAllow, BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedBlock, BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
 type BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBots string
 
@@ -437,6 +485,14 @@ const (
 	BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsAllow BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBots = "allow"
 	BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsBlock BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBots = "block"
 )
+
+func (r BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBots) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsAllow, BotManagementGetResponseBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsBlock:
+		return true
+	}
+	return false
+}
 
 type BotManagementGetResponseBotManagementSbfmLikelyConfig struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
@@ -494,6 +550,14 @@ const (
 	BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedManagedChallenge BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomated = "managed_challenge"
 )
 
+func (r BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomated) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedAllow, BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedBlock, BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on likely automated requests.
 type BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomated string
 
@@ -503,6 +567,14 @@ const (
 	BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomatedManagedChallenge BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomated = "managed_challenge"
 )
 
+func (r BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomated) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomatedAllow, BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomatedBlock, BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmLikelyAutomatedManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
 type BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmVerifiedBots string
 
@@ -510,6 +582,14 @@ const (
 	BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmVerifiedBotsAllow BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmVerifiedBots = "allow"
 	BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmVerifiedBotsBlock BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmVerifiedBots = "block"
 )
+
+func (r BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmVerifiedBots) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmVerifiedBotsAllow, BotManagementGetResponseBotManagementSbfmLikelyConfigSbfmVerifiedBotsBlock:
+		return true
+	}
+	return false
+}
 
 type BotManagementGetResponseBotManagementBmSubscriptionConfig struct {
 	// Automatically update to the newest bot detection models created by Cloudflare as
@@ -593,6 +673,14 @@ const (
 	BotManagementUpdateParamsSbfmDefinitelyAutomatedManagedChallenge BotManagementUpdateParamsSbfmDefinitelyAutomated = "managed_challenge"
 )
 
+func (r BotManagementUpdateParamsSbfmDefinitelyAutomated) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsSbfmDefinitelyAutomatedAllow, BotManagementUpdateParamsSbfmDefinitelyAutomatedBlock, BotManagementUpdateParamsSbfmDefinitelyAutomatedManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on likely automated requests.
 type BotManagementUpdateParamsSbfmLikelyAutomated string
 
@@ -602,6 +690,14 @@ const (
 	BotManagementUpdateParamsSbfmLikelyAutomatedManagedChallenge BotManagementUpdateParamsSbfmLikelyAutomated = "managed_challenge"
 )
 
+func (r BotManagementUpdateParamsSbfmLikelyAutomated) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsSbfmLikelyAutomatedAllow, BotManagementUpdateParamsSbfmLikelyAutomatedBlock, BotManagementUpdateParamsSbfmLikelyAutomatedManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on verified bots requests.
 type BotManagementUpdateParamsSbfmVerifiedBots string
 
@@ -609,6 +705,14 @@ const (
 	BotManagementUpdateParamsSbfmVerifiedBotsAllow BotManagementUpdateParamsSbfmVerifiedBots = "allow"
 	BotManagementUpdateParamsSbfmVerifiedBotsBlock BotManagementUpdateParamsSbfmVerifiedBots = "block"
 )
+
+func (r BotManagementUpdateParamsSbfmVerifiedBots) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsSbfmVerifiedBotsAllow, BotManagementUpdateParamsSbfmVerifiedBotsBlock:
+		return true
+	}
+	return false
+}
 
 type BotManagementUpdateResponseEnvelope struct {
 	Errors   []BotManagementUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -690,6 +794,14 @@ type BotManagementUpdateResponseEnvelopeSuccess bool
 const (
 	BotManagementUpdateResponseEnvelopeSuccessTrue BotManagementUpdateResponseEnvelopeSuccess = true
 )
+
+func (r BotManagementUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type BotManagementGetParams struct {
 	// Identifier
@@ -776,3 +888,11 @@ type BotManagementGetResponseEnvelopeSuccess bool
 const (
 	BotManagementGetResponseEnvelopeSuccessTrue BotManagementGetResponseEnvelopeSuccess = true
 )
+
+func (r BotManagementGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

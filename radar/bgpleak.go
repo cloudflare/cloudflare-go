@@ -196,6 +196,14 @@ const (
 	BGPLeakEventsParamsDateRange24wControl BGPLeakEventsParamsDateRange = "24wControl"
 )
 
+func (r BGPLeakEventsParamsDateRange) IsKnown() bool {
+	switch r {
+	case BGPLeakEventsParamsDateRange1d, BGPLeakEventsParamsDateRange2d, BGPLeakEventsParamsDateRange7d, BGPLeakEventsParamsDateRange14d, BGPLeakEventsParamsDateRange28d, BGPLeakEventsParamsDateRange12w, BGPLeakEventsParamsDateRange24w, BGPLeakEventsParamsDateRange52w, BGPLeakEventsParamsDateRange1dControl, BGPLeakEventsParamsDateRange2dControl, BGPLeakEventsParamsDateRange7dControl, BGPLeakEventsParamsDateRange14dControl, BGPLeakEventsParamsDateRange28dControl, BGPLeakEventsParamsDateRange12wControl, BGPLeakEventsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type BGPLeakEventsParamsFormat string
 
@@ -203,6 +211,14 @@ const (
 	BGPLeakEventsParamsFormatJson BGPLeakEventsParamsFormat = "JSON"
 	BGPLeakEventsParamsFormatCsv  BGPLeakEventsParamsFormat = "CSV"
 )
+
+func (r BGPLeakEventsParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPLeakEventsParamsFormatJson, BGPLeakEventsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 // Sort events by field
 type BGPLeakEventsParamsSortBy string
@@ -216,6 +232,14 @@ const (
 	BGPLeakEventsParamsSortByTime     BGPLeakEventsParamsSortBy = "TIME"
 )
 
+func (r BGPLeakEventsParamsSortBy) IsKnown() bool {
+	switch r {
+	case BGPLeakEventsParamsSortByID, BGPLeakEventsParamsSortByLeaks, BGPLeakEventsParamsSortByPeers, BGPLeakEventsParamsSortByPrefixes, BGPLeakEventsParamsSortByOrigins, BGPLeakEventsParamsSortByTime:
+		return true
+	}
+	return false
+}
+
 // Sort order
 type BGPLeakEventsParamsSortOrder string
 
@@ -223,6 +247,14 @@ const (
 	BGPLeakEventsParamsSortOrderAsc  BGPLeakEventsParamsSortOrder = "ASC"
 	BGPLeakEventsParamsSortOrderDesc BGPLeakEventsParamsSortOrder = "DESC"
 )
+
+func (r BGPLeakEventsParamsSortOrder) IsKnown() bool {
+	switch r {
+	case BGPLeakEventsParamsSortOrderAsc, BGPLeakEventsParamsSortOrderDesc:
+		return true
+	}
+	return false
+}
 
 type BGPLeakEventsResponseEnvelope struct {
 	Result     BGPLeakEventsResponse                   `json:"result,required"`

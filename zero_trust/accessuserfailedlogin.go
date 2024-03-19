@@ -149,6 +149,14 @@ const (
 	AccessUserFailedLoginListResponseEnvelopeSuccessTrue AccessUserFailedLoginListResponseEnvelopeSuccess = true
 )
 
+func (r AccessUserFailedLoginListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessUserFailedLoginListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessUserFailedLoginListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

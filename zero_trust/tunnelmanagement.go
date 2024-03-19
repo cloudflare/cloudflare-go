@@ -90,6 +90,14 @@ const (
 	TunnelManagementNewParamsResourceLogs TunnelManagementNewParamsResource = "logs"
 )
 
+func (r TunnelManagementNewParamsResource) IsKnown() bool {
+	switch r {
+	case TunnelManagementNewParamsResourceLogs:
+		return true
+	}
+	return false
+}
+
 type TunnelManagementNewResponseEnvelope struct {
 	Errors   []TunnelManagementNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TunnelManagementNewResponseEnvelopeMessages `json:"messages,required"`
@@ -170,3 +178,11 @@ type TunnelManagementNewResponseEnvelopeSuccess bool
 const (
 	TunnelManagementNewResponseEnvelopeSuccessTrue TunnelManagementNewResponseEnvelopeSuccess = true
 )
+
+func (r TunnelManagementNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelManagementNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

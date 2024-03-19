@@ -747,6 +747,14 @@ const (
 	AS112TopDNSSECParamsDNSSECNotSupported AS112TopDNSSECParamsDNSSEC = "NOT_SUPPORTED"
 )
 
+func (r AS112TopDNSSECParamsDNSSEC) IsKnown() bool {
+	switch r {
+	case AS112TopDNSSECParamsDNSSECSupported, AS112TopDNSSECParamsDNSSECNotSupported:
+		return true
+	}
+	return false
+}
+
 type AS112TopDNSSECParamsDateRange string
 
 const (
@@ -767,6 +775,14 @@ const (
 	AS112TopDNSSECParamsDateRange24wControl AS112TopDNSSECParamsDateRange = "24wControl"
 )
 
+func (r AS112TopDNSSECParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TopDNSSECParamsDateRange1d, AS112TopDNSSECParamsDateRange2d, AS112TopDNSSECParamsDateRange7d, AS112TopDNSSECParamsDateRange14d, AS112TopDNSSECParamsDateRange28d, AS112TopDNSSECParamsDateRange12w, AS112TopDNSSECParamsDateRange24w, AS112TopDNSSECParamsDateRange52w, AS112TopDNSSECParamsDateRange1dControl, AS112TopDNSSECParamsDateRange2dControl, AS112TopDNSSECParamsDateRange7dControl, AS112TopDNSSECParamsDateRange14dControl, AS112TopDNSSECParamsDateRange28dControl, AS112TopDNSSECParamsDateRange12wControl, AS112TopDNSSECParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TopDNSSECParamsFormat string
 
@@ -774,6 +790,14 @@ const (
 	AS112TopDNSSECParamsFormatJson AS112TopDNSSECParamsFormat = "JSON"
 	AS112TopDNSSECParamsFormatCsv  AS112TopDNSSECParamsFormat = "CSV"
 )
+
+func (r AS112TopDNSSECParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TopDNSSECParamsFormatJson, AS112TopDNSSECParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TopDNSSECResponseEnvelope struct {
 	Result  AS112TopDNSSECResponse             `json:"result,required"`
@@ -843,6 +867,14 @@ const (
 	AS112TopEdnsParamsEdnsNotSupported AS112TopEdnsParamsEdns = "NOT_SUPPORTED"
 )
 
+func (r AS112TopEdnsParamsEdns) IsKnown() bool {
+	switch r {
+	case AS112TopEdnsParamsEdnsSupported, AS112TopEdnsParamsEdnsNotSupported:
+		return true
+	}
+	return false
+}
+
 type AS112TopEdnsParamsDateRange string
 
 const (
@@ -863,6 +895,14 @@ const (
 	AS112TopEdnsParamsDateRange24wControl AS112TopEdnsParamsDateRange = "24wControl"
 )
 
+func (r AS112TopEdnsParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TopEdnsParamsDateRange1d, AS112TopEdnsParamsDateRange2d, AS112TopEdnsParamsDateRange7d, AS112TopEdnsParamsDateRange14d, AS112TopEdnsParamsDateRange28d, AS112TopEdnsParamsDateRange12w, AS112TopEdnsParamsDateRange24w, AS112TopEdnsParamsDateRange52w, AS112TopEdnsParamsDateRange1dControl, AS112TopEdnsParamsDateRange2dControl, AS112TopEdnsParamsDateRange7dControl, AS112TopEdnsParamsDateRange14dControl, AS112TopEdnsParamsDateRange28dControl, AS112TopEdnsParamsDateRange12wControl, AS112TopEdnsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TopEdnsParamsFormat string
 
@@ -870,6 +910,14 @@ const (
 	AS112TopEdnsParamsFormatJson AS112TopEdnsParamsFormat = "JSON"
 	AS112TopEdnsParamsFormatCsv  AS112TopEdnsParamsFormat = "CSV"
 )
+
+func (r AS112TopEdnsParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TopEdnsParamsFormatJson, AS112TopEdnsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TopEdnsResponseEnvelope struct {
 	Result  AS112TopEdnsResponse             `json:"result,required"`
@@ -940,6 +988,14 @@ const (
 	AS112TopIPVersionParamsIPVersionIPv6 AS112TopIPVersionParamsIPVersion = "IPv6"
 )
 
+func (r AS112TopIPVersionParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AS112TopIPVersionParamsIPVersionIPv4, AS112TopIPVersionParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
 type AS112TopIPVersionParamsDateRange string
 
 const (
@@ -960,6 +1016,14 @@ const (
 	AS112TopIPVersionParamsDateRange24wControl AS112TopIPVersionParamsDateRange = "24wControl"
 )
 
+func (r AS112TopIPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TopIPVersionParamsDateRange1d, AS112TopIPVersionParamsDateRange2d, AS112TopIPVersionParamsDateRange7d, AS112TopIPVersionParamsDateRange14d, AS112TopIPVersionParamsDateRange28d, AS112TopIPVersionParamsDateRange12w, AS112TopIPVersionParamsDateRange24w, AS112TopIPVersionParamsDateRange52w, AS112TopIPVersionParamsDateRange1dControl, AS112TopIPVersionParamsDateRange2dControl, AS112TopIPVersionParamsDateRange7dControl, AS112TopIPVersionParamsDateRange14dControl, AS112TopIPVersionParamsDateRange28dControl, AS112TopIPVersionParamsDateRange12wControl, AS112TopIPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TopIPVersionParamsFormat string
 
@@ -967,6 +1031,14 @@ const (
 	AS112TopIPVersionParamsFormatJson AS112TopIPVersionParamsFormat = "JSON"
 	AS112TopIPVersionParamsFormatCsv  AS112TopIPVersionParamsFormat = "CSV"
 )
+
+func (r AS112TopIPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TopIPVersionParamsFormatJson, AS112TopIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TopIPVersionResponseEnvelope struct {
 	Result  AS112TopIPVersionResponse             `json:"result,required"`
@@ -1049,6 +1121,14 @@ const (
 	AS112TopLocationsParamsDateRange24wControl AS112TopLocationsParamsDateRange = "24wControl"
 )
 
+func (r AS112TopLocationsParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TopLocationsParamsDateRange1d, AS112TopLocationsParamsDateRange2d, AS112TopLocationsParamsDateRange7d, AS112TopLocationsParamsDateRange14d, AS112TopLocationsParamsDateRange28d, AS112TopLocationsParamsDateRange12w, AS112TopLocationsParamsDateRange24w, AS112TopLocationsParamsDateRange52w, AS112TopLocationsParamsDateRange1dControl, AS112TopLocationsParamsDateRange2dControl, AS112TopLocationsParamsDateRange7dControl, AS112TopLocationsParamsDateRange14dControl, AS112TopLocationsParamsDateRange28dControl, AS112TopLocationsParamsDateRange12wControl, AS112TopLocationsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TopLocationsParamsFormat string
 
@@ -1056,6 +1136,14 @@ const (
 	AS112TopLocationsParamsFormatJson AS112TopLocationsParamsFormat = "JSON"
 	AS112TopLocationsParamsFormatCsv  AS112TopLocationsParamsFormat = "CSV"
 )
+
+func (r AS112TopLocationsParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TopLocationsParamsFormatJson, AS112TopLocationsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TopLocationsResponseEnvelope struct {
 	Result  AS112TopLocationsResponse             `json:"result,required"`

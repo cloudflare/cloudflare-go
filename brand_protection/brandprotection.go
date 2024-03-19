@@ -406,6 +406,14 @@ const (
 	BrandProtectionSubmitResponseEnvelopeSuccessTrue BrandProtectionSubmitResponseEnvelopeSuccess = true
 )
 
+func (r BrandProtectionSubmitResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BrandProtectionSubmitResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type BrandProtectionURLInfoParams struct {
 	// Identifier
 	AccountID  param.Field[string]                                 `path:"account_id,required"`
@@ -516,3 +524,11 @@ type BrandProtectionURLInfoResponseEnvelopeSuccess bool
 const (
 	BrandProtectionURLInfoResponseEnvelopeSuccessTrue BrandProtectionURLInfoResponseEnvelopeSuccess = true
 )
+
+func (r BrandProtectionURLInfoResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BrandProtectionURLInfoResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

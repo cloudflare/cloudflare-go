@@ -184,6 +184,14 @@ const (
 	ServiceEnvironmentContentUpdateResponseEnvelopeSuccessTrue ServiceEnvironmentContentUpdateResponseEnvelopeSuccess = true
 )
 
+func (r ServiceEnvironmentContentUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ServiceEnvironmentContentUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ServiceEnvironmentContentGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`

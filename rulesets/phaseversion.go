@@ -127,6 +127,14 @@ const (
 	PhaseVersionListResponseKindZone    PhaseVersionListResponseKind = "zone"
 )
 
+func (r PhaseVersionListResponseKind) IsKnown() bool {
+	switch r {
+	case PhaseVersionListResponseKindManaged, PhaseVersionListResponseKindCustom, PhaseVersionListResponseKindRoot, PhaseVersionListResponseKindZone:
+		return true
+	}
+	return false
+}
+
 // The phase of the ruleset.
 type PhaseVersionListResponsePhase string
 
@@ -155,6 +163,14 @@ const (
 	PhaseVersionListResponsePhaseMagicTransitIDsManaged         PhaseVersionListResponsePhase = "magic_transit_ids_managed"
 	PhaseVersionListResponsePhaseMagicTransitManaged            PhaseVersionListResponsePhase = "magic_transit_managed"
 )
+
+func (r PhaseVersionListResponsePhase) IsKnown() bool {
+	switch r {
+	case PhaseVersionListResponsePhaseDDOSL4, PhaseVersionListResponsePhaseDDOSL7, PhaseVersionListResponsePhaseHTTPConfigSettings, PhaseVersionListResponsePhaseHTTPCustomErrors, PhaseVersionListResponsePhaseHTTPLogCustomFields, PhaseVersionListResponsePhaseHTTPRatelimit, PhaseVersionListResponsePhaseHTTPRequestCacheSettings, PhaseVersionListResponsePhaseHTTPRequestDynamicRedirect, PhaseVersionListResponsePhaseHTTPRequestFirewallCustom, PhaseVersionListResponsePhaseHTTPRequestFirewallManaged, PhaseVersionListResponsePhaseHTTPRequestLateTransform, PhaseVersionListResponsePhaseHTTPRequestOrigin, PhaseVersionListResponsePhaseHTTPRequestRedirect, PhaseVersionListResponsePhaseHTTPRequestSanitize, PhaseVersionListResponsePhaseHTTPRequestSbfm, PhaseVersionListResponsePhaseHTTPRequestSelectConfiguration, PhaseVersionListResponsePhaseHTTPRequestTransform, PhaseVersionListResponsePhaseHTTPResponseCompression, PhaseVersionListResponsePhaseHTTPResponseFirewallManaged, PhaseVersionListResponsePhaseHTTPResponseHeadersTransform, PhaseVersionListResponsePhaseMagicTransit, PhaseVersionListResponsePhaseMagicTransitIDsManaged, PhaseVersionListResponsePhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 type PhaseVersionListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -191,6 +207,14 @@ const (
 	PhaseVersionListParamsRulesetPhaseMagicTransitIDsManaged         PhaseVersionListParamsRulesetPhase = "magic_transit_ids_managed"
 	PhaseVersionListParamsRulesetPhaseMagicTransitManaged            PhaseVersionListParamsRulesetPhase = "magic_transit_managed"
 )
+
+func (r PhaseVersionListParamsRulesetPhase) IsKnown() bool {
+	switch r {
+	case PhaseVersionListParamsRulesetPhaseDDOSL4, PhaseVersionListParamsRulesetPhaseDDOSL7, PhaseVersionListParamsRulesetPhaseHTTPConfigSettings, PhaseVersionListParamsRulesetPhaseHTTPCustomErrors, PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionListParamsRulesetPhaseHTTPRatelimit, PhaseVersionListParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionListParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionListParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionListParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionListParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionListParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionListParamsRulesetPhaseHTTPRequestTransform, PhaseVersionListParamsRulesetPhaseHTTPResponseCompression, PhaseVersionListParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionListParamsRulesetPhaseMagicTransit, PhaseVersionListParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionListParamsRulesetPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 // A response object.
 type PhaseVersionListResponseEnvelope struct {
@@ -335,6 +359,14 @@ const (
 	PhaseVersionListResponseEnvelopeSuccessTrue PhaseVersionListResponseEnvelopeSuccess = true
 )
 
+func (r PhaseVersionListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PhaseVersionListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PhaseVersionGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -370,6 +402,14 @@ const (
 	PhaseVersionGetParamsRulesetPhaseMagicTransitIDsManaged         PhaseVersionGetParamsRulesetPhase = "magic_transit_ids_managed"
 	PhaseVersionGetParamsRulesetPhaseMagicTransitManaged            PhaseVersionGetParamsRulesetPhase = "magic_transit_managed"
 )
+
+func (r PhaseVersionGetParamsRulesetPhase) IsKnown() bool {
+	switch r {
+	case PhaseVersionGetParamsRulesetPhaseDDOSL4, PhaseVersionGetParamsRulesetPhaseDDOSL7, PhaseVersionGetParamsRulesetPhaseHTTPConfigSettings, PhaseVersionGetParamsRulesetPhaseHTTPCustomErrors, PhaseVersionGetParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionGetParamsRulesetPhaseHTTPRatelimit, PhaseVersionGetParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionGetParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionGetParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionGetParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionGetParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionGetParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionGetParamsRulesetPhaseHTTPRequestTransform, PhaseVersionGetParamsRulesetPhaseHTTPResponseCompression, PhaseVersionGetParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionGetParamsRulesetPhaseMagicTransit, PhaseVersionGetParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionGetParamsRulesetPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 // A response object.
 type PhaseVersionGetResponseEnvelope struct {
@@ -513,3 +553,11 @@ type PhaseVersionGetResponseEnvelopeSuccess bool
 const (
 	PhaseVersionGetResponseEnvelopeSuccessTrue PhaseVersionGetResponseEnvelopeSuccess = true
 )
+
+func (r PhaseVersionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PhaseVersionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

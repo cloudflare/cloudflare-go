@@ -172,3 +172,11 @@ type VideoStorageUsageResponseEnvelopeSuccess bool
 const (
 	VideoStorageUsageResponseEnvelopeSuccessTrue VideoStorageUsageResponseEnvelopeSuccess = true
 )
+
+func (r VideoStorageUsageResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VideoStorageUsageResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

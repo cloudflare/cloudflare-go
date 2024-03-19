@@ -231,6 +231,14 @@ const (
 	TrafficAnomalyGetParamsDateRange24wControl TrafficAnomalyGetParamsDateRange = "24wControl"
 )
 
+func (r TrafficAnomalyGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case TrafficAnomalyGetParamsDateRange1d, TrafficAnomalyGetParamsDateRange2d, TrafficAnomalyGetParamsDateRange7d, TrafficAnomalyGetParamsDateRange14d, TrafficAnomalyGetParamsDateRange28d, TrafficAnomalyGetParamsDateRange12w, TrafficAnomalyGetParamsDateRange24w, TrafficAnomalyGetParamsDateRange52w, TrafficAnomalyGetParamsDateRange1dControl, TrafficAnomalyGetParamsDateRange2dControl, TrafficAnomalyGetParamsDateRange7dControl, TrafficAnomalyGetParamsDateRange14dControl, TrafficAnomalyGetParamsDateRange28dControl, TrafficAnomalyGetParamsDateRange12wControl, TrafficAnomalyGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type TrafficAnomalyGetParamsFormat string
 
@@ -239,12 +247,28 @@ const (
 	TrafficAnomalyGetParamsFormatCsv  TrafficAnomalyGetParamsFormat = "CSV"
 )
 
+func (r TrafficAnomalyGetParamsFormat) IsKnown() bool {
+	switch r {
+	case TrafficAnomalyGetParamsFormatJson, TrafficAnomalyGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type TrafficAnomalyGetParamsStatus string
 
 const (
 	TrafficAnomalyGetParamsStatusVerified   TrafficAnomalyGetParamsStatus = "VERIFIED"
 	TrafficAnomalyGetParamsStatusUnverified TrafficAnomalyGetParamsStatus = "UNVERIFIED"
 )
+
+func (r TrafficAnomalyGetParamsStatus) IsKnown() bool {
+	switch r {
+	case TrafficAnomalyGetParamsStatusVerified, TrafficAnomalyGetParamsStatusUnverified:
+		return true
+	}
+	return false
+}
 
 type TrafficAnomalyGetResponseEnvelope struct {
 	Result  TrafficAnomalyGetResponse             `json:"result,required"`

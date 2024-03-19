@@ -241,6 +241,14 @@ const (
 	RequestMessageNewResponseEnvelopeSuccessTrue RequestMessageNewResponseEnvelopeSuccess = true
 )
 
+func (r RequestMessageNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestMessageNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestMessageUpdateParams struct {
 	// Request content
 	Content param.Field[string] `json:"content"`
@@ -268,6 +276,14 @@ const (
 	RequestMessageUpdateParamsTlpGreen       RequestMessageUpdateParamsTlp = "green"
 	RequestMessageUpdateParamsTlpRed         RequestMessageUpdateParamsTlp = "red"
 )
+
+func (r RequestMessageUpdateParamsTlp) IsKnown() bool {
+	switch r {
+	case RequestMessageUpdateParamsTlpClear, RequestMessageUpdateParamsTlpAmber, RequestMessageUpdateParamsTlpAmberStrict, RequestMessageUpdateParamsTlpGreen, RequestMessageUpdateParamsTlpRed:
+		return true
+	}
+	return false
+}
 
 type RequestMessageUpdateResponseEnvelope struct {
 	Errors   []RequestMessageUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -350,6 +366,14 @@ const (
 	RequestMessageUpdateResponseEnvelopeSuccessTrue RequestMessageUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RequestMessageUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestMessageUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestMessageDeleteResponseEnvelope struct {
 	Errors   []RequestMessageDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestMessageDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -431,6 +455,14 @@ const (
 	RequestMessageDeleteResponseEnvelopeSuccessTrue RequestMessageDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RequestMessageDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestMessageDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RequestMessageGetParams struct {
 	// Page number of results
 	Page param.Field[int64] `json:"page,required"`
@@ -457,6 +489,14 @@ const (
 	RequestMessageGetParamsSortOrderAsc  RequestMessageGetParamsSortOrder = "asc"
 	RequestMessageGetParamsSortOrderDesc RequestMessageGetParamsSortOrder = "desc"
 )
+
+func (r RequestMessageGetParamsSortOrder) IsKnown() bool {
+	switch r {
+	case RequestMessageGetParamsSortOrderAsc, RequestMessageGetParamsSortOrderDesc:
+		return true
+	}
+	return false
+}
 
 type RequestMessageGetResponseEnvelope struct {
 	Errors   []RequestMessageGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -538,3 +578,11 @@ type RequestMessageGetResponseEnvelopeSuccess bool
 const (
 	RequestMessageGetResponseEnvelopeSuccessTrue RequestMessageGetResponseEnvelopeSuccess = true
 )
+
+func (r RequestMessageGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RequestMessageGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

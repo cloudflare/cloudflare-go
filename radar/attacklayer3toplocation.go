@@ -433,6 +433,14 @@ const (
 	AttackLayer3TopLocationOriginParamsDateRange24wControl AttackLayer3TopLocationOriginParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TopLocationOriginParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationOriginParamsDateRange1d, AttackLayer3TopLocationOriginParamsDateRange2d, AttackLayer3TopLocationOriginParamsDateRange7d, AttackLayer3TopLocationOriginParamsDateRange14d, AttackLayer3TopLocationOriginParamsDateRange28d, AttackLayer3TopLocationOriginParamsDateRange12w, AttackLayer3TopLocationOriginParamsDateRange24w, AttackLayer3TopLocationOriginParamsDateRange52w, AttackLayer3TopLocationOriginParamsDateRange1dControl, AttackLayer3TopLocationOriginParamsDateRange2dControl, AttackLayer3TopLocationOriginParamsDateRange7dControl, AttackLayer3TopLocationOriginParamsDateRange14dControl, AttackLayer3TopLocationOriginParamsDateRange28dControl, AttackLayer3TopLocationOriginParamsDateRange12wControl, AttackLayer3TopLocationOriginParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TopLocationOriginParamsFormat string
 
@@ -441,12 +449,28 @@ const (
 	AttackLayer3TopLocationOriginParamsFormatCsv  AttackLayer3TopLocationOriginParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TopLocationOriginParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationOriginParamsFormatJson, AttackLayer3TopLocationOriginParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TopLocationOriginParamsIPVersion string
 
 const (
 	AttackLayer3TopLocationOriginParamsIPVersionIPv4 AttackLayer3TopLocationOriginParamsIPVersion = "IPv4"
 	AttackLayer3TopLocationOriginParamsIPVersionIPv6 AttackLayer3TopLocationOriginParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TopLocationOriginParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationOriginParamsIPVersionIPv4, AttackLayer3TopLocationOriginParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TopLocationOriginParamsProtocol string
 
@@ -456,6 +480,14 @@ const (
 	AttackLayer3TopLocationOriginParamsProtocolIcmp AttackLayer3TopLocationOriginParamsProtocol = "ICMP"
 	AttackLayer3TopLocationOriginParamsProtocolGRE  AttackLayer3TopLocationOriginParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TopLocationOriginParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationOriginParamsProtocolUdp, AttackLayer3TopLocationOriginParamsProtocolTcp, AttackLayer3TopLocationOriginParamsProtocolIcmp, AttackLayer3TopLocationOriginParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TopLocationOriginResponseEnvelope struct {
 	Result  AttackLayer3TopLocationOriginResponse             `json:"result,required"`
@@ -538,6 +570,14 @@ const (
 	AttackLayer3TopLocationTargetParamsDateRange24wControl AttackLayer3TopLocationTargetParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer3TopLocationTargetParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationTargetParamsDateRange1d, AttackLayer3TopLocationTargetParamsDateRange2d, AttackLayer3TopLocationTargetParamsDateRange7d, AttackLayer3TopLocationTargetParamsDateRange14d, AttackLayer3TopLocationTargetParamsDateRange28d, AttackLayer3TopLocationTargetParamsDateRange12w, AttackLayer3TopLocationTargetParamsDateRange24w, AttackLayer3TopLocationTargetParamsDateRange52w, AttackLayer3TopLocationTargetParamsDateRange1dControl, AttackLayer3TopLocationTargetParamsDateRange2dControl, AttackLayer3TopLocationTargetParamsDateRange7dControl, AttackLayer3TopLocationTargetParamsDateRange14dControl, AttackLayer3TopLocationTargetParamsDateRange28dControl, AttackLayer3TopLocationTargetParamsDateRange12wControl, AttackLayer3TopLocationTargetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer3TopLocationTargetParamsFormat string
 
@@ -546,12 +586,28 @@ const (
 	AttackLayer3TopLocationTargetParamsFormatCsv  AttackLayer3TopLocationTargetParamsFormat = "CSV"
 )
 
+func (r AttackLayer3TopLocationTargetParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationTargetParamsFormatJson, AttackLayer3TopLocationTargetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type AttackLayer3TopLocationTargetParamsIPVersion string
 
 const (
 	AttackLayer3TopLocationTargetParamsIPVersionIPv4 AttackLayer3TopLocationTargetParamsIPVersion = "IPv4"
 	AttackLayer3TopLocationTargetParamsIPVersionIPv6 AttackLayer3TopLocationTargetParamsIPVersion = "IPv6"
 )
+
+func (r AttackLayer3TopLocationTargetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationTargetParamsIPVersionIPv4, AttackLayer3TopLocationTargetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TopLocationTargetParamsProtocol string
 
@@ -561,6 +617,14 @@ const (
 	AttackLayer3TopLocationTargetParamsProtocolIcmp AttackLayer3TopLocationTargetParamsProtocol = "ICMP"
 	AttackLayer3TopLocationTargetParamsProtocolGRE  AttackLayer3TopLocationTargetParamsProtocol = "GRE"
 )
+
+func (r AttackLayer3TopLocationTargetParamsProtocol) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopLocationTargetParamsProtocolUdp, AttackLayer3TopLocationTargetParamsProtocolTcp, AttackLayer3TopLocationTargetParamsProtocolIcmp, AttackLayer3TopLocationTargetParamsProtocolGRE:
+		return true
+	}
+	return false
+}
 
 type AttackLayer3TopLocationTargetResponseEnvelope struct {
 	Result  AttackLayer3TopLocationTargetResponse             `json:"result,required"`

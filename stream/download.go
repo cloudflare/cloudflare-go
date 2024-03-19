@@ -207,6 +207,14 @@ const (
 	DownloadNewResponseEnvelopeSuccessTrue DownloadNewResponseEnvelopeSuccess = true
 )
 
+func (r DownloadNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DownloadNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DownloadDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -293,6 +301,14 @@ const (
 	DownloadDeleteResponseEnvelopeSuccessTrue DownloadDeleteResponseEnvelopeSuccess = true
 )
 
+func (r DownloadDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DownloadDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DownloadGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -378,3 +394,11 @@ type DownloadGetResponseEnvelopeSuccess bool
 const (
 	DownloadGetResponseEnvelopeSuccessTrue DownloadGetResponseEnvelopeSuccess = true
 )
+
+func (r DownloadGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DownloadGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

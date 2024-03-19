@@ -503,6 +503,14 @@ const (
 	BGPRouteMoasParamsFormatCsv  BGPRouteMoasParamsFormat = "CSV"
 )
 
+func (r BGPRouteMoasParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPRouteMoasParamsFormatJson, BGPRouteMoasParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type BGPRouteMoasResponseEnvelope struct {
 	Result  BGPRouteMoasResponse             `json:"result,required"`
 	Success bool                             `json:"success,required"`
@@ -556,6 +564,14 @@ const (
 	BGPRoutePfx2asParamsFormatCsv  BGPRoutePfx2asParamsFormat = "CSV"
 )
 
+func (r BGPRoutePfx2asParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPRoutePfx2asParamsFormatJson, BGPRoutePfx2asParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 // Return only results with matching rpki status: valid, invalid or unknown
 type BGPRoutePfx2asParamsRPKIStatus string
 
@@ -564,6 +580,14 @@ const (
 	BGPRoutePfx2asParamsRPKIStatusInvalid BGPRoutePfx2asParamsRPKIStatus = "INVALID"
 	BGPRoutePfx2asParamsRPKIStatusUnknown BGPRoutePfx2asParamsRPKIStatus = "UNKNOWN"
 )
+
+func (r BGPRoutePfx2asParamsRPKIStatus) IsKnown() bool {
+	switch r {
+	case BGPRoutePfx2asParamsRPKIStatusValid, BGPRoutePfx2asParamsRPKIStatusInvalid, BGPRoutePfx2asParamsRPKIStatusUnknown:
+		return true
+	}
+	return false
+}
 
 type BGPRoutePfx2asResponseEnvelope struct {
 	Result  BGPRoutePfx2asResponse             `json:"result,required"`
@@ -612,6 +636,14 @@ const (
 	BGPRouteStatsParamsFormatJson BGPRouteStatsParamsFormat = "JSON"
 	BGPRouteStatsParamsFormatCsv  BGPRouteStatsParamsFormat = "CSV"
 )
+
+func (r BGPRouteStatsParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPRouteStatsParamsFormatJson, BGPRouteStatsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type BGPRouteStatsResponseEnvelope struct {
 	Result  BGPRouteStatsResponse             `json:"result,required"`
@@ -681,6 +713,14 @@ const (
 	BGPRouteTimeseriesParamsDateRange24wControl BGPRouteTimeseriesParamsDateRange = "24wControl"
 )
 
+func (r BGPRouteTimeseriesParamsDateRange) IsKnown() bool {
+	switch r {
+	case BGPRouteTimeseriesParamsDateRange1d, BGPRouteTimeseriesParamsDateRange2d, BGPRouteTimeseriesParamsDateRange7d, BGPRouteTimeseriesParamsDateRange14d, BGPRouteTimeseriesParamsDateRange28d, BGPRouteTimeseriesParamsDateRange12w, BGPRouteTimeseriesParamsDateRange24w, BGPRouteTimeseriesParamsDateRange52w, BGPRouteTimeseriesParamsDateRange1dControl, BGPRouteTimeseriesParamsDateRange2dControl, BGPRouteTimeseriesParamsDateRange7dControl, BGPRouteTimeseriesParamsDateRange14dControl, BGPRouteTimeseriesParamsDateRange28dControl, BGPRouteTimeseriesParamsDateRange12wControl, BGPRouteTimeseriesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type BGPRouteTimeseriesParamsFormat string
 
@@ -688,6 +728,14 @@ const (
 	BGPRouteTimeseriesParamsFormatJson BGPRouteTimeseriesParamsFormat = "JSON"
 	BGPRouteTimeseriesParamsFormatCsv  BGPRouteTimeseriesParamsFormat = "CSV"
 )
+
+func (r BGPRouteTimeseriesParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPRouteTimeseriesParamsFormatJson, BGPRouteTimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type BGPRouteTimeseriesResponseEnvelope struct {
 	Result  BGPRouteTimeseriesResponse             `json:"result,required"`

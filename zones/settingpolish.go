@@ -110,6 +110,14 @@ const (
 	ZonesPolishIDPolish ZonesPolishID = "polish"
 )
 
+func (r ZonesPolishID) IsKnown() bool {
+	switch r {
+	case ZonesPolishIDPolish:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesPolishValue string
 
@@ -119,6 +127,14 @@ const (
 	ZonesPolishValueLossy    ZonesPolishValue = "lossy"
 )
 
+func (r ZonesPolishValue) IsKnown() bool {
+	switch r {
+	case ZonesPolishValueOff, ZonesPolishValueLossless, ZonesPolishValueLossy:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesPolishEditable bool
@@ -127,6 +143,14 @@ const (
 	ZonesPolishEditableTrue  ZonesPolishEditable = true
 	ZonesPolishEditableFalse ZonesPolishEditable = false
 )
+
+func (r ZonesPolishEditable) IsKnown() bool {
+	switch r {
+	case ZonesPolishEditableTrue, ZonesPolishEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Removes metadata and compresses your images for faster page load times. Basic
 // (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual

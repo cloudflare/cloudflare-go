@@ -274,6 +274,14 @@ const (
 	SiteACLNewResponseACLsProtocolIcmp SiteACLNewResponseACLsProtocol = "icmp"
 )
 
+func (r SiteACLNewResponseACLsProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLNewResponseACLsProtocolTcp, SiteACLNewResponseACLsProtocolUdp, SiteACLNewResponseACLsProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 type SiteACLUpdateResponse struct {
 	// Bidirectional ACL policy for local network traffic within a site.
 	ACL  SiteACLUpdateResponseACL  `json:"acl"`
@@ -451,6 +459,14 @@ const (
 	SiteACLUpdateResponseACLProtocolIcmp SiteACLUpdateResponseACLProtocol = "icmp"
 )
 
+func (r SiteACLUpdateResponseACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLUpdateResponseACLProtocolTcp, SiteACLUpdateResponseACLProtocolUdp, SiteACLUpdateResponseACLProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 type SiteACLListResponse struct {
 	ACLs []SiteACLListResponseACL `json:"acls"`
 	JSON siteACLListResponseJSON  `json:"-"`
@@ -626,6 +642,14 @@ const (
 	SiteACLListResponseACLsProtocolUdp  SiteACLListResponseACLsProtocol = "udp"
 	SiteACLListResponseACLsProtocolIcmp SiteACLListResponseACLsProtocol = "icmp"
 )
+
+func (r SiteACLListResponseACLsProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLListResponseACLsProtocolTcp, SiteACLListResponseACLsProtocolUdp, SiteACLListResponseACLsProtocolIcmp:
+		return true
+	}
+	return false
+}
 
 type SiteACLDeleteResponse struct {
 	Deleted bool `json:"deleted"`
@@ -806,6 +830,14 @@ const (
 	SiteACLDeleteResponseDeletedACLProtocolIcmp SiteACLDeleteResponseDeletedACLProtocol = "icmp"
 )
 
+func (r SiteACLDeleteResponseDeletedACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLDeleteResponseDeletedACLProtocolTcp, SiteACLDeleteResponseDeletedACLProtocolUdp, SiteACLDeleteResponseDeletedACLProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 type SiteACLGetResponse struct {
 	// Bidirectional ACL policy for local network traffic within a site.
 	ACL  SiteACLGetResponseACL  `json:"acl"`
@@ -983,6 +1015,14 @@ const (
 	SiteACLGetResponseACLProtocolIcmp SiteACLGetResponseACLProtocol = "icmp"
 )
 
+func (r SiteACLGetResponseACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLGetResponseACLProtocolTcp, SiteACLGetResponseACLProtocolUdp, SiteACLGetResponseACLProtocolIcmp:
+		return true
+	}
+	return false
+}
+
 type SiteACLNewParams struct {
 	ACL param.Field[SiteACLNewParamsACL] `json:"acl"`
 }
@@ -1062,6 +1102,14 @@ const (
 	SiteACLNewParamsACLProtocolUdp  SiteACLNewParamsACLProtocol = "udp"
 	SiteACLNewParamsACLProtocolIcmp SiteACLNewParamsACLProtocol = "icmp"
 )
+
+func (r SiteACLNewParamsACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLNewParamsACLProtocolTcp, SiteACLNewParamsACLProtocolUdp, SiteACLNewParamsACLProtocolIcmp:
+		return true
+	}
+	return false
+}
 
 type SiteACLNewResponseEnvelope struct {
 	Errors   []SiteACLNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -1144,6 +1192,14 @@ const (
 	SiteACLNewResponseEnvelopeSuccessTrue SiteACLNewResponseEnvelopeSuccess = true
 )
 
+func (r SiteACLNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteACLUpdateParams struct {
 	ACL param.Field[SiteACLUpdateParamsACL] `json:"acl"`
 }
@@ -1223,6 +1279,14 @@ const (
 	SiteACLUpdateParamsACLProtocolUdp  SiteACLUpdateParamsACLProtocol = "udp"
 	SiteACLUpdateParamsACLProtocolIcmp SiteACLUpdateParamsACLProtocol = "icmp"
 )
+
+func (r SiteACLUpdateParamsACLProtocol) IsKnown() bool {
+	switch r {
+	case SiteACLUpdateParamsACLProtocolTcp, SiteACLUpdateParamsACLProtocolUdp, SiteACLUpdateParamsACLProtocolIcmp:
+		return true
+	}
+	return false
+}
 
 type SiteACLUpdateResponseEnvelope struct {
 	Errors   []SiteACLUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -1305,6 +1369,14 @@ const (
 	SiteACLUpdateResponseEnvelopeSuccessTrue SiteACLUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SiteACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteACLListResponseEnvelope struct {
 	Errors   []SiteACLListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteACLListResponseEnvelopeMessages `json:"messages,required"`
@@ -1385,6 +1457,14 @@ type SiteACLListResponseEnvelopeSuccess bool
 const (
 	SiteACLListResponseEnvelopeSuccessTrue SiteACLListResponseEnvelopeSuccess = true
 )
+
+func (r SiteACLListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SiteACLDeleteResponseEnvelope struct {
 	Errors   []SiteACLDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1467,6 +1547,14 @@ const (
 	SiteACLDeleteResponseEnvelopeSuccessTrue SiteACLDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SiteACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteACLGetResponseEnvelope struct {
 	Errors   []SiteACLGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteACLGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1547,3 +1635,11 @@ type SiteACLGetResponseEnvelopeSuccess bool
 const (
 	SiteACLGetResponseEnvelopeSuccessTrue SiteACLGetResponseEnvelopeSuccess = true
 )
+
+func (r SiteACLGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteACLGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -154,3 +154,11 @@ type DeviceRevokeNewResponseEnvelopeSuccess bool
 const (
 	DeviceRevokeNewResponseEnvelopeSuccessTrue DeviceRevokeNewResponseEnvelopeSuccess = true
 )
+
+func (r DeviceRevokeNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceRevokeNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
