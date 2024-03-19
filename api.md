@@ -1620,23 +1620,7 @@ Methods:
 
 ### Reports
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#DNSDNSAnalyticsAPIReport">DNSDNSAnalyticsAPIReport</a>
-
-Methods:
-
-- <code title="get /zones/{identifier}/dns_analytics/report">client.DNS.Analytics.Reports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#AnalyticsReportService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#AnalyticsReportGetParams">AnalyticsReportGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#DNSDNSAnalyticsAPIReport">DNSDNSAnalyticsAPIReport</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 #### Bytimes
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#DNSDNSAnalyticsAPIReportBytime">DNSDNSAnalyticsAPIReportBytime</a>
-
-Methods:
-
-- <code title="get /zones/{identifier}/dns_analytics/report/bytime">client.DNS.Analytics.Reports.Bytimes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#AnalyticsReportBytimeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#AnalyticsReportBytimeGetParams">AnalyticsReportBytimeGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#DNSDNSAnalyticsAPIReportBytime">DNSDNSAnalyticsAPIReportBytime</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Firewall
 
@@ -1657,15 +1641,7 @@ Methods:
 
 #### Reports
 
-Methods:
-
-- <code title="get /accounts/{account_identifier}/dns_firewall/{identifier}/dns_analytics/report">client.DNS.Firewall.Analytics.Reports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#FirewallAnalyticsReportService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#FirewallAnalyticsReportGetParams">FirewallAnalyticsReportGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#DNSDNSAnalyticsAPIReport">DNSDNSAnalyticsAPIReport</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ##### Bytimes
-
-Methods:
-
-- <code title="get /accounts/{account_identifier}/dns_firewall/{identifier}/dns_analytics/report/bytime">client.DNS.Firewall.Analytics.Reports.Bytimes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#FirewallAnalyticsReportBytimeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#FirewallAnalyticsReportBytimeGetParams">FirewallAnalyticsReportBytimeGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#DNSDNSAnalyticsAPIReportBytime">DNSDNSAnalyticsAPIReportBytime</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # DNSSEC
 
