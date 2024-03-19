@@ -288,6 +288,14 @@ const (
 	DomainBulkGetResponseEnvelopeSuccessTrue DomainBulkGetResponseEnvelopeSuccess = true
 )
 
+func (r DomainBulkGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainBulkGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DomainBulkGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

@@ -187,6 +187,14 @@ const (
 	DeviceOverrideCodeListResponseEnvelopeSuccessTrue DeviceOverrideCodeListResponseEnvelopeSuccess = true
 )
 
+func (r DeviceOverrideCodeListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceOverrideCodeListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DeviceOverrideCodeListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

@@ -214,6 +214,14 @@ const (
 	IndicatorFeedPermissionNewResponseEnvelopeSuccessTrue IndicatorFeedPermissionNewResponseEnvelopeSuccess = true
 )
 
+func (r IndicatorFeedPermissionNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndicatorFeedPermissionNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IndicatorFeedPermissionListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -299,6 +307,14 @@ type IndicatorFeedPermissionListResponseEnvelopeSuccess bool
 const (
 	IndicatorFeedPermissionListResponseEnvelopeSuccessTrue IndicatorFeedPermissionListResponseEnvelopeSuccess = true
 )
+
+func (r IndicatorFeedPermissionListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndicatorFeedPermissionListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IndicatorFeedPermissionDeleteParams struct {
 	// Identifier
@@ -393,3 +409,11 @@ type IndicatorFeedPermissionDeleteResponseEnvelopeSuccess bool
 const (
 	IndicatorFeedPermissionDeleteResponseEnvelopeSuccessTrue IndicatorFeedPermissionDeleteResponseEnvelopeSuccess = true
 )
+
+func (r IndicatorFeedPermissionDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndicatorFeedPermissionDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

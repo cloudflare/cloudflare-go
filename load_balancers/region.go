@@ -197,6 +197,14 @@ const (
 	RegionListResponseEnvelopeSuccessTrue RegionListResponseEnvelopeSuccess = true
 )
 
+func (r RegionListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RegionListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RegionGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -224,6 +232,14 @@ const (
 	RegionGetParamsRegionIDSeas RegionGetParamsRegionID = "SEAS"
 	RegionGetParamsRegionIDNeas RegionGetParamsRegionID = "NEAS"
 )
+
+func (r RegionGetParamsRegionID) IsKnown() bool {
+	switch r {
+	case RegionGetParamsRegionIDWnam, RegionGetParamsRegionIDEnam, RegionGetParamsRegionIDWeu, RegionGetParamsRegionIDEeu, RegionGetParamsRegionIDNsam, RegionGetParamsRegionIDSsam, RegionGetParamsRegionIDOc, RegionGetParamsRegionIDMe, RegionGetParamsRegionIDNaf, RegionGetParamsRegionIDSaf, RegionGetParamsRegionIDSas, RegionGetParamsRegionIDSeas, RegionGetParamsRegionIDNeas:
+		return true
+	}
+	return false
+}
 
 type RegionGetResponseEnvelope struct {
 	Errors   []RegionGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -306,3 +322,11 @@ type RegionGetResponseEnvelopeSuccess bool
 const (
 	RegionGetResponseEnvelopeSuccessTrue RegionGetResponseEnvelopeSuccess = true
 )
+
+func (r RegionGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RegionGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

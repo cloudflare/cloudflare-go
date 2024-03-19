@@ -449,6 +449,14 @@ const (
 	EventListResponseEnvelopeSuccessTrue EventListResponseEnvelopeSuccess = true
 )
 
+func (r EventListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case EventListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type EventListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

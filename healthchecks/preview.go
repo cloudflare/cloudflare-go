@@ -156,6 +156,14 @@ const (
 	PreviewNewParamsCheckRegionAllRegions PreviewNewParamsCheckRegion = "ALL_REGIONS"
 )
 
+func (r PreviewNewParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case PreviewNewParamsCheckRegionWnam, PreviewNewParamsCheckRegionEnam, PreviewNewParamsCheckRegionWeu, PreviewNewParamsCheckRegionEeu, PreviewNewParamsCheckRegionNsam, PreviewNewParamsCheckRegionSsam, PreviewNewParamsCheckRegionOc, PreviewNewParamsCheckRegionMe, PreviewNewParamsCheckRegionNaf, PreviewNewParamsCheckRegionSaf, PreviewNewParamsCheckRegionIn, PreviewNewParamsCheckRegionSeas, PreviewNewParamsCheckRegionNeas, PreviewNewParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to an HTTP or HTTPS health check.
 type PreviewNewParamsHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
@@ -192,6 +200,14 @@ const (
 	PreviewNewParamsHTTPConfigMethodHead PreviewNewParamsHTTPConfigMethod = "HEAD"
 )
 
+func (r PreviewNewParamsHTTPConfigMethod) IsKnown() bool {
+	switch r {
+	case PreviewNewParamsHTTPConfigMethodGet, PreviewNewParamsHTTPConfigMethodHead:
+		return true
+	}
+	return false
+}
+
 // Parameters specific to TCP health check.
 type PreviewNewParamsTcpConfig struct {
 	// The TCP connection method to use for the health check.
@@ -210,6 +226,14 @@ type PreviewNewParamsTcpConfigMethod string
 const (
 	PreviewNewParamsTcpConfigMethodConnectionEstablished PreviewNewParamsTcpConfigMethod = "connection_established"
 )
+
+func (r PreviewNewParamsTcpConfigMethod) IsKnown() bool {
+	switch r {
+	case PreviewNewParamsTcpConfigMethodConnectionEstablished:
+		return true
+	}
+	return false
+}
 
 type PreviewNewResponseEnvelope struct {
 	Errors   []PreviewNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -292,6 +316,14 @@ const (
 	PreviewNewResponseEnvelopeSuccessTrue PreviewNewResponseEnvelopeSuccess = true
 )
 
+func (r PreviewNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PreviewNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PreviewDeleteResponseEnvelope struct {
 	Errors   []PreviewDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PreviewDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -373,6 +405,14 @@ const (
 	PreviewDeleteResponseEnvelopeSuccessTrue PreviewDeleteResponseEnvelopeSuccess = true
 )
 
+func (r PreviewDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PreviewDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PreviewGetResponseEnvelope struct {
 	Errors   []PreviewGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PreviewGetResponseEnvelopeMessages `json:"messages,required"`
@@ -453,3 +493,11 @@ type PreviewGetResponseEnvelopeSuccess bool
 const (
 	PreviewGetResponseEnvelopeSuccessTrue PreviewGetResponseEnvelopeSuccess = true
 )
+
+func (r PreviewGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PreviewGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -169,6 +169,14 @@ const (
 	WorkerScriptUpdateResponseEnvelopeSuccessTrue WorkerScriptUpdateResponseEnvelopeSuccess = true
 )
 
+func (r WorkerScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WorkerScriptUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WorkerScriptDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`

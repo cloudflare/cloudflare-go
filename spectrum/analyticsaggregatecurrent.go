@@ -149,3 +149,11 @@ type AnalyticsAggregateCurrentGetResponseEnvelopeSuccess bool
 const (
 	AnalyticsAggregateCurrentGetResponseEnvelopeSuccessTrue AnalyticsAggregateCurrentGetResponseEnvelopeSuccess = true
 )
+
+func (r AnalyticsAggregateCurrentGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AnalyticsAggregateCurrentGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

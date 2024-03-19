@@ -360,6 +360,14 @@ const (
 	LoadBalancerLocationStrategyModeResolverIP LoadBalancerLocationStrategyMode = "resolver_ip"
 )
 
+func (r LoadBalancerLocationStrategyMode) IsKnown() bool {
+	switch r {
+	case LoadBalancerLocationStrategyModePop, LoadBalancerLocationStrategyModeResolverIP:
+		return true
+	}
+	return false
+}
+
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 // authoritative location.
 //
@@ -375,6 +383,14 @@ const (
 	LoadBalancerLocationStrategyPreferEcsProximity LoadBalancerLocationStrategyPreferEcs = "proximity"
 	LoadBalancerLocationStrategyPreferEcsGeo       LoadBalancerLocationStrategyPreferEcs = "geo"
 )
+
+func (r LoadBalancerLocationStrategyPreferEcs) IsKnown() bool {
+	switch r {
+	case LoadBalancerLocationStrategyPreferEcsAlways, LoadBalancerLocationStrategyPreferEcsNever, LoadBalancerLocationStrategyPreferEcsProximity, LoadBalancerLocationStrategyPreferEcsGeo:
+		return true
+	}
+	return false
+}
 
 // Configures pool weights.
 //
@@ -717,6 +733,14 @@ const (
 	LoadBalancerRulesOverridesLocationStrategyModeResolverIP LoadBalancerRulesOverridesLocationStrategyMode = "resolver_ip"
 )
 
+func (r LoadBalancerRulesOverridesLocationStrategyMode) IsKnown() bool {
+	switch r {
+	case LoadBalancerRulesOverridesLocationStrategyModePop, LoadBalancerRulesOverridesLocationStrategyModeResolverIP:
+		return true
+	}
+	return false
+}
+
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 // authoritative location.
 //
@@ -732,6 +756,14 @@ const (
 	LoadBalancerRulesOverridesLocationStrategyPreferEcsProximity LoadBalancerRulesOverridesLocationStrategyPreferEcs = "proximity"
 	LoadBalancerRulesOverridesLocationStrategyPreferEcsGeo       LoadBalancerRulesOverridesLocationStrategyPreferEcs = "geo"
 )
+
+func (r LoadBalancerRulesOverridesLocationStrategyPreferEcs) IsKnown() bool {
+	switch r {
+	case LoadBalancerRulesOverridesLocationStrategyPreferEcsAlways, LoadBalancerRulesOverridesLocationStrategyPreferEcsNever, LoadBalancerRulesOverridesLocationStrategyPreferEcsProximity, LoadBalancerRulesOverridesLocationStrategyPreferEcsGeo:
+		return true
+	}
+	return false
+}
 
 // Configures pool weights.
 //
@@ -800,6 +832,14 @@ const (
 	LoadBalancerRulesOverridesSessionAffinityHeader   LoadBalancerRulesOverridesSessionAffinity = "header"
 	LoadBalancerRulesOverridesSessionAffinityEmpty    LoadBalancerRulesOverridesSessionAffinity = "\"\""
 )
+
+func (r LoadBalancerRulesOverridesSessionAffinity) IsKnown() bool {
+	switch r {
+	case LoadBalancerRulesOverridesSessionAffinityNone, LoadBalancerRulesOverridesSessionAffinityCookie, LoadBalancerRulesOverridesSessionAffinityIPCookie, LoadBalancerRulesOverridesSessionAffinityHeader, LoadBalancerRulesOverridesSessionAffinityEmpty:
+		return true
+	}
+	return false
+}
 
 // Configures attributes for session affinity.
 type LoadBalancerRulesOverridesSessionAffinityAttributes struct {
@@ -883,6 +923,14 @@ const (
 	LoadBalancerRulesOverridesSessionAffinityAttributesSamesiteStrict LoadBalancerRulesOverridesSessionAffinityAttributesSamesite = "Strict"
 )
 
+func (r LoadBalancerRulesOverridesSessionAffinityAttributesSamesite) IsKnown() bool {
+	switch r {
+	case LoadBalancerRulesOverridesSessionAffinityAttributesSamesiteAuto, LoadBalancerRulesOverridesSessionAffinityAttributesSamesiteLax, LoadBalancerRulesOverridesSessionAffinityAttributesSamesiteNone, LoadBalancerRulesOverridesSessionAffinityAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
@@ -894,6 +942,14 @@ const (
 	LoadBalancerRulesOverridesSessionAffinityAttributesSecureAlways LoadBalancerRulesOverridesSessionAffinityAttributesSecure = "Always"
 	LoadBalancerRulesOverridesSessionAffinityAttributesSecureNever  LoadBalancerRulesOverridesSessionAffinityAttributesSecure = "Never"
 )
+
+func (r LoadBalancerRulesOverridesSessionAffinityAttributesSecure) IsKnown() bool {
+	switch r {
+	case LoadBalancerRulesOverridesSessionAffinityAttributesSecureAuto, LoadBalancerRulesOverridesSessionAffinityAttributesSecureAlways, LoadBalancerRulesOverridesSessionAffinityAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // Configures the zero-downtime failover between origins within a pool when session
 // affinity is enabled. This feature is currently incompatible with Argo, Tiered
@@ -913,6 +969,14 @@ const (
 	LoadBalancerRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "temporary"
 	LoadBalancerRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
+
+func (r LoadBalancerRulesOverridesSessionAffinityAttributesZeroDowntimeFailover) IsKnown() bool {
+	switch r {
+	case LoadBalancerRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverNone, LoadBalancerRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary, LoadBalancerRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky:
+		return true
+	}
+	return false
+}
 
 // Steering Policy for this load balancer.
 //
@@ -949,6 +1013,14 @@ const (
 	LoadBalancerRulesOverridesSteeringPolicyEmpty                    LoadBalancerRulesOverridesSteeringPolicy = "\"\""
 )
 
+func (r LoadBalancerRulesOverridesSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerRulesOverridesSteeringPolicyOff, LoadBalancerRulesOverridesSteeringPolicyGeo, LoadBalancerRulesOverridesSteeringPolicyRandom, LoadBalancerRulesOverridesSteeringPolicyDynamicLatency, LoadBalancerRulesOverridesSteeringPolicyProximity, LoadBalancerRulesOverridesSteeringPolicyLeastOutstandingRequests, LoadBalancerRulesOverridesSteeringPolicyLeastConnections, LoadBalancerRulesOverridesSteeringPolicyEmpty:
+		return true
+	}
+	return false
+}
+
 // Specifies the type of session affinity the load balancer should use unless
 // specified as `"none"` or "" (default). The supported types are:
 //
@@ -981,6 +1053,14 @@ const (
 	LoadBalancerSessionAffinityHeader   LoadBalancerSessionAffinity = "header"
 	LoadBalancerSessionAffinityEmpty    LoadBalancerSessionAffinity = "\"\""
 )
+
+func (r LoadBalancerSessionAffinity) IsKnown() bool {
+	switch r {
+	case LoadBalancerSessionAffinityNone, LoadBalancerSessionAffinityCookie, LoadBalancerSessionAffinityIPCookie, LoadBalancerSessionAffinityHeader, LoadBalancerSessionAffinityEmpty:
+		return true
+	}
+	return false
+}
 
 // Configures attributes for session affinity.
 type LoadBalancerSessionAffinityAttributes struct {
@@ -1064,6 +1144,14 @@ const (
 	LoadBalancerSessionAffinityAttributesSamesiteStrict LoadBalancerSessionAffinityAttributesSamesite = "Strict"
 )
 
+func (r LoadBalancerSessionAffinityAttributesSamesite) IsKnown() bool {
+	switch r {
+	case LoadBalancerSessionAffinityAttributesSamesiteAuto, LoadBalancerSessionAffinityAttributesSamesiteLax, LoadBalancerSessionAffinityAttributesSamesiteNone, LoadBalancerSessionAffinityAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
@@ -1075,6 +1163,14 @@ const (
 	LoadBalancerSessionAffinityAttributesSecureAlways LoadBalancerSessionAffinityAttributesSecure = "Always"
 	LoadBalancerSessionAffinityAttributesSecureNever  LoadBalancerSessionAffinityAttributesSecure = "Never"
 )
+
+func (r LoadBalancerSessionAffinityAttributesSecure) IsKnown() bool {
+	switch r {
+	case LoadBalancerSessionAffinityAttributesSecureAuto, LoadBalancerSessionAffinityAttributesSecureAlways, LoadBalancerSessionAffinityAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // Configures the zero-downtime failover between origins within a pool when session
 // affinity is enabled. This feature is currently incompatible with Argo, Tiered
@@ -1094,6 +1190,14 @@ const (
 	LoadBalancerSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerSessionAffinityAttributesZeroDowntimeFailover = "temporary"
 	LoadBalancerSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
+
+func (r LoadBalancerSessionAffinityAttributesZeroDowntimeFailover) IsKnown() bool {
+	switch r {
+	case LoadBalancerSessionAffinityAttributesZeroDowntimeFailoverNone, LoadBalancerSessionAffinityAttributesZeroDowntimeFailoverTemporary, LoadBalancerSessionAffinityAttributesZeroDowntimeFailoverSticky:
+		return true
+	}
+	return false
+}
 
 // Steering Policy for this load balancer.
 //
@@ -1129,6 +1233,14 @@ const (
 	LoadBalancerSteeringPolicyLeastConnections         LoadBalancerSteeringPolicy = "least_connections"
 	LoadBalancerSteeringPolicyEmpty                    LoadBalancerSteeringPolicy = "\"\""
 )
+
+func (r LoadBalancerSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerSteeringPolicyOff, LoadBalancerSteeringPolicyGeo, LoadBalancerSteeringPolicyRandom, LoadBalancerSteeringPolicyDynamicLatency, LoadBalancerSteeringPolicyProximity, LoadBalancerSteeringPolicyLeastOutstandingRequests, LoadBalancerSteeringPolicyLeastConnections, LoadBalancerSteeringPolicyEmpty:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerDeleteResponse struct {
 	ID   string                         `json:"id"`
@@ -1328,6 +1440,14 @@ const (
 	LoadBalancerNewParamsLocationStrategyModeResolverIP LoadBalancerNewParamsLocationStrategyMode = "resolver_ip"
 )
 
+func (r LoadBalancerNewParamsLocationStrategyMode) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsLocationStrategyModePop, LoadBalancerNewParamsLocationStrategyModeResolverIP:
+		return true
+	}
+	return false
+}
+
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 // authoritative location.
 //
@@ -1343,6 +1463,14 @@ const (
 	LoadBalancerNewParamsLocationStrategyPreferEcsProximity LoadBalancerNewParamsLocationStrategyPreferEcs = "proximity"
 	LoadBalancerNewParamsLocationStrategyPreferEcsGeo       LoadBalancerNewParamsLocationStrategyPreferEcs = "geo"
 )
+
+func (r LoadBalancerNewParamsLocationStrategyPreferEcs) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsLocationStrategyPreferEcsAlways, LoadBalancerNewParamsLocationStrategyPreferEcsNever, LoadBalancerNewParamsLocationStrategyPreferEcsProximity, LoadBalancerNewParamsLocationStrategyPreferEcsGeo:
+		return true
+	}
+	return false
+}
 
 // Configures pool weights.
 //
@@ -1584,6 +1712,14 @@ const (
 	LoadBalancerNewParamsRulesOverridesLocationStrategyModeResolverIP LoadBalancerNewParamsRulesOverridesLocationStrategyMode = "resolver_ip"
 )
 
+func (r LoadBalancerNewParamsRulesOverridesLocationStrategyMode) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsRulesOverridesLocationStrategyModePop, LoadBalancerNewParamsRulesOverridesLocationStrategyModeResolverIP:
+		return true
+	}
+	return false
+}
+
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 // authoritative location.
 //
@@ -1599,6 +1735,14 @@ const (
 	LoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcsProximity LoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcs = "proximity"
 	LoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcsGeo       LoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcs = "geo"
 )
+
+func (r LoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcs) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcsAlways, LoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcsNever, LoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcsProximity, LoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcsGeo:
+		return true
+	}
+	return false
+}
 
 // Configures pool weights.
 //
@@ -1653,6 +1797,14 @@ const (
 	LoadBalancerNewParamsRulesOverridesSessionAffinityHeader   LoadBalancerNewParamsRulesOverridesSessionAffinity = "header"
 	LoadBalancerNewParamsRulesOverridesSessionAffinityEmpty    LoadBalancerNewParamsRulesOverridesSessionAffinity = "\"\""
 )
+
+func (r LoadBalancerNewParamsRulesOverridesSessionAffinity) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsRulesOverridesSessionAffinityNone, LoadBalancerNewParamsRulesOverridesSessionAffinityCookie, LoadBalancerNewParamsRulesOverridesSessionAffinityIPCookie, LoadBalancerNewParamsRulesOverridesSessionAffinityHeader, LoadBalancerNewParamsRulesOverridesSessionAffinityEmpty:
+		return true
+	}
+	return false
+}
 
 // Configures attributes for session affinity.
 type LoadBalancerNewParamsRulesOverridesSessionAffinityAttributes struct {
@@ -1718,6 +1870,14 @@ const (
 	LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesiteStrict LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesite = "Strict"
 )
 
+func (r LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesite) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesiteAuto, LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesiteLax, LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesiteNone, LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
@@ -1729,6 +1889,14 @@ const (
 	LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSecureAlways LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSecure = "Always"
 	LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSecureNever  LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSecure = "Never"
 )
+
+func (r LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSecure) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSecureAuto, LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSecureAlways, LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // Configures the zero-downtime failover between origins within a pool when session
 // affinity is enabled. This feature is currently incompatible with Argo, Tiered
@@ -1748,6 +1916,14 @@ const (
 	LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "temporary"
 	LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
+
+func (r LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverNone, LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary, LoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky:
+		return true
+	}
+	return false
+}
 
 // Steering Policy for this load balancer.
 //
@@ -1784,6 +1960,14 @@ const (
 	LoadBalancerNewParamsRulesOverridesSteeringPolicyEmpty                    LoadBalancerNewParamsRulesOverridesSteeringPolicy = "\"\""
 )
 
+func (r LoadBalancerNewParamsRulesOverridesSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsRulesOverridesSteeringPolicyOff, LoadBalancerNewParamsRulesOverridesSteeringPolicyGeo, LoadBalancerNewParamsRulesOverridesSteeringPolicyRandom, LoadBalancerNewParamsRulesOverridesSteeringPolicyDynamicLatency, LoadBalancerNewParamsRulesOverridesSteeringPolicyProximity, LoadBalancerNewParamsRulesOverridesSteeringPolicyLeastOutstandingRequests, LoadBalancerNewParamsRulesOverridesSteeringPolicyLeastConnections, LoadBalancerNewParamsRulesOverridesSteeringPolicyEmpty:
+		return true
+	}
+	return false
+}
+
 // Specifies the type of session affinity the load balancer should use unless
 // specified as `"none"` or "" (default). The supported types are:
 //
@@ -1816,6 +2000,14 @@ const (
 	LoadBalancerNewParamsSessionAffinityHeader   LoadBalancerNewParamsSessionAffinity = "header"
 	LoadBalancerNewParamsSessionAffinityEmpty    LoadBalancerNewParamsSessionAffinity = "\"\""
 )
+
+func (r LoadBalancerNewParamsSessionAffinity) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsSessionAffinityNone, LoadBalancerNewParamsSessionAffinityCookie, LoadBalancerNewParamsSessionAffinityIPCookie, LoadBalancerNewParamsSessionAffinityHeader, LoadBalancerNewParamsSessionAffinityEmpty:
+		return true
+	}
+	return false
+}
 
 // Configures attributes for session affinity.
 type LoadBalancerNewParamsSessionAffinityAttributes struct {
@@ -1881,6 +2073,14 @@ const (
 	LoadBalancerNewParamsSessionAffinityAttributesSamesiteStrict LoadBalancerNewParamsSessionAffinityAttributesSamesite = "Strict"
 )
 
+func (r LoadBalancerNewParamsSessionAffinityAttributesSamesite) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsSessionAffinityAttributesSamesiteAuto, LoadBalancerNewParamsSessionAffinityAttributesSamesiteLax, LoadBalancerNewParamsSessionAffinityAttributesSamesiteNone, LoadBalancerNewParamsSessionAffinityAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
@@ -1892,6 +2092,14 @@ const (
 	LoadBalancerNewParamsSessionAffinityAttributesSecureAlways LoadBalancerNewParamsSessionAffinityAttributesSecure = "Always"
 	LoadBalancerNewParamsSessionAffinityAttributesSecureNever  LoadBalancerNewParamsSessionAffinityAttributesSecure = "Never"
 )
+
+func (r LoadBalancerNewParamsSessionAffinityAttributesSecure) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsSessionAffinityAttributesSecureAuto, LoadBalancerNewParamsSessionAffinityAttributesSecureAlways, LoadBalancerNewParamsSessionAffinityAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // Configures the zero-downtime failover between origins within a pool when session
 // affinity is enabled. This feature is currently incompatible with Argo, Tiered
@@ -1911,6 +2119,14 @@ const (
 	LoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailover = "temporary"
 	LoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
+
+func (r LoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailover) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailoverNone, LoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailoverTemporary, LoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailoverSticky:
+		return true
+	}
+	return false
+}
 
 // Steering Policy for this load balancer.
 //
@@ -1946,6 +2162,14 @@ const (
 	LoadBalancerNewParamsSteeringPolicyLeastConnections         LoadBalancerNewParamsSteeringPolicy = "least_connections"
 	LoadBalancerNewParamsSteeringPolicyEmpty                    LoadBalancerNewParamsSteeringPolicy = "\"\""
 )
+
+func (r LoadBalancerNewParamsSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewParamsSteeringPolicyOff, LoadBalancerNewParamsSteeringPolicyGeo, LoadBalancerNewParamsSteeringPolicyRandom, LoadBalancerNewParamsSteeringPolicyDynamicLatency, LoadBalancerNewParamsSteeringPolicyProximity, LoadBalancerNewParamsSteeringPolicyLeastOutstandingRequests, LoadBalancerNewParamsSteeringPolicyLeastConnections, LoadBalancerNewParamsSteeringPolicyEmpty:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerNewResponseEnvelope struct {
 	Errors   []LoadBalancerNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -2027,6 +2251,14 @@ type LoadBalancerNewResponseEnvelopeSuccess bool
 const (
 	LoadBalancerNewResponseEnvelopeSuccessTrue LoadBalancerNewResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerUpdateParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -2207,6 +2439,14 @@ const (
 	LoadBalancerUpdateParamsLocationStrategyModeResolverIP LoadBalancerUpdateParamsLocationStrategyMode = "resolver_ip"
 )
 
+func (r LoadBalancerUpdateParamsLocationStrategyMode) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsLocationStrategyModePop, LoadBalancerUpdateParamsLocationStrategyModeResolverIP:
+		return true
+	}
+	return false
+}
+
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 // authoritative location.
 //
@@ -2222,6 +2462,14 @@ const (
 	LoadBalancerUpdateParamsLocationStrategyPreferEcsProximity LoadBalancerUpdateParamsLocationStrategyPreferEcs = "proximity"
 	LoadBalancerUpdateParamsLocationStrategyPreferEcsGeo       LoadBalancerUpdateParamsLocationStrategyPreferEcs = "geo"
 )
+
+func (r LoadBalancerUpdateParamsLocationStrategyPreferEcs) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsLocationStrategyPreferEcsAlways, LoadBalancerUpdateParamsLocationStrategyPreferEcsNever, LoadBalancerUpdateParamsLocationStrategyPreferEcsProximity, LoadBalancerUpdateParamsLocationStrategyPreferEcsGeo:
+		return true
+	}
+	return false
+}
 
 // Configures pool weights.
 //
@@ -2463,6 +2711,14 @@ const (
 	LoadBalancerUpdateParamsRulesOverridesLocationStrategyModeResolverIP LoadBalancerUpdateParamsRulesOverridesLocationStrategyMode = "resolver_ip"
 )
 
+func (r LoadBalancerUpdateParamsRulesOverridesLocationStrategyMode) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsRulesOverridesLocationStrategyModePop, LoadBalancerUpdateParamsRulesOverridesLocationStrategyModeResolverIP:
+		return true
+	}
+	return false
+}
+
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 // authoritative location.
 //
@@ -2478,6 +2734,14 @@ const (
 	LoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcsProximity LoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcs = "proximity"
 	LoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcsGeo       LoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcs = "geo"
 )
+
+func (r LoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcs) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcsAlways, LoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcsNever, LoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcsProximity, LoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcsGeo:
+		return true
+	}
+	return false
+}
 
 // Configures pool weights.
 //
@@ -2532,6 +2796,14 @@ const (
 	LoadBalancerUpdateParamsRulesOverridesSessionAffinityHeader   LoadBalancerUpdateParamsRulesOverridesSessionAffinity = "header"
 	LoadBalancerUpdateParamsRulesOverridesSessionAffinityEmpty    LoadBalancerUpdateParamsRulesOverridesSessionAffinity = "\"\""
 )
+
+func (r LoadBalancerUpdateParamsRulesOverridesSessionAffinity) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsRulesOverridesSessionAffinityNone, LoadBalancerUpdateParamsRulesOverridesSessionAffinityCookie, LoadBalancerUpdateParamsRulesOverridesSessionAffinityIPCookie, LoadBalancerUpdateParamsRulesOverridesSessionAffinityHeader, LoadBalancerUpdateParamsRulesOverridesSessionAffinityEmpty:
+		return true
+	}
+	return false
+}
 
 // Configures attributes for session affinity.
 type LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes struct {
@@ -2597,6 +2869,14 @@ const (
 	LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesiteStrict LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesite = "Strict"
 )
 
+func (r LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesite) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesiteAuto, LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesiteLax, LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesiteNone, LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
@@ -2608,6 +2888,14 @@ const (
 	LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSecureAlways LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSecure = "Always"
 	LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSecureNever  LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSecure = "Never"
 )
+
+func (r LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSecure) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSecureAuto, LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSecureAlways, LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // Configures the zero-downtime failover between origins within a pool when session
 // affinity is enabled. This feature is currently incompatible with Argo, Tiered
@@ -2627,6 +2915,14 @@ const (
 	LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "temporary"
 	LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
+
+func (r LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverNone, LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary, LoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky:
+		return true
+	}
+	return false
+}
 
 // Steering Policy for this load balancer.
 //
@@ -2663,6 +2959,14 @@ const (
 	LoadBalancerUpdateParamsRulesOverridesSteeringPolicyEmpty                    LoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "\"\""
 )
 
+func (r LoadBalancerUpdateParamsRulesOverridesSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsRulesOverridesSteeringPolicyOff, LoadBalancerUpdateParamsRulesOverridesSteeringPolicyGeo, LoadBalancerUpdateParamsRulesOverridesSteeringPolicyRandom, LoadBalancerUpdateParamsRulesOverridesSteeringPolicyDynamicLatency, LoadBalancerUpdateParamsRulesOverridesSteeringPolicyProximity, LoadBalancerUpdateParamsRulesOverridesSteeringPolicyLeastOutstandingRequests, LoadBalancerUpdateParamsRulesOverridesSteeringPolicyLeastConnections, LoadBalancerUpdateParamsRulesOverridesSteeringPolicyEmpty:
+		return true
+	}
+	return false
+}
+
 // Specifies the type of session affinity the load balancer should use unless
 // specified as `"none"` or "" (default). The supported types are:
 //
@@ -2695,6 +2999,14 @@ const (
 	LoadBalancerUpdateParamsSessionAffinityHeader   LoadBalancerUpdateParamsSessionAffinity = "header"
 	LoadBalancerUpdateParamsSessionAffinityEmpty    LoadBalancerUpdateParamsSessionAffinity = "\"\""
 )
+
+func (r LoadBalancerUpdateParamsSessionAffinity) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsSessionAffinityNone, LoadBalancerUpdateParamsSessionAffinityCookie, LoadBalancerUpdateParamsSessionAffinityIPCookie, LoadBalancerUpdateParamsSessionAffinityHeader, LoadBalancerUpdateParamsSessionAffinityEmpty:
+		return true
+	}
+	return false
+}
 
 // Configures attributes for session affinity.
 type LoadBalancerUpdateParamsSessionAffinityAttributes struct {
@@ -2760,6 +3072,14 @@ const (
 	LoadBalancerUpdateParamsSessionAffinityAttributesSamesiteStrict LoadBalancerUpdateParamsSessionAffinityAttributesSamesite = "Strict"
 )
 
+func (r LoadBalancerUpdateParamsSessionAffinityAttributesSamesite) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsSessionAffinityAttributesSamesiteAuto, LoadBalancerUpdateParamsSessionAffinityAttributesSamesiteLax, LoadBalancerUpdateParamsSessionAffinityAttributesSamesiteNone, LoadBalancerUpdateParamsSessionAffinityAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
@@ -2771,6 +3091,14 @@ const (
 	LoadBalancerUpdateParamsSessionAffinityAttributesSecureAlways LoadBalancerUpdateParamsSessionAffinityAttributesSecure = "Always"
 	LoadBalancerUpdateParamsSessionAffinityAttributesSecureNever  LoadBalancerUpdateParamsSessionAffinityAttributesSecure = "Never"
 )
+
+func (r LoadBalancerUpdateParamsSessionAffinityAttributesSecure) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsSessionAffinityAttributesSecureAuto, LoadBalancerUpdateParamsSessionAffinityAttributesSecureAlways, LoadBalancerUpdateParamsSessionAffinityAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // Configures the zero-downtime failover between origins within a pool when session
 // affinity is enabled. This feature is currently incompatible with Argo, Tiered
@@ -2790,6 +3118,14 @@ const (
 	LoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailover = "temporary"
 	LoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
+
+func (r LoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailover) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailoverNone, LoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailoverTemporary, LoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailoverSticky:
+		return true
+	}
+	return false
+}
 
 // Steering Policy for this load balancer.
 //
@@ -2825,6 +3161,14 @@ const (
 	LoadBalancerUpdateParamsSteeringPolicyLeastConnections         LoadBalancerUpdateParamsSteeringPolicy = "least_connections"
 	LoadBalancerUpdateParamsSteeringPolicyEmpty                    LoadBalancerUpdateParamsSteeringPolicy = "\"\""
 )
+
+func (r LoadBalancerUpdateParamsSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateParamsSteeringPolicyOff, LoadBalancerUpdateParamsSteeringPolicyGeo, LoadBalancerUpdateParamsSteeringPolicyRandom, LoadBalancerUpdateParamsSteeringPolicyDynamicLatency, LoadBalancerUpdateParamsSteeringPolicyProximity, LoadBalancerUpdateParamsSteeringPolicyLeastOutstandingRequests, LoadBalancerUpdateParamsSteeringPolicyLeastConnections, LoadBalancerUpdateParamsSteeringPolicyEmpty:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerUpdateResponseEnvelope struct {
 	Errors   []LoadBalancerUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -2906,6 +3250,14 @@ type LoadBalancerUpdateResponseEnvelopeSuccess bool
 const (
 	LoadBalancerUpdateResponseEnvelopeSuccessTrue LoadBalancerUpdateResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerListParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -2993,6 +3345,14 @@ type LoadBalancerListResponseEnvelopeSuccess bool
 const (
 	LoadBalancerListResponseEnvelopeSuccessTrue LoadBalancerListResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -3109,6 +3469,14 @@ type LoadBalancerDeleteResponseEnvelopeSuccess bool
 const (
 	LoadBalancerDeleteResponseEnvelopeSuccessTrue LoadBalancerDeleteResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerEditParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -3289,6 +3657,14 @@ const (
 	LoadBalancerEditParamsLocationStrategyModeResolverIP LoadBalancerEditParamsLocationStrategyMode = "resolver_ip"
 )
 
+func (r LoadBalancerEditParamsLocationStrategyMode) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsLocationStrategyModePop, LoadBalancerEditParamsLocationStrategyModeResolverIP:
+		return true
+	}
+	return false
+}
+
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 // authoritative location.
 //
@@ -3304,6 +3680,14 @@ const (
 	LoadBalancerEditParamsLocationStrategyPreferEcsProximity LoadBalancerEditParamsLocationStrategyPreferEcs = "proximity"
 	LoadBalancerEditParamsLocationStrategyPreferEcsGeo       LoadBalancerEditParamsLocationStrategyPreferEcs = "geo"
 )
+
+func (r LoadBalancerEditParamsLocationStrategyPreferEcs) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsLocationStrategyPreferEcsAlways, LoadBalancerEditParamsLocationStrategyPreferEcsNever, LoadBalancerEditParamsLocationStrategyPreferEcsProximity, LoadBalancerEditParamsLocationStrategyPreferEcsGeo:
+		return true
+	}
+	return false
+}
 
 // Configures pool weights.
 //
@@ -3545,6 +3929,14 @@ const (
 	LoadBalancerEditParamsRulesOverridesLocationStrategyModeResolverIP LoadBalancerEditParamsRulesOverridesLocationStrategyMode = "resolver_ip"
 )
 
+func (r LoadBalancerEditParamsRulesOverridesLocationStrategyMode) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsRulesOverridesLocationStrategyModePop, LoadBalancerEditParamsRulesOverridesLocationStrategyModeResolverIP:
+		return true
+	}
+	return false
+}
+
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 // authoritative location.
 //
@@ -3560,6 +3952,14 @@ const (
 	LoadBalancerEditParamsRulesOverridesLocationStrategyPreferEcsProximity LoadBalancerEditParamsRulesOverridesLocationStrategyPreferEcs = "proximity"
 	LoadBalancerEditParamsRulesOverridesLocationStrategyPreferEcsGeo       LoadBalancerEditParamsRulesOverridesLocationStrategyPreferEcs = "geo"
 )
+
+func (r LoadBalancerEditParamsRulesOverridesLocationStrategyPreferEcs) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsRulesOverridesLocationStrategyPreferEcsAlways, LoadBalancerEditParamsRulesOverridesLocationStrategyPreferEcsNever, LoadBalancerEditParamsRulesOverridesLocationStrategyPreferEcsProximity, LoadBalancerEditParamsRulesOverridesLocationStrategyPreferEcsGeo:
+		return true
+	}
+	return false
+}
 
 // Configures pool weights.
 //
@@ -3614,6 +4014,14 @@ const (
 	LoadBalancerEditParamsRulesOverridesSessionAffinityHeader   LoadBalancerEditParamsRulesOverridesSessionAffinity = "header"
 	LoadBalancerEditParamsRulesOverridesSessionAffinityEmpty    LoadBalancerEditParamsRulesOverridesSessionAffinity = "\"\""
 )
+
+func (r LoadBalancerEditParamsRulesOverridesSessionAffinity) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsRulesOverridesSessionAffinityNone, LoadBalancerEditParamsRulesOverridesSessionAffinityCookie, LoadBalancerEditParamsRulesOverridesSessionAffinityIPCookie, LoadBalancerEditParamsRulesOverridesSessionAffinityHeader, LoadBalancerEditParamsRulesOverridesSessionAffinityEmpty:
+		return true
+	}
+	return false
+}
 
 // Configures attributes for session affinity.
 type LoadBalancerEditParamsRulesOverridesSessionAffinityAttributes struct {
@@ -3679,6 +4087,14 @@ const (
 	LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSamesiteStrict LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSamesite = "Strict"
 )
 
+func (r LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSamesite) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSamesiteAuto, LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSamesiteLax, LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSamesiteNone, LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
@@ -3690,6 +4106,14 @@ const (
 	LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSecureAlways LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSecure = "Always"
 	LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSecureNever  LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSecure = "Never"
 )
+
+func (r LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSecure) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSecureAuto, LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSecureAlways, LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // Configures the zero-downtime failover between origins within a pool when session
 // affinity is enabled. This feature is currently incompatible with Argo, Tiered
@@ -3709,6 +4133,14 @@ const (
 	LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "temporary"
 	LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
+
+func (r LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverNone, LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary, LoadBalancerEditParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky:
+		return true
+	}
+	return false
+}
 
 // Steering Policy for this load balancer.
 //
@@ -3745,6 +4177,14 @@ const (
 	LoadBalancerEditParamsRulesOverridesSteeringPolicyEmpty                    LoadBalancerEditParamsRulesOverridesSteeringPolicy = "\"\""
 )
 
+func (r LoadBalancerEditParamsRulesOverridesSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsRulesOverridesSteeringPolicyOff, LoadBalancerEditParamsRulesOverridesSteeringPolicyGeo, LoadBalancerEditParamsRulesOverridesSteeringPolicyRandom, LoadBalancerEditParamsRulesOverridesSteeringPolicyDynamicLatency, LoadBalancerEditParamsRulesOverridesSteeringPolicyProximity, LoadBalancerEditParamsRulesOverridesSteeringPolicyLeastOutstandingRequests, LoadBalancerEditParamsRulesOverridesSteeringPolicyLeastConnections, LoadBalancerEditParamsRulesOverridesSteeringPolicyEmpty:
+		return true
+	}
+	return false
+}
+
 // Specifies the type of session affinity the load balancer should use unless
 // specified as `"none"` or "" (default). The supported types are:
 //
@@ -3777,6 +4217,14 @@ const (
 	LoadBalancerEditParamsSessionAffinityHeader   LoadBalancerEditParamsSessionAffinity = "header"
 	LoadBalancerEditParamsSessionAffinityEmpty    LoadBalancerEditParamsSessionAffinity = "\"\""
 )
+
+func (r LoadBalancerEditParamsSessionAffinity) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsSessionAffinityNone, LoadBalancerEditParamsSessionAffinityCookie, LoadBalancerEditParamsSessionAffinityIPCookie, LoadBalancerEditParamsSessionAffinityHeader, LoadBalancerEditParamsSessionAffinityEmpty:
+		return true
+	}
+	return false
+}
 
 // Configures attributes for session affinity.
 type LoadBalancerEditParamsSessionAffinityAttributes struct {
@@ -3842,6 +4290,14 @@ const (
 	LoadBalancerEditParamsSessionAffinityAttributesSamesiteStrict LoadBalancerEditParamsSessionAffinityAttributesSamesite = "Strict"
 )
 
+func (r LoadBalancerEditParamsSessionAffinityAttributesSamesite) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsSessionAffinityAttributesSamesiteAuto, LoadBalancerEditParamsSessionAffinityAttributesSamesiteLax, LoadBalancerEditParamsSessionAffinityAttributesSamesiteNone, LoadBalancerEditParamsSessionAffinityAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
@@ -3853,6 +4309,14 @@ const (
 	LoadBalancerEditParamsSessionAffinityAttributesSecureAlways LoadBalancerEditParamsSessionAffinityAttributesSecure = "Always"
 	LoadBalancerEditParamsSessionAffinityAttributesSecureNever  LoadBalancerEditParamsSessionAffinityAttributesSecure = "Never"
 )
+
+func (r LoadBalancerEditParamsSessionAffinityAttributesSecure) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsSessionAffinityAttributesSecureAuto, LoadBalancerEditParamsSessionAffinityAttributesSecureAlways, LoadBalancerEditParamsSessionAffinityAttributesSecureNever:
+		return true
+	}
+	return false
+}
 
 // Configures the zero-downtime failover between origins within a pool when session
 // affinity is enabled. This feature is currently incompatible with Argo, Tiered
@@ -3872,6 +4336,14 @@ const (
 	LoadBalancerEditParamsSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerEditParamsSessionAffinityAttributesZeroDowntimeFailover = "temporary"
 	LoadBalancerEditParamsSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerEditParamsSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
+
+func (r LoadBalancerEditParamsSessionAffinityAttributesZeroDowntimeFailover) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsSessionAffinityAttributesZeroDowntimeFailoverNone, LoadBalancerEditParamsSessionAffinityAttributesZeroDowntimeFailoverTemporary, LoadBalancerEditParamsSessionAffinityAttributesZeroDowntimeFailoverSticky:
+		return true
+	}
+	return false
+}
 
 // Steering Policy for this load balancer.
 //
@@ -3907,6 +4379,14 @@ const (
 	LoadBalancerEditParamsSteeringPolicyLeastConnections         LoadBalancerEditParamsSteeringPolicy = "least_connections"
 	LoadBalancerEditParamsSteeringPolicyEmpty                    LoadBalancerEditParamsSteeringPolicy = "\"\""
 )
+
+func (r LoadBalancerEditParamsSteeringPolicy) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditParamsSteeringPolicyOff, LoadBalancerEditParamsSteeringPolicyGeo, LoadBalancerEditParamsSteeringPolicyRandom, LoadBalancerEditParamsSteeringPolicyDynamicLatency, LoadBalancerEditParamsSteeringPolicyProximity, LoadBalancerEditParamsSteeringPolicyLeastOutstandingRequests, LoadBalancerEditParamsSteeringPolicyLeastConnections, LoadBalancerEditParamsSteeringPolicyEmpty:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerEditResponseEnvelope struct {
 	Errors   []LoadBalancerEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -3988,6 +4468,14 @@ type LoadBalancerEditResponseEnvelopeSuccess bool
 const (
 	LoadBalancerEditResponseEnvelopeSuccessTrue LoadBalancerEditResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LoadBalancerGetParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -4073,3 +4561,11 @@ type LoadBalancerGetResponseEnvelopeSuccess bool
 const (
 	LoadBalancerGetResponseEnvelopeSuccessTrue LoadBalancerGetResponseEnvelopeSuccess = true
 )
+
+func (r LoadBalancerGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancerGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

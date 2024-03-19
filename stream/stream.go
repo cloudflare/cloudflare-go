@@ -316,6 +316,14 @@ const (
 	StreamVideosStatusStateError         StreamVideosStatusState = "error"
 )
 
+func (r StreamVideosStatusState) IsKnown() bool {
+	switch r {
+	case StreamVideosStatusStatePendingupload, StreamVideosStatusStateDownloading, StreamVideosStatusStateQueued, StreamVideosStatusStateInprogress, StreamVideosStatusStateReady, StreamVideosStatusStateError:
+		return true
+	}
+	return false
+}
+
 type StreamNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -340,6 +348,14 @@ type StreamNewParamsTusResumable string
 const (
 	StreamNewParamsTusResumable1_0_0 StreamNewParamsTusResumable = "1.0.0"
 )
+
+func (r StreamNewParamsTusResumable) IsKnown() bool {
+	switch r {
+	case StreamNewParamsTusResumable1_0_0:
+		return true
+	}
+	return false
+}
 
 type StreamListParams struct {
 	// The account identifier tag.
@@ -383,6 +399,14 @@ const (
 	StreamListParamsStatusReady         StreamListParamsStatus = "ready"
 	StreamListParamsStatusError         StreamListParamsStatus = "error"
 )
+
+func (r StreamListParamsStatus) IsKnown() bool {
+	switch r {
+	case StreamListParamsStatusPendingupload, StreamListParamsStatusDownloading, StreamListParamsStatusQueued, StreamListParamsStatusInprogress, StreamListParamsStatusReady, StreamListParamsStatusError:
+		return true
+	}
+	return false
+}
 
 type StreamListResponseEnvelope struct {
 	Errors   []StreamListResponseEnvelopeErrors   `json:"errors,required"`
@@ -470,6 +494,14 @@ type StreamListResponseEnvelopeSuccess bool
 const (
 	StreamListResponseEnvelopeSuccessTrue StreamListResponseEnvelopeSuccess = true
 )
+
+func (r StreamListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case StreamListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type StreamDeleteParams struct {
 	// The account identifier tag.
@@ -561,3 +593,11 @@ type StreamGetResponseEnvelopeSuccess bool
 const (
 	StreamGetResponseEnvelopeSuccessTrue StreamGetResponseEnvelopeSuccess = true
 )
+
+func (r StreamGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case StreamGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

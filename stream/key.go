@@ -231,6 +231,14 @@ const (
 	KeyNewResponseEnvelopeSuccessTrue KeyNewResponseEnvelopeSuccess = true
 )
 
+func (r KeyNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case KeyNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type KeyDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -317,6 +325,14 @@ const (
 	KeyDeleteResponseEnvelopeSuccessTrue KeyDeleteResponseEnvelopeSuccess = true
 )
 
+func (r KeyDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case KeyDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type KeyGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -402,3 +418,11 @@ type KeyGetResponseEnvelopeSuccess bool
 const (
 	KeyGetResponseEnvelopeSuccessTrue KeyGetResponseEnvelopeSuccess = true
 )
+
+func (r KeyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case KeyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -222,6 +222,14 @@ const (
 	LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationTargetIP LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationTarget = "ip"
 )
 
+func (r LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationTarget) IsKnown() bool {
+	switch r {
+	case LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationTargetIP:
+		return true
+	}
+	return false
+}
+
 type LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the Zone Lockdown rule.
@@ -259,6 +267,14 @@ type LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCIDRConfigurationTarget 
 const (
 	LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCIDRConfigurationTargetIPRange LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCIDRConfigurationTarget = "ip_range"
 )
+
+func (r LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCIDRConfigurationTarget) IsKnown() bool {
+	switch r {
+	case LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCIDRConfigurationTargetIPRange:
+		return true
+	}
+	return false
+}
 
 type LockdownDeleteResponse struct {
 	// The unique identifier of the Zone Lockdown rule.
@@ -371,6 +387,14 @@ const (
 	LockdownNewResponseEnvelopeSuccessTrue LockdownNewResponseEnvelopeSuccess = true
 )
 
+func (r LockdownNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LockdownNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LockdownUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -459,6 +483,14 @@ type LockdownUpdateResponseEnvelopeSuccess bool
 const (
 	LockdownUpdateResponseEnvelopeSuccessTrue LockdownUpdateResponseEnvelopeSuccess = true
 )
+
+func (r LockdownUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LockdownUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LockdownListParams struct {
 	// A string to search for in the description of existing rules.
@@ -593,3 +625,11 @@ type LockdownGetResponseEnvelopeSuccess bool
 const (
 	LockdownGetResponseEnvelopeSuccessTrue LockdownGetResponseEnvelopeSuccess = true
 )
+
+func (r LockdownGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LockdownGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -183,6 +183,14 @@ const (
 	ObservatoryPageTestDesktopReportDeviceTypeMobile  ObservatoryPageTestDesktopReportDeviceType = "MOBILE"
 )
 
+func (r ObservatoryPageTestDesktopReportDeviceType) IsKnown() bool {
+	switch r {
+	case ObservatoryPageTestDesktopReportDeviceTypeDesktop, ObservatoryPageTestDesktopReportDeviceTypeMobile:
+		return true
+	}
+	return false
+}
+
 type ObservatoryPageTestDesktopReportError struct {
 	// The error code of the Lighthouse result.
 	Code ObservatoryPageTestDesktopReportErrorCode `json:"code"`
@@ -222,6 +230,14 @@ const (
 	ObservatoryPageTestDesktopReportErrorCodeUnknown           ObservatoryPageTestDesktopReportErrorCode = "UNKNOWN"
 )
 
+func (r ObservatoryPageTestDesktopReportErrorCode) IsKnown() bool {
+	switch r {
+	case ObservatoryPageTestDesktopReportErrorCodeNotReachable, ObservatoryPageTestDesktopReportErrorCodeDNSFailure, ObservatoryPageTestDesktopReportErrorCodeNotHTML, ObservatoryPageTestDesktopReportErrorCodeLighthouseTimeout, ObservatoryPageTestDesktopReportErrorCodeUnknown:
+		return true
+	}
+	return false
+}
+
 // The state of the Lighthouse report.
 type ObservatoryPageTestDesktopReportState string
 
@@ -230,6 +246,14 @@ const (
 	ObservatoryPageTestDesktopReportStateComplete ObservatoryPageTestDesktopReportState = "COMPLETE"
 	ObservatoryPageTestDesktopReportStateFailed   ObservatoryPageTestDesktopReportState = "FAILED"
 )
+
+func (r ObservatoryPageTestDesktopReportState) IsKnown() bool {
+	switch r {
+	case ObservatoryPageTestDesktopReportStateRunning, ObservatoryPageTestDesktopReportStateComplete, ObservatoryPageTestDesktopReportStateFailed:
+		return true
+	}
+	return false
+}
 
 // The Lighthouse report.
 type ObservatoryPageTestMobileReport struct {
@@ -294,6 +318,14 @@ const (
 	ObservatoryPageTestMobileReportDeviceTypeMobile  ObservatoryPageTestMobileReportDeviceType = "MOBILE"
 )
 
+func (r ObservatoryPageTestMobileReportDeviceType) IsKnown() bool {
+	switch r {
+	case ObservatoryPageTestMobileReportDeviceTypeDesktop, ObservatoryPageTestMobileReportDeviceTypeMobile:
+		return true
+	}
+	return false
+}
+
 type ObservatoryPageTestMobileReportError struct {
 	// The error code of the Lighthouse result.
 	Code ObservatoryPageTestMobileReportErrorCode `json:"code"`
@@ -333,6 +365,14 @@ const (
 	ObservatoryPageTestMobileReportErrorCodeUnknown           ObservatoryPageTestMobileReportErrorCode = "UNKNOWN"
 )
 
+func (r ObservatoryPageTestMobileReportErrorCode) IsKnown() bool {
+	switch r {
+	case ObservatoryPageTestMobileReportErrorCodeNotReachable, ObservatoryPageTestMobileReportErrorCodeDNSFailure, ObservatoryPageTestMobileReportErrorCodeNotHTML, ObservatoryPageTestMobileReportErrorCodeLighthouseTimeout, ObservatoryPageTestMobileReportErrorCodeUnknown:
+		return true
+	}
+	return false
+}
+
 // The state of the Lighthouse report.
 type ObservatoryPageTestMobileReportState string
 
@@ -341,6 +381,14 @@ const (
 	ObservatoryPageTestMobileReportStateComplete ObservatoryPageTestMobileReportState = "COMPLETE"
 	ObservatoryPageTestMobileReportStateFailed   ObservatoryPageTestMobileReportState = "FAILED"
 )
+
+func (r ObservatoryPageTestMobileReportState) IsKnown() bool {
+	switch r {
+	case ObservatoryPageTestMobileReportStateRunning, ObservatoryPageTestMobileReportStateComplete, ObservatoryPageTestMobileReportStateFailed:
+		return true
+	}
+	return false
+}
 
 // A test region with a label.
 type ObservatoryPageTestRegion struct {
@@ -394,6 +442,14 @@ const (
 	ObservatoryPageTestRegionValueUsWest1             ObservatoryPageTestRegionValue = "us-west1"
 )
 
+func (r ObservatoryPageTestRegionValue) IsKnown() bool {
+	switch r {
+	case ObservatoryPageTestRegionValueAsiaEast1, ObservatoryPageTestRegionValueAsiaNortheast1, ObservatoryPageTestRegionValueAsiaNortheast2, ObservatoryPageTestRegionValueAsiaSouth1, ObservatoryPageTestRegionValueAsiaSoutheast1, ObservatoryPageTestRegionValueAustraliaSoutheast1, ObservatoryPageTestRegionValueEuropeNorth1, ObservatoryPageTestRegionValueEuropeSouthwest1, ObservatoryPageTestRegionValueEuropeWest1, ObservatoryPageTestRegionValueEuropeWest2, ObservatoryPageTestRegionValueEuropeWest3, ObservatoryPageTestRegionValueEuropeWest4, ObservatoryPageTestRegionValueEuropeWest8, ObservatoryPageTestRegionValueEuropeWest9, ObservatoryPageTestRegionValueMeWest1, ObservatoryPageTestRegionValueSouthamericaEast1, ObservatoryPageTestRegionValueUsCentral1, ObservatoryPageTestRegionValueUsEast1, ObservatoryPageTestRegionValueUsEast4, ObservatoryPageTestRegionValueUsSouth1, ObservatoryPageTestRegionValueUsWest1:
+		return true
+	}
+	return false
+}
+
 // The frequency of the test.
 type ObservatoryPageTestScheduleFrequency string
 
@@ -401,6 +457,14 @@ const (
 	ObservatoryPageTestScheduleFrequencyDaily  ObservatoryPageTestScheduleFrequency = "DAILY"
 	ObservatoryPageTestScheduleFrequencyWeekly ObservatoryPageTestScheduleFrequency = "WEEKLY"
 )
+
+func (r ObservatoryPageTestScheduleFrequency) IsKnown() bool {
+	switch r {
+	case ObservatoryPageTestScheduleFrequencyDaily, ObservatoryPageTestScheduleFrequencyWeekly:
+		return true
+	}
+	return false
+}
 
 type TestListResponse struct {
 	Errors   []TestListResponseError   `json:"errors,required"`
@@ -563,6 +627,14 @@ const (
 	TestNewParamsRegionUsWest1             TestNewParamsRegion = "us-west1"
 )
 
+func (r TestNewParamsRegion) IsKnown() bool {
+	switch r {
+	case TestNewParamsRegionAsiaEast1, TestNewParamsRegionAsiaNortheast1, TestNewParamsRegionAsiaNortheast2, TestNewParamsRegionAsiaSouth1, TestNewParamsRegionAsiaSoutheast1, TestNewParamsRegionAustraliaSoutheast1, TestNewParamsRegionEuropeNorth1, TestNewParamsRegionEuropeSouthwest1, TestNewParamsRegionEuropeWest1, TestNewParamsRegionEuropeWest2, TestNewParamsRegionEuropeWest3, TestNewParamsRegionEuropeWest4, TestNewParamsRegionEuropeWest8, TestNewParamsRegionEuropeWest9, TestNewParamsRegionMeWest1, TestNewParamsRegionSouthamericaEast1, TestNewParamsRegionUsCentral1, TestNewParamsRegionUsEast1, TestNewParamsRegionUsEast4, TestNewParamsRegionUsSouth1, TestNewParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
+
 type TestNewResponseEnvelope struct {
 	Result ObservatoryPageTest         `json:"result"`
 	JSON   testNewResponseEnvelopeJSON `json:"-"`
@@ -628,6 +700,14 @@ const (
 	TestListParamsRegionUsWest1             TestListParamsRegion = "us-west1"
 )
 
+func (r TestListParamsRegion) IsKnown() bool {
+	switch r {
+	case TestListParamsRegionAsiaEast1, TestListParamsRegionAsiaNortheast1, TestListParamsRegionAsiaNortheast2, TestListParamsRegionAsiaSouth1, TestListParamsRegionAsiaSoutheast1, TestListParamsRegionAustraliaSoutheast1, TestListParamsRegionEuropeNorth1, TestListParamsRegionEuropeSouthwest1, TestListParamsRegionEuropeWest1, TestListParamsRegionEuropeWest2, TestListParamsRegionEuropeWest3, TestListParamsRegionEuropeWest4, TestListParamsRegionEuropeWest8, TestListParamsRegionEuropeWest9, TestListParamsRegionMeWest1, TestListParamsRegionSouthamericaEast1, TestListParamsRegionUsCentral1, TestListParamsRegionUsEast1, TestListParamsRegionUsEast4, TestListParamsRegionUsSouth1, TestListParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
+
 type TestDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -669,6 +749,14 @@ const (
 	TestDeleteParamsRegionUsSouth1            TestDeleteParamsRegion = "us-south1"
 	TestDeleteParamsRegionUsWest1             TestDeleteParamsRegion = "us-west1"
 )
+
+func (r TestDeleteParamsRegion) IsKnown() bool {
+	switch r {
+	case TestDeleteParamsRegionAsiaEast1, TestDeleteParamsRegionAsiaNortheast1, TestDeleteParamsRegionAsiaNortheast2, TestDeleteParamsRegionAsiaSouth1, TestDeleteParamsRegionAsiaSoutheast1, TestDeleteParamsRegionAustraliaSoutheast1, TestDeleteParamsRegionEuropeNorth1, TestDeleteParamsRegionEuropeSouthwest1, TestDeleteParamsRegionEuropeWest1, TestDeleteParamsRegionEuropeWest2, TestDeleteParamsRegionEuropeWest3, TestDeleteParamsRegionEuropeWest4, TestDeleteParamsRegionEuropeWest8, TestDeleteParamsRegionEuropeWest9, TestDeleteParamsRegionMeWest1, TestDeleteParamsRegionSouthamericaEast1, TestDeleteParamsRegionUsCentral1, TestDeleteParamsRegionUsEast1, TestDeleteParamsRegionUsEast4, TestDeleteParamsRegionUsSouth1, TestDeleteParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
 
 type TestDeleteResponseEnvelope struct {
 	Result TestDeleteResponse             `json:"result"`

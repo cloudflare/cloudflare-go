@@ -299,6 +299,14 @@ const (
 	SiteInfoListParamsOrderByCreated SiteInfoListParamsOrderBy = "created"
 )
 
+func (r SiteInfoListParamsOrderBy) IsKnown() bool {
+	switch r {
+	case SiteInfoListParamsOrderByHost, SiteInfoListParamsOrderByCreated:
+		return true
+	}
+	return false
+}
+
 type SiteInfoDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`

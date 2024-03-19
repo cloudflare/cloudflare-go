@@ -105,6 +105,14 @@ const (
 	ZonesOpportunisticOnionIDOpportunisticOnion ZonesOpportunisticOnionID = "opportunistic_onion"
 )
 
+func (r ZonesOpportunisticOnionID) IsKnown() bool {
+	switch r {
+	case ZonesOpportunisticOnionIDOpportunisticOnion:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesOpportunisticOnionValue string
 
@@ -112,6 +120,14 @@ const (
 	ZonesOpportunisticOnionValueOn  ZonesOpportunisticOnionValue = "on"
 	ZonesOpportunisticOnionValueOff ZonesOpportunisticOnionValue = "off"
 )
+
+func (r ZonesOpportunisticOnionValue) IsKnown() bool {
+	switch r {
+	case ZonesOpportunisticOnionValueOn, ZonesOpportunisticOnionValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -121,6 +137,14 @@ const (
 	ZonesOpportunisticOnionEditableTrue  ZonesOpportunisticOnionEditable = true
 	ZonesOpportunisticOnionEditableFalse ZonesOpportunisticOnionEditable = false
 )
+
+func (r ZonesOpportunisticOnionEditable) IsKnown() bool {
+	switch r {
+	case ZonesOpportunisticOnionEditableTrue, ZonesOpportunisticOnionEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
@@ -157,6 +181,14 @@ const (
 	SettingOpportunisticOnionEditParamsValueOn  SettingOpportunisticOnionEditParamsValue = "on"
 	SettingOpportunisticOnionEditParamsValueOff SettingOpportunisticOnionEditParamsValue = "off"
 )
+
+func (r SettingOpportunisticOnionEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingOpportunisticOnionEditParamsValueOn, SettingOpportunisticOnionEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingOpportunisticOnionEditResponseEnvelope struct {
 	Errors   []SettingOpportunisticOnionEditResponseEnvelopeErrors   `json:"errors,required"`

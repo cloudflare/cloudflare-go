@@ -201,6 +201,14 @@ const (
 	V1KeyUpdateResponseEnvelopeSuccessTrue V1KeyUpdateResponseEnvelopeSuccess = true
 )
 
+func (r V1KeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1KeyUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V1KeyListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -287,6 +295,14 @@ const (
 	V1KeyListResponseEnvelopeSuccessTrue V1KeyListResponseEnvelopeSuccess = true
 )
 
+func (r V1KeyListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1KeyListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V1KeyDeleteParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -372,3 +388,11 @@ type V1KeyDeleteResponseEnvelopeSuccess bool
 const (
 	V1KeyDeleteResponseEnvelopeSuccessTrue V1KeyDeleteResponseEnvelopeSuccess = true
 )
+
+func (r V1KeyDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V1KeyDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

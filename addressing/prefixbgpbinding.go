@@ -161,6 +161,14 @@ const (
 	AddressingServiceBindingProvisioningStateActive       AddressingServiceBindingProvisioningState = "active"
 )
 
+func (r AddressingServiceBindingProvisioningState) IsKnown() bool {
+	switch r {
+	case AddressingServiceBindingProvisioningStateProvisioning, AddressingServiceBindingProvisioningStateActive:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [addressing.PrefixBGPBindingDeleteResponseUnknown],
 // [addressing.PrefixBGPBindingDeleteResponseArray] or [shared.UnionString].
 type PrefixBGPBindingDeleteResponse interface {
@@ -280,6 +288,14 @@ const (
 	PrefixBGPBindingNewResponseEnvelopeSuccessTrue PrefixBGPBindingNewResponseEnvelopeSuccess = true
 )
 
+func (r PrefixBGPBindingNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPBindingNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixBGPBindingListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -365,6 +381,14 @@ type PrefixBGPBindingListResponseEnvelopeSuccess bool
 const (
 	PrefixBGPBindingListResponseEnvelopeSuccessTrue PrefixBGPBindingListResponseEnvelopeSuccess = true
 )
+
+func (r PrefixBGPBindingListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPBindingListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PrefixBGPBindingDeleteParams struct {
 	// Identifier
@@ -452,6 +476,14 @@ const (
 	PrefixBGPBindingDeleteResponseEnvelopeSuccessTrue PrefixBGPBindingDeleteResponseEnvelopeSuccess = true
 )
 
+func (r PrefixBGPBindingDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPBindingDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixBGPBindingGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -537,3 +569,11 @@ type PrefixBGPBindingGetResponseEnvelopeSuccess bool
 const (
 	PrefixBGPBindingGetResponseEnvelopeSuccessTrue PrefixBGPBindingGetResponseEnvelopeSuccess = true
 )
+
+func (r PrefixBGPBindingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPBindingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

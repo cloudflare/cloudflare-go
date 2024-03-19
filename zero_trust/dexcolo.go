@@ -77,6 +77,14 @@ const (
 	DEXColoListParamsSortByApplicationTestsUsage DEXColoListParamsSortBy = "application-tests-usage"
 )
 
+func (r DEXColoListParamsSortBy) IsKnown() bool {
+	switch r {
+	case DEXColoListParamsSortByFleetStatusUsage, DEXColoListParamsSortByApplicationTestsUsage:
+		return true
+	}
+	return false
+}
+
 type DEXColoListResponseEnvelope struct {
 	Errors   []DEXColoListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DEXColoListResponseEnvelopeMessages `json:"messages,required"`
@@ -160,6 +168,14 @@ type DEXColoListResponseEnvelopeSuccess bool
 const (
 	DEXColoListResponseEnvelopeSuccessTrue DEXColoListResponseEnvelopeSuccess = true
 )
+
+func (r DEXColoListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXColoListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DEXColoListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

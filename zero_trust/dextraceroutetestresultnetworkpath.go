@@ -157,6 +157,14 @@ const (
 	DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToIsp       DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMile = "client-to-isp"
 )
 
+func (r DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMile) IsKnown() bool {
+	switch r {
+	case DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToApp, DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToCfEgress, DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToCfIngress, DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToIsp:
+		return true
+	}
+	return false
+}
+
 type DEXTracerouteTestResultNetworkPathGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
@@ -243,3 +251,11 @@ type DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccess bool
 const (
 	DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccessTrue DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccess = true
 )
+
+func (r DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

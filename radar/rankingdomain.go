@@ -177,6 +177,14 @@ const (
 	RankingDomainGetParamsFormatCsv  RankingDomainGetParamsFormat = "CSV"
 )
 
+func (r RankingDomainGetParamsFormat) IsKnown() bool {
+	switch r {
+	case RankingDomainGetParamsFormatJson, RankingDomainGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 // The ranking type.
 type RankingDomainGetParamsRankingType string
 
@@ -185,6 +193,14 @@ const (
 	RankingDomainGetParamsRankingTypeTrendingRise   RankingDomainGetParamsRankingType = "TRENDING_RISE"
 	RankingDomainGetParamsRankingTypeTrendingSteady RankingDomainGetParamsRankingType = "TRENDING_STEADY"
 )
+
+func (r RankingDomainGetParamsRankingType) IsKnown() bool {
+	switch r {
+	case RankingDomainGetParamsRankingTypePopular, RankingDomainGetParamsRankingTypeTrendingRise, RankingDomainGetParamsRankingTypeTrendingSteady:
+		return true
+	}
+	return false
+}
 
 type RankingDomainGetResponseEnvelope struct {
 	Result  RankingDomainGetResponse             `json:"result,required"`

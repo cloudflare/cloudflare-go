@@ -185,6 +185,14 @@ const (
 	WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedModeOff WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedMode = "off"
 )
 
+func (r WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedModeOn, WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedModeOff:
+		return true
+	}
+	return false
+}
+
 // The rule group to which the current WAF rule belongs.
 type WAFManagedRulesRuleWAFManagedRulesAnomalyRuleGroup struct {
 	// The unique identifier of the rule group.
@@ -219,6 +227,14 @@ const (
 	WAFManagedRulesRuleWAFManagedRulesAnomalyRuleModeOn  WAFManagedRulesRuleWAFManagedRulesAnomalyRuleMode = "on"
 	WAFManagedRulesRuleWAFManagedRulesAnomalyRuleModeOff WAFManagedRulesRuleWAFManagedRulesAnomalyRuleMode = "off"
 )
+
+func (r WAFManagedRulesRuleWAFManagedRulesAnomalyRuleMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesRuleWAFManagedRulesAnomalyRuleModeOn, WAFManagedRulesRuleWAFManagedRulesAnomalyRuleModeOff:
+		return true
+	}
+	return false
+}
 
 // When triggered, traditional WAF rules cause the firewall to immediately act upon
 // the request based on the configuration of the rule. A 'deny' rule will
@@ -283,6 +299,14 @@ const (
 	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeChallenge WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedMode = "challenge"
 )
 
+func (r WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeDefault, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeDisable, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeSimulate, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeBlock, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeChallenge:
+		return true
+	}
+	return false
+}
+
 // The default action/mode of a rule.
 type WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode string
 
@@ -292,6 +316,14 @@ const (
 	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeBlock     WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode = "block"
 	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeChallenge WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode = "challenge"
 )
+
+func (r WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeDisable, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeSimulate, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeBlock, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeChallenge:
+		return true
+	}
+	return false
+}
 
 // The rule group to which the current WAF rule belongs.
 type WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleGroup struct {
@@ -331,6 +363,14 @@ const (
 	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeBlock     WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode = "block"
 	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeChallenge WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode = "challenge"
 )
+
+func (r WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeDefault, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeDisable, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeSimulate, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeBlock, WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeChallenge:
+		return true
+	}
+	return false
+}
 
 // When triggered, traditional WAF rules cause the firewall to immediately act on
 // the request based on the rule configuration. An 'allow' rule will immediately
@@ -388,6 +428,14 @@ const (
 	WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedModeOff WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedMode = "off"
 )
 
+func (r WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedModeOn, WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedModeOff:
+		return true
+	}
+	return false
+}
+
 // The rule group to which the current WAF rule belongs.
 type WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleGroup struct {
 	// The unique identifier of the rule group.
@@ -423,6 +471,14 @@ const (
 	WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleModeOn  WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode = "on"
 	WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleModeOff WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode = "off"
 )
+
+func (r WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleModeOn, WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleModeOff:
+		return true
+	}
+	return false
+}
 
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
@@ -514,6 +570,14 @@ const (
 	WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOff WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode = "off"
 )
 
+func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOn, WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOff:
+		return true
+	}
+	return false
+}
+
 // The rule group to which the current WAF rule belongs.
 type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleGroup struct {
 	// The unique identifier of the rule group.
@@ -549,6 +613,14 @@ const (
 	WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleModeOn  WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode = "on"
 	WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleModeOff WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode = "off"
 )
+
+func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleModeOn, WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleModeOff:
+		return true
+	}
+	return false
+}
 
 // When triggered, traditional WAF rules cause the firewall to immediately act upon
 // the request based on the configuration of the rule. A 'deny' rule will
@@ -614,6 +686,14 @@ const (
 	WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedModeChallenge WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode = "challenge"
 )
 
+func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedModeDefault, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedModeDisable, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedModeSimulate, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedModeBlock, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedModeChallenge:
+		return true
+	}
+	return false
+}
+
 // The default action/mode of a rule.
 type WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultMode string
 
@@ -623,6 +703,14 @@ const (
 	WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultModeBlock     WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultMode = "block"
 	WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultModeChallenge WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultMode = "challenge"
 )
+
+func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultModeDisable, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultModeSimulate, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultModeBlock, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleDefaultModeChallenge:
+		return true
+	}
+	return false
+}
 
 // The rule group to which the current WAF rule belongs.
 type WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleGroup struct {
@@ -662,6 +750,14 @@ const (
 	WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleModeBlock     WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleMode = "block"
 	WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleModeChallenge WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleMode = "challenge"
 )
+
+func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleModeDefault, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleModeDisable, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleModeSimulate, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleModeBlock, WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleModeChallenge:
+		return true
+	}
+	return false
+}
 
 // When triggered, traditional WAF rules cause the firewall to immediately act on
 // the request based on the rule configuration. An 'allow' rule will immediately
@@ -720,6 +816,14 @@ const (
 	WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedModeOff WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode = "off"
 )
 
+func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedModeOn, WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedModeOff:
+		return true
+	}
+	return false
+}
+
 // The rule group to which the current WAF rule belongs.
 type WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleGroup struct {
 	// The unique identifier of the rule group.
@@ -755,6 +859,14 @@ const (
 	WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleModeOn  WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode = "on"
 	WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleModeOff WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode = "off"
 )
+
+func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleModeOn, WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleModeOff:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [firewall.WAFPackageRuleGetResponseUnknown],
 // [firewall.WAFPackageRuleGetResponseArray] or [shared.UnionString].
@@ -816,6 +928,14 @@ const (
 	WAFPackageRuleListParamsDirectionDesc WAFPackageRuleListParamsDirection = "desc"
 )
 
+func (r WAFPackageRuleListParamsDirection) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleListParamsDirectionAsc, WAFPackageRuleListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // When set to `all`, all the search requirements must match. When set to `any`,
 // only one of the search requirements has to match.
 type WAFPackageRuleListParamsMatch string
@@ -824,6 +944,14 @@ const (
 	WAFPackageRuleListParamsMatchAny WAFPackageRuleListParamsMatch = "any"
 	WAFPackageRuleListParamsMatchAll WAFPackageRuleListParamsMatch = "all"
 )
+
+func (r WAFPackageRuleListParamsMatch) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleListParamsMatchAny, WAFPackageRuleListParamsMatchAll:
+		return true
+	}
+	return false
+}
 
 // The action/mode a rule has been overridden to perform.
 type WAFPackageRuleListParamsMode string
@@ -835,6 +963,14 @@ const (
 	WAFPackageRuleListParamsModeSim WAFPackageRuleListParamsMode = "SIM"
 )
 
+func (r WAFPackageRuleListParamsMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleListParamsModeDis, WAFPackageRuleListParamsModeChl, WAFPackageRuleListParamsModeBlk, WAFPackageRuleListParamsModeSim:
+		return true
+	}
+	return false
+}
+
 // The field used to sort returned rules.
 type WAFPackageRuleListParamsOrder string
 
@@ -843,6 +979,14 @@ const (
 	WAFPackageRuleListParamsOrderGroupID     WAFPackageRuleListParamsOrder = "group_id"
 	WAFPackageRuleListParamsOrderDescription WAFPackageRuleListParamsOrder = "description"
 )
+
+func (r WAFPackageRuleListParamsOrder) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleListParamsOrderPriority, WAFPackageRuleListParamsOrderGroupID, WAFPackageRuleListParamsOrderDescription:
+		return true
+	}
+	return false
+}
 
 type WAFPackageRuleEditParams struct {
 	// Identifier
@@ -869,6 +1013,14 @@ const (
 	WAFPackageRuleEditParamsModeOn        WAFPackageRuleEditParamsMode = "on"
 	WAFPackageRuleEditParamsModeOff       WAFPackageRuleEditParamsMode = "off"
 )
+
+func (r WAFPackageRuleEditParamsMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditParamsModeDefault, WAFPackageRuleEditParamsModeDisable, WAFPackageRuleEditParamsModeSimulate, WAFPackageRuleEditParamsModeBlock, WAFPackageRuleEditParamsModeChallenge, WAFPackageRuleEditParamsModeOn, WAFPackageRuleEditParamsModeOff:
+		return true
+	}
+	return false
+}
 
 type WAFPackageRuleEditResponseEnvelope struct {
 	Errors   []WAFPackageRuleEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -955,6 +1107,14 @@ const (
 	WAFPackageRuleEditResponseEnvelopeSuccessTrue WAFPackageRuleEditResponseEnvelopeSuccess = true
 )
 
+func (r WAFPackageRuleEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WAFPackageRuleGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -1040,3 +1200,11 @@ type WAFPackageRuleGetResponseEnvelopeSuccess bool
 const (
 	WAFPackageRuleGetResponseEnvelopeSuccessTrue WAFPackageRuleGetResponseEnvelopeSuccess = true
 )
+
+func (r WAFPackageRuleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

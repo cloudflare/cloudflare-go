@@ -205,6 +205,14 @@ const (
 	MonitorNewParamsTypeSmtp     MonitorNewParamsType = "smtp"
 )
 
+func (r MonitorNewParamsType) IsKnown() bool {
+	switch r {
+	case MonitorNewParamsTypeHTTP, MonitorNewParamsTypeHTTPS, MonitorNewParamsTypeTcp, MonitorNewParamsTypeUdpIcmp, MonitorNewParamsTypeIcmpPing, MonitorNewParamsTypeSmtp:
+		return true
+	}
+	return false
+}
+
 type MonitorNewResponseEnvelope struct {
 	Errors   []MonitorNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MonitorNewResponseEnvelopeMessages `json:"messages,required"`
@@ -286,6 +294,14 @@ const (
 	MonitorNewResponseEnvelopeSuccessTrue MonitorNewResponseEnvelopeSuccess = true
 )
 
+func (r MonitorNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MonitorNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type MonitorUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -356,6 +372,14 @@ const (
 	MonitorUpdateParamsTypeIcmpPing MonitorUpdateParamsType = "icmp_ping"
 	MonitorUpdateParamsTypeSmtp     MonitorUpdateParamsType = "smtp"
 )
+
+func (r MonitorUpdateParamsType) IsKnown() bool {
+	switch r {
+	case MonitorUpdateParamsTypeHTTP, MonitorUpdateParamsTypeHTTPS, MonitorUpdateParamsTypeTcp, MonitorUpdateParamsTypeUdpIcmp, MonitorUpdateParamsTypeIcmpPing, MonitorUpdateParamsTypeSmtp:
+		return true
+	}
+	return false
+}
 
 type MonitorUpdateResponseEnvelope struct {
 	Errors   []MonitorUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -437,6 +461,14 @@ type MonitorUpdateResponseEnvelopeSuccess bool
 const (
 	MonitorUpdateResponseEnvelopeSuccessTrue MonitorUpdateResponseEnvelopeSuccess = true
 )
+
+func (r MonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MonitorUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type MonitorListParams struct {
 	// Identifier
@@ -525,6 +557,14 @@ type MonitorListResponseEnvelopeSuccess bool
 const (
 	MonitorListResponseEnvelopeSuccessTrue MonitorListResponseEnvelopeSuccess = true
 )
+
+func (r MonitorListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MonitorListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type MonitorListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -643,6 +683,14 @@ const (
 	MonitorDeleteResponseEnvelopeSuccessTrue MonitorDeleteResponseEnvelopeSuccess = true
 )
 
+func (r MonitorDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MonitorDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type MonitorEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -713,6 +761,14 @@ const (
 	MonitorEditParamsTypeIcmpPing MonitorEditParamsType = "icmp_ping"
 	MonitorEditParamsTypeSmtp     MonitorEditParamsType = "smtp"
 )
+
+func (r MonitorEditParamsType) IsKnown() bool {
+	switch r {
+	case MonitorEditParamsTypeHTTP, MonitorEditParamsTypeHTTPS, MonitorEditParamsTypeTcp, MonitorEditParamsTypeUdpIcmp, MonitorEditParamsTypeIcmpPing, MonitorEditParamsTypeSmtp:
+		return true
+	}
+	return false
+}
 
 type MonitorEditResponseEnvelope struct {
 	Errors   []MonitorEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -794,6 +850,14 @@ type MonitorEditResponseEnvelopeSuccess bool
 const (
 	MonitorEditResponseEnvelopeSuccessTrue MonitorEditResponseEnvelopeSuccess = true
 )
+
+func (r MonitorEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MonitorEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type MonitorGetParams struct {
 	// Identifier
@@ -880,3 +944,11 @@ type MonitorGetResponseEnvelopeSuccess bool
 const (
 	MonitorGetResponseEnvelopeSuccessTrue MonitorGetResponseEnvelopeSuccess = true
 )
+
+func (r MonitorGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MonitorGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

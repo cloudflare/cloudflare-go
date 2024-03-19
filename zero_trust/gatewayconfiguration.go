@@ -1506,6 +1506,14 @@ const (
 	GatewayConfigurationUpdateResponseEnvelopeSuccessTrue GatewayConfigurationUpdateResponseEnvelopeSuccess = true
 )
 
+func (r GatewayConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayConfigurationUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayConfigurationEditParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// account settings.
@@ -1770,6 +1778,14 @@ const (
 	GatewayConfigurationEditResponseEnvelopeSuccessTrue GatewayConfigurationEditResponseEnvelopeSuccess = true
 )
 
+func (r GatewayConfigurationEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayConfigurationEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayConfigurationGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -1855,3 +1871,11 @@ type GatewayConfigurationGetResponseEnvelopeSuccess bool
 const (
 	GatewayConfigurationGetResponseEnvelopeSuccessTrue GatewayConfigurationGetResponseEnvelopeSuccess = true
 )
+
+func (r GatewayConfigurationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayConfigurationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

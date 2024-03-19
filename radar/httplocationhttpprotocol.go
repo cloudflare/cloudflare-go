@@ -260,12 +260,28 @@ const (
 	HTTPLocationHTTPProtocolGetParamsHTTPProtocolHTTPS HTTPLocationHTTPProtocolGetParamsHTTPProtocol = "HTTPS"
 )
 
+func (r HTTPLocationHTTPProtocolGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPProtocolGetParamsHTTPProtocolHTTP, HTTPLocationHTTPProtocolGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationHTTPProtocolGetParamsBotClass string
 
 const (
 	HTTPLocationHTTPProtocolGetParamsBotClassLikelyAutomated HTTPLocationHTTPProtocolGetParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPLocationHTTPProtocolGetParamsBotClassLikelyHuman     HTTPLocationHTTPProtocolGetParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPLocationHTTPProtocolGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPProtocolGetParamsBotClassLikelyAutomated, HTTPLocationHTTPProtocolGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationHTTPProtocolGetParamsDateRange string
 
@@ -287,6 +303,14 @@ const (
 	HTTPLocationHTTPProtocolGetParamsDateRange24wControl HTTPLocationHTTPProtocolGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPLocationHTTPProtocolGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPProtocolGetParamsDateRange1d, HTTPLocationHTTPProtocolGetParamsDateRange2d, HTTPLocationHTTPProtocolGetParamsDateRange7d, HTTPLocationHTTPProtocolGetParamsDateRange14d, HTTPLocationHTTPProtocolGetParamsDateRange28d, HTTPLocationHTTPProtocolGetParamsDateRange12w, HTTPLocationHTTPProtocolGetParamsDateRange24w, HTTPLocationHTTPProtocolGetParamsDateRange52w, HTTPLocationHTTPProtocolGetParamsDateRange1dControl, HTTPLocationHTTPProtocolGetParamsDateRange2dControl, HTTPLocationHTTPProtocolGetParamsDateRange7dControl, HTTPLocationHTTPProtocolGetParamsDateRange14dControl, HTTPLocationHTTPProtocolGetParamsDateRange28dControl, HTTPLocationHTTPProtocolGetParamsDateRange12wControl, HTTPLocationHTTPProtocolGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationHTTPProtocolGetParamsDeviceType string
 
 const (
@@ -294,6 +318,14 @@ const (
 	HTTPLocationHTTPProtocolGetParamsDeviceTypeMobile  HTTPLocationHTTPProtocolGetParamsDeviceType = "MOBILE"
 	HTTPLocationHTTPProtocolGetParamsDeviceTypeOther   HTTPLocationHTTPProtocolGetParamsDeviceType = "OTHER"
 )
+
+func (r HTTPLocationHTTPProtocolGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPProtocolGetParamsDeviceTypeDesktop, HTTPLocationHTTPProtocolGetParamsDeviceTypeMobile, HTTPLocationHTTPProtocolGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPLocationHTTPProtocolGetParamsFormat string
@@ -303,12 +335,28 @@ const (
 	HTTPLocationHTTPProtocolGetParamsFormatCsv  HTTPLocationHTTPProtocolGetParamsFormat = "CSV"
 )
 
+func (r HTTPLocationHTTPProtocolGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPProtocolGetParamsFormatJson, HTTPLocationHTTPProtocolGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationHTTPProtocolGetParamsIPVersion string
 
 const (
 	HTTPLocationHTTPProtocolGetParamsIPVersionIPv4 HTTPLocationHTTPProtocolGetParamsIPVersion = "IPv4"
 	HTTPLocationHTTPProtocolGetParamsIPVersionIPv6 HTTPLocationHTTPProtocolGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPLocationHTTPProtocolGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPProtocolGetParamsIPVersionIPv4, HTTPLocationHTTPProtocolGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationHTTPProtocolGetParamsOS string
 
@@ -322,6 +370,14 @@ const (
 	HTTPLocationHTTPProtocolGetParamsOSSmartTv  HTTPLocationHTTPProtocolGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPLocationHTTPProtocolGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPProtocolGetParamsOSWindows, HTTPLocationHTTPProtocolGetParamsOSMacosx, HTTPLocationHTTPProtocolGetParamsOSIos, HTTPLocationHTTPProtocolGetParamsOSAndroid, HTTPLocationHTTPProtocolGetParamsOSChromeos, HTTPLocationHTTPProtocolGetParamsOSLinux, HTTPLocationHTTPProtocolGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationHTTPProtocolGetParamsTLSVersion string
 
 const (
@@ -331,6 +387,14 @@ const (
 	HTTPLocationHTTPProtocolGetParamsTLSVersionTlSv1_3  HTTPLocationHTTPProtocolGetParamsTLSVersion = "TLSv1_3"
 	HTTPLocationHTTPProtocolGetParamsTLSVersionTlSvQuic HTTPLocationHTTPProtocolGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPLocationHTTPProtocolGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPProtocolGetParamsTLSVersionTlSv1_0, HTTPLocationHTTPProtocolGetParamsTLSVersionTlSv1_1, HTTPLocationHTTPProtocolGetParamsTLSVersionTlSv1_2, HTTPLocationHTTPProtocolGetParamsTLSVersionTlSv1_3, HTTPLocationHTTPProtocolGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationHTTPProtocolGetResponseEnvelope struct {
 	Result  HTTPLocationHTTPProtocolGetResponse             `json:"result,required"`

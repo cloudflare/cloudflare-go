@@ -263,12 +263,28 @@ const (
 	HTTPLocationHTTPMethodGetParamsHTTPVersionHttPv3 HTTPLocationHTTPMethodGetParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPLocationHTTPMethodGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPMethodGetParamsHTTPVersionHttPv1, HTTPLocationHTTPMethodGetParamsHTTPVersionHttPv2, HTTPLocationHTTPMethodGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationHTTPMethodGetParamsBotClass string
 
 const (
 	HTTPLocationHTTPMethodGetParamsBotClassLikelyAutomated HTTPLocationHTTPMethodGetParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPLocationHTTPMethodGetParamsBotClassLikelyHuman     HTTPLocationHTTPMethodGetParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPLocationHTTPMethodGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPMethodGetParamsBotClassLikelyAutomated, HTTPLocationHTTPMethodGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationHTTPMethodGetParamsDateRange string
 
@@ -290,6 +306,14 @@ const (
 	HTTPLocationHTTPMethodGetParamsDateRange24wControl HTTPLocationHTTPMethodGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPLocationHTTPMethodGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPMethodGetParamsDateRange1d, HTTPLocationHTTPMethodGetParamsDateRange2d, HTTPLocationHTTPMethodGetParamsDateRange7d, HTTPLocationHTTPMethodGetParamsDateRange14d, HTTPLocationHTTPMethodGetParamsDateRange28d, HTTPLocationHTTPMethodGetParamsDateRange12w, HTTPLocationHTTPMethodGetParamsDateRange24w, HTTPLocationHTTPMethodGetParamsDateRange52w, HTTPLocationHTTPMethodGetParamsDateRange1dControl, HTTPLocationHTTPMethodGetParamsDateRange2dControl, HTTPLocationHTTPMethodGetParamsDateRange7dControl, HTTPLocationHTTPMethodGetParamsDateRange14dControl, HTTPLocationHTTPMethodGetParamsDateRange28dControl, HTTPLocationHTTPMethodGetParamsDateRange12wControl, HTTPLocationHTTPMethodGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationHTTPMethodGetParamsDeviceType string
 
 const (
@@ -297,6 +321,14 @@ const (
 	HTTPLocationHTTPMethodGetParamsDeviceTypeMobile  HTTPLocationHTTPMethodGetParamsDeviceType = "MOBILE"
 	HTTPLocationHTTPMethodGetParamsDeviceTypeOther   HTTPLocationHTTPMethodGetParamsDeviceType = "OTHER"
 )
+
+func (r HTTPLocationHTTPMethodGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPMethodGetParamsDeviceTypeDesktop, HTTPLocationHTTPMethodGetParamsDeviceTypeMobile, HTTPLocationHTTPMethodGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPLocationHTTPMethodGetParamsFormat string
@@ -306,6 +338,14 @@ const (
 	HTTPLocationHTTPMethodGetParamsFormatCsv  HTTPLocationHTTPMethodGetParamsFormat = "CSV"
 )
 
+func (r HTTPLocationHTTPMethodGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPMethodGetParamsFormatJson, HTTPLocationHTTPMethodGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationHTTPMethodGetParamsHTTPProtocol string
 
 const (
@@ -313,12 +353,28 @@ const (
 	HTTPLocationHTTPMethodGetParamsHTTPProtocolHTTPS HTTPLocationHTTPMethodGetParamsHTTPProtocol = "HTTPS"
 )
 
+func (r HTTPLocationHTTPMethodGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPMethodGetParamsHTTPProtocolHTTP, HTTPLocationHTTPMethodGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationHTTPMethodGetParamsIPVersion string
 
 const (
 	HTTPLocationHTTPMethodGetParamsIPVersionIPv4 HTTPLocationHTTPMethodGetParamsIPVersion = "IPv4"
 	HTTPLocationHTTPMethodGetParamsIPVersionIPv6 HTTPLocationHTTPMethodGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPLocationHTTPMethodGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPMethodGetParamsIPVersionIPv4, HTTPLocationHTTPMethodGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationHTTPMethodGetParamsOS string
 
@@ -332,6 +388,14 @@ const (
 	HTTPLocationHTTPMethodGetParamsOSSmartTv  HTTPLocationHTTPMethodGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPLocationHTTPMethodGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPMethodGetParamsOSWindows, HTTPLocationHTTPMethodGetParamsOSMacosx, HTTPLocationHTTPMethodGetParamsOSIos, HTTPLocationHTTPMethodGetParamsOSAndroid, HTTPLocationHTTPMethodGetParamsOSChromeos, HTTPLocationHTTPMethodGetParamsOSLinux, HTTPLocationHTTPMethodGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationHTTPMethodGetParamsTLSVersion string
 
 const (
@@ -341,6 +405,14 @@ const (
 	HTTPLocationHTTPMethodGetParamsTLSVersionTlSv1_3  HTTPLocationHTTPMethodGetParamsTLSVersion = "TLSv1_3"
 	HTTPLocationHTTPMethodGetParamsTLSVersionTlSvQuic HTTPLocationHTTPMethodGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPLocationHTTPMethodGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationHTTPMethodGetParamsTLSVersionTlSv1_0, HTTPLocationHTTPMethodGetParamsTLSVersionTlSv1_1, HTTPLocationHTTPMethodGetParamsTLSVersionTlSv1_2, HTTPLocationHTTPMethodGetParamsTLSVersionTlSv1_3, HTTPLocationHTTPMethodGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationHTTPMethodGetResponseEnvelope struct {
 	Result  HTTPLocationHTTPMethodGetResponse             `json:"result,required"`

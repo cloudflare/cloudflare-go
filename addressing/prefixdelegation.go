@@ -222,6 +222,14 @@ const (
 	PrefixDelegationNewResponseEnvelopeSuccessTrue PrefixDelegationNewResponseEnvelopeSuccess = true
 )
 
+func (r PrefixDelegationNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixDelegationNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixDelegationListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -309,6 +317,14 @@ type PrefixDelegationListResponseEnvelopeSuccess bool
 const (
 	PrefixDelegationListResponseEnvelopeSuccessTrue PrefixDelegationListResponseEnvelopeSuccess = true
 )
+
+func (r PrefixDelegationListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixDelegationListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PrefixDelegationListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -426,3 +442,11 @@ type PrefixDelegationDeleteResponseEnvelopeSuccess bool
 const (
 	PrefixDelegationDeleteResponseEnvelopeSuccessTrue PrefixDelegationDeleteResponseEnvelopeSuccess = true
 )
+
+func (r PrefixDelegationDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixDelegationDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

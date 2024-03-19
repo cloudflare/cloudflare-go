@@ -122,6 +122,14 @@ const (
 	ZonesDevelopmentModeIDDevelopmentMode ZonesDevelopmentModeID = "development_mode"
 )
 
+func (r ZonesDevelopmentModeID) IsKnown() bool {
+	switch r {
+	case ZonesDevelopmentModeIDDevelopmentMode:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesDevelopmentModeValue string
 
@@ -129,6 +137,14 @@ const (
 	ZonesDevelopmentModeValueOn  ZonesDevelopmentModeValue = "on"
 	ZonesDevelopmentModeValueOff ZonesDevelopmentModeValue = "off"
 )
+
+func (r ZonesDevelopmentModeValue) IsKnown() bool {
+	switch r {
+	case ZonesDevelopmentModeValueOn, ZonesDevelopmentModeValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -138,6 +154,14 @@ const (
 	ZonesDevelopmentModeEditableTrue  ZonesDevelopmentModeEditable = true
 	ZonesDevelopmentModeEditableFalse ZonesDevelopmentModeEditable = false
 )
+
+func (r ZonesDevelopmentModeEditable) IsKnown() bool {
+	switch r {
+	case ZonesDevelopmentModeEditableTrue, ZonesDevelopmentModeEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Development Mode temporarily allows you to enter development mode for your
 // websites if you need to make changes to your site. This will bypass Cloudflare's
@@ -176,6 +200,14 @@ const (
 	SettingDevelopmentModeEditParamsValueOn  SettingDevelopmentModeEditParamsValue = "on"
 	SettingDevelopmentModeEditParamsValueOff SettingDevelopmentModeEditParamsValue = "off"
 )
+
+func (r SettingDevelopmentModeEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingDevelopmentModeEditParamsValueOn, SettingDevelopmentModeEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingDevelopmentModeEditResponseEnvelope struct {
 	Errors   []SettingDevelopmentModeEditResponseEnvelopeErrors   `json:"errors,required"`

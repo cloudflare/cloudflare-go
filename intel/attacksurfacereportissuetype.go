@@ -130,3 +130,11 @@ type AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess bool
 const (
 	AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccessTrue AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess = true
 )
+
+func (r AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

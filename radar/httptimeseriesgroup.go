@@ -656,6 +656,14 @@ const (
 	HTTPTimeseriesGroupBotClassParamsAggInterval1w  HTTPTimeseriesGroupBotClassParamsAggInterval = "1w"
 )
 
+func (r HTTPTimeseriesGroupBotClassParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassParamsAggInterval15m, HTTPTimeseriesGroupBotClassParamsAggInterval1h, HTTPTimeseriesGroupBotClassParamsAggInterval1d, HTTPTimeseriesGroupBotClassParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBotClassParamsDateRange string
 
 const (
@@ -676,6 +684,14 @@ const (
 	HTTPTimeseriesGroupBotClassParamsDateRange24wControl HTTPTimeseriesGroupBotClassParamsDateRange = "24wControl"
 )
 
+func (r HTTPTimeseriesGroupBotClassParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassParamsDateRange1d, HTTPTimeseriesGroupBotClassParamsDateRange2d, HTTPTimeseriesGroupBotClassParamsDateRange7d, HTTPTimeseriesGroupBotClassParamsDateRange14d, HTTPTimeseriesGroupBotClassParamsDateRange28d, HTTPTimeseriesGroupBotClassParamsDateRange12w, HTTPTimeseriesGroupBotClassParamsDateRange24w, HTTPTimeseriesGroupBotClassParamsDateRange52w, HTTPTimeseriesGroupBotClassParamsDateRange1dControl, HTTPTimeseriesGroupBotClassParamsDateRange2dControl, HTTPTimeseriesGroupBotClassParamsDateRange7dControl, HTTPTimeseriesGroupBotClassParamsDateRange14dControl, HTTPTimeseriesGroupBotClassParamsDateRange28dControl, HTTPTimeseriesGroupBotClassParamsDateRange12wControl, HTTPTimeseriesGroupBotClassParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBotClassParamsDeviceType string
 
 const (
@@ -683,6 +699,14 @@ const (
 	HTTPTimeseriesGroupBotClassParamsDeviceTypeMobile  HTTPTimeseriesGroupBotClassParamsDeviceType = "MOBILE"
 	HTTPTimeseriesGroupBotClassParamsDeviceTypeOther   HTTPTimeseriesGroupBotClassParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTimeseriesGroupBotClassParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassParamsDeviceTypeDesktop, HTTPTimeseriesGroupBotClassParamsDeviceTypeMobile, HTTPTimeseriesGroupBotClassParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTimeseriesGroupBotClassParamsFormat string
@@ -692,12 +716,28 @@ const (
 	HTTPTimeseriesGroupBotClassParamsFormatCsv  HTTPTimeseriesGroupBotClassParamsFormat = "CSV"
 )
 
+func (r HTTPTimeseriesGroupBotClassParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassParamsFormatJson, HTTPTimeseriesGroupBotClassParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBotClassParamsHTTPProtocol string
 
 const (
 	HTTPTimeseriesGroupBotClassParamsHTTPProtocolHTTP  HTTPTimeseriesGroupBotClassParamsHTTPProtocol = "HTTP"
 	HTTPTimeseriesGroupBotClassParamsHTTPProtocolHTTPS HTTPTimeseriesGroupBotClassParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPTimeseriesGroupBotClassParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassParamsHTTPProtocolHTTP, HTTPTimeseriesGroupBotClassParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBotClassParamsHTTPVersion string
 
@@ -707,12 +747,28 @@ const (
 	HTTPTimeseriesGroupBotClassParamsHTTPVersionHttPv3 HTTPTimeseriesGroupBotClassParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPTimeseriesGroupBotClassParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassParamsHTTPVersionHttPv1, HTTPTimeseriesGroupBotClassParamsHTTPVersionHttPv2, HTTPTimeseriesGroupBotClassParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBotClassParamsIPVersion string
 
 const (
 	HTTPTimeseriesGroupBotClassParamsIPVersionIPv4 HTTPTimeseriesGroupBotClassParamsIPVersion = "IPv4"
 	HTTPTimeseriesGroupBotClassParamsIPVersionIPv6 HTTPTimeseriesGroupBotClassParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTimeseriesGroupBotClassParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassParamsIPVersionIPv4, HTTPTimeseriesGroupBotClassParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBotClassParamsOS string
 
@@ -726,6 +782,14 @@ const (
 	HTTPTimeseriesGroupBotClassParamsOSSmartTv  HTTPTimeseriesGroupBotClassParamsOS = "SMART_TV"
 )
 
+func (r HTTPTimeseriesGroupBotClassParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassParamsOSWindows, HTTPTimeseriesGroupBotClassParamsOSMacosx, HTTPTimeseriesGroupBotClassParamsOSIos, HTTPTimeseriesGroupBotClassParamsOSAndroid, HTTPTimeseriesGroupBotClassParamsOSChromeos, HTTPTimeseriesGroupBotClassParamsOSLinux, HTTPTimeseriesGroupBotClassParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBotClassParamsTLSVersion string
 
 const (
@@ -735,6 +799,14 @@ const (
 	HTTPTimeseriesGroupBotClassParamsTLSVersionTlSv1_3  HTTPTimeseriesGroupBotClassParamsTLSVersion = "TLSv1_3"
 	HTTPTimeseriesGroupBotClassParamsTLSVersionTlSvQuic HTTPTimeseriesGroupBotClassParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTimeseriesGroupBotClassParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBotClassParamsTLSVersionTlSv1_0, HTTPTimeseriesGroupBotClassParamsTLSVersionTlSv1_1, HTTPTimeseriesGroupBotClassParamsTLSVersionTlSv1_2, HTTPTimeseriesGroupBotClassParamsTLSVersionTlSv1_3, HTTPTimeseriesGroupBotClassParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBotClassResponseEnvelope struct {
 	Result  HTTPTimeseriesGroupBotClassResponse             `json:"result,required"`
@@ -829,12 +901,28 @@ const (
 	HTTPTimeseriesGroupBrowserParamsAggInterval1w  HTTPTimeseriesGroupBrowserParamsAggInterval = "1w"
 )
 
+func (r HTTPTimeseriesGroupBrowserParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsAggInterval15m, HTTPTimeseriesGroupBrowserParamsAggInterval1h, HTTPTimeseriesGroupBrowserParamsAggInterval1d, HTTPTimeseriesGroupBrowserParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserParamsBotClass string
 
 const (
 	HTTPTimeseriesGroupBrowserParamsBotClassLikelyAutomated HTTPTimeseriesGroupBrowserParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPTimeseriesGroupBrowserParamsBotClassLikelyHuman     HTTPTimeseriesGroupBrowserParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPTimeseriesGroupBrowserParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsBotClassLikelyAutomated, HTTPTimeseriesGroupBrowserParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBrowserParamsDateRange string
 
@@ -856,6 +944,14 @@ const (
 	HTTPTimeseriesGroupBrowserParamsDateRange24wControl HTTPTimeseriesGroupBrowserParamsDateRange = "24wControl"
 )
 
+func (r HTTPTimeseriesGroupBrowserParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsDateRange1d, HTTPTimeseriesGroupBrowserParamsDateRange2d, HTTPTimeseriesGroupBrowserParamsDateRange7d, HTTPTimeseriesGroupBrowserParamsDateRange14d, HTTPTimeseriesGroupBrowserParamsDateRange28d, HTTPTimeseriesGroupBrowserParamsDateRange12w, HTTPTimeseriesGroupBrowserParamsDateRange24w, HTTPTimeseriesGroupBrowserParamsDateRange52w, HTTPTimeseriesGroupBrowserParamsDateRange1dControl, HTTPTimeseriesGroupBrowserParamsDateRange2dControl, HTTPTimeseriesGroupBrowserParamsDateRange7dControl, HTTPTimeseriesGroupBrowserParamsDateRange14dControl, HTTPTimeseriesGroupBrowserParamsDateRange28dControl, HTTPTimeseriesGroupBrowserParamsDateRange12wControl, HTTPTimeseriesGroupBrowserParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserParamsDeviceType string
 
 const (
@@ -863,6 +959,14 @@ const (
 	HTTPTimeseriesGroupBrowserParamsDeviceTypeMobile  HTTPTimeseriesGroupBrowserParamsDeviceType = "MOBILE"
 	HTTPTimeseriesGroupBrowserParamsDeviceTypeOther   HTTPTimeseriesGroupBrowserParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTimeseriesGroupBrowserParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsDeviceTypeDesktop, HTTPTimeseriesGroupBrowserParamsDeviceTypeMobile, HTTPTimeseriesGroupBrowserParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTimeseriesGroupBrowserParamsFormat string
@@ -872,12 +976,28 @@ const (
 	HTTPTimeseriesGroupBrowserParamsFormatCsv  HTTPTimeseriesGroupBrowserParamsFormat = "CSV"
 )
 
+func (r HTTPTimeseriesGroupBrowserParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsFormatJson, HTTPTimeseriesGroupBrowserParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserParamsHTTPProtocol string
 
 const (
 	HTTPTimeseriesGroupBrowserParamsHTTPProtocolHTTP  HTTPTimeseriesGroupBrowserParamsHTTPProtocol = "HTTP"
 	HTTPTimeseriesGroupBrowserParamsHTTPProtocolHTTPS HTTPTimeseriesGroupBrowserParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPTimeseriesGroupBrowserParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsHTTPProtocolHTTP, HTTPTimeseriesGroupBrowserParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBrowserParamsHTTPVersion string
 
@@ -887,12 +1007,28 @@ const (
 	HTTPTimeseriesGroupBrowserParamsHTTPVersionHttPv3 HTTPTimeseriesGroupBrowserParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPTimeseriesGroupBrowserParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsHTTPVersionHttPv1, HTTPTimeseriesGroupBrowserParamsHTTPVersionHttPv2, HTTPTimeseriesGroupBrowserParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserParamsIPVersion string
 
 const (
 	HTTPTimeseriesGroupBrowserParamsIPVersionIPv4 HTTPTimeseriesGroupBrowserParamsIPVersion = "IPv4"
 	HTTPTimeseriesGroupBrowserParamsIPVersionIPv6 HTTPTimeseriesGroupBrowserParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTimeseriesGroupBrowserParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsIPVersionIPv4, HTTPTimeseriesGroupBrowserParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBrowserParamsOS string
 
@@ -906,6 +1042,14 @@ const (
 	HTTPTimeseriesGroupBrowserParamsOSSmartTv  HTTPTimeseriesGroupBrowserParamsOS = "SMART_TV"
 )
 
+func (r HTTPTimeseriesGroupBrowserParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsOSWindows, HTTPTimeseriesGroupBrowserParamsOSMacosx, HTTPTimeseriesGroupBrowserParamsOSIos, HTTPTimeseriesGroupBrowserParamsOSAndroid, HTTPTimeseriesGroupBrowserParamsOSChromeos, HTTPTimeseriesGroupBrowserParamsOSLinux, HTTPTimeseriesGroupBrowserParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserParamsTLSVersion string
 
 const (
@@ -915,6 +1059,14 @@ const (
 	HTTPTimeseriesGroupBrowserParamsTLSVersionTlSv1_3  HTTPTimeseriesGroupBrowserParamsTLSVersion = "TLSv1_3"
 	HTTPTimeseriesGroupBrowserParamsTLSVersionTlSvQuic HTTPTimeseriesGroupBrowserParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTimeseriesGroupBrowserParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserParamsTLSVersionTlSv1_0, HTTPTimeseriesGroupBrowserParamsTLSVersionTlSv1_1, HTTPTimeseriesGroupBrowserParamsTLSVersionTlSv1_2, HTTPTimeseriesGroupBrowserParamsTLSVersionTlSv1_3, HTTPTimeseriesGroupBrowserParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBrowserResponseEnvelope struct {
 	Result  HTTPTimeseriesGroupBrowserResponse             `json:"result,required"`
@@ -1006,12 +1158,28 @@ const (
 	HTTPTimeseriesGroupBrowserFamilyParamsAggInterval1w  HTTPTimeseriesGroupBrowserFamilyParamsAggInterval = "1w"
 )
 
+func (r HTTPTimeseriesGroupBrowserFamilyParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsAggInterval15m, HTTPTimeseriesGroupBrowserFamilyParamsAggInterval1h, HTTPTimeseriesGroupBrowserFamilyParamsAggInterval1d, HTTPTimeseriesGroupBrowserFamilyParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserFamilyParamsBotClass string
 
 const (
 	HTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyAutomated HTTPTimeseriesGroupBrowserFamilyParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyHuman     HTTPTimeseriesGroupBrowserFamilyParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPTimeseriesGroupBrowserFamilyParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyAutomated, HTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBrowserFamilyParamsDateRange string
 
@@ -1033,6 +1201,14 @@ const (
 	HTTPTimeseriesGroupBrowserFamilyParamsDateRange24wControl HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "24wControl"
 )
 
+func (r HTTPTimeseriesGroupBrowserFamilyParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsDateRange1d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange2d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange7d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange14d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange28d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange12w, HTTPTimeseriesGroupBrowserFamilyParamsDateRange24w, HTTPTimeseriesGroupBrowserFamilyParamsDateRange52w, HTTPTimeseriesGroupBrowserFamilyParamsDateRange1dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange2dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange7dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange14dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange28dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange12wControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserFamilyParamsDeviceType string
 
 const (
@@ -1040,6 +1216,14 @@ const (
 	HTTPTimeseriesGroupBrowserFamilyParamsDeviceTypeMobile  HTTPTimeseriesGroupBrowserFamilyParamsDeviceType = "MOBILE"
 	HTTPTimeseriesGroupBrowserFamilyParamsDeviceTypeOther   HTTPTimeseriesGroupBrowserFamilyParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTimeseriesGroupBrowserFamilyParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsDeviceTypeDesktop, HTTPTimeseriesGroupBrowserFamilyParamsDeviceTypeMobile, HTTPTimeseriesGroupBrowserFamilyParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTimeseriesGroupBrowserFamilyParamsFormat string
@@ -1049,12 +1233,28 @@ const (
 	HTTPTimeseriesGroupBrowserFamilyParamsFormatCsv  HTTPTimeseriesGroupBrowserFamilyParamsFormat = "CSV"
 )
 
+func (r HTTPTimeseriesGroupBrowserFamilyParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsFormatJson, HTTPTimeseriesGroupBrowserFamilyParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocol string
 
 const (
 	HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocolHTTP  HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocol = "HTTP"
 	HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocolHTTPS HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocolHTTP, HTTPTimeseriesGroupBrowserFamilyParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBrowserFamilyParamsHTTPVersion string
 
@@ -1064,12 +1264,28 @@ const (
 	HTTPTimeseriesGroupBrowserFamilyParamsHTTPVersionHttPv3 HTTPTimeseriesGroupBrowserFamilyParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPTimeseriesGroupBrowserFamilyParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsHTTPVersionHttPv1, HTTPTimeseriesGroupBrowserFamilyParamsHTTPVersionHttPv2, HTTPTimeseriesGroupBrowserFamilyParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserFamilyParamsIPVersion string
 
 const (
 	HTTPTimeseriesGroupBrowserFamilyParamsIPVersionIPv4 HTTPTimeseriesGroupBrowserFamilyParamsIPVersion = "IPv4"
 	HTTPTimeseriesGroupBrowserFamilyParamsIPVersionIPv6 HTTPTimeseriesGroupBrowserFamilyParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTimeseriesGroupBrowserFamilyParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsIPVersionIPv4, HTTPTimeseriesGroupBrowserFamilyParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBrowserFamilyParamsOS string
 
@@ -1083,6 +1299,14 @@ const (
 	HTTPTimeseriesGroupBrowserFamilyParamsOSSmartTv  HTTPTimeseriesGroupBrowserFamilyParamsOS = "SMART_TV"
 )
 
+func (r HTTPTimeseriesGroupBrowserFamilyParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsOSWindows, HTTPTimeseriesGroupBrowserFamilyParamsOSMacosx, HTTPTimeseriesGroupBrowserFamilyParamsOSIos, HTTPTimeseriesGroupBrowserFamilyParamsOSAndroid, HTTPTimeseriesGroupBrowserFamilyParamsOSChromeos, HTTPTimeseriesGroupBrowserFamilyParamsOSLinux, HTTPTimeseriesGroupBrowserFamilyParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupBrowserFamilyParamsTLSVersion string
 
 const (
@@ -1092,6 +1316,14 @@ const (
 	HTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSv1_3  HTTPTimeseriesGroupBrowserFamilyParamsTLSVersion = "TLSv1_3"
 	HTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSvQuic HTTPTimeseriesGroupBrowserFamilyParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTimeseriesGroupBrowserFamilyParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSv1_0, HTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSv1_1, HTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSv1_2, HTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSv1_3, HTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupBrowserFamilyResponseEnvelope struct {
 	Result  HTTPTimeseriesGroupBrowserFamilyResponse             `json:"result,required"`
@@ -1181,12 +1413,28 @@ const (
 	HTTPTimeseriesGroupDeviceTypeParamsAggInterval1w  HTTPTimeseriesGroupDeviceTypeParamsAggInterval = "1w"
 )
 
+func (r HTTPTimeseriesGroupDeviceTypeParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeParamsAggInterval15m, HTTPTimeseriesGroupDeviceTypeParamsAggInterval1h, HTTPTimeseriesGroupDeviceTypeParamsAggInterval1d, HTTPTimeseriesGroupDeviceTypeParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupDeviceTypeParamsBotClass string
 
 const (
 	HTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyAutomated HTTPTimeseriesGroupDeviceTypeParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyHuman     HTTPTimeseriesGroupDeviceTypeParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPTimeseriesGroupDeviceTypeParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyAutomated, HTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupDeviceTypeParamsDateRange string
 
@@ -1208,6 +1456,14 @@ const (
 	HTTPTimeseriesGroupDeviceTypeParamsDateRange24wControl HTTPTimeseriesGroupDeviceTypeParamsDateRange = "24wControl"
 )
 
+func (r HTTPTimeseriesGroupDeviceTypeParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeParamsDateRange1d, HTTPTimeseriesGroupDeviceTypeParamsDateRange2d, HTTPTimeseriesGroupDeviceTypeParamsDateRange7d, HTTPTimeseriesGroupDeviceTypeParamsDateRange14d, HTTPTimeseriesGroupDeviceTypeParamsDateRange28d, HTTPTimeseriesGroupDeviceTypeParamsDateRange12w, HTTPTimeseriesGroupDeviceTypeParamsDateRange24w, HTTPTimeseriesGroupDeviceTypeParamsDateRange52w, HTTPTimeseriesGroupDeviceTypeParamsDateRange1dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange2dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange7dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange14dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange28dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange12wControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type HTTPTimeseriesGroupDeviceTypeParamsFormat string
 
@@ -1216,12 +1472,28 @@ const (
 	HTTPTimeseriesGroupDeviceTypeParamsFormatCsv  HTTPTimeseriesGroupDeviceTypeParamsFormat = "CSV"
 )
 
+func (r HTTPTimeseriesGroupDeviceTypeParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeParamsFormatJson, HTTPTimeseriesGroupDeviceTypeParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocol string
 
 const (
 	HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocolHTTP  HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocol = "HTTP"
 	HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocolHTTPS HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocolHTTP, HTTPTimeseriesGroupDeviceTypeParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupDeviceTypeParamsHTTPVersion string
 
@@ -1231,12 +1503,28 @@ const (
 	HTTPTimeseriesGroupDeviceTypeParamsHTTPVersionHttPv3 HTTPTimeseriesGroupDeviceTypeParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPTimeseriesGroupDeviceTypeParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeParamsHTTPVersionHttPv1, HTTPTimeseriesGroupDeviceTypeParamsHTTPVersionHttPv2, HTTPTimeseriesGroupDeviceTypeParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupDeviceTypeParamsIPVersion string
 
 const (
 	HTTPTimeseriesGroupDeviceTypeParamsIPVersionIPv4 HTTPTimeseriesGroupDeviceTypeParamsIPVersion = "IPv4"
 	HTTPTimeseriesGroupDeviceTypeParamsIPVersionIPv6 HTTPTimeseriesGroupDeviceTypeParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTimeseriesGroupDeviceTypeParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeParamsIPVersionIPv4, HTTPTimeseriesGroupDeviceTypeParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupDeviceTypeParamsOS string
 
@@ -1250,6 +1538,14 @@ const (
 	HTTPTimeseriesGroupDeviceTypeParamsOSSmartTv  HTTPTimeseriesGroupDeviceTypeParamsOS = "SMART_TV"
 )
 
+func (r HTTPTimeseriesGroupDeviceTypeParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeParamsOSWindows, HTTPTimeseriesGroupDeviceTypeParamsOSMacosx, HTTPTimeseriesGroupDeviceTypeParamsOSIos, HTTPTimeseriesGroupDeviceTypeParamsOSAndroid, HTTPTimeseriesGroupDeviceTypeParamsOSChromeos, HTTPTimeseriesGroupDeviceTypeParamsOSLinux, HTTPTimeseriesGroupDeviceTypeParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupDeviceTypeParamsTLSVersion string
 
 const (
@@ -1259,6 +1555,14 @@ const (
 	HTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSv1_3  HTTPTimeseriesGroupDeviceTypeParamsTLSVersion = "TLSv1_3"
 	HTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSvQuic HTTPTimeseriesGroupDeviceTypeParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTimeseriesGroupDeviceTypeParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSv1_0, HTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSv1_1, HTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSv1_2, HTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSv1_3, HTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupDeviceTypeResponseEnvelope struct {
 	Result  HTTPTimeseriesGroupDeviceTypeResponse             `json:"result,required"`
@@ -1348,12 +1652,28 @@ const (
 	HTTPTimeseriesGroupHTTPProtocolParamsAggInterval1w  HTTPTimeseriesGroupHTTPProtocolParamsAggInterval = "1w"
 )
 
+func (r HTTPTimeseriesGroupHTTPProtocolParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolParamsAggInterval15m, HTTPTimeseriesGroupHTTPProtocolParamsAggInterval1h, HTTPTimeseriesGroupHTTPProtocolParamsAggInterval1d, HTTPTimeseriesGroupHTTPProtocolParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPProtocolParamsBotClass string
 
 const (
 	HTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyAutomated HTTPTimeseriesGroupHTTPProtocolParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyHuman     HTTPTimeseriesGroupHTTPProtocolParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPTimeseriesGroupHTTPProtocolParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyAutomated, HTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupHTTPProtocolParamsDateRange string
 
@@ -1375,6 +1695,14 @@ const (
 	HTTPTimeseriesGroupHTTPProtocolParamsDateRange24wControl HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "24wControl"
 )
 
+func (r HTTPTimeseriesGroupHTTPProtocolParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolParamsDateRange1d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange2d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange7d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange14d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange28d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange12w, HTTPTimeseriesGroupHTTPProtocolParamsDateRange24w, HTTPTimeseriesGroupHTTPProtocolParamsDateRange52w, HTTPTimeseriesGroupHTTPProtocolParamsDateRange1dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange2dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange7dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange14dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange28dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange12wControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPProtocolParamsDeviceType string
 
 const (
@@ -1382,6 +1710,14 @@ const (
 	HTTPTimeseriesGroupHTTPProtocolParamsDeviceTypeMobile  HTTPTimeseriesGroupHTTPProtocolParamsDeviceType = "MOBILE"
 	HTTPTimeseriesGroupHTTPProtocolParamsDeviceTypeOther   HTTPTimeseriesGroupHTTPProtocolParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTimeseriesGroupHTTPProtocolParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolParamsDeviceTypeDesktop, HTTPTimeseriesGroupHTTPProtocolParamsDeviceTypeMobile, HTTPTimeseriesGroupHTTPProtocolParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTimeseriesGroupHTTPProtocolParamsFormat string
@@ -1391,6 +1727,14 @@ const (
 	HTTPTimeseriesGroupHTTPProtocolParamsFormatCsv  HTTPTimeseriesGroupHTTPProtocolParamsFormat = "CSV"
 )
 
+func (r HTTPTimeseriesGroupHTTPProtocolParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolParamsFormatJson, HTTPTimeseriesGroupHTTPProtocolParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPProtocolParamsHTTPVersion string
 
 const (
@@ -1399,12 +1743,28 @@ const (
 	HTTPTimeseriesGroupHTTPProtocolParamsHTTPVersionHttPv3 HTTPTimeseriesGroupHTTPProtocolParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPTimeseriesGroupHTTPProtocolParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolParamsHTTPVersionHttPv1, HTTPTimeseriesGroupHTTPProtocolParamsHTTPVersionHttPv2, HTTPTimeseriesGroupHTTPProtocolParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPProtocolParamsIPVersion string
 
 const (
 	HTTPTimeseriesGroupHTTPProtocolParamsIPVersionIPv4 HTTPTimeseriesGroupHTTPProtocolParamsIPVersion = "IPv4"
 	HTTPTimeseriesGroupHTTPProtocolParamsIPVersionIPv6 HTTPTimeseriesGroupHTTPProtocolParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTimeseriesGroupHTTPProtocolParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolParamsIPVersionIPv4, HTTPTimeseriesGroupHTTPProtocolParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupHTTPProtocolParamsOS string
 
@@ -1418,6 +1778,14 @@ const (
 	HTTPTimeseriesGroupHTTPProtocolParamsOSSmartTv  HTTPTimeseriesGroupHTTPProtocolParamsOS = "SMART_TV"
 )
 
+func (r HTTPTimeseriesGroupHTTPProtocolParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolParamsOSWindows, HTTPTimeseriesGroupHTTPProtocolParamsOSMacosx, HTTPTimeseriesGroupHTTPProtocolParamsOSIos, HTTPTimeseriesGroupHTTPProtocolParamsOSAndroid, HTTPTimeseriesGroupHTTPProtocolParamsOSChromeos, HTTPTimeseriesGroupHTTPProtocolParamsOSLinux, HTTPTimeseriesGroupHTTPProtocolParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPProtocolParamsTLSVersion string
 
 const (
@@ -1427,6 +1795,14 @@ const (
 	HTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSv1_3  HTTPTimeseriesGroupHTTPProtocolParamsTLSVersion = "TLSv1_3"
 	HTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSvQuic HTTPTimeseriesGroupHTTPProtocolParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTimeseriesGroupHTTPProtocolParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSv1_0, HTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSv1_1, HTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSv1_2, HTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSv1_3, HTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupHTTPProtocolResponseEnvelope struct {
 	Result  HTTPTimeseriesGroupHTTPProtocolResponse             `json:"result,required"`
@@ -1516,12 +1892,28 @@ const (
 	HTTPTimeseriesGroupHTTPVersionParamsAggInterval1w  HTTPTimeseriesGroupHTTPVersionParamsAggInterval = "1w"
 )
 
+func (r HTTPTimeseriesGroupHTTPVersionParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionParamsAggInterval15m, HTTPTimeseriesGroupHTTPVersionParamsAggInterval1h, HTTPTimeseriesGroupHTTPVersionParamsAggInterval1d, HTTPTimeseriesGroupHTTPVersionParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPVersionParamsBotClass string
 
 const (
 	HTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyAutomated HTTPTimeseriesGroupHTTPVersionParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyHuman     HTTPTimeseriesGroupHTTPVersionParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPTimeseriesGroupHTTPVersionParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyAutomated, HTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupHTTPVersionParamsDateRange string
 
@@ -1543,6 +1935,14 @@ const (
 	HTTPTimeseriesGroupHTTPVersionParamsDateRange24wControl HTTPTimeseriesGroupHTTPVersionParamsDateRange = "24wControl"
 )
 
+func (r HTTPTimeseriesGroupHTTPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionParamsDateRange1d, HTTPTimeseriesGroupHTTPVersionParamsDateRange2d, HTTPTimeseriesGroupHTTPVersionParamsDateRange7d, HTTPTimeseriesGroupHTTPVersionParamsDateRange14d, HTTPTimeseriesGroupHTTPVersionParamsDateRange28d, HTTPTimeseriesGroupHTTPVersionParamsDateRange12w, HTTPTimeseriesGroupHTTPVersionParamsDateRange24w, HTTPTimeseriesGroupHTTPVersionParamsDateRange52w, HTTPTimeseriesGroupHTTPVersionParamsDateRange1dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange2dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange7dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange14dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange28dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange12wControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPVersionParamsDeviceType string
 
 const (
@@ -1550,6 +1950,14 @@ const (
 	HTTPTimeseriesGroupHTTPVersionParamsDeviceTypeMobile  HTTPTimeseriesGroupHTTPVersionParamsDeviceType = "MOBILE"
 	HTTPTimeseriesGroupHTTPVersionParamsDeviceTypeOther   HTTPTimeseriesGroupHTTPVersionParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTimeseriesGroupHTTPVersionParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionParamsDeviceTypeDesktop, HTTPTimeseriesGroupHTTPVersionParamsDeviceTypeMobile, HTTPTimeseriesGroupHTTPVersionParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTimeseriesGroupHTTPVersionParamsFormat string
@@ -1559,6 +1967,14 @@ const (
 	HTTPTimeseriesGroupHTTPVersionParamsFormatCsv  HTTPTimeseriesGroupHTTPVersionParamsFormat = "CSV"
 )
 
+func (r HTTPTimeseriesGroupHTTPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionParamsFormatJson, HTTPTimeseriesGroupHTTPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPVersionParamsHTTPProtocol string
 
 const (
@@ -1566,12 +1982,28 @@ const (
 	HTTPTimeseriesGroupHTTPVersionParamsHTTPProtocolHTTPS HTTPTimeseriesGroupHTTPVersionParamsHTTPProtocol = "HTTPS"
 )
 
+func (r HTTPTimeseriesGroupHTTPVersionParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionParamsHTTPProtocolHTTP, HTTPTimeseriesGroupHTTPVersionParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPVersionParamsIPVersion string
 
 const (
 	HTTPTimeseriesGroupHTTPVersionParamsIPVersionIPv4 HTTPTimeseriesGroupHTTPVersionParamsIPVersion = "IPv4"
 	HTTPTimeseriesGroupHTTPVersionParamsIPVersionIPv6 HTTPTimeseriesGroupHTTPVersionParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTimeseriesGroupHTTPVersionParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionParamsIPVersionIPv4, HTTPTimeseriesGroupHTTPVersionParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupHTTPVersionParamsOS string
 
@@ -1585,6 +2017,14 @@ const (
 	HTTPTimeseriesGroupHTTPVersionParamsOSSmartTv  HTTPTimeseriesGroupHTTPVersionParamsOS = "SMART_TV"
 )
 
+func (r HTTPTimeseriesGroupHTTPVersionParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionParamsOSWindows, HTTPTimeseriesGroupHTTPVersionParamsOSMacosx, HTTPTimeseriesGroupHTTPVersionParamsOSIos, HTTPTimeseriesGroupHTTPVersionParamsOSAndroid, HTTPTimeseriesGroupHTTPVersionParamsOSChromeos, HTTPTimeseriesGroupHTTPVersionParamsOSLinux, HTTPTimeseriesGroupHTTPVersionParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupHTTPVersionParamsTLSVersion string
 
 const (
@@ -1594,6 +2034,14 @@ const (
 	HTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSv1_3  HTTPTimeseriesGroupHTTPVersionParamsTLSVersion = "TLSv1_3"
 	HTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSvQuic HTTPTimeseriesGroupHTTPVersionParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTimeseriesGroupHTTPVersionParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSv1_0, HTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSv1_1, HTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSv1_2, HTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSv1_3, HTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupHTTPVersionResponseEnvelope struct {
 	Result  HTTPTimeseriesGroupHTTPVersionResponse             `json:"result,required"`
@@ -1683,12 +2131,28 @@ const (
 	HTTPTimeseriesGroupIPVersionParamsAggInterval1w  HTTPTimeseriesGroupIPVersionParamsAggInterval = "1w"
 )
 
+func (r HTTPTimeseriesGroupIPVersionParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionParamsAggInterval15m, HTTPTimeseriesGroupIPVersionParamsAggInterval1h, HTTPTimeseriesGroupIPVersionParamsAggInterval1d, HTTPTimeseriesGroupIPVersionParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupIPVersionParamsBotClass string
 
 const (
 	HTTPTimeseriesGroupIPVersionParamsBotClassLikelyAutomated HTTPTimeseriesGroupIPVersionParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPTimeseriesGroupIPVersionParamsBotClassLikelyHuman     HTTPTimeseriesGroupIPVersionParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPTimeseriesGroupIPVersionParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionParamsBotClassLikelyAutomated, HTTPTimeseriesGroupIPVersionParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupIPVersionParamsDateRange string
 
@@ -1710,6 +2174,14 @@ const (
 	HTTPTimeseriesGroupIPVersionParamsDateRange24wControl HTTPTimeseriesGroupIPVersionParamsDateRange = "24wControl"
 )
 
+func (r HTTPTimeseriesGroupIPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionParamsDateRange1d, HTTPTimeseriesGroupIPVersionParamsDateRange2d, HTTPTimeseriesGroupIPVersionParamsDateRange7d, HTTPTimeseriesGroupIPVersionParamsDateRange14d, HTTPTimeseriesGroupIPVersionParamsDateRange28d, HTTPTimeseriesGroupIPVersionParamsDateRange12w, HTTPTimeseriesGroupIPVersionParamsDateRange24w, HTTPTimeseriesGroupIPVersionParamsDateRange52w, HTTPTimeseriesGroupIPVersionParamsDateRange1dControl, HTTPTimeseriesGroupIPVersionParamsDateRange2dControl, HTTPTimeseriesGroupIPVersionParamsDateRange7dControl, HTTPTimeseriesGroupIPVersionParamsDateRange14dControl, HTTPTimeseriesGroupIPVersionParamsDateRange28dControl, HTTPTimeseriesGroupIPVersionParamsDateRange12wControl, HTTPTimeseriesGroupIPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupIPVersionParamsDeviceType string
 
 const (
@@ -1717,6 +2189,14 @@ const (
 	HTTPTimeseriesGroupIPVersionParamsDeviceTypeMobile  HTTPTimeseriesGroupIPVersionParamsDeviceType = "MOBILE"
 	HTTPTimeseriesGroupIPVersionParamsDeviceTypeOther   HTTPTimeseriesGroupIPVersionParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTimeseriesGroupIPVersionParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionParamsDeviceTypeDesktop, HTTPTimeseriesGroupIPVersionParamsDeviceTypeMobile, HTTPTimeseriesGroupIPVersionParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTimeseriesGroupIPVersionParamsFormat string
@@ -1726,12 +2206,28 @@ const (
 	HTTPTimeseriesGroupIPVersionParamsFormatCsv  HTTPTimeseriesGroupIPVersionParamsFormat = "CSV"
 )
 
+func (r HTTPTimeseriesGroupIPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionParamsFormatJson, HTTPTimeseriesGroupIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupIPVersionParamsHTTPProtocol string
 
 const (
 	HTTPTimeseriesGroupIPVersionParamsHTTPProtocolHTTP  HTTPTimeseriesGroupIPVersionParamsHTTPProtocol = "HTTP"
 	HTTPTimeseriesGroupIPVersionParamsHTTPProtocolHTTPS HTTPTimeseriesGroupIPVersionParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPTimeseriesGroupIPVersionParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionParamsHTTPProtocolHTTP, HTTPTimeseriesGroupIPVersionParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupIPVersionParamsHTTPVersion string
 
@@ -1740,6 +2236,14 @@ const (
 	HTTPTimeseriesGroupIPVersionParamsHTTPVersionHttPv2 HTTPTimeseriesGroupIPVersionParamsHTTPVersion = "HTTPv2"
 	HTTPTimeseriesGroupIPVersionParamsHTTPVersionHttPv3 HTTPTimeseriesGroupIPVersionParamsHTTPVersion = "HTTPv3"
 )
+
+func (r HTTPTimeseriesGroupIPVersionParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionParamsHTTPVersionHttPv1, HTTPTimeseriesGroupIPVersionParamsHTTPVersionHttPv2, HTTPTimeseriesGroupIPVersionParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupIPVersionParamsOS string
 
@@ -1753,6 +2257,14 @@ const (
 	HTTPTimeseriesGroupIPVersionParamsOSSmartTv  HTTPTimeseriesGroupIPVersionParamsOS = "SMART_TV"
 )
 
+func (r HTTPTimeseriesGroupIPVersionParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionParamsOSWindows, HTTPTimeseriesGroupIPVersionParamsOSMacosx, HTTPTimeseriesGroupIPVersionParamsOSIos, HTTPTimeseriesGroupIPVersionParamsOSAndroid, HTTPTimeseriesGroupIPVersionParamsOSChromeos, HTTPTimeseriesGroupIPVersionParamsOSLinux, HTTPTimeseriesGroupIPVersionParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupIPVersionParamsTLSVersion string
 
 const (
@@ -1762,6 +2274,14 @@ const (
 	HTTPTimeseriesGroupIPVersionParamsTLSVersionTlSv1_3  HTTPTimeseriesGroupIPVersionParamsTLSVersion = "TLSv1_3"
 	HTTPTimeseriesGroupIPVersionParamsTLSVersionTlSvQuic HTTPTimeseriesGroupIPVersionParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTimeseriesGroupIPVersionParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupIPVersionParamsTLSVersionTlSv1_0, HTTPTimeseriesGroupIPVersionParamsTLSVersionTlSv1_1, HTTPTimeseriesGroupIPVersionParamsTLSVersionTlSv1_2, HTTPTimeseriesGroupIPVersionParamsTLSVersionTlSv1_3, HTTPTimeseriesGroupIPVersionParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupIPVersionResponseEnvelope struct {
 	Result  HTTPTimeseriesGroupIPVersionResponse             `json:"result,required"`
@@ -1851,12 +2371,28 @@ const (
 	HTTPTimeseriesGroupOSParamsAggInterval1w  HTTPTimeseriesGroupOSParamsAggInterval = "1w"
 )
 
+func (r HTTPTimeseriesGroupOSParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSParamsAggInterval15m, HTTPTimeseriesGroupOSParamsAggInterval1h, HTTPTimeseriesGroupOSParamsAggInterval1d, HTTPTimeseriesGroupOSParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupOSParamsBotClass string
 
 const (
 	HTTPTimeseriesGroupOSParamsBotClassLikelyAutomated HTTPTimeseriesGroupOSParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPTimeseriesGroupOSParamsBotClassLikelyHuman     HTTPTimeseriesGroupOSParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPTimeseriesGroupOSParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSParamsBotClassLikelyAutomated, HTTPTimeseriesGroupOSParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupOSParamsDateRange string
 
@@ -1878,6 +2414,14 @@ const (
 	HTTPTimeseriesGroupOSParamsDateRange24wControl HTTPTimeseriesGroupOSParamsDateRange = "24wControl"
 )
 
+func (r HTTPTimeseriesGroupOSParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSParamsDateRange1d, HTTPTimeseriesGroupOSParamsDateRange2d, HTTPTimeseriesGroupOSParamsDateRange7d, HTTPTimeseriesGroupOSParamsDateRange14d, HTTPTimeseriesGroupOSParamsDateRange28d, HTTPTimeseriesGroupOSParamsDateRange12w, HTTPTimeseriesGroupOSParamsDateRange24w, HTTPTimeseriesGroupOSParamsDateRange52w, HTTPTimeseriesGroupOSParamsDateRange1dControl, HTTPTimeseriesGroupOSParamsDateRange2dControl, HTTPTimeseriesGroupOSParamsDateRange7dControl, HTTPTimeseriesGroupOSParamsDateRange14dControl, HTTPTimeseriesGroupOSParamsDateRange28dControl, HTTPTimeseriesGroupOSParamsDateRange12wControl, HTTPTimeseriesGroupOSParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupOSParamsDeviceType string
 
 const (
@@ -1885,6 +2429,14 @@ const (
 	HTTPTimeseriesGroupOSParamsDeviceTypeMobile  HTTPTimeseriesGroupOSParamsDeviceType = "MOBILE"
 	HTTPTimeseriesGroupOSParamsDeviceTypeOther   HTTPTimeseriesGroupOSParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTimeseriesGroupOSParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSParamsDeviceTypeDesktop, HTTPTimeseriesGroupOSParamsDeviceTypeMobile, HTTPTimeseriesGroupOSParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTimeseriesGroupOSParamsFormat string
@@ -1894,12 +2446,28 @@ const (
 	HTTPTimeseriesGroupOSParamsFormatCsv  HTTPTimeseriesGroupOSParamsFormat = "CSV"
 )
 
+func (r HTTPTimeseriesGroupOSParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSParamsFormatJson, HTTPTimeseriesGroupOSParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupOSParamsHTTPProtocol string
 
 const (
 	HTTPTimeseriesGroupOSParamsHTTPProtocolHTTP  HTTPTimeseriesGroupOSParamsHTTPProtocol = "HTTP"
 	HTTPTimeseriesGroupOSParamsHTTPProtocolHTTPS HTTPTimeseriesGroupOSParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPTimeseriesGroupOSParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSParamsHTTPProtocolHTTP, HTTPTimeseriesGroupOSParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupOSParamsHTTPVersion string
 
@@ -1909,12 +2477,28 @@ const (
 	HTTPTimeseriesGroupOSParamsHTTPVersionHttPv3 HTTPTimeseriesGroupOSParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPTimeseriesGroupOSParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSParamsHTTPVersionHttPv1, HTTPTimeseriesGroupOSParamsHTTPVersionHttPv2, HTTPTimeseriesGroupOSParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupOSParamsIPVersion string
 
 const (
 	HTTPTimeseriesGroupOSParamsIPVersionIPv4 HTTPTimeseriesGroupOSParamsIPVersion = "IPv4"
 	HTTPTimeseriesGroupOSParamsIPVersionIPv6 HTTPTimeseriesGroupOSParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTimeseriesGroupOSParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSParamsIPVersionIPv4, HTTPTimeseriesGroupOSParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupOSParamsTLSVersion string
 
@@ -1925,6 +2509,14 @@ const (
 	HTTPTimeseriesGroupOSParamsTLSVersionTlSv1_3  HTTPTimeseriesGroupOSParamsTLSVersion = "TLSv1_3"
 	HTTPTimeseriesGroupOSParamsTLSVersionTlSvQuic HTTPTimeseriesGroupOSParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTimeseriesGroupOSParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupOSParamsTLSVersionTlSv1_0, HTTPTimeseriesGroupOSParamsTLSVersionTlSv1_1, HTTPTimeseriesGroupOSParamsTLSVersionTlSv1_2, HTTPTimeseriesGroupOSParamsTLSVersionTlSv1_3, HTTPTimeseriesGroupOSParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupOSResponseEnvelope struct {
 	Result  HTTPTimeseriesGroupOSResponse             `json:"result,required"`
@@ -2014,12 +2606,28 @@ const (
 	HTTPTimeseriesGroupTLSVersionParamsAggInterval1w  HTTPTimeseriesGroupTLSVersionParamsAggInterval = "1w"
 )
 
+func (r HTTPTimeseriesGroupTLSVersionParamsAggInterval) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionParamsAggInterval15m, HTTPTimeseriesGroupTLSVersionParamsAggInterval1h, HTTPTimeseriesGroupTLSVersionParamsAggInterval1d, HTTPTimeseriesGroupTLSVersionParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupTLSVersionParamsBotClass string
 
 const (
 	HTTPTimeseriesGroupTLSVersionParamsBotClassLikelyAutomated HTTPTimeseriesGroupTLSVersionParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPTimeseriesGroupTLSVersionParamsBotClassLikelyHuman     HTTPTimeseriesGroupTLSVersionParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPTimeseriesGroupTLSVersionParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionParamsBotClassLikelyAutomated, HTTPTimeseriesGroupTLSVersionParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupTLSVersionParamsDateRange string
 
@@ -2041,6 +2649,14 @@ const (
 	HTTPTimeseriesGroupTLSVersionParamsDateRange24wControl HTTPTimeseriesGroupTLSVersionParamsDateRange = "24wControl"
 )
 
+func (r HTTPTimeseriesGroupTLSVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionParamsDateRange1d, HTTPTimeseriesGroupTLSVersionParamsDateRange2d, HTTPTimeseriesGroupTLSVersionParamsDateRange7d, HTTPTimeseriesGroupTLSVersionParamsDateRange14d, HTTPTimeseriesGroupTLSVersionParamsDateRange28d, HTTPTimeseriesGroupTLSVersionParamsDateRange12w, HTTPTimeseriesGroupTLSVersionParamsDateRange24w, HTTPTimeseriesGroupTLSVersionParamsDateRange52w, HTTPTimeseriesGroupTLSVersionParamsDateRange1dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange2dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange7dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange14dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange28dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange12wControl, HTTPTimeseriesGroupTLSVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupTLSVersionParamsDeviceType string
 
 const (
@@ -2048,6 +2664,14 @@ const (
 	HTTPTimeseriesGroupTLSVersionParamsDeviceTypeMobile  HTTPTimeseriesGroupTLSVersionParamsDeviceType = "MOBILE"
 	HTTPTimeseriesGroupTLSVersionParamsDeviceTypeOther   HTTPTimeseriesGroupTLSVersionParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTimeseriesGroupTLSVersionParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionParamsDeviceTypeDesktop, HTTPTimeseriesGroupTLSVersionParamsDeviceTypeMobile, HTTPTimeseriesGroupTLSVersionParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTimeseriesGroupTLSVersionParamsFormat string
@@ -2057,12 +2681,28 @@ const (
 	HTTPTimeseriesGroupTLSVersionParamsFormatCsv  HTTPTimeseriesGroupTLSVersionParamsFormat = "CSV"
 )
 
+func (r HTTPTimeseriesGroupTLSVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionParamsFormatJson, HTTPTimeseriesGroupTLSVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupTLSVersionParamsHTTPProtocol string
 
 const (
 	HTTPTimeseriesGroupTLSVersionParamsHTTPProtocolHTTP  HTTPTimeseriesGroupTLSVersionParamsHTTPProtocol = "HTTP"
 	HTTPTimeseriesGroupTLSVersionParamsHTTPProtocolHTTPS HTTPTimeseriesGroupTLSVersionParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPTimeseriesGroupTLSVersionParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionParamsHTTPProtocolHTTP, HTTPTimeseriesGroupTLSVersionParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupTLSVersionParamsHTTPVersion string
 
@@ -2072,12 +2712,28 @@ const (
 	HTTPTimeseriesGroupTLSVersionParamsHTTPVersionHttPv3 HTTPTimeseriesGroupTLSVersionParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPTimeseriesGroupTLSVersionParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionParamsHTTPVersionHttPv1, HTTPTimeseriesGroupTLSVersionParamsHTTPVersionHttPv2, HTTPTimeseriesGroupTLSVersionParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPTimeseriesGroupTLSVersionParamsIPVersion string
 
 const (
 	HTTPTimeseriesGroupTLSVersionParamsIPVersionIPv4 HTTPTimeseriesGroupTLSVersionParamsIPVersion = "IPv4"
 	HTTPTimeseriesGroupTLSVersionParamsIPVersionIPv6 HTTPTimeseriesGroupTLSVersionParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTimeseriesGroupTLSVersionParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionParamsIPVersionIPv4, HTTPTimeseriesGroupTLSVersionParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupTLSVersionParamsOS string
 
@@ -2090,6 +2746,14 @@ const (
 	HTTPTimeseriesGroupTLSVersionParamsOSLinux    HTTPTimeseriesGroupTLSVersionParamsOS = "LINUX"
 	HTTPTimeseriesGroupTLSVersionParamsOSSmartTv  HTTPTimeseriesGroupTLSVersionParamsOS = "SMART_TV"
 )
+
+func (r HTTPTimeseriesGroupTLSVersionParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesGroupTLSVersionParamsOSWindows, HTTPTimeseriesGroupTLSVersionParamsOSMacosx, HTTPTimeseriesGroupTLSVersionParamsOSIos, HTTPTimeseriesGroupTLSVersionParamsOSAndroid, HTTPTimeseriesGroupTLSVersionParamsOSChromeos, HTTPTimeseriesGroupTLSVersionParamsOSLinux, HTTPTimeseriesGroupTLSVersionParamsOSSmartTv:
+		return true
+	}
+	return false
+}
 
 type HTTPTimeseriesGroupTLSVersionResponseEnvelope struct {
 	Result  HTTPTimeseriesGroupTLSVersionResponse             `json:"result,required"`

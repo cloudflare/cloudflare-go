@@ -198,6 +198,14 @@ const (
 	AddressMapAccountUpdateResponseEnvelopeSuccessTrue AddressMapAccountUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AddressMapAccountUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapAccountUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AddressMapAccountUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -316,6 +324,14 @@ type AddressMapAccountDeleteResponseEnvelopeSuccess bool
 const (
 	AddressMapAccountDeleteResponseEnvelopeSuccessTrue AddressMapAccountDeleteResponseEnvelopeSuccess = true
 )
+
+func (r AddressMapAccountDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapAccountDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AddressMapAccountDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

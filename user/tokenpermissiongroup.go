@@ -127,6 +127,14 @@ const (
 	TokenPermissionGroupListResponseEnvelopeSuccessTrue TokenPermissionGroupListResponseEnvelopeSuccess = true
 )
 
+func (r TokenPermissionGroupListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenPermissionGroupListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenPermissionGroupListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

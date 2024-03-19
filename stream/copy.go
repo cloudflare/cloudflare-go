@@ -174,3 +174,11 @@ type CopyNewResponseEnvelopeSuccess bool
 const (
 	CopyNewResponseEnvelopeSuccessTrue CopyNewResponseEnvelopeSuccess = true
 )
+
+func (r CopyNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CopyNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -133,6 +133,14 @@ const (
 	DevicePolicyDefaultPolicyGetResponseEnvelopeSuccessTrue DevicePolicyDefaultPolicyGetResponseEnvelopeSuccess = true
 )
 
+func (r DevicePolicyDefaultPolicyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyDefaultPolicyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePolicyDefaultPolicyGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

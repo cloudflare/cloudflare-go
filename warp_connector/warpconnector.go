@@ -271,6 +271,14 @@ const (
 	WARPConnectorNewResponseTunnelCfdTunnelTunTypeCni           WARPConnectorNewResponseTunnelCfdTunnelTunType = "cni"
 )
 
+func (r WARPConnectorNewResponseTunnelCfdTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorNewResponseTunnelCfdTunnelTunTypeCfdTunnel, WARPConnectorNewResponseTunnelCfdTunnelTunTypeWARPConnector, WARPConnectorNewResponseTunnelCfdTunnelTunTypeIPSec, WARPConnectorNewResponseTunnelCfdTunnelTunTypeGRE, WARPConnectorNewResponseTunnelCfdTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorNewResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
@@ -390,6 +398,14 @@ const (
 	WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeGRE           WARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "gre"
 	WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCni           WARPConnectorNewResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
+
+func (r WARPConnectorNewResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorNewResponseTunnelWARPConnectorTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
@@ -537,6 +553,14 @@ const (
 	WARPConnectorListResponseTunnelCfdTunnelTunTypeCni           WARPConnectorListResponseTunnelCfdTunnelTunType = "cni"
 )
 
+func (r WARPConnectorListResponseTunnelCfdTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorListResponseTunnelCfdTunnelTunTypeCfdTunnel, WARPConnectorListResponseTunnelCfdTunnelTunTypeWARPConnector, WARPConnectorListResponseTunnelCfdTunnelTunTypeIPSec, WARPConnectorListResponseTunnelCfdTunnelTunTypeGRE, WARPConnectorListResponseTunnelCfdTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorListResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
@@ -656,6 +680,14 @@ const (
 	WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeGRE           WARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "gre"
 	WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCni           WARPConnectorListResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
+
+func (r WARPConnectorListResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorListResponseTunnelWARPConnectorTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
@@ -803,6 +835,14 @@ const (
 	WARPConnectorDeleteResponseTunnelCfdTunnelTunTypeCni           WARPConnectorDeleteResponseTunnelCfdTunnelTunType = "cni"
 )
 
+func (r WARPConnectorDeleteResponseTunnelCfdTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorDeleteResponseTunnelCfdTunnelTunTypeCfdTunnel, WARPConnectorDeleteResponseTunnelCfdTunnelTunTypeWARPConnector, WARPConnectorDeleteResponseTunnelCfdTunnelTunTypeIPSec, WARPConnectorDeleteResponseTunnelCfdTunnelTunTypeGRE, WARPConnectorDeleteResponseTunnelCfdTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorDeleteResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
@@ -922,6 +962,14 @@ const (
 	WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeGRE           WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "gre"
 	WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCni           WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
+
+func (r WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorDeleteResponseTunnelWARPConnectorTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
@@ -1069,6 +1117,14 @@ const (
 	WARPConnectorEditResponseTunnelCfdTunnelTunTypeCni           WARPConnectorEditResponseTunnelCfdTunnelTunType = "cni"
 )
 
+func (r WARPConnectorEditResponseTunnelCfdTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorEditResponseTunnelCfdTunnelTunTypeCfdTunnel, WARPConnectorEditResponseTunnelCfdTunnelTunTypeWARPConnector, WARPConnectorEditResponseTunnelCfdTunnelTunTypeIPSec, WARPConnectorEditResponseTunnelCfdTunnelTunTypeGRE, WARPConnectorEditResponseTunnelCfdTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorEditResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
@@ -1188,6 +1244,14 @@ const (
 	WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeGRE           WARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "gre"
 	WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCni           WARPConnectorEditResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
+
+func (r WARPConnectorEditResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorEditResponseTunnelWARPConnectorTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
@@ -1334,6 +1398,14 @@ const (
 	WARPConnectorGetResponseTunnelCfdTunnelTunTypeCni           WARPConnectorGetResponseTunnelCfdTunnelTunType = "cni"
 )
 
+func (r WARPConnectorGetResponseTunnelCfdTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorGetResponseTunnelCfdTunnelTunTypeCfdTunnel, WARPConnectorGetResponseTunnelCfdTunnelTunTypeWARPConnector, WARPConnectorGetResponseTunnelCfdTunnelTunTypeIPSec, WARPConnectorGetResponseTunnelCfdTunnelTunTypeGRE, WARPConnectorGetResponseTunnelCfdTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorGetResponseTunnelWARPConnectorTunnel struct {
 	// UUID of the tunnel.
@@ -1454,6 +1526,14 @@ const (
 	WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCni           WARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
+func (r WARPConnectorGetResponseTunnelWARPConnectorTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeWARPConnector, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeIPSec, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeGRE, WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [warp_connector.WARPConnectorTokenResponseUnknown],
 // [warp_connector.WARPConnectorTokenResponseArray] or [shared.UnionString].
 type WARPConnectorTokenResponse interface {
@@ -1571,6 +1651,14 @@ type WARPConnectorNewResponseEnvelopeSuccess bool
 const (
 	WARPConnectorNewResponseEnvelopeSuccessTrue WARPConnectorNewResponseEnvelopeSuccess = true
 )
+
+func (r WARPConnectorNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WARPConnectorNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type WARPConnectorListParams struct {
 	// Cloudflare account ID
@@ -1694,6 +1782,14 @@ const (
 	WARPConnectorDeleteResponseEnvelopeSuccessTrue WARPConnectorDeleteResponseEnvelopeSuccess = true
 )
 
+func (r WARPConnectorDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WARPConnectorDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WARPConnectorEditParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1790,6 +1886,14 @@ const (
 	WARPConnectorEditResponseEnvelopeSuccessTrue WARPConnectorEditResponseEnvelopeSuccess = true
 )
 
+func (r WARPConnectorEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WARPConnectorEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WARPConnectorGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1877,6 +1981,14 @@ const (
 	WARPConnectorGetResponseEnvelopeSuccessTrue WARPConnectorGetResponseEnvelopeSuccess = true
 )
 
+func (r WARPConnectorGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WARPConnectorGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type WARPConnectorTokenParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1962,3 +2074,11 @@ type WARPConnectorTokenResponseEnvelopeSuccess bool
 const (
 	WARPConnectorTokenResponseEnvelopeSuccessTrue WARPConnectorTokenResponseEnvelopeSuccess = true
 )
+
+func (r WARPConnectorTokenResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WARPConnectorTokenResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

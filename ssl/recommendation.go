@@ -78,6 +78,14 @@ const (
 	RecommendationGetResponseValueStrict   RecommendationGetResponseValue = "strict"
 )
 
+func (r RecommendationGetResponseValue) IsKnown() bool {
+	switch r {
+	case RecommendationGetResponseValueFlexible, RecommendationGetResponseValueFull, RecommendationGetResponseValueStrict:
+		return true
+	}
+	return false
+}
+
 type RecommendationGetResponseEnvelope struct {
 	Errors   []RecommendationGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RecommendationGetResponseEnvelopeMessages `json:"messages,required"`
@@ -158,3 +166,11 @@ type RecommendationGetResponseEnvelopeSuccess bool
 const (
 	RecommendationGetResponseEnvelopeSuccessTrue RecommendationGetResponseEnvelopeSuccess = true
 )
+
+func (r RecommendationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RecommendationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

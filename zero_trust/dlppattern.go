@@ -158,3 +158,11 @@ type DLPPatternValidateResponseEnvelopeSuccess bool
 const (
 	DLPPatternValidateResponseEnvelopeSuccessTrue DLPPatternValidateResponseEnvelopeSuccess = true
 )
+
+func (r DLPPatternValidateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPPatternValidateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

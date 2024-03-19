@@ -233,6 +233,14 @@ const (
 	ScriptTailNewResponseEnvelopeSuccessTrue ScriptTailNewResponseEnvelopeSuccess = true
 )
 
+func (r ScriptTailNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptTailNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ScriptTailDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -319,6 +327,14 @@ const (
 	ScriptTailDeleteResponseEnvelopeSuccessTrue ScriptTailDeleteResponseEnvelopeSuccess = true
 )
 
+func (r ScriptTailDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptTailDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ScriptTailGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -404,3 +420,11 @@ type ScriptTailGetResponseEnvelopeSuccess bool
 const (
 	ScriptTailGetResponseEnvelopeSuccessTrue ScriptTailGetResponseEnvelopeSuccess = true
 )
+
+func (r ScriptTailGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptTailGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

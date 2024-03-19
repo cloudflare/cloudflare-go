@@ -852,6 +852,14 @@ const (
 	ScanGetResponseScanTaskClientTypeAPI       ScanGetResponseScanTaskClientType = "Api"
 )
 
+func (r ScanGetResponseScanTaskClientType) IsKnown() bool {
+	switch r {
+	case ScanGetResponseScanTaskClientTypeSite, ScanGetResponseScanTaskClientTypeAutomatic, ScanGetResponseScanTaskClientTypeAPI:
+		return true
+	}
+	return false
+}
+
 type ScanGetResponseScanTaskError struct {
 	Message string                           `json:"message,required"`
 	JSON    scanGetResponseScanTaskErrorJSON `json:"-"`
@@ -904,12 +912,28 @@ const (
 	ScanGetResponseScanTaskStatusFinished         ScanGetResponseScanTaskStatus = "Finished"
 )
 
+func (r ScanGetResponseScanTaskStatus) IsKnown() bool {
+	switch r {
+	case ScanGetResponseScanTaskStatusQueued, ScanGetResponseScanTaskStatusInProgress, ScanGetResponseScanTaskStatusInPostProcessing, ScanGetResponseScanTaskStatusFinished:
+		return true
+	}
+	return false
+}
+
 type ScanGetResponseScanTaskVisibility string
 
 const (
 	ScanGetResponseScanTaskVisibilityPublic   ScanGetResponseScanTaskVisibility = "Public"
 	ScanGetResponseScanTaskVisibilityUnlisted ScanGetResponseScanTaskVisibility = "Unlisted"
 )
+
+func (r ScanGetResponseScanTaskVisibility) IsKnown() bool {
+	switch r {
+	case ScanGetResponseScanTaskVisibilityPublic, ScanGetResponseScanTaskVisibilityUnlisted:
+		return true
+	}
+	return false
+}
 
 type ScanGetResponseScanVerdicts struct {
 	Overall ScanGetResponseScanVerdictsOverall `json:"overall,required"`
@@ -1765,6 +1789,14 @@ const (
 	ScanNewParamsScreenshotsResolutionTablet  ScanNewParamsScreenshotsResolution = "tablet"
 )
 
+func (r ScanNewParamsScreenshotsResolution) IsKnown() bool {
+	switch r {
+	case ScanNewParamsScreenshotsResolutionDesktop, ScanNewParamsScreenshotsResolutionMobile, ScanNewParamsScreenshotsResolutionTablet:
+		return true
+	}
+	return false
+}
+
 // The option `Public` means it will be included in listings like recent scans and
 // search results. `Unlisted` means it will not be included in the aforementioned
 // listings, users will need to have the scan's ID to access it. A a scan will be
@@ -1776,6 +1808,14 @@ const (
 	ScanNewParamsVisibilityPublic   ScanNewParamsVisibility = "Public"
 	ScanNewParamsVisibilityUnlisted ScanNewParamsVisibility = "Unlisted"
 )
+
+func (r ScanNewParamsVisibility) IsKnown() bool {
+	switch r {
+	case ScanNewParamsVisibilityPublic, ScanNewParamsVisibilityUnlisted:
+		return true
+	}
+	return false
+}
 
 type ScanNewResponseEnvelope struct {
 	Errors   []ScanNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -2007,3 +2047,11 @@ const (
 	ScanScreenshotParamsResolutionMobile  ScanScreenshotParamsResolution = "mobile"
 	ScanScreenshotParamsResolutionTablet  ScanScreenshotParamsResolution = "tablet"
 )
+
+func (r ScanScreenshotParamsResolution) IsKnown() bool {
+	switch r {
+	case ScanScreenshotParamsResolutionDesktop, ScanScreenshotParamsResolutionMobile, ScanScreenshotParamsResolutionTablet:
+		return true
+	}
+	return false
+}

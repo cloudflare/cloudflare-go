@@ -188,6 +188,14 @@ const (
 	EdgeNewResponseEnvelopeSuccessTrue EdgeNewResponseEnvelopeSuccess = true
 )
 
+func (r EdgeNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case EdgeNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type EdgeGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -273,3 +281,11 @@ type EdgeGetResponseEnvelopeSuccess bool
 const (
 	EdgeGetResponseEnvelopeSuccessTrue EdgeGetResponseEnvelopeSuccess = true
 )
+
+func (r EdgeGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case EdgeGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

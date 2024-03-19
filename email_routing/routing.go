@@ -128,6 +128,14 @@ const (
 	RoutingDisableResponseEnabledFalse RoutingDisableResponseEnabled = false
 )
 
+func (r RoutingDisableResponseEnabled) IsKnown() bool {
+	switch r {
+	case RoutingDisableResponseEnabledTrue, RoutingDisableResponseEnabledFalse:
+		return true
+	}
+	return false
+}
+
 // Flag to check if the user skipped the configuration wizard.
 type RoutingDisableResponseSkipWizard bool
 
@@ -135,6 +143,14 @@ const (
 	RoutingDisableResponseSkipWizardTrue  RoutingDisableResponseSkipWizard = true
 	RoutingDisableResponseSkipWizardFalse RoutingDisableResponseSkipWizard = false
 )
+
+func (r RoutingDisableResponseSkipWizard) IsKnown() bool {
+	switch r {
+	case RoutingDisableResponseSkipWizardTrue, RoutingDisableResponseSkipWizardFalse:
+		return true
+	}
+	return false
+}
 
 // Show the state of your account, and the type or configuration error.
 type RoutingDisableResponseStatus string
@@ -146,6 +162,14 @@ const (
 	RoutingDisableResponseStatusMisconfiguredLocked RoutingDisableResponseStatus = "misconfigured/locked"
 	RoutingDisableResponseStatusUnlocked            RoutingDisableResponseStatus = "unlocked"
 )
+
+func (r RoutingDisableResponseStatus) IsKnown() bool {
+	switch r {
+	case RoutingDisableResponseStatusReady, RoutingDisableResponseStatusUnconfigured, RoutingDisableResponseStatusMisconfigured, RoutingDisableResponseStatusMisconfiguredLocked, RoutingDisableResponseStatusUnlocked:
+		return true
+	}
+	return false
+}
 
 type RoutingEnableResponse struct {
 	// Email Routing settings identifier.
@@ -199,6 +223,14 @@ const (
 	RoutingEnableResponseEnabledFalse RoutingEnableResponseEnabled = false
 )
 
+func (r RoutingEnableResponseEnabled) IsKnown() bool {
+	switch r {
+	case RoutingEnableResponseEnabledTrue, RoutingEnableResponseEnabledFalse:
+		return true
+	}
+	return false
+}
+
 // Flag to check if the user skipped the configuration wizard.
 type RoutingEnableResponseSkipWizard bool
 
@@ -206,6 +238,14 @@ const (
 	RoutingEnableResponseSkipWizardTrue  RoutingEnableResponseSkipWizard = true
 	RoutingEnableResponseSkipWizardFalse RoutingEnableResponseSkipWizard = false
 )
+
+func (r RoutingEnableResponseSkipWizard) IsKnown() bool {
+	switch r {
+	case RoutingEnableResponseSkipWizardTrue, RoutingEnableResponseSkipWizardFalse:
+		return true
+	}
+	return false
+}
 
 // Show the state of your account, and the type or configuration error.
 type RoutingEnableResponseStatus string
@@ -217,6 +257,14 @@ const (
 	RoutingEnableResponseStatusMisconfiguredLocked RoutingEnableResponseStatus = "misconfigured/locked"
 	RoutingEnableResponseStatusUnlocked            RoutingEnableResponseStatus = "unlocked"
 )
+
+func (r RoutingEnableResponseStatus) IsKnown() bool {
+	switch r {
+	case RoutingEnableResponseStatusReady, RoutingEnableResponseStatusUnconfigured, RoutingEnableResponseStatusMisconfigured, RoutingEnableResponseStatusMisconfiguredLocked, RoutingEnableResponseStatusUnlocked:
+		return true
+	}
+	return false
+}
 
 type RoutingGetResponse struct {
 	// Email Routing settings identifier.
@@ -270,6 +318,14 @@ const (
 	RoutingGetResponseEnabledFalse RoutingGetResponseEnabled = false
 )
 
+func (r RoutingGetResponseEnabled) IsKnown() bool {
+	switch r {
+	case RoutingGetResponseEnabledTrue, RoutingGetResponseEnabledFalse:
+		return true
+	}
+	return false
+}
+
 // Flag to check if the user skipped the configuration wizard.
 type RoutingGetResponseSkipWizard bool
 
@@ -277,6 +333,14 @@ const (
 	RoutingGetResponseSkipWizardTrue  RoutingGetResponseSkipWizard = true
 	RoutingGetResponseSkipWizardFalse RoutingGetResponseSkipWizard = false
 )
+
+func (r RoutingGetResponseSkipWizard) IsKnown() bool {
+	switch r {
+	case RoutingGetResponseSkipWizardTrue, RoutingGetResponseSkipWizardFalse:
+		return true
+	}
+	return false
+}
 
 // Show the state of your account, and the type or configuration error.
 type RoutingGetResponseStatus string
@@ -288,6 +352,14 @@ const (
 	RoutingGetResponseStatusMisconfiguredLocked RoutingGetResponseStatus = "misconfigured/locked"
 	RoutingGetResponseStatusUnlocked            RoutingGetResponseStatus = "unlocked"
 )
+
+func (r RoutingGetResponseStatus) IsKnown() bool {
+	switch r {
+	case RoutingGetResponseStatusReady, RoutingGetResponseStatusUnconfigured, RoutingGetResponseStatusMisconfigured, RoutingGetResponseStatusMisconfiguredLocked, RoutingGetResponseStatusUnlocked:
+		return true
+	}
+	return false
+}
 
 type RoutingDisableResponseEnvelope struct {
 	Errors   []RoutingDisableResponseEnvelopeErrors   `json:"errors,required"`
@@ -370,6 +442,14 @@ const (
 	RoutingDisableResponseEnvelopeSuccessTrue RoutingDisableResponseEnvelopeSuccess = true
 )
 
+func (r RoutingDisableResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingDisableResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RoutingEnableResponseEnvelope struct {
 	Errors   []RoutingEnableResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RoutingEnableResponseEnvelopeMessages `json:"messages,required"`
@@ -451,6 +531,14 @@ const (
 	RoutingEnableResponseEnvelopeSuccessTrue RoutingEnableResponseEnvelopeSuccess = true
 )
 
+func (r RoutingEnableResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingEnableResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RoutingGetResponseEnvelope struct {
 	Errors   []RoutingGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RoutingGetResponseEnvelopeMessages `json:"messages,required"`
@@ -531,3 +619,11 @@ type RoutingGetResponseEnvelopeSuccess bool
 const (
 	RoutingGetResponseEnvelopeSuccessTrue RoutingGetResponseEnvelopeSuccess = true
 )
+
+func (r RoutingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoutingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -247,6 +247,14 @@ const (
 	TokenVerifyResponseStatusExpired  TokenVerifyResponseStatus = "expired"
 )
 
+func (r TokenVerifyResponseStatus) IsKnown() bool {
+	switch r {
+	case TokenVerifyResponseStatusActive, TokenVerifyResponseStatusDisabled, TokenVerifyResponseStatusExpired:
+		return true
+	}
+	return false
+}
+
 type TokenNewParams struct {
 	// Token name.
 	Name param.Field[string] `json:"name,required"`
@@ -284,6 +292,14 @@ const (
 	TokenNewParamsPoliciesEffectAllow TokenNewParamsPoliciesEffect = "allow"
 	TokenNewParamsPoliciesEffectDeny  TokenNewParamsPoliciesEffect = "deny"
 )
+
+func (r TokenNewParamsPoliciesEffect) IsKnown() bool {
+	switch r {
+	case TokenNewParamsPoliciesEffectAllow, TokenNewParamsPoliciesEffectDeny:
+		return true
+	}
+	return false
+}
 
 // A named group of permissions that map to a group of operations against
 // resources.
@@ -396,6 +412,14 @@ const (
 	TokenNewResponseEnvelopeSuccessTrue TokenNewResponseEnvelopeSuccess = true
 )
 
+func (r TokenNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenUpdateParams struct {
 	// Token name.
 	Name param.Field[string] `json:"name,required"`
@@ -436,6 +460,14 @@ const (
 	TokenUpdateParamsPoliciesEffectDeny  TokenUpdateParamsPoliciesEffect = "deny"
 )
 
+func (r TokenUpdateParamsPoliciesEffect) IsKnown() bool {
+	switch r {
+	case TokenUpdateParamsPoliciesEffectAllow, TokenUpdateParamsPoliciesEffectDeny:
+		return true
+	}
+	return false
+}
+
 // A named group of permissions that map to a group of operations against
 // resources.
 type TokenUpdateParamsPoliciesPermissionGroup struct {
@@ -453,6 +485,14 @@ const (
 	TokenUpdateParamsStatusDisabled TokenUpdateParamsStatus = "disabled"
 	TokenUpdateParamsStatusExpired  TokenUpdateParamsStatus = "expired"
 )
+
+func (r TokenUpdateParamsStatus) IsKnown() bool {
+	switch r {
+	case TokenUpdateParamsStatusActive, TokenUpdateParamsStatusDisabled, TokenUpdateParamsStatusExpired:
+		return true
+	}
+	return false
+}
 
 type TokenUpdateParamsCondition struct {
 	// Client IP restrictions.
@@ -556,6 +596,14 @@ const (
 	TokenUpdateResponseEnvelopeSuccessTrue TokenUpdateResponseEnvelopeSuccess = true
 )
 
+func (r TokenUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenListParams struct {
 	// Direction to order results.
 	Direction param.Field[TokenListParamsDirection] `query:"direction"`
@@ -580,6 +628,14 @@ const (
 	TokenListParamsDirectionAsc  TokenListParamsDirection = "asc"
 	TokenListParamsDirectionDesc TokenListParamsDirection = "desc"
 )
+
+func (r TokenListParamsDirection) IsKnown() bool {
+	switch r {
+	case TokenListParamsDirectionAsc, TokenListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
 
 type TokenDeleteResponseEnvelope struct {
 	Errors   []TokenDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -662,6 +718,14 @@ const (
 	TokenDeleteResponseEnvelopeSuccessTrue TokenDeleteResponseEnvelopeSuccess = true
 )
 
+func (r TokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenGetResponseEnvelope struct {
 	Errors   []TokenGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TokenGetResponseEnvelopeMessages `json:"messages,required"`
@@ -743,6 +807,14 @@ const (
 	TokenGetResponseEnvelopeSuccessTrue TokenGetResponseEnvelopeSuccess = true
 )
 
+func (r TokenGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenVerifyResponseEnvelope struct {
 	Errors   []TokenVerifyResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TokenVerifyResponseEnvelopeMessages `json:"messages,required"`
@@ -823,3 +895,11 @@ type TokenVerifyResponseEnvelopeSuccess bool
 const (
 	TokenVerifyResponseEnvelopeSuccessTrue TokenVerifyResponseEnvelopeSuccess = true
 )
+
+func (r TokenVerifyResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenVerifyResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

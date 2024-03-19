@@ -236,6 +236,14 @@ const (
 	ACLNewResponseEnvelopeSuccessTrue ACLNewResponseEnvelopeSuccess = true
 )
 
+func (r ACLNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ACLNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ACLUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
@@ -333,6 +341,14 @@ const (
 	ACLUpdateResponseEnvelopeSuccessTrue ACLUpdateResponseEnvelopeSuccess = true
 )
 
+func (r ACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ACLUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ACLListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -419,6 +435,14 @@ type ACLListResponseEnvelopeSuccess bool
 const (
 	ACLListResponseEnvelopeSuccessTrue ACLListResponseEnvelopeSuccess = true
 )
+
+func (r ACLListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ACLListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ACLListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -536,6 +560,14 @@ const (
 	ACLDeleteResponseEnvelopeSuccessTrue ACLDeleteResponseEnvelopeSuccess = true
 )
 
+func (r ACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ACLDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ACLGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -620,3 +652,11 @@ type ACLGetResponseEnvelopeSuccess bool
 const (
 	ACLGetResponseEnvelopeSuccessTrue ACLGetResponseEnvelopeSuccess = true
 )
+
+func (r ACLGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ACLGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

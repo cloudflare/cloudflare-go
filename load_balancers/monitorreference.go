@@ -79,6 +79,14 @@ const (
 	MonitorReferenceGetResponseReferenceTypeReferrer MonitorReferenceGetResponseReferenceType = "referrer"
 )
 
+func (r MonitorReferenceGetResponseReferenceType) IsKnown() bool {
+	switch r {
+	case MonitorReferenceGetResponseReferenceTypeStar, MonitorReferenceGetResponseReferenceTypeReferral, MonitorReferenceGetResponseReferenceTypeReferrer:
+		return true
+	}
+	return false
+}
+
 type MonitorReferenceGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -167,6 +175,14 @@ type MonitorReferenceGetResponseEnvelopeSuccess bool
 const (
 	MonitorReferenceGetResponseEnvelopeSuccessTrue MonitorReferenceGetResponseEnvelopeSuccess = true
 )
+
+func (r MonitorReferenceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MonitorReferenceGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type MonitorReferenceGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

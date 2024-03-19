@@ -457,6 +457,14 @@ const (
 	ConnectionTamperingSummaryParamsDateRange24wControl ConnectionTamperingSummaryParamsDateRange = "24wControl"
 )
 
+func (r ConnectionTamperingSummaryParamsDateRange) IsKnown() bool {
+	switch r {
+	case ConnectionTamperingSummaryParamsDateRange1d, ConnectionTamperingSummaryParamsDateRange2d, ConnectionTamperingSummaryParamsDateRange7d, ConnectionTamperingSummaryParamsDateRange14d, ConnectionTamperingSummaryParamsDateRange28d, ConnectionTamperingSummaryParamsDateRange12w, ConnectionTamperingSummaryParamsDateRange24w, ConnectionTamperingSummaryParamsDateRange52w, ConnectionTamperingSummaryParamsDateRange1dControl, ConnectionTamperingSummaryParamsDateRange2dControl, ConnectionTamperingSummaryParamsDateRange7dControl, ConnectionTamperingSummaryParamsDateRange14dControl, ConnectionTamperingSummaryParamsDateRange28dControl, ConnectionTamperingSummaryParamsDateRange12wControl, ConnectionTamperingSummaryParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type ConnectionTamperingSummaryParamsFormat string
 
@@ -464,6 +472,14 @@ const (
 	ConnectionTamperingSummaryParamsFormatJson ConnectionTamperingSummaryParamsFormat = "JSON"
 	ConnectionTamperingSummaryParamsFormatCsv  ConnectionTamperingSummaryParamsFormat = "CSV"
 )
+
+func (r ConnectionTamperingSummaryParamsFormat) IsKnown() bool {
+	switch r {
+	case ConnectionTamperingSummaryParamsFormatJson, ConnectionTamperingSummaryParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type ConnectionTamperingSummaryResponseEnvelope struct {
 	Result  ConnectionTamperingSummaryResponse             `json:"result,required"`
@@ -540,6 +556,14 @@ const (
 	ConnectionTamperingTimeseriesGroupsParamsAggInterval1w  ConnectionTamperingTimeseriesGroupsParamsAggInterval = "1w"
 )
 
+func (r ConnectionTamperingTimeseriesGroupsParamsAggInterval) IsKnown() bool {
+	switch r {
+	case ConnectionTamperingTimeseriesGroupsParamsAggInterval15m, ConnectionTamperingTimeseriesGroupsParamsAggInterval1h, ConnectionTamperingTimeseriesGroupsParamsAggInterval1d, ConnectionTamperingTimeseriesGroupsParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type ConnectionTamperingTimeseriesGroupsParamsDateRange string
 
 const (
@@ -560,6 +584,14 @@ const (
 	ConnectionTamperingTimeseriesGroupsParamsDateRange24wControl ConnectionTamperingTimeseriesGroupsParamsDateRange = "24wControl"
 )
 
+func (r ConnectionTamperingTimeseriesGroupsParamsDateRange) IsKnown() bool {
+	switch r {
+	case ConnectionTamperingTimeseriesGroupsParamsDateRange1d, ConnectionTamperingTimeseriesGroupsParamsDateRange2d, ConnectionTamperingTimeseriesGroupsParamsDateRange7d, ConnectionTamperingTimeseriesGroupsParamsDateRange14d, ConnectionTamperingTimeseriesGroupsParamsDateRange28d, ConnectionTamperingTimeseriesGroupsParamsDateRange12w, ConnectionTamperingTimeseriesGroupsParamsDateRange24w, ConnectionTamperingTimeseriesGroupsParamsDateRange52w, ConnectionTamperingTimeseriesGroupsParamsDateRange1dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange2dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange7dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange14dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange28dControl, ConnectionTamperingTimeseriesGroupsParamsDateRange12wControl, ConnectionTamperingTimeseriesGroupsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type ConnectionTamperingTimeseriesGroupsParamsFormat string
 
@@ -567,6 +599,14 @@ const (
 	ConnectionTamperingTimeseriesGroupsParamsFormatJson ConnectionTamperingTimeseriesGroupsParamsFormat = "JSON"
 	ConnectionTamperingTimeseriesGroupsParamsFormatCsv  ConnectionTamperingTimeseriesGroupsParamsFormat = "CSV"
 )
+
+func (r ConnectionTamperingTimeseriesGroupsParamsFormat) IsKnown() bool {
+	switch r {
+	case ConnectionTamperingTimeseriesGroupsParamsFormatJson, ConnectionTamperingTimeseriesGroupsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type ConnectionTamperingTimeseriesGroupsResponseEnvelope struct {
 	Result  ConnectionTamperingTimeseriesGroupsResponse             `json:"result,required"`

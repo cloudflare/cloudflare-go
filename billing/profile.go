@@ -141,3 +141,11 @@ type ProfileGetResponseEnvelopeSuccess bool
 const (
 	ProfileGetResponseEnvelopeSuccessTrue ProfileGetResponseEnvelopeSuccess = true
 )
+
+func (r ProfileGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProfileGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

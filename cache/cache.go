@@ -210,3 +210,11 @@ type CachePurgeResponseEnvelopeSuccess bool
 const (
 	CachePurgeResponseEnvelopeSuccessTrue CachePurgeResponseEnvelopeSuccess = true
 )
+
+func (r CachePurgeResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CachePurgeResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

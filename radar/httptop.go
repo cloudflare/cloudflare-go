@@ -425,6 +425,14 @@ const (
 	HTTPTopBrowserFamiliesParamsBotClassLikelyHuman     HTTPTopBrowserFamiliesParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPTopBrowserFamiliesParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsBotClassLikelyAutomated, HTTPTopBrowserFamiliesParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowserFamiliesParamsDateRange string
 
 const (
@@ -445,6 +453,14 @@ const (
 	HTTPTopBrowserFamiliesParamsDateRange24wControl HTTPTopBrowserFamiliesParamsDateRange = "24wControl"
 )
 
+func (r HTTPTopBrowserFamiliesParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsDateRange1d, HTTPTopBrowserFamiliesParamsDateRange2d, HTTPTopBrowserFamiliesParamsDateRange7d, HTTPTopBrowserFamiliesParamsDateRange14d, HTTPTopBrowserFamiliesParamsDateRange28d, HTTPTopBrowserFamiliesParamsDateRange12w, HTTPTopBrowserFamiliesParamsDateRange24w, HTTPTopBrowserFamiliesParamsDateRange52w, HTTPTopBrowserFamiliesParamsDateRange1dControl, HTTPTopBrowserFamiliesParamsDateRange2dControl, HTTPTopBrowserFamiliesParamsDateRange7dControl, HTTPTopBrowserFamiliesParamsDateRange14dControl, HTTPTopBrowserFamiliesParamsDateRange28dControl, HTTPTopBrowserFamiliesParamsDateRange12wControl, HTTPTopBrowserFamiliesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowserFamiliesParamsDeviceType string
 
 const (
@@ -452,6 +468,14 @@ const (
 	HTTPTopBrowserFamiliesParamsDeviceTypeMobile  HTTPTopBrowserFamiliesParamsDeviceType = "MOBILE"
 	HTTPTopBrowserFamiliesParamsDeviceTypeOther   HTTPTopBrowserFamiliesParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTopBrowserFamiliesParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsDeviceTypeDesktop, HTTPTopBrowserFamiliesParamsDeviceTypeMobile, HTTPTopBrowserFamiliesParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTopBrowserFamiliesParamsFormat string
@@ -461,12 +485,28 @@ const (
 	HTTPTopBrowserFamiliesParamsFormatCsv  HTTPTopBrowserFamiliesParamsFormat = "CSV"
 )
 
+func (r HTTPTopBrowserFamiliesParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsFormatJson, HTTPTopBrowserFamiliesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowserFamiliesParamsHTTPProtocol string
 
 const (
 	HTTPTopBrowserFamiliesParamsHTTPProtocolHTTP  HTTPTopBrowserFamiliesParamsHTTPProtocol = "HTTP"
 	HTTPTopBrowserFamiliesParamsHTTPProtocolHTTPS HTTPTopBrowserFamiliesParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPTopBrowserFamiliesParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsHTTPProtocolHTTP, HTTPTopBrowserFamiliesParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPTopBrowserFamiliesParamsHTTPVersion string
 
@@ -476,12 +516,28 @@ const (
 	HTTPTopBrowserFamiliesParamsHTTPVersionHttPv3 HTTPTopBrowserFamiliesParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPTopBrowserFamiliesParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsHTTPVersionHttPv1, HTTPTopBrowserFamiliesParamsHTTPVersionHttPv2, HTTPTopBrowserFamiliesParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowserFamiliesParamsIPVersion string
 
 const (
 	HTTPTopBrowserFamiliesParamsIPVersionIPv4 HTTPTopBrowserFamiliesParamsIPVersion = "IPv4"
 	HTTPTopBrowserFamiliesParamsIPVersionIPv6 HTTPTopBrowserFamiliesParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTopBrowserFamiliesParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsIPVersionIPv4, HTTPTopBrowserFamiliesParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTopBrowserFamiliesParamsOS string
 
@@ -495,6 +551,14 @@ const (
 	HTTPTopBrowserFamiliesParamsOSSmartTv  HTTPTopBrowserFamiliesParamsOS = "SMART_TV"
 )
 
+func (r HTTPTopBrowserFamiliesParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsOSWindows, HTTPTopBrowserFamiliesParamsOSMacosx, HTTPTopBrowserFamiliesParamsOSIos, HTTPTopBrowserFamiliesParamsOSAndroid, HTTPTopBrowserFamiliesParamsOSChromeos, HTTPTopBrowserFamiliesParamsOSLinux, HTTPTopBrowserFamiliesParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowserFamiliesParamsTLSVersion string
 
 const (
@@ -504,6 +568,14 @@ const (
 	HTTPTopBrowserFamiliesParamsTLSVersionTlSv1_3  HTTPTopBrowserFamiliesParamsTLSVersion = "TLSv1_3"
 	HTTPTopBrowserFamiliesParamsTLSVersionTlSvQuic HTTPTopBrowserFamiliesParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTopBrowserFamiliesParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowserFamiliesParamsTLSVersionTlSv1_0, HTTPTopBrowserFamiliesParamsTLSVersionTlSv1_1, HTTPTopBrowserFamiliesParamsTLSVersionTlSv1_2, HTTPTopBrowserFamiliesParamsTLSVersionTlSv1_3, HTTPTopBrowserFamiliesParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTopBrowserFamiliesResponseEnvelope struct {
 	Result  HTTPTopBrowserFamiliesResponse             `json:"result,required"`
@@ -587,6 +659,14 @@ const (
 	HTTPTopBrowsersParamsBotClassLikelyHuman     HTTPTopBrowsersParamsBotClass = "LIKELY_HUMAN"
 )
 
+func (r HTTPTopBrowsersParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsBotClassLikelyAutomated, HTTPTopBrowsersParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowsersParamsDateRange string
 
 const (
@@ -607,6 +687,14 @@ const (
 	HTTPTopBrowsersParamsDateRange24wControl HTTPTopBrowsersParamsDateRange = "24wControl"
 )
 
+func (r HTTPTopBrowsersParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsDateRange1d, HTTPTopBrowsersParamsDateRange2d, HTTPTopBrowsersParamsDateRange7d, HTTPTopBrowsersParamsDateRange14d, HTTPTopBrowsersParamsDateRange28d, HTTPTopBrowsersParamsDateRange12w, HTTPTopBrowsersParamsDateRange24w, HTTPTopBrowsersParamsDateRange52w, HTTPTopBrowsersParamsDateRange1dControl, HTTPTopBrowsersParamsDateRange2dControl, HTTPTopBrowsersParamsDateRange7dControl, HTTPTopBrowsersParamsDateRange14dControl, HTTPTopBrowsersParamsDateRange28dControl, HTTPTopBrowsersParamsDateRange12wControl, HTTPTopBrowsersParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowsersParamsDeviceType string
 
 const (
@@ -614,6 +702,14 @@ const (
 	HTTPTopBrowsersParamsDeviceTypeMobile  HTTPTopBrowsersParamsDeviceType = "MOBILE"
 	HTTPTopBrowsersParamsDeviceTypeOther   HTTPTopBrowsersParamsDeviceType = "OTHER"
 )
+
+func (r HTTPTopBrowsersParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsDeviceTypeDesktop, HTTPTopBrowsersParamsDeviceTypeMobile, HTTPTopBrowsersParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type HTTPTopBrowsersParamsFormat string
@@ -623,12 +719,28 @@ const (
 	HTTPTopBrowsersParamsFormatCsv  HTTPTopBrowsersParamsFormat = "CSV"
 )
 
+func (r HTTPTopBrowsersParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsFormatJson, HTTPTopBrowsersParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowsersParamsHTTPProtocol string
 
 const (
 	HTTPTopBrowsersParamsHTTPProtocolHTTP  HTTPTopBrowsersParamsHTTPProtocol = "HTTP"
 	HTTPTopBrowsersParamsHTTPProtocolHTTPS HTTPTopBrowsersParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPTopBrowsersParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsHTTPProtocolHTTP, HTTPTopBrowsersParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPTopBrowsersParamsHTTPVersion string
 
@@ -638,12 +750,28 @@ const (
 	HTTPTopBrowsersParamsHTTPVersionHttPv3 HTTPTopBrowsersParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPTopBrowsersParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsHTTPVersionHttPv1, HTTPTopBrowsersParamsHTTPVersionHttPv2, HTTPTopBrowsersParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowsersParamsIPVersion string
 
 const (
 	HTTPTopBrowsersParamsIPVersionIPv4 HTTPTopBrowsersParamsIPVersion = "IPv4"
 	HTTPTopBrowsersParamsIPVersionIPv6 HTTPTopBrowsersParamsIPVersion = "IPv6"
 )
+
+func (r HTTPTopBrowsersParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsIPVersionIPv4, HTTPTopBrowsersParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPTopBrowsersParamsOS string
 
@@ -657,6 +785,14 @@ const (
 	HTTPTopBrowsersParamsOSSmartTv  HTTPTopBrowsersParamsOS = "SMART_TV"
 )
 
+func (r HTTPTopBrowsersParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsOSWindows, HTTPTopBrowsersParamsOSMacosx, HTTPTopBrowsersParamsOSIos, HTTPTopBrowsersParamsOSAndroid, HTTPTopBrowsersParamsOSChromeos, HTTPTopBrowsersParamsOSLinux, HTTPTopBrowsersParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPTopBrowsersParamsTLSVersion string
 
 const (
@@ -666,6 +802,14 @@ const (
 	HTTPTopBrowsersParamsTLSVersionTlSv1_3  HTTPTopBrowsersParamsTLSVersion = "TLSv1_3"
 	HTTPTopBrowsersParamsTLSVersionTlSvQuic HTTPTopBrowsersParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPTopBrowsersParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPTopBrowsersParamsTLSVersionTlSv1_0, HTTPTopBrowsersParamsTLSVersionTlSv1_1, HTTPTopBrowsersParamsTLSVersionTlSv1_2, HTTPTopBrowsersParamsTLSVersionTlSv1_3, HTTPTopBrowsersParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPTopBrowsersResponseEnvelope struct {
 	Result  HTTPTopBrowsersResponse             `json:"result,required"`

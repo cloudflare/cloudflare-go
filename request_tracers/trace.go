@@ -220,3 +220,11 @@ type TraceNewResponseEnvelopeSuccess bool
 const (
 	TraceNewResponseEnvelopeSuccessTrue TraceNewResponseEnvelopeSuccess = true
 )
+
+func (r TraceNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TraceNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

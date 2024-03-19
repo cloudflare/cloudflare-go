@@ -149,6 +149,14 @@ const (
 	DwebConfigWeb3HostnameStatusError    DwebConfigWeb3HostnameStatus = "error"
 )
 
+func (r DwebConfigWeb3HostnameStatus) IsKnown() bool {
+	switch r {
+	case DwebConfigWeb3HostnameStatusActive, DwebConfigWeb3HostnameStatusPending, DwebConfigWeb3HostnameStatusDeleting, DwebConfigWeb3HostnameStatusError:
+		return true
+	}
+	return false
+}
+
 // Target gateway of the hostname.
 type DwebConfigWeb3HostnameTarget string
 
@@ -157,6 +165,14 @@ const (
 	DwebConfigWeb3HostnameTargetIPFS              DwebConfigWeb3HostnameTarget = "ipfs"
 	DwebConfigWeb3HostnameTargetIPFSUniversalPath DwebConfigWeb3HostnameTarget = "ipfs_universal_path"
 )
+
+func (r DwebConfigWeb3HostnameTarget) IsKnown() bool {
+	switch r {
+	case DwebConfigWeb3HostnameTargetEthereum, DwebConfigWeb3HostnameTargetIPFS, DwebConfigWeb3HostnameTargetIPFSUniversalPath:
+		return true
+	}
+	return false
+}
 
 type HostnameDeleteResponse struct {
 	// Identifier
@@ -201,6 +217,14 @@ const (
 	HostnameNewParamsTargetIPFS              HostnameNewParamsTarget = "ipfs"
 	HostnameNewParamsTargetIPFSUniversalPath HostnameNewParamsTarget = "ipfs_universal_path"
 )
+
+func (r HostnameNewParamsTarget) IsKnown() bool {
+	switch r {
+	case HostnameNewParamsTargetEthereum, HostnameNewParamsTargetIPFS, HostnameNewParamsTargetIPFSUniversalPath:
+		return true
+	}
+	return false
+}
 
 type HostnameNewResponseEnvelope struct {
 	Errors   []HostnameNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -282,6 +306,14 @@ type HostnameNewResponseEnvelopeSuccess bool
 const (
 	HostnameNewResponseEnvelopeSuccessTrue HostnameNewResponseEnvelopeSuccess = true
 )
+
+func (r HostnameNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type HostnameListResponseEnvelope struct {
 	Errors   []HostnameListResponseEnvelopeErrors   `json:"errors,required"`
@@ -365,6 +397,14 @@ type HostnameListResponseEnvelopeSuccess bool
 const (
 	HostnameListResponseEnvelopeSuccessTrue HostnameListResponseEnvelopeSuccess = true
 )
+
+func (r HostnameListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type HostnameListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -478,6 +518,14 @@ const (
 	HostnameDeleteResponseEnvelopeSuccessTrue HostnameDeleteResponseEnvelopeSuccess = true
 )
 
+func (r HostnameDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HostnameEditParams struct {
 	// An optional description of the hostname.
 	Description param.Field[string] `json:"description"`
@@ -570,6 +618,14 @@ const (
 	HostnameEditResponseEnvelopeSuccessTrue HostnameEditResponseEnvelopeSuccess = true
 )
 
+func (r HostnameEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HostnameGetResponseEnvelope struct {
 	Errors   []HostnameGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameGetResponseEnvelopeMessages `json:"messages,required"`
@@ -650,3 +706,11 @@ type HostnameGetResponseEnvelopeSuccess bool
 const (
 	HostnameGetResponseEnvelopeSuccessTrue HostnameGetResponseEnvelopeSuccess = true
 )
+
+func (r HostnameGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

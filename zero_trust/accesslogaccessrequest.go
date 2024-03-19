@@ -172,6 +172,14 @@ const (
 	AccessLogAccessRequestListResponseEnvelopeSuccessTrue AccessLogAccessRequestListResponseEnvelopeSuccess = true
 )
 
+func (r AccessLogAccessRequestListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessLogAccessRequestListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessLogAccessRequestListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

@@ -122,3 +122,11 @@ type ConfigFullGetResponseEnvelopeSuccess bool
 const (
 	ConfigFullGetResponseEnvelopeSuccessTrue ConfigFullGetResponseEnvelopeSuccess = true
 )
+
+func (r ConfigFullGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigFullGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

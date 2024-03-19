@@ -141,6 +141,14 @@ const (
 	DLPDatasetStatusComplete  DLPDatasetStatus = "complete"
 )
 
+func (r DLPDatasetStatus) IsKnown() bool {
+	switch r {
+	case DLPDatasetStatusEmpty, DLPDatasetStatusUploading, DLPDatasetStatusFailed, DLPDatasetStatusComplete:
+		return true
+	}
+	return false
+}
+
 type DLPDatasetUpload struct {
 	NumCells int64                   `json:"num_cells,required"`
 	Status   DLPDatasetUploadsStatus `json:"status,required"`
@@ -174,6 +182,14 @@ const (
 	DLPDatasetUploadsStatusFailed    DLPDatasetUploadsStatus = "failed"
 	DLPDatasetUploadsStatusComplete  DLPDatasetUploadsStatus = "complete"
 )
+
+func (r DLPDatasetUploadsStatus) IsKnown() bool {
+	switch r {
+	case DLPDatasetUploadsStatusEmpty, DLPDatasetUploadsStatusUploading, DLPDatasetUploadsStatusFailed, DLPDatasetUploadsStatusComplete:
+		return true
+	}
+	return false
+}
 
 type DLPDatasetArray []DLPDataset
 

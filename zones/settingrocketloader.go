@@ -129,6 +129,14 @@ const (
 	ZonesRocketLoaderIDRocketLoader ZonesRocketLoaderID = "rocket_loader"
 )
 
+func (r ZonesRocketLoaderID) IsKnown() bool {
+	switch r {
+	case ZonesRocketLoaderIDRocketLoader:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesRocketLoaderValue string
 
@@ -136,6 +144,14 @@ const (
 	ZonesRocketLoaderValueOn  ZonesRocketLoaderValue = "on"
 	ZonesRocketLoaderValueOff ZonesRocketLoaderValue = "off"
 )
+
+func (r ZonesRocketLoaderValue) IsKnown() bool {
+	switch r {
+	case ZonesRocketLoaderValueOn, ZonesRocketLoaderValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -145,6 +161,14 @@ const (
 	ZonesRocketLoaderEditableTrue  ZonesRocketLoaderEditable = true
 	ZonesRocketLoaderEditableFalse ZonesRocketLoaderEditable = false
 )
+
+func (r ZonesRocketLoaderEditable) IsKnown() bool {
+	switch r {
+	case ZonesRocketLoaderEditableTrue, ZonesRocketLoaderEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
 // prioritises rendering your content while loading your site's Javascript

@@ -264,6 +264,14 @@ const (
 	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateHigh IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate = "high"
 )
 
+func (r IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRate) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateLow, IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateMid, IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType string
 
@@ -271,6 +279,14 @@ const (
 	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeReply   IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType = "reply"
 	IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeRequest IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType = "request"
 )
+
+func (r IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeReply, IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type IPSECTunnelUpdateResponse struct {
 	Modified            bool                          `json:"modified"`
@@ -439,6 +455,14 @@ const (
 	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateHigh IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate = "high"
 )
 
+func (r IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRate) IsKnown() bool {
+	switch r {
+	case IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateLow, IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateMid, IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType string
 
@@ -446,6 +470,14 @@ const (
 	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeReply   IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType = "reply"
 	IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeRequest IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType = "request"
 )
+
+func (r IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeReply, IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type IPSECTunnelDeleteResponse struct {
 	Deleted            bool                          `json:"deleted"`
@@ -606,6 +638,14 @@ const (
 	IPSECTunnelNewParamsHealthCheckDirectionBidirectional  IPSECTunnelNewParamsHealthCheckDirection = "bidirectional"
 )
 
+func (r IPSECTunnelNewParamsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewParamsHealthCheckDirectionUnidirectional, IPSECTunnelNewParamsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
 // How frequent the health check is run. The default value is `mid`.
 type IPSECTunnelNewParamsHealthCheckRate string
 
@@ -615,6 +655,14 @@ const (
 	IPSECTunnelNewParamsHealthCheckRateHigh IPSECTunnelNewParamsHealthCheckRate = "high"
 )
 
+func (r IPSECTunnelNewParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewParamsHealthCheckRateLow, IPSECTunnelNewParamsHealthCheckRateMid, IPSECTunnelNewParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type IPSECTunnelNewParamsHealthCheckType string
 
@@ -622,6 +670,14 @@ const (
 	IPSECTunnelNewParamsHealthCheckTypeReply   IPSECTunnelNewParamsHealthCheckType = "reply"
 	IPSECTunnelNewParamsHealthCheckTypeRequest IPSECTunnelNewParamsHealthCheckType = "request"
 )
+
+func (r IPSECTunnelNewParamsHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewParamsHealthCheckTypeReply, IPSECTunnelNewParamsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type IPSECTunnelNewResponseEnvelope struct {
 	Errors   []IPSECTunnelNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -704,6 +760,14 @@ const (
 	IPSECTunnelNewResponseEnvelopeSuccessTrue IPSECTunnelNewResponseEnvelopeSuccess = true
 )
 
+func (r IPSECTunnelNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelUpdateParams struct {
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint,required"`
@@ -768,6 +832,14 @@ const (
 	IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional  IPSECTunnelUpdateParamsHealthCheckDirection = "bidirectional"
 )
 
+func (r IPSECTunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateParamsHealthCheckDirectionUnidirectional, IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
 // How frequent the health check is run. The default value is `mid`.
 type IPSECTunnelUpdateParamsHealthCheckRate string
 
@@ -777,6 +849,14 @@ const (
 	IPSECTunnelUpdateParamsHealthCheckRateHigh IPSECTunnelUpdateParamsHealthCheckRate = "high"
 )
 
+func (r IPSECTunnelUpdateParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateParamsHealthCheckRateLow, IPSECTunnelUpdateParamsHealthCheckRateMid, IPSECTunnelUpdateParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type IPSECTunnelUpdateParamsHealthCheckType string
 
@@ -784,6 +864,14 @@ const (
 	IPSECTunnelUpdateParamsHealthCheckTypeReply   IPSECTunnelUpdateParamsHealthCheckType = "reply"
 	IPSECTunnelUpdateParamsHealthCheckTypeRequest IPSECTunnelUpdateParamsHealthCheckType = "request"
 )
+
+func (r IPSECTunnelUpdateParamsHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateParamsHealthCheckTypeReply, IPSECTunnelUpdateParamsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type IPSECTunnelUpdateResponseEnvelope struct {
 	Errors   []IPSECTunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -866,6 +954,14 @@ const (
 	IPSECTunnelUpdateResponseEnvelopeSuccessTrue IPSECTunnelUpdateResponseEnvelopeSuccess = true
 )
 
+func (r IPSECTunnelUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelListResponseEnvelope struct {
 	Errors   []IPSECTunnelListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IPSECTunnelListResponseEnvelopeMessages `json:"messages,required"`
@@ -946,6 +1042,14 @@ type IPSECTunnelListResponseEnvelopeSuccess bool
 const (
 	IPSECTunnelListResponseEnvelopeSuccessTrue IPSECTunnelListResponseEnvelopeSuccess = true
 )
+
+func (r IPSECTunnelListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IPSECTunnelDeleteResponseEnvelope struct {
 	Errors   []IPSECTunnelDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1028,6 +1132,14 @@ const (
 	IPSECTunnelDeleteResponseEnvelopeSuccessTrue IPSECTunnelDeleteResponseEnvelopeSuccess = true
 )
 
+func (r IPSECTunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelGetResponseEnvelope struct {
 	Errors   []IPSECTunnelGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IPSECTunnelGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1109,6 +1221,14 @@ const (
 	IPSECTunnelGetResponseEnvelopeSuccessTrue IPSECTunnelGetResponseEnvelopeSuccess = true
 )
 
+func (r IPSECTunnelGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelPSKGenerateResponseEnvelope struct {
 	Errors   []IPSECTunnelPSKGenerateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IPSECTunnelPSKGenerateResponseEnvelopeMessages `json:"messages,required"`
@@ -1189,3 +1309,11 @@ type IPSECTunnelPSKGenerateResponseEnvelopeSuccess bool
 const (
 	IPSECTunnelPSKGenerateResponseEnvelopeSuccessTrue IPSECTunnelPSKGenerateResponseEnvelopeSuccess = true
 )
+
+func (r IPSECTunnelPSKGenerateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelPSKGenerateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

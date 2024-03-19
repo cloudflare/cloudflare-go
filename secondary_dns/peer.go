@@ -248,6 +248,14 @@ const (
 	PeerNewResponseEnvelopeSuccessTrue PeerNewResponseEnvelopeSuccess = true
 )
 
+func (r PeerNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PeerNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PeerUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The name of the peer.
@@ -353,6 +361,14 @@ const (
 	PeerUpdateResponseEnvelopeSuccessTrue PeerUpdateResponseEnvelopeSuccess = true
 )
 
+func (r PeerUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PeerUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PeerListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -439,6 +455,14 @@ type PeerListResponseEnvelopeSuccess bool
 const (
 	PeerListResponseEnvelopeSuccessTrue PeerListResponseEnvelopeSuccess = true
 )
+
+func (r PeerListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PeerListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PeerListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -556,6 +580,14 @@ const (
 	PeerDeleteResponseEnvelopeSuccessTrue PeerDeleteResponseEnvelopeSuccess = true
 )
 
+func (r PeerDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PeerDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PeerGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -640,3 +672,11 @@ type PeerGetResponseEnvelopeSuccess bool
 const (
 	PeerGetResponseEnvelopeSuccessTrue PeerGetResponseEnvelopeSuccess = true
 )
+
+func (r PeerGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PeerGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

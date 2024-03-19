@@ -331,3 +331,11 @@ type AccessUserLastSeenIdentityGetResponseEnvelopeSuccess bool
 const (
 	AccessUserLastSeenIdentityGetResponseEnvelopeSuccessTrue AccessUserLastSeenIdentityGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessUserLastSeenIdentityGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessUserLastSeenIdentityGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

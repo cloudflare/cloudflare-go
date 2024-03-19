@@ -102,6 +102,14 @@ const (
 	ZonesAutomaticHTTPSRewritesIDAutomaticHTTPSRewrites ZonesAutomaticHTTPSRewritesID = "automatic_https_rewrites"
 )
 
+func (r ZonesAutomaticHTTPSRewritesID) IsKnown() bool {
+	switch r {
+	case ZonesAutomaticHTTPSRewritesIDAutomaticHTTPSRewrites:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesAutomaticHTTPSRewritesValue string
 
@@ -109,6 +117,14 @@ const (
 	ZonesAutomaticHTTPSRewritesValueOn  ZonesAutomaticHTTPSRewritesValue = "on"
 	ZonesAutomaticHTTPSRewritesValueOff ZonesAutomaticHTTPSRewritesValue = "off"
 )
+
+func (r ZonesAutomaticHTTPSRewritesValue) IsKnown() bool {
+	switch r {
+	case ZonesAutomaticHTTPSRewritesValueOn, ZonesAutomaticHTTPSRewritesValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -118,6 +134,14 @@ const (
 	ZonesAutomaticHTTPSRewritesEditableTrue  ZonesAutomaticHTTPSRewritesEditable = true
 	ZonesAutomaticHTTPSRewritesEditableFalse ZonesAutomaticHTTPSRewritesEditable = false
 )
+
+func (r ZonesAutomaticHTTPSRewritesEditable) IsKnown() bool {
+	switch r {
+	case ZonesAutomaticHTTPSRewritesEditableTrue, ZonesAutomaticHTTPSRewritesEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
 type ZonesAutomaticHTTPSRewritesParam struct {
@@ -153,6 +177,14 @@ const (
 	SettingAutomaticHTTPSRewriteEditParamsValueOn  SettingAutomaticHTTPSRewriteEditParamsValue = "on"
 	SettingAutomaticHTTPSRewriteEditParamsValueOff SettingAutomaticHTTPSRewriteEditParamsValue = "off"
 )
+
+func (r SettingAutomaticHTTPSRewriteEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingAutomaticHTTPSRewriteEditParamsValueOn, SettingAutomaticHTTPSRewriteEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingAutomaticHTTPSRewriteEditResponseEnvelope struct {
 	Errors   []SettingAutomaticHTTPSRewriteEditResponseEnvelopeErrors   `json:"errors,required"`

@@ -261,6 +261,14 @@ const (
 	PrefixBGPPrefixListResponseEnvelopeSuccessTrue PrefixBGPPrefixListResponseEnvelopeSuccess = true
 )
 
+func (r PrefixBGPPrefixListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPPrefixListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixBGPPrefixListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -391,6 +399,14 @@ const (
 	PrefixBGPPrefixEditResponseEnvelopeSuccessTrue PrefixBGPPrefixEditResponseEnvelopeSuccess = true
 )
 
+func (r PrefixBGPPrefixEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPPrefixEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixBGPPrefixGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -476,3 +492,11 @@ type PrefixBGPPrefixGetResponseEnvelopeSuccess bool
 const (
 	PrefixBGPPrefixGetResponseEnvelopeSuccessTrue PrefixBGPPrefixGetResponseEnvelopeSuccess = true
 )
+
+func (r PrefixBGPPrefixGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixBGPPrefixGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -129,6 +129,14 @@ const (
 	PhaseUpdateParamsRulesetPhaseMagicTransitManaged            PhaseUpdateParamsRulesetPhase = "magic_transit_managed"
 )
 
+func (r PhaseUpdateParamsRulesetPhase) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesetPhaseDDOSL4, PhaseUpdateParamsRulesetPhaseDDOSL7, PhaseUpdateParamsRulesetPhaseHTTPConfigSettings, PhaseUpdateParamsRulesetPhaseHTTPCustomErrors, PhaseUpdateParamsRulesetPhaseHTTPLogCustomFields, PhaseUpdateParamsRulesetPhaseHTTPRatelimit, PhaseUpdateParamsRulesetPhaseHTTPRequestCacheSettings, PhaseUpdateParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseUpdateParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseUpdateParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseUpdateParamsRulesetPhaseHTTPRequestLateTransform, PhaseUpdateParamsRulesetPhaseHTTPRequestOrigin, PhaseUpdateParamsRulesetPhaseHTTPRequestRedirect, PhaseUpdateParamsRulesetPhaseHTTPRequestSanitize, PhaseUpdateParamsRulesetPhaseHTTPRequestSbfm, PhaseUpdateParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseUpdateParamsRulesetPhaseHTTPRequestTransform, PhaseUpdateParamsRulesetPhaseHTTPResponseCompression, PhaseUpdateParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseUpdateParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseUpdateParamsRulesetPhaseMagicTransit, PhaseUpdateParamsRulesetPhaseMagicTransitIDsManaged, PhaseUpdateParamsRulesetPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
+
 // Satisfied by [rulesets.PhaseUpdateParamsRulesRulesetsBlockRule],
 // [rulesets.PhaseUpdateParamsRulesRulesetsExecuteRule],
 // [rulesets.PhaseUpdateParamsRulesRulesetsLogRule],
@@ -168,6 +176,14 @@ type PhaseUpdateParamsRulesRulesetsBlockRuleAction string
 const (
 	PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock PhaseUpdateParamsRulesRulesetsBlockRuleAction = "block"
 )
+
+func (r PhaseUpdateParamsRulesRulesetsBlockRuleAction) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters struct {
@@ -234,6 +250,14 @@ type PhaseUpdateParamsRulesRulesetsExecuteRuleAction string
 const (
 	PhaseUpdateParamsRulesRulesetsExecuteRuleActionExecute PhaseUpdateParamsRulesRulesetsExecuteRuleAction = "execute"
 )
+
+func (r PhaseUpdateParamsRulesRulesetsExecuteRuleAction) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsExecuteRuleActionExecute:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type PhaseUpdateParamsRulesRulesetsExecuteRuleActionParameters struct {
@@ -307,6 +331,14 @@ const (
 	PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
 )
 
+func (r PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault, PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium, PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow, PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
+
 // A rule-level override
 type PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
 	// The ID of the rule to override.
@@ -335,6 +367,14 @@ const (
 	PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
 )
 
+func (r PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault, PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium, PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow, PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
+
 // A sensitivity level to set for all rules. This option has lower precedence than
 // rule and category overrides and is only applicable for DDoS phases.
 type PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
@@ -345,6 +385,14 @@ const (
 	PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
 	PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
 )
+
+func (r PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault, PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium, PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow, PhaseUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff:
+		return true
+	}
+	return false
+}
 
 // An object configuring the rule's logging behavior.
 type PhaseUpdateParamsRulesRulesetsExecuteRuleLogging struct {
@@ -388,6 +436,14 @@ const (
 	PhaseUpdateParamsRulesRulesetsLogRuleActionLog PhaseUpdateParamsRulesRulesetsLogRuleAction = "log"
 )
 
+func (r PhaseUpdateParamsRulesRulesetsLogRuleAction) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsLogRuleActionLog:
+		return true
+	}
+	return false
+}
+
 // An object configuring the rule's logging behavior.
 type PhaseUpdateParamsRulesRulesetsLogRuleLogging struct {
 	// Whether to generate a log when the rule matches.
@@ -429,6 +485,14 @@ type PhaseUpdateParamsRulesRulesetsSkipRuleAction string
 const (
 	PhaseUpdateParamsRulesRulesetsSkipRuleActionSkip PhaseUpdateParamsRulesRulesetsSkipRuleAction = "skip"
 )
+
+func (r PhaseUpdateParamsRulesRulesetsSkipRuleAction) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsSkipRuleActionSkip:
+		return true
+	}
+	return false
+}
 
 // The parameters configuring the rule's action.
 type PhaseUpdateParamsRulesRulesetsSkipRuleActionParameters struct {
@@ -481,6 +545,14 @@ const (
 	PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
 )
 
+func (r PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL4, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL7, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransit, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
+
 // The name of a legacy security product to skip the execution of.
 type PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProduct string
 
@@ -494,6 +566,14 @@ const (
 	PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown  PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )
 
+func (r PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProduct) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProductBic, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProductHot, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProductRateLimit, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProductSecurityLevel, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProductUABlock, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProductWAF, PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown:
+		return true
+	}
+	return false
+}
+
 // A ruleset to skip the execution of. This option is incompatible with the
 // rulesets, rules and phases options.
 type PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset string
@@ -501,6 +581,14 @@ type PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset string
 const (
 	PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersRulesetCurrent PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset = "current"
 )
+
+func (r PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersRulesetCurrent:
+		return true
+	}
+	return false
+}
 
 // An object configuring the rule's logging behavior.
 type PhaseUpdateParamsRulesRulesetsSkipRuleLogging struct {
@@ -521,6 +609,14 @@ const (
 	PhaseUpdateParamsKindRoot    PhaseUpdateParamsKind = "root"
 	PhaseUpdateParamsKindZone    PhaseUpdateParamsKind = "zone"
 )
+
+func (r PhaseUpdateParamsKind) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsKindManaged, PhaseUpdateParamsKindCustom, PhaseUpdateParamsKindRoot, PhaseUpdateParamsKindZone:
+		return true
+	}
+	return false
+}
 
 // The phase of the ruleset.
 type PhaseUpdateParamsPhase string
@@ -550,6 +646,14 @@ const (
 	PhaseUpdateParamsPhaseMagicTransitIDsManaged         PhaseUpdateParamsPhase = "magic_transit_ids_managed"
 	PhaseUpdateParamsPhaseMagicTransitManaged            PhaseUpdateParamsPhase = "magic_transit_managed"
 )
+
+func (r PhaseUpdateParamsPhase) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsPhaseDDOSL4, PhaseUpdateParamsPhaseDDOSL7, PhaseUpdateParamsPhaseHTTPConfigSettings, PhaseUpdateParamsPhaseHTTPCustomErrors, PhaseUpdateParamsPhaseHTTPLogCustomFields, PhaseUpdateParamsPhaseHTTPRatelimit, PhaseUpdateParamsPhaseHTTPRequestCacheSettings, PhaseUpdateParamsPhaseHTTPRequestDynamicRedirect, PhaseUpdateParamsPhaseHTTPRequestFirewallCustom, PhaseUpdateParamsPhaseHTTPRequestFirewallManaged, PhaseUpdateParamsPhaseHTTPRequestLateTransform, PhaseUpdateParamsPhaseHTTPRequestOrigin, PhaseUpdateParamsPhaseHTTPRequestRedirect, PhaseUpdateParamsPhaseHTTPRequestSanitize, PhaseUpdateParamsPhaseHTTPRequestSbfm, PhaseUpdateParamsPhaseHTTPRequestSelectConfiguration, PhaseUpdateParamsPhaseHTTPRequestTransform, PhaseUpdateParamsPhaseHTTPResponseCompression, PhaseUpdateParamsPhaseHTTPResponseFirewallManaged, PhaseUpdateParamsPhaseHTTPResponseHeadersTransform, PhaseUpdateParamsPhaseMagicTransit, PhaseUpdateParamsPhaseMagicTransitIDsManaged, PhaseUpdateParamsPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 // A response object.
 type PhaseUpdateResponseEnvelope struct {
@@ -694,6 +798,14 @@ const (
 	PhaseUpdateResponseEnvelopeSuccessTrue PhaseUpdateResponseEnvelopeSuccess = true
 )
 
+func (r PhaseUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PhaseUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PhaseGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -729,6 +841,14 @@ const (
 	PhaseGetParamsRulesetPhaseMagicTransitIDsManaged         PhaseGetParamsRulesetPhase = "magic_transit_ids_managed"
 	PhaseGetParamsRulesetPhaseMagicTransitManaged            PhaseGetParamsRulesetPhase = "magic_transit_managed"
 )
+
+func (r PhaseGetParamsRulesetPhase) IsKnown() bool {
+	switch r {
+	case PhaseGetParamsRulesetPhaseDDOSL4, PhaseGetParamsRulesetPhaseDDOSL7, PhaseGetParamsRulesetPhaseHTTPConfigSettings, PhaseGetParamsRulesetPhaseHTTPCustomErrors, PhaseGetParamsRulesetPhaseHTTPLogCustomFields, PhaseGetParamsRulesetPhaseHTTPRatelimit, PhaseGetParamsRulesetPhaseHTTPRequestCacheSettings, PhaseGetParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseGetParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseGetParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseGetParamsRulesetPhaseHTTPRequestLateTransform, PhaseGetParamsRulesetPhaseHTTPRequestOrigin, PhaseGetParamsRulesetPhaseHTTPRequestRedirect, PhaseGetParamsRulesetPhaseHTTPRequestSanitize, PhaseGetParamsRulesetPhaseHTTPRequestSbfm, PhaseGetParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseGetParamsRulesetPhaseHTTPRequestTransform, PhaseGetParamsRulesetPhaseHTTPResponseCompression, PhaseGetParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseGetParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseGetParamsRulesetPhaseMagicTransit, PhaseGetParamsRulesetPhaseMagicTransitIDsManaged, PhaseGetParamsRulesetPhaseMagicTransitManaged:
+		return true
+	}
+	return false
+}
 
 // A response object.
 type PhaseGetResponseEnvelope struct {
@@ -872,3 +992,11 @@ type PhaseGetResponseEnvelopeSuccess bool
 const (
 	PhaseGetResponseEnvelopeSuccessTrue PhaseGetResponseEnvelopeSuccess = true
 )
+
+func (r PhaseGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PhaseGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

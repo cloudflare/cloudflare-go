@@ -234,6 +234,14 @@ const (
 	CfInterconnectListResponseInterconnectsHealthCheckRateHigh CfInterconnectListResponseInterconnectsHealthCheckRate = "high"
 )
 
+func (r CfInterconnectListResponseInterconnectsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case CfInterconnectListResponseInterconnectsHealthCheckRateLow, CfInterconnectListResponseInterconnectsHealthCheckRateMid, CfInterconnectListResponseInterconnectsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type CfInterconnectListResponseInterconnectsHealthCheckType string
 
@@ -241,6 +249,14 @@ const (
 	CfInterconnectListResponseInterconnectsHealthCheckTypeReply   CfInterconnectListResponseInterconnectsHealthCheckType = "reply"
 	CfInterconnectListResponseInterconnectsHealthCheckTypeRequest CfInterconnectListResponseInterconnectsHealthCheckType = "request"
 )
+
+func (r CfInterconnectListResponseInterconnectsHealthCheckType) IsKnown() bool {
+	switch r {
+	case CfInterconnectListResponseInterconnectsHealthCheckTypeReply, CfInterconnectListResponseInterconnectsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type CfInterconnectGetResponse struct {
 	Interconnect interface{}                   `json:"interconnect"`
@@ -319,6 +335,14 @@ const (
 	CfInterconnectUpdateParamsHealthCheckRateHigh CfInterconnectUpdateParamsHealthCheckRate = "high"
 )
 
+func (r CfInterconnectUpdateParamsHealthCheckRate) IsKnown() bool {
+	switch r {
+	case CfInterconnectUpdateParamsHealthCheckRateLow, CfInterconnectUpdateParamsHealthCheckRateMid, CfInterconnectUpdateParamsHealthCheckRateHigh:
+		return true
+	}
+	return false
+}
+
 // The type of healthcheck to run, reply or request. The default value is `reply`.
 type CfInterconnectUpdateParamsHealthCheckType string
 
@@ -326,6 +350,14 @@ const (
 	CfInterconnectUpdateParamsHealthCheckTypeReply   CfInterconnectUpdateParamsHealthCheckType = "reply"
 	CfInterconnectUpdateParamsHealthCheckTypeRequest CfInterconnectUpdateParamsHealthCheckType = "request"
 )
+
+func (r CfInterconnectUpdateParamsHealthCheckType) IsKnown() bool {
+	switch r {
+	case CfInterconnectUpdateParamsHealthCheckTypeReply, CfInterconnectUpdateParamsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
 
 type CfInterconnectUpdateResponseEnvelope struct {
 	Errors   []CfInterconnectUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -408,6 +440,14 @@ const (
 	CfInterconnectUpdateResponseEnvelopeSuccessTrue CfInterconnectUpdateResponseEnvelopeSuccess = true
 )
 
+func (r CfInterconnectUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CfInterconnectUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CfInterconnectListResponseEnvelope struct {
 	Errors   []CfInterconnectListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CfInterconnectListResponseEnvelopeMessages `json:"messages,required"`
@@ -489,6 +529,14 @@ const (
 	CfInterconnectListResponseEnvelopeSuccessTrue CfInterconnectListResponseEnvelopeSuccess = true
 )
 
+func (r CfInterconnectListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CfInterconnectListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CfInterconnectGetResponseEnvelope struct {
 	Errors   []CfInterconnectGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CfInterconnectGetResponseEnvelopeMessages `json:"messages,required"`
@@ -569,3 +617,11 @@ type CfInterconnectGetResponseEnvelopeSuccess bool
 const (
 	CfInterconnectGetResponseEnvelopeSuccessTrue CfInterconnectGetResponseEnvelopeSuccess = true
 )
+
+func (r CfInterconnectGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CfInterconnectGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

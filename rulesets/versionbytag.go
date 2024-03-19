@@ -191,3 +191,11 @@ type VersionByTagGetResponseEnvelopeSuccess bool
 const (
 	VersionByTagGetResponseEnvelopeSuccessTrue VersionByTagGetResponseEnvelopeSuccess = true
 )
+
+func (r VersionByTagGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case VersionByTagGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

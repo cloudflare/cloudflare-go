@@ -108,6 +108,14 @@ const (
 	ZonesOriginErrorPagePassThruIDOriginErrorPagePassThru ZonesOriginErrorPagePassThruID = "origin_error_page_pass_thru"
 )
 
+func (r ZonesOriginErrorPagePassThruID) IsKnown() bool {
+	switch r {
+	case ZonesOriginErrorPagePassThruIDOriginErrorPagePassThru:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesOriginErrorPagePassThruValue string
 
@@ -115,6 +123,14 @@ const (
 	ZonesOriginErrorPagePassThruValueOn  ZonesOriginErrorPagePassThruValue = "on"
 	ZonesOriginErrorPagePassThruValueOff ZonesOriginErrorPagePassThruValue = "off"
 )
+
+func (r ZonesOriginErrorPagePassThruValue) IsKnown() bool {
+	switch r {
+	case ZonesOriginErrorPagePassThruValueOn, ZonesOriginErrorPagePassThruValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -124,6 +140,14 @@ const (
 	ZonesOriginErrorPagePassThruEditableTrue  ZonesOriginErrorPagePassThruEditable = true
 	ZonesOriginErrorPagePassThruEditableFalse ZonesOriginErrorPagePassThruEditable = false
 )
+
+func (r ZonesOriginErrorPagePassThruEditable) IsKnown() bool {
+	switch r {
+	case ZonesOriginErrorPagePassThruEditableTrue, ZonesOriginErrorPagePassThruEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Cloudflare will proxy customer error pages on any 502,504 errors on origin
 // server instead of showing a default Cloudflare error page. This does not apply
@@ -159,6 +183,14 @@ const (
 	SettingOriginErrorPagePassThruEditParamsValueOn  SettingOriginErrorPagePassThruEditParamsValue = "on"
 	SettingOriginErrorPagePassThruEditParamsValueOff SettingOriginErrorPagePassThruEditParamsValue = "off"
 )
+
+func (r SettingOriginErrorPagePassThruEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingOriginErrorPagePassThruEditParamsValueOn, SettingOriginErrorPagePassThruEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingOriginErrorPagePassThruEditResponseEnvelope struct {
 	Errors   []SettingOriginErrorPagePassThruEditResponseEnvelopeErrors   `json:"errors,required"`

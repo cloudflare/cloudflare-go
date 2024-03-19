@@ -269,6 +269,14 @@ const (
 	ListItemGetResponseListsItemRedirectStatusCode308 ListItemGetResponseListsItemRedirectStatusCode = 308
 )
 
+func (r ListItemGetResponseListsItemRedirectStatusCode) IsKnown() bool {
+	switch r {
+	case ListItemGetResponseListsItemRedirectStatusCode301, ListItemGetResponseListsItemRedirectStatusCode302, ListItemGetResponseListsItemRedirectStatusCode307, ListItemGetResponseListsItemRedirectStatusCode308:
+		return true
+	}
+	return false
+}
+
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
 type ListItemGetResponseListsItemHostname struct {
@@ -357,6 +365,14 @@ const (
 	ListItemNewParamsBodyRedirectStatusCode308 ListItemNewParamsBodyRedirectStatusCode = 308
 )
 
+func (r ListItemNewParamsBodyRedirectStatusCode) IsKnown() bool {
+	switch r {
+	case ListItemNewParamsBodyRedirectStatusCode301, ListItemNewParamsBodyRedirectStatusCode302, ListItemNewParamsBodyRedirectStatusCode307, ListItemNewParamsBodyRedirectStatusCode308:
+		return true
+	}
+	return false
+}
+
 type ListItemNewResponseEnvelope struct {
 	Errors   []ListItemNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ListItemNewResponseEnvelopeMessages `json:"messages,required"`
@@ -438,6 +454,14 @@ const (
 	ListItemNewResponseEnvelopeSuccessTrue ListItemNewResponseEnvelopeSuccess = true
 )
 
+func (r ListItemNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListItemNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ListItemUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string]                     `path:"account_id,required"`
@@ -500,6 +524,14 @@ const (
 	ListItemUpdateParamsBodyRedirectStatusCode307 ListItemUpdateParamsBodyRedirectStatusCode = 307
 	ListItemUpdateParamsBodyRedirectStatusCode308 ListItemUpdateParamsBodyRedirectStatusCode = 308
 )
+
+func (r ListItemUpdateParamsBodyRedirectStatusCode) IsKnown() bool {
+	switch r {
+	case ListItemUpdateParamsBodyRedirectStatusCode301, ListItemUpdateParamsBodyRedirectStatusCode302, ListItemUpdateParamsBodyRedirectStatusCode307, ListItemUpdateParamsBodyRedirectStatusCode308:
+		return true
+	}
+	return false
+}
 
 type ListItemUpdateResponseEnvelope struct {
 	Errors   []ListItemUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -581,6 +613,14 @@ type ListItemUpdateResponseEnvelopeSuccess bool
 const (
 	ListItemUpdateResponseEnvelopeSuccessTrue ListItemUpdateResponseEnvelopeSuccess = true
 )
+
+func (r ListItemUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListItemUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ListItemListParams struct {
 	// Identifier
@@ -707,6 +747,14 @@ const (
 	ListItemDeleteResponseEnvelopeSuccessTrue ListItemDeleteResponseEnvelopeSuccess = true
 )
 
+func (r ListItemDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListItemDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ListItemGetResponseEnvelope struct {
 	Errors   []ListItemGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ListItemGetResponseEnvelopeMessages `json:"messages,required"`
@@ -789,3 +837,11 @@ type ListItemGetResponseEnvelopeSuccess bool
 const (
 	ListItemGetResponseEnvelopeSuccessTrue ListItemGetResponseEnvelopeSuccess = true
 )
+
+func (r ListItemGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListItemGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

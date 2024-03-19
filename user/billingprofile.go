@@ -142,3 +142,11 @@ type BillingProfileGetResponseEnvelopeSuccess bool
 const (
 	BillingProfileGetResponseEnvelopeSuccessTrue BillingProfileGetResponseEnvelopeSuccess = true
 )
+
+func (r BillingProfileGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BillingProfileGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

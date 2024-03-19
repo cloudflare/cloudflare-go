@@ -256,6 +256,14 @@ const (
 	BGPTimeseriesParamsAggInterval1w  BGPTimeseriesParamsAggInterval = "1w"
 )
 
+func (r BGPTimeseriesParamsAggInterval) IsKnown() bool {
+	switch r {
+	case BGPTimeseriesParamsAggInterval15m, BGPTimeseriesParamsAggInterval1h, BGPTimeseriesParamsAggInterval1d, BGPTimeseriesParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type BGPTimeseriesParamsDateRange string
 
 const (
@@ -276,6 +284,14 @@ const (
 	BGPTimeseriesParamsDateRange24wControl BGPTimeseriesParamsDateRange = "24wControl"
 )
 
+func (r BGPTimeseriesParamsDateRange) IsKnown() bool {
+	switch r {
+	case BGPTimeseriesParamsDateRange1d, BGPTimeseriesParamsDateRange2d, BGPTimeseriesParamsDateRange7d, BGPTimeseriesParamsDateRange14d, BGPTimeseriesParamsDateRange28d, BGPTimeseriesParamsDateRange12w, BGPTimeseriesParamsDateRange24w, BGPTimeseriesParamsDateRange52w, BGPTimeseriesParamsDateRange1dControl, BGPTimeseriesParamsDateRange2dControl, BGPTimeseriesParamsDateRange7dControl, BGPTimeseriesParamsDateRange14dControl, BGPTimeseriesParamsDateRange28dControl, BGPTimeseriesParamsDateRange12wControl, BGPTimeseriesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type BGPTimeseriesParamsFormat string
 
@@ -284,12 +300,28 @@ const (
 	BGPTimeseriesParamsFormatCsv  BGPTimeseriesParamsFormat = "CSV"
 )
 
+func (r BGPTimeseriesParamsFormat) IsKnown() bool {
+	switch r {
+	case BGPTimeseriesParamsFormatJson, BGPTimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type BGPTimeseriesParamsUpdateType string
 
 const (
 	BGPTimeseriesParamsUpdateTypeAnnouncement BGPTimeseriesParamsUpdateType = "ANNOUNCEMENT"
 	BGPTimeseriesParamsUpdateTypeWithdrawal   BGPTimeseriesParamsUpdateType = "WITHDRAWAL"
 )
+
+func (r BGPTimeseriesParamsUpdateType) IsKnown() bool {
+	switch r {
+	case BGPTimeseriesParamsUpdateTypeAnnouncement, BGPTimeseriesParamsUpdateTypeWithdrawal:
+		return true
+	}
+	return false
+}
 
 type BGPTimeseriesResponseEnvelope struct {
 	Result  BGPTimeseriesResponse             `json:"result,required"`

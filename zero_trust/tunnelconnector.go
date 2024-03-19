@@ -131,3 +131,11 @@ type TunnelConnectorGetResponseEnvelopeSuccess bool
 const (
 	TunnelConnectorGetResponseEnvelopeSuccessTrue TunnelConnectorGetResponseEnvelopeSuccess = true
 )
+
+func (r TunnelConnectorGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelConnectorGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

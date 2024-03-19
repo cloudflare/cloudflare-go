@@ -220,3 +220,11 @@ type DNSGetResponseEnvelopeSuccess bool
 const (
 	DNSGetResponseEnvelopeSuccessTrue DNSGetResponseEnvelopeSuccess = true
 )
+
+func (r DNSGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

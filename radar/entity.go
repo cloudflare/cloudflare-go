@@ -127,6 +127,14 @@ const (
 	EntityGetParamsFormatCsv  EntityGetParamsFormat = "CSV"
 )
 
+func (r EntityGetParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityGetParamsFormatJson, EntityGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EntityGetResponseEnvelope struct {
 	Result  EntityGetResponse             `json:"result,required"`
 	Success bool                          `json:"success,required"`

@@ -116,6 +116,14 @@ const (
 	ObservatoryScheduleFrequencyWeekly ObservatoryScheduleFrequency = "WEEKLY"
 )
 
+func (r ObservatoryScheduleFrequency) IsKnown() bool {
+	switch r {
+	case ObservatoryScheduleFrequencyDaily, ObservatoryScheduleFrequencyWeekly:
+		return true
+	}
+	return false
+}
+
 // A test region.
 type ObservatoryScheduleRegion string
 
@@ -142,6 +150,14 @@ const (
 	ObservatoryScheduleRegionUsSouth1            ObservatoryScheduleRegion = "us-south1"
 	ObservatoryScheduleRegionUsWest1             ObservatoryScheduleRegion = "us-west1"
 )
+
+func (r ObservatoryScheduleRegion) IsKnown() bool {
+	switch r {
+	case ObservatoryScheduleRegionAsiaEast1, ObservatoryScheduleRegionAsiaNortheast1, ObservatoryScheduleRegionAsiaNortheast2, ObservatoryScheduleRegionAsiaSouth1, ObservatoryScheduleRegionAsiaSoutheast1, ObservatoryScheduleRegionAustraliaSoutheast1, ObservatoryScheduleRegionEuropeNorth1, ObservatoryScheduleRegionEuropeSouthwest1, ObservatoryScheduleRegionEuropeWest1, ObservatoryScheduleRegionEuropeWest2, ObservatoryScheduleRegionEuropeWest3, ObservatoryScheduleRegionEuropeWest4, ObservatoryScheduleRegionEuropeWest8, ObservatoryScheduleRegionEuropeWest9, ObservatoryScheduleRegionMeWest1, ObservatoryScheduleRegionSouthamericaEast1, ObservatoryScheduleRegionUsCentral1, ObservatoryScheduleRegionUsEast1, ObservatoryScheduleRegionUsEast4, ObservatoryScheduleRegionUsSouth1, ObservatoryScheduleRegionUsWest1:
+		return true
+	}
+	return false
+}
 
 type ObservatoryTrend struct {
 	// Cumulative Layout Shift trend.
@@ -250,6 +266,14 @@ const (
 	SpeedDeleteParamsRegionUsWest1             SpeedDeleteParamsRegion = "us-west1"
 )
 
+func (r SpeedDeleteParamsRegion) IsKnown() bool {
+	switch r {
+	case SpeedDeleteParamsRegionAsiaEast1, SpeedDeleteParamsRegionAsiaNortheast1, SpeedDeleteParamsRegionAsiaNortheast2, SpeedDeleteParamsRegionAsiaSouth1, SpeedDeleteParamsRegionAsiaSoutheast1, SpeedDeleteParamsRegionAustraliaSoutheast1, SpeedDeleteParamsRegionEuropeNorth1, SpeedDeleteParamsRegionEuropeSouthwest1, SpeedDeleteParamsRegionEuropeWest1, SpeedDeleteParamsRegionEuropeWest2, SpeedDeleteParamsRegionEuropeWest3, SpeedDeleteParamsRegionEuropeWest4, SpeedDeleteParamsRegionEuropeWest8, SpeedDeleteParamsRegionEuropeWest9, SpeedDeleteParamsRegionMeWest1, SpeedDeleteParamsRegionSouthamericaEast1, SpeedDeleteParamsRegionUsCentral1, SpeedDeleteParamsRegionUsEast1, SpeedDeleteParamsRegionUsEast4, SpeedDeleteParamsRegionUsSouth1, SpeedDeleteParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
+
 type SpeedDeleteResponseEnvelope struct {
 	Result SpeedDeleteResponse             `json:"result"`
 	JSON   speedDeleteResponseEnvelopeJSON `json:"-"`
@@ -313,6 +337,14 @@ const (
 	SpeedScheduleGetParamsRegionUsWest1             SpeedScheduleGetParamsRegion = "us-west1"
 )
 
+func (r SpeedScheduleGetParamsRegion) IsKnown() bool {
+	switch r {
+	case SpeedScheduleGetParamsRegionAsiaEast1, SpeedScheduleGetParamsRegionAsiaNortheast1, SpeedScheduleGetParamsRegionAsiaNortheast2, SpeedScheduleGetParamsRegionAsiaSouth1, SpeedScheduleGetParamsRegionAsiaSoutheast1, SpeedScheduleGetParamsRegionAustraliaSoutheast1, SpeedScheduleGetParamsRegionEuropeNorth1, SpeedScheduleGetParamsRegionEuropeSouthwest1, SpeedScheduleGetParamsRegionEuropeWest1, SpeedScheduleGetParamsRegionEuropeWest2, SpeedScheduleGetParamsRegionEuropeWest3, SpeedScheduleGetParamsRegionEuropeWest4, SpeedScheduleGetParamsRegionEuropeWest8, SpeedScheduleGetParamsRegionEuropeWest9, SpeedScheduleGetParamsRegionMeWest1, SpeedScheduleGetParamsRegionSouthamericaEast1, SpeedScheduleGetParamsRegionUsCentral1, SpeedScheduleGetParamsRegionUsEast1, SpeedScheduleGetParamsRegionUsEast4, SpeedScheduleGetParamsRegionUsSouth1, SpeedScheduleGetParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
+
 type SpeedScheduleGetResponseEnvelope struct {
 	// The test schedule.
 	Result ObservatorySchedule                  `json:"result"`
@@ -364,6 +396,14 @@ const (
 	SpeedTrendsListParamsDeviceTypeMobile  SpeedTrendsListParamsDeviceType = "MOBILE"
 )
 
+func (r SpeedTrendsListParamsDeviceType) IsKnown() bool {
+	switch r {
+	case SpeedTrendsListParamsDeviceTypeDesktop, SpeedTrendsListParamsDeviceTypeMobile:
+		return true
+	}
+	return false
+}
+
 // A test region.
 type SpeedTrendsListParamsRegion string
 
@@ -390,6 +430,14 @@ const (
 	SpeedTrendsListParamsRegionUsSouth1            SpeedTrendsListParamsRegion = "us-south1"
 	SpeedTrendsListParamsRegionUsWest1             SpeedTrendsListParamsRegion = "us-west1"
 )
+
+func (r SpeedTrendsListParamsRegion) IsKnown() bool {
+	switch r {
+	case SpeedTrendsListParamsRegionAsiaEast1, SpeedTrendsListParamsRegionAsiaNortheast1, SpeedTrendsListParamsRegionAsiaNortheast2, SpeedTrendsListParamsRegionAsiaSouth1, SpeedTrendsListParamsRegionAsiaSoutheast1, SpeedTrendsListParamsRegionAustraliaSoutheast1, SpeedTrendsListParamsRegionEuropeNorth1, SpeedTrendsListParamsRegionEuropeSouthwest1, SpeedTrendsListParamsRegionEuropeWest1, SpeedTrendsListParamsRegionEuropeWest2, SpeedTrendsListParamsRegionEuropeWest3, SpeedTrendsListParamsRegionEuropeWest4, SpeedTrendsListParamsRegionEuropeWest8, SpeedTrendsListParamsRegionEuropeWest9, SpeedTrendsListParamsRegionMeWest1, SpeedTrendsListParamsRegionSouthamericaEast1, SpeedTrendsListParamsRegionUsCentral1, SpeedTrendsListParamsRegionUsEast1, SpeedTrendsListParamsRegionUsEast4, SpeedTrendsListParamsRegionUsSouth1, SpeedTrendsListParamsRegionUsWest1:
+		return true
+	}
+	return false
+}
 
 type SpeedTrendsListResponseEnvelope struct {
 	Result ObservatoryTrend                    `json:"result"`

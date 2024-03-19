@@ -210,6 +210,14 @@ const (
 	CustomNameserverUpdateResponseEnvelopeSuccessTrue CustomNameserverUpdateResponseEnvelopeSuccess = true
 )
 
+func (r CustomNameserverUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomNameserverUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CustomNameserverUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -334,6 +342,14 @@ type CustomNameserverGetResponseEnvelopeSuccess bool
 const (
 	CustomNameserverGetResponseEnvelopeSuccessTrue CustomNameserverGetResponseEnvelopeSuccess = true
 )
+
+func (r CustomNameserverGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CustomNameserverGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type CustomNameserverGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

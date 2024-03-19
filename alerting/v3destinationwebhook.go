@@ -156,6 +156,14 @@ const (
 	AaaWebhooksTypeGchat   AaaWebhooksType = "gchat"
 )
 
+func (r AaaWebhooksType) IsKnown() bool {
+	switch r {
+	case AaaWebhooksTypeSlack, AaaWebhooksTypeGeneric, AaaWebhooksTypeGchat:
+		return true
+	}
+	return false
+}
+
 type V3DestinationWebhookNewResponse struct {
 	// UUID
 	ID   string                              `json:"id"`
@@ -325,6 +333,14 @@ const (
 	V3DestinationWebhookNewResponseEnvelopeSuccessTrue V3DestinationWebhookNewResponseEnvelopeSuccess = true
 )
 
+func (r V3DestinationWebhookNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationWebhookNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V3DestinationWebhookUpdateParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -424,6 +440,14 @@ const (
 	V3DestinationWebhookUpdateResponseEnvelopeSuccessTrue V3DestinationWebhookUpdateResponseEnvelopeSuccess = true
 )
 
+func (r V3DestinationWebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationWebhookUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V3DestinationWebhookListParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -511,6 +535,14 @@ type V3DestinationWebhookListResponseEnvelopeSuccess bool
 const (
 	V3DestinationWebhookListResponseEnvelopeSuccessTrue V3DestinationWebhookListResponseEnvelopeSuccess = true
 )
+
+func (r V3DestinationWebhookListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationWebhookListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type V3DestinationWebhookListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -631,6 +663,14 @@ const (
 	V3DestinationWebhookDeleteResponseEnvelopeSuccessTrue V3DestinationWebhookDeleteResponseEnvelopeSuccess = true
 )
 
+func (r V3DestinationWebhookDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationWebhookDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V3DestinationWebhookDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -747,3 +787,11 @@ type V3DestinationWebhookGetResponseEnvelopeSuccess bool
 const (
 	V3DestinationWebhookGetResponseEnvelopeSuccessTrue V3DestinationWebhookGetResponseEnvelopeSuccess = true
 )
+
+func (r V3DestinationWebhookGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3DestinationWebhookGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

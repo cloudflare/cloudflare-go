@@ -104,6 +104,14 @@ const (
 	ZonesH2PrioritizationIDH2Prioritization ZonesH2PrioritizationID = "h2_prioritization"
 )
 
+func (r ZonesH2PrioritizationID) IsKnown() bool {
+	switch r {
+	case ZonesH2PrioritizationIDH2Prioritization:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesH2PrioritizationValue string
 
@@ -113,6 +121,14 @@ const (
 	ZonesH2PrioritizationValueCustom ZonesH2PrioritizationValue = "custom"
 )
 
+func (r ZonesH2PrioritizationValue) IsKnown() bool {
+	switch r {
+	case ZonesH2PrioritizationValueOn, ZonesH2PrioritizationValueOff, ZonesH2PrioritizationValueCustom:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesH2PrioritizationEditable bool
@@ -121,6 +137,14 @@ const (
 	ZonesH2PrioritizationEditableTrue  ZonesH2PrioritizationEditable = true
 	ZonesH2PrioritizationEditableFalse ZonesH2PrioritizationEditable = false
 )
+
+func (r ZonesH2PrioritizationEditable) IsKnown() bool {
+	switch r {
+	case ZonesH2PrioritizationEditableTrue, ZonesH2PrioritizationEditableFalse:
+		return true
+	}
+	return false
+}
 
 // HTTP/2 Edge Prioritization optimises the delivery of resources served through
 // HTTP/2 to improve page load performance. It also supports fine control of

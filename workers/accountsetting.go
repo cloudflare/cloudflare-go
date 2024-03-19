@@ -194,6 +194,14 @@ const (
 	AccountSettingUpdateResponseEnvelopeSuccessTrue AccountSettingUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AccountSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountSettingUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccountSettingGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -279,3 +287,11 @@ type AccountSettingGetResponseEnvelopeSuccess bool
 const (
 	AccountSettingGetResponseEnvelopeSuccessTrue AccountSettingGetResponseEnvelopeSuccess = true
 )
+
+func (r AccountSettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountSettingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

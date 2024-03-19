@@ -223,6 +223,14 @@ const (
 	AccessKeyUpdateResponseEnvelopeSuccessTrue AccessKeyUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessKeyUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessKeyGetResponseEnvelope struct {
 	Errors   []AccessKeyGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessKeyGetResponseEnvelopeMessages `json:"messages,required"`
@@ -313,6 +321,14 @@ const (
 	AccessKeyGetResponseEnvelopeSuccessTrue AccessKeyGetResponseEnvelopeSuccess = true
 )
 
+func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessKeyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessKeyRotateResponseEnvelope struct {
 	Errors   []AccessKeyRotateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessKeyRotateResponseEnvelopeMessages `json:"messages,required"`
@@ -402,3 +418,11 @@ type AccessKeyRotateResponseEnvelopeSuccess bool
 const (
 	AccessKeyRotateResponseEnvelopeSuccessTrue AccessKeyRotateResponseEnvelopeSuccess = true
 )
+
+func (r AccessKeyRotateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessKeyRotateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

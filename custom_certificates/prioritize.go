@@ -151,6 +151,14 @@ const (
 	PrioritizeUpdateResponseEnvelopeSuccessTrue PrioritizeUpdateResponseEnvelopeSuccess = true
 )
 
+func (r PrioritizeUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrioritizeUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrioritizeUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

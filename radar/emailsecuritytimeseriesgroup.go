@@ -629,6 +629,14 @@ const (
 	EmailSecurityTimeseriesGroupARCParamsAggInterval1w  EmailSecurityTimeseriesGroupARCParamsAggInterval = "1w"
 )
 
+func (r EmailSecurityTimeseriesGroupARCParamsAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupARCParamsAggInterval15m, EmailSecurityTimeseriesGroupARCParamsAggInterval1h, EmailSecurityTimeseriesGroupARCParamsAggInterval1d, EmailSecurityTimeseriesGroupARCParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupARCParamsDateRange string
 
 const (
@@ -649,6 +657,14 @@ const (
 	EmailSecurityTimeseriesGroupARCParamsDateRange24wControl EmailSecurityTimeseriesGroupARCParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTimeseriesGroupARCParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupARCParamsDateRange1d, EmailSecurityTimeseriesGroupARCParamsDateRange2d, EmailSecurityTimeseriesGroupARCParamsDateRange7d, EmailSecurityTimeseriesGroupARCParamsDateRange14d, EmailSecurityTimeseriesGroupARCParamsDateRange28d, EmailSecurityTimeseriesGroupARCParamsDateRange12w, EmailSecurityTimeseriesGroupARCParamsDateRange24w, EmailSecurityTimeseriesGroupARCParamsDateRange52w, EmailSecurityTimeseriesGroupARCParamsDateRange1dControl, EmailSecurityTimeseriesGroupARCParamsDateRange2dControl, EmailSecurityTimeseriesGroupARCParamsDateRange7dControl, EmailSecurityTimeseriesGroupARCParamsDateRange14dControl, EmailSecurityTimeseriesGroupARCParamsDateRange28dControl, EmailSecurityTimeseriesGroupARCParamsDateRange12wControl, EmailSecurityTimeseriesGroupARCParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupARCParamsDKIM string
 
 const (
@@ -656,6 +672,14 @@ const (
 	EmailSecurityTimeseriesGroupARCParamsDKIMNone EmailSecurityTimeseriesGroupARCParamsDKIM = "NONE"
 	EmailSecurityTimeseriesGroupARCParamsDKIMFail EmailSecurityTimeseriesGroupARCParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupARCParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupARCParamsDKIMPass, EmailSecurityTimeseriesGroupARCParamsDKIMNone, EmailSecurityTimeseriesGroupARCParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupARCParamsDMARC string
 
@@ -665,6 +689,14 @@ const (
 	EmailSecurityTimeseriesGroupARCParamsDMARCFail EmailSecurityTimeseriesGroupARCParamsDMARC = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupARCParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupARCParamsDMARCPass, EmailSecurityTimeseriesGroupARCParamsDMARCNone, EmailSecurityTimeseriesGroupARCParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecurityTimeseriesGroupARCParamsFormat string
 
@@ -672,6 +704,14 @@ const (
 	EmailSecurityTimeseriesGroupARCParamsFormatJson EmailSecurityTimeseriesGroupARCParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupARCParamsFormatCsv  EmailSecurityTimeseriesGroupARCParamsFormat = "CSV"
 )
+
+func (r EmailSecurityTimeseriesGroupARCParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupARCParamsFormatJson, EmailSecurityTimeseriesGroupARCParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupARCParamsSPF string
 
@@ -681,6 +721,14 @@ const (
 	EmailSecurityTimeseriesGroupARCParamsSPFFail EmailSecurityTimeseriesGroupARCParamsSPF = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupARCParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupARCParamsSPFPass, EmailSecurityTimeseriesGroupARCParamsSPFNone, EmailSecurityTimeseriesGroupARCParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupARCParamsTLSVersion string
 
 const (
@@ -689,6 +737,14 @@ const (
 	EmailSecurityTimeseriesGroupARCParamsTLSVersionTlSv1_2 EmailSecurityTimeseriesGroupARCParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTimeseriesGroupARCParamsTLSVersionTlSv1_3 EmailSecurityTimeseriesGroupARCParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTimeseriesGroupARCParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupARCParamsTLSVersionTlSv1_0, EmailSecurityTimeseriesGroupARCParamsTLSVersionTlSv1_1, EmailSecurityTimeseriesGroupARCParamsTLSVersionTlSv1_2, EmailSecurityTimeseriesGroupARCParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupARCResponseEnvelope struct {
 	Result  EmailSecurityTimeseriesGroupARCResponse             `json:"result,required"`
@@ -761,6 +817,14 @@ const (
 	EmailSecurityTimeseriesGroupDKIMParamsAggInterval1w  EmailSecurityTimeseriesGroupDKIMParamsAggInterval = "1w"
 )
 
+func (r EmailSecurityTimeseriesGroupDKIMParamsAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDKIMParamsAggInterval15m, EmailSecurityTimeseriesGroupDKIMParamsAggInterval1h, EmailSecurityTimeseriesGroupDKIMParamsAggInterval1d, EmailSecurityTimeseriesGroupDKIMParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupDKIMParamsARC string
 
 const (
@@ -768,6 +832,14 @@ const (
 	EmailSecurityTimeseriesGroupDKIMParamsARCNone EmailSecurityTimeseriesGroupDKIMParamsARC = "NONE"
 	EmailSecurityTimeseriesGroupDKIMParamsARCFail EmailSecurityTimeseriesGroupDKIMParamsARC = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupDKIMParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDKIMParamsARCPass, EmailSecurityTimeseriesGroupDKIMParamsARCNone, EmailSecurityTimeseriesGroupDKIMParamsARCFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupDKIMParamsDateRange string
 
@@ -789,6 +861,14 @@ const (
 	EmailSecurityTimeseriesGroupDKIMParamsDateRange24wControl EmailSecurityTimeseriesGroupDKIMParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTimeseriesGroupDKIMParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDKIMParamsDateRange1d, EmailSecurityTimeseriesGroupDKIMParamsDateRange2d, EmailSecurityTimeseriesGroupDKIMParamsDateRange7d, EmailSecurityTimeseriesGroupDKIMParamsDateRange14d, EmailSecurityTimeseriesGroupDKIMParamsDateRange28d, EmailSecurityTimeseriesGroupDKIMParamsDateRange12w, EmailSecurityTimeseriesGroupDKIMParamsDateRange24w, EmailSecurityTimeseriesGroupDKIMParamsDateRange52w, EmailSecurityTimeseriesGroupDKIMParamsDateRange1dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange2dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange7dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange14dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange28dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange12wControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupDKIMParamsDMARC string
 
 const (
@@ -796,6 +876,14 @@ const (
 	EmailSecurityTimeseriesGroupDKIMParamsDMARCNone EmailSecurityTimeseriesGroupDKIMParamsDMARC = "NONE"
 	EmailSecurityTimeseriesGroupDKIMParamsDMARCFail EmailSecurityTimeseriesGroupDKIMParamsDMARC = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupDKIMParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDKIMParamsDMARCPass, EmailSecurityTimeseriesGroupDKIMParamsDMARCNone, EmailSecurityTimeseriesGroupDKIMParamsDMARCFail:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type EmailSecurityTimeseriesGroupDKIMParamsFormat string
@@ -805,6 +893,14 @@ const (
 	EmailSecurityTimeseriesGroupDKIMParamsFormatCsv  EmailSecurityTimeseriesGroupDKIMParamsFormat = "CSV"
 )
 
+func (r EmailSecurityTimeseriesGroupDKIMParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDKIMParamsFormatJson, EmailSecurityTimeseriesGroupDKIMParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupDKIMParamsSPF string
 
 const (
@@ -812,6 +908,14 @@ const (
 	EmailSecurityTimeseriesGroupDKIMParamsSPFNone EmailSecurityTimeseriesGroupDKIMParamsSPF = "NONE"
 	EmailSecurityTimeseriesGroupDKIMParamsSPFFail EmailSecurityTimeseriesGroupDKIMParamsSPF = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupDKIMParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDKIMParamsSPFPass, EmailSecurityTimeseriesGroupDKIMParamsSPFNone, EmailSecurityTimeseriesGroupDKIMParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupDKIMParamsTLSVersion string
 
@@ -821,6 +925,14 @@ const (
 	EmailSecurityTimeseriesGroupDKIMParamsTLSVersionTlSv1_2 EmailSecurityTimeseriesGroupDKIMParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTimeseriesGroupDKIMParamsTLSVersionTlSv1_3 EmailSecurityTimeseriesGroupDKIMParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTimeseriesGroupDKIMParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDKIMParamsTLSVersionTlSv1_0, EmailSecurityTimeseriesGroupDKIMParamsTLSVersionTlSv1_1, EmailSecurityTimeseriesGroupDKIMParamsTLSVersionTlSv1_2, EmailSecurityTimeseriesGroupDKIMParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupDKIMResponseEnvelope struct {
 	Result  EmailSecurityTimeseriesGroupDKIMResponse             `json:"result,required"`
@@ -893,6 +1005,14 @@ const (
 	EmailSecurityTimeseriesGroupDMARCParamsAggInterval1w  EmailSecurityTimeseriesGroupDMARCParamsAggInterval = "1w"
 )
 
+func (r EmailSecurityTimeseriesGroupDMARCParamsAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDMARCParamsAggInterval15m, EmailSecurityTimeseriesGroupDMARCParamsAggInterval1h, EmailSecurityTimeseriesGroupDMARCParamsAggInterval1d, EmailSecurityTimeseriesGroupDMARCParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupDMARCParamsARC string
 
 const (
@@ -900,6 +1020,14 @@ const (
 	EmailSecurityTimeseriesGroupDMARCParamsARCNone EmailSecurityTimeseriesGroupDMARCParamsARC = "NONE"
 	EmailSecurityTimeseriesGroupDMARCParamsARCFail EmailSecurityTimeseriesGroupDMARCParamsARC = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupDMARCParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDMARCParamsARCPass, EmailSecurityTimeseriesGroupDMARCParamsARCNone, EmailSecurityTimeseriesGroupDMARCParamsARCFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupDMARCParamsDateRange string
 
@@ -921,6 +1049,14 @@ const (
 	EmailSecurityTimeseriesGroupDMARCParamsDateRange24wControl EmailSecurityTimeseriesGroupDMARCParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTimeseriesGroupDMARCParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDMARCParamsDateRange1d, EmailSecurityTimeseriesGroupDMARCParamsDateRange2d, EmailSecurityTimeseriesGroupDMARCParamsDateRange7d, EmailSecurityTimeseriesGroupDMARCParamsDateRange14d, EmailSecurityTimeseriesGroupDMARCParamsDateRange28d, EmailSecurityTimeseriesGroupDMARCParamsDateRange12w, EmailSecurityTimeseriesGroupDMARCParamsDateRange24w, EmailSecurityTimeseriesGroupDMARCParamsDateRange52w, EmailSecurityTimeseriesGroupDMARCParamsDateRange1dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange2dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange7dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange14dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange28dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange12wControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupDMARCParamsDKIM string
 
 const (
@@ -928,6 +1064,14 @@ const (
 	EmailSecurityTimeseriesGroupDMARCParamsDKIMNone EmailSecurityTimeseriesGroupDMARCParamsDKIM = "NONE"
 	EmailSecurityTimeseriesGroupDMARCParamsDKIMFail EmailSecurityTimeseriesGroupDMARCParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupDMARCParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDMARCParamsDKIMPass, EmailSecurityTimeseriesGroupDMARCParamsDKIMNone, EmailSecurityTimeseriesGroupDMARCParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 // Format results are returned in.
 type EmailSecurityTimeseriesGroupDMARCParamsFormat string
@@ -937,6 +1081,14 @@ const (
 	EmailSecurityTimeseriesGroupDMARCParamsFormatCsv  EmailSecurityTimeseriesGroupDMARCParamsFormat = "CSV"
 )
 
+func (r EmailSecurityTimeseriesGroupDMARCParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDMARCParamsFormatJson, EmailSecurityTimeseriesGroupDMARCParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupDMARCParamsSPF string
 
 const (
@@ -944,6 +1096,14 @@ const (
 	EmailSecurityTimeseriesGroupDMARCParamsSPFNone EmailSecurityTimeseriesGroupDMARCParamsSPF = "NONE"
 	EmailSecurityTimeseriesGroupDMARCParamsSPFFail EmailSecurityTimeseriesGroupDMARCParamsSPF = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupDMARCParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDMARCParamsSPFPass, EmailSecurityTimeseriesGroupDMARCParamsSPFNone, EmailSecurityTimeseriesGroupDMARCParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupDMARCParamsTLSVersion string
 
@@ -953,6 +1113,14 @@ const (
 	EmailSecurityTimeseriesGroupDMARCParamsTLSVersionTlSv1_2 EmailSecurityTimeseriesGroupDMARCParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTimeseriesGroupDMARCParamsTLSVersionTlSv1_3 EmailSecurityTimeseriesGroupDMARCParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTimeseriesGroupDMARCParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupDMARCParamsTLSVersionTlSv1_0, EmailSecurityTimeseriesGroupDMARCParamsTLSVersionTlSv1_1, EmailSecurityTimeseriesGroupDMARCParamsTLSVersionTlSv1_2, EmailSecurityTimeseriesGroupDMARCParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupDMARCResponseEnvelope struct {
 	Result  EmailSecurityTimeseriesGroupDMARCResponse             `json:"result,required"`
@@ -1027,6 +1195,14 @@ const (
 	EmailSecurityTimeseriesGroupMaliciousParamsAggInterval1w  EmailSecurityTimeseriesGroupMaliciousParamsAggInterval = "1w"
 )
 
+func (r EmailSecurityTimeseriesGroupMaliciousParamsAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousParamsAggInterval15m, EmailSecurityTimeseriesGroupMaliciousParamsAggInterval1h, EmailSecurityTimeseriesGroupMaliciousParamsAggInterval1d, EmailSecurityTimeseriesGroupMaliciousParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupMaliciousParamsARC string
 
 const (
@@ -1034,6 +1210,14 @@ const (
 	EmailSecurityTimeseriesGroupMaliciousParamsARCNone EmailSecurityTimeseriesGroupMaliciousParamsARC = "NONE"
 	EmailSecurityTimeseriesGroupMaliciousParamsARCFail EmailSecurityTimeseriesGroupMaliciousParamsARC = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupMaliciousParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousParamsARCPass, EmailSecurityTimeseriesGroupMaliciousParamsARCNone, EmailSecurityTimeseriesGroupMaliciousParamsARCFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupMaliciousParamsDateRange string
 
@@ -1055,6 +1239,14 @@ const (
 	EmailSecurityTimeseriesGroupMaliciousParamsDateRange24wControl EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTimeseriesGroupMaliciousParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousParamsDateRange1d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange2d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange7d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange14d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange28d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange12w, EmailSecurityTimeseriesGroupMaliciousParamsDateRange24w, EmailSecurityTimeseriesGroupMaliciousParamsDateRange52w, EmailSecurityTimeseriesGroupMaliciousParamsDateRange1dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange2dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange7dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange14dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange28dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange12wControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupMaliciousParamsDKIM string
 
 const (
@@ -1062,6 +1254,14 @@ const (
 	EmailSecurityTimeseriesGroupMaliciousParamsDKIMNone EmailSecurityTimeseriesGroupMaliciousParamsDKIM = "NONE"
 	EmailSecurityTimeseriesGroupMaliciousParamsDKIMFail EmailSecurityTimeseriesGroupMaliciousParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupMaliciousParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousParamsDKIMPass, EmailSecurityTimeseriesGroupMaliciousParamsDKIMNone, EmailSecurityTimeseriesGroupMaliciousParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupMaliciousParamsDMARC string
 
@@ -1071,6 +1271,14 @@ const (
 	EmailSecurityTimeseriesGroupMaliciousParamsDMARCFail EmailSecurityTimeseriesGroupMaliciousParamsDMARC = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupMaliciousParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousParamsDMARCPass, EmailSecurityTimeseriesGroupMaliciousParamsDMARCNone, EmailSecurityTimeseriesGroupMaliciousParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecurityTimeseriesGroupMaliciousParamsFormat string
 
@@ -1078,6 +1286,14 @@ const (
 	EmailSecurityTimeseriesGroupMaliciousParamsFormatJson EmailSecurityTimeseriesGroupMaliciousParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupMaliciousParamsFormatCsv  EmailSecurityTimeseriesGroupMaliciousParamsFormat = "CSV"
 )
+
+func (r EmailSecurityTimeseriesGroupMaliciousParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousParamsFormatJson, EmailSecurityTimeseriesGroupMaliciousParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupMaliciousParamsSPF string
 
@@ -1087,6 +1303,14 @@ const (
 	EmailSecurityTimeseriesGroupMaliciousParamsSPFFail EmailSecurityTimeseriesGroupMaliciousParamsSPF = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupMaliciousParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousParamsSPFPass, EmailSecurityTimeseriesGroupMaliciousParamsSPFNone, EmailSecurityTimeseriesGroupMaliciousParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupMaliciousParamsTLSVersion string
 
 const (
@@ -1095,6 +1319,14 @@ const (
 	EmailSecurityTimeseriesGroupMaliciousParamsTLSVersionTlSv1_2 EmailSecurityTimeseriesGroupMaliciousParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTimeseriesGroupMaliciousParamsTLSVersionTlSv1_3 EmailSecurityTimeseriesGroupMaliciousParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTimeseriesGroupMaliciousParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupMaliciousParamsTLSVersionTlSv1_0, EmailSecurityTimeseriesGroupMaliciousParamsTLSVersionTlSv1_1, EmailSecurityTimeseriesGroupMaliciousParamsTLSVersionTlSv1_2, EmailSecurityTimeseriesGroupMaliciousParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupMaliciousResponseEnvelope struct {
 	Result  EmailSecurityTimeseriesGroupMaliciousResponse             `json:"result,required"`
@@ -1169,6 +1401,14 @@ const (
 	EmailSecurityTimeseriesGroupSpamParamsAggInterval1w  EmailSecurityTimeseriesGroupSpamParamsAggInterval = "1w"
 )
 
+func (r EmailSecurityTimeseriesGroupSpamParamsAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamParamsAggInterval15m, EmailSecurityTimeseriesGroupSpamParamsAggInterval1h, EmailSecurityTimeseriesGroupSpamParamsAggInterval1d, EmailSecurityTimeseriesGroupSpamParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupSpamParamsARC string
 
 const (
@@ -1176,6 +1416,14 @@ const (
 	EmailSecurityTimeseriesGroupSpamParamsARCNone EmailSecurityTimeseriesGroupSpamParamsARC = "NONE"
 	EmailSecurityTimeseriesGroupSpamParamsARCFail EmailSecurityTimeseriesGroupSpamParamsARC = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupSpamParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamParamsARCPass, EmailSecurityTimeseriesGroupSpamParamsARCNone, EmailSecurityTimeseriesGroupSpamParamsARCFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSpamParamsDateRange string
 
@@ -1197,6 +1445,14 @@ const (
 	EmailSecurityTimeseriesGroupSpamParamsDateRange24wControl EmailSecurityTimeseriesGroupSpamParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTimeseriesGroupSpamParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamParamsDateRange1d, EmailSecurityTimeseriesGroupSpamParamsDateRange2d, EmailSecurityTimeseriesGroupSpamParamsDateRange7d, EmailSecurityTimeseriesGroupSpamParamsDateRange14d, EmailSecurityTimeseriesGroupSpamParamsDateRange28d, EmailSecurityTimeseriesGroupSpamParamsDateRange12w, EmailSecurityTimeseriesGroupSpamParamsDateRange24w, EmailSecurityTimeseriesGroupSpamParamsDateRange52w, EmailSecurityTimeseriesGroupSpamParamsDateRange1dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange2dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange7dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange14dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange28dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange12wControl, EmailSecurityTimeseriesGroupSpamParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupSpamParamsDKIM string
 
 const (
@@ -1204,6 +1460,14 @@ const (
 	EmailSecurityTimeseriesGroupSpamParamsDKIMNone EmailSecurityTimeseriesGroupSpamParamsDKIM = "NONE"
 	EmailSecurityTimeseriesGroupSpamParamsDKIMFail EmailSecurityTimeseriesGroupSpamParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupSpamParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamParamsDKIMPass, EmailSecurityTimeseriesGroupSpamParamsDKIMNone, EmailSecurityTimeseriesGroupSpamParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSpamParamsDMARC string
 
@@ -1213,6 +1477,14 @@ const (
 	EmailSecurityTimeseriesGroupSpamParamsDMARCFail EmailSecurityTimeseriesGroupSpamParamsDMARC = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupSpamParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamParamsDMARCPass, EmailSecurityTimeseriesGroupSpamParamsDMARCNone, EmailSecurityTimeseriesGroupSpamParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecurityTimeseriesGroupSpamParamsFormat string
 
@@ -1220,6 +1492,14 @@ const (
 	EmailSecurityTimeseriesGroupSpamParamsFormatJson EmailSecurityTimeseriesGroupSpamParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupSpamParamsFormatCsv  EmailSecurityTimeseriesGroupSpamParamsFormat = "CSV"
 )
+
+func (r EmailSecurityTimeseriesGroupSpamParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamParamsFormatJson, EmailSecurityTimeseriesGroupSpamParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSpamParamsSPF string
 
@@ -1229,6 +1509,14 @@ const (
 	EmailSecurityTimeseriesGroupSpamParamsSPFFail EmailSecurityTimeseriesGroupSpamParamsSPF = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupSpamParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamParamsSPFPass, EmailSecurityTimeseriesGroupSpamParamsSPFNone, EmailSecurityTimeseriesGroupSpamParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupSpamParamsTLSVersion string
 
 const (
@@ -1237,6 +1525,14 @@ const (
 	EmailSecurityTimeseriesGroupSpamParamsTLSVersionTlSv1_2 EmailSecurityTimeseriesGroupSpamParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTimeseriesGroupSpamParamsTLSVersionTlSv1_3 EmailSecurityTimeseriesGroupSpamParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTimeseriesGroupSpamParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpamParamsTLSVersionTlSv1_0, EmailSecurityTimeseriesGroupSpamParamsTLSVersionTlSv1_1, EmailSecurityTimeseriesGroupSpamParamsTLSVersionTlSv1_2, EmailSecurityTimeseriesGroupSpamParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSpamResponseEnvelope struct {
 	Result  EmailSecurityTimeseriesGroupSpamResponse             `json:"result,required"`
@@ -1309,6 +1605,14 @@ const (
 	EmailSecurityTimeseriesGroupSPFParamsAggInterval1w  EmailSecurityTimeseriesGroupSPFParamsAggInterval = "1w"
 )
 
+func (r EmailSecurityTimeseriesGroupSPFParamsAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSPFParamsAggInterval15m, EmailSecurityTimeseriesGroupSPFParamsAggInterval1h, EmailSecurityTimeseriesGroupSPFParamsAggInterval1d, EmailSecurityTimeseriesGroupSPFParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupSPFParamsARC string
 
 const (
@@ -1316,6 +1620,14 @@ const (
 	EmailSecurityTimeseriesGroupSPFParamsARCNone EmailSecurityTimeseriesGroupSPFParamsARC = "NONE"
 	EmailSecurityTimeseriesGroupSPFParamsARCFail EmailSecurityTimeseriesGroupSPFParamsARC = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupSPFParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSPFParamsARCPass, EmailSecurityTimeseriesGroupSPFParamsARCNone, EmailSecurityTimeseriesGroupSPFParamsARCFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSPFParamsDateRange string
 
@@ -1337,6 +1649,14 @@ const (
 	EmailSecurityTimeseriesGroupSPFParamsDateRange24wControl EmailSecurityTimeseriesGroupSPFParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTimeseriesGroupSPFParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSPFParamsDateRange1d, EmailSecurityTimeseriesGroupSPFParamsDateRange2d, EmailSecurityTimeseriesGroupSPFParamsDateRange7d, EmailSecurityTimeseriesGroupSPFParamsDateRange14d, EmailSecurityTimeseriesGroupSPFParamsDateRange28d, EmailSecurityTimeseriesGroupSPFParamsDateRange12w, EmailSecurityTimeseriesGroupSPFParamsDateRange24w, EmailSecurityTimeseriesGroupSPFParamsDateRange52w, EmailSecurityTimeseriesGroupSPFParamsDateRange1dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange2dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange7dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange14dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange28dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange12wControl, EmailSecurityTimeseriesGroupSPFParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupSPFParamsDKIM string
 
 const (
@@ -1344,6 +1664,14 @@ const (
 	EmailSecurityTimeseriesGroupSPFParamsDKIMNone EmailSecurityTimeseriesGroupSPFParamsDKIM = "NONE"
 	EmailSecurityTimeseriesGroupSPFParamsDKIMFail EmailSecurityTimeseriesGroupSPFParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupSPFParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSPFParamsDKIMPass, EmailSecurityTimeseriesGroupSPFParamsDKIMNone, EmailSecurityTimeseriesGroupSPFParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSPFParamsDMARC string
 
@@ -1353,6 +1681,14 @@ const (
 	EmailSecurityTimeseriesGroupSPFParamsDMARCFail EmailSecurityTimeseriesGroupSPFParamsDMARC = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupSPFParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSPFParamsDMARCPass, EmailSecurityTimeseriesGroupSPFParamsDMARCNone, EmailSecurityTimeseriesGroupSPFParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecurityTimeseriesGroupSPFParamsFormat string
 
@@ -1360,6 +1696,14 @@ const (
 	EmailSecurityTimeseriesGroupSPFParamsFormatJson EmailSecurityTimeseriesGroupSPFParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupSPFParamsFormatCsv  EmailSecurityTimeseriesGroupSPFParamsFormat = "CSV"
 )
+
+func (r EmailSecurityTimeseriesGroupSPFParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSPFParamsFormatJson, EmailSecurityTimeseriesGroupSPFParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSPFParamsTLSVersion string
 
@@ -1369,6 +1713,14 @@ const (
 	EmailSecurityTimeseriesGroupSPFParamsTLSVersionTlSv1_2 EmailSecurityTimeseriesGroupSPFParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTimeseriesGroupSPFParamsTLSVersionTlSv1_3 EmailSecurityTimeseriesGroupSPFParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTimeseriesGroupSPFParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSPFParamsTLSVersionTlSv1_0, EmailSecurityTimeseriesGroupSPFParamsTLSVersionTlSv1_1, EmailSecurityTimeseriesGroupSPFParamsTLSVersionTlSv1_2, EmailSecurityTimeseriesGroupSPFParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSPFResponseEnvelope struct {
 	Result  EmailSecurityTimeseriesGroupSPFResponse             `json:"result,required"`
@@ -1443,6 +1795,14 @@ const (
 	EmailSecurityTimeseriesGroupSpoofParamsAggInterval1w  EmailSecurityTimeseriesGroupSpoofParamsAggInterval = "1w"
 )
 
+func (r EmailSecurityTimeseriesGroupSpoofParamsAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofParamsAggInterval15m, EmailSecurityTimeseriesGroupSpoofParamsAggInterval1h, EmailSecurityTimeseriesGroupSpoofParamsAggInterval1d, EmailSecurityTimeseriesGroupSpoofParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupSpoofParamsARC string
 
 const (
@@ -1450,6 +1810,14 @@ const (
 	EmailSecurityTimeseriesGroupSpoofParamsARCNone EmailSecurityTimeseriesGroupSpoofParamsARC = "NONE"
 	EmailSecurityTimeseriesGroupSpoofParamsARCFail EmailSecurityTimeseriesGroupSpoofParamsARC = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupSpoofParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofParamsARCPass, EmailSecurityTimeseriesGroupSpoofParamsARCNone, EmailSecurityTimeseriesGroupSpoofParamsARCFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSpoofParamsDateRange string
 
@@ -1471,6 +1839,14 @@ const (
 	EmailSecurityTimeseriesGroupSpoofParamsDateRange24wControl EmailSecurityTimeseriesGroupSpoofParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTimeseriesGroupSpoofParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofParamsDateRange1d, EmailSecurityTimeseriesGroupSpoofParamsDateRange2d, EmailSecurityTimeseriesGroupSpoofParamsDateRange7d, EmailSecurityTimeseriesGroupSpoofParamsDateRange14d, EmailSecurityTimeseriesGroupSpoofParamsDateRange28d, EmailSecurityTimeseriesGroupSpoofParamsDateRange12w, EmailSecurityTimeseriesGroupSpoofParamsDateRange24w, EmailSecurityTimeseriesGroupSpoofParamsDateRange52w, EmailSecurityTimeseriesGroupSpoofParamsDateRange1dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange2dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange7dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange14dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange28dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange12wControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupSpoofParamsDKIM string
 
 const (
@@ -1478,6 +1854,14 @@ const (
 	EmailSecurityTimeseriesGroupSpoofParamsDKIMNone EmailSecurityTimeseriesGroupSpoofParamsDKIM = "NONE"
 	EmailSecurityTimeseriesGroupSpoofParamsDKIMFail EmailSecurityTimeseriesGroupSpoofParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupSpoofParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofParamsDKIMPass, EmailSecurityTimeseriesGroupSpoofParamsDKIMNone, EmailSecurityTimeseriesGroupSpoofParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSpoofParamsDMARC string
 
@@ -1487,6 +1871,14 @@ const (
 	EmailSecurityTimeseriesGroupSpoofParamsDMARCFail EmailSecurityTimeseriesGroupSpoofParamsDMARC = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupSpoofParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofParamsDMARCPass, EmailSecurityTimeseriesGroupSpoofParamsDMARCNone, EmailSecurityTimeseriesGroupSpoofParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecurityTimeseriesGroupSpoofParamsFormat string
 
@@ -1494,6 +1886,14 @@ const (
 	EmailSecurityTimeseriesGroupSpoofParamsFormatJson EmailSecurityTimeseriesGroupSpoofParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupSpoofParamsFormatCsv  EmailSecurityTimeseriesGroupSpoofParamsFormat = "CSV"
 )
+
+func (r EmailSecurityTimeseriesGroupSpoofParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofParamsFormatJson, EmailSecurityTimeseriesGroupSpoofParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSpoofParamsSPF string
 
@@ -1503,6 +1903,14 @@ const (
 	EmailSecurityTimeseriesGroupSpoofParamsSPFFail EmailSecurityTimeseriesGroupSpoofParamsSPF = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupSpoofParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofParamsSPFPass, EmailSecurityTimeseriesGroupSpoofParamsSPFNone, EmailSecurityTimeseriesGroupSpoofParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupSpoofParamsTLSVersion string
 
 const (
@@ -1511,6 +1919,14 @@ const (
 	EmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_2 EmailSecurityTimeseriesGroupSpoofParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_3 EmailSecurityTimeseriesGroupSpoofParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTimeseriesGroupSpoofParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_0, EmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_1, EmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_2, EmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupSpoofResponseEnvelope struct {
 	Result  EmailSecurityTimeseriesGroupSpoofResponse             `json:"result,required"`
@@ -1585,6 +2001,14 @@ const (
 	EmailSecurityTimeseriesGroupThreatCategoryParamsAggInterval1w  EmailSecurityTimeseriesGroupThreatCategoryParamsAggInterval = "1w"
 )
 
+func (r EmailSecurityTimeseriesGroupThreatCategoryParamsAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryParamsAggInterval15m, EmailSecurityTimeseriesGroupThreatCategoryParamsAggInterval1h, EmailSecurityTimeseriesGroupThreatCategoryParamsAggInterval1d, EmailSecurityTimeseriesGroupThreatCategoryParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupThreatCategoryParamsARC string
 
 const (
@@ -1592,6 +2016,14 @@ const (
 	EmailSecurityTimeseriesGroupThreatCategoryParamsARCNone EmailSecurityTimeseriesGroupThreatCategoryParamsARC = "NONE"
 	EmailSecurityTimeseriesGroupThreatCategoryParamsARCFail EmailSecurityTimeseriesGroupThreatCategoryParamsARC = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupThreatCategoryParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryParamsARCPass, EmailSecurityTimeseriesGroupThreatCategoryParamsARCNone, EmailSecurityTimeseriesGroupThreatCategoryParamsARCFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange string
 
@@ -1613,6 +2045,14 @@ const (
 	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange24wControl EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange1d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange2d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange7d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange14d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange28d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange12w, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange24w, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange52w, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange1dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange2dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange7dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange14dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange28dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange12wControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupThreatCategoryParamsDKIM string
 
 const (
@@ -1620,6 +2060,14 @@ const (
 	EmailSecurityTimeseriesGroupThreatCategoryParamsDKIMNone EmailSecurityTimeseriesGroupThreatCategoryParamsDKIM = "NONE"
 	EmailSecurityTimeseriesGroupThreatCategoryParamsDKIMFail EmailSecurityTimeseriesGroupThreatCategoryParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupThreatCategoryParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryParamsDKIMPass, EmailSecurityTimeseriesGroupThreatCategoryParamsDKIMNone, EmailSecurityTimeseriesGroupThreatCategoryParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupThreatCategoryParamsDMARC string
 
@@ -1629,6 +2077,14 @@ const (
 	EmailSecurityTimeseriesGroupThreatCategoryParamsDMARCFail EmailSecurityTimeseriesGroupThreatCategoryParamsDMARC = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupThreatCategoryParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryParamsDMARCPass, EmailSecurityTimeseriesGroupThreatCategoryParamsDMARCNone, EmailSecurityTimeseriesGroupThreatCategoryParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecurityTimeseriesGroupThreatCategoryParamsFormat string
 
@@ -1636,6 +2092,14 @@ const (
 	EmailSecurityTimeseriesGroupThreatCategoryParamsFormatJson EmailSecurityTimeseriesGroupThreatCategoryParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupThreatCategoryParamsFormatCsv  EmailSecurityTimeseriesGroupThreatCategoryParamsFormat = "CSV"
 )
+
+func (r EmailSecurityTimeseriesGroupThreatCategoryParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryParamsFormatJson, EmailSecurityTimeseriesGroupThreatCategoryParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupThreatCategoryParamsSPF string
 
@@ -1645,6 +2109,14 @@ const (
 	EmailSecurityTimeseriesGroupThreatCategoryParamsSPFFail EmailSecurityTimeseriesGroupThreatCategoryParamsSPF = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupThreatCategoryParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryParamsSPFPass, EmailSecurityTimeseriesGroupThreatCategoryParamsSPFNone, EmailSecurityTimeseriesGroupThreatCategoryParamsSPFFail:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersion string
 
 const (
@@ -1653,6 +2125,14 @@ const (
 	EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_2 EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersion = "TLSv1_2"
 	EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_3 EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersion = "TLSv1_3"
 )
+
+func (r EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_0, EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_1, EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_2, EmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_3:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupThreatCategoryResponseEnvelope struct {
 	Result  EmailSecurityTimeseriesGroupThreatCategoryResponse             `json:"result,required"`
@@ -1726,6 +2206,14 @@ const (
 	EmailSecurityTimeseriesGroupTLSVersionParamsAggInterval1w  EmailSecurityTimeseriesGroupTLSVersionParamsAggInterval = "1w"
 )
 
+func (r EmailSecurityTimeseriesGroupTLSVersionParamsAggInterval) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupTLSVersionParamsAggInterval15m, EmailSecurityTimeseriesGroupTLSVersionParamsAggInterval1h, EmailSecurityTimeseriesGroupTLSVersionParamsAggInterval1d, EmailSecurityTimeseriesGroupTLSVersionParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupTLSVersionParamsARC string
 
 const (
@@ -1733,6 +2221,14 @@ const (
 	EmailSecurityTimeseriesGroupTLSVersionParamsARCNone EmailSecurityTimeseriesGroupTLSVersionParamsARC = "NONE"
 	EmailSecurityTimeseriesGroupTLSVersionParamsARCFail EmailSecurityTimeseriesGroupTLSVersionParamsARC = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupTLSVersionParamsARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupTLSVersionParamsARCPass, EmailSecurityTimeseriesGroupTLSVersionParamsARCNone, EmailSecurityTimeseriesGroupTLSVersionParamsARCFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupTLSVersionParamsDateRange string
 
@@ -1754,6 +2250,14 @@ const (
 	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange24wControl EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "24wControl"
 )
 
+func (r EmailSecurityTimeseriesGroupTLSVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupTLSVersionParamsDateRange1d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange2d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange7d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange14d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange28d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange12w, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange24w, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange52w, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange1dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange2dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange7dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange14dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange28dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange12wControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupTLSVersionParamsDKIM string
 
 const (
@@ -1761,6 +2265,14 @@ const (
 	EmailSecurityTimeseriesGroupTLSVersionParamsDKIMNone EmailSecurityTimeseriesGroupTLSVersionParamsDKIM = "NONE"
 	EmailSecurityTimeseriesGroupTLSVersionParamsDKIMFail EmailSecurityTimeseriesGroupTLSVersionParamsDKIM = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupTLSVersionParamsDKIM) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupTLSVersionParamsDKIMPass, EmailSecurityTimeseriesGroupTLSVersionParamsDKIMNone, EmailSecurityTimeseriesGroupTLSVersionParamsDKIMFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupTLSVersionParamsDMARC string
 
@@ -1770,6 +2282,14 @@ const (
 	EmailSecurityTimeseriesGroupTLSVersionParamsDMARCFail EmailSecurityTimeseriesGroupTLSVersionParamsDMARC = "FAIL"
 )
 
+func (r EmailSecurityTimeseriesGroupTLSVersionParamsDMARC) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupTLSVersionParamsDMARCPass, EmailSecurityTimeseriesGroupTLSVersionParamsDMARCNone, EmailSecurityTimeseriesGroupTLSVersionParamsDMARCFail:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type EmailSecurityTimeseriesGroupTLSVersionParamsFormat string
 
@@ -1778,6 +2298,14 @@ const (
 	EmailSecurityTimeseriesGroupTLSVersionParamsFormatCsv  EmailSecurityTimeseriesGroupTLSVersionParamsFormat = "CSV"
 )
 
+func (r EmailSecurityTimeseriesGroupTLSVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupTLSVersionParamsFormatJson, EmailSecurityTimeseriesGroupTLSVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EmailSecurityTimeseriesGroupTLSVersionParamsSPF string
 
 const (
@@ -1785,6 +2313,14 @@ const (
 	EmailSecurityTimeseriesGroupTLSVersionParamsSPFNone EmailSecurityTimeseriesGroupTLSVersionParamsSPF = "NONE"
 	EmailSecurityTimeseriesGroupTLSVersionParamsSPFFail EmailSecurityTimeseriesGroupTLSVersionParamsSPF = "FAIL"
 )
+
+func (r EmailSecurityTimeseriesGroupTLSVersionParamsSPF) IsKnown() bool {
+	switch r {
+	case EmailSecurityTimeseriesGroupTLSVersionParamsSPFPass, EmailSecurityTimeseriesGroupTLSVersionParamsSPFNone, EmailSecurityTimeseriesGroupTLSVersionParamsSPFFail:
+		return true
+	}
+	return false
+}
 
 type EmailSecurityTimeseriesGroupTLSVersionResponseEnvelope struct {
 	Result  EmailSecurityTimeseriesGroupTLSVersionResponse             `json:"result,required"`

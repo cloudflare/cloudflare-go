@@ -326,6 +326,14 @@ const (
 	DEXFleetStatusLiveResponseEnvelopeSuccessTrue DEXFleetStatusLiveResponseEnvelopeSuccess = true
 )
 
+func (r DEXFleetStatusLiveResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXFleetStatusLiveResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DEXFleetStatusOverTimeParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Timestamp in ISO format

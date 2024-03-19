@@ -206,6 +206,14 @@ const (
 	ConfigNewResponseEnvelopeSuccessTrue ConfigNewResponseEnvelopeSuccess = true
 )
 
+func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConfigUpdateResponseEnvelope struct {
 	Errors   []ConfigUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -286,6 +294,14 @@ type ConfigUpdateResponseEnvelopeSuccess bool
 const (
 	ConfigUpdateResponseEnvelopeSuccessTrue ConfigUpdateResponseEnvelopeSuccess = true
 )
+
+func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ConfigDeleteResponseEnvelope struct {
 	Errors   []ConfigDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -368,6 +384,14 @@ const (
 	ConfigDeleteResponseEnvelopeSuccessTrue ConfigDeleteResponseEnvelopeSuccess = true
 )
 
+func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConfigEditResponseEnvelope struct {
 	Errors   []ConfigEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConfigEditResponseEnvelopeMessages `json:"messages,required"`
@@ -449,6 +473,14 @@ const (
 	ConfigEditResponseEnvelopeSuccessTrue ConfigEditResponseEnvelopeSuccess = true
 )
 
+func (r ConfigEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConfigGetResponseEnvelope struct {
 	Errors   []ConfigGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConfigGetResponseEnvelopeMessages `json:"messages,required"`
@@ -529,3 +561,11 @@ type ConfigGetResponseEnvelopeSuccess bool
 const (
 	ConfigGetResponseEnvelopeSuccessTrue ConfigGetResponseEnvelopeSuccess = true
 )
+
+func (r ConfigGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
