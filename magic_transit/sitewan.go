@@ -666,6 +666,14 @@ const (
 	SiteWanNewResponseEnvelopeSuccessTrue SiteWanNewResponseEnvelopeSuccess = true
 )
 
+func (r SiteWanNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteWanUpdateParams struct {
 	Wan param.Field[SiteWanUpdateParamsWan] `json:"wan"`
 }
@@ -785,6 +793,14 @@ const (
 	SiteWanUpdateResponseEnvelopeSuccessTrue SiteWanUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SiteWanUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteWanListResponseEnvelope struct {
 	Errors   []SiteWanListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteWanListResponseEnvelopeMessages `json:"messages,required"`
@@ -865,6 +881,14 @@ type SiteWanListResponseEnvelopeSuccess bool
 const (
 	SiteWanListResponseEnvelopeSuccessTrue SiteWanListResponseEnvelopeSuccess = true
 )
+
+func (r SiteWanListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SiteWanDeleteResponseEnvelope struct {
 	Errors   []SiteWanDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -947,6 +971,14 @@ const (
 	SiteWanDeleteResponseEnvelopeSuccessTrue SiteWanDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SiteWanDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteWanGetResponseEnvelope struct {
 	Errors   []SiteWanGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteWanGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1027,3 +1059,11 @@ type SiteWanGetResponseEnvelopeSuccess bool
 const (
 	SiteWanGetResponseEnvelopeSuccessTrue SiteWanGetResponseEnvelopeSuccess = true
 )
+
+func (r SiteWanGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteWanGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

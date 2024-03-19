@@ -243,6 +243,14 @@ const (
 	SnippetUpdateResponseEnvelopeSuccessTrue SnippetUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SnippetUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SnippetListResponseEnvelope struct {
 	Errors   []SnippetListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SnippetListResponseEnvelopeMessages `json:"messages,required"`
@@ -325,6 +333,14 @@ const (
 	SnippetListResponseEnvelopeSuccessTrue SnippetListResponseEnvelopeSuccess = true
 )
 
+func (r SnippetListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SnippetListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SnippetDeleteResponseEnvelope struct {
 	Errors   []SnippetDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SnippetDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -405,6 +421,14 @@ type SnippetDeleteResponseEnvelopeSuccess bool
 const (
 	SnippetDeleteResponseEnvelopeSuccessTrue SnippetDeleteResponseEnvelopeSuccess = true
 )
+
+func (r SnippetDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SnippetDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SnippetGetResponseEnvelope struct {
 	Errors   []SnippetGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -487,3 +511,11 @@ type SnippetGetResponseEnvelopeSuccess bool
 const (
 	SnippetGetResponseEnvelopeSuccessTrue SnippetGetResponseEnvelopeSuccess = true
 )
+
+func (r SnippetGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SnippetGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

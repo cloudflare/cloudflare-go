@@ -111,6 +111,14 @@ const (
 	ZonesImageResizingIDImageResizing ZonesImageResizingID = "image_resizing"
 )
 
+func (r ZonesImageResizingID) IsKnown() bool {
+	switch r {
+	case ZonesImageResizingIDImageResizing:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesImageResizingValue string
 
@@ -120,6 +128,14 @@ const (
 	ZonesImageResizingValueOpen ZonesImageResizingValue = "open"
 )
 
+func (r ZonesImageResizingValue) IsKnown() bool {
+	switch r {
+	case ZonesImageResizingValueOn, ZonesImageResizingValueOff, ZonesImageResizingValueOpen:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesImageResizingEditable bool
@@ -128,6 +144,14 @@ const (
 	ZonesImageResizingEditableTrue  ZonesImageResizingEditable = true
 	ZonesImageResizingEditableFalse ZonesImageResizingEditable = false
 )
+
+func (r ZonesImageResizingEditable) IsKnown() bool {
+	switch r {
+	case ZonesImageResizingEditableTrue, ZonesImageResizingEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Image Resizing provides on-demand resizing, conversion and optimisation for
 // images served through Cloudflare's network. Refer to the

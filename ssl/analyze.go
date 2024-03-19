@@ -91,6 +91,14 @@ const (
 	AnalyzeNewParamsBundleMethodForce      AnalyzeNewParamsBundleMethod = "force"
 )
 
+func (r AnalyzeNewParamsBundleMethod) IsKnown() bool {
+	switch r {
+	case AnalyzeNewParamsBundleMethodUbiquitous, AnalyzeNewParamsBundleMethodOptimal, AnalyzeNewParamsBundleMethodForce:
+		return true
+	}
+	return false
+}
+
 type AnalyzeNewResponseEnvelope struct {
 	Errors   []AnalyzeNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AnalyzeNewResponseEnvelopeMessages `json:"messages,required"`
@@ -171,3 +179,11 @@ type AnalyzeNewResponseEnvelopeSuccess bool
 const (
 	AnalyzeNewResponseEnvelopeSuccessTrue AnalyzeNewResponseEnvelopeSuccess = true
 )
+
+func (r AnalyzeNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AnalyzeNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -100,6 +100,14 @@ const (
 	V2ListParamsSortOrderDesc V2ListParamsSortOrder = "desc"
 )
 
+func (r V2ListParamsSortOrder) IsKnown() bool {
+	switch r {
+	case V2ListParamsSortOrderAsc, V2ListParamsSortOrderDesc:
+		return true
+	}
+	return false
+}
+
 type V2ListResponseEnvelope struct {
 	Errors   []V2ListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []V2ListResponseEnvelopeMessages `json:"messages,required"`
@@ -180,3 +188,11 @@ type V2ListResponseEnvelopeSuccess bool
 const (
 	V2ListResponseEnvelopeSuccessTrue V2ListResponseEnvelopeSuccess = true
 )
+
+func (r V2ListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V2ListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

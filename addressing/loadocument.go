@@ -159,3 +159,11 @@ type LOADocumentNewResponseEnvelopeSuccess bool
 const (
 	LOADocumentNewResponseEnvelopeSuccessTrue LOADocumentNewResponseEnvelopeSuccess = true
 )
+
+func (r LOADocumentNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LOADocumentNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

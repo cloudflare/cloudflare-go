@@ -217,6 +217,14 @@ const (
 	UARuleListResponseModeManagedChallenge UARuleListResponseMode = "managed_challenge"
 )
 
+func (r UARuleListResponseMode) IsKnown() bool {
+	switch r {
+	case UARuleListResponseModeBlock, UARuleListResponseModeChallenge, UARuleListResponseModeJsChallenge, UARuleListResponseModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
 type UARuleDeleteResponse struct {
 	// The unique identifier of the User Agent Blocking rule.
 	ID   string                   `json:"id"`
@@ -344,6 +352,14 @@ const (
 	UARuleNewResponseEnvelopeSuccessTrue UARuleNewResponseEnvelopeSuccess = true
 )
 
+func (r UARuleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UARuleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type UARuleUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -432,6 +448,14 @@ type UARuleUpdateResponseEnvelopeSuccess bool
 const (
 	UARuleUpdateResponseEnvelopeSuccessTrue UARuleUpdateResponseEnvelopeSuccess = true
 )
+
+func (r UARuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UARuleUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type UARuleListParams struct {
 	// A string to search for in the description of existing rules.
@@ -536,6 +560,14 @@ const (
 	UARuleDeleteResponseEnvelopeSuccessTrue UARuleDeleteResponseEnvelopeSuccess = true
 )
 
+func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UARuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type UARuleGetResponseEnvelope struct {
 	Errors   []UARuleGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []UARuleGetResponseEnvelopeMessages `json:"messages,required"`
@@ -616,3 +648,11 @@ type UARuleGetResponseEnvelopeSuccess bool
 const (
 	UARuleGetResponseEnvelopeSuccessTrue UARuleGetResponseEnvelopeSuccess = true
 )
+
+func (r UARuleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UARuleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

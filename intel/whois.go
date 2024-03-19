@@ -176,3 +176,11 @@ type WhoisGetResponseEnvelopeSuccess bool
 const (
 	WhoisGetResponseEnvelopeSuccessTrue WhoisGetResponseEnvelopeSuccess = true
 )
+
+func (r WhoisGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case WhoisGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

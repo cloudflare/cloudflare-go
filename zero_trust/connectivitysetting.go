@@ -201,6 +201,14 @@ const (
 	ConnectivitySettingEditResponseEnvelopeSuccessTrue ConnectivitySettingEditResponseEnvelopeSuccess = true
 )
 
+func (r ConnectivitySettingEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConnectivitySettingEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ConnectivitySettingGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -286,3 +294,11 @@ type ConnectivitySettingGetResponseEnvelopeSuccess bool
 const (
 	ConnectivitySettingGetResponseEnvelopeSuccessTrue ConnectivitySettingGetResponseEnvelopeSuccess = true
 )
+
+func (r ConnectivitySettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConnectivitySettingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

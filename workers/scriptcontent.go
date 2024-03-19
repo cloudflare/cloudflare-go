@@ -173,3 +173,11 @@ type ScriptContentUpdateResponseEnvelopeSuccess bool
 const (
 	ScriptContentUpdateResponseEnvelopeSuccessTrue ScriptContentUpdateResponseEnvelopeSuccess = true
 )
+
+func (r ScriptContentUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ScriptContentUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

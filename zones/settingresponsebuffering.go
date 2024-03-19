@@ -110,6 +110,14 @@ const (
 	ZonesBufferingIDResponseBuffering ZonesBufferingID = "response_buffering"
 )
 
+func (r ZonesBufferingID) IsKnown() bool {
+	switch r {
+	case ZonesBufferingIDResponseBuffering:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesBufferingValue string
 
@@ -117,6 +125,14 @@ const (
 	ZonesBufferingValueOn  ZonesBufferingValue = "on"
 	ZonesBufferingValueOff ZonesBufferingValue = "off"
 )
+
+func (r ZonesBufferingValue) IsKnown() bool {
+	switch r {
+	case ZonesBufferingValueOn, ZonesBufferingValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -126,6 +142,14 @@ const (
 	ZonesBufferingEditableTrue  ZonesBufferingEditable = true
 	ZonesBufferingEditableFalse ZonesBufferingEditable = false
 )
+
+func (r ZonesBufferingEditable) IsKnown() bool {
+	switch r {
+	case ZonesBufferingEditableTrue, ZonesBufferingEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Enables or disables buffering of responses from the proxied server. Cloudflare
 // may buffer the whole payload to deliver it at once to the client versus allowing
@@ -162,6 +186,14 @@ const (
 	SettingResponseBufferingEditParamsValueOn  SettingResponseBufferingEditParamsValue = "on"
 	SettingResponseBufferingEditParamsValueOff SettingResponseBufferingEditParamsValue = "off"
 )
+
+func (r SettingResponseBufferingEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingResponseBufferingEditParamsValueOn, SettingResponseBufferingEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingResponseBufferingEditResponseEnvelope struct {
 	Errors   []SettingResponseBufferingEditResponseEnvelopeErrors   `json:"errors,required"`

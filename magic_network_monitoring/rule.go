@@ -239,6 +239,14 @@ const (
 	RuleNewResponseEnvelopeSuccessTrue RuleNewResponseEnvelopeSuccess = true
 )
 
+func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleUpdateResponseEnvelope struct {
 	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -319,6 +327,14 @@ type RuleUpdateResponseEnvelopeSuccess bool
 const (
 	RuleUpdateResponseEnvelopeSuccessTrue RuleUpdateResponseEnvelopeSuccess = true
 )
+
+func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RuleListResponseEnvelope struct {
 	Errors   []RuleListResponseEnvelopeErrors   `json:"errors,required"`
@@ -402,6 +418,14 @@ type RuleListResponseEnvelopeSuccess bool
 const (
 	RuleListResponseEnvelopeSuccessTrue RuleListResponseEnvelopeSuccess = true
 )
+
+func (r RuleListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RuleListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -515,6 +539,14 @@ const (
 	RuleDeleteResponseEnvelopeSuccessTrue RuleDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleEditResponseEnvelope struct {
 	Errors   []RuleEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleEditResponseEnvelopeMessages `json:"messages,required"`
@@ -596,6 +628,14 @@ const (
 	RuleEditResponseEnvelopeSuccessTrue RuleEditResponseEnvelopeSuccess = true
 )
 
+func (r RuleEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RuleGetResponseEnvelope struct {
 	Errors   []RuleGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleGetResponseEnvelopeMessages `json:"messages,required"`
@@ -676,3 +716,11 @@ type RuleGetResponseEnvelopeSuccess bool
 const (
 	RuleGetResponseEnvelopeSuccessTrue RuleGetResponseEnvelopeSuccess = true
 )
+
+func (r RuleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -107,6 +107,14 @@ const (
 	ZonesWebpIDWebp ZonesWebpID = "webp"
 )
 
+func (r ZonesWebpID) IsKnown() bool {
+	switch r {
+	case ZonesWebpIDWebp:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesWebpValue string
 
@@ -114,6 +122,14 @@ const (
 	ZonesWebpValueOff ZonesWebpValue = "off"
 	ZonesWebpValueOn  ZonesWebpValue = "on"
 )
+
+func (r ZonesWebpValue) IsKnown() bool {
+	switch r {
+	case ZonesWebpValueOff, ZonesWebpValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -123,6 +139,14 @@ const (
 	ZonesWebpEditableTrue  ZonesWebpEditable = true
 	ZonesWebpEditableFalse ZonesWebpEditable = false
 )
+
+func (r ZonesWebpEditable) IsKnown() bool {
+	switch r {
+	case ZonesWebpEditableTrue, ZonesWebpEditableFalse:
+		return true
+	}
+	return false
+}
 
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
@@ -158,6 +182,14 @@ const (
 	SettingWebpEditParamsValueOff SettingWebpEditParamsValue = "off"
 	SettingWebpEditParamsValueOn  SettingWebpEditParamsValue = "on"
 )
+
+func (r SettingWebpEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingWebpEditParamsValueOff, SettingWebpEditParamsValueOn:
+		return true
+	}
+	return false
+}
 
 type SettingWebpEditResponseEnvelope struct {
 	Errors   []SettingWebpEditResponseEnvelopeErrors   `json:"errors,required"`

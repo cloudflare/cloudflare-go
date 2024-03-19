@@ -102,6 +102,14 @@ const (
 	ZonesOpportunisticEncryptionIDOpportunisticEncryption ZonesOpportunisticEncryptionID = "opportunistic_encryption"
 )
 
+func (r ZonesOpportunisticEncryptionID) IsKnown() bool {
+	switch r {
+	case ZonesOpportunisticEncryptionIDOpportunisticEncryption:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesOpportunisticEncryptionValue string
 
@@ -109,6 +117,14 @@ const (
 	ZonesOpportunisticEncryptionValueOn  ZonesOpportunisticEncryptionValue = "on"
 	ZonesOpportunisticEncryptionValueOff ZonesOpportunisticEncryptionValue = "off"
 )
+
+func (r ZonesOpportunisticEncryptionValue) IsKnown() bool {
+	switch r {
+	case ZonesOpportunisticEncryptionValueOn, ZonesOpportunisticEncryptionValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -118,6 +134,14 @@ const (
 	ZonesOpportunisticEncryptionEditableTrue  ZonesOpportunisticEncryptionEditable = true
 	ZonesOpportunisticEncryptionEditableFalse ZonesOpportunisticEncryptionEditable = false
 )
+
+func (r ZonesOpportunisticEncryptionEditable) IsKnown() bool {
+	switch r {
+	case ZonesOpportunisticEncryptionEditableTrue, ZonesOpportunisticEncryptionEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Enables the Opportunistic Encryption feature for a zone.
 type ZonesOpportunisticEncryptionParam struct {
@@ -153,6 +177,14 @@ const (
 	SettingOpportunisticEncryptionEditParamsValueOn  SettingOpportunisticEncryptionEditParamsValue = "on"
 	SettingOpportunisticEncryptionEditParamsValueOff SettingOpportunisticEncryptionEditParamsValue = "off"
 )
+
+func (r SettingOpportunisticEncryptionEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingOpportunisticEncryptionEditParamsValueOn, SettingOpportunisticEncryptionEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingOpportunisticEncryptionEditResponseEnvelope struct {
 	Errors   []SettingOpportunisticEncryptionEditResponseEnvelopeErrors   `json:"errors,required"`

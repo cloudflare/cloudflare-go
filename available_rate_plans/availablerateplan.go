@@ -118,6 +118,14 @@ const (
 	AvailableRatePlanGetResponseComponentsNameDedicatedCertificatesCustom AvailableRatePlanGetResponseComponentsName = "dedicated_certificates_custom"
 )
 
+func (r AvailableRatePlanGetResponseComponentsName) IsKnown() bool {
+	switch r {
+	case AvailableRatePlanGetResponseComponentsNameZones, AvailableRatePlanGetResponseComponentsNamePageRules, AvailableRatePlanGetResponseComponentsNameDedicatedCertificates, AvailableRatePlanGetResponseComponentsNameDedicatedCertificatesCustom:
+		return true
+	}
+	return false
+}
+
 // The frequency at which you will be billed for this plan.
 type AvailableRatePlanGetResponseFrequency string
 
@@ -127,6 +135,14 @@ const (
 	AvailableRatePlanGetResponseFrequencyQuarterly AvailableRatePlanGetResponseFrequency = "quarterly"
 	AvailableRatePlanGetResponseFrequencyYearly    AvailableRatePlanGetResponseFrequency = "yearly"
 )
+
+func (r AvailableRatePlanGetResponseFrequency) IsKnown() bool {
+	switch r {
+	case AvailableRatePlanGetResponseFrequencyWeekly, AvailableRatePlanGetResponseFrequencyMonthly, AvailableRatePlanGetResponseFrequencyQuarterly, AvailableRatePlanGetResponseFrequencyYearly:
+		return true
+	}
+	return false
+}
 
 type AvailableRatePlanGetResponseEnvelope struct {
 	Errors   []AvailableRatePlanGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -210,6 +226,14 @@ type AvailableRatePlanGetResponseEnvelopeSuccess bool
 const (
 	AvailableRatePlanGetResponseEnvelopeSuccessTrue AvailableRatePlanGetResponseEnvelopeSuccess = true
 )
+
+func (r AvailableRatePlanGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AvailableRatePlanGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AvailableRatePlanGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

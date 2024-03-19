@@ -165,6 +165,14 @@ const (
 	V3ListResponseEnvelopeSuccessTrue V3ListResponseEnvelopeSuccess = true
 )
 
+func (r V3ListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case V3ListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type V3ListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

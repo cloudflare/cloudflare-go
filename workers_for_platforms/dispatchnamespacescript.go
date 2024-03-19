@@ -301,6 +301,14 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataPlacementModeSmart DispatchNamespaceScriptUpdateParamsMetadataPlacementMode = "smart"
 )
 
+func (r DispatchNamespaceScriptUpdateParamsMetadataPlacementMode) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataPlacementModeSmart:
+		return true
+	}
+	return false
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type DispatchNamespaceScriptUpdateParamsMetadataTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -322,6 +330,14 @@ const (
 	DispatchNamespaceScriptUpdateParamsMetadataUsageModelBundled DispatchNamespaceScriptUpdateParamsMetadataUsageModel = "bundled"
 	DispatchNamespaceScriptUpdateParamsMetadataUsageModelUnbound DispatchNamespaceScriptUpdateParamsMetadataUsageModel = "unbound"
 )
+
+func (r DispatchNamespaceScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateParamsMetadataUsageModelBundled, DispatchNamespaceScriptUpdateParamsMetadataUsageModelUnbound:
+		return true
+	}
+	return false
+}
 
 type DispatchNamespaceScriptUpdateResponseEnvelope struct {
 	Errors   []DispatchNamespaceScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -403,6 +419,14 @@ type DispatchNamespaceScriptUpdateResponseEnvelopeSuccess bool
 const (
 	DispatchNamespaceScriptUpdateResponseEnvelopeSuccessTrue DispatchNamespaceScriptUpdateResponseEnvelopeSuccess = true
 )
+
+func (r DispatchNamespaceScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DispatchNamespaceScriptDeleteParams struct {
 	// Identifier
@@ -508,3 +532,11 @@ type DispatchNamespaceScriptGetResponseEnvelopeSuccess bool
 const (
 	DispatchNamespaceScriptGetResponseEnvelopeSuccessTrue DispatchNamespaceScriptGetResponseEnvelopeSuccess = true
 )
+
+func (r DispatchNamespaceScriptGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

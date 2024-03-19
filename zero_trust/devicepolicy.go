@@ -371,6 +371,14 @@ const (
 	DevicePolicyNewResponseEnvelopeSuccessTrue DevicePolicyNewResponseEnvelopeSuccess = true
 )
 
+func (r DevicePolicyNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePolicyNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -489,6 +497,14 @@ const (
 	DevicePolicyListResponseEnvelopeSuccessTrue DevicePolicyListResponseEnvelopeSuccess = true
 )
 
+func (r DevicePolicyListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePolicyListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -606,6 +622,14 @@ type DevicePolicyDeleteResponseEnvelopeSuccess bool
 const (
 	DevicePolicyDeleteResponseEnvelopeSuccessTrue DevicePolicyDeleteResponseEnvelopeSuccess = true
 )
+
+func (r DevicePolicyDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePolicyDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -773,6 +797,14 @@ const (
 	DevicePolicyEditResponseEnvelopeSuccessTrue DevicePolicyEditResponseEnvelopeSuccess = true
 )
 
+func (r DevicePolicyEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePolicyEditResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -890,6 +922,14 @@ type DevicePolicyGetResponseEnvelopeSuccess bool
 const (
 	DevicePolicyGetResponseEnvelopeSuccessTrue DevicePolicyGetResponseEnvelopeSuccess = true
 )
+
+func (r DevicePolicyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePolicyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePolicyGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

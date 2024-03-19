@@ -191,6 +191,14 @@ const (
 	EntityLocationListParamsFormatCsv  EntityLocationListParamsFormat = "CSV"
 )
 
+func (r EntityLocationListParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityLocationListParamsFormatJson, EntityLocationListParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type EntityLocationListResponseEnvelope struct {
 	Result  EntityLocationListResponse             `json:"result,required"`
 	Success bool                                   `json:"success,required"`
@@ -235,6 +243,14 @@ const (
 	EntityLocationGetParamsFormatJson EntityLocationGetParamsFormat = "JSON"
 	EntityLocationGetParamsFormatCsv  EntityLocationGetParamsFormat = "CSV"
 )
+
+func (r EntityLocationGetParamsFormat) IsKnown() bool {
+	switch r {
+	case EntityLocationGetParamsFormatJson, EntityLocationGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type EntityLocationGetResponseEnvelope struct {
 	Result  EntityLocationGetResponse             `json:"result,required"`

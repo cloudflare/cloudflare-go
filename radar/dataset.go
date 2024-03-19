@@ -190,6 +190,14 @@ const (
 	DatasetListParamsDatasetTypeReport        DatasetListParamsDatasetType = "REPORT"
 )
 
+func (r DatasetListParamsDatasetType) IsKnown() bool {
+	switch r {
+	case DatasetListParamsDatasetTypeRankingBucket, DatasetListParamsDatasetTypeReport:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type DatasetListParamsFormat string
 
@@ -197,6 +205,14 @@ const (
 	DatasetListParamsFormatJson DatasetListParamsFormat = "JSON"
 	DatasetListParamsFormatCsv  DatasetListParamsFormat = "CSV"
 )
+
+func (r DatasetListParamsFormat) IsKnown() bool {
+	switch r {
+	case DatasetListParamsFormatJson, DatasetListParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type DatasetListResponseEnvelope struct {
 	Result  DatasetListResponse             `json:"result,required"`
@@ -246,6 +262,14 @@ const (
 	DatasetDownloadParamsFormatJson DatasetDownloadParamsFormat = "JSON"
 	DatasetDownloadParamsFormatCsv  DatasetDownloadParamsFormat = "CSV"
 )
+
+func (r DatasetDownloadParamsFormat) IsKnown() bool {
+	switch r {
+	case DatasetDownloadParamsFormatJson, DatasetDownloadParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type DatasetDownloadResponseEnvelope struct {
 	Result  DatasetDownloadResponse             `json:"result,required"`

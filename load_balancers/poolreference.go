@@ -79,6 +79,14 @@ const (
 	PoolReferenceGetResponseReferenceTypeReferrer PoolReferenceGetResponseReferenceType = "referrer"
 )
 
+func (r PoolReferenceGetResponseReferenceType) IsKnown() bool {
+	switch r {
+	case PoolReferenceGetResponseReferenceTypeStar, PoolReferenceGetResponseReferenceTypeReferral, PoolReferenceGetResponseReferenceTypeReferrer:
+		return true
+	}
+	return false
+}
+
 type PoolReferenceGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -167,6 +175,14 @@ type PoolReferenceGetResponseEnvelopeSuccess bool
 const (
 	PoolReferenceGetResponseEnvelopeSuccessTrue PoolReferenceGetResponseEnvelopeSuccess = true
 )
+
+func (r PoolReferenceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolReferenceGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PoolReferenceGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

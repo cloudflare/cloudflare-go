@@ -284,6 +284,14 @@ const (
 	PrefixNewResponseEnvelopeSuccessTrue PrefixNewResponseEnvelopeSuccess = true
 )
 
+func (r PrefixNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -371,6 +379,14 @@ type PrefixListResponseEnvelopeSuccess bool
 const (
 	PrefixListResponseEnvelopeSuccessTrue PrefixListResponseEnvelopeSuccess = true
 )
+
+func (r PrefixListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PrefixListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -490,6 +506,14 @@ type PrefixDeleteResponseEnvelopeSuccess bool
 const (
 	PrefixDeleteResponseEnvelopeSuccessTrue PrefixDeleteResponseEnvelopeSuccess = true
 )
+
+func (r PrefixDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type PrefixDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -614,6 +638,14 @@ const (
 	PrefixEditResponseEnvelopeSuccessTrue PrefixEditResponseEnvelopeSuccess = true
 )
 
+func (r PrefixEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PrefixGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -699,3 +731,11 @@ type PrefixGetResponseEnvelopeSuccess bool
 const (
 	PrefixGetResponseEnvelopeSuccessTrue PrefixGetResponseEnvelopeSuccess = true
 )
+
+func (r PrefixGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PrefixGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

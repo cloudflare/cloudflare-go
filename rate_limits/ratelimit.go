@@ -226,6 +226,14 @@ const (
 	RateLimitListResponseActionModeManagedChallenge RateLimitListResponseActionMode = "managed_challenge"
 )
 
+func (r RateLimitListResponseActionMode) IsKnown() bool {
+	switch r {
+	case RateLimitListResponseActionModeSimulate, RateLimitListResponseActionModeBan, RateLimitListResponseActionModeChallenge, RateLimitListResponseActionModeJsChallenge, RateLimitListResponseActionModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
 // A custom content type and reponse to return when the threshold is exceeded. The
 // custom response configured in this object will override the custom error for the
 // zone. This object is optional. Notes: If you omit this object, Cloudflare will
@@ -289,6 +297,14 @@ const (
 	RateLimitListResponseBypassNameURL RateLimitListResponseBypassName = "url"
 )
 
+func (r RateLimitListResponseBypassName) IsKnown() bool {
+	switch r {
+	case RateLimitListResponseBypassNameURL:
+		return true
+	}
+	return false
+}
+
 // Determines which traffic the rate limit counts towards the threshold.
 type RateLimitListResponseMatch struct {
 	Headers  []RateLimitListResponseMatchHeader `json:"headers"`
@@ -351,6 +367,14 @@ const (
 	RateLimitListResponseMatchHeadersOpNe RateLimitListResponseMatchHeadersOp = "ne"
 )
 
+func (r RateLimitListResponseMatchHeadersOp) IsKnown() bool {
+	switch r {
+	case RateLimitListResponseMatchHeadersOpEq, RateLimitListResponseMatchHeadersOpNe:
+		return true
+	}
+	return false
+}
+
 type RateLimitListResponseMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
@@ -398,6 +422,14 @@ const (
 	RateLimitListResponseMatchRequestMethodHead   RateLimitListResponseMatchRequestMethod = "HEAD"
 	RateLimitListResponseMatchRequestMethod_All   RateLimitListResponseMatchRequestMethod = "_ALL_"
 )
+
+func (r RateLimitListResponseMatchRequestMethod) IsKnown() bool {
+	switch r {
+	case RateLimitListResponseMatchRequestMethodGet, RateLimitListResponseMatchRequestMethodPost, RateLimitListResponseMatchRequestMethodPut, RateLimitListResponseMatchRequestMethodDelete, RateLimitListResponseMatchRequestMethodPatch, RateLimitListResponseMatchRequestMethodHead, RateLimitListResponseMatchRequestMethod_All:
+		return true
+	}
+	return false
+}
 
 type RateLimitListResponseMatchResponse struct {
 	// When true, only the uncached traffic served from your origin servers will count
@@ -570,6 +602,14 @@ const (
 	RateLimitNewResponseEnvelopeSuccessTrue RateLimitNewResponseEnvelopeSuccess = true
 )
 
+func (r RateLimitNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RateLimitNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RateLimitListParams struct {
 	// The page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -667,6 +707,14 @@ const (
 	RateLimitDeleteResponseEnvelopeSuccessTrue RateLimitDeleteResponseEnvelopeSuccess = true
 )
 
+func (r RateLimitDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RateLimitDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RateLimitEditParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -756,6 +804,14 @@ const (
 	RateLimitEditResponseEnvelopeSuccessTrue RateLimitEditResponseEnvelopeSuccess = true
 )
 
+func (r RateLimitEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RateLimitEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RateLimitGetResponseEnvelope struct {
 	Errors   []RateLimitGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RateLimitGetResponseEnvelopeMessages `json:"messages,required"`
@@ -836,3 +892,11 @@ type RateLimitGetResponseEnvelopeSuccess bool
 const (
 	RateLimitGetResponseEnvelopeSuccessTrue RateLimitGetResponseEnvelopeSuccess = true
 )
+
+func (r RateLimitGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RateLimitGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

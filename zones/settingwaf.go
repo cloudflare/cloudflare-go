@@ -127,6 +127,14 @@ const (
 	ZonesWAFIDWAF ZonesWAFID = "waf"
 )
 
+func (r ZonesWAFID) IsKnown() bool {
+	switch r {
+	case ZonesWAFIDWAF:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesWAFValue string
 
@@ -134,6 +142,14 @@ const (
 	ZonesWAFValueOn  ZonesWAFValue = "on"
 	ZonesWAFValueOff ZonesWAFValue = "off"
 )
+
+func (r ZonesWAFValue) IsKnown() bool {
+	switch r {
+	case ZonesWAFValueOn, ZonesWAFValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -143,6 +159,14 @@ const (
 	ZonesWAFEditableTrue  ZonesWAFEditable = true
 	ZonesWAFEditableFalse ZonesWAFEditable = false
 )
+
+func (r ZonesWAFEditable) IsKnown() bool {
+	switch r {
+	case ZonesWAFEditableTrue, ZonesWAFEditableFalse:
+		return true
+	}
+	return false
+}
 
 // The WAF examines HTTP requests to your website. It inspects both GET and POST
 // requests and applies rules to help filter out illegitimate traffic from
@@ -185,6 +209,14 @@ const (
 	SettingWAFEditParamsValueOn  SettingWAFEditParamsValue = "on"
 	SettingWAFEditParamsValueOff SettingWAFEditParamsValue = "off"
 )
+
+func (r SettingWAFEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingWAFEditParamsValueOn, SettingWAFEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingWAFEditResponseEnvelope struct {
 	Errors   []SettingWAFEditResponseEnvelopeErrors   `json:"errors,required"`

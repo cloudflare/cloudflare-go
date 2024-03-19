@@ -156,6 +156,14 @@ const (
 	GatewayListItemListResponseEnvelopeSuccessTrue GatewayListItemListResponseEnvelopeSuccess = true
 )
 
+func (r GatewayListItemListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayListItemListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayListItemListResponseEnvelopeResultInfo struct {
 	// Total results returned based on your search parameters.
 	Count float64 `json:"count"`

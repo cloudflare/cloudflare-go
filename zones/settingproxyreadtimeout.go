@@ -102,6 +102,14 @@ const (
 	ZonesProxyReadTimeoutIDProxyReadTimeout ZonesProxyReadTimeoutID = "proxy_read_timeout"
 )
 
+func (r ZonesProxyReadTimeoutID) IsKnown() bool {
+	switch r {
+	case ZonesProxyReadTimeoutIDProxyReadTimeout:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesProxyReadTimeoutEditable bool
@@ -110,6 +118,14 @@ const (
 	ZonesProxyReadTimeoutEditableTrue  ZonesProxyReadTimeoutEditable = true
 	ZonesProxyReadTimeoutEditableFalse ZonesProxyReadTimeoutEditable = false
 )
+
+func (r ZonesProxyReadTimeoutEditable) IsKnown() bool {
+	switch r {
+	case ZonesProxyReadTimeoutEditableTrue, ZonesProxyReadTimeoutEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Maximum time between two read operations from origin.
 type ZonesProxyReadTimeoutParam struct {

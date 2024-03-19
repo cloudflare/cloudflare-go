@@ -203,6 +203,14 @@ const (
 	ProjectDeploymentNewResponseEnvelopeSuccessTrue ProjectDeploymentNewResponseEnvelopeSuccess = true
 )
 
+func (r ProjectDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ProjectDeploymentListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -290,6 +298,14 @@ type ProjectDeploymentListResponseEnvelopeSuccess bool
 const (
 	ProjectDeploymentListResponseEnvelopeSuccessTrue ProjectDeploymentListResponseEnvelopeSuccess = true
 )
+
+func (r ProjectDeploymentListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ProjectDeploymentListResponseEnvelopeResultInfo struct {
 	Count      interface{}                                         `json:"count"`
@@ -409,6 +425,14 @@ const (
 	ProjectDeploymentGetResponseEnvelopeSuccessTrue ProjectDeploymentGetResponseEnvelopeSuccess = true
 )
 
+func (r ProjectDeploymentGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ProjectDeploymentRetryParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -495,6 +519,14 @@ const (
 	ProjectDeploymentRetryResponseEnvelopeSuccessTrue ProjectDeploymentRetryResponseEnvelopeSuccess = true
 )
 
+func (r ProjectDeploymentRetryResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentRetryResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ProjectDeploymentRollbackParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -580,3 +612,11 @@ type ProjectDeploymentRollbackResponseEnvelopeSuccess bool
 const (
 	ProjectDeploymentRollbackResponseEnvelopeSuccessTrue ProjectDeploymentRollbackResponseEnvelopeSuccess = true
 )
+
+func (r ProjectDeploymentRollbackResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentRollbackResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

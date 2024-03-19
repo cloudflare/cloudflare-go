@@ -178,6 +178,14 @@ const (
 	SeatEditResponseEnvelopeSuccessTrue SeatEditResponseEnvelopeSuccess = true
 )
 
+func (r SeatEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SeatEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SeatEditResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

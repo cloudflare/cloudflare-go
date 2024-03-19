@@ -134,3 +134,11 @@ type TokenValueUpdateResponseEnvelopeSuccess bool
 const (
 	TokenValueUpdateResponseEnvelopeSuccessTrue TokenValueUpdateResponseEnvelopeSuccess = true
 )
+
+func (r TokenValueUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenValueUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

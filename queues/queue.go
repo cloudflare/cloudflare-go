@@ -306,6 +306,14 @@ const (
 	QueueNewResponseEnvelopeSuccessTrue QueueNewResponseEnvelopeSuccess = true
 )
 
+func (r QueueNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case QueueNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type QueueNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -430,6 +438,14 @@ const (
 	QueueUpdateResponseEnvelopeSuccessTrue QueueUpdateResponseEnvelopeSuccess = true
 )
 
+func (r QueueUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case QueueUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type QueueUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -502,6 +518,14 @@ type QueueListResponseEnvelopeSuccess bool
 const (
 	QueueListResponseEnvelopeSuccessTrue QueueListResponseEnvelopeSuccess = true
 )
+
+func (r QueueListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case QueueListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type QueueListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -624,6 +648,14 @@ const (
 	QueueDeleteResponseEnvelopeSuccessTrue QueueDeleteResponseEnvelopeSuccess = true
 )
 
+func (r QueueDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case QueueDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type QueueDeleteResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -742,6 +774,14 @@ type QueueGetResponseEnvelopeSuccess bool
 const (
 	QueueGetResponseEnvelopeSuccessTrue QueueGetResponseEnvelopeSuccess = true
 )
+
+func (r QueueGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case QueueGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type QueueGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

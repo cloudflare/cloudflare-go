@@ -111,6 +111,14 @@ const (
 	ZonesMobileRedirectIDMobileRedirect ZonesMobileRedirectID = "mobile_redirect"
 )
 
+func (r ZonesMobileRedirectID) IsKnown() bool {
+	switch r {
+	case ZonesMobileRedirectIDMobileRedirect:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesMobileRedirectValue struct {
 	// Which subdomain prefix you wish to redirect visitors on mobile devices to
@@ -150,6 +158,14 @@ const (
 	ZonesMobileRedirectValueStatusOff ZonesMobileRedirectValueStatus = "off"
 )
 
+func (r ZonesMobileRedirectValueStatus) IsKnown() bool {
+	switch r {
+	case ZonesMobileRedirectValueStatusOn, ZonesMobileRedirectValueStatusOff:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesMobileRedirectEditable bool
@@ -158,6 +174,14 @@ const (
 	ZonesMobileRedirectEditableTrue  ZonesMobileRedirectEditable = true
 	ZonesMobileRedirectEditableFalse ZonesMobileRedirectEditable = false
 )
+
+func (r ZonesMobileRedirectEditable) IsKnown() bool {
+	switch r {
+	case ZonesMobileRedirectEditableTrue, ZonesMobileRedirectEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Automatically redirect visitors on mobile devices to a mobile-optimized
 // subdomain. Refer to
@@ -226,6 +250,14 @@ const (
 	SettingMobileRedirectEditParamsValueStatusOn  SettingMobileRedirectEditParamsValueStatus = "on"
 	SettingMobileRedirectEditParamsValueStatusOff SettingMobileRedirectEditParamsValueStatus = "off"
 )
+
+func (r SettingMobileRedirectEditParamsValueStatus) IsKnown() bool {
+	switch r {
+	case SettingMobileRedirectEditParamsValueStatusOn, SettingMobileRedirectEditParamsValueStatusOff:
+		return true
+	}
+	return false
+}
 
 type SettingMobileRedirectEditResponseEnvelope struct {
 	Errors   []SettingMobileRedirectEditResponseEnvelopeErrors   `json:"errors,required"`

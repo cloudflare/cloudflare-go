@@ -167,3 +167,11 @@ type DEXTestUniqueDeviceListResponseEnvelopeSuccess bool
 const (
 	DEXTestUniqueDeviceListResponseEnvelopeSuccessTrue DEXTestUniqueDeviceListResponseEnvelopeSuccess = true
 )
+
+func (r DEXTestUniqueDeviceListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DEXTestUniqueDeviceListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

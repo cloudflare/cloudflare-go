@@ -277,6 +277,14 @@ const (
 	DeviceDEXTestNewResponseEnvelopeSuccessTrue DeviceDEXTestNewResponseEnvelopeSuccess = true
 )
 
+func (r DeviceDEXTestNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The configuration object which contains the details for the WARP client to
@@ -392,6 +400,14 @@ const (
 	DeviceDEXTestUpdateResponseEnvelopeSuccessTrue DeviceDEXTestUpdateResponseEnvelopeSuccess = true
 )
 
+func (r DeviceDEXTestUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -476,6 +492,14 @@ type DeviceDEXTestListResponseEnvelopeSuccess bool
 const (
 	DeviceDEXTestListResponseEnvelopeSuccessTrue DeviceDEXTestListResponseEnvelopeSuccess = true
 )
+
+func (r DeviceDEXTestListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DeviceDEXTestDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -562,6 +586,14 @@ const (
 	DeviceDEXTestDeleteResponseEnvelopeSuccessTrue DeviceDEXTestDeleteResponseEnvelopeSuccess = true
 )
 
+func (r DeviceDEXTestDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DeviceDEXTestGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -646,3 +678,11 @@ type DeviceDEXTestGetResponseEnvelopeSuccess bool
 const (
 	DeviceDEXTestGetResponseEnvelopeSuccessTrue DeviceDEXTestGetResponseEnvelopeSuccess = true
 )
+
+func (r DeviceDEXTestGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceDEXTestGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

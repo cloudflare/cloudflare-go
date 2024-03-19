@@ -128,6 +128,14 @@ const (
 	TokenNewParamsAccessRulesActionBlock TokenNewParamsAccessRulesAction = "block"
 )
 
+func (r TokenNewParamsAccessRulesAction) IsKnown() bool {
+	switch r {
+	case TokenNewParamsAccessRulesActionAllow, TokenNewParamsAccessRulesActionBlock:
+		return true
+	}
+	return false
+}
+
 // Lists available rule types to match for requests. An `any` type matches all
 // requests and can be used as a wildcard to apply default actions after other
 // rules.
@@ -138,6 +146,14 @@ const (
 	TokenNewParamsAccessRulesTypeIPSrc          TokenNewParamsAccessRulesType = "ip.src"
 	TokenNewParamsAccessRulesTypeIPGeoipCountry TokenNewParamsAccessRulesType = "ip.geoip.country"
 )
+
+func (r TokenNewParamsAccessRulesType) IsKnown() bool {
+	switch r {
+	case TokenNewParamsAccessRulesTypeAny, TokenNewParamsAccessRulesTypeIPSrc, TokenNewParamsAccessRulesTypeIPGeoipCountry:
+		return true
+	}
+	return false
+}
 
 type TokenNewResponseEnvelope struct {
 	Errors   []TokenNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -219,3 +235,11 @@ type TokenNewResponseEnvelopeSuccess bool
 const (
 	TokenNewResponseEnvelopeSuccessTrue TokenNewResponseEnvelopeSuccess = true
 )
+
+func (r TokenNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

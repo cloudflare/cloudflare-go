@@ -105,6 +105,14 @@ const (
 	ZonesPrefetchPreloadIDPrefetchPreload ZonesPrefetchPreloadID = "prefetch_preload"
 )
 
+func (r ZonesPrefetchPreloadID) IsKnown() bool {
+	switch r {
+	case ZonesPrefetchPreloadIDPrefetchPreload:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesPrefetchPreloadValue string
 
@@ -112,6 +120,14 @@ const (
 	ZonesPrefetchPreloadValueOn  ZonesPrefetchPreloadValue = "on"
 	ZonesPrefetchPreloadValueOff ZonesPrefetchPreloadValue = "off"
 )
+
+func (r ZonesPrefetchPreloadValue) IsKnown() bool {
+	switch r {
+	case ZonesPrefetchPreloadValueOn, ZonesPrefetchPreloadValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -121,6 +137,14 @@ const (
 	ZonesPrefetchPreloadEditableTrue  ZonesPrefetchPreloadEditable = true
 	ZonesPrefetchPreloadEditableFalse ZonesPrefetchPreloadEditable = false
 )
+
+func (r ZonesPrefetchPreloadEditable) IsKnown() bool {
+	switch r {
+	case ZonesPrefetchPreloadEditableTrue, ZonesPrefetchPreloadEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
@@ -155,6 +179,14 @@ const (
 	SettingPrefetchPreloadEditParamsValueOn  SettingPrefetchPreloadEditParamsValue = "on"
 	SettingPrefetchPreloadEditParamsValueOff SettingPrefetchPreloadEditParamsValue = "off"
 )
+
+func (r SettingPrefetchPreloadEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingPrefetchPreloadEditParamsValueOn, SettingPrefetchPreloadEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingPrefetchPreloadEditResponseEnvelope struct {
 	Errors   []SettingPrefetchPreloadEditResponseEnvelopeErrors   `json:"errors,required"`

@@ -241,6 +241,14 @@ const (
 	TSIGNewResponseEnvelopeSuccessTrue TSIGNewResponseEnvelopeSuccess = true
 )
 
+func (r TSIGNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TSIGNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TSIGUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// TSIG algorithm.
@@ -336,6 +344,14 @@ const (
 	TSIGUpdateResponseEnvelopeSuccessTrue TSIGUpdateResponseEnvelopeSuccess = true
 )
 
+func (r TSIGUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TSIGUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TSIGListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -422,6 +438,14 @@ type TSIGListResponseEnvelopeSuccess bool
 const (
 	TSIGListResponseEnvelopeSuccessTrue TSIGListResponseEnvelopeSuccess = true
 )
+
+func (r TSIGListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TSIGListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type TSIGListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -539,6 +563,14 @@ const (
 	TSIGDeleteResponseEnvelopeSuccessTrue TSIGDeleteResponseEnvelopeSuccess = true
 )
 
+func (r TSIGDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TSIGDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TSIGGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -623,3 +655,11 @@ type TSIGGetResponseEnvelopeSuccess bool
 const (
 	TSIGGetResponseEnvelopeSuccessTrue TSIGGetResponseEnvelopeSuccess = true
 )
+
+func (r TSIGGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TSIGGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -157,6 +157,14 @@ const (
 	AssociationGetResponseEnvelopeSuccessTrue AssociationGetResponseEnvelopeSuccess = true
 )
 
+func (r AssociationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AssociationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AssociationGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

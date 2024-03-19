@@ -156,3 +156,11 @@ type DeploymentByScriptDetailGetResponseEnvelopeSuccess bool
 const (
 	DeploymentByScriptDetailGetResponseEnvelopeSuccessTrue DeploymentByScriptDetailGetResponseEnvelopeSuccess = true
 )
+
+func (r DeploymentByScriptDetailGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeploymentByScriptDetailGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

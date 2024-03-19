@@ -89,6 +89,14 @@ const (
 	SearchGetParamsSearchParamsReferencesReferrer SearchGetParamsSearchParamsReferences = "referrer"
 )
 
+func (r SearchGetParamsSearchParamsReferences) IsKnown() bool {
+	switch r {
+	case SearchGetParamsSearchParamsReferencesEmpty, SearchGetParamsSearchParamsReferencesStar, SearchGetParamsSearchParamsReferencesReferral, SearchGetParamsSearchParamsReferencesReferrer:
+		return true
+	}
+	return false
+}
+
 type SearchGetResponseEnvelope struct {
 	Errors   []SearchGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SearchGetResponseEnvelopeMessages `json:"messages,required"`
@@ -171,6 +179,14 @@ type SearchGetResponseEnvelopeSuccess bool
 const (
 	SearchGetResponseEnvelopeSuccessTrue SearchGetResponseEnvelopeSuccess = true
 )
+
+func (r SearchGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SearchGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type SearchGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

@@ -101,6 +101,14 @@ const (
 	CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt CertificatePackOrderNewResponseCertificateAuthority = "lets_encrypt"
 )
 
+func (r CertificatePackOrderNewResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseCertificateAuthorityGoogle, CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Status of certificate pack.
 type CertificatePackOrderNewResponseStatus string
 
@@ -128,12 +136,28 @@ const (
 	CertificatePackOrderNewResponseStatusHoldingDeployment    CertificatePackOrderNewResponseStatus = "holding_deployment"
 )
 
+func (r CertificatePackOrderNewResponseStatus) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseStatusInitializing, CertificatePackOrderNewResponseStatusPendingValidation, CertificatePackOrderNewResponseStatusDeleted, CertificatePackOrderNewResponseStatusPendingIssuance, CertificatePackOrderNewResponseStatusPendingDeployment, CertificatePackOrderNewResponseStatusPendingDeletion, CertificatePackOrderNewResponseStatusPendingExpiration, CertificatePackOrderNewResponseStatusExpired, CertificatePackOrderNewResponseStatusActive, CertificatePackOrderNewResponseStatusInitializingTimedOut, CertificatePackOrderNewResponseStatusValidationTimedOut, CertificatePackOrderNewResponseStatusIssuanceTimedOut, CertificatePackOrderNewResponseStatusDeploymentTimedOut, CertificatePackOrderNewResponseStatusDeletionTimedOut, CertificatePackOrderNewResponseStatusPendingCleanup, CertificatePackOrderNewResponseStatusStagingDeployment, CertificatePackOrderNewResponseStatusStagingActive, CertificatePackOrderNewResponseStatusDeactivating, CertificatePackOrderNewResponseStatusInactive, CertificatePackOrderNewResponseStatusBackupIssued, CertificatePackOrderNewResponseStatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
 // Type of certificate pack.
 type CertificatePackOrderNewResponseType string
 
 const (
 	CertificatePackOrderNewResponseTypeAdvanced CertificatePackOrderNewResponseType = "advanced"
 )
+
+func (r CertificatePackOrderNewResponseType) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseTypeAdvanced:
+		return true
+	}
+	return false
+}
 
 // Validation Method selected for the order.
 type CertificatePackOrderNewResponseValidationMethod string
@@ -144,6 +168,14 @@ const (
 	CertificatePackOrderNewResponseValidationMethodEmail CertificatePackOrderNewResponseValidationMethod = "email"
 )
 
+func (r CertificatePackOrderNewResponseValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseValidationMethodTXT, CertificatePackOrderNewResponseValidationMethodHTTP, CertificatePackOrderNewResponseValidationMethodEmail:
+		return true
+	}
+	return false
+}
+
 // Validity Days selected for the order.
 type CertificatePackOrderNewResponseValidityDays int64
 
@@ -153,6 +185,14 @@ const (
 	CertificatePackOrderNewResponseValidityDays90  CertificatePackOrderNewResponseValidityDays = 90
 	CertificatePackOrderNewResponseValidityDays365 CertificatePackOrderNewResponseValidityDays = 365
 )
+
+func (r CertificatePackOrderNewResponseValidityDays) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseValidityDays14, CertificatePackOrderNewResponseValidityDays30, CertificatePackOrderNewResponseValidityDays90, CertificatePackOrderNewResponseValidityDays365:
+		return true
+	}
+	return false
+}
 
 type CertificatePackOrderNewParams struct {
 	// Identifier
@@ -189,12 +229,28 @@ const (
 	CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt CertificatePackOrderNewParamsCertificateAuthority = "lets_encrypt"
 )
 
+func (r CertificatePackOrderNewParamsCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewParamsCertificateAuthorityGoogle, CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Type of certificate pack.
 type CertificatePackOrderNewParamsType string
 
 const (
 	CertificatePackOrderNewParamsTypeAdvanced CertificatePackOrderNewParamsType = "advanced"
 )
+
+func (r CertificatePackOrderNewParamsType) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewParamsTypeAdvanced:
+		return true
+	}
+	return false
+}
 
 // Validation Method selected for the order.
 type CertificatePackOrderNewParamsValidationMethod string
@@ -205,6 +261,14 @@ const (
 	CertificatePackOrderNewParamsValidationMethodEmail CertificatePackOrderNewParamsValidationMethod = "email"
 )
 
+func (r CertificatePackOrderNewParamsValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewParamsValidationMethodTXT, CertificatePackOrderNewParamsValidationMethodHTTP, CertificatePackOrderNewParamsValidationMethodEmail:
+		return true
+	}
+	return false
+}
+
 // Validity Days selected for the order.
 type CertificatePackOrderNewParamsValidityDays int64
 
@@ -214,6 +278,14 @@ const (
 	CertificatePackOrderNewParamsValidityDays90  CertificatePackOrderNewParamsValidityDays = 90
 	CertificatePackOrderNewParamsValidityDays365 CertificatePackOrderNewParamsValidityDays = 365
 )
+
+func (r CertificatePackOrderNewParamsValidityDays) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewParamsValidityDays14, CertificatePackOrderNewParamsValidityDays30, CertificatePackOrderNewParamsValidityDays90, CertificatePackOrderNewParamsValidityDays365:
+		return true
+	}
+	return false
+}
 
 type CertificatePackOrderNewResponseEnvelope struct {
 	Errors   []CertificatePackOrderNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -295,3 +367,11 @@ type CertificatePackOrderNewResponseEnvelopeSuccess bool
 const (
 	CertificatePackOrderNewResponseEnvelopeSuccessTrue CertificatePackOrderNewResponseEnvelopeSuccess = true
 )
+
+func (r CertificatePackOrderNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

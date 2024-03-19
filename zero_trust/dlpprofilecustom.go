@@ -256,12 +256,28 @@ const (
 	DLPCustomProfileEntriesPatternValidationLuhn DLPCustomProfileEntriesPatternValidation = "luhn"
 )
 
+func (r DLPCustomProfileEntriesPatternValidation) IsKnown() bool {
+	switch r {
+	case DLPCustomProfileEntriesPatternValidationLuhn:
+		return true
+	}
+	return false
+}
+
 // The type of the profile.
 type DLPCustomProfileType string
 
 const (
 	DLPCustomProfileTypeCustom DLPCustomProfileType = "custom"
 )
+
+func (r DLPCustomProfileType) IsKnown() bool {
+	switch r {
+	case DLPCustomProfileTypeCustom:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [zero_trust.DLPProfileCustomDeleteResponseUnknown] or
 // [shared.UnionString].
@@ -367,6 +383,14 @@ const (
 	DLPProfileCustomNewParamsProfilesEntriesPatternValidationLuhn DLPProfileCustomNewParamsProfilesEntriesPatternValidation = "luhn"
 )
 
+func (r DLPProfileCustomNewParamsProfilesEntriesPatternValidation) IsKnown() bool {
+	switch r {
+	case DLPProfileCustomNewParamsProfilesEntriesPatternValidationLuhn:
+		return true
+	}
+	return false
+}
+
 type DLPProfileCustomNewResponseEnvelope struct {
 	Errors   []DLPProfileCustomNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DLPProfileCustomNewResponseEnvelopeMessages `json:"messages,required"`
@@ -449,6 +473,14 @@ type DLPProfileCustomNewResponseEnvelopeSuccess bool
 const (
 	DLPProfileCustomNewResponseEnvelopeSuccessTrue DLPProfileCustomNewResponseEnvelopeSuccess = true
 )
+
+func (r DLPProfileCustomNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfileCustomNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DLPProfileCustomNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -566,6 +598,14 @@ type DLPProfileCustomUpdateParamsEntriesPatternValidation string
 const (
 	DLPProfileCustomUpdateParamsEntriesPatternValidationLuhn DLPProfileCustomUpdateParamsEntriesPatternValidation = "luhn"
 )
+
+func (r DLPProfileCustomUpdateParamsEntriesPatternValidation) IsKnown() bool {
+	switch r {
+	case DLPProfileCustomUpdateParamsEntriesPatternValidationLuhn:
+		return true
+	}
+	return false
+}
 
 // Properties of a predefined entry in a custom profile
 //
@@ -688,6 +728,14 @@ const (
 	DLPProfileCustomDeleteResponseEnvelopeSuccessTrue DLPProfileCustomDeleteResponseEnvelopeSuccess = true
 )
 
+func (r DLPProfileCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfileCustomDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DLPProfileCustomGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -773,3 +821,11 @@ type DLPProfileCustomGetResponseEnvelopeSuccess bool
 const (
 	DLPProfileCustomGetResponseEnvelopeSuccessTrue DLPProfileCustomGetResponseEnvelopeSuccess = true
 )
+
+func (r DLPProfileCustomGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfileCustomGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

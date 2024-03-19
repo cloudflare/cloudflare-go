@@ -219,6 +219,14 @@ const (
 	UniversalSettingEditResponseEnvelopeSuccessTrue UniversalSettingEditResponseEnvelopeSuccess = true
 )
 
+func (r UniversalSettingEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UniversalSettingEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type UniversalSettingGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -304,3 +312,11 @@ type UniversalSettingGetResponseEnvelopeSuccess bool
 const (
 	UniversalSettingGetResponseEnvelopeSuccessTrue UniversalSettingGetResponseEnvelopeSuccess = true
 )
+
+func (r UniversalSettingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UniversalSettingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

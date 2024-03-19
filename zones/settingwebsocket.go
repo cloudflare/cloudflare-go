@@ -110,6 +110,14 @@ const (
 	ZonesWebsocketsIDWebsockets ZonesWebsocketsID = "websockets"
 )
 
+func (r ZonesWebsocketsID) IsKnown() bool {
+	switch r {
+	case ZonesWebsocketsIDWebsockets:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesWebsocketsValue string
 
@@ -117,6 +125,14 @@ const (
 	ZonesWebsocketsValueOff ZonesWebsocketsValue = "off"
 	ZonesWebsocketsValueOn  ZonesWebsocketsValue = "on"
 )
+
+func (r ZonesWebsocketsValue) IsKnown() bool {
+	switch r {
+	case ZonesWebsocketsValueOff, ZonesWebsocketsValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -126,6 +142,14 @@ const (
 	ZonesWebsocketsEditableTrue  ZonesWebsocketsEditable = true
 	ZonesWebsocketsEditableFalse ZonesWebsocketsEditable = false
 )
+
+func (r ZonesWebsocketsEditable) IsKnown() bool {
+	switch r {
+	case ZonesWebsocketsEditableTrue, ZonesWebsocketsEditableFalse:
+		return true
+	}
+	return false
+}
 
 // WebSockets are open connections sustained between the client and the origin
 // server. Inside a WebSockets connection, the client and the origin can pass data
@@ -165,6 +189,14 @@ const (
 	SettingWebsocketEditParamsValueOff SettingWebsocketEditParamsValue = "off"
 	SettingWebsocketEditParamsValueOn  SettingWebsocketEditParamsValue = "on"
 )
+
+func (r SettingWebsocketEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingWebsocketEditParamsValueOff, SettingWebsocketEditParamsValueOn:
+		return true
+	}
+	return false
+}
 
 type SettingWebsocketEditResponseEnvelope struct {
 	Errors   []SettingWebsocketEditResponseEnvelopeErrors   `json:"errors,required"`

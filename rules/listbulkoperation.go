@@ -129,3 +129,11 @@ type ListBulkOperationGetResponseEnvelopeSuccess bool
 const (
 	ListBulkOperationGetResponseEnvelopeSuccessTrue ListBulkOperationGetResponseEnvelopeSuccess = true
 )
+
+func (r ListBulkOperationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ListBulkOperationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -104,6 +104,14 @@ const (
 	ZonesMinTLSVersionIDMinTLSVersion ZonesMinTLSVersionID = "min_tls_version"
 )
 
+func (r ZonesMinTLSVersionID) IsKnown() bool {
+	switch r {
+	case ZonesMinTLSVersionIDMinTLSVersion:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesMinTLSVersionValue string
 
@@ -114,6 +122,14 @@ const (
 	ZonesMinTLSVersionValue1_3 ZonesMinTLSVersionValue = "1.3"
 )
 
+func (r ZonesMinTLSVersionValue) IsKnown() bool {
+	switch r {
+	case ZonesMinTLSVersionValue1_0, ZonesMinTLSVersionValue1_1, ZonesMinTLSVersionValue1_2, ZonesMinTLSVersionValue1_3:
+		return true
+	}
+	return false
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZonesMinTLSVersionEditable bool
@@ -122,6 +138,14 @@ const (
 	ZonesMinTLSVersionEditableTrue  ZonesMinTLSVersionEditable = true
 	ZonesMinTLSVersionEditableFalse ZonesMinTLSVersionEditable = false
 )
+
+func (r ZonesMinTLSVersionEditable) IsKnown() bool {
+	switch r {
+	case ZonesMinTLSVersionEditableTrue, ZonesMinTLSVersionEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Only accepts HTTPS requests that use at least the TLS protocol version
 // specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
@@ -159,6 +183,14 @@ const (
 	SettingMinTLSVersionEditParamsValue1_2 SettingMinTLSVersionEditParamsValue = "1.2"
 	SettingMinTLSVersionEditParamsValue1_3 SettingMinTLSVersionEditParamsValue = "1.3"
 )
+
+func (r SettingMinTLSVersionEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingMinTLSVersionEditParamsValue1_0, SettingMinTLSVersionEditParamsValue1_1, SettingMinTLSVersionEditParamsValue1_2, SettingMinTLSVersionEditParamsValue1_3:
+		return true
+	}
+	return false
+}
 
 type SettingMinTLSVersionEditResponseEnvelope struct {
 	Errors   []SettingMinTLSVersionEditResponseEnvelopeErrors   `json:"errors,required"`

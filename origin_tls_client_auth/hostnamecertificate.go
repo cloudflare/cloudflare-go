@@ -141,6 +141,14 @@ const (
 	TLSCertificatesAndHostnamesSchemasCertificateObjectStatusDeletionTimedOut   TLSCertificatesAndHostnamesSchemasCertificateObjectStatus = "deletion_timed_out"
 )
 
+func (r TLSCertificatesAndHostnamesSchemasCertificateObjectStatus) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesSchemasCertificateObjectStatusInitializing, TLSCertificatesAndHostnamesSchemasCertificateObjectStatusPendingDeployment, TLSCertificatesAndHostnamesSchemasCertificateObjectStatusPendingDeletion, TLSCertificatesAndHostnamesSchemasCertificateObjectStatusActive, TLSCertificatesAndHostnamesSchemasCertificateObjectStatusDeleted, TLSCertificatesAndHostnamesSchemasCertificateObjectStatusDeploymentTimedOut, TLSCertificatesAndHostnamesSchemasCertificateObjectStatusDeletionTimedOut:
+		return true
+	}
+	return false
+}
+
 type HostnameCertificateNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -235,6 +243,14 @@ const (
 	HostnameCertificateNewResponseEnvelopeSuccessTrue HostnameCertificateNewResponseEnvelopeSuccess = true
 )
 
+func (r HostnameCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameCertificateNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HostnameCertificateListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -322,6 +338,14 @@ type HostnameCertificateListResponseEnvelopeSuccess bool
 const (
 	HostnameCertificateListResponseEnvelopeSuccessTrue HostnameCertificateListResponseEnvelopeSuccess = true
 )
+
+func (r HostnameCertificateListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameCertificateListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type HostnameCertificateListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -440,6 +464,14 @@ const (
 	HostnameCertificateDeleteResponseEnvelopeSuccessTrue HostnameCertificateDeleteResponseEnvelopeSuccess = true
 )
 
+func (r HostnameCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameCertificateDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HostnameCertificateGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -525,3 +557,11 @@ type HostnameCertificateGetResponseEnvelopeSuccess bool
 const (
 	HostnameCertificateGetResponseEnvelopeSuccessTrue HostnameCertificateGetResponseEnvelopeSuccess = true
 )
+
+func (r HostnameCertificateGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameCertificateGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

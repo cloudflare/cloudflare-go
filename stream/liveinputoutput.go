@@ -215,6 +215,14 @@ const (
 	LiveInputOutputNewResponseEnvelopeSuccessTrue LiveInputOutputNewResponseEnvelopeSuccess = true
 )
 
+func (r LiveInputOutputNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LiveInputOutputNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LiveInputOutputUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -311,6 +319,14 @@ const (
 	LiveInputOutputUpdateResponseEnvelopeSuccessTrue LiveInputOutputUpdateResponseEnvelopeSuccess = true
 )
 
+func (r LiveInputOutputUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LiveInputOutputUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type LiveInputOutputListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -396,6 +412,14 @@ type LiveInputOutputListResponseEnvelopeSuccess bool
 const (
 	LiveInputOutputListResponseEnvelopeSuccessTrue LiveInputOutputListResponseEnvelopeSuccess = true
 )
+
+func (r LiveInputOutputListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LiveInputOutputListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type LiveInputOutputDeleteParams struct {
 	// Identifier

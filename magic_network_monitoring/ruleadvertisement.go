@@ -147,3 +147,11 @@ type RuleAdvertisementEditResponseEnvelopeSuccess bool
 const (
 	RuleAdvertisementEditResponseEnvelopeSuccessTrue RuleAdvertisementEditResponseEnvelopeSuccess = true
 )
+
+func (r RuleAdvertisementEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleAdvertisementEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

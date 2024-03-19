@@ -271,3 +271,11 @@ type DexhttpTestPercentileGetResponseEnvelopeSuccess bool
 const (
 	DexhttpTestPercentileGetResponseEnvelopeSuccessTrue DexhttpTestPercentileGetResponseEnvelopeSuccess = true
 )
+
+func (r DexhttpTestPercentileGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DexhttpTestPercentileGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -264,6 +264,14 @@ const (
 	ProjectDomainNewResponseEnvelopeSuccessTrue ProjectDomainNewResponseEnvelopeSuccess = true
 )
 
+func (r ProjectDomainNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDomainNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ProjectDomainListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -351,6 +359,14 @@ type ProjectDomainListResponseEnvelopeSuccess bool
 const (
 	ProjectDomainListResponseEnvelopeSuccessTrue ProjectDomainListResponseEnvelopeSuccess = true
 )
+
+func (r ProjectDomainListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDomainListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ProjectDomainListResponseEnvelopeResultInfo struct {
 	Count      interface{}                                     `json:"count"`
@@ -470,6 +486,14 @@ const (
 	ProjectDomainEditResponseEnvelopeSuccessTrue ProjectDomainEditResponseEnvelopeSuccess = true
 )
 
+func (r ProjectDomainEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDomainEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ProjectDomainGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -555,3 +579,11 @@ type ProjectDomainGetResponseEnvelopeSuccess bool
 const (
 	ProjectDomainGetResponseEnvelopeSuccessTrue ProjectDomainGetResponseEnvelopeSuccess = true
 )
+
+func (r ProjectDomainGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDomainGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

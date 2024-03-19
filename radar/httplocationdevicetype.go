@@ -263,12 +263,28 @@ const (
 	HTTPLocationDeviceTypeGetParamsDeviceTypeOther   HTTPLocationDeviceTypeGetParamsDeviceType = "OTHER"
 )
 
+func (r HTTPLocationDeviceTypeGetParamsDeviceType) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetParamsDeviceTypeDesktop, HTTPLocationDeviceTypeGetParamsDeviceTypeMobile, HTTPLocationDeviceTypeGetParamsDeviceTypeOther:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationDeviceTypeGetParamsBotClass string
 
 const (
 	HTTPLocationDeviceTypeGetParamsBotClassLikelyAutomated HTTPLocationDeviceTypeGetParamsBotClass = "LIKELY_AUTOMATED"
 	HTTPLocationDeviceTypeGetParamsBotClassLikelyHuman     HTTPLocationDeviceTypeGetParamsBotClass = "LIKELY_HUMAN"
 )
+
+func (r HTTPLocationDeviceTypeGetParamsBotClass) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetParamsBotClassLikelyAutomated, HTTPLocationDeviceTypeGetParamsBotClassLikelyHuman:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationDeviceTypeGetParamsDateRange string
 
@@ -290,6 +306,14 @@ const (
 	HTTPLocationDeviceTypeGetParamsDateRange24wControl HTTPLocationDeviceTypeGetParamsDateRange = "24wControl"
 )
 
+func (r HTTPLocationDeviceTypeGetParamsDateRange) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetParamsDateRange1d, HTTPLocationDeviceTypeGetParamsDateRange2d, HTTPLocationDeviceTypeGetParamsDateRange7d, HTTPLocationDeviceTypeGetParamsDateRange14d, HTTPLocationDeviceTypeGetParamsDateRange28d, HTTPLocationDeviceTypeGetParamsDateRange12w, HTTPLocationDeviceTypeGetParamsDateRange24w, HTTPLocationDeviceTypeGetParamsDateRange52w, HTTPLocationDeviceTypeGetParamsDateRange1dControl, HTTPLocationDeviceTypeGetParamsDateRange2dControl, HTTPLocationDeviceTypeGetParamsDateRange7dControl, HTTPLocationDeviceTypeGetParamsDateRange14dControl, HTTPLocationDeviceTypeGetParamsDateRange28dControl, HTTPLocationDeviceTypeGetParamsDateRange12wControl, HTTPLocationDeviceTypeGetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type HTTPLocationDeviceTypeGetParamsFormat string
 
@@ -298,12 +322,28 @@ const (
 	HTTPLocationDeviceTypeGetParamsFormatCsv  HTTPLocationDeviceTypeGetParamsFormat = "CSV"
 )
 
+func (r HTTPLocationDeviceTypeGetParamsFormat) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetParamsFormatJson, HTTPLocationDeviceTypeGetParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationDeviceTypeGetParamsHTTPProtocol string
 
 const (
 	HTTPLocationDeviceTypeGetParamsHTTPProtocolHTTP  HTTPLocationDeviceTypeGetParamsHTTPProtocol = "HTTP"
 	HTTPLocationDeviceTypeGetParamsHTTPProtocolHTTPS HTTPLocationDeviceTypeGetParamsHTTPProtocol = "HTTPS"
 )
+
+func (r HTTPLocationDeviceTypeGetParamsHTTPProtocol) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetParamsHTTPProtocolHTTP, HTTPLocationDeviceTypeGetParamsHTTPProtocolHTTPS:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationDeviceTypeGetParamsHTTPVersion string
 
@@ -313,12 +353,28 @@ const (
 	HTTPLocationDeviceTypeGetParamsHTTPVersionHttPv3 HTTPLocationDeviceTypeGetParamsHTTPVersion = "HTTPv3"
 )
 
+func (r HTTPLocationDeviceTypeGetParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetParamsHTTPVersionHttPv1, HTTPLocationDeviceTypeGetParamsHTTPVersionHttPv2, HTTPLocationDeviceTypeGetParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationDeviceTypeGetParamsIPVersion string
 
 const (
 	HTTPLocationDeviceTypeGetParamsIPVersionIPv4 HTTPLocationDeviceTypeGetParamsIPVersion = "IPv4"
 	HTTPLocationDeviceTypeGetParamsIPVersionIPv6 HTTPLocationDeviceTypeGetParamsIPVersion = "IPv6"
 )
+
+func (r HTTPLocationDeviceTypeGetParamsIPVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetParamsIPVersionIPv4, HTTPLocationDeviceTypeGetParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationDeviceTypeGetParamsOS string
 
@@ -332,6 +388,14 @@ const (
 	HTTPLocationDeviceTypeGetParamsOSSmartTv  HTTPLocationDeviceTypeGetParamsOS = "SMART_TV"
 )
 
+func (r HTTPLocationDeviceTypeGetParamsOS) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetParamsOSWindows, HTTPLocationDeviceTypeGetParamsOSMacosx, HTTPLocationDeviceTypeGetParamsOSIos, HTTPLocationDeviceTypeGetParamsOSAndroid, HTTPLocationDeviceTypeGetParamsOSChromeos, HTTPLocationDeviceTypeGetParamsOSLinux, HTTPLocationDeviceTypeGetParamsOSSmartTv:
+		return true
+	}
+	return false
+}
+
 type HTTPLocationDeviceTypeGetParamsTLSVersion string
 
 const (
@@ -341,6 +405,14 @@ const (
 	HTTPLocationDeviceTypeGetParamsTLSVersionTlSv1_3  HTTPLocationDeviceTypeGetParamsTLSVersion = "TLSv1_3"
 	HTTPLocationDeviceTypeGetParamsTLSVersionTlSvQuic HTTPLocationDeviceTypeGetParamsTLSVersion = "TLSvQUIC"
 )
+
+func (r HTTPLocationDeviceTypeGetParamsTLSVersion) IsKnown() bool {
+	switch r {
+	case HTTPLocationDeviceTypeGetParamsTLSVersionTlSv1_0, HTTPLocationDeviceTypeGetParamsTLSVersionTlSv1_1, HTTPLocationDeviceTypeGetParamsTLSVersionTlSv1_2, HTTPLocationDeviceTypeGetParamsTLSVersionTlSv1_3, HTTPLocationDeviceTypeGetParamsTLSVersionTlSvQuic:
+		return true
+	}
+	return false
+}
 
 type HTTPLocationDeviceTypeGetResponseEnvelope struct {
 	Result  HTTPLocationDeviceTypeGetResponse             `json:"result,required"`

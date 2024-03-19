@@ -433,6 +433,14 @@ const (
 	AttackLayer7TopLocationOriginParamsDateRange24wControl AttackLayer7TopLocationOriginParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TopLocationOriginParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopLocationOriginParamsDateRange1d, AttackLayer7TopLocationOriginParamsDateRange2d, AttackLayer7TopLocationOriginParamsDateRange7d, AttackLayer7TopLocationOriginParamsDateRange14d, AttackLayer7TopLocationOriginParamsDateRange28d, AttackLayer7TopLocationOriginParamsDateRange12w, AttackLayer7TopLocationOriginParamsDateRange24w, AttackLayer7TopLocationOriginParamsDateRange52w, AttackLayer7TopLocationOriginParamsDateRange1dControl, AttackLayer7TopLocationOriginParamsDateRange2dControl, AttackLayer7TopLocationOriginParamsDateRange7dControl, AttackLayer7TopLocationOriginParamsDateRange14dControl, AttackLayer7TopLocationOriginParamsDateRange28dControl, AttackLayer7TopLocationOriginParamsDateRange12wControl, AttackLayer7TopLocationOriginParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TopLocationOriginParamsFormat string
 
@@ -440,6 +448,14 @@ const (
 	AttackLayer7TopLocationOriginParamsFormatJson AttackLayer7TopLocationOriginParamsFormat = "JSON"
 	AttackLayer7TopLocationOriginParamsFormatCsv  AttackLayer7TopLocationOriginParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TopLocationOriginParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopLocationOriginParamsFormatJson, AttackLayer7TopLocationOriginParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TopLocationOriginResponseEnvelope struct {
 	Result  AttackLayer7TopLocationOriginResponse             `json:"result,required"`
@@ -514,6 +530,14 @@ const (
 	AttackLayer7TopLocationTargetParamsDateRange24wControl AttackLayer7TopLocationTargetParamsDateRange = "24wControl"
 )
 
+func (r AttackLayer7TopLocationTargetParamsDateRange) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopLocationTargetParamsDateRange1d, AttackLayer7TopLocationTargetParamsDateRange2d, AttackLayer7TopLocationTargetParamsDateRange7d, AttackLayer7TopLocationTargetParamsDateRange14d, AttackLayer7TopLocationTargetParamsDateRange28d, AttackLayer7TopLocationTargetParamsDateRange12w, AttackLayer7TopLocationTargetParamsDateRange24w, AttackLayer7TopLocationTargetParamsDateRange52w, AttackLayer7TopLocationTargetParamsDateRange1dControl, AttackLayer7TopLocationTargetParamsDateRange2dControl, AttackLayer7TopLocationTargetParamsDateRange7dControl, AttackLayer7TopLocationTargetParamsDateRange14dControl, AttackLayer7TopLocationTargetParamsDateRange28dControl, AttackLayer7TopLocationTargetParamsDateRange12wControl, AttackLayer7TopLocationTargetParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AttackLayer7TopLocationTargetParamsFormat string
 
@@ -521,6 +545,14 @@ const (
 	AttackLayer7TopLocationTargetParamsFormatJson AttackLayer7TopLocationTargetParamsFormat = "JSON"
 	AttackLayer7TopLocationTargetParamsFormatCsv  AttackLayer7TopLocationTargetParamsFormat = "CSV"
 )
+
+func (r AttackLayer7TopLocationTargetParamsFormat) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopLocationTargetParamsFormatJson, AttackLayer7TopLocationTargetParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AttackLayer7TopLocationTargetResponseEnvelope struct {
 	Result  AttackLayer7TopLocationTargetResponse             `json:"result,required"`

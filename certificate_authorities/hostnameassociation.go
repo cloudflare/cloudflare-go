@@ -180,6 +180,14 @@ const (
 	HostnameAssociationUpdateResponseEnvelopeSuccessTrue HostnameAssociationUpdateResponseEnvelopeSuccess = true
 )
 
+func (r HostnameAssociationUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameAssociationUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type HostnameAssociationGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -278,3 +286,11 @@ type HostnameAssociationGetResponseEnvelopeSuccess bool
 const (
 	HostnameAssociationGetResponseEnvelopeSuccessTrue HostnameAssociationGetResponseEnvelopeSuccess = true
 )
+
+func (r HostnameAssociationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HostnameAssociationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

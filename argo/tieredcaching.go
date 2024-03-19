@@ -113,6 +113,14 @@ const (
 	TieredCachingEditParamsValueOff TieredCachingEditParamsValue = "off"
 )
 
+func (r TieredCachingEditParamsValue) IsKnown() bool {
+	switch r {
+	case TieredCachingEditParamsValueOn, TieredCachingEditParamsValueOff:
+		return true
+	}
+	return false
+}
+
 type TieredCachingEditResponseEnvelope struct {
 	Errors   []TieredCachingEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TieredCachingEditResponseEnvelopeMessages `json:"messages,required"`
@@ -193,6 +201,14 @@ type TieredCachingEditResponseEnvelopeSuccess bool
 const (
 	TieredCachingEditResponseEnvelopeSuccessTrue TieredCachingEditResponseEnvelopeSuccess = true
 )
+
+func (r TieredCachingEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TieredCachingEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type TieredCachingGetParams struct {
 	// Identifier
@@ -279,3 +295,11 @@ type TieredCachingGetResponseEnvelopeSuccess bool
 const (
 	TieredCachingGetResponseEnvelopeSuccessTrue TieredCachingGetResponseEnvelopeSuccess = true
 )
+
+func (r TieredCachingGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TieredCachingGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -313,6 +313,14 @@ const (
 	QualityIQISummaryParamsMetricLatency   QualityIQISummaryParamsMetric = "LATENCY"
 )
 
+func (r QualityIQISummaryParamsMetric) IsKnown() bool {
+	switch r {
+	case QualityIQISummaryParamsMetricBandwidth, QualityIQISummaryParamsMetricDNS, QualityIQISummaryParamsMetricLatency:
+		return true
+	}
+	return false
+}
+
 type QualityIQISummaryParamsDateRange string
 
 const (
@@ -333,6 +341,14 @@ const (
 	QualityIQISummaryParamsDateRange24wControl QualityIQISummaryParamsDateRange = "24wControl"
 )
 
+func (r QualityIQISummaryParamsDateRange) IsKnown() bool {
+	switch r {
+	case QualityIQISummaryParamsDateRange1d, QualityIQISummaryParamsDateRange2d, QualityIQISummaryParamsDateRange7d, QualityIQISummaryParamsDateRange14d, QualityIQISummaryParamsDateRange28d, QualityIQISummaryParamsDateRange12w, QualityIQISummaryParamsDateRange24w, QualityIQISummaryParamsDateRange52w, QualityIQISummaryParamsDateRange1dControl, QualityIQISummaryParamsDateRange2dControl, QualityIQISummaryParamsDateRange7dControl, QualityIQISummaryParamsDateRange14dControl, QualityIQISummaryParamsDateRange28dControl, QualityIQISummaryParamsDateRange12wControl, QualityIQISummaryParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type QualityIQISummaryParamsFormat string
 
@@ -340,6 +356,14 @@ const (
 	QualityIQISummaryParamsFormatJson QualityIQISummaryParamsFormat = "JSON"
 	QualityIQISummaryParamsFormatCsv  QualityIQISummaryParamsFormat = "CSV"
 )
+
+func (r QualityIQISummaryParamsFormat) IsKnown() bool {
+	switch r {
+	case QualityIQISummaryParamsFormatJson, QualityIQISummaryParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type QualityIQISummaryResponseEnvelope struct {
 	Result  QualityIQISummaryResponse             `json:"result,required"`
@@ -417,6 +441,14 @@ const (
 	QualityIQITimeseriesGroupsParamsMetricLatency   QualityIQITimeseriesGroupsParamsMetric = "LATENCY"
 )
 
+func (r QualityIQITimeseriesGroupsParamsMetric) IsKnown() bool {
+	switch r {
+	case QualityIQITimeseriesGroupsParamsMetricBandwidth, QualityIQITimeseriesGroupsParamsMetricDNS, QualityIQITimeseriesGroupsParamsMetricLatency:
+		return true
+	}
+	return false
+}
+
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
@@ -428,6 +460,14 @@ const (
 	QualityIQITimeseriesGroupsParamsAggInterval1d  QualityIQITimeseriesGroupsParamsAggInterval = "1d"
 	QualityIQITimeseriesGroupsParamsAggInterval1w  QualityIQITimeseriesGroupsParamsAggInterval = "1w"
 )
+
+func (r QualityIQITimeseriesGroupsParamsAggInterval) IsKnown() bool {
+	switch r {
+	case QualityIQITimeseriesGroupsParamsAggInterval15m, QualityIQITimeseriesGroupsParamsAggInterval1h, QualityIQITimeseriesGroupsParamsAggInterval1d, QualityIQITimeseriesGroupsParamsAggInterval1w:
+		return true
+	}
+	return false
+}
 
 type QualityIQITimeseriesGroupsParamsDateRange string
 
@@ -449,6 +489,14 @@ const (
 	QualityIQITimeseriesGroupsParamsDateRange24wControl QualityIQITimeseriesGroupsParamsDateRange = "24wControl"
 )
 
+func (r QualityIQITimeseriesGroupsParamsDateRange) IsKnown() bool {
+	switch r {
+	case QualityIQITimeseriesGroupsParamsDateRange1d, QualityIQITimeseriesGroupsParamsDateRange2d, QualityIQITimeseriesGroupsParamsDateRange7d, QualityIQITimeseriesGroupsParamsDateRange14d, QualityIQITimeseriesGroupsParamsDateRange28d, QualityIQITimeseriesGroupsParamsDateRange12w, QualityIQITimeseriesGroupsParamsDateRange24w, QualityIQITimeseriesGroupsParamsDateRange52w, QualityIQITimeseriesGroupsParamsDateRange1dControl, QualityIQITimeseriesGroupsParamsDateRange2dControl, QualityIQITimeseriesGroupsParamsDateRange7dControl, QualityIQITimeseriesGroupsParamsDateRange14dControl, QualityIQITimeseriesGroupsParamsDateRange28dControl, QualityIQITimeseriesGroupsParamsDateRange12wControl, QualityIQITimeseriesGroupsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type QualityIQITimeseriesGroupsParamsFormat string
 
@@ -456,6 +504,14 @@ const (
 	QualityIQITimeseriesGroupsParamsFormatJson QualityIQITimeseriesGroupsParamsFormat = "JSON"
 	QualityIQITimeseriesGroupsParamsFormatCsv  QualityIQITimeseriesGroupsParamsFormat = "CSV"
 )
+
+func (r QualityIQITimeseriesGroupsParamsFormat) IsKnown() bool {
+	switch r {
+	case QualityIQITimeseriesGroupsParamsFormatJson, QualityIQITimeseriesGroupsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type QualityIQITimeseriesGroupsResponseEnvelope struct {
 	Result  QualityIQITimeseriesGroupsResponse             `json:"result,required"`

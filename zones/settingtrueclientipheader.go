@@ -105,6 +105,14 @@ const (
 	ZonesTrueClientIPHeaderIDTrueClientIPHeader ZonesTrueClientIPHeaderID = "true_client_ip_header"
 )
 
+func (r ZonesTrueClientIPHeaderID) IsKnown() bool {
+	switch r {
+	case ZonesTrueClientIPHeaderIDTrueClientIPHeader:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesTrueClientIPHeaderValue string
 
@@ -112,6 +120,14 @@ const (
 	ZonesTrueClientIPHeaderValueOn  ZonesTrueClientIPHeaderValue = "on"
 	ZonesTrueClientIPHeaderValueOff ZonesTrueClientIPHeaderValue = "off"
 )
+
+func (r ZonesTrueClientIPHeaderValue) IsKnown() bool {
+	switch r {
+	case ZonesTrueClientIPHeaderValueOn, ZonesTrueClientIPHeaderValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -121,6 +137,14 @@ const (
 	ZonesTrueClientIPHeaderEditableTrue  ZonesTrueClientIPHeaderEditable = true
 	ZonesTrueClientIPHeaderEditableFalse ZonesTrueClientIPHeaderEditable = false
 )
+
+func (r ZonesTrueClientIPHeaderEditable) IsKnown() bool {
+	switch r {
+	case ZonesTrueClientIPHeaderEditableTrue, ZonesTrueClientIPHeaderEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
 // headers we send to the origin. This is limited to Enterprise Zones.
@@ -155,6 +179,14 @@ const (
 	SettingTrueClientIPHeaderEditParamsValueOn  SettingTrueClientIPHeaderEditParamsValue = "on"
 	SettingTrueClientIPHeaderEditParamsValueOff SettingTrueClientIPHeaderEditParamsValue = "off"
 )
+
+func (r SettingTrueClientIPHeaderEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingTrueClientIPHeaderEditParamsValueOn, SettingTrueClientIPHeaderEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type SettingTrueClientIPHeaderEditResponseEnvelope struct {
 	Errors   []SettingTrueClientIPHeaderEditResponseEnvelopeErrors   `json:"errors,required"`

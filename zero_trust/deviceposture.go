@@ -287,6 +287,14 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemMac     TeamsDevicesDevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemWindows, TeamsDevicesDevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemLinux, TeamsDevicesDevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesUniqueClientIDInputRequest struct {
 	// List ID.
 	ID string `json:"id,required"`
@@ -325,6 +333,14 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos TeamsDevicesDevicePostureRulesInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid, TeamsDevicesDevicePostureRulesInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos, TeamsDevicesDevicePostureRulesInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos:
+		return true
+	}
+	return false
+}
+
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesDomainJoinedInputRequest struct {
 	// Operating System
 	OperatingSystem TeamsDevicesDevicePostureRulesInputTeamsDevicesDomainJoinedInputRequestOperatingSystem `json:"operating_system,required"`
@@ -360,6 +376,14 @@ type TeamsDevicesDevicePostureRulesInputTeamsDevicesDomainJoinedInputRequestOper
 const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows TeamsDevicesDevicePostureRulesInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesDomainJoinedInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows:
+		return true
+	}
+	return false
+}
 
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
@@ -410,16 +434,32 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatingSystem = "windows"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows:
+		return true
+	}
+	return false
+}
+
 // Operator
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator string
 
 const (
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorUnknown5 TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = "<"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorUnknown6 TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = "<="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorUnknown7 TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = ">"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorUnknown8 TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = ">="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorUnknown9 TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = "=="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorLess            TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorLessOrEquals    TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorGreater         TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorGreaterOrEquals TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorEquals          TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator = "=="
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperator) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorLess, TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorLessOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorGreater, TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorGreaterOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesOSVersionInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesFirewallInputRequest struct {
 	// Enabled
@@ -457,6 +497,14 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesFirewallInputRequestOperatingSystemWindows TeamsDevicesDevicePostureRulesInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesFirewallInputRequestOperatingSystemMac     TeamsDevicesDevicePostureRulesInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesFirewallInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesFirewallInputRequestOperatingSystemWindows, TeamsDevicesDevicePostureRulesInputTeamsDevicesFirewallInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
 
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneInputRequest struct {
 	// Operating system
@@ -502,6 +550,14 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows, TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux, TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system
 	OperatingSystem TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
@@ -545,6 +601,14 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows, TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux, TeamsDevicesDevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
 
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesDiskEncryptionInputRequest struct {
 	// List of volume names to be checked for encryption.
@@ -619,6 +683,14 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemMac     TeamsDevicesDevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemWindows, TeamsDevicesDevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemLinux, TeamsDevicesDevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesClientCertificateInputRequest struct {
 	// UUID of Cloudflare managed certificate.
 	CertificateID string `json:"certificate_id,required"`
@@ -686,6 +758,14 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      TeamsDevicesDevicePostureRulesInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant, TeamsDevicesDevicePostureRulesInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant, TeamsDevicesDevicePostureRulesInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown:
+		return true
+	}
+	return false
+}
+
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id,required"`
@@ -740,12 +820,20 @@ func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequest) 
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator string
 
 const (
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown15 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown16 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown17 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown18 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown19 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorLess            TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals    TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater         TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals          TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorLess, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 // For more details on state, please refer to the Crowdstrike documentation.
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestState string
@@ -756,16 +844,32 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestStateUnknown TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestState = "unknown"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestState) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestStateOnline, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestStateOffline, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestStateUnknown:
+		return true
+	}
+	return false
+}
+
 // Version Operator
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
 
 const (
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown25 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown26 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown27 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown28 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown29 TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess            TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals    TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater         TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals          TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequest struct {
 	// Compliance Status
@@ -808,6 +912,14 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequestComplianceStatusError         TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequestComplianceStatus) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant, TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant, TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown, TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable, TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod, TeamsDevicesDevicePostureRulesInputTeamsDevicesIntuneInputRequestComplianceStatusError:
+		return true
+	}
+	return false
+}
+
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id,required"`
@@ -844,12 +956,20 @@ func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequest) imple
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator string
 
 const (
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorUnknown35 TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = "<"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorUnknown36 TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = "<="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorUnknown37 TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = ">"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorUnknown38 TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = ">="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorUnknown39 TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = "=="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorLess            TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = "<"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorLessOrEquals    TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = "<="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorGreater         TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = ">"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorGreaterOrEquals TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = ">="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorEquals          TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator = "=="
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperator) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorLess, TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorLessOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorGreater, TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorGreaterOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesKolideInputRequestCountOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequest struct {
 	// Posture Integration ID.
@@ -896,12 +1016,20 @@ func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequest) imple
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator string
 
 const (
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorUnknown45 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = "<"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorUnknown46 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = "<="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorUnknown47 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = ">"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorUnknown48 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = ">="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorUnknown49 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = "=="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorLess            TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = "<"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorLessOrEquals    TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = "<="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorGreater         TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = ">"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorGreaterOrEquals TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = ">="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorEquals          TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator = "=="
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperator) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorLess, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorLessOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorGreater, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorGreaterOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 // For more details on risk level, refer to the Tanium documentation.
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestRiskLevel string
@@ -913,16 +1041,32 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestRiskLevelCritical TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestRiskLevel) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestRiskLevelLow, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestRiskLevelMedium, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestRiskLevelHigh, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestRiskLevelCritical:
+		return true
+	}
+	return false
+}
+
 // Score Operator
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator string
 
 const (
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown55 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown56 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown57 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown58 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown59 TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorLess            TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorLessOrEquals    TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorGreater         TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorGreaterOrEquals TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorEquals          TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperator) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorLess, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorLessOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorGreater, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorGreaterOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesTaniumInputRequestScoreOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequest struct {
 	// Posture Integration ID.
@@ -975,16 +1119,32 @@ const (
 	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
 )
 
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected, TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected, TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting, TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting:
+		return true
+	}
+	return false
+}
+
 // operator
 type TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator string
 
 const (
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown65 TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown66 TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown67 TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown68 TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
-	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown69 TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorLess            TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals    TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater         TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals          TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
 )
+
+func (r TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorLess, TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater, TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals, TeamsDevicesDevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type TeamsDevicesDevicePostureRulesMatch struct {
 	Platform TeamsDevicesDevicePostureRulesMatchPlatform `json:"platform"`
@@ -1017,6 +1177,14 @@ const (
 	TeamsDevicesDevicePostureRulesMatchPlatformIos     TeamsDevicesDevicePostureRulesMatchPlatform = "ios"
 )
 
+func (r TeamsDevicesDevicePostureRulesMatchPlatform) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesMatchPlatformWindows, TeamsDevicesDevicePostureRulesMatchPlatformMac, TeamsDevicesDevicePostureRulesMatchPlatformLinux, TeamsDevicesDevicePostureRulesMatchPlatformAndroid, TeamsDevicesDevicePostureRulesMatchPlatformIos:
+		return true
+	}
+	return false
+}
+
 // The type of device posture rule.
 type TeamsDevicesDevicePostureRulesType string
 
@@ -1041,6 +1209,14 @@ const (
 	TeamsDevicesDevicePostureRulesTypeWorkspaceOne      TeamsDevicesDevicePostureRulesType = "workspace_one"
 	TeamsDevicesDevicePostureRulesTypeSentineloneS2s    TeamsDevicesDevicePostureRulesType = "sentinelone_s2s"
 )
+
+func (r TeamsDevicesDevicePostureRulesType) IsKnown() bool {
+	switch r {
+	case TeamsDevicesDevicePostureRulesTypeFile, TeamsDevicesDevicePostureRulesTypeApplication, TeamsDevicesDevicePostureRulesTypeTanium, TeamsDevicesDevicePostureRulesTypeGateway, TeamsDevicesDevicePostureRulesTypeWARP, TeamsDevicesDevicePostureRulesTypeDiskEncryption, TeamsDevicesDevicePostureRulesTypeSentinelone, TeamsDevicesDevicePostureRulesTypeCarbonblack, TeamsDevicesDevicePostureRulesTypeFirewall, TeamsDevicesDevicePostureRulesTypeOSVersion, TeamsDevicesDevicePostureRulesTypeDomainJoined, TeamsDevicesDevicePostureRulesTypeClientCertificate, TeamsDevicesDevicePostureRulesTypeUniqueClientID, TeamsDevicesDevicePostureRulesTypeKolide, TeamsDevicesDevicePostureRulesTypeTaniumS2s, TeamsDevicesDevicePostureRulesTypeCrowdstrikeS2s, TeamsDevicesDevicePostureRulesTypeIntune, TeamsDevicesDevicePostureRulesTypeWorkspaceOne, TeamsDevicesDevicePostureRulesTypeSentineloneS2s:
+		return true
+	}
+	return false
+}
 
 type DevicePostureDeleteResponse struct {
 	// API UUID.
@@ -1113,6 +1289,14 @@ const (
 	DevicePostureNewParamsTypeSentineloneS2s    DevicePostureNewParamsType = "sentinelone_s2s"
 )
 
+func (r DevicePostureNewParamsType) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsTypeFile, DevicePostureNewParamsTypeApplication, DevicePostureNewParamsTypeTanium, DevicePostureNewParamsTypeGateway, DevicePostureNewParamsTypeWARP, DevicePostureNewParamsTypeDiskEncryption, DevicePostureNewParamsTypeSentinelone, DevicePostureNewParamsTypeCarbonblack, DevicePostureNewParamsTypeFirewall, DevicePostureNewParamsTypeOSVersion, DevicePostureNewParamsTypeDomainJoined, DevicePostureNewParamsTypeClientCertificate, DevicePostureNewParamsTypeUniqueClientID, DevicePostureNewParamsTypeKolide, DevicePostureNewParamsTypeTaniumS2s, DevicePostureNewParamsTypeCrowdstrikeS2s, DevicePostureNewParamsTypeIntune, DevicePostureNewParamsTypeWorkspaceOne, DevicePostureNewParamsTypeSentineloneS2s:
+		return true
+	}
+	return false
+}
+
 // The value to be checked against.
 //
 // Satisfied by
@@ -1165,6 +1349,14 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows, DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux, DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
 	// List ID.
 	ID param.Field[string] `json:"id,required"`
@@ -1188,6 +1380,14 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid, DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos, DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos:
+		return true
+	}
+	return false
+}
+
 type DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequest struct {
 	// Operating System
 	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem] `json:"operating_system,required"`
@@ -1208,6 +1408,14 @@ type DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSys
 const (
 	DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows:
+		return true
+	}
+	return false
+}
 
 type DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
@@ -1239,16 +1447,32 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem = "windows"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows:
+		return true
+	}
+	return false
+}
+
 // Operator
 type DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator string
 
 const (
-	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown75 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown76 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown77 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown78 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown79 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorLess            DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorLessOrEquals    DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorGreater         DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorGreaterOrEquals DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorEquals          DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = "=="
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorLess, DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorGreater, DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest struct {
 	// Enabled
@@ -1271,6 +1495,14 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
 	DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystemWindows, DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
 
 type DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest struct {
 	// Operating system
@@ -1299,6 +1531,14 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows, DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux, DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system
 	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
@@ -1325,6 +1565,14 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
 	DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows, DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux, DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
 
 type DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
 	// List of volume names to be checked for encryption.
@@ -1367,6 +1615,14 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows, DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux, DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest struct {
 	// UUID of Cloudflare managed certificate.
 	CertificateID param.Field[string] `json:"certificate_id,required"`
@@ -1404,6 +1660,14 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant, DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant, DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown:
+		return true
+	}
+	return false
+}
+
 type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
@@ -1436,12 +1700,20 @@ func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest) implemen
 type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator string
 
 const (
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown85 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown86 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown87 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown88 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown89 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLess            DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals    DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater         DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals          DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLess, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 // For more details on state, please refer to the Crowdstrike documentation.
 type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestState string
@@ -1452,16 +1724,32 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestStateUnknown DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestState = "unknown"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestState) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestStateOnline, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestStateOffline, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestStateUnknown:
+		return true
+	}
+	return false
+}
+
 // Version Operator
 type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
 
 const (
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown95 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown96 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown97 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown98 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown99 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess            DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals    DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater         DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals          DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureNewParamsInputTeamsDevicesIntuneInputRequest struct {
 	// Compliance Status
@@ -1489,6 +1777,14 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant, DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant, DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown, DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable, DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod, DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusError:
+		return true
+	}
+	return false
+}
+
 type DevicePostureNewParamsInputTeamsDevicesKolideInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
@@ -1509,12 +1805,20 @@ func (r DevicePostureNewParamsInputTeamsDevicesKolideInputRequest) implementsZer
 type DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator string
 
 const (
-	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown105 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown106 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown107 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown108 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown109 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorLess            DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorLessOrEquals    DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorGreater         DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorGreaterOrEquals DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorEquals          DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = "=="
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorLess, DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorGreater, DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest struct {
 	// Posture Integration ID.
@@ -1542,12 +1846,20 @@ func (r DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest) implementsZer
 type DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator string
 
 const (
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown115 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown116 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown117 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown118 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown119 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorLess            DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorLessOrEquals    DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorGreater         DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorGreaterOrEquals DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorEquals          DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = "=="
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorLess, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorGreater, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 // For more details on risk level, refer to the Tanium documentation.
 type DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevel string
@@ -1559,16 +1871,32 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevel) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevelLow, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevelMedium, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevelHigh, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevelCritical:
+		return true
+	}
+	return false
+}
+
 // Score Operator
 type DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator string
 
 const (
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown125 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown126 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown127 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown128 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown129 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorLess            DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorLessOrEquals    DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorGreater         DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorGreaterOrEquals DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorEquals          DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorLess, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorGreater, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest struct {
 	// Posture Integration ID.
@@ -1602,16 +1930,32 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
 )
 
+func (r DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting:
+		return true
+	}
+	return false
+}
+
 // operator
 type DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator string
 
 const (
-	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown135 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown136 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown137 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown138 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown139 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLess            DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals    DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater         DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals          DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
 )
+
+func (r DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLess, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureNewParamsMatch struct {
 	Platform param.Field[DevicePostureNewParamsMatchPlatform] `json:"platform"`
@@ -1630,6 +1974,14 @@ const (
 	DevicePostureNewParamsMatchPlatformAndroid DevicePostureNewParamsMatchPlatform = "android"
 	DevicePostureNewParamsMatchPlatformIos     DevicePostureNewParamsMatchPlatform = "ios"
 )
+
+func (r DevicePostureNewParamsMatchPlatform) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsMatchPlatformWindows, DevicePostureNewParamsMatchPlatformMac, DevicePostureNewParamsMatchPlatformLinux, DevicePostureNewParamsMatchPlatformAndroid, DevicePostureNewParamsMatchPlatformIos:
+		return true
+	}
+	return false
+}
 
 type DevicePostureNewResponseEnvelope struct {
 	Errors   []DevicePostureNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -1712,6 +2064,14 @@ const (
 	DevicePostureNewResponseEnvelopeSuccessTrue DevicePostureNewResponseEnvelopeSuccess = true
 )
 
+func (r DevicePostureNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePostureUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The name of the device posture rule.
@@ -1760,6 +2120,14 @@ const (
 	DevicePostureUpdateParamsTypeWorkspaceOne      DevicePostureUpdateParamsType = "workspace_one"
 	DevicePostureUpdateParamsTypeSentineloneS2s    DevicePostureUpdateParamsType = "sentinelone_s2s"
 )
+
+func (r DevicePostureUpdateParamsType) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsTypeFile, DevicePostureUpdateParamsTypeApplication, DevicePostureUpdateParamsTypeTanium, DevicePostureUpdateParamsTypeGateway, DevicePostureUpdateParamsTypeWARP, DevicePostureUpdateParamsTypeDiskEncryption, DevicePostureUpdateParamsTypeSentinelone, DevicePostureUpdateParamsTypeCarbonblack, DevicePostureUpdateParamsTypeFirewall, DevicePostureUpdateParamsTypeOSVersion, DevicePostureUpdateParamsTypeDomainJoined, DevicePostureUpdateParamsTypeClientCertificate, DevicePostureUpdateParamsTypeUniqueClientID, DevicePostureUpdateParamsTypeKolide, DevicePostureUpdateParamsTypeTaniumS2s, DevicePostureUpdateParamsTypeCrowdstrikeS2s, DevicePostureUpdateParamsTypeIntune, DevicePostureUpdateParamsTypeWorkspaceOne, DevicePostureUpdateParamsTypeSentineloneS2s:
+		return true
+	}
+	return false
+}
 
 // The value to be checked against.
 //
@@ -1813,6 +2181,14 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows, DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux, DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
 	// List ID.
 	ID param.Field[string] `json:"id,required"`
@@ -1836,6 +2212,14 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid, DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos, DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos:
+		return true
+	}
+	return false
+}
+
 type DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequest struct {
 	// Operating System
 	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem] `json:"operating_system,required"`
@@ -1856,6 +2240,14 @@ type DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperating
 const (
 	DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows:
+		return true
+	}
+	return false
+}
 
 type DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
@@ -1887,16 +2279,32 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem = "windows"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows:
+		return true
+	}
+	return false
+}
+
 // Operator
 type DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown145 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown146 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown147 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown148 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown149 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = "=="
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorLess            DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorLessOrEquals    DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorGreater         DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorGreaterOrEquals DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorEquals          DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = "=="
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest struct {
 	// Enabled
@@ -1919,6 +2327,14 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
 	DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystemWindows, DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
 
 type DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest struct {
 	// Operating system
@@ -1947,6 +2363,14 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows, DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux, DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system
 	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
@@ -1973,6 +2397,14 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
 	DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows, DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux, DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
 
 type DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
 	// List of volume names to be checked for encryption.
@@ -2015,6 +2447,14 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows, DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux, DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
 type DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest struct {
 	// UUID of Cloudflare managed certificate.
 	CertificateID param.Field[string] `json:"certificate_id,required"`
@@ -2052,6 +2492,14 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant, DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant, DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown:
+		return true
+	}
+	return false
+}
+
 type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
@@ -2084,12 +2532,20 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest) imple
 type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown155 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown156 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown157 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown158 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown159 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLess            DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals    DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater         DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals          DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 // For more details on state, please refer to the Crowdstrike documentation.
 type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestState string
@@ -2100,16 +2556,32 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestStateUnknown DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestState = "unknown"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestState) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestStateOnline, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestStateOffline, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestStateUnknown:
+		return true
+	}
+	return false
+}
+
 // Version Operator
 type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown165 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown166 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown167 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown168 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown169 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess            DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals    DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater         DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
+	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals          DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequest struct {
 	// Compliance Status
@@ -2137,6 +2609,14 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant, DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant, DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown, DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable, DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod, DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusError:
+		return true
+	}
+	return false
+}
+
 type DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
@@ -2157,12 +2637,20 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest) implements
 type DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown175 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown176 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown177 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown178 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown179 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = "=="
+	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorLess            DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = "<"
+	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorLessOrEquals    DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = "<="
+	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorGreater         DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = ">"
+	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorGreaterOrEquals DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = ">="
+	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorEquals          DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = "=="
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest struct {
 	// Posture Integration ID.
@@ -2190,12 +2678,20 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest) implements
 type DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown185 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown186 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown187 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown188 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown189 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = "=="
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorLess            DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = "<"
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorLessOrEquals    DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = "<="
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorGreater         DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = ">"
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorGreaterOrEquals DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = ">="
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorEquals          DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = "=="
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 // For more details on risk level, refer to the Tanium documentation.
 type DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevel string
@@ -2207,16 +2703,32 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevel) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevelLow, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevelMedium, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevelHigh, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevelCritical:
+		return true
+	}
+	return false
+}
+
 // Score Operator
 type DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown195 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown196 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown197 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown198 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown199 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorLess            DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorLessOrEquals    DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorGreater         DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorGreaterOrEquals DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
+	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorEquals          DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest struct {
 	// Posture Integration ID.
@@ -2250,16 +2762,32 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
 )
 
+func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting:
+		return true
+	}
+	return false
+}
+
 // operator
 type DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown205 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown206 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown207 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown208 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown209 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLess            DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals    DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater         DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals          DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
 )
+
+func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
 
 type DevicePostureUpdateParamsMatch struct {
 	Platform param.Field[DevicePostureUpdateParamsMatchPlatform] `json:"platform"`
@@ -2278,6 +2806,14 @@ const (
 	DevicePostureUpdateParamsMatchPlatformAndroid DevicePostureUpdateParamsMatchPlatform = "android"
 	DevicePostureUpdateParamsMatchPlatformIos     DevicePostureUpdateParamsMatchPlatform = "ios"
 )
+
+func (r DevicePostureUpdateParamsMatchPlatform) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsMatchPlatformWindows, DevicePostureUpdateParamsMatchPlatformMac, DevicePostureUpdateParamsMatchPlatformLinux, DevicePostureUpdateParamsMatchPlatformAndroid, DevicePostureUpdateParamsMatchPlatformIos:
+		return true
+	}
+	return false
+}
 
 type DevicePostureUpdateResponseEnvelope struct {
 	Errors   []DevicePostureUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -2359,6 +2895,14 @@ type DevicePostureUpdateResponseEnvelopeSuccess bool
 const (
 	DevicePostureUpdateResponseEnvelopeSuccessTrue DevicePostureUpdateResponseEnvelopeSuccess = true
 )
+
+func (r DevicePostureUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePostureListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -2446,6 +2990,14 @@ type DevicePostureListResponseEnvelopeSuccess bool
 const (
 	DevicePostureListResponseEnvelopeSuccessTrue DevicePostureListResponseEnvelopeSuccess = true
 )
+
+func (r DevicePostureListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type DevicePostureListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -2563,6 +3115,14 @@ const (
 	DevicePostureDeleteResponseEnvelopeSuccessTrue DevicePostureDeleteResponseEnvelopeSuccess = true
 )
 
+func (r DevicePostureDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DevicePostureGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -2647,3 +3207,11 @@ type DevicePostureGetResponseEnvelopeSuccess bool
 const (
 	DevicePostureGetResponseEnvelopeSuccessTrue DevicePostureGetResponseEnvelopeSuccess = true
 )
+
+func (r DevicePostureGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DevicePostureGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

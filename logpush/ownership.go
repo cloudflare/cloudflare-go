@@ -216,6 +216,14 @@ const (
 	OwnershipNewResponseEnvelopeSuccessTrue OwnershipNewResponseEnvelopeSuccess = true
 )
 
+func (r OwnershipNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OwnershipNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OwnershipValidateParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
@@ -313,3 +321,11 @@ type OwnershipValidateResponseEnvelopeSuccess bool
 const (
 	OwnershipValidateResponseEnvelopeSuccessTrue OwnershipValidateResponseEnvelopeSuccess = true
 )
+
+func (r OwnershipValidateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OwnershipValidateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

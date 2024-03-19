@@ -389,6 +389,14 @@ const (
 	RecordNewResponseATypeA RecordNewResponseAType = "A"
 )
 
+func (r RecordNewResponseAType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseATypeA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -445,6 +453,14 @@ type RecordNewResponseATTLNumber float64
 const (
 	RecordNewResponseATTLNumber1 RecordNewResponseATTLNumber = 1
 )
+
+func (r RecordNewResponseATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseAAAA struct {
 	// A valid IPv6 address.
@@ -524,6 +540,14 @@ const (
 	RecordNewResponseAAAATypeAAAA RecordNewResponseAAAAType = "AAAA"
 )
 
+func (r RecordNewResponseAAAAType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseAAAATypeAAAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -580,6 +604,14 @@ type RecordNewResponseAAAATTLNumber float64
 const (
 	RecordNewResponseAAAATTLNumber1 RecordNewResponseAAAATTLNumber = 1
 )
+
+func (r RecordNewResponseAAAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseAAAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseCAA struct {
 	// Components of a CAA record.
@@ -687,6 +719,14 @@ const (
 	RecordNewResponseCAATypeCAA RecordNewResponseCAAType = "CAA"
 )
 
+func (r RecordNewResponseCAAType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseCAATypeCAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -743,6 +783,14 @@ type RecordNewResponseCAATTLNumber float64
 const (
 	RecordNewResponseCAATTLNumber1 RecordNewResponseCAATTLNumber = 1
 )
+
+func (r RecordNewResponseCAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseCAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseCert struct {
 	// Components of a CERT record.
@@ -853,6 +901,14 @@ const (
 	RecordNewResponseCertTypeCert RecordNewResponseCertType = "CERT"
 )
 
+func (r RecordNewResponseCertType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseCertTypeCert:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -909,6 +965,14 @@ type RecordNewResponseCertTTLNumber float64
 const (
 	RecordNewResponseCertTTLNumber1 RecordNewResponseCertTTLNumber = 1
 )
+
+func (r RecordNewResponseCertTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseCertTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
@@ -988,6 +1052,14 @@ const (
 	RecordNewResponseCNAMETypeCNAME RecordNewResponseCNAMEType = "CNAME"
 )
 
+func (r RecordNewResponseCNAMEType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseCNAMETypeCNAME:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -1044,6 +1116,14 @@ type RecordNewResponseCNAMETTLNumber float64
 const (
 	RecordNewResponseCNAMETTLNumber1 RecordNewResponseCNAMETTLNumber = 1
 )
+
+func (r RecordNewResponseCNAMETTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseCNAMETTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseDNSKEY struct {
 	// Components of a DNSKEY record.
@@ -1154,6 +1234,14 @@ const (
 	RecordNewResponseDNSKEYTypeDNSKEY RecordNewResponseDNSKEYType = "DNSKEY"
 )
 
+func (r RecordNewResponseDNSKEYType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseDNSKEYTypeDNSKEY:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -1211,6 +1299,14 @@ type RecordNewResponseDNSKEYTTLNumber float64
 const (
 	RecordNewResponseDNSKEYTTLNumber1 RecordNewResponseDNSKEYTTLNumber = 1
 )
+
+func (r RecordNewResponseDNSKEYTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseDNSKEYTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseDS struct {
 	// Components of a DS record.
@@ -1321,6 +1417,14 @@ const (
 	RecordNewResponseDSTypeDS RecordNewResponseDSType = "DS"
 )
 
+func (r RecordNewResponseDSType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseDSTypeDS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -1377,6 +1481,14 @@ type RecordNewResponseDSTTLNumber float64
 const (
 	RecordNewResponseDSTTLNumber1 RecordNewResponseDSTTLNumber = 1
 )
+
+func (r RecordNewResponseDSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseDSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseHTTPS struct {
 	// Components of a HTTPS record.
@@ -1484,6 +1596,14 @@ const (
 	RecordNewResponseHTTPSTypeHTTPS RecordNewResponseHTTPSType = "HTTPS"
 )
 
+func (r RecordNewResponseHTTPSType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseHTTPSTypeHTTPS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -1540,6 +1660,14 @@ type RecordNewResponseHTTPSTTLNumber float64
 const (
 	RecordNewResponseHTTPSTTLNumber1 RecordNewResponseHTTPSTTLNumber = 1
 )
+
+func (r RecordNewResponseHTTPSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseHTTPSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseLOC struct {
 	// Components of a LOC record.
@@ -1675,6 +1803,14 @@ const (
 	RecordNewResponseLOCDataLatDirectionS RecordNewResponseLOCDataLatDirection = "S"
 )
 
+func (r RecordNewResponseLOCDataLatDirection) IsKnown() bool {
+	switch r {
+	case RecordNewResponseLOCDataLatDirectionN, RecordNewResponseLOCDataLatDirectionS:
+		return true
+	}
+	return false
+}
+
 // Longitude direction.
 type RecordNewResponseLOCDataLongDirection string
 
@@ -1683,12 +1819,28 @@ const (
 	RecordNewResponseLOCDataLongDirectionW RecordNewResponseLOCDataLongDirection = "W"
 )
 
+func (r RecordNewResponseLOCDataLongDirection) IsKnown() bool {
+	switch r {
+	case RecordNewResponseLOCDataLongDirectionE, RecordNewResponseLOCDataLongDirectionW:
+		return true
+	}
+	return false
+}
+
 // Record type.
 type RecordNewResponseLOCType string
 
 const (
 	RecordNewResponseLOCTypeLOC RecordNewResponseLOCType = "LOC"
 )
+
+func (r RecordNewResponseLOCType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseLOCTypeLOC:
+		return true
+	}
+	return false
+}
 
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseLOCMeta struct {
@@ -1746,6 +1898,14 @@ type RecordNewResponseLOCTTLNumber float64
 const (
 	RecordNewResponseLOCTTLNumber1 RecordNewResponseLOCTTLNumber = 1
 )
+
+func (r RecordNewResponseLOCTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseLOCTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseMX struct {
 	// A valid mail server hostname.
@@ -1825,6 +1985,14 @@ const (
 	RecordNewResponseMXTypeMX RecordNewResponseMXType = "MX"
 )
 
+func (r RecordNewResponseMXType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseMXTypeMX:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -1881,6 +2049,14 @@ type RecordNewResponseMXTTLNumber float64
 const (
 	RecordNewResponseMXTTLNumber1 RecordNewResponseMXTTLNumber = 1
 )
+
+func (r RecordNewResponseMXTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseMXTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseNAPTR struct {
 	// Components of a NAPTR record.
@@ -1997,6 +2173,14 @@ const (
 	RecordNewResponseNAPTRTypeNAPTR RecordNewResponseNAPTRType = "NAPTR"
 )
 
+func (r RecordNewResponseNAPTRType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseNAPTRTypeNAPTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -2053,6 +2237,14 @@ type RecordNewResponseNAPTRTTLNumber float64
 const (
 	RecordNewResponseNAPTRTTLNumber1 RecordNewResponseNAPTRTTLNumber = 1
 )
+
+func (r RecordNewResponseNAPTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseNAPTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseNS struct {
 	// A valid name server host name.
@@ -2128,6 +2320,14 @@ const (
 	RecordNewResponseNSTypeNS RecordNewResponseNSType = "NS"
 )
 
+func (r RecordNewResponseNSType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseNSTypeNS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -2184,6 +2384,14 @@ type RecordNewResponseNSTTLNumber float64
 const (
 	RecordNewResponseNSTTLNumber1 RecordNewResponseNSTTLNumber = 1
 )
+
+func (r RecordNewResponseNSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseNSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponsePTR struct {
 	// Domain name pointing to the address.
@@ -2259,6 +2467,14 @@ const (
 	RecordNewResponsePTRTypePTR RecordNewResponsePTRType = "PTR"
 )
 
+func (r RecordNewResponsePTRType) IsKnown() bool {
+	switch r {
+	case RecordNewResponsePTRTypePTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -2315,6 +2531,14 @@ type RecordNewResponsePTRTTLNumber float64
 const (
 	RecordNewResponsePTRTTLNumber1 RecordNewResponsePTRTTLNumber = 1
 )
+
+func (r RecordNewResponsePTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponsePTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseSmimea struct {
 	// Components of a SMIMEA record.
@@ -2425,6 +2649,14 @@ const (
 	RecordNewResponseSmimeaTypeSmimea RecordNewResponseSmimeaType = "SMIMEA"
 )
 
+func (r RecordNewResponseSmimeaType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseSmimeaTypeSmimea:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -2482,6 +2714,14 @@ type RecordNewResponseSmimeaTTLNumber float64
 const (
 	RecordNewResponseSmimeaTTLNumber1 RecordNewResponseSmimeaTTLNumber = 1
 )
+
+func (r RecordNewResponseSmimeaTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseSmimeaTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseSRV struct {
 	// Components of a SRV record.
@@ -2611,6 +2851,14 @@ const (
 	RecordNewResponseSRVTypeSRV RecordNewResponseSRVType = "SRV"
 )
 
+func (r RecordNewResponseSRVType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseSRVTypeSRV:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -2667,6 +2915,14 @@ type RecordNewResponseSRVTTLNumber float64
 const (
 	RecordNewResponseSRVTTLNumber1 RecordNewResponseSRVTTLNumber = 1
 )
+
+func (r RecordNewResponseSRVTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseSRVTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseSSHFP struct {
 	// Components of a SSHFP record.
@@ -2774,6 +3030,14 @@ const (
 	RecordNewResponseSSHFPTypeSSHFP RecordNewResponseSSHFPType = "SSHFP"
 )
 
+func (r RecordNewResponseSSHFPType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseSSHFPTypeSSHFP:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -2830,6 +3094,14 @@ type RecordNewResponseSSHFPTTLNumber float64
 const (
 	RecordNewResponseSSHFPTTLNumber1 RecordNewResponseSSHFPTTLNumber = 1
 )
+
+func (r RecordNewResponseSSHFPTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseSSHFPTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseSVCB struct {
 	// Components of a SVCB record.
@@ -2937,6 +3209,14 @@ const (
 	RecordNewResponseSVCBTypeSVCB RecordNewResponseSVCBType = "SVCB"
 )
 
+func (r RecordNewResponseSVCBType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseSVCBTypeSVCB:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -2993,6 +3273,14 @@ type RecordNewResponseSVCBTTLNumber float64
 const (
 	RecordNewResponseSVCBTTLNumber1 RecordNewResponseSVCBTTLNumber = 1
 )
+
+func (r RecordNewResponseSVCBTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseSVCBTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseTLSA struct {
 	// Components of a TLSA record.
@@ -3103,6 +3391,14 @@ const (
 	RecordNewResponseTLSATypeTLSA RecordNewResponseTLSAType = "TLSA"
 )
 
+func (r RecordNewResponseTLSAType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseTLSATypeTLSA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -3159,6 +3455,14 @@ type RecordNewResponseTLSATTLNumber float64
 const (
 	RecordNewResponseTLSATTLNumber1 RecordNewResponseTLSATTLNumber = 1
 )
+
+func (r RecordNewResponseTLSATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseTLSATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseTXT struct {
 	// Text content for the record.
@@ -3234,6 +3538,14 @@ const (
 	RecordNewResponseTXTTypeTXT RecordNewResponseTXTType = "TXT"
 )
 
+func (r RecordNewResponseTXTType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseTXTTypeTXT:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -3290,6 +3602,14 @@ type RecordNewResponseTXTTTLNumber float64
 const (
 	RecordNewResponseTXTTTLNumber1 RecordNewResponseTXTTTLNumber = 1
 )
+
+func (r RecordNewResponseTXTTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseTXTTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseURI struct {
 	// Components of a URI record.
@@ -3398,6 +3718,14 @@ const (
 	RecordNewResponseURITypeURI RecordNewResponseURIType = "URI"
 )
 
+func (r RecordNewResponseURIType) IsKnown() bool {
+	switch r {
+	case RecordNewResponseURITypeURI:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordNewResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -3454,6 +3782,14 @@ type RecordNewResponseURITTLNumber float64
 const (
 	RecordNewResponseURITTLNumber1 RecordNewResponseURITTLNumber = 1
 )
+
+func (r RecordNewResponseURITTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewResponseURITTLNumber1:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [dns.RecordUpdateResponseA], [dns.RecordUpdateResponseAAAA],
 // [dns.RecordUpdateResponseCAA], [dns.RecordUpdateResponseCert],
@@ -3654,6 +3990,14 @@ const (
 	RecordUpdateResponseATypeA RecordUpdateResponseAType = "A"
 )
 
+func (r RecordUpdateResponseAType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseATypeA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -3710,6 +4054,14 @@ type RecordUpdateResponseATTLNumber float64
 const (
 	RecordUpdateResponseATTLNumber1 RecordUpdateResponseATTLNumber = 1
 )
+
+func (r RecordUpdateResponseATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseAAAA struct {
 	// A valid IPv6 address.
@@ -3789,6 +4141,14 @@ const (
 	RecordUpdateResponseAAAATypeAAAA RecordUpdateResponseAAAAType = "AAAA"
 )
 
+func (r RecordUpdateResponseAAAAType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseAAAATypeAAAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -3846,6 +4206,14 @@ type RecordUpdateResponseAAAATTLNumber float64
 const (
 	RecordUpdateResponseAAAATTLNumber1 RecordUpdateResponseAAAATTLNumber = 1
 )
+
+func (r RecordUpdateResponseAAAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseAAAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseCAA struct {
 	// Components of a CAA record.
@@ -3953,6 +4321,14 @@ const (
 	RecordUpdateResponseCAATypeCAA RecordUpdateResponseCAAType = "CAA"
 )
 
+func (r RecordUpdateResponseCAAType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseCAATypeCAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -4010,6 +4386,14 @@ type RecordUpdateResponseCAATTLNumber float64
 const (
 	RecordUpdateResponseCAATTLNumber1 RecordUpdateResponseCAATTLNumber = 1
 )
+
+func (r RecordUpdateResponseCAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseCAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseCert struct {
 	// Components of a CERT record.
@@ -4120,6 +4504,14 @@ const (
 	RecordUpdateResponseCertTypeCert RecordUpdateResponseCertType = "CERT"
 )
 
+func (r RecordUpdateResponseCertType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseCertTypeCert:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -4177,6 +4569,14 @@ type RecordUpdateResponseCertTTLNumber float64
 const (
 	RecordUpdateResponseCertTTLNumber1 RecordUpdateResponseCertTTLNumber = 1
 )
+
+func (r RecordUpdateResponseCertTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseCertTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
@@ -4256,6 +4656,14 @@ const (
 	RecordUpdateResponseCNAMETypeCNAME RecordUpdateResponseCNAMEType = "CNAME"
 )
 
+func (r RecordUpdateResponseCNAMEType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseCNAMETypeCNAME:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -4313,6 +4721,14 @@ type RecordUpdateResponseCNAMETTLNumber float64
 const (
 	RecordUpdateResponseCNAMETTLNumber1 RecordUpdateResponseCNAMETTLNumber = 1
 )
+
+func (r RecordUpdateResponseCNAMETTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseCNAMETTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseDNSKEY struct {
 	// Components of a DNSKEY record.
@@ -4423,6 +4839,14 @@ const (
 	RecordUpdateResponseDNSKEYTypeDNSKEY RecordUpdateResponseDNSKEYType = "DNSKEY"
 )
 
+func (r RecordUpdateResponseDNSKEYType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseDNSKEYTypeDNSKEY:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -4480,6 +4904,14 @@ type RecordUpdateResponseDNSKEYTTLNumber float64
 const (
 	RecordUpdateResponseDNSKEYTTLNumber1 RecordUpdateResponseDNSKEYTTLNumber = 1
 )
+
+func (r RecordUpdateResponseDNSKEYTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseDNSKEYTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseDS struct {
 	// Components of a DS record.
@@ -4590,6 +5022,14 @@ const (
 	RecordUpdateResponseDSTypeDS RecordUpdateResponseDSType = "DS"
 )
 
+func (r RecordUpdateResponseDSType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseDSTypeDS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -4646,6 +5086,14 @@ type RecordUpdateResponseDSTTLNumber float64
 const (
 	RecordUpdateResponseDSTTLNumber1 RecordUpdateResponseDSTTLNumber = 1
 )
+
+func (r RecordUpdateResponseDSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseDSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseHTTPS struct {
 	// Components of a HTTPS record.
@@ -4753,6 +5201,14 @@ const (
 	RecordUpdateResponseHTTPSTypeHTTPS RecordUpdateResponseHTTPSType = "HTTPS"
 )
 
+func (r RecordUpdateResponseHTTPSType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseHTTPSTypeHTTPS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -4810,6 +5266,14 @@ type RecordUpdateResponseHTTPSTTLNumber float64
 const (
 	RecordUpdateResponseHTTPSTTLNumber1 RecordUpdateResponseHTTPSTTLNumber = 1
 )
+
+func (r RecordUpdateResponseHTTPSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseHTTPSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseLOC struct {
 	// Components of a LOC record.
@@ -4945,6 +5409,14 @@ const (
 	RecordUpdateResponseLOCDataLatDirectionS RecordUpdateResponseLOCDataLatDirection = "S"
 )
 
+func (r RecordUpdateResponseLOCDataLatDirection) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseLOCDataLatDirectionN, RecordUpdateResponseLOCDataLatDirectionS:
+		return true
+	}
+	return false
+}
+
 // Longitude direction.
 type RecordUpdateResponseLOCDataLongDirection string
 
@@ -4953,12 +5425,28 @@ const (
 	RecordUpdateResponseLOCDataLongDirectionW RecordUpdateResponseLOCDataLongDirection = "W"
 )
 
+func (r RecordUpdateResponseLOCDataLongDirection) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseLOCDataLongDirectionE, RecordUpdateResponseLOCDataLongDirectionW:
+		return true
+	}
+	return false
+}
+
 // Record type.
 type RecordUpdateResponseLOCType string
 
 const (
 	RecordUpdateResponseLOCTypeLOC RecordUpdateResponseLOCType = "LOC"
 )
+
+func (r RecordUpdateResponseLOCType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseLOCTypeLOC:
+		return true
+	}
+	return false
+}
 
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseLOCMeta struct {
@@ -5017,6 +5505,14 @@ type RecordUpdateResponseLOCTTLNumber float64
 const (
 	RecordUpdateResponseLOCTTLNumber1 RecordUpdateResponseLOCTTLNumber = 1
 )
+
+func (r RecordUpdateResponseLOCTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseLOCTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseMX struct {
 	// A valid mail server hostname.
@@ -5096,6 +5592,14 @@ const (
 	RecordUpdateResponseMXTypeMX RecordUpdateResponseMXType = "MX"
 )
 
+func (r RecordUpdateResponseMXType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseMXTypeMX:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -5152,6 +5656,14 @@ type RecordUpdateResponseMXTTLNumber float64
 const (
 	RecordUpdateResponseMXTTLNumber1 RecordUpdateResponseMXTTLNumber = 1
 )
+
+func (r RecordUpdateResponseMXTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseMXTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseNAPTR struct {
 	// Components of a NAPTR record.
@@ -5268,6 +5780,14 @@ const (
 	RecordUpdateResponseNAPTRTypeNAPTR RecordUpdateResponseNAPTRType = "NAPTR"
 )
 
+func (r RecordUpdateResponseNAPTRType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseNAPTRTypeNAPTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -5325,6 +5845,14 @@ type RecordUpdateResponseNAPTRTTLNumber float64
 const (
 	RecordUpdateResponseNAPTRTTLNumber1 RecordUpdateResponseNAPTRTTLNumber = 1
 )
+
+func (r RecordUpdateResponseNAPTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseNAPTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseNS struct {
 	// A valid name server host name.
@@ -5400,6 +5928,14 @@ const (
 	RecordUpdateResponseNSTypeNS RecordUpdateResponseNSType = "NS"
 )
 
+func (r RecordUpdateResponseNSType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseNSTypeNS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -5456,6 +5992,14 @@ type RecordUpdateResponseNSTTLNumber float64
 const (
 	RecordUpdateResponseNSTTLNumber1 RecordUpdateResponseNSTTLNumber = 1
 )
+
+func (r RecordUpdateResponseNSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseNSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponsePTR struct {
 	// Domain name pointing to the address.
@@ -5531,6 +6075,14 @@ const (
 	RecordUpdateResponsePTRTypePTR RecordUpdateResponsePTRType = "PTR"
 )
 
+func (r RecordUpdateResponsePTRType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponsePTRTypePTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -5588,6 +6140,14 @@ type RecordUpdateResponsePTRTTLNumber float64
 const (
 	RecordUpdateResponsePTRTTLNumber1 RecordUpdateResponsePTRTTLNumber = 1
 )
+
+func (r RecordUpdateResponsePTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponsePTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseSmimea struct {
 	// Components of a SMIMEA record.
@@ -5698,6 +6258,14 @@ const (
 	RecordUpdateResponseSmimeaTypeSmimea RecordUpdateResponseSmimeaType = "SMIMEA"
 )
 
+func (r RecordUpdateResponseSmimeaType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseSmimeaTypeSmimea:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -5755,6 +6323,14 @@ type RecordUpdateResponseSmimeaTTLNumber float64
 const (
 	RecordUpdateResponseSmimeaTTLNumber1 RecordUpdateResponseSmimeaTTLNumber = 1
 )
+
+func (r RecordUpdateResponseSmimeaTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseSmimeaTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseSRV struct {
 	// Components of a SRV record.
@@ -5884,6 +6460,14 @@ const (
 	RecordUpdateResponseSRVTypeSRV RecordUpdateResponseSRVType = "SRV"
 )
 
+func (r RecordUpdateResponseSRVType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseSRVTypeSRV:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -5941,6 +6525,14 @@ type RecordUpdateResponseSRVTTLNumber float64
 const (
 	RecordUpdateResponseSRVTTLNumber1 RecordUpdateResponseSRVTTLNumber = 1
 )
+
+func (r RecordUpdateResponseSRVTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseSRVTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseSSHFP struct {
 	// Components of a SSHFP record.
@@ -6048,6 +6640,14 @@ const (
 	RecordUpdateResponseSSHFPTypeSSHFP RecordUpdateResponseSSHFPType = "SSHFP"
 )
 
+func (r RecordUpdateResponseSSHFPType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseSSHFPTypeSSHFP:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -6105,6 +6705,14 @@ type RecordUpdateResponseSSHFPTTLNumber float64
 const (
 	RecordUpdateResponseSSHFPTTLNumber1 RecordUpdateResponseSSHFPTTLNumber = 1
 )
+
+func (r RecordUpdateResponseSSHFPTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseSSHFPTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseSVCB struct {
 	// Components of a SVCB record.
@@ -6212,6 +6820,14 @@ const (
 	RecordUpdateResponseSVCBTypeSVCB RecordUpdateResponseSVCBType = "SVCB"
 )
 
+func (r RecordUpdateResponseSVCBType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseSVCBTypeSVCB:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -6269,6 +6885,14 @@ type RecordUpdateResponseSVCBTTLNumber float64
 const (
 	RecordUpdateResponseSVCBTTLNumber1 RecordUpdateResponseSVCBTTLNumber = 1
 )
+
+func (r RecordUpdateResponseSVCBTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseSVCBTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseTLSA struct {
 	// Components of a TLSA record.
@@ -6379,6 +7003,14 @@ const (
 	RecordUpdateResponseTLSATypeTLSA RecordUpdateResponseTLSAType = "TLSA"
 )
 
+func (r RecordUpdateResponseTLSAType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseTLSATypeTLSA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -6436,6 +7068,14 @@ type RecordUpdateResponseTLSATTLNumber float64
 const (
 	RecordUpdateResponseTLSATTLNumber1 RecordUpdateResponseTLSATTLNumber = 1
 )
+
+func (r RecordUpdateResponseTLSATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseTLSATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseTXT struct {
 	// Text content for the record.
@@ -6511,6 +7151,14 @@ const (
 	RecordUpdateResponseTXTTypeTXT RecordUpdateResponseTXTType = "TXT"
 )
 
+func (r RecordUpdateResponseTXTType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseTXTTypeTXT:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -6568,6 +7216,14 @@ type RecordUpdateResponseTXTTTLNumber float64
 const (
 	RecordUpdateResponseTXTTTLNumber1 RecordUpdateResponseTXTTTLNumber = 1
 )
+
+func (r RecordUpdateResponseTXTTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseTXTTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseURI struct {
 	// Components of a URI record.
@@ -6676,6 +7332,14 @@ const (
 	RecordUpdateResponseURITypeURI RecordUpdateResponseURIType = "URI"
 )
 
+func (r RecordUpdateResponseURIType) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseURITypeURI:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordUpdateResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -6733,6 +7397,14 @@ type RecordUpdateResponseURITTLNumber float64
 const (
 	RecordUpdateResponseURITTLNumber1 RecordUpdateResponseURITTLNumber = 1
 )
+
+func (r RecordUpdateResponseURITTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseURITTLNumber1:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [dns.RecordListResponseA], [dns.RecordListResponseAAAA],
 // [dns.RecordListResponseCAA], [dns.RecordListResponseCert],
@@ -6933,6 +7605,14 @@ const (
 	RecordListResponseATypeA RecordListResponseAType = "A"
 )
 
+func (r RecordListResponseAType) IsKnown() bool {
+	switch r {
+	case RecordListResponseATypeA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -6989,6 +7669,14 @@ type RecordListResponseATTLNumber float64
 const (
 	RecordListResponseATTLNumber1 RecordListResponseATTLNumber = 1
 )
+
+func (r RecordListResponseATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseAAAA struct {
 	// A valid IPv6 address.
@@ -7068,6 +7756,14 @@ const (
 	RecordListResponseAAAATypeAAAA RecordListResponseAAAAType = "AAAA"
 )
 
+func (r RecordListResponseAAAAType) IsKnown() bool {
+	switch r {
+	case RecordListResponseAAAATypeAAAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -7124,6 +7820,14 @@ type RecordListResponseAAAATTLNumber float64
 const (
 	RecordListResponseAAAATTLNumber1 RecordListResponseAAAATTLNumber = 1
 )
+
+func (r RecordListResponseAAAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseAAAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseCAA struct {
 	// Components of a CAA record.
@@ -7231,6 +7935,14 @@ const (
 	RecordListResponseCAATypeCAA RecordListResponseCAAType = "CAA"
 )
 
+func (r RecordListResponseCAAType) IsKnown() bool {
+	switch r {
+	case RecordListResponseCAATypeCAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -7287,6 +7999,14 @@ type RecordListResponseCAATTLNumber float64
 const (
 	RecordListResponseCAATTLNumber1 RecordListResponseCAATTLNumber = 1
 )
+
+func (r RecordListResponseCAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseCAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseCert struct {
 	// Components of a CERT record.
@@ -7397,6 +8117,14 @@ const (
 	RecordListResponseCertTypeCert RecordListResponseCertType = "CERT"
 )
 
+func (r RecordListResponseCertType) IsKnown() bool {
+	switch r {
+	case RecordListResponseCertTypeCert:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -7453,6 +8181,14 @@ type RecordListResponseCertTTLNumber float64
 const (
 	RecordListResponseCertTTLNumber1 RecordListResponseCertTTLNumber = 1
 )
+
+func (r RecordListResponseCertTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseCertTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
@@ -7532,6 +8268,14 @@ const (
 	RecordListResponseCNAMETypeCNAME RecordListResponseCNAMEType = "CNAME"
 )
 
+func (r RecordListResponseCNAMEType) IsKnown() bool {
+	switch r {
+	case RecordListResponseCNAMETypeCNAME:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -7589,6 +8333,14 @@ type RecordListResponseCNAMETTLNumber float64
 const (
 	RecordListResponseCNAMETTLNumber1 RecordListResponseCNAMETTLNumber = 1
 )
+
+func (r RecordListResponseCNAMETTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseCNAMETTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseDNSKEY struct {
 	// Components of a DNSKEY record.
@@ -7699,6 +8451,14 @@ const (
 	RecordListResponseDNSKEYTypeDNSKEY RecordListResponseDNSKEYType = "DNSKEY"
 )
 
+func (r RecordListResponseDNSKEYType) IsKnown() bool {
+	switch r {
+	case RecordListResponseDNSKEYTypeDNSKEY:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -7756,6 +8516,14 @@ type RecordListResponseDNSKEYTTLNumber float64
 const (
 	RecordListResponseDNSKEYTTLNumber1 RecordListResponseDNSKEYTTLNumber = 1
 )
+
+func (r RecordListResponseDNSKEYTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseDNSKEYTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseDS struct {
 	// Components of a DS record.
@@ -7866,6 +8634,14 @@ const (
 	RecordListResponseDSTypeDS RecordListResponseDSType = "DS"
 )
 
+func (r RecordListResponseDSType) IsKnown() bool {
+	switch r {
+	case RecordListResponseDSTypeDS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -7922,6 +8698,14 @@ type RecordListResponseDSTTLNumber float64
 const (
 	RecordListResponseDSTTLNumber1 RecordListResponseDSTTLNumber = 1
 )
+
+func (r RecordListResponseDSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseDSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseHTTPS struct {
 	// Components of a HTTPS record.
@@ -8029,6 +8813,14 @@ const (
 	RecordListResponseHTTPSTypeHTTPS RecordListResponseHTTPSType = "HTTPS"
 )
 
+func (r RecordListResponseHTTPSType) IsKnown() bool {
+	switch r {
+	case RecordListResponseHTTPSTypeHTTPS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -8086,6 +8878,14 @@ type RecordListResponseHTTPSTTLNumber float64
 const (
 	RecordListResponseHTTPSTTLNumber1 RecordListResponseHTTPSTTLNumber = 1
 )
+
+func (r RecordListResponseHTTPSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseHTTPSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseLOC struct {
 	// Components of a LOC record.
@@ -8221,6 +9021,14 @@ const (
 	RecordListResponseLOCDataLatDirectionS RecordListResponseLOCDataLatDirection = "S"
 )
 
+func (r RecordListResponseLOCDataLatDirection) IsKnown() bool {
+	switch r {
+	case RecordListResponseLOCDataLatDirectionN, RecordListResponseLOCDataLatDirectionS:
+		return true
+	}
+	return false
+}
+
 // Longitude direction.
 type RecordListResponseLOCDataLongDirection string
 
@@ -8229,12 +9037,28 @@ const (
 	RecordListResponseLOCDataLongDirectionW RecordListResponseLOCDataLongDirection = "W"
 )
 
+func (r RecordListResponseLOCDataLongDirection) IsKnown() bool {
+	switch r {
+	case RecordListResponseLOCDataLongDirectionE, RecordListResponseLOCDataLongDirectionW:
+		return true
+	}
+	return false
+}
+
 // Record type.
 type RecordListResponseLOCType string
 
 const (
 	RecordListResponseLOCTypeLOC RecordListResponseLOCType = "LOC"
 )
+
+func (r RecordListResponseLOCType) IsKnown() bool {
+	switch r {
+	case RecordListResponseLOCTypeLOC:
+		return true
+	}
+	return false
+}
 
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseLOCMeta struct {
@@ -8292,6 +9116,14 @@ type RecordListResponseLOCTTLNumber float64
 const (
 	RecordListResponseLOCTTLNumber1 RecordListResponseLOCTTLNumber = 1
 )
+
+func (r RecordListResponseLOCTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseLOCTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseMX struct {
 	// A valid mail server hostname.
@@ -8371,6 +9203,14 @@ const (
 	RecordListResponseMXTypeMX RecordListResponseMXType = "MX"
 )
 
+func (r RecordListResponseMXType) IsKnown() bool {
+	switch r {
+	case RecordListResponseMXTypeMX:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -8427,6 +9267,14 @@ type RecordListResponseMXTTLNumber float64
 const (
 	RecordListResponseMXTTLNumber1 RecordListResponseMXTTLNumber = 1
 )
+
+func (r RecordListResponseMXTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseMXTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseNAPTR struct {
 	// Components of a NAPTR record.
@@ -8543,6 +9391,14 @@ const (
 	RecordListResponseNAPTRTypeNAPTR RecordListResponseNAPTRType = "NAPTR"
 )
 
+func (r RecordListResponseNAPTRType) IsKnown() bool {
+	switch r {
+	case RecordListResponseNAPTRTypeNAPTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -8600,6 +9456,14 @@ type RecordListResponseNAPTRTTLNumber float64
 const (
 	RecordListResponseNAPTRTTLNumber1 RecordListResponseNAPTRTTLNumber = 1
 )
+
+func (r RecordListResponseNAPTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseNAPTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseNS struct {
 	// A valid name server host name.
@@ -8675,6 +9539,14 @@ const (
 	RecordListResponseNSTypeNS RecordListResponseNSType = "NS"
 )
 
+func (r RecordListResponseNSType) IsKnown() bool {
+	switch r {
+	case RecordListResponseNSTypeNS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -8731,6 +9603,14 @@ type RecordListResponseNSTTLNumber float64
 const (
 	RecordListResponseNSTTLNumber1 RecordListResponseNSTTLNumber = 1
 )
+
+func (r RecordListResponseNSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseNSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponsePTR struct {
 	// Domain name pointing to the address.
@@ -8806,6 +9686,14 @@ const (
 	RecordListResponsePTRTypePTR RecordListResponsePTRType = "PTR"
 )
 
+func (r RecordListResponsePTRType) IsKnown() bool {
+	switch r {
+	case RecordListResponsePTRTypePTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -8862,6 +9750,14 @@ type RecordListResponsePTRTTLNumber float64
 const (
 	RecordListResponsePTRTTLNumber1 RecordListResponsePTRTTLNumber = 1
 )
+
+func (r RecordListResponsePTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponsePTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseSmimea struct {
 	// Components of a SMIMEA record.
@@ -8972,6 +9868,14 @@ const (
 	RecordListResponseSmimeaTypeSmimea RecordListResponseSmimeaType = "SMIMEA"
 )
 
+func (r RecordListResponseSmimeaType) IsKnown() bool {
+	switch r {
+	case RecordListResponseSmimeaTypeSmimea:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -9029,6 +9933,14 @@ type RecordListResponseSmimeaTTLNumber float64
 const (
 	RecordListResponseSmimeaTTLNumber1 RecordListResponseSmimeaTTLNumber = 1
 )
+
+func (r RecordListResponseSmimeaTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseSmimeaTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseSRV struct {
 	// Components of a SRV record.
@@ -9158,6 +10070,14 @@ const (
 	RecordListResponseSRVTypeSRV RecordListResponseSRVType = "SRV"
 )
 
+func (r RecordListResponseSRVType) IsKnown() bool {
+	switch r {
+	case RecordListResponseSRVTypeSRV:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -9214,6 +10134,14 @@ type RecordListResponseSRVTTLNumber float64
 const (
 	RecordListResponseSRVTTLNumber1 RecordListResponseSRVTTLNumber = 1
 )
+
+func (r RecordListResponseSRVTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseSRVTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseSSHFP struct {
 	// Components of a SSHFP record.
@@ -9321,6 +10249,14 @@ const (
 	RecordListResponseSSHFPTypeSSHFP RecordListResponseSSHFPType = "SSHFP"
 )
 
+func (r RecordListResponseSSHFPType) IsKnown() bool {
+	switch r {
+	case RecordListResponseSSHFPTypeSSHFP:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -9378,6 +10314,14 @@ type RecordListResponseSSHFPTTLNumber float64
 const (
 	RecordListResponseSSHFPTTLNumber1 RecordListResponseSSHFPTTLNumber = 1
 )
+
+func (r RecordListResponseSSHFPTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseSSHFPTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseSVCB struct {
 	// Components of a SVCB record.
@@ -9485,6 +10429,14 @@ const (
 	RecordListResponseSVCBTypeSVCB RecordListResponseSVCBType = "SVCB"
 )
 
+func (r RecordListResponseSVCBType) IsKnown() bool {
+	switch r {
+	case RecordListResponseSVCBTypeSVCB:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -9541,6 +10493,14 @@ type RecordListResponseSVCBTTLNumber float64
 const (
 	RecordListResponseSVCBTTLNumber1 RecordListResponseSVCBTTLNumber = 1
 )
+
+func (r RecordListResponseSVCBTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseSVCBTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseTLSA struct {
 	// Components of a TLSA record.
@@ -9651,6 +10611,14 @@ const (
 	RecordListResponseTLSATypeTLSA RecordListResponseTLSAType = "TLSA"
 )
 
+func (r RecordListResponseTLSAType) IsKnown() bool {
+	switch r {
+	case RecordListResponseTLSATypeTLSA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -9707,6 +10675,14 @@ type RecordListResponseTLSATTLNumber float64
 const (
 	RecordListResponseTLSATTLNumber1 RecordListResponseTLSATTLNumber = 1
 )
+
+func (r RecordListResponseTLSATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseTLSATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseTXT struct {
 	// Text content for the record.
@@ -9782,6 +10758,14 @@ const (
 	RecordListResponseTXTTypeTXT RecordListResponseTXTType = "TXT"
 )
 
+func (r RecordListResponseTXTType) IsKnown() bool {
+	switch r {
+	case RecordListResponseTXTTypeTXT:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -9838,6 +10822,14 @@ type RecordListResponseTXTTTLNumber float64
 const (
 	RecordListResponseTXTTTLNumber1 RecordListResponseTXTTTLNumber = 1
 )
+
+func (r RecordListResponseTXTTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseTXTTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordListResponseURI struct {
 	// Components of a URI record.
@@ -9946,6 +10938,14 @@ const (
 	RecordListResponseURITypeURI RecordListResponseURIType = "URI"
 )
 
+func (r RecordListResponseURIType) IsKnown() bool {
+	switch r {
+	case RecordListResponseURITypeURI:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordListResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -10002,6 +11002,14 @@ type RecordListResponseURITTLNumber float64
 const (
 	RecordListResponseURITTLNumber1 RecordListResponseURITTLNumber = 1
 )
+
+func (r RecordListResponseURITTLNumber) IsKnown() bool {
+	switch r {
+	case RecordListResponseURITTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordDeleteResponse struct {
 	// Identifier
@@ -10224,6 +11232,14 @@ const (
 	RecordEditResponseATypeA RecordEditResponseAType = "A"
 )
 
+func (r RecordEditResponseAType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseATypeA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -10280,6 +11296,14 @@ type RecordEditResponseATTLNumber float64
 const (
 	RecordEditResponseATTLNumber1 RecordEditResponseATTLNumber = 1
 )
+
+func (r RecordEditResponseATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseAAAA struct {
 	// A valid IPv6 address.
@@ -10359,6 +11383,14 @@ const (
 	RecordEditResponseAAAATypeAAAA RecordEditResponseAAAAType = "AAAA"
 )
 
+func (r RecordEditResponseAAAAType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseAAAATypeAAAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -10415,6 +11447,14 @@ type RecordEditResponseAAAATTLNumber float64
 const (
 	RecordEditResponseAAAATTLNumber1 RecordEditResponseAAAATTLNumber = 1
 )
+
+func (r RecordEditResponseAAAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseAAAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseCAA struct {
 	// Components of a CAA record.
@@ -10522,6 +11562,14 @@ const (
 	RecordEditResponseCAATypeCAA RecordEditResponseCAAType = "CAA"
 )
 
+func (r RecordEditResponseCAAType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseCAATypeCAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -10578,6 +11626,14 @@ type RecordEditResponseCAATTLNumber float64
 const (
 	RecordEditResponseCAATTLNumber1 RecordEditResponseCAATTLNumber = 1
 )
+
+func (r RecordEditResponseCAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseCAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseCert struct {
 	// Components of a CERT record.
@@ -10688,6 +11744,14 @@ const (
 	RecordEditResponseCertTypeCert RecordEditResponseCertType = "CERT"
 )
 
+func (r RecordEditResponseCertType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseCertTypeCert:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -10744,6 +11808,14 @@ type RecordEditResponseCertTTLNumber float64
 const (
 	RecordEditResponseCertTTLNumber1 RecordEditResponseCertTTLNumber = 1
 )
+
+func (r RecordEditResponseCertTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseCertTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
@@ -10823,6 +11895,14 @@ const (
 	RecordEditResponseCNAMETypeCNAME RecordEditResponseCNAMEType = "CNAME"
 )
 
+func (r RecordEditResponseCNAMEType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseCNAMETypeCNAME:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -10880,6 +11960,14 @@ type RecordEditResponseCNAMETTLNumber float64
 const (
 	RecordEditResponseCNAMETTLNumber1 RecordEditResponseCNAMETTLNumber = 1
 )
+
+func (r RecordEditResponseCNAMETTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseCNAMETTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseDNSKEY struct {
 	// Components of a DNSKEY record.
@@ -10990,6 +12078,14 @@ const (
 	RecordEditResponseDNSKEYTypeDNSKEY RecordEditResponseDNSKEYType = "DNSKEY"
 )
 
+func (r RecordEditResponseDNSKEYType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseDNSKEYTypeDNSKEY:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -11047,6 +12143,14 @@ type RecordEditResponseDNSKEYTTLNumber float64
 const (
 	RecordEditResponseDNSKEYTTLNumber1 RecordEditResponseDNSKEYTTLNumber = 1
 )
+
+func (r RecordEditResponseDNSKEYTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseDNSKEYTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseDS struct {
 	// Components of a DS record.
@@ -11157,6 +12261,14 @@ const (
 	RecordEditResponseDSTypeDS RecordEditResponseDSType = "DS"
 )
 
+func (r RecordEditResponseDSType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseDSTypeDS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -11213,6 +12325,14 @@ type RecordEditResponseDSTTLNumber float64
 const (
 	RecordEditResponseDSTTLNumber1 RecordEditResponseDSTTLNumber = 1
 )
+
+func (r RecordEditResponseDSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseDSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseHTTPS struct {
 	// Components of a HTTPS record.
@@ -11320,6 +12440,14 @@ const (
 	RecordEditResponseHTTPSTypeHTTPS RecordEditResponseHTTPSType = "HTTPS"
 )
 
+func (r RecordEditResponseHTTPSType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseHTTPSTypeHTTPS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -11377,6 +12505,14 @@ type RecordEditResponseHTTPSTTLNumber float64
 const (
 	RecordEditResponseHTTPSTTLNumber1 RecordEditResponseHTTPSTTLNumber = 1
 )
+
+func (r RecordEditResponseHTTPSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseHTTPSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseLOC struct {
 	// Components of a LOC record.
@@ -11512,6 +12648,14 @@ const (
 	RecordEditResponseLOCDataLatDirectionS RecordEditResponseLOCDataLatDirection = "S"
 )
 
+func (r RecordEditResponseLOCDataLatDirection) IsKnown() bool {
+	switch r {
+	case RecordEditResponseLOCDataLatDirectionN, RecordEditResponseLOCDataLatDirectionS:
+		return true
+	}
+	return false
+}
+
 // Longitude direction.
 type RecordEditResponseLOCDataLongDirection string
 
@@ -11520,12 +12664,28 @@ const (
 	RecordEditResponseLOCDataLongDirectionW RecordEditResponseLOCDataLongDirection = "W"
 )
 
+func (r RecordEditResponseLOCDataLongDirection) IsKnown() bool {
+	switch r {
+	case RecordEditResponseLOCDataLongDirectionE, RecordEditResponseLOCDataLongDirectionW:
+		return true
+	}
+	return false
+}
+
 // Record type.
 type RecordEditResponseLOCType string
 
 const (
 	RecordEditResponseLOCTypeLOC RecordEditResponseLOCType = "LOC"
 )
+
+func (r RecordEditResponseLOCType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseLOCTypeLOC:
+		return true
+	}
+	return false
+}
 
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseLOCMeta struct {
@@ -11583,6 +12743,14 @@ type RecordEditResponseLOCTTLNumber float64
 const (
 	RecordEditResponseLOCTTLNumber1 RecordEditResponseLOCTTLNumber = 1
 )
+
+func (r RecordEditResponseLOCTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseLOCTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseMX struct {
 	// A valid mail server hostname.
@@ -11662,6 +12830,14 @@ const (
 	RecordEditResponseMXTypeMX RecordEditResponseMXType = "MX"
 )
 
+func (r RecordEditResponseMXType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseMXTypeMX:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -11718,6 +12894,14 @@ type RecordEditResponseMXTTLNumber float64
 const (
 	RecordEditResponseMXTTLNumber1 RecordEditResponseMXTTLNumber = 1
 )
+
+func (r RecordEditResponseMXTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseMXTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseNAPTR struct {
 	// Components of a NAPTR record.
@@ -11834,6 +13018,14 @@ const (
 	RecordEditResponseNAPTRTypeNAPTR RecordEditResponseNAPTRType = "NAPTR"
 )
 
+func (r RecordEditResponseNAPTRType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseNAPTRTypeNAPTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -11891,6 +13083,14 @@ type RecordEditResponseNAPTRTTLNumber float64
 const (
 	RecordEditResponseNAPTRTTLNumber1 RecordEditResponseNAPTRTTLNumber = 1
 )
+
+func (r RecordEditResponseNAPTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseNAPTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseNS struct {
 	// A valid name server host name.
@@ -11966,6 +13166,14 @@ const (
 	RecordEditResponseNSTypeNS RecordEditResponseNSType = "NS"
 )
 
+func (r RecordEditResponseNSType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseNSTypeNS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -12022,6 +13230,14 @@ type RecordEditResponseNSTTLNumber float64
 const (
 	RecordEditResponseNSTTLNumber1 RecordEditResponseNSTTLNumber = 1
 )
+
+func (r RecordEditResponseNSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseNSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponsePTR struct {
 	// Domain name pointing to the address.
@@ -12097,6 +13313,14 @@ const (
 	RecordEditResponsePTRTypePTR RecordEditResponsePTRType = "PTR"
 )
 
+func (r RecordEditResponsePTRType) IsKnown() bool {
+	switch r {
+	case RecordEditResponsePTRTypePTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -12153,6 +13377,14 @@ type RecordEditResponsePTRTTLNumber float64
 const (
 	RecordEditResponsePTRTTLNumber1 RecordEditResponsePTRTTLNumber = 1
 )
+
+func (r RecordEditResponsePTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponsePTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseSmimea struct {
 	// Components of a SMIMEA record.
@@ -12263,6 +13495,14 @@ const (
 	RecordEditResponseSmimeaTypeSmimea RecordEditResponseSmimeaType = "SMIMEA"
 )
 
+func (r RecordEditResponseSmimeaType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseSmimeaTypeSmimea:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -12320,6 +13560,14 @@ type RecordEditResponseSmimeaTTLNumber float64
 const (
 	RecordEditResponseSmimeaTTLNumber1 RecordEditResponseSmimeaTTLNumber = 1
 )
+
+func (r RecordEditResponseSmimeaTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseSmimeaTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseSRV struct {
 	// Components of a SRV record.
@@ -12449,6 +13697,14 @@ const (
 	RecordEditResponseSRVTypeSRV RecordEditResponseSRVType = "SRV"
 )
 
+func (r RecordEditResponseSRVType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseSRVTypeSRV:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -12505,6 +13761,14 @@ type RecordEditResponseSRVTTLNumber float64
 const (
 	RecordEditResponseSRVTTLNumber1 RecordEditResponseSRVTTLNumber = 1
 )
+
+func (r RecordEditResponseSRVTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseSRVTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseSSHFP struct {
 	// Components of a SSHFP record.
@@ -12612,6 +13876,14 @@ const (
 	RecordEditResponseSSHFPTypeSSHFP RecordEditResponseSSHFPType = "SSHFP"
 )
 
+func (r RecordEditResponseSSHFPType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseSSHFPTypeSSHFP:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -12669,6 +13941,14 @@ type RecordEditResponseSSHFPTTLNumber float64
 const (
 	RecordEditResponseSSHFPTTLNumber1 RecordEditResponseSSHFPTTLNumber = 1
 )
+
+func (r RecordEditResponseSSHFPTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseSSHFPTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseSVCB struct {
 	// Components of a SVCB record.
@@ -12776,6 +14056,14 @@ const (
 	RecordEditResponseSVCBTypeSVCB RecordEditResponseSVCBType = "SVCB"
 )
 
+func (r RecordEditResponseSVCBType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseSVCBTypeSVCB:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -12832,6 +14120,14 @@ type RecordEditResponseSVCBTTLNumber float64
 const (
 	RecordEditResponseSVCBTTLNumber1 RecordEditResponseSVCBTTLNumber = 1
 )
+
+func (r RecordEditResponseSVCBTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseSVCBTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseTLSA struct {
 	// Components of a TLSA record.
@@ -12942,6 +14238,14 @@ const (
 	RecordEditResponseTLSATypeTLSA RecordEditResponseTLSAType = "TLSA"
 )
 
+func (r RecordEditResponseTLSAType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseTLSATypeTLSA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -12998,6 +14302,14 @@ type RecordEditResponseTLSATTLNumber float64
 const (
 	RecordEditResponseTLSATTLNumber1 RecordEditResponseTLSATTLNumber = 1
 )
+
+func (r RecordEditResponseTLSATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseTLSATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseTXT struct {
 	// Text content for the record.
@@ -13073,6 +14385,14 @@ const (
 	RecordEditResponseTXTTypeTXT RecordEditResponseTXTType = "TXT"
 )
 
+func (r RecordEditResponseTXTType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseTXTTypeTXT:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -13129,6 +14449,14 @@ type RecordEditResponseTXTTTLNumber float64
 const (
 	RecordEditResponseTXTTTLNumber1 RecordEditResponseTXTTTLNumber = 1
 )
+
+func (r RecordEditResponseTXTTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseTXTTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseURI struct {
 	// Components of a URI record.
@@ -13237,6 +14565,14 @@ const (
 	RecordEditResponseURITypeURI RecordEditResponseURIType = "URI"
 )
 
+func (r RecordEditResponseURIType) IsKnown() bool {
+	switch r {
+	case RecordEditResponseURITypeURI:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordEditResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -13293,6 +14629,14 @@ type RecordEditResponseURITTLNumber float64
 const (
 	RecordEditResponseURITTLNumber1 RecordEditResponseURITTLNumber = 1
 )
+
+func (r RecordEditResponseURITTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditResponseURITTLNumber1:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [dns.RecordGetResponseA], [dns.RecordGetResponseAAAA],
 // [dns.RecordGetResponseCAA], [dns.RecordGetResponseCert],
@@ -13493,6 +14837,14 @@ const (
 	RecordGetResponseATypeA RecordGetResponseAType = "A"
 )
 
+func (r RecordGetResponseAType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseATypeA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -13549,6 +14901,14 @@ type RecordGetResponseATTLNumber float64
 const (
 	RecordGetResponseATTLNumber1 RecordGetResponseATTLNumber = 1
 )
+
+func (r RecordGetResponseATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseAAAA struct {
 	// A valid IPv6 address.
@@ -13628,6 +14988,14 @@ const (
 	RecordGetResponseAAAATypeAAAA RecordGetResponseAAAAType = "AAAA"
 )
 
+func (r RecordGetResponseAAAAType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseAAAATypeAAAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -13684,6 +15052,14 @@ type RecordGetResponseAAAATTLNumber float64
 const (
 	RecordGetResponseAAAATTLNumber1 RecordGetResponseAAAATTLNumber = 1
 )
+
+func (r RecordGetResponseAAAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseAAAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseCAA struct {
 	// Components of a CAA record.
@@ -13791,6 +15167,14 @@ const (
 	RecordGetResponseCAATypeCAA RecordGetResponseCAAType = "CAA"
 )
 
+func (r RecordGetResponseCAAType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseCAATypeCAA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -13847,6 +15231,14 @@ type RecordGetResponseCAATTLNumber float64
 const (
 	RecordGetResponseCAATTLNumber1 RecordGetResponseCAATTLNumber = 1
 )
+
+func (r RecordGetResponseCAATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseCAATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseCert struct {
 	// Components of a CERT record.
@@ -13957,6 +15349,14 @@ const (
 	RecordGetResponseCertTypeCert RecordGetResponseCertType = "CERT"
 )
 
+func (r RecordGetResponseCertType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseCertTypeCert:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -14013,6 +15413,14 @@ type RecordGetResponseCertTTLNumber float64
 const (
 	RecordGetResponseCertTTLNumber1 RecordGetResponseCertTTLNumber = 1
 )
+
+func (r RecordGetResponseCertTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseCertTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
@@ -14092,6 +15500,14 @@ const (
 	RecordGetResponseCNAMETypeCNAME RecordGetResponseCNAMEType = "CNAME"
 )
 
+func (r RecordGetResponseCNAMEType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseCNAMETypeCNAME:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -14148,6 +15564,14 @@ type RecordGetResponseCNAMETTLNumber float64
 const (
 	RecordGetResponseCNAMETTLNumber1 RecordGetResponseCNAMETTLNumber = 1
 )
+
+func (r RecordGetResponseCNAMETTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseCNAMETTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseDNSKEY struct {
 	// Components of a DNSKEY record.
@@ -14258,6 +15682,14 @@ const (
 	RecordGetResponseDNSKEYTypeDNSKEY RecordGetResponseDNSKEYType = "DNSKEY"
 )
 
+func (r RecordGetResponseDNSKEYType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseDNSKEYTypeDNSKEY:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -14315,6 +15747,14 @@ type RecordGetResponseDNSKEYTTLNumber float64
 const (
 	RecordGetResponseDNSKEYTTLNumber1 RecordGetResponseDNSKEYTTLNumber = 1
 )
+
+func (r RecordGetResponseDNSKEYTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseDNSKEYTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseDS struct {
 	// Components of a DS record.
@@ -14425,6 +15865,14 @@ const (
 	RecordGetResponseDSTypeDS RecordGetResponseDSType = "DS"
 )
 
+func (r RecordGetResponseDSType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseDSTypeDS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -14481,6 +15929,14 @@ type RecordGetResponseDSTTLNumber float64
 const (
 	RecordGetResponseDSTTLNumber1 RecordGetResponseDSTTLNumber = 1
 )
+
+func (r RecordGetResponseDSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseDSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseHTTPS struct {
 	// Components of a HTTPS record.
@@ -14588,6 +16044,14 @@ const (
 	RecordGetResponseHTTPSTypeHTTPS RecordGetResponseHTTPSType = "HTTPS"
 )
 
+func (r RecordGetResponseHTTPSType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseHTTPSTypeHTTPS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -14644,6 +16108,14 @@ type RecordGetResponseHTTPSTTLNumber float64
 const (
 	RecordGetResponseHTTPSTTLNumber1 RecordGetResponseHTTPSTTLNumber = 1
 )
+
+func (r RecordGetResponseHTTPSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseHTTPSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseLOC struct {
 	// Components of a LOC record.
@@ -14779,6 +16251,14 @@ const (
 	RecordGetResponseLOCDataLatDirectionS RecordGetResponseLOCDataLatDirection = "S"
 )
 
+func (r RecordGetResponseLOCDataLatDirection) IsKnown() bool {
+	switch r {
+	case RecordGetResponseLOCDataLatDirectionN, RecordGetResponseLOCDataLatDirectionS:
+		return true
+	}
+	return false
+}
+
 // Longitude direction.
 type RecordGetResponseLOCDataLongDirection string
 
@@ -14787,12 +16267,28 @@ const (
 	RecordGetResponseLOCDataLongDirectionW RecordGetResponseLOCDataLongDirection = "W"
 )
 
+func (r RecordGetResponseLOCDataLongDirection) IsKnown() bool {
+	switch r {
+	case RecordGetResponseLOCDataLongDirectionE, RecordGetResponseLOCDataLongDirectionW:
+		return true
+	}
+	return false
+}
+
 // Record type.
 type RecordGetResponseLOCType string
 
 const (
 	RecordGetResponseLOCTypeLOC RecordGetResponseLOCType = "LOC"
 )
+
+func (r RecordGetResponseLOCType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseLOCTypeLOC:
+		return true
+	}
+	return false
+}
 
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseLOCMeta struct {
@@ -14850,6 +16346,14 @@ type RecordGetResponseLOCTTLNumber float64
 const (
 	RecordGetResponseLOCTTLNumber1 RecordGetResponseLOCTTLNumber = 1
 )
+
+func (r RecordGetResponseLOCTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseLOCTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseMX struct {
 	// A valid mail server hostname.
@@ -14929,6 +16433,14 @@ const (
 	RecordGetResponseMXTypeMX RecordGetResponseMXType = "MX"
 )
 
+func (r RecordGetResponseMXType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseMXTypeMX:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -14985,6 +16497,14 @@ type RecordGetResponseMXTTLNumber float64
 const (
 	RecordGetResponseMXTTLNumber1 RecordGetResponseMXTTLNumber = 1
 )
+
+func (r RecordGetResponseMXTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseMXTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseNAPTR struct {
 	// Components of a NAPTR record.
@@ -15101,6 +16621,14 @@ const (
 	RecordGetResponseNAPTRTypeNAPTR RecordGetResponseNAPTRType = "NAPTR"
 )
 
+func (r RecordGetResponseNAPTRType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseNAPTRTypeNAPTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -15157,6 +16685,14 @@ type RecordGetResponseNAPTRTTLNumber float64
 const (
 	RecordGetResponseNAPTRTTLNumber1 RecordGetResponseNAPTRTTLNumber = 1
 )
+
+func (r RecordGetResponseNAPTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseNAPTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseNS struct {
 	// A valid name server host name.
@@ -15232,6 +16768,14 @@ const (
 	RecordGetResponseNSTypeNS RecordGetResponseNSType = "NS"
 )
 
+func (r RecordGetResponseNSType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseNSTypeNS:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -15288,6 +16832,14 @@ type RecordGetResponseNSTTLNumber float64
 const (
 	RecordGetResponseNSTTLNumber1 RecordGetResponseNSTTLNumber = 1
 )
+
+func (r RecordGetResponseNSTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseNSTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponsePTR struct {
 	// Domain name pointing to the address.
@@ -15363,6 +16915,14 @@ const (
 	RecordGetResponsePTRTypePTR RecordGetResponsePTRType = "PTR"
 )
 
+func (r RecordGetResponsePTRType) IsKnown() bool {
+	switch r {
+	case RecordGetResponsePTRTypePTR:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -15419,6 +16979,14 @@ type RecordGetResponsePTRTTLNumber float64
 const (
 	RecordGetResponsePTRTTLNumber1 RecordGetResponsePTRTTLNumber = 1
 )
+
+func (r RecordGetResponsePTRTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponsePTRTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseSmimea struct {
 	// Components of a SMIMEA record.
@@ -15529,6 +17097,14 @@ const (
 	RecordGetResponseSmimeaTypeSmimea RecordGetResponseSmimeaType = "SMIMEA"
 )
 
+func (r RecordGetResponseSmimeaType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseSmimeaTypeSmimea:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -15586,6 +17162,14 @@ type RecordGetResponseSmimeaTTLNumber float64
 const (
 	RecordGetResponseSmimeaTTLNumber1 RecordGetResponseSmimeaTTLNumber = 1
 )
+
+func (r RecordGetResponseSmimeaTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseSmimeaTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseSRV struct {
 	// Components of a SRV record.
@@ -15715,6 +17299,14 @@ const (
 	RecordGetResponseSRVTypeSRV RecordGetResponseSRVType = "SRV"
 )
 
+func (r RecordGetResponseSRVType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseSRVTypeSRV:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -15771,6 +17363,14 @@ type RecordGetResponseSRVTTLNumber float64
 const (
 	RecordGetResponseSRVTTLNumber1 RecordGetResponseSRVTTLNumber = 1
 )
+
+func (r RecordGetResponseSRVTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseSRVTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseSSHFP struct {
 	// Components of a SSHFP record.
@@ -15878,6 +17478,14 @@ const (
 	RecordGetResponseSSHFPTypeSSHFP RecordGetResponseSSHFPType = "SSHFP"
 )
 
+func (r RecordGetResponseSSHFPType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseSSHFPTypeSSHFP:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -15934,6 +17542,14 @@ type RecordGetResponseSSHFPTTLNumber float64
 const (
 	RecordGetResponseSSHFPTTLNumber1 RecordGetResponseSSHFPTTLNumber = 1
 )
+
+func (r RecordGetResponseSSHFPTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseSSHFPTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseSVCB struct {
 	// Components of a SVCB record.
@@ -16041,6 +17657,14 @@ const (
 	RecordGetResponseSVCBTypeSVCB RecordGetResponseSVCBType = "SVCB"
 )
 
+func (r RecordGetResponseSVCBType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseSVCBTypeSVCB:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -16097,6 +17721,14 @@ type RecordGetResponseSVCBTTLNumber float64
 const (
 	RecordGetResponseSVCBTTLNumber1 RecordGetResponseSVCBTTLNumber = 1
 )
+
+func (r RecordGetResponseSVCBTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseSVCBTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseTLSA struct {
 	// Components of a TLSA record.
@@ -16207,6 +17839,14 @@ const (
 	RecordGetResponseTLSATypeTLSA RecordGetResponseTLSAType = "TLSA"
 )
 
+func (r RecordGetResponseTLSAType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseTLSATypeTLSA:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -16263,6 +17903,14 @@ type RecordGetResponseTLSATTLNumber float64
 const (
 	RecordGetResponseTLSATTLNumber1 RecordGetResponseTLSATTLNumber = 1
 )
+
+func (r RecordGetResponseTLSATTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseTLSATTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseTXT struct {
 	// Text content for the record.
@@ -16338,6 +17986,14 @@ const (
 	RecordGetResponseTXTTypeTXT RecordGetResponseTXTType = "TXT"
 )
 
+func (r RecordGetResponseTXTType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseTXTTypeTXT:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -16394,6 +18050,14 @@ type RecordGetResponseTXTTTLNumber float64
 const (
 	RecordGetResponseTXTTTLNumber1 RecordGetResponseTXTTTLNumber = 1
 )
+
+func (r RecordGetResponseTXTTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseTXTTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordGetResponseURI struct {
 	// Components of a URI record.
@@ -16502,6 +18166,14 @@ const (
 	RecordGetResponseURITypeURI RecordGetResponseURIType = "URI"
 )
 
+func (r RecordGetResponseURIType) IsKnown() bool {
+	switch r {
+	case RecordGetResponseURITypeURI:
+		return true
+	}
+	return false
+}
+
 // Extra Cloudflare-specific information about the record.
 type RecordGetResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -16558,6 +18230,14 @@ type RecordGetResponseURITTLNumber float64
 const (
 	RecordGetResponseURITTLNumber1 RecordGetResponseURITTLNumber = 1
 )
+
+func (r RecordGetResponseURITTLNumber) IsKnown() bool {
+	switch r {
+	case RecordGetResponseURITTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordImportResponse struct {
 	// Number of DNS records added.
@@ -16667,6 +18347,14 @@ const (
 	RecordNewParamsTypeA      RecordNewParamsType = "A"
 )
 
+func (r RecordNewParamsType) IsKnown() bool {
+	switch r {
+	case RecordNewParamsTypeURI, RecordNewParamsTypeTXT, RecordNewParamsTypeTLSA, RecordNewParamsTypeSVCB, RecordNewParamsTypeSSHFP, RecordNewParamsTypeSRV, RecordNewParamsTypeSmimea, RecordNewParamsTypePTR, RecordNewParamsTypeNS, RecordNewParamsTypeNAPTR, RecordNewParamsTypeMX, RecordNewParamsTypeLOC, RecordNewParamsTypeHTTPS, RecordNewParamsTypeDS, RecordNewParamsTypeDNSKEY, RecordNewParamsTypeCNAME, RecordNewParamsTypeCert, RecordNewParamsTypeCAA, RecordNewParamsTypeAAAA, RecordNewParamsTypeA:
+		return true
+	}
+	return false
+}
+
 type RecordNewParamsData struct {
 	// algorithm.
 	Algorithm param.Field[float64] `json:"algorithm"`
@@ -16766,6 +18454,14 @@ const (
 	RecordNewParamsDataLatDirectionS RecordNewParamsDataLatDirection = "S"
 )
 
+func (r RecordNewParamsDataLatDirection) IsKnown() bool {
+	switch r {
+	case RecordNewParamsDataLatDirectionN, RecordNewParamsDataLatDirectionS:
+		return true
+	}
+	return false
+}
+
 // Longitude direction.
 type RecordNewParamsDataLongDirection string
 
@@ -16773,6 +18469,14 @@ const (
 	RecordNewParamsDataLongDirectionE RecordNewParamsDataLongDirection = "E"
 	RecordNewParamsDataLongDirectionW RecordNewParamsDataLongDirection = "W"
 )
+
+func (r RecordNewParamsDataLongDirection) IsKnown() bool {
+	switch r {
+	case RecordNewParamsDataLongDirectionE, RecordNewParamsDataLongDirectionW:
+		return true
+	}
+	return false
+}
 
 type RecordNewParamsMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -16800,6 +18504,14 @@ type RecordNewParamsTTLNumber float64
 const (
 	RecordNewParamsTTLNumber1 RecordNewParamsTTLNumber = 1
 )
+
+func (r RecordNewParamsTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordNewParamsTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordNewResponseEnvelope struct {
 	Errors   []RecordNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -16882,6 +18594,14 @@ const (
 	RecordNewResponseEnvelopeSuccessTrue RecordNewResponseEnvelopeSuccess = true
 )
 
+func (r RecordNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RecordNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RecordUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -16939,6 +18659,14 @@ const (
 	RecordUpdateParamsTypeAAAA   RecordUpdateParamsType = "AAAA"
 	RecordUpdateParamsTypeA      RecordUpdateParamsType = "A"
 )
+
+func (r RecordUpdateParamsType) IsKnown() bool {
+	switch r {
+	case RecordUpdateParamsTypeURI, RecordUpdateParamsTypeTXT, RecordUpdateParamsTypeTLSA, RecordUpdateParamsTypeSVCB, RecordUpdateParamsTypeSSHFP, RecordUpdateParamsTypeSRV, RecordUpdateParamsTypeSmimea, RecordUpdateParamsTypePTR, RecordUpdateParamsTypeNS, RecordUpdateParamsTypeNAPTR, RecordUpdateParamsTypeMX, RecordUpdateParamsTypeLOC, RecordUpdateParamsTypeHTTPS, RecordUpdateParamsTypeDS, RecordUpdateParamsTypeDNSKEY, RecordUpdateParamsTypeCNAME, RecordUpdateParamsTypeCert, RecordUpdateParamsTypeCAA, RecordUpdateParamsTypeAAAA, RecordUpdateParamsTypeA:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateParamsData struct {
 	// algorithm.
@@ -17039,6 +18767,14 @@ const (
 	RecordUpdateParamsDataLatDirectionS RecordUpdateParamsDataLatDirection = "S"
 )
 
+func (r RecordUpdateParamsDataLatDirection) IsKnown() bool {
+	switch r {
+	case RecordUpdateParamsDataLatDirectionN, RecordUpdateParamsDataLatDirectionS:
+		return true
+	}
+	return false
+}
+
 // Longitude direction.
 type RecordUpdateParamsDataLongDirection string
 
@@ -17046,6 +18782,14 @@ const (
 	RecordUpdateParamsDataLongDirectionE RecordUpdateParamsDataLongDirection = "E"
 	RecordUpdateParamsDataLongDirectionW RecordUpdateParamsDataLongDirection = "W"
 )
+
+func (r RecordUpdateParamsDataLongDirection) IsKnown() bool {
+	switch r {
+	case RecordUpdateParamsDataLongDirectionE, RecordUpdateParamsDataLongDirectionW:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateParamsMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -17073,6 +18817,14 @@ type RecordUpdateParamsTTLNumber float64
 const (
 	RecordUpdateParamsTTLNumber1 RecordUpdateParamsTTLNumber = 1
 )
+
+func (r RecordUpdateParamsTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordUpdateParamsTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordUpdateResponseEnvelope struct {
 	Errors   []RecordUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -17155,6 +18907,14 @@ const (
 	RecordUpdateResponseEnvelopeSuccessTrue RecordUpdateResponseEnvelopeSuccess = true
 )
 
+func (r RecordUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RecordUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RecordListParams struct {
 	// Identifier
 	ZoneID  param.Field[string]                  `path:"zone_id,required"`
@@ -17235,6 +18995,14 @@ const (
 	RecordListParamsDirectionDesc RecordListParamsDirection = "desc"
 )
 
+func (r RecordListParamsDirection) IsKnown() bool {
+	switch r {
+	case RecordListParamsDirectionAsc, RecordListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Whether to match all search requirements or at least one (any). If set to `all`,
 // acts like a logical AND between filters. If set to `any`, acts like a logical OR
 // instead. Note that the interaction between tag filters is controlled by the
@@ -17246,6 +19014,14 @@ const (
 	RecordListParamsMatchAll RecordListParamsMatch = "all"
 )
 
+func (r RecordListParamsMatch) IsKnown() bool {
+	switch r {
+	case RecordListParamsMatchAny, RecordListParamsMatchAll:
+		return true
+	}
+	return false
+}
+
 // Field to order DNS records by.
 type RecordListParamsOrder string
 
@@ -17256,6 +19032,14 @@ const (
 	RecordListParamsOrderTTL     RecordListParamsOrder = "ttl"
 	RecordListParamsOrderProxied RecordListParamsOrder = "proxied"
 )
+
+func (r RecordListParamsOrder) IsKnown() bool {
+	switch r {
+	case RecordListParamsOrderType, RecordListParamsOrderName, RecordListParamsOrderContent, RecordListParamsOrderTTL, RecordListParamsOrderProxied:
+		return true
+	}
+	return false
+}
 
 type RecordListParamsTag struct {
 	// Name of a tag which must _not_ be present on the DNS record. Tag filters are
@@ -17301,6 +19085,14 @@ const (
 	RecordListParamsTagMatchAll RecordListParamsTagMatch = "all"
 )
 
+func (r RecordListParamsTagMatch) IsKnown() bool {
+	switch r {
+	case RecordListParamsTagMatchAny, RecordListParamsTagMatchAll:
+		return true
+	}
+	return false
+}
+
 // Record type.
 type RecordListParamsType string
 
@@ -17326,6 +19118,14 @@ const (
 	RecordListParamsTypeTXT    RecordListParamsType = "TXT"
 	RecordListParamsTypeURI    RecordListParamsType = "URI"
 )
+
+func (r RecordListParamsType) IsKnown() bool {
+	switch r {
+	case RecordListParamsTypeA, RecordListParamsTypeAAAA, RecordListParamsTypeCAA, RecordListParamsTypeCert, RecordListParamsTypeCNAME, RecordListParamsTypeDNSKEY, RecordListParamsTypeDS, RecordListParamsTypeHTTPS, RecordListParamsTypeLOC, RecordListParamsTypeMX, RecordListParamsTypeNAPTR, RecordListParamsTypeNS, RecordListParamsTypePTR, RecordListParamsTypeSmimea, RecordListParamsTypeSRV, RecordListParamsTypeSSHFP, RecordListParamsTypeSVCB, RecordListParamsTypeTLSA, RecordListParamsTypeTXT, RecordListParamsTypeURI:
+		return true
+	}
+	return false
+}
 
 type RecordDeleteParams struct {
 	// Identifier
@@ -17410,6 +19210,14 @@ const (
 	RecordEditParamsTypeAAAA   RecordEditParamsType = "AAAA"
 	RecordEditParamsTypeA      RecordEditParamsType = "A"
 )
+
+func (r RecordEditParamsType) IsKnown() bool {
+	switch r {
+	case RecordEditParamsTypeURI, RecordEditParamsTypeTXT, RecordEditParamsTypeTLSA, RecordEditParamsTypeSVCB, RecordEditParamsTypeSSHFP, RecordEditParamsTypeSRV, RecordEditParamsTypeSmimea, RecordEditParamsTypePTR, RecordEditParamsTypeNS, RecordEditParamsTypeNAPTR, RecordEditParamsTypeMX, RecordEditParamsTypeLOC, RecordEditParamsTypeHTTPS, RecordEditParamsTypeDS, RecordEditParamsTypeDNSKEY, RecordEditParamsTypeCNAME, RecordEditParamsTypeCert, RecordEditParamsTypeCAA, RecordEditParamsTypeAAAA, RecordEditParamsTypeA:
+		return true
+	}
+	return false
+}
 
 type RecordEditParamsData struct {
 	// algorithm.
@@ -17510,6 +19318,14 @@ const (
 	RecordEditParamsDataLatDirectionS RecordEditParamsDataLatDirection = "S"
 )
 
+func (r RecordEditParamsDataLatDirection) IsKnown() bool {
+	switch r {
+	case RecordEditParamsDataLatDirectionN, RecordEditParamsDataLatDirectionS:
+		return true
+	}
+	return false
+}
+
 // Longitude direction.
 type RecordEditParamsDataLongDirection string
 
@@ -17517,6 +19333,14 @@ const (
 	RecordEditParamsDataLongDirectionE RecordEditParamsDataLongDirection = "E"
 	RecordEditParamsDataLongDirectionW RecordEditParamsDataLongDirection = "W"
 )
+
+func (r RecordEditParamsDataLongDirection) IsKnown() bool {
+	switch r {
+	case RecordEditParamsDataLongDirectionE, RecordEditParamsDataLongDirectionW:
+		return true
+	}
+	return false
+}
 
 type RecordEditParamsMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
@@ -17544,6 +19368,14 @@ type RecordEditParamsTTLNumber float64
 const (
 	RecordEditParamsTTLNumber1 RecordEditParamsTTLNumber = 1
 )
+
+func (r RecordEditParamsTTLNumber) IsKnown() bool {
+	switch r {
+	case RecordEditParamsTTLNumber1:
+		return true
+	}
+	return false
+}
 
 type RecordEditResponseEnvelope struct {
 	Errors   []RecordEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -17625,6 +19457,14 @@ type RecordEditResponseEnvelopeSuccess bool
 const (
 	RecordEditResponseEnvelopeSuccessTrue RecordEditResponseEnvelopeSuccess = true
 )
+
+func (r RecordEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RecordEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RecordExportParams struct {
 	// Identifier
@@ -17716,6 +19556,14 @@ type RecordGetResponseEnvelopeSuccess bool
 const (
 	RecordGetResponseEnvelopeSuccessTrue RecordGetResponseEnvelopeSuccess = true
 )
+
+func (r RecordGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RecordGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RecordImportParams struct {
 	// Identifier
@@ -17818,6 +19666,14 @@ type RecordImportResponseEnvelopeSuccess bool
 const (
 	RecordImportResponseEnvelopeSuccessTrue RecordImportResponseEnvelopeSuccess = true
 )
+
+func (r RecordImportResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RecordImportResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RecordImportResponseEnvelopeTiming struct {
 	// When the file parsing ended.
@@ -17934,6 +19790,14 @@ type RecordScanResponseEnvelopeSuccess bool
 const (
 	RecordScanResponseEnvelopeSuccessTrue RecordScanResponseEnvelopeSuccess = true
 )
+
+func (r RecordScanResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RecordScanResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type RecordScanResponseEnvelopeTiming struct {
 	// When the file parsing ended.

@@ -209,6 +209,14 @@ const (
 	NetflowTopAsesParamsDateRange24wControl NetflowTopAsesParamsDateRange = "24wControl"
 )
 
+func (r NetflowTopAsesParamsDateRange) IsKnown() bool {
+	switch r {
+	case NetflowTopAsesParamsDateRange1d, NetflowTopAsesParamsDateRange2d, NetflowTopAsesParamsDateRange7d, NetflowTopAsesParamsDateRange14d, NetflowTopAsesParamsDateRange28d, NetflowTopAsesParamsDateRange12w, NetflowTopAsesParamsDateRange24w, NetflowTopAsesParamsDateRange52w, NetflowTopAsesParamsDateRange1dControl, NetflowTopAsesParamsDateRange2dControl, NetflowTopAsesParamsDateRange7dControl, NetflowTopAsesParamsDateRange14dControl, NetflowTopAsesParamsDateRange28dControl, NetflowTopAsesParamsDateRange12wControl, NetflowTopAsesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type NetflowTopAsesParamsFormat string
 
@@ -216,6 +224,14 @@ const (
 	NetflowTopAsesParamsFormatJson NetflowTopAsesParamsFormat = "JSON"
 	NetflowTopAsesParamsFormatCsv  NetflowTopAsesParamsFormat = "CSV"
 )
+
+func (r NetflowTopAsesParamsFormat) IsKnown() bool {
+	switch r {
+	case NetflowTopAsesParamsFormatJson, NetflowTopAsesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type NetflowTopAsesResponseEnvelope struct {
 	Result  NetflowTopAsesResponse             `json:"result,required"`
@@ -298,6 +314,14 @@ const (
 	NetflowTopLocationsParamsDateRange24wControl NetflowTopLocationsParamsDateRange = "24wControl"
 )
 
+func (r NetflowTopLocationsParamsDateRange) IsKnown() bool {
+	switch r {
+	case NetflowTopLocationsParamsDateRange1d, NetflowTopLocationsParamsDateRange2d, NetflowTopLocationsParamsDateRange7d, NetflowTopLocationsParamsDateRange14d, NetflowTopLocationsParamsDateRange28d, NetflowTopLocationsParamsDateRange12w, NetflowTopLocationsParamsDateRange24w, NetflowTopLocationsParamsDateRange52w, NetflowTopLocationsParamsDateRange1dControl, NetflowTopLocationsParamsDateRange2dControl, NetflowTopLocationsParamsDateRange7dControl, NetflowTopLocationsParamsDateRange14dControl, NetflowTopLocationsParamsDateRange28dControl, NetflowTopLocationsParamsDateRange12wControl, NetflowTopLocationsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type NetflowTopLocationsParamsFormat string
 
@@ -305,6 +329,14 @@ const (
 	NetflowTopLocationsParamsFormatJson NetflowTopLocationsParamsFormat = "JSON"
 	NetflowTopLocationsParamsFormatCsv  NetflowTopLocationsParamsFormat = "CSV"
 )
+
+func (r NetflowTopLocationsParamsFormat) IsKnown() bool {
+	switch r {
+	case NetflowTopLocationsParamsFormatJson, NetflowTopLocationsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type NetflowTopLocationsResponseEnvelope struct {
 	Result  NetflowTopLocationsResponse             `json:"result,required"`

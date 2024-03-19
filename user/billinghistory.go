@@ -136,6 +136,14 @@ const (
 	BillingHistoryGetParamsOrderAction    BillingHistoryGetParamsOrder = "action"
 )
 
+func (r BillingHistoryGetParamsOrder) IsKnown() bool {
+	switch r {
+	case BillingHistoryGetParamsOrderType, BillingHistoryGetParamsOrderOccuredAt, BillingHistoryGetParamsOrderAction:
+		return true
+	}
+	return false
+}
+
 type BillingHistoryGetResponseEnvelope struct {
 	Errors   []BillingHistoryGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []BillingHistoryGetResponseEnvelopeMessages `json:"messages,required"`
@@ -218,6 +226,14 @@ type BillingHistoryGetResponseEnvelopeSuccess bool
 const (
 	BillingHistoryGetResponseEnvelopeSuccessTrue BillingHistoryGetResponseEnvelopeSuccess = true
 )
+
+func (r BillingHistoryGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BillingHistoryGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type BillingHistoryGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service

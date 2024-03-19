@@ -175,6 +175,14 @@ const (
 	CertificatePackEditResponseCertificateAuthorityLetsEncrypt CertificatePackEditResponseCertificateAuthority = "lets_encrypt"
 )
 
+func (r CertificatePackEditResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackEditResponseCertificateAuthorityGoogle, CertificatePackEditResponseCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
 // Status of certificate pack.
 type CertificatePackEditResponseStatus string
 
@@ -202,12 +210,28 @@ const (
 	CertificatePackEditResponseStatusHoldingDeployment    CertificatePackEditResponseStatus = "holding_deployment"
 )
 
+func (r CertificatePackEditResponseStatus) IsKnown() bool {
+	switch r {
+	case CertificatePackEditResponseStatusInitializing, CertificatePackEditResponseStatusPendingValidation, CertificatePackEditResponseStatusDeleted, CertificatePackEditResponseStatusPendingIssuance, CertificatePackEditResponseStatusPendingDeployment, CertificatePackEditResponseStatusPendingDeletion, CertificatePackEditResponseStatusPendingExpiration, CertificatePackEditResponseStatusExpired, CertificatePackEditResponseStatusActive, CertificatePackEditResponseStatusInitializingTimedOut, CertificatePackEditResponseStatusValidationTimedOut, CertificatePackEditResponseStatusIssuanceTimedOut, CertificatePackEditResponseStatusDeploymentTimedOut, CertificatePackEditResponseStatusDeletionTimedOut, CertificatePackEditResponseStatusPendingCleanup, CertificatePackEditResponseStatusStagingDeployment, CertificatePackEditResponseStatusStagingActive, CertificatePackEditResponseStatusDeactivating, CertificatePackEditResponseStatusInactive, CertificatePackEditResponseStatusBackupIssued, CertificatePackEditResponseStatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
 // Type of certificate pack.
 type CertificatePackEditResponseType string
 
 const (
 	CertificatePackEditResponseTypeAdvanced CertificatePackEditResponseType = "advanced"
 )
+
+func (r CertificatePackEditResponseType) IsKnown() bool {
+	switch r {
+	case CertificatePackEditResponseTypeAdvanced:
+		return true
+	}
+	return false
+}
 
 // Validation Method selected for the order.
 type CertificatePackEditResponseValidationMethod string
@@ -218,6 +242,14 @@ const (
 	CertificatePackEditResponseValidationMethodEmail CertificatePackEditResponseValidationMethod = "email"
 )
 
+func (r CertificatePackEditResponseValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackEditResponseValidationMethodTXT, CertificatePackEditResponseValidationMethodHTTP, CertificatePackEditResponseValidationMethodEmail:
+		return true
+	}
+	return false
+}
+
 // Validity Days selected for the order.
 type CertificatePackEditResponseValidityDays int64
 
@@ -227,6 +259,14 @@ const (
 	CertificatePackEditResponseValidityDays90  CertificatePackEditResponseValidityDays = 90
 	CertificatePackEditResponseValidityDays365 CertificatePackEditResponseValidityDays = 365
 )
+
+func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
+	switch r {
+	case CertificatePackEditResponseValidityDays14, CertificatePackEditResponseValidityDays30, CertificatePackEditResponseValidityDays90, CertificatePackEditResponseValidityDays365:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by [ssl.CertificatePackGetResponseUnknown] or
 // [shared.UnionString].
@@ -267,6 +307,14 @@ type CertificatePackListParamsStatus string
 const (
 	CertificatePackListParamsStatusAll CertificatePackListParamsStatus = "all"
 )
+
+func (r CertificatePackListParamsStatus) IsKnown() bool {
+	switch r {
+	case CertificatePackListParamsStatusAll:
+		return true
+	}
+	return false
+}
 
 type CertificatePackListResponseEnvelope struct {
 	Errors   []CertificatePackListResponseEnvelopeErrors   `json:"errors,required"`
@@ -350,6 +398,14 @@ type CertificatePackListResponseEnvelopeSuccess bool
 const (
 	CertificatePackListResponseEnvelopeSuccessTrue CertificatePackListResponseEnvelopeSuccess = true
 )
+
+func (r CertificatePackListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CertificatePackListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type CertificatePackListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -468,6 +524,14 @@ const (
 	CertificatePackDeleteResponseEnvelopeSuccessTrue CertificatePackDeleteResponseEnvelopeSuccess = true
 )
 
+func (r CertificatePackDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CertificatePackDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CertificatePackEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -554,6 +618,14 @@ const (
 	CertificatePackEditResponseEnvelopeSuccessTrue CertificatePackEditResponseEnvelopeSuccess = true
 )
 
+func (r CertificatePackEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CertificatePackEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CertificatePackGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -639,3 +711,11 @@ type CertificatePackGetResponseEnvelopeSuccess bool
 const (
 	CertificatePackGetResponseEnvelopeSuccessTrue CertificatePackGetResponseEnvelopeSuccess = true
 )
+
+func (r CertificatePackGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CertificatePackGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

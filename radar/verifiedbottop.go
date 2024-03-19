@@ -423,6 +423,14 @@ const (
 	VerifiedBotTopBotsParamsDateRange24wControl VerifiedBotTopBotsParamsDateRange = "24wControl"
 )
 
+func (r VerifiedBotTopBotsParamsDateRange) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopBotsParamsDateRange1d, VerifiedBotTopBotsParamsDateRange2d, VerifiedBotTopBotsParamsDateRange7d, VerifiedBotTopBotsParamsDateRange14d, VerifiedBotTopBotsParamsDateRange28d, VerifiedBotTopBotsParamsDateRange12w, VerifiedBotTopBotsParamsDateRange24w, VerifiedBotTopBotsParamsDateRange52w, VerifiedBotTopBotsParamsDateRange1dControl, VerifiedBotTopBotsParamsDateRange2dControl, VerifiedBotTopBotsParamsDateRange7dControl, VerifiedBotTopBotsParamsDateRange14dControl, VerifiedBotTopBotsParamsDateRange28dControl, VerifiedBotTopBotsParamsDateRange12wControl, VerifiedBotTopBotsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type VerifiedBotTopBotsParamsFormat string
 
@@ -430,6 +438,14 @@ const (
 	VerifiedBotTopBotsParamsFormatJson VerifiedBotTopBotsParamsFormat = "JSON"
 	VerifiedBotTopBotsParamsFormatCsv  VerifiedBotTopBotsParamsFormat = "CSV"
 )
+
+func (r VerifiedBotTopBotsParamsFormat) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopBotsParamsFormatJson, VerifiedBotTopBotsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type VerifiedBotTopBotsResponseEnvelope struct {
 	Result  VerifiedBotTopBotsResponse             `json:"result,required"`
@@ -512,6 +528,14 @@ const (
 	VerifiedBotTopCategoriesParamsDateRange24wControl VerifiedBotTopCategoriesParamsDateRange = "24wControl"
 )
 
+func (r VerifiedBotTopCategoriesParamsDateRange) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopCategoriesParamsDateRange1d, VerifiedBotTopCategoriesParamsDateRange2d, VerifiedBotTopCategoriesParamsDateRange7d, VerifiedBotTopCategoriesParamsDateRange14d, VerifiedBotTopCategoriesParamsDateRange28d, VerifiedBotTopCategoriesParamsDateRange12w, VerifiedBotTopCategoriesParamsDateRange24w, VerifiedBotTopCategoriesParamsDateRange52w, VerifiedBotTopCategoriesParamsDateRange1dControl, VerifiedBotTopCategoriesParamsDateRange2dControl, VerifiedBotTopCategoriesParamsDateRange7dControl, VerifiedBotTopCategoriesParamsDateRange14dControl, VerifiedBotTopCategoriesParamsDateRange28dControl, VerifiedBotTopCategoriesParamsDateRange12wControl, VerifiedBotTopCategoriesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type VerifiedBotTopCategoriesParamsFormat string
 
@@ -519,6 +543,14 @@ const (
 	VerifiedBotTopCategoriesParamsFormatJson VerifiedBotTopCategoriesParamsFormat = "JSON"
 	VerifiedBotTopCategoriesParamsFormatCsv  VerifiedBotTopCategoriesParamsFormat = "CSV"
 )
+
+func (r VerifiedBotTopCategoriesParamsFormat) IsKnown() bool {
+	switch r {
+	case VerifiedBotTopCategoriesParamsFormatJson, VerifiedBotTopCategoriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type VerifiedBotTopCategoriesResponseEnvelope struct {
 	Result  VerifiedBotTopCategoriesResponse             `json:"result,required"`

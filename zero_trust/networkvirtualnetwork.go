@@ -300,6 +300,14 @@ const (
 	NetworkVirtualNetworkNewResponseEnvelopeSuccessTrue NetworkVirtualNetworkNewResponseEnvelopeSuccess = true
 )
 
+func (r NetworkVirtualNetworkNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkVirtualNetworkNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NetworkVirtualNetworkListParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -406,6 +414,14 @@ type NetworkVirtualNetworkListResponseEnvelopeSuccess bool
 const (
 	NetworkVirtualNetworkListResponseEnvelopeSuccessTrue NetworkVirtualNetworkListResponseEnvelopeSuccess = true
 )
+
+func (r NetworkVirtualNetworkListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkVirtualNetworkListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type NetworkVirtualNetworkListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -524,6 +540,14 @@ const (
 	NetworkVirtualNetworkDeleteResponseEnvelopeSuccessTrue NetworkVirtualNetworkDeleteResponseEnvelopeSuccess = true
 )
 
+func (r NetworkVirtualNetworkDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkVirtualNetworkDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NetworkVirtualNetworkEditParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -619,3 +643,11 @@ type NetworkVirtualNetworkEditResponseEnvelopeSuccess bool
 const (
 	NetworkVirtualNetworkEditResponseEnvelopeSuccessTrue NetworkVirtualNetworkEditResponseEnvelopeSuccess = true
 )
+
+func (r NetworkVirtualNetworkEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkVirtualNetworkEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

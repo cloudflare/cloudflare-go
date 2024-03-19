@@ -145,6 +145,14 @@ const (
 	CacheReserveClearResponseIDCacheReserveClear CacheReserveClearResponseID = "cache_reserve_clear"
 )
 
+func (r CacheReserveClearResponseID) IsKnown() bool {
+	switch r {
+	case CacheReserveClearResponseIDCacheReserveClear:
+		return true
+	}
+	return false
+}
+
 // The current state of the Cache Reserve Clear operation.
 type CacheReserveClearResponseState string
 
@@ -152,6 +160,14 @@ const (
 	CacheReserveClearResponseStateInProgress CacheReserveClearResponseState = "In-progress"
 	CacheReserveClearResponseStateCompleted  CacheReserveClearResponseState = "Completed"
 )
+
+func (r CacheReserveClearResponseState) IsKnown() bool {
+	switch r {
+	case CacheReserveClearResponseStateInProgress, CacheReserveClearResponseStateCompleted:
+		return true
+	}
+	return false
+}
 
 // Increase cache lifetimes by automatically storing all cacheable files into
 // Cloudflare's persistent object storage buckets. Requires Cache Reserve
@@ -194,6 +210,14 @@ const (
 	CacheReserveEditResponseIDCacheReserve CacheReserveEditResponseID = "cache_reserve"
 )
 
+func (r CacheReserveEditResponseID) IsKnown() bool {
+	switch r {
+	case CacheReserveEditResponseIDCacheReserve:
+		return true
+	}
+	return false
+}
+
 // Value of the Cache Reserve zone setting.
 type CacheReserveEditResponseValue string
 
@@ -201,6 +225,14 @@ const (
 	CacheReserveEditResponseValueOn  CacheReserveEditResponseValue = "on"
 	CacheReserveEditResponseValueOff CacheReserveEditResponseValue = "off"
 )
+
+func (r CacheReserveEditResponseValue) IsKnown() bool {
+	switch r {
+	case CacheReserveEditResponseValueOn, CacheReserveEditResponseValueOff:
+		return true
+	}
+	return false
+}
 
 // Increase cache lifetimes by automatically storing all cacheable files into
 // Cloudflare's persistent object storage buckets. Requires Cache Reserve
@@ -243,6 +275,14 @@ const (
 	CacheReserveGetResponseIDCacheReserve CacheReserveGetResponseID = "cache_reserve"
 )
 
+func (r CacheReserveGetResponseID) IsKnown() bool {
+	switch r {
+	case CacheReserveGetResponseIDCacheReserve:
+		return true
+	}
+	return false
+}
+
 // Value of the Cache Reserve zone setting.
 type CacheReserveGetResponseValue string
 
@@ -250,6 +290,14 @@ const (
 	CacheReserveGetResponseValueOn  CacheReserveGetResponseValue = "on"
 	CacheReserveGetResponseValueOff CacheReserveGetResponseValue = "off"
 )
+
+func (r CacheReserveGetResponseValue) IsKnown() bool {
+	switch r {
+	case CacheReserveGetResponseValueOn, CacheReserveGetResponseValueOff:
+		return true
+	}
+	return false
+}
 
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
@@ -296,6 +344,14 @@ const (
 	CacheReserveStatusResponseIDCacheReserveClear CacheReserveStatusResponseID = "cache_reserve_clear"
 )
 
+func (r CacheReserveStatusResponseID) IsKnown() bool {
+	switch r {
+	case CacheReserveStatusResponseIDCacheReserveClear:
+		return true
+	}
+	return false
+}
+
 // The current state of the Cache Reserve Clear operation.
 type CacheReserveStatusResponseState string
 
@@ -303,6 +359,14 @@ const (
 	CacheReserveStatusResponseStateInProgress CacheReserveStatusResponseState = "In-progress"
 	CacheReserveStatusResponseStateCompleted  CacheReserveStatusResponseState = "Completed"
 )
+
+func (r CacheReserveStatusResponseState) IsKnown() bool {
+	switch r {
+	case CacheReserveStatusResponseStateInProgress, CacheReserveStatusResponseStateCompleted:
+		return true
+	}
+	return false
+}
 
 type CacheReserveClearParams struct {
 	// Identifier
@@ -394,6 +458,14 @@ const (
 	CacheReserveClearResponseEnvelopeSuccessTrue CacheReserveClearResponseEnvelopeSuccess = true
 )
 
+func (r CacheReserveClearResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CacheReserveClearResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CacheReserveEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -412,6 +484,14 @@ const (
 	CacheReserveEditParamsValueOn  CacheReserveEditParamsValue = "on"
 	CacheReserveEditParamsValueOff CacheReserveEditParamsValue = "off"
 )
+
+func (r CacheReserveEditParamsValue) IsKnown() bool {
+	switch r {
+	case CacheReserveEditParamsValueOn, CacheReserveEditParamsValueOff:
+		return true
+	}
+	return false
+}
 
 type CacheReserveEditResponseEnvelope struct {
 	Errors   []CacheReserveEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -499,6 +579,14 @@ type CacheReserveEditResponseEnvelopeSuccess bool
 const (
 	CacheReserveEditResponseEnvelopeSuccessTrue CacheReserveEditResponseEnvelopeSuccess = true
 )
+
+func (r CacheReserveEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CacheReserveEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type CacheReserveGetParams struct {
 	// Identifier
@@ -592,6 +680,14 @@ const (
 	CacheReserveGetResponseEnvelopeSuccessTrue CacheReserveGetResponseEnvelopeSuccess = true
 )
 
+func (r CacheReserveGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CacheReserveGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type CacheReserveStatusParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -681,3 +777,11 @@ type CacheReserveStatusResponseEnvelopeSuccess bool
 const (
 	CacheReserveStatusResponseEnvelopeSuccessTrue CacheReserveStatusResponseEnvelopeSuccess = true
 )
+
+func (r CacheReserveStatusResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CacheReserveStatusResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

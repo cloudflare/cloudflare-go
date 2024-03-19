@@ -160,6 +160,14 @@ const (
 	NamespaceListResponseEnvelopeSuccessTrue NamespaceListResponseEnvelopeSuccess = true
 )
 
+func (r NamespaceListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NamespaceListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type NamespaceListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

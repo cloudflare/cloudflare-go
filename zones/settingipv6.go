@@ -104,6 +104,14 @@ const (
 	ZonesIPV6IDIPV6 ZonesIPV6ID = "ipv6"
 )
 
+func (r ZonesIPV6ID) IsKnown() bool {
+	switch r {
+	case ZonesIPV6IDIPV6:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesIPV6Value string
 
@@ -111,6 +119,14 @@ const (
 	ZonesIPV6ValueOff ZonesIPV6Value = "off"
 	ZonesIPV6ValueOn  ZonesIPV6Value = "on"
 )
+
+func (r ZonesIPV6Value) IsKnown() bool {
+	switch r {
+	case ZonesIPV6ValueOff, ZonesIPV6ValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -120,6 +136,14 @@ const (
 	ZonesIPV6EditableTrue  ZonesIPV6Editable = true
 	ZonesIPV6EditableFalse ZonesIPV6Editable = false
 )
+
+func (r ZonesIPV6Editable) IsKnown() bool {
+	switch r {
+	case ZonesIPV6EditableTrue, ZonesIPV6EditableFalse:
+		return true
+	}
+	return false
+}
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
@@ -154,6 +178,14 @@ const (
 	SettingIPV6EditParamsValueOff SettingIPV6EditParamsValue = "off"
 	SettingIPV6EditParamsValueOn  SettingIPV6EditParamsValue = "on"
 )
+
+func (r SettingIPV6EditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingIPV6EditParamsValueOff, SettingIPV6EditParamsValueOn:
+		return true
+	}
+	return false
+}
 
 type SettingIPV6EditResponseEnvelope struct {
 	Errors   []SettingIPV6EditResponseEnvelopeErrors   `json:"errors,required"`

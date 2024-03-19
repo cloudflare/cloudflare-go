@@ -133,6 +133,14 @@ const (
 	InviteListResponseStatusExpired  InviteListResponseStatus = "expired"
 )
 
+func (r InviteListResponseStatus) IsKnown() bool {
+	switch r {
+	case InviteListResponseStatusPending, InviteListResponseStatusAccepted, InviteListResponseStatusRejected, InviteListResponseStatusExpired:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [user.InviteEditResponseUnknown] or [shared.UnionString].
 type InviteEditResponse interface {
 	ImplementsUserInviteEditResponse()
@@ -248,6 +256,14 @@ const (
 	InviteListResponseEnvelopeSuccessTrue InviteListResponseEnvelopeSuccess = true
 )
 
+func (r InviteListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InviteListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type InviteListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -295,6 +311,14 @@ const (
 	InviteEditParamsStatusAccepted InviteEditParamsStatus = "accepted"
 	InviteEditParamsStatusRejected InviteEditParamsStatus = "rejected"
 )
+
+func (r InviteEditParamsStatus) IsKnown() bool {
+	switch r {
+	case InviteEditParamsStatusAccepted, InviteEditParamsStatusRejected:
+		return true
+	}
+	return false
+}
 
 type InviteEditResponseEnvelope struct {
 	Errors   []InviteEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -377,6 +401,14 @@ const (
 	InviteEditResponseEnvelopeSuccessTrue InviteEditResponseEnvelopeSuccess = true
 )
 
+func (r InviteEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InviteEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type InviteGetResponseEnvelope struct {
 	Errors   []InviteGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []InviteGetResponseEnvelopeMessages `json:"messages,required"`
@@ -457,3 +489,11 @@ type InviteGetResponseEnvelopeSuccess bool
 const (
 	InviteGetResponseEnvelopeSuccessTrue InviteGetResponseEnvelopeSuccess = true
 )
+
+func (r InviteGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InviteGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

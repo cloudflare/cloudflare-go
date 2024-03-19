@@ -189,6 +189,14 @@ const (
 	DispatchNamespaceScriptContentScriptUpdateResponseEnvelopeSuccessTrue DispatchNamespaceScriptContentScriptUpdateResponseEnvelopeSuccess = true
 )
 
+func (r DispatchNamespaceScriptContentScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptContentScriptUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptContentScriptGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`

@@ -231,6 +231,14 @@ const (
 	VectorizeCreateIndexConfigMetricDotProduct VectorizeCreateIndexConfigMetric = "dot-product"
 )
 
+func (r VectorizeCreateIndexConfigMetric) IsKnown() bool {
+	switch r {
+	case VectorizeCreateIndexConfigMetricCosine, VectorizeCreateIndexConfigMetricEuclidean, VectorizeCreateIndexConfigMetricDotProduct:
+		return true
+	}
+	return false
+}
+
 type VectorizeIndexDeleteVectorsByID struct {
 	// The count of the vectors successfully deleted.
 	Count int64 `json:"count"`
@@ -423,6 +431,14 @@ const (
 	IndexNewParamsConfigVectorizeIndexPresetConfigurationPresetCohereEmbedMultilingualV2_0 IndexNewParamsConfigVectorizeIndexPresetConfigurationPreset = "cohere/embed-multilingual-v2.0"
 )
 
+func (r IndexNewParamsConfigVectorizeIndexPresetConfigurationPreset) IsKnown() bool {
+	switch r {
+	case IndexNewParamsConfigVectorizeIndexPresetConfigurationPresetCfBaaiBgeSmallEnV1_5, IndexNewParamsConfigVectorizeIndexPresetConfigurationPresetCfBaaiBgeBaseEnV1_5, IndexNewParamsConfigVectorizeIndexPresetConfigurationPresetCfBaaiBgeLargeEnV1_5, IndexNewParamsConfigVectorizeIndexPresetConfigurationPresetOpenAITextEmbeddingAda002, IndexNewParamsConfigVectorizeIndexPresetConfigurationPresetCohereEmbedMultilingualV2_0:
+		return true
+	}
+	return false
+}
+
 type IndexNewParamsConfigVectorizeIndexDimensionConfiguration struct {
 	// Specifies the number of dimensions for the index
 	Dimensions param.Field[int64] `json:"dimensions,required"`
@@ -445,6 +461,14 @@ const (
 	IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetricEuclidean  IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetric = "euclidean"
 	IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetricDotProduct IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetric = "dot-product"
 )
+
+func (r IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetric) IsKnown() bool {
+	switch r {
+	case IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetricCosine, IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetricEuclidean, IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetricDotProduct:
+		return true
+	}
+	return false
+}
 
 type IndexNewResponseEnvelope struct {
 	Errors   []IndexNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -526,6 +550,14 @@ type IndexNewResponseEnvelopeSuccess bool
 const (
 	IndexNewResponseEnvelopeSuccessTrue IndexNewResponseEnvelopeSuccess = true
 )
+
+func (r IndexNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IndexUpdateParams struct {
 	// Specifies the description of the index.
@@ -617,6 +649,14 @@ const (
 	IndexUpdateResponseEnvelopeSuccessTrue IndexUpdateResponseEnvelopeSuccess = true
 )
 
+func (r IndexUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IndexListResponseEnvelope struct {
 	Errors   []IndexListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IndexListResponseEnvelopeMessages `json:"messages,required"`
@@ -698,6 +738,14 @@ const (
 	IndexListResponseEnvelopeSuccessTrue IndexListResponseEnvelopeSuccess = true
 )
 
+func (r IndexListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IndexDeleteResponseEnvelope struct {
 	Errors   []IndexDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IndexDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -778,6 +826,14 @@ type IndexDeleteResponseEnvelopeSuccess bool
 const (
 	IndexDeleteResponseEnvelopeSuccessTrue IndexDeleteResponseEnvelopeSuccess = true
 )
+
+func (r IndexDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IndexDeleteByIDsParams struct {
 	// A list of vector identifiers to delete from the index indicated by the path.
@@ -869,6 +925,14 @@ const (
 	IndexDeleteByIDsResponseEnvelopeSuccessTrue IndexDeleteByIDsResponseEnvelopeSuccess = true
 )
 
+func (r IndexDeleteByIDsResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexDeleteByIDsResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IndexGetResponseEnvelope struct {
 	Errors   []IndexGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IndexGetResponseEnvelopeMessages `json:"messages,required"`
@@ -949,6 +1013,14 @@ type IndexGetResponseEnvelopeSuccess bool
 const (
 	IndexGetResponseEnvelopeSuccessTrue IndexGetResponseEnvelopeSuccess = true
 )
+
+func (r IndexGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IndexGetByIDsParams struct {
 	// A list of vector identifiers to retrieve from the index indicated by the path.
@@ -1041,6 +1113,14 @@ const (
 	IndexGetByIDsResponseEnvelopeSuccessTrue IndexGetByIDsResponseEnvelopeSuccess = true
 )
 
+func (r IndexGetByIDsResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexGetByIDsResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IndexInsertResponseEnvelope struct {
 	Errors   []IndexInsertResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IndexInsertResponseEnvelopeMessages `json:"messages,required"`
@@ -1121,6 +1201,14 @@ type IndexInsertResponseEnvelopeSuccess bool
 const (
 	IndexInsertResponseEnvelopeSuccessTrue IndexInsertResponseEnvelopeSuccess = true
 )
+
+func (r IndexInsertResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexInsertResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IndexQueryParams struct {
 	// Whether to return the metadata associated with the closest vectors.
@@ -1218,6 +1306,14 @@ const (
 	IndexQueryResponseEnvelopeSuccessTrue IndexQueryResponseEnvelopeSuccess = true
 )
 
+func (r IndexQueryResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexQueryResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IndexUpsertResponseEnvelope struct {
 	Errors   []IndexUpsertResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IndexUpsertResponseEnvelopeMessages `json:"messages,required"`
@@ -1298,3 +1394,11 @@ type IndexUpsertResponseEnvelopeSuccess bool
 const (
 	IndexUpsertResponseEnvelopeSuccessTrue IndexUpsertResponseEnvelopeSuccess = true
 )
+
+func (r IndexUpsertResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexUpsertResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

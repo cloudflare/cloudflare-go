@@ -658,6 +658,14 @@ const (
 	SiteNewResponseEnvelopeSuccessTrue SiteNewResponseEnvelopeSuccess = true
 )
 
+func (r SiteNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteUpdateParams struct {
 	Site param.Field[SiteUpdateParamsSite] `json:"site"`
 }
@@ -775,6 +783,14 @@ const (
 	SiteUpdateResponseEnvelopeSuccessTrue SiteUpdateResponseEnvelopeSuccess = true
 )
 
+func (r SiteUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteListParams struct {
 }
 
@@ -859,6 +875,14 @@ const (
 	SiteListResponseEnvelopeSuccessTrue SiteListResponseEnvelopeSuccess = true
 )
 
+func (r SiteListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteDeleteResponseEnvelope struct {
 	Errors   []SiteDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -940,6 +964,14 @@ const (
 	SiteDeleteResponseEnvelopeSuccessTrue SiteDeleteResponseEnvelopeSuccess = true
 )
 
+func (r SiteDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SiteGetResponseEnvelope struct {
 	Errors   []SiteGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SiteGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1020,3 +1052,11 @@ type SiteGetResponseEnvelopeSuccess bool
 const (
 	SiteGetResponseEnvelopeSuccessTrue SiteGetResponseEnvelopeSuccess = true
 )
+
+func (r SiteGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SiteGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

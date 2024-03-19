@@ -93,6 +93,14 @@ const (
 	ZonesAdvancedDDOSIDAdvancedDDOS ZonesAdvancedDDOSID = "advanced_ddos"
 )
 
+func (r ZonesAdvancedDDOSID) IsKnown() bool {
+	switch r {
+	case ZonesAdvancedDDOSIDAdvancedDDOS:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesAdvancedDDOSValue string
 
@@ -100,6 +108,14 @@ const (
 	ZonesAdvancedDDOSValueOn  ZonesAdvancedDDOSValue = "on"
 	ZonesAdvancedDDOSValueOff ZonesAdvancedDDOSValue = "off"
 )
+
+func (r ZonesAdvancedDDOSValue) IsKnown() bool {
+	switch r {
+	case ZonesAdvancedDDOSValueOn, ZonesAdvancedDDOSValueOff:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -109,6 +125,14 @@ const (
 	ZonesAdvancedDDOSEditableTrue  ZonesAdvancedDDOSEditable = true
 	ZonesAdvancedDDOSEditableFalse ZonesAdvancedDDOSEditable = false
 )
+
+func (r ZonesAdvancedDDOSEditable) IsKnown() bool {
+	switch r {
+	case ZonesAdvancedDDOSEditableTrue, ZonesAdvancedDDOSEditableFalse:
+		return true
+	}
+	return false
+}
 
 // Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 // website. This is an uneditable value that is 'on' in the case of Business and

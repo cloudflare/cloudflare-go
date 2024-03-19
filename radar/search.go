@@ -122,6 +122,14 @@ const (
 	SearchGlobalParamsExcludeASNs          SearchGlobalParamsExclude = "ASNS"
 )
 
+func (r SearchGlobalParamsExclude) IsKnown() bool {
+	switch r {
+	case SearchGlobalParamsExcludeSpecialEvents, SearchGlobalParamsExcludeNotebooks, SearchGlobalParamsExcludeLocations, SearchGlobalParamsExcludeASNs:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type SearchGlobalParamsFormat string
 
@@ -129,6 +137,14 @@ const (
 	SearchGlobalParamsFormatJson SearchGlobalParamsFormat = "JSON"
 	SearchGlobalParamsFormatCsv  SearchGlobalParamsFormat = "CSV"
 )
+
+func (r SearchGlobalParamsFormat) IsKnown() bool {
+	switch r {
+	case SearchGlobalParamsFormatJson, SearchGlobalParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type SearchGlobalParamsInclude string
 
@@ -138,6 +154,14 @@ const (
 	SearchGlobalParamsIncludeLocations     SearchGlobalParamsInclude = "LOCATIONS"
 	SearchGlobalParamsIncludeASNs          SearchGlobalParamsInclude = "ASNS"
 )
+
+func (r SearchGlobalParamsInclude) IsKnown() bool {
+	switch r {
+	case SearchGlobalParamsIncludeSpecialEvents, SearchGlobalParamsIncludeNotebooks, SearchGlobalParamsIncludeLocations, SearchGlobalParamsIncludeASNs:
+		return true
+	}
+	return false
+}
 
 type SearchGlobalResponseEnvelope struct {
 	Result  SearchGlobalResponse             `json:"result,required"`

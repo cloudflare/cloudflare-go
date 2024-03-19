@@ -446,6 +446,14 @@ const (
 	AS112TimeseriesGroupDNSSECParamsAggInterval1w  AS112TimeseriesGroupDNSSECParamsAggInterval = "1w"
 )
 
+func (r AS112TimeseriesGroupDNSSECParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupDNSSECParamsAggInterval15m, AS112TimeseriesGroupDNSSECParamsAggInterval1h, AS112TimeseriesGroupDNSSECParamsAggInterval1d, AS112TimeseriesGroupDNSSECParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AS112TimeseriesGroupDNSSECParamsDateRange string
 
 const (
@@ -466,6 +474,14 @@ const (
 	AS112TimeseriesGroupDNSSECParamsDateRange24wControl AS112TimeseriesGroupDNSSECParamsDateRange = "24wControl"
 )
 
+func (r AS112TimeseriesGroupDNSSECParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupDNSSECParamsDateRange1d, AS112TimeseriesGroupDNSSECParamsDateRange2d, AS112TimeseriesGroupDNSSECParamsDateRange7d, AS112TimeseriesGroupDNSSECParamsDateRange14d, AS112TimeseriesGroupDNSSECParamsDateRange28d, AS112TimeseriesGroupDNSSECParamsDateRange12w, AS112TimeseriesGroupDNSSECParamsDateRange24w, AS112TimeseriesGroupDNSSECParamsDateRange52w, AS112TimeseriesGroupDNSSECParamsDateRange1dControl, AS112TimeseriesGroupDNSSECParamsDateRange2dControl, AS112TimeseriesGroupDNSSECParamsDateRange7dControl, AS112TimeseriesGroupDNSSECParamsDateRange14dControl, AS112TimeseriesGroupDNSSECParamsDateRange28dControl, AS112TimeseriesGroupDNSSECParamsDateRange12wControl, AS112TimeseriesGroupDNSSECParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TimeseriesGroupDNSSECParamsFormat string
 
@@ -473,6 +489,14 @@ const (
 	AS112TimeseriesGroupDNSSECParamsFormatJson AS112TimeseriesGroupDNSSECParamsFormat = "JSON"
 	AS112TimeseriesGroupDNSSECParamsFormatCsv  AS112TimeseriesGroupDNSSECParamsFormat = "CSV"
 )
+
+func (r AS112TimeseriesGroupDNSSECParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupDNSSECParamsFormatJson, AS112TimeseriesGroupDNSSECParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TimeseriesGroupDNSSECResponseEnvelope struct {
 	Result  AS112TimeseriesGroupDNSSECResponse             `json:"result,required"`
@@ -549,6 +573,14 @@ const (
 	AS112TimeseriesGroupEdnsParamsAggInterval1w  AS112TimeseriesGroupEdnsParamsAggInterval = "1w"
 )
 
+func (r AS112TimeseriesGroupEdnsParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupEdnsParamsAggInterval15m, AS112TimeseriesGroupEdnsParamsAggInterval1h, AS112TimeseriesGroupEdnsParamsAggInterval1d, AS112TimeseriesGroupEdnsParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AS112TimeseriesGroupEdnsParamsDateRange string
 
 const (
@@ -569,6 +601,14 @@ const (
 	AS112TimeseriesGroupEdnsParamsDateRange24wControl AS112TimeseriesGroupEdnsParamsDateRange = "24wControl"
 )
 
+func (r AS112TimeseriesGroupEdnsParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupEdnsParamsDateRange1d, AS112TimeseriesGroupEdnsParamsDateRange2d, AS112TimeseriesGroupEdnsParamsDateRange7d, AS112TimeseriesGroupEdnsParamsDateRange14d, AS112TimeseriesGroupEdnsParamsDateRange28d, AS112TimeseriesGroupEdnsParamsDateRange12w, AS112TimeseriesGroupEdnsParamsDateRange24w, AS112TimeseriesGroupEdnsParamsDateRange52w, AS112TimeseriesGroupEdnsParamsDateRange1dControl, AS112TimeseriesGroupEdnsParamsDateRange2dControl, AS112TimeseriesGroupEdnsParamsDateRange7dControl, AS112TimeseriesGroupEdnsParamsDateRange14dControl, AS112TimeseriesGroupEdnsParamsDateRange28dControl, AS112TimeseriesGroupEdnsParamsDateRange12wControl, AS112TimeseriesGroupEdnsParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TimeseriesGroupEdnsParamsFormat string
 
@@ -576,6 +616,14 @@ const (
 	AS112TimeseriesGroupEdnsParamsFormatJson AS112TimeseriesGroupEdnsParamsFormat = "JSON"
 	AS112TimeseriesGroupEdnsParamsFormatCsv  AS112TimeseriesGroupEdnsParamsFormat = "CSV"
 )
+
+func (r AS112TimeseriesGroupEdnsParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupEdnsParamsFormatJson, AS112TimeseriesGroupEdnsParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TimeseriesGroupEdnsResponseEnvelope struct {
 	Result  AS112TimeseriesGroupEdnsResponse             `json:"result,required"`
@@ -652,6 +700,14 @@ const (
 	AS112TimeseriesGroupIPVersionParamsAggInterval1w  AS112TimeseriesGroupIPVersionParamsAggInterval = "1w"
 )
 
+func (r AS112TimeseriesGroupIPVersionParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupIPVersionParamsAggInterval15m, AS112TimeseriesGroupIPVersionParamsAggInterval1h, AS112TimeseriesGroupIPVersionParamsAggInterval1d, AS112TimeseriesGroupIPVersionParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AS112TimeseriesGroupIPVersionParamsDateRange string
 
 const (
@@ -672,6 +728,14 @@ const (
 	AS112TimeseriesGroupIPVersionParamsDateRange24wControl AS112TimeseriesGroupIPVersionParamsDateRange = "24wControl"
 )
 
+func (r AS112TimeseriesGroupIPVersionParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupIPVersionParamsDateRange1d, AS112TimeseriesGroupIPVersionParamsDateRange2d, AS112TimeseriesGroupIPVersionParamsDateRange7d, AS112TimeseriesGroupIPVersionParamsDateRange14d, AS112TimeseriesGroupIPVersionParamsDateRange28d, AS112TimeseriesGroupIPVersionParamsDateRange12w, AS112TimeseriesGroupIPVersionParamsDateRange24w, AS112TimeseriesGroupIPVersionParamsDateRange52w, AS112TimeseriesGroupIPVersionParamsDateRange1dControl, AS112TimeseriesGroupIPVersionParamsDateRange2dControl, AS112TimeseriesGroupIPVersionParamsDateRange7dControl, AS112TimeseriesGroupIPVersionParamsDateRange14dControl, AS112TimeseriesGroupIPVersionParamsDateRange28dControl, AS112TimeseriesGroupIPVersionParamsDateRange12wControl, AS112TimeseriesGroupIPVersionParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TimeseriesGroupIPVersionParamsFormat string
 
@@ -679,6 +743,14 @@ const (
 	AS112TimeseriesGroupIPVersionParamsFormatJson AS112TimeseriesGroupIPVersionParamsFormat = "JSON"
 	AS112TimeseriesGroupIPVersionParamsFormatCsv  AS112TimeseriesGroupIPVersionParamsFormat = "CSV"
 )
+
+func (r AS112TimeseriesGroupIPVersionParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupIPVersionParamsFormatJson, AS112TimeseriesGroupIPVersionParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TimeseriesGroupIPVersionResponseEnvelope struct {
 	Result  AS112TimeseriesGroupIPVersionResponse             `json:"result,required"`
@@ -755,6 +827,14 @@ const (
 	AS112TimeseriesGroupProtocolParamsAggInterval1w  AS112TimeseriesGroupProtocolParamsAggInterval = "1w"
 )
 
+func (r AS112TimeseriesGroupProtocolParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupProtocolParamsAggInterval15m, AS112TimeseriesGroupProtocolParamsAggInterval1h, AS112TimeseriesGroupProtocolParamsAggInterval1d, AS112TimeseriesGroupProtocolParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AS112TimeseriesGroupProtocolParamsDateRange string
 
 const (
@@ -775,6 +855,14 @@ const (
 	AS112TimeseriesGroupProtocolParamsDateRange24wControl AS112TimeseriesGroupProtocolParamsDateRange = "24wControl"
 )
 
+func (r AS112TimeseriesGroupProtocolParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupProtocolParamsDateRange1d, AS112TimeseriesGroupProtocolParamsDateRange2d, AS112TimeseriesGroupProtocolParamsDateRange7d, AS112TimeseriesGroupProtocolParamsDateRange14d, AS112TimeseriesGroupProtocolParamsDateRange28d, AS112TimeseriesGroupProtocolParamsDateRange12w, AS112TimeseriesGroupProtocolParamsDateRange24w, AS112TimeseriesGroupProtocolParamsDateRange52w, AS112TimeseriesGroupProtocolParamsDateRange1dControl, AS112TimeseriesGroupProtocolParamsDateRange2dControl, AS112TimeseriesGroupProtocolParamsDateRange7dControl, AS112TimeseriesGroupProtocolParamsDateRange14dControl, AS112TimeseriesGroupProtocolParamsDateRange28dControl, AS112TimeseriesGroupProtocolParamsDateRange12wControl, AS112TimeseriesGroupProtocolParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TimeseriesGroupProtocolParamsFormat string
 
@@ -782,6 +870,14 @@ const (
 	AS112TimeseriesGroupProtocolParamsFormatJson AS112TimeseriesGroupProtocolParamsFormat = "JSON"
 	AS112TimeseriesGroupProtocolParamsFormatCsv  AS112TimeseriesGroupProtocolParamsFormat = "CSV"
 )
+
+func (r AS112TimeseriesGroupProtocolParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupProtocolParamsFormatJson, AS112TimeseriesGroupProtocolParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TimeseriesGroupProtocolResponseEnvelope struct {
 	Result  AS112TimeseriesGroupProtocolResponse             `json:"result,required"`
@@ -858,6 +954,14 @@ const (
 	AS112TimeseriesGroupQueryTypeParamsAggInterval1w  AS112TimeseriesGroupQueryTypeParamsAggInterval = "1w"
 )
 
+func (r AS112TimeseriesGroupQueryTypeParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupQueryTypeParamsAggInterval15m, AS112TimeseriesGroupQueryTypeParamsAggInterval1h, AS112TimeseriesGroupQueryTypeParamsAggInterval1d, AS112TimeseriesGroupQueryTypeParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AS112TimeseriesGroupQueryTypeParamsDateRange string
 
 const (
@@ -878,6 +982,14 @@ const (
 	AS112TimeseriesGroupQueryTypeParamsDateRange24wControl AS112TimeseriesGroupQueryTypeParamsDateRange = "24wControl"
 )
 
+func (r AS112TimeseriesGroupQueryTypeParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupQueryTypeParamsDateRange1d, AS112TimeseriesGroupQueryTypeParamsDateRange2d, AS112TimeseriesGroupQueryTypeParamsDateRange7d, AS112TimeseriesGroupQueryTypeParamsDateRange14d, AS112TimeseriesGroupQueryTypeParamsDateRange28d, AS112TimeseriesGroupQueryTypeParamsDateRange12w, AS112TimeseriesGroupQueryTypeParamsDateRange24w, AS112TimeseriesGroupQueryTypeParamsDateRange52w, AS112TimeseriesGroupQueryTypeParamsDateRange1dControl, AS112TimeseriesGroupQueryTypeParamsDateRange2dControl, AS112TimeseriesGroupQueryTypeParamsDateRange7dControl, AS112TimeseriesGroupQueryTypeParamsDateRange14dControl, AS112TimeseriesGroupQueryTypeParamsDateRange28dControl, AS112TimeseriesGroupQueryTypeParamsDateRange12wControl, AS112TimeseriesGroupQueryTypeParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TimeseriesGroupQueryTypeParamsFormat string
 
@@ -885,6 +997,14 @@ const (
 	AS112TimeseriesGroupQueryTypeParamsFormatJson AS112TimeseriesGroupQueryTypeParamsFormat = "JSON"
 	AS112TimeseriesGroupQueryTypeParamsFormatCsv  AS112TimeseriesGroupQueryTypeParamsFormat = "CSV"
 )
+
+func (r AS112TimeseriesGroupQueryTypeParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupQueryTypeParamsFormatJson, AS112TimeseriesGroupQueryTypeParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TimeseriesGroupQueryTypeResponseEnvelope struct {
 	Result  AS112TimeseriesGroupQueryTypeResponse             `json:"result,required"`
@@ -961,6 +1081,14 @@ const (
 	AS112TimeseriesGroupResponseCodesParamsAggInterval1w  AS112TimeseriesGroupResponseCodesParamsAggInterval = "1w"
 )
 
+func (r AS112TimeseriesGroupResponseCodesParamsAggInterval) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupResponseCodesParamsAggInterval15m, AS112TimeseriesGroupResponseCodesParamsAggInterval1h, AS112TimeseriesGroupResponseCodesParamsAggInterval1d, AS112TimeseriesGroupResponseCodesParamsAggInterval1w:
+		return true
+	}
+	return false
+}
+
 type AS112TimeseriesGroupResponseCodesParamsDateRange string
 
 const (
@@ -981,6 +1109,14 @@ const (
 	AS112TimeseriesGroupResponseCodesParamsDateRange24wControl AS112TimeseriesGroupResponseCodesParamsDateRange = "24wControl"
 )
 
+func (r AS112TimeseriesGroupResponseCodesParamsDateRange) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupResponseCodesParamsDateRange1d, AS112TimeseriesGroupResponseCodesParamsDateRange2d, AS112TimeseriesGroupResponseCodesParamsDateRange7d, AS112TimeseriesGroupResponseCodesParamsDateRange14d, AS112TimeseriesGroupResponseCodesParamsDateRange28d, AS112TimeseriesGroupResponseCodesParamsDateRange12w, AS112TimeseriesGroupResponseCodesParamsDateRange24w, AS112TimeseriesGroupResponseCodesParamsDateRange52w, AS112TimeseriesGroupResponseCodesParamsDateRange1dControl, AS112TimeseriesGroupResponseCodesParamsDateRange2dControl, AS112TimeseriesGroupResponseCodesParamsDateRange7dControl, AS112TimeseriesGroupResponseCodesParamsDateRange14dControl, AS112TimeseriesGroupResponseCodesParamsDateRange28dControl, AS112TimeseriesGroupResponseCodesParamsDateRange12wControl, AS112TimeseriesGroupResponseCodesParamsDateRange24wControl:
+		return true
+	}
+	return false
+}
+
 // Format results are returned in.
 type AS112TimeseriesGroupResponseCodesParamsFormat string
 
@@ -988,6 +1124,14 @@ const (
 	AS112TimeseriesGroupResponseCodesParamsFormatJson AS112TimeseriesGroupResponseCodesParamsFormat = "JSON"
 	AS112TimeseriesGroupResponseCodesParamsFormatCsv  AS112TimeseriesGroupResponseCodesParamsFormat = "CSV"
 )
+
+func (r AS112TimeseriesGroupResponseCodesParamsFormat) IsKnown() bool {
+	switch r {
+	case AS112TimeseriesGroupResponseCodesParamsFormatJson, AS112TimeseriesGroupResponseCodesParamsFormatCsv:
+		return true
+	}
+	return false
+}
 
 type AS112TimeseriesGroupResponseCodesResponseEnvelope struct {
 	Result  AS112TimeseriesGroupResponseCodesResponse             `json:"result,required"`

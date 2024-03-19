@@ -218,6 +218,14 @@ const (
 	AppNewResponseDNSTypeAddress AppNewResponseDNSType = "ADDRESS"
 )
 
+func (r AppNewResponseDNSType) IsKnown() bool {
+	switch r {
+	case AppNewResponseDNSTypeCNAME, AppNewResponseDNSTypeAddress:
+		return true
+	}
+	return false
+}
+
 // The anycast edge IP configuration for the hostname of this application.
 //
 // Union satisfied by [spectrum.AppNewResponseEdgeIPsEyeballIPs] or
@@ -279,6 +287,14 @@ const (
 	AppNewResponseEdgeIPsEyeballIPsConnectivityIPV6 AppNewResponseEdgeIPsEyeballIPsConnectivity = "ipv6"
 )
 
+func (r AppNewResponseEdgeIPsEyeballIPsConnectivity) IsKnown() bool {
+	switch r {
+	case AppNewResponseEdgeIPsEyeballIPsConnectivityAll, AppNewResponseEdgeIPsEyeballIPsConnectivityIPV4, AppNewResponseEdgeIPsEyeballIPsConnectivityIPV6:
+		return true
+	}
+	return false
+}
+
 // The type of edge IP configuration specified. Dynamically allocated edge IPs use
 // Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 // with CNAME DNS names.
@@ -287,6 +303,14 @@ type AppNewResponseEdgeIPsEyeballIPsType string
 const (
 	AppNewResponseEdgeIPsEyeballIPsTypeDynamic AppNewResponseEdgeIPsEyeballIPsType = "dynamic"
 )
+
+func (r AppNewResponseEdgeIPsEyeballIPsType) IsKnown() bool {
+	switch r {
+	case AppNewResponseEdgeIPsEyeballIPsTypeDynamic:
+		return true
+	}
+	return false
+}
 
 type AppNewResponseEdgeIPsCustomerOwnedIPs struct {
 	// The array of customer owned IPs we broadcast via anycast for this hostname and
@@ -326,6 +350,14 @@ type AppNewResponseEdgeIPsCustomerOwnedIPsType string
 const (
 	AppNewResponseEdgeIPsCustomerOwnedIPsTypeStatic AppNewResponseEdgeIPsCustomerOwnedIPsType = "static"
 )
+
+func (r AppNewResponseEdgeIPsCustomerOwnedIPsType) IsKnown() bool {
+	switch r {
+	case AppNewResponseEdgeIPsCustomerOwnedIPsTypeStatic:
+		return true
+	}
+	return false
+}
 
 // The name and type of DNS record for the Spectrum application.
 type AppNewResponseOriginDNS struct {
@@ -368,6 +400,14 @@ const (
 	AppNewResponseOriginDNSTypeSRV   AppNewResponseOriginDNSType = "SRV"
 )
 
+func (r AppNewResponseOriginDNSType) IsKnown() bool {
+	switch r {
+	case AppNewResponseOriginDNSTypeEmpty, AppNewResponseOriginDNSTypeA, AppNewResponseOriginDNSTypeAAAA, AppNewResponseOriginDNSTypeSRV:
+		return true
+	}
+	return false
+}
+
 // The destination port at the origin. Only specified in conjunction with
 // origin_dns. May use an integer to specify a single origin port, for example
 // `1000`, or a string to specify a range of origin ports, for example
@@ -407,6 +447,14 @@ const (
 	AppNewResponseProxyProtocolSimple AppNewResponseProxyProtocol = "simple"
 )
 
+func (r AppNewResponseProxyProtocol) IsKnown() bool {
+	switch r {
+	case AppNewResponseProxyProtocolOff, AppNewResponseProxyProtocolV1, AppNewResponseProxyProtocolV2, AppNewResponseProxyProtocolSimple:
+		return true
+	}
+	return false
+}
+
 // The type of TLS termination associated with the application.
 type AppNewResponseTLS string
 
@@ -416,6 +464,14 @@ const (
 	AppNewResponseTLSFull     AppNewResponseTLS = "full"
 	AppNewResponseTLSStrict   AppNewResponseTLS = "strict"
 )
+
+func (r AppNewResponseTLS) IsKnown() bool {
+	switch r {
+	case AppNewResponseTLSOff, AppNewResponseTLSFlexible, AppNewResponseTLSFull, AppNewResponseTLSStrict:
+		return true
+	}
+	return false
+}
 
 // Determines how data travels from the edge to your origin. When set to "direct",
 // Spectrum will send traffic directly to your origin, and the application's type
@@ -429,6 +485,14 @@ const (
 	AppNewResponseTrafficTypeHTTP   AppNewResponseTrafficType = "http"
 	AppNewResponseTrafficTypeHTTPS  AppNewResponseTrafficType = "https"
 )
+
+func (r AppNewResponseTrafficType) IsKnown() bool {
+	switch r {
+	case AppNewResponseTrafficTypeDirect, AppNewResponseTrafficTypeHTTP, AppNewResponseTrafficTypeHTTPS:
+		return true
+	}
+	return false
+}
 
 type AppUpdateResponse struct {
 	// Application identifier.
@@ -536,6 +600,14 @@ const (
 	AppUpdateResponseDNSTypeAddress AppUpdateResponseDNSType = "ADDRESS"
 )
 
+func (r AppUpdateResponseDNSType) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseDNSTypeCNAME, AppUpdateResponseDNSTypeAddress:
+		return true
+	}
+	return false
+}
+
 // The anycast edge IP configuration for the hostname of this application.
 //
 // Union satisfied by [spectrum.AppUpdateResponseEdgeIPsEyeballIPs] or
@@ -597,6 +669,14 @@ const (
 	AppUpdateResponseEdgeIPsEyeballIPsConnectivityIPV6 AppUpdateResponseEdgeIPsEyeballIPsConnectivity = "ipv6"
 )
 
+func (r AppUpdateResponseEdgeIPsEyeballIPsConnectivity) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseEdgeIPsEyeballIPsConnectivityAll, AppUpdateResponseEdgeIPsEyeballIPsConnectivityIPV4, AppUpdateResponseEdgeIPsEyeballIPsConnectivityIPV6:
+		return true
+	}
+	return false
+}
+
 // The type of edge IP configuration specified. Dynamically allocated edge IPs use
 // Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 // with CNAME DNS names.
@@ -605,6 +685,14 @@ type AppUpdateResponseEdgeIPsEyeballIPsType string
 const (
 	AppUpdateResponseEdgeIPsEyeballIPsTypeDynamic AppUpdateResponseEdgeIPsEyeballIPsType = "dynamic"
 )
+
+func (r AppUpdateResponseEdgeIPsEyeballIPsType) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseEdgeIPsEyeballIPsTypeDynamic:
+		return true
+	}
+	return false
+}
 
 type AppUpdateResponseEdgeIPsCustomerOwnedIPs struct {
 	// The array of customer owned IPs we broadcast via anycast for this hostname and
@@ -644,6 +732,14 @@ type AppUpdateResponseEdgeIPsCustomerOwnedIPsType string
 const (
 	AppUpdateResponseEdgeIPsCustomerOwnedIPsTypeStatic AppUpdateResponseEdgeIPsCustomerOwnedIPsType = "static"
 )
+
+func (r AppUpdateResponseEdgeIPsCustomerOwnedIPsType) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseEdgeIPsCustomerOwnedIPsTypeStatic:
+		return true
+	}
+	return false
+}
 
 // The name and type of DNS record for the Spectrum application.
 type AppUpdateResponseOriginDNS struct {
@@ -686,6 +782,14 @@ const (
 	AppUpdateResponseOriginDNSTypeSRV   AppUpdateResponseOriginDNSType = "SRV"
 )
 
+func (r AppUpdateResponseOriginDNSType) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseOriginDNSTypeEmpty, AppUpdateResponseOriginDNSTypeA, AppUpdateResponseOriginDNSTypeAAAA, AppUpdateResponseOriginDNSTypeSRV:
+		return true
+	}
+	return false
+}
+
 // The destination port at the origin. Only specified in conjunction with
 // origin_dns. May use an integer to specify a single origin port, for example
 // `1000`, or a string to specify a range of origin ports, for example
@@ -725,6 +829,14 @@ const (
 	AppUpdateResponseProxyProtocolSimple AppUpdateResponseProxyProtocol = "simple"
 )
 
+func (r AppUpdateResponseProxyProtocol) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseProxyProtocolOff, AppUpdateResponseProxyProtocolV1, AppUpdateResponseProxyProtocolV2, AppUpdateResponseProxyProtocolSimple:
+		return true
+	}
+	return false
+}
+
 // The type of TLS termination associated with the application.
 type AppUpdateResponseTLS string
 
@@ -734,6 +846,14 @@ const (
 	AppUpdateResponseTLSFull     AppUpdateResponseTLS = "full"
 	AppUpdateResponseTLSStrict   AppUpdateResponseTLS = "strict"
 )
+
+func (r AppUpdateResponseTLS) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseTLSOff, AppUpdateResponseTLSFlexible, AppUpdateResponseTLSFull, AppUpdateResponseTLSStrict:
+		return true
+	}
+	return false
+}
 
 // Determines how data travels from the edge to your origin. When set to "direct",
 // Spectrum will send traffic directly to your origin, and the application's type
@@ -747,6 +867,14 @@ const (
 	AppUpdateResponseTrafficTypeHTTP   AppUpdateResponseTrafficType = "http"
 	AppUpdateResponseTrafficTypeHTTPS  AppUpdateResponseTrafficType = "https"
 )
+
+func (r AppUpdateResponseTrafficType) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseTrafficTypeDirect, AppUpdateResponseTrafficTypeHTTP, AppUpdateResponseTrafficTypeHTTPS:
+		return true
+	}
+	return false
+}
 
 type AppListResponse = interface{}
 
@@ -849,6 +977,14 @@ const (
 	AppNewParamsDNSTypeAddress AppNewParamsDNSType = "ADDRESS"
 )
 
+func (r AppNewParamsDNSType) IsKnown() bool {
+	switch r {
+	case AppNewParamsDNSTypeCNAME, AppNewParamsDNSTypeAddress:
+		return true
+	}
+	return false
+}
+
 // The name and type of DNS record for the Spectrum application.
 type AppNewParamsOriginDNS struct {
 	// The name of the DNS record associated with the origin.
@@ -874,6 +1010,14 @@ const (
 	AppNewParamsOriginDNSTypeAAAA  AppNewParamsOriginDNSType = "AAAA"
 	AppNewParamsOriginDNSTypeSRV   AppNewParamsOriginDNSType = "SRV"
 )
+
+func (r AppNewParamsOriginDNSType) IsKnown() bool {
+	switch r {
+	case AppNewParamsOriginDNSTypeEmpty, AppNewParamsOriginDNSTypeA, AppNewParamsOriginDNSTypeAAAA, AppNewParamsOriginDNSTypeSRV:
+		return true
+	}
+	return false
+}
 
 // The destination port at the origin. Only specified in conjunction with
 // origin_dns. May use an integer to specify a single origin port, for example
@@ -918,6 +1062,14 @@ const (
 	AppNewParamsEdgeIPsEyeballIPsConnectivityIPV6 AppNewParamsEdgeIPsEyeballIPsConnectivity = "ipv6"
 )
 
+func (r AppNewParamsEdgeIPsEyeballIPsConnectivity) IsKnown() bool {
+	switch r {
+	case AppNewParamsEdgeIPsEyeballIPsConnectivityAll, AppNewParamsEdgeIPsEyeballIPsConnectivityIPV4, AppNewParamsEdgeIPsEyeballIPsConnectivityIPV6:
+		return true
+	}
+	return false
+}
+
 // The type of edge IP configuration specified. Dynamically allocated edge IPs use
 // Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 // with CNAME DNS names.
@@ -926,6 +1078,14 @@ type AppNewParamsEdgeIPsEyeballIPsType string
 const (
 	AppNewParamsEdgeIPsEyeballIPsTypeDynamic AppNewParamsEdgeIPsEyeballIPsType = "dynamic"
 )
+
+func (r AppNewParamsEdgeIPsEyeballIPsType) IsKnown() bool {
+	switch r {
+	case AppNewParamsEdgeIPsEyeballIPsTypeDynamic:
+		return true
+	}
+	return false
+}
 
 type AppNewParamsEdgeIPsCustomerOwnedIPs struct {
 	// The array of customer owned IPs we broadcast via anycast for this hostname and
@@ -952,6 +1112,14 @@ const (
 	AppNewParamsEdgeIPsCustomerOwnedIPsTypeStatic AppNewParamsEdgeIPsCustomerOwnedIPsType = "static"
 )
 
+func (r AppNewParamsEdgeIPsCustomerOwnedIPsType) IsKnown() bool {
+	switch r {
+	case AppNewParamsEdgeIPsCustomerOwnedIPsTypeStatic:
+		return true
+	}
+	return false
+}
+
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 // for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -965,6 +1133,14 @@ const (
 	AppNewParamsProxyProtocolSimple AppNewParamsProxyProtocol = "simple"
 )
 
+func (r AppNewParamsProxyProtocol) IsKnown() bool {
+	switch r {
+	case AppNewParamsProxyProtocolOff, AppNewParamsProxyProtocolV1, AppNewParamsProxyProtocolV2, AppNewParamsProxyProtocolSimple:
+		return true
+	}
+	return false
+}
+
 // The type of TLS termination associated with the application.
 type AppNewParamsTLS string
 
@@ -974,6 +1150,14 @@ const (
 	AppNewParamsTLSFull     AppNewParamsTLS = "full"
 	AppNewParamsTLSStrict   AppNewParamsTLS = "strict"
 )
+
+func (r AppNewParamsTLS) IsKnown() bool {
+	switch r {
+	case AppNewParamsTLSOff, AppNewParamsTLSFlexible, AppNewParamsTLSFull, AppNewParamsTLSStrict:
+		return true
+	}
+	return false
+}
 
 // Determines how data travels from the edge to your origin. When set to "direct",
 // Spectrum will send traffic directly to your origin, and the application's type
@@ -987,6 +1171,14 @@ const (
 	AppNewParamsTrafficTypeHTTP   AppNewParamsTrafficType = "http"
 	AppNewParamsTrafficTypeHTTPS  AppNewParamsTrafficType = "https"
 )
+
+func (r AppNewParamsTrafficType) IsKnown() bool {
+	switch r {
+	case AppNewParamsTrafficTypeDirect, AppNewParamsTrafficTypeHTTP, AppNewParamsTrafficTypeHTTPS:
+		return true
+	}
+	return false
+}
 
 type AppNewResponseEnvelope struct {
 	Errors   []AppNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -1069,6 +1261,14 @@ const (
 	AppNewResponseEnvelopeSuccessTrue AppNewResponseEnvelopeSuccess = true
 )
 
+func (r AppNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AppNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AppUpdateParams struct {
 	// The name and type of DNS record for the Spectrum application.
 	DNS param.Field[AppUpdateParamsDNS] `json:"dns,required"`
@@ -1130,6 +1330,14 @@ const (
 	AppUpdateParamsDNSTypeAddress AppUpdateParamsDNSType = "ADDRESS"
 )
 
+func (r AppUpdateParamsDNSType) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsDNSTypeCNAME, AppUpdateParamsDNSTypeAddress:
+		return true
+	}
+	return false
+}
+
 // The name and type of DNS record for the Spectrum application.
 type AppUpdateParamsOriginDNS struct {
 	// The name of the DNS record associated with the origin.
@@ -1155,6 +1363,14 @@ const (
 	AppUpdateParamsOriginDNSTypeAAAA  AppUpdateParamsOriginDNSType = "AAAA"
 	AppUpdateParamsOriginDNSTypeSRV   AppUpdateParamsOriginDNSType = "SRV"
 )
+
+func (r AppUpdateParamsOriginDNSType) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsOriginDNSTypeEmpty, AppUpdateParamsOriginDNSTypeA, AppUpdateParamsOriginDNSTypeAAAA, AppUpdateParamsOriginDNSTypeSRV:
+		return true
+	}
+	return false
+}
 
 // The destination port at the origin. Only specified in conjunction with
 // origin_dns. May use an integer to specify a single origin port, for example
@@ -1199,6 +1415,14 @@ const (
 	AppUpdateParamsEdgeIPsEyeballIPsConnectivityIPV6 AppUpdateParamsEdgeIPsEyeballIPsConnectivity = "ipv6"
 )
 
+func (r AppUpdateParamsEdgeIPsEyeballIPsConnectivity) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsEdgeIPsEyeballIPsConnectivityAll, AppUpdateParamsEdgeIPsEyeballIPsConnectivityIPV4, AppUpdateParamsEdgeIPsEyeballIPsConnectivityIPV6:
+		return true
+	}
+	return false
+}
+
 // The type of edge IP configuration specified. Dynamically allocated edge IPs use
 // Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 // with CNAME DNS names.
@@ -1207,6 +1431,14 @@ type AppUpdateParamsEdgeIPsEyeballIPsType string
 const (
 	AppUpdateParamsEdgeIPsEyeballIPsTypeDynamic AppUpdateParamsEdgeIPsEyeballIPsType = "dynamic"
 )
+
+func (r AppUpdateParamsEdgeIPsEyeballIPsType) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsEdgeIPsEyeballIPsTypeDynamic:
+		return true
+	}
+	return false
+}
 
 type AppUpdateParamsEdgeIPsCustomerOwnedIPs struct {
 	// The array of customer owned IPs we broadcast via anycast for this hostname and
@@ -1233,6 +1465,14 @@ const (
 	AppUpdateParamsEdgeIPsCustomerOwnedIPsTypeStatic AppUpdateParamsEdgeIPsCustomerOwnedIPsType = "static"
 )
 
+func (r AppUpdateParamsEdgeIPsCustomerOwnedIPsType) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsEdgeIPsCustomerOwnedIPsTypeStatic:
+		return true
+	}
+	return false
+}
+
 // Enables Proxy Protocol to the origin. Refer to
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 // for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
@@ -1246,6 +1486,14 @@ const (
 	AppUpdateParamsProxyProtocolSimple AppUpdateParamsProxyProtocol = "simple"
 )
 
+func (r AppUpdateParamsProxyProtocol) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsProxyProtocolOff, AppUpdateParamsProxyProtocolV1, AppUpdateParamsProxyProtocolV2, AppUpdateParamsProxyProtocolSimple:
+		return true
+	}
+	return false
+}
+
 // The type of TLS termination associated with the application.
 type AppUpdateParamsTLS string
 
@@ -1255,6 +1503,14 @@ const (
 	AppUpdateParamsTLSFull     AppUpdateParamsTLS = "full"
 	AppUpdateParamsTLSStrict   AppUpdateParamsTLS = "strict"
 )
+
+func (r AppUpdateParamsTLS) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsTLSOff, AppUpdateParamsTLSFlexible, AppUpdateParamsTLSFull, AppUpdateParamsTLSStrict:
+		return true
+	}
+	return false
+}
 
 // Determines how data travels from the edge to your origin. When set to "direct",
 // Spectrum will send traffic directly to your origin, and the application's type
@@ -1268,6 +1524,14 @@ const (
 	AppUpdateParamsTrafficTypeHTTP   AppUpdateParamsTrafficType = "http"
 	AppUpdateParamsTrafficTypeHTTPS  AppUpdateParamsTrafficType = "https"
 )
+
+func (r AppUpdateParamsTrafficType) IsKnown() bool {
+	switch r {
+	case AppUpdateParamsTrafficTypeDirect, AppUpdateParamsTrafficTypeHTTP, AppUpdateParamsTrafficTypeHTTPS:
+		return true
+	}
+	return false
+}
 
 type AppUpdateResponseEnvelope struct {
 	Errors   []AppUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -1350,6 +1614,14 @@ const (
 	AppUpdateResponseEnvelopeSuccessTrue AppUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AppUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AppUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AppListParams struct {
 	// Sets the direction by which results are ordered.
 	Direction param.Field[AppListParamsDirection] `query:"direction"`
@@ -1379,6 +1651,14 @@ const (
 	AppListParamsDirectionDesc AppListParamsDirection = "desc"
 )
 
+func (r AppListParamsDirection) IsKnown() bool {
+	switch r {
+	case AppListParamsDirectionAsc, AppListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Application field by which results are ordered.
 type AppListParamsOrder string
 
@@ -1389,6 +1669,14 @@ const (
 	AppListParamsOrderModifiedOn AppListParamsOrder = "modified_on"
 	AppListParamsOrderDNS        AppListParamsOrder = "dns"
 )
+
+func (r AppListParamsOrder) IsKnown() bool {
+	switch r {
+	case AppListParamsOrderProtocol, AppListParamsOrderAppID, AppListParamsOrderCreatedOn, AppListParamsOrderModifiedOn, AppListParamsOrderDNS:
+		return true
+	}
+	return false
+}
 
 type AppDeleteResponseEnvelope struct {
 	Errors   []AppDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1471,6 +1759,14 @@ const (
 	AppDeleteResponseEnvelopeSuccessTrue AppDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AppDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AppDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AppGetResponseEnvelope struct {
 	Errors   []AppGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AppGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1551,3 +1847,11 @@ type AppGetResponseEnvelopeSuccess bool
 const (
 	AppGetResponseEnvelopeSuccessTrue AppGetResponseEnvelopeSuccess = true
 )
+
+func (r AppGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AppGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

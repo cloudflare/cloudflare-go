@@ -189,6 +189,14 @@ const (
 	ControlRetentionFlagNewResponseEnvelopeSuccessTrue ControlRetentionFlagNewResponseEnvelopeSuccess = true
 )
 
+func (r ControlRetentionFlagNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ControlRetentionFlagNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ControlRetentionFlagGetResponseEnvelope struct {
 	Errors   []ControlRetentionFlagGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ControlRetentionFlagGetResponseEnvelopeMessages `json:"messages,required"`
@@ -269,3 +277,11 @@ type ControlRetentionFlagGetResponseEnvelopeSuccess bool
 const (
 	ControlRetentionFlagGetResponseEnvelopeSuccessTrue ControlRetentionFlagGetResponseEnvelopeSuccess = true
 )
+
+func (r ControlRetentionFlagGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ControlRetentionFlagGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

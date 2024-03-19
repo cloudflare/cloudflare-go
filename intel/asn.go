@@ -134,3 +134,11 @@ type ASNGetResponseEnvelopeSuccess bool
 const (
 	ASNGetResponseEnvelopeSuccessTrue ASNGetResponseEnvelopeSuccess = true
 )
+
+func (r ASNGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ASNGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

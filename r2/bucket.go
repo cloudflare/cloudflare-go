@@ -134,6 +134,14 @@ const (
 	R2BucketLocationWnam R2BucketLocation = "wnam"
 )
 
+func (r R2BucketLocation) IsKnown() bool {
+	switch r {
+	case R2BucketLocationApac, R2BucketLocationEeur, R2BucketLocationEnam, R2BucketLocationWeur, R2BucketLocationWnam:
+		return true
+	}
+	return false
+}
+
 type BucketDeleteResponse = interface{}
 
 type BucketNewParams struct {
@@ -159,6 +167,14 @@ const (
 	BucketNewParamsLocationHintWeur BucketNewParamsLocationHint = "weur"
 	BucketNewParamsLocationHintWnam BucketNewParamsLocationHint = "wnam"
 )
+
+func (r BucketNewParamsLocationHint) IsKnown() bool {
+	switch r {
+	case BucketNewParamsLocationHintApac, BucketNewParamsLocationHintEeur, BucketNewParamsLocationHintEnam, BucketNewParamsLocationHintWeur, BucketNewParamsLocationHintWnam:
+		return true
+	}
+	return false
+}
 
 type BucketNewResponseEnvelope struct {
 	Errors   []BucketNewResponseEnvelopeErrors `json:"errors,required"`
@@ -219,6 +235,14 @@ const (
 	BucketNewResponseEnvelopeSuccessTrue BucketNewResponseEnvelopeSuccess = true
 )
 
+func (r BucketNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BucketNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type BucketListParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -254,12 +278,28 @@ const (
 	BucketListParamsDirectionDesc BucketListParamsDirection = "desc"
 )
 
+func (r BucketListParamsDirection) IsKnown() bool {
+	switch r {
+	case BucketListParamsDirectionAsc, BucketListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Field to order buckets by
 type BucketListParamsOrder string
 
 const (
 	BucketListParamsOrderName BucketListParamsOrder = "name"
 )
+
+func (r BucketListParamsOrder) IsKnown() bool {
+	switch r {
+	case BucketListParamsOrderName:
+		return true
+	}
+	return false
+}
 
 type BucketDeleteParams struct {
 	// Account ID
@@ -324,6 +364,14 @@ const (
 	BucketDeleteResponseEnvelopeSuccessTrue BucketDeleteResponseEnvelopeSuccess = true
 )
 
+func (r BucketDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BucketDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type BucketGetParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -387,3 +435,11 @@ type BucketGetResponseEnvelopeSuccess bool
 const (
 	BucketGetResponseEnvelopeSuccessTrue BucketGetResponseEnvelopeSuccess = true
 )
+
+func (r BucketGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case BucketGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

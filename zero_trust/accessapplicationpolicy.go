@@ -252,6 +252,14 @@ const (
 	AccessPoliciesDecisionBypass      AccessPoliciesDecision = "bypass"
 )
 
+func (r AccessPoliciesDecision) IsKnown() bool {
+	switch r {
+	case AccessPoliciesDecisionAllow, AccessPoliciesDecisionDeny, AccessPoliciesDecisionNonIdentity, AccessPoliciesDecisionBypass:
+		return true
+	}
+	return false
+}
+
 // Matches a specific email.
 //
 // Union satisfied by [zero_trust.AccessPoliciesExcludeAccessEmailRule],
@@ -3168,6 +3176,14 @@ const (
 	AccessApplicationPolicyNewParamsDecisionBypass      AccessApplicationPolicyNewParamsDecision = "bypass"
 )
 
+func (r AccessApplicationPolicyNewParamsDecision) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyNewParamsDecisionAllow, AccessApplicationPolicyNewParamsDecisionDeny, AccessApplicationPolicyNewParamsDecisionNonIdentity, AccessApplicationPolicyNewParamsDecisionBypass:
+		return true
+	}
+	return false
+}
+
 // Matches a specific email.
 //
 // Satisfied by
@@ -4505,6 +4521,14 @@ const (
 	AccessApplicationPolicyNewResponseEnvelopeSuccessTrue AccessApplicationPolicyNewResponseEnvelopeSuccess = true
 )
 
+func (r AccessApplicationPolicyNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationPolicyUpdateParams struct {
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[AccessApplicationPolicyUpdateParamsDecision] `json:"decision,required"`
@@ -4557,6 +4581,14 @@ const (
 	AccessApplicationPolicyUpdateParamsDecisionNonIdentity AccessApplicationPolicyUpdateParamsDecision = "non_identity"
 	AccessApplicationPolicyUpdateParamsDecisionBypass      AccessApplicationPolicyUpdateParamsDecision = "bypass"
 )
+
+func (r AccessApplicationPolicyUpdateParamsDecision) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyUpdateParamsDecisionAllow, AccessApplicationPolicyUpdateParamsDecisionDeny, AccessApplicationPolicyUpdateParamsDecisionNonIdentity, AccessApplicationPolicyUpdateParamsDecisionBypass:
+		return true
+	}
+	return false
+}
 
 // Matches a specific email.
 //
@@ -5895,6 +5927,14 @@ const (
 	AccessApplicationPolicyUpdateResponseEnvelopeSuccessTrue AccessApplicationPolicyUpdateResponseEnvelopeSuccess = true
 )
 
+func (r AccessApplicationPolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationPolicyListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -5984,6 +6024,14 @@ type AccessApplicationPolicyListResponseEnvelopeSuccess bool
 const (
 	AccessApplicationPolicyListResponseEnvelopeSuccessTrue AccessApplicationPolicyListResponseEnvelopeSuccess = true
 )
+
+func (r AccessApplicationPolicyListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccessApplicationPolicyListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -6104,6 +6152,14 @@ const (
 	AccessApplicationPolicyDeleteResponseEnvelopeSuccessTrue AccessApplicationPolicyDeleteResponseEnvelopeSuccess = true
 )
 
+func (r AccessApplicationPolicyDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationPolicyGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -6191,3 +6247,11 @@ type AccessApplicationPolicyGetResponseEnvelopeSuccess bool
 const (
 	AccessApplicationPolicyGetResponseEnvelopeSuccessTrue AccessApplicationPolicyGetResponseEnvelopeSuccess = true
 )
+
+func (r AccessApplicationPolicyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccessApplicationPolicyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

@@ -144,3 +144,11 @@ type NetworkRouteIPGetResponseEnvelopeSuccess bool
 const (
 	NetworkRouteIPGetResponseEnvelopeSuccessTrue NetworkRouteIPGetResponseEnvelopeSuccess = true
 )
+
+func (r NetworkRouteIPGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkRouteIPGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

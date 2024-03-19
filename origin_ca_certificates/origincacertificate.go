@@ -146,6 +146,14 @@ const (
 	OriginCACertificateRequestTypeKeylessCertificate OriginCACertificateRequestType = "keyless-certificate"
 )
 
+func (r OriginCACertificateRequestType) IsKnown() bool {
+	switch r {
+	case OriginCACertificateRequestTypeOriginRsa, OriginCACertificateRequestTypeOriginEcc, OriginCACertificateRequestTypeKeylessCertificate:
+		return true
+	}
+	return false
+}
+
 // The number of days for which the certificate should be valid.
 type OriginCACertificateRequestedValidity float64
 
@@ -158,6 +166,14 @@ const (
 	OriginCACertificateRequestedValidity1095 OriginCACertificateRequestedValidity = 1095
 	OriginCACertificateRequestedValidity5475 OriginCACertificateRequestedValidity = 5475
 )
+
+func (r OriginCACertificateRequestedValidity) IsKnown() bool {
+	switch r {
+	case OriginCACertificateRequestedValidity7, OriginCACertificateRequestedValidity30, OriginCACertificateRequestedValidity90, OriginCACertificateRequestedValidity365, OriginCACertificateRequestedValidity730, OriginCACertificateRequestedValidity1095, OriginCACertificateRequestedValidity5475:
+		return true
+	}
+	return false
+}
 
 // Union satisfied by
 // [origin_ca_certificates.OriginCACertificateNewResponseUnknown] or
@@ -244,6 +260,14 @@ const (
 	OriginCACertificateNewParamsRequestTypeKeylessCertificate OriginCACertificateNewParamsRequestType = "keyless-certificate"
 )
 
+func (r OriginCACertificateNewParamsRequestType) IsKnown() bool {
+	switch r {
+	case OriginCACertificateNewParamsRequestTypeOriginRsa, OriginCACertificateNewParamsRequestTypeOriginEcc, OriginCACertificateNewParamsRequestTypeKeylessCertificate:
+		return true
+	}
+	return false
+}
+
 // The number of days for which the certificate should be valid.
 type OriginCACertificateNewParamsRequestedValidity float64
 
@@ -256,6 +280,14 @@ const (
 	OriginCACertificateNewParamsRequestedValidity1095 OriginCACertificateNewParamsRequestedValidity = 1095
 	OriginCACertificateNewParamsRequestedValidity5475 OriginCACertificateNewParamsRequestedValidity = 5475
 )
+
+func (r OriginCACertificateNewParamsRequestedValidity) IsKnown() bool {
+	switch r {
+	case OriginCACertificateNewParamsRequestedValidity7, OriginCACertificateNewParamsRequestedValidity30, OriginCACertificateNewParamsRequestedValidity90, OriginCACertificateNewParamsRequestedValidity365, OriginCACertificateNewParamsRequestedValidity730, OriginCACertificateNewParamsRequestedValidity1095, OriginCACertificateNewParamsRequestedValidity5475:
+		return true
+	}
+	return false
+}
 
 type OriginCACertificateNewResponseEnvelope struct {
 	Errors   []OriginCACertificateNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -337,6 +369,14 @@ type OriginCACertificateNewResponseEnvelopeSuccess bool
 const (
 	OriginCACertificateNewResponseEnvelopeSuccessTrue OriginCACertificateNewResponseEnvelopeSuccess = true
 )
+
+func (r OriginCACertificateNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginCACertificateNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type OriginCACertificateListParams struct {
 }
@@ -423,6 +463,14 @@ type OriginCACertificateListResponseEnvelopeSuccess bool
 const (
 	OriginCACertificateListResponseEnvelopeSuccessTrue OriginCACertificateListResponseEnvelopeSuccess = true
 )
+
+func (r OriginCACertificateListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginCACertificateListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type OriginCACertificateListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
@@ -536,6 +584,14 @@ const (
 	OriginCACertificateDeleteResponseEnvelopeSuccessTrue OriginCACertificateDeleteResponseEnvelopeSuccess = true
 )
 
+func (r OriginCACertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginCACertificateDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OriginCACertificateGetResponseEnvelope struct {
 	Errors   []OriginCACertificateGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OriginCACertificateGetResponseEnvelopeMessages `json:"messages,required"`
@@ -616,3 +672,11 @@ type OriginCACertificateGetResponseEnvelopeSuccess bool
 const (
 	OriginCACertificateGetResponseEnvelopeSuccessTrue OriginCACertificateGetResponseEnvelopeSuccess = true
 )
+
+func (r OriginCACertificateGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OriginCACertificateGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

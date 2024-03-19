@@ -226,6 +226,14 @@ const (
 	GatewayAppTypeListResponseEnvelopeSuccessTrue GatewayAppTypeListResponseEnvelopeSuccess = true
 )
 
+func (r GatewayAppTypeListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayAppTypeListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type GatewayAppTypeListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

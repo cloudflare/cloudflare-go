@@ -801,6 +801,14 @@ const (
 	ZoneNewParamsTypeSecondary ZoneNewParamsType = "secondary"
 )
 
+func (r ZoneNewParamsType) IsKnown() bool {
+	switch r {
+	case ZoneNewParamsTypeFull, ZoneNewParamsTypePartial, ZoneNewParamsTypeSecondary:
+		return true
+	}
+	return false
+}
+
 type ZoneNewResponseEnvelope struct {
 	Errors   []ZoneNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZoneNewResponseEnvelopeMessages `json:"messages,required"`
@@ -944,6 +952,14 @@ const (
 	ZoneListParamsDirectionDesc ZoneListParamsDirection = "desc"
 )
 
+func (r ZoneListParamsDirection) IsKnown() bool {
+	switch r {
+	case ZoneListParamsDirectionAsc, ZoneListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
 // Whether to match all search requirements or at least one (any).
 type ZoneListParamsMatch string
 
@@ -951,6 +967,14 @@ const (
 	ZoneListParamsMatchAny ZoneListParamsMatch = "any"
 	ZoneListParamsMatchAll ZoneListParamsMatch = "all"
 )
+
+func (r ZoneListParamsMatch) IsKnown() bool {
+	switch r {
+	case ZoneListParamsMatchAny, ZoneListParamsMatchAll:
+		return true
+	}
+	return false
+}
 
 // Field to order zones by.
 type ZoneListParamsOrder string
@@ -962,6 +986,14 @@ const (
 	ZoneListParamsOrderAccountName ZoneListParamsOrder = "account.name"
 )
 
+func (r ZoneListParamsOrder) IsKnown() bool {
+	switch r {
+	case ZoneListParamsOrderName, ZoneListParamsOrderStatus, ZoneListParamsOrderAccountID, ZoneListParamsOrderAccountName:
+		return true
+	}
+	return false
+}
+
 // A zone status
 type ZoneListParamsStatus string
 
@@ -971,6 +1003,14 @@ const (
 	ZoneListParamsStatusActive       ZoneListParamsStatus = "active"
 	ZoneListParamsStatusMoved        ZoneListParamsStatus = "moved"
 )
+
+func (r ZoneListParamsStatus) IsKnown() bool {
+	switch r {
+	case ZoneListParamsStatusInitializing, ZoneListParamsStatusPending, ZoneListParamsStatusActive, ZoneListParamsStatusMoved:
+		return true
+	}
+	return false
+}
 
 type ZoneDeleteParams struct {
 	// Identifier
@@ -1095,6 +1135,14 @@ const (
 	ZoneEditParamsTypePartial   ZoneEditParamsType = "partial"
 	ZoneEditParamsTypeSecondary ZoneEditParamsType = "secondary"
 )
+
+func (r ZoneEditParamsType) IsKnown() bool {
+	switch r {
+	case ZoneEditParamsTypeFull, ZoneEditParamsTypePartial, ZoneEditParamsTypeSecondary:
+		return true
+	}
+	return false
+}
 
 type ZoneEditResponseEnvelope struct {
 	Errors   []ZoneEditResponseEnvelopeErrors   `json:"errors,required"`

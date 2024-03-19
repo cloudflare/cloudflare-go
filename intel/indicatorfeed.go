@@ -178,6 +178,14 @@ const (
 	IntelIndicatorFeedMetadataLatestUploadStatusError        IntelIndicatorFeedMetadataLatestUploadStatus = "Error"
 )
 
+func (r IntelIndicatorFeedMetadataLatestUploadStatus) IsKnown() bool {
+	switch r {
+	case IntelIndicatorFeedMetadataLatestUploadStatusMirroring, IntelIndicatorFeedMetadataLatestUploadStatusUnifying, IntelIndicatorFeedMetadataLatestUploadStatusLoading, IntelIndicatorFeedMetadataLatestUploadStatusProvisioning, IntelIndicatorFeedMetadataLatestUploadStatusComplete, IntelIndicatorFeedMetadataLatestUploadStatusError:
+		return true
+	}
+	return false
+}
+
 type IntelUpdateFeed struct {
 	// Feed id
 	FileID int64 `json:"file_id"`
@@ -299,6 +307,14 @@ const (
 	IndicatorFeedNewResponseEnvelopeSuccessTrue IndicatorFeedNewResponseEnvelopeSuccess = true
 )
 
+func (r IndicatorFeedNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndicatorFeedNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IndicatorFeedUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -391,6 +407,14 @@ const (
 	IndicatorFeedUpdateResponseEnvelopeSuccessTrue IndicatorFeedUpdateResponseEnvelopeSuccess = true
 )
 
+func (r IndicatorFeedUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndicatorFeedUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IndicatorFeedListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -476,6 +500,14 @@ type IndicatorFeedListResponseEnvelopeSuccess bool
 const (
 	IndicatorFeedListResponseEnvelopeSuccessTrue IndicatorFeedListResponseEnvelopeSuccess = true
 )
+
+func (r IndicatorFeedListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndicatorFeedListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type IndicatorFeedDataParams struct {
 	// Identifier
@@ -567,3 +599,11 @@ type IndicatorFeedGetResponseEnvelopeSuccess bool
 const (
 	IndicatorFeedGetResponseEnvelopeSuccessTrue IndicatorFeedGetResponseEnvelopeSuccess = true
 )
+
+func (r IndicatorFeedGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndicatorFeedGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

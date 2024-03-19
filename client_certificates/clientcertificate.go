@@ -223,6 +223,14 @@ const (
 	TLSCertificatesAndHostnamesClientCertificateStatusRevoked             TLSCertificatesAndHostnamesClientCertificateStatus = "revoked"
 )
 
+func (r TLSCertificatesAndHostnamesClientCertificateStatus) IsKnown() bool {
+	switch r {
+	case TLSCertificatesAndHostnamesClientCertificateStatusActive, TLSCertificatesAndHostnamesClientCertificateStatusPendingReactivation, TLSCertificatesAndHostnamesClientCertificateStatusPendingRevocation, TLSCertificatesAndHostnamesClientCertificateStatusRevoked:
+		return true
+	}
+	return false
+}
+
 type ClientCertificateNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -317,6 +325,14 @@ const (
 	ClientCertificateNewResponseEnvelopeSuccessTrue ClientCertificateNewResponseEnvelopeSuccess = true
 )
 
+func (r ClientCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ClientCertificateNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ClientCertificateListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -351,6 +367,14 @@ const (
 	ClientCertificateListParamsStatusPendingRevocation   ClientCertificateListParamsStatus = "pending_revocation"
 	ClientCertificateListParamsStatusRevoked             ClientCertificateListParamsStatus = "revoked"
 )
+
+func (r ClientCertificateListParamsStatus) IsKnown() bool {
+	switch r {
+	case ClientCertificateListParamsStatusAll, ClientCertificateListParamsStatusActive, ClientCertificateListParamsStatusPendingReactivation, ClientCertificateListParamsStatusPendingRevocation, ClientCertificateListParamsStatusRevoked:
+		return true
+	}
+	return false
+}
 
 type ClientCertificateDeleteParams struct {
 	// Identifier
@@ -438,6 +462,14 @@ const (
 	ClientCertificateDeleteResponseEnvelopeSuccessTrue ClientCertificateDeleteResponseEnvelopeSuccess = true
 )
 
+func (r ClientCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ClientCertificateDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ClientCertificateEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -524,6 +556,14 @@ const (
 	ClientCertificateEditResponseEnvelopeSuccessTrue ClientCertificateEditResponseEnvelopeSuccess = true
 )
 
+func (r ClientCertificateEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ClientCertificateEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ClientCertificateGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -609,3 +649,11 @@ type ClientCertificateGetResponseEnvelopeSuccess bool
 const (
 	ClientCertificateGetResponseEnvelopeSuccessTrue ClientCertificateGetResponseEnvelopeSuccess = true
 )
+
+func (r ClientCertificateGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ClientCertificateGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

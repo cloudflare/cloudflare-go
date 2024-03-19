@@ -212,6 +212,14 @@ const (
 	ControlCmbConfigNewResponseEnvelopeSuccessTrue ControlCmbConfigNewResponseEnvelopeSuccess = true
 )
 
+func (r ControlCmbConfigNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ControlCmbConfigNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ControlCmbConfigDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -298,6 +306,14 @@ const (
 	ControlCmbConfigDeleteResponseEnvelopeSuccessTrue ControlCmbConfigDeleteResponseEnvelopeSuccess = true
 )
 
+func (r ControlCmbConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ControlCmbConfigDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ControlCmbConfigGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -383,3 +399,11 @@ type ControlCmbConfigGetResponseEnvelopeSuccess bool
 const (
 	ControlCmbConfigGetResponseEnvelopeSuccessTrue ControlCmbConfigGetResponseEnvelopeSuccess = true
 )
+
+func (r ControlCmbConfigGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ControlCmbConfigGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}

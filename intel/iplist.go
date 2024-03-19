@@ -155,6 +155,14 @@ const (
 	IPListGetResponseEnvelopeSuccessTrue IPListGetResponseEnvelopeSuccess = true
 )
 
+func (r IPListGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPListGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type IPListGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`

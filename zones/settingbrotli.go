@@ -104,6 +104,14 @@ const (
 	ZonesBrotliIDBrotli ZonesBrotliID = "brotli"
 )
 
+func (r ZonesBrotliID) IsKnown() bool {
+	switch r {
+	case ZonesBrotliIDBrotli:
+		return true
+	}
+	return false
+}
+
 // Current value of the zone setting.
 type ZonesBrotliValue string
 
@@ -111,6 +119,14 @@ const (
 	ZonesBrotliValueOff ZonesBrotliValue = "off"
 	ZonesBrotliValueOn  ZonesBrotliValue = "on"
 )
+
+func (r ZonesBrotliValue) IsKnown() bool {
+	switch r {
+	case ZonesBrotliValueOff, ZonesBrotliValueOn:
+		return true
+	}
+	return false
+}
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
@@ -120,6 +136,14 @@ const (
 	ZonesBrotliEditableTrue  ZonesBrotliEditable = true
 	ZonesBrotliEditableFalse ZonesBrotliEditable = false
 )
+
+func (r ZonesBrotliEditable) IsKnown() bool {
+	switch r {
+	case ZonesBrotliEditableTrue, ZonesBrotliEditableFalse:
+		return true
+	}
+	return false
+}
 
 // When the client requesting an asset supports the Brotli compression algorithm,
 // Cloudflare will serve a Brotli compressed version of the asset.
@@ -154,6 +178,14 @@ const (
 	SettingBrotliEditParamsValueOff SettingBrotliEditParamsValue = "off"
 	SettingBrotliEditParamsValueOn  SettingBrotliEditParamsValue = "on"
 )
+
+func (r SettingBrotliEditParamsValue) IsKnown() bool {
+	switch r {
+	case SettingBrotliEditParamsValueOff, SettingBrotliEditParamsValueOn:
+		return true
+	}
+	return false
+}
 
 type SettingBrotliEditResponseEnvelope struct {
 	Errors   []SettingBrotliEditResponseEnvelopeErrors   `json:"errors,required"`

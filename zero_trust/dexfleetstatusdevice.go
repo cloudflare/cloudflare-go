@@ -144,3 +144,11 @@ const (
 	DEXFleetStatusDeviceListParamsSortByTimestamp DEXFleetStatusDeviceListParamsSortBy = "timestamp"
 	DEXFleetStatusDeviceListParamsSortByVersion   DEXFleetStatusDeviceListParamsSortBy = "version"
 )
+
+func (r DEXFleetStatusDeviceListParamsSortBy) IsKnown() bool {
+	switch r {
+	case DEXFleetStatusDeviceListParamsSortByColo, DEXFleetStatusDeviceListParamsSortByDeviceID, DEXFleetStatusDeviceListParamsSortByMode, DEXFleetStatusDeviceListParamsSortByPlatform, DEXFleetStatusDeviceListParamsSortByStatus, DEXFleetStatusDeviceListParamsSortByTimestamp, DEXFleetStatusDeviceListParamsSortByVersion:
+		return true
+	}
+	return false
+}
