@@ -64,6 +64,8 @@ type DLPPredefinedProfile struct {
 	Entries []DLPPredefinedProfileEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
+	// If true, scan images via OCR to determine if any text present matches filters.
+	OcrEnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
 	Type DLPPredefinedProfileType `json:"type"`
 	JSON dlpPredefinedProfileJSON `json:"-"`
@@ -77,6 +79,7 @@ type dlpPredefinedProfileJSON struct {
 	ContextAwareness  apijson.Field
 	Entries           apijson.Field
 	Name              apijson.Field
+	OcrEnabled        apijson.Field
 	Type              apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
@@ -202,6 +205,8 @@ type DLPProfilePredefinedUpdateParams struct {
 	ContextAwareness param.Field[DLPProfilePredefinedUpdateParamsContextAwareness] `json:"context_awareness"`
 	// The entries for this profile.
 	Entries param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries"`
+	// If true, scan images via OCR to determine if any text present matches filters.
+	OcrEnabled param.Field[bool] `json:"ocr_enabled"`
 }
 
 func (r DLPProfilePredefinedUpdateParams) MarshalJSON() (data []byte, err error) {
