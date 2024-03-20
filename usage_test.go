@@ -26,7 +26,7 @@ func TestUsage(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	zoneNewResponse, err := client.Zones.New(context.TODO(), zones.ZoneNewParams{
+	zone, err := client.Zones.New(context.TODO(), zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
@@ -36,5 +36,5 @@ func TestUsage(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Logf("%+v\n", zoneNewResponse.ID)
+	t.Logf("%+v\n", zone.ID)
 }
