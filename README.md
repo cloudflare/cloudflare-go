@@ -52,7 +52,7 @@ func main() {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"), // defaults to os.LookupEnv("CLOUDFLARE_API_KEY")
 		option.WithAPIEmail("user@example.com"),               // defaults to os.LookupEnv("CLOUDFLARE_EMAIL")
 	)
-	zoneNewResponse, err := client.Zones.New(context.TODO(), zones.ZoneNewParams{
+	zone, err := client.Zones.New(context.TODO(), zones.ZoneNewParams{
 		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
@@ -62,12 +62,12 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", zoneNewResponse.ID)
+	fmt.Printf("%+v\n", zone.ID)
 }
 
 ```
 
-### Request Fields
+### Request fields
 
 All request parameters are wrapped in a generic `Field` type,
 which we use to distinguish zero values from null or omitted fields.
@@ -97,7 +97,7 @@ params := FooParams{
 }
 ```
 
-### Response Objects
+### Response objects
 
 All fields in response structs are value types (not pointers or wrappers).
 
@@ -303,7 +303,7 @@ You may also replace the default `http.Client` with
 accepted (this overwrites any previous client) and receives requests after any
 middleware has been applied.
 
-## Semantic Versioning
+## Semantic versioning
 
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
 

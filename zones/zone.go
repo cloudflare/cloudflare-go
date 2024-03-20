@@ -47,7 +47,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 }
 
 // Create Zone
-func (r *ZoneService) New(ctx context.Context, body ZoneNewParams, opts ...option.RequestOption) (res *ZoneNewResponse, err error) {
+func (r *ZoneService) New(ctx context.Context, body ZoneNewParams, opts ...option.RequestOption) (res *Zone, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneNewResponseEnvelope
 	path := "zones"
@@ -60,7 +60,7 @@ func (r *ZoneService) New(ctx context.Context, body ZoneNewParams, opts ...optio
 }
 
 // Lists, searches, sorts, and filters your zones.
-func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ZoneListResponse], err error) {
+func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[Zone], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,7 +78,7 @@ func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...op
 }
 
 // Lists, searches, sorts, and filters your zones.
-func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ZoneListResponse] {
+func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[Zone] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -96,7 +96,7 @@ func (r *ZoneService) Delete(ctx context.Context, body ZoneDeleteParams, opts ..
 }
 
 // Edits a zone. Only one zone property can be changed at a time.
-func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...option.RequestOption) (res *ZoneEditResponse, err error) {
+func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...option.RequestOption) (res *Zone, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s", params.ZoneID)
@@ -109,7 +109,7 @@ func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...o
 }
 
 // Zone Details
-func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...option.RequestOption) (res *ZoneGetResponse, err error) {
+func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...option.RequestOption) (res *Zone, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s", query.ZoneID)
@@ -121,11 +121,11 @@ func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...opti
 	return
 }
 
-type ZoneNewResponse struct {
+type Zone struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The account the zone belongs to
-	Account ZoneNewResponseAccount `json:"account,required"`
+	Account ZoneAccount `json:"account,required"`
 	// The last time proof of ownership was detected and the zone was made active
 	ActivatedOn time.Time `json:"activated_on,required,nullable" format:"date-time"`
 	// When the zone was created
@@ -135,7 +135,7 @@ type ZoneNewResponse struct {
 	// been enabled, this value is 0.
 	DevelopmentMode float64 `json:"development_mode,required"`
 	// Metadata about the zone
-	Meta ZoneNewResponseMeta `json:"meta,required"`
+	Meta ZoneMeta `json:"meta,required"`
 	// When the zone was last modified
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The domain name
@@ -148,15 +148,15 @@ type ZoneNewResponse struct {
 	// Registrar for the domain at the time of switching to Cloudflare
 	OriginalRegistrar string `json:"original_registrar,required,nullable"`
 	// The owner of the zone
-	Owner ZoneNewResponseOwner `json:"owner,required"`
+	Owner ZoneOwner `json:"owner,required"`
 	// An array of domains used for custom name servers. This is only available for
 	// Business and Enterprise plans.
-	VanityNameServers []string            `json:"vanity_name_servers" format:"hostname"`
-	JSON              zoneNewResponseJSON `json:"-"`
+	VanityNameServers []string `json:"vanity_name_servers" format:"hostname"`
+	JSON              zoneJSON `json:"-"`
 }
 
-// zoneNewResponseJSON contains the JSON metadata for the struct [ZoneNewResponse]
-type zoneNewResponseJSON struct {
+// zoneJSON contains the JSON metadata for the struct [Zone]
+type zoneJSON struct {
 	ID                  apijson.Field
 	Account             apijson.Field
 	ActivatedOn         apijson.Field
@@ -174,42 +174,41 @@ type zoneNewResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ZoneNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Zone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneNewResponseJSON) RawJSON() string {
+func (r zoneJSON) RawJSON() string {
 	return r.raw
 }
 
 // The account the zone belongs to
-type ZoneNewResponseAccount struct {
+type ZoneAccount struct {
 	// Identifier
 	ID string `json:"id"`
 	// The name of the account
-	Name string                     `json:"name"`
-	JSON zoneNewResponseAccountJSON `json:"-"`
+	Name string          `json:"name"`
+	JSON zoneAccountJSON `json:"-"`
 }
 
-// zoneNewResponseAccountJSON contains the JSON metadata for the struct
-// [ZoneNewResponseAccount]
-type zoneNewResponseAccountJSON struct {
+// zoneAccountJSON contains the JSON metadata for the struct [ZoneAccount]
+type zoneAccountJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneNewResponseAccount) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAccount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneNewResponseAccountJSON) RawJSON() string {
+func (r zoneAccountJSON) RawJSON() string {
 	return r.raw
 }
 
 // Metadata about the zone
-type ZoneNewResponseMeta struct {
+type ZoneMeta struct {
 	// The zone is only configured for CDN
 	CdnOnly bool `json:"cdn_only"`
 	// Number of Custom Certificates the zone can have
@@ -221,14 +220,13 @@ type ZoneNewResponseMeta struct {
 	// Number of Page Rules a zone can have
 	PageRuleQuota int64 `json:"page_rule_quota"`
 	// The zone has been flagged for phishing
-	PhishingDetected bool                    `json:"phishing_detected"`
-	Step             int64                   `json:"step"`
-	JSON             zoneNewResponseMetaJSON `json:"-"`
+	PhishingDetected bool         `json:"phishing_detected"`
+	Step             int64        `json:"step"`
+	JSON             zoneMetaJSON `json:"-"`
 }
 
-// zoneNewResponseMetaJSON contains the JSON metadata for the struct
-// [ZoneNewResponseMeta]
-type zoneNewResponseMetaJSON struct {
+// zoneMetaJSON contains the JSON metadata for the struct [ZoneMeta]
+type zoneMetaJSON struct {
 	CdnOnly                apijson.Field
 	CustomCertificateQuota apijson.Field
 	DNSOnly                apijson.Field
@@ -240,28 +238,27 @@ type zoneNewResponseMetaJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *ZoneNewResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneNewResponseMetaJSON) RawJSON() string {
+func (r zoneMetaJSON) RawJSON() string {
 	return r.raw
 }
 
 // The owner of the zone
-type ZoneNewResponseOwner struct {
+type ZoneOwner struct {
 	// Identifier
 	ID string `json:"id"`
 	// Name of the owner
 	Name string `json:"name"`
 	// The type of owner
-	Type string                   `json:"type"`
-	JSON zoneNewResponseOwnerJSON `json:"-"`
+	Type string        `json:"type"`
+	JSON zoneOwnerJSON `json:"-"`
 }
 
-// zoneNewResponseOwnerJSON contains the JSON metadata for the struct
-// [ZoneNewResponseOwner]
-type zoneNewResponseOwnerJSON struct {
+// zoneOwnerJSON contains the JSON metadata for the struct [ZoneOwner]
+type zoneOwnerJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -269,168 +266,11 @@ type zoneNewResponseOwnerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneNewResponseOwner) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneOwner) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneNewResponseOwnerJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneListResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// The account the zone belongs to
-	Account ZoneListResponseAccount `json:"account,required"`
-	// The last time proof of ownership was detected and the zone was made active
-	ActivatedOn time.Time `json:"activated_on,required,nullable" format:"date-time"`
-	// When the zone was created
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// The interval (in seconds) from when development mode expires (positive integer)
-	// or last expired (negative integer) for the domain. If development mode has never
-	// been enabled, this value is 0.
-	DevelopmentMode float64 `json:"development_mode,required"`
-	// Metadata about the zone
-	Meta ZoneListResponseMeta `json:"meta,required"`
-	// When the zone was last modified
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The domain name
-	Name string `json:"name,required"`
-	// DNS host at the time of switching to Cloudflare
-	OriginalDnshost string `json:"original_dnshost,required,nullable"`
-	// Original name servers before moving to Cloudflare Notes: Is this only available
-	// for full zones?
-	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
-	// Registrar for the domain at the time of switching to Cloudflare
-	OriginalRegistrar string `json:"original_registrar,required,nullable"`
-	// The owner of the zone
-	Owner ZoneListResponseOwner `json:"owner,required"`
-	// An array of domains used for custom name servers. This is only available for
-	// Business and Enterprise plans.
-	VanityNameServers []string             `json:"vanity_name_servers" format:"hostname"`
-	JSON              zoneListResponseJSON `json:"-"`
-}
-
-// zoneListResponseJSON contains the JSON metadata for the struct
-// [ZoneListResponse]
-type zoneListResponseJSON struct {
-	ID                  apijson.Field
-	Account             apijson.Field
-	ActivatedOn         apijson.Field
-	CreatedOn           apijson.Field
-	DevelopmentMode     apijson.Field
-	Meta                apijson.Field
-	ModifiedOn          apijson.Field
-	Name                apijson.Field
-	OriginalDnshost     apijson.Field
-	OriginalNameServers apijson.Field
-	OriginalRegistrar   apijson.Field
-	Owner               apijson.Field
-	VanityNameServers   apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ZoneListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The account the zone belongs to
-type ZoneListResponseAccount struct {
-	// Identifier
-	ID string `json:"id"`
-	// The name of the account
-	Name string                      `json:"name"`
-	JSON zoneListResponseAccountJSON `json:"-"`
-}
-
-// zoneListResponseAccountJSON contains the JSON metadata for the struct
-// [ZoneListResponseAccount]
-type zoneListResponseAccountJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneListResponseAccount) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneListResponseAccountJSON) RawJSON() string {
-	return r.raw
-}
-
-// Metadata about the zone
-type ZoneListResponseMeta struct {
-	// The zone is only configured for CDN
-	CdnOnly bool `json:"cdn_only"`
-	// Number of Custom Certificates the zone can have
-	CustomCertificateQuota int64 `json:"custom_certificate_quota"`
-	// The zone is only configured for DNS
-	DNSOnly bool `json:"dns_only"`
-	// The zone is setup with Foundation DNS
-	FoundationDNS bool `json:"foundation_dns"`
-	// Number of Page Rules a zone can have
-	PageRuleQuota int64 `json:"page_rule_quota"`
-	// The zone has been flagged for phishing
-	PhishingDetected bool                     `json:"phishing_detected"`
-	Step             int64                    `json:"step"`
-	JSON             zoneListResponseMetaJSON `json:"-"`
-}
-
-// zoneListResponseMetaJSON contains the JSON metadata for the struct
-// [ZoneListResponseMeta]
-type zoneListResponseMetaJSON struct {
-	CdnOnly                apijson.Field
-	CustomCertificateQuota apijson.Field
-	DNSOnly                apijson.Field
-	FoundationDNS          apijson.Field
-	PageRuleQuota          apijson.Field
-	PhishingDetected       apijson.Field
-	Step                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *ZoneListResponseMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneListResponseMetaJSON) RawJSON() string {
-	return r.raw
-}
-
-// The owner of the zone
-type ZoneListResponseOwner struct {
-	// Identifier
-	ID string `json:"id"`
-	// Name of the owner
-	Name string `json:"name"`
-	// The type of owner
-	Type string                    `json:"type"`
-	JSON zoneListResponseOwnerJSON `json:"-"`
-}
-
-// zoneListResponseOwnerJSON contains the JSON metadata for the struct
-// [ZoneListResponseOwner]
-type zoneListResponseOwnerJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneListResponseOwner) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneListResponseOwnerJSON) RawJSON() string {
+func (r zoneOwnerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -453,319 +293,6 @@ func (r *ZoneDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r zoneDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneEditResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// The account the zone belongs to
-	Account ZoneEditResponseAccount `json:"account,required"`
-	// The last time proof of ownership was detected and the zone was made active
-	ActivatedOn time.Time `json:"activated_on,required,nullable" format:"date-time"`
-	// When the zone was created
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// The interval (in seconds) from when development mode expires (positive integer)
-	// or last expired (negative integer) for the domain. If development mode has never
-	// been enabled, this value is 0.
-	DevelopmentMode float64 `json:"development_mode,required"`
-	// Metadata about the zone
-	Meta ZoneEditResponseMeta `json:"meta,required"`
-	// When the zone was last modified
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The domain name
-	Name string `json:"name,required"`
-	// DNS host at the time of switching to Cloudflare
-	OriginalDnshost string `json:"original_dnshost,required,nullable"`
-	// Original name servers before moving to Cloudflare Notes: Is this only available
-	// for full zones?
-	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
-	// Registrar for the domain at the time of switching to Cloudflare
-	OriginalRegistrar string `json:"original_registrar,required,nullable"`
-	// The owner of the zone
-	Owner ZoneEditResponseOwner `json:"owner,required"`
-	// An array of domains used for custom name servers. This is only available for
-	// Business and Enterprise plans.
-	VanityNameServers []string             `json:"vanity_name_servers" format:"hostname"`
-	JSON              zoneEditResponseJSON `json:"-"`
-}
-
-// zoneEditResponseJSON contains the JSON metadata for the struct
-// [ZoneEditResponse]
-type zoneEditResponseJSON struct {
-	ID                  apijson.Field
-	Account             apijson.Field
-	ActivatedOn         apijson.Field
-	CreatedOn           apijson.Field
-	DevelopmentMode     apijson.Field
-	Meta                apijson.Field
-	ModifiedOn          apijson.Field
-	Name                apijson.Field
-	OriginalDnshost     apijson.Field
-	OriginalNameServers apijson.Field
-	OriginalRegistrar   apijson.Field
-	Owner               apijson.Field
-	VanityNameServers   apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ZoneEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The account the zone belongs to
-type ZoneEditResponseAccount struct {
-	// Identifier
-	ID string `json:"id"`
-	// The name of the account
-	Name string                      `json:"name"`
-	JSON zoneEditResponseAccountJSON `json:"-"`
-}
-
-// zoneEditResponseAccountJSON contains the JSON metadata for the struct
-// [ZoneEditResponseAccount]
-type zoneEditResponseAccountJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneEditResponseAccount) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneEditResponseAccountJSON) RawJSON() string {
-	return r.raw
-}
-
-// Metadata about the zone
-type ZoneEditResponseMeta struct {
-	// The zone is only configured for CDN
-	CdnOnly bool `json:"cdn_only"`
-	// Number of Custom Certificates the zone can have
-	CustomCertificateQuota int64 `json:"custom_certificate_quota"`
-	// The zone is only configured for DNS
-	DNSOnly bool `json:"dns_only"`
-	// The zone is setup with Foundation DNS
-	FoundationDNS bool `json:"foundation_dns"`
-	// Number of Page Rules a zone can have
-	PageRuleQuota int64 `json:"page_rule_quota"`
-	// The zone has been flagged for phishing
-	PhishingDetected bool                     `json:"phishing_detected"`
-	Step             int64                    `json:"step"`
-	JSON             zoneEditResponseMetaJSON `json:"-"`
-}
-
-// zoneEditResponseMetaJSON contains the JSON metadata for the struct
-// [ZoneEditResponseMeta]
-type zoneEditResponseMetaJSON struct {
-	CdnOnly                apijson.Field
-	CustomCertificateQuota apijson.Field
-	DNSOnly                apijson.Field
-	FoundationDNS          apijson.Field
-	PageRuleQuota          apijson.Field
-	PhishingDetected       apijson.Field
-	Step                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *ZoneEditResponseMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneEditResponseMetaJSON) RawJSON() string {
-	return r.raw
-}
-
-// The owner of the zone
-type ZoneEditResponseOwner struct {
-	// Identifier
-	ID string `json:"id"`
-	// Name of the owner
-	Name string `json:"name"`
-	// The type of owner
-	Type string                    `json:"type"`
-	JSON zoneEditResponseOwnerJSON `json:"-"`
-}
-
-// zoneEditResponseOwnerJSON contains the JSON metadata for the struct
-// [ZoneEditResponseOwner]
-type zoneEditResponseOwnerJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneEditResponseOwner) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneEditResponseOwnerJSON) RawJSON() string {
-	return r.raw
-}
-
-type ZoneGetResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// The account the zone belongs to
-	Account ZoneGetResponseAccount `json:"account,required"`
-	// The last time proof of ownership was detected and the zone was made active
-	ActivatedOn time.Time `json:"activated_on,required,nullable" format:"date-time"`
-	// When the zone was created
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// The interval (in seconds) from when development mode expires (positive integer)
-	// or last expired (negative integer) for the domain. If development mode has never
-	// been enabled, this value is 0.
-	DevelopmentMode float64 `json:"development_mode,required"`
-	// Metadata about the zone
-	Meta ZoneGetResponseMeta `json:"meta,required"`
-	// When the zone was last modified
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The domain name
-	Name string `json:"name,required"`
-	// DNS host at the time of switching to Cloudflare
-	OriginalDnshost string `json:"original_dnshost,required,nullable"`
-	// Original name servers before moving to Cloudflare Notes: Is this only available
-	// for full zones?
-	OriginalNameServers []string `json:"original_name_servers,required,nullable" format:"hostname"`
-	// Registrar for the domain at the time of switching to Cloudflare
-	OriginalRegistrar string `json:"original_registrar,required,nullable"`
-	// The owner of the zone
-	Owner ZoneGetResponseOwner `json:"owner,required"`
-	// An array of domains used for custom name servers. This is only available for
-	// Business and Enterprise plans.
-	VanityNameServers []string            `json:"vanity_name_servers" format:"hostname"`
-	JSON              zoneGetResponseJSON `json:"-"`
-}
-
-// zoneGetResponseJSON contains the JSON metadata for the struct [ZoneGetResponse]
-type zoneGetResponseJSON struct {
-	ID                  apijson.Field
-	Account             apijson.Field
-	ActivatedOn         apijson.Field
-	CreatedOn           apijson.Field
-	DevelopmentMode     apijson.Field
-	Meta                apijson.Field
-	ModifiedOn          apijson.Field
-	Name                apijson.Field
-	OriginalDnshost     apijson.Field
-	OriginalNameServers apijson.Field
-	OriginalRegistrar   apijson.Field
-	Owner               apijson.Field
-	VanityNameServers   apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ZoneGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The account the zone belongs to
-type ZoneGetResponseAccount struct {
-	// Identifier
-	ID string `json:"id"`
-	// The name of the account
-	Name string                     `json:"name"`
-	JSON zoneGetResponseAccountJSON `json:"-"`
-}
-
-// zoneGetResponseAccountJSON contains the JSON metadata for the struct
-// [ZoneGetResponseAccount]
-type zoneGetResponseAccountJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneGetResponseAccount) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneGetResponseAccountJSON) RawJSON() string {
-	return r.raw
-}
-
-// Metadata about the zone
-type ZoneGetResponseMeta struct {
-	// The zone is only configured for CDN
-	CdnOnly bool `json:"cdn_only"`
-	// Number of Custom Certificates the zone can have
-	CustomCertificateQuota int64 `json:"custom_certificate_quota"`
-	// The zone is only configured for DNS
-	DNSOnly bool `json:"dns_only"`
-	// The zone is setup with Foundation DNS
-	FoundationDNS bool `json:"foundation_dns"`
-	// Number of Page Rules a zone can have
-	PageRuleQuota int64 `json:"page_rule_quota"`
-	// The zone has been flagged for phishing
-	PhishingDetected bool                    `json:"phishing_detected"`
-	Step             int64                   `json:"step"`
-	JSON             zoneGetResponseMetaJSON `json:"-"`
-}
-
-// zoneGetResponseMetaJSON contains the JSON metadata for the struct
-// [ZoneGetResponseMeta]
-type zoneGetResponseMetaJSON struct {
-	CdnOnly                apijson.Field
-	CustomCertificateQuota apijson.Field
-	DNSOnly                apijson.Field
-	FoundationDNS          apijson.Field
-	PageRuleQuota          apijson.Field
-	PhishingDetected       apijson.Field
-	Step                   apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *ZoneGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneGetResponseMetaJSON) RawJSON() string {
-	return r.raw
-}
-
-// The owner of the zone
-type ZoneGetResponseOwner struct {
-	// Identifier
-	ID string `json:"id"`
-	// Name of the owner
-	Name string `json:"name"`
-	// The type of owner
-	Type string                   `json:"type"`
-	JSON zoneGetResponseOwnerJSON `json:"-"`
-}
-
-// zoneGetResponseOwnerJSON contains the JSON metadata for the struct
-// [ZoneGetResponseOwner]
-type zoneGetResponseOwnerJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneGetResponseOwner) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zoneGetResponseOwnerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -814,7 +341,7 @@ type ZoneNewResponseEnvelope struct {
 	Messages []ZoneNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                        `json:"success,required"`
-	Result  ZoneNewResponse             `json:"result"`
+	Result  Zone                        `json:"result"`
 	JSON    zoneNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1149,7 +676,7 @@ type ZoneEditResponseEnvelope struct {
 	Messages []ZoneEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                         `json:"success,required"`
-	Result  ZoneEditResponse             `json:"result"`
+	Result  Zone                         `json:"result"`
 	JSON    zoneEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1228,7 +755,7 @@ type ZoneGetResponseEnvelope struct {
 	Messages []ZoneGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                        `json:"success,required"`
-	Result  ZoneGetResponse             `json:"result"`
+	Result  Zone                        `json:"result"`
 	JSON    zoneGetResponseEnvelopeJSON `json:"-"`
 }
 
