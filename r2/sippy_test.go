@@ -31,21 +31,19 @@ func TestSippyUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.R2.Sippy.Update(
 		context.TODO(),
 		"example-bucket",
-		r2.SippyUpdateParams{
+		r2.SippyUpdateParamsR2EnableSippyAws{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Destination: cloudflare.F(r2.SippyUpdateParamsDestination{
+			Destination: cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsDestination{
 				AccessKeyID:     cloudflare.F("string"),
-				Provider:        cloudflare.F(r2.SippyUpdateParamsDestinationProviderR2),
+				Provider:        cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsDestinationProviderR2),
 				SecretAccessKey: cloudflare.F("string"),
 			}),
-			Source: cloudflare.F(r2.SippyUpdateParamsSource{
+			Source: cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsSource{
 				AccessKeyID:     cloudflare.F("string"),
 				Bucket:          cloudflare.F("string"),
-				Provider:        cloudflare.F(r2.SippyUpdateParamsSourceProviderGcs),
+				Provider:        cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsSourceProviderAws),
 				Region:          cloudflare.F("string"),
 				SecretAccessKey: cloudflare.F("string"),
-				ClientEmail:     cloudflare.F("string"),
-				PrivateKey:      cloudflare.F("string"),
 			}),
 		},
 	)

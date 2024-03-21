@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"mime/multipart"
 	"net/http"
 	"reflect"
@@ -48,7 +49,7 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParams, opts ...option.RequestOption) (res *AIRunResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AIRunResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/ai/run/%s", params.AccountID, modelName)
+	path := fmt.Sprintf("accounts/%s/ai/run/%s", params.getAccountID(), modelName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -308,12 +309,108 @@ func (r aiRunResponseImageToTextJSON) RawJSON() string {
 
 func (r AIRunResponseImageToText) ImplementsWorkersAIRunResponse() {}
 
-type AIRunParams struct {
-	AccountID param.Field[string]          `path:"account_id,required"`
-	Body      param.Field[AIRunParamsBody] `json:"body,required" format:"binary"`
+// This interface is a union satisfied by one of the following:
+// [AIRunParamsTextClassification], [AIRunParamsTextToImage],
+// [AIRunParamsSentenceSimilarity], [AIRunParamsTextEmbeddings],
+// [AIRunParamsVariant4], [AIRunParamsVariant5], [AIRunParamsVariant6],
+// [AIRunParamsVariant7], [AIRunParamsVariant8], [AIRunParamsVariant9],
+// [AIRunParamsVariant10], [AIRunParamsVariant11], [AIRunParamsTranslation],
+// [AIRunParamsSummarization], [AIRunParamsVariant14], [AIRunParamsVariant15].
+type AIRunParams interface {
+	ImplementsAIRunParams()
+
+	getAccountID() param.Field[string]
 }
 
-func (r AIRunParams) MarshalMultipart() (data []byte, contentType string, err error) {
+type AIRunParamsTextClassification struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+	Text      param.Field[string] `json:"text,required"`
+}
+
+func (r AIRunParamsTextClassification) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsTextClassification) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (AIRunParamsTextClassification) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsTextToImage struct {
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Prompt    param.Field[string]    `json:"prompt,required"`
+	Guidance  param.Field[float64]   `json:"guidance"`
+	Image     param.Field[[]float64] `json:"image"`
+	Mask      param.Field[[]float64] `json:"mask"`
+	NumSteps  param.Field[int64]     `json:"num_steps"`
+	Strength  param.Field[float64]   `json:"strength"`
+}
+
+func (r AIRunParamsTextToImage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsTextToImage) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (AIRunParamsTextToImage) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsSentenceSimilarity struct {
+	AccountID param.Field[string]   `path:"account_id,required"`
+	Sentences param.Field[[]string] `json:"sentences,required"`
+	Source    param.Field[string]   `json:"source,required"`
+}
+
+func (r AIRunParamsSentenceSimilarity) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsSentenceSimilarity) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (AIRunParamsSentenceSimilarity) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsTextEmbeddings struct {
+	AccountID param.Field[string]                        `path:"account_id,required"`
+	Text      param.Field[AIRunParamsTextEmbeddingsText] `json:"text,required"`
+}
+
+func (r AIRunParamsTextEmbeddings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsTextEmbeddings) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (AIRunParamsTextEmbeddings) ImplementsAIRunParams() {
+
+}
+
+// Satisfied by [shared.UnionString], [workers.AIRunParamsTextEmbeddingsTextArray].
+type AIRunParamsTextEmbeddingsText interface {
+	ImplementsWorkersAIRunParamsTextEmbeddingsText()
+}
+
+type AIRunParamsTextEmbeddingsTextArray []string
+
+func (r AIRunParamsTextEmbeddingsTextArray) ImplementsWorkersAIRunParamsTextEmbeddingsText() {}
+
+type AIRunParamsVariant4 struct {
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Body      param.Field[io.Reader] `json:"body,required" format:"binary"`
+}
+
+func (r AIRunParamsVariant4) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
 	err = apiform.MarshalRoot(r, writer)
@@ -328,129 +425,253 @@ func (r AIRunParams) MarshalMultipart() (data []byte, contentType string, err er
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// Satisfied by [workers.AIRunParamsBodyTextClassification],
-// [workers.AIRunParamsBodyTextToImage],
-// [workers.AIRunParamsBodySentenceSimilarity],
-// [workers.AIRunParamsBodyTextEmbeddings], [shared.UnionString],
-// [workers.AIRunParamsBodyObject], [shared.UnionString],
-// [workers.AIRunParamsBodyImageClassification], [shared.UnionString],
-// [workers.AIRunParamsBodyObjectDetection], [workers.AIRunParamsBodyObject],
-// [workers.AIRunParamsBodyObject], [workers.AIRunParamsBodyTranslation],
-// [workers.AIRunParamsBodySummarization], [shared.UnionString],
-// [workers.AIRunParamsBodyObject].
-type AIRunParamsBody interface {
-	ImplementsWorkersAIRunParamsBody()
+func (r AIRunParamsVariant4) getAccountID() param.Field[string] {
+	return r.AccountID
 }
 
-type AIRunParamsBodyTextClassification struct {
-	Text param.Field[string] `json:"text,required"`
+func (AIRunParamsVariant4) ImplementsAIRunParams() {
+
 }
 
-func (r AIRunParamsBodyTextClassification) MarshalJSON() (data []byte, err error) {
+type AIRunParamsVariant5 struct {
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Audio     param.Field[[]float64] `json:"audio"`
+}
+
+func (r AIRunParamsVariant5) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextClassification) ImplementsWorkersAIRunParamsBody() {}
-
-type AIRunParamsBodyTextToImage struct {
-	Prompt   param.Field[string]    `json:"prompt,required"`
-	Guidance param.Field[float64]   `json:"guidance"`
-	Image    param.Field[[]float64] `json:"image"`
-	Mask     param.Field[[]float64] `json:"mask"`
-	NumSteps param.Field[int64]     `json:"num_steps"`
-	Strength param.Field[float64]   `json:"strength"`
+func (r AIRunParamsVariant5) getAccountID() param.Field[string] {
+	return r.AccountID
 }
 
-func (r AIRunParamsBodyTextToImage) MarshalJSON() (data []byte, err error) {
+func (AIRunParamsVariant5) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsVariant6 struct {
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Body      param.Field[io.Reader] `json:"body,required" format:"binary"`
+}
+
+func (r AIRunParamsVariant6) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+func (r AIRunParamsVariant6) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (AIRunParamsVariant6) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsVariant7 struct {
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Image     param.Field[[]float64] `json:"image"`
+}
+
+func (r AIRunParamsVariant7) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextToImage) ImplementsWorkersAIRunParamsBody() {}
-
-type AIRunParamsBodySentenceSimilarity struct {
-	Sentences param.Field[[]string] `json:"sentences,required"`
-	Source    param.Field[string]   `json:"source,required"`
+func (r AIRunParamsVariant7) getAccountID() param.Field[string] {
+	return r.AccountID
 }
 
-func (r AIRunParamsBodySentenceSimilarity) MarshalJSON() (data []byte, err error) {
+func (AIRunParamsVariant7) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsVariant8 struct {
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Body      param.Field[io.Reader] `json:"body,required" format:"binary"`
+}
+
+func (r AIRunParamsVariant8) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+func (r AIRunParamsVariant8) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (AIRunParamsVariant8) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsVariant9 struct {
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Image     param.Field[[]float64] `json:"image"`
+}
+
+func (r AIRunParamsVariant9) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodySentenceSimilarity) ImplementsWorkersAIRunParamsBody() {}
-
-type AIRunParamsBodyTextEmbeddings struct {
-	Text param.Field[AIRunParamsBodyTextEmbeddingsText] `json:"text,required"`
+func (r AIRunParamsVariant9) getAccountID() param.Field[string] {
+	return r.AccountID
 }
 
-func (r AIRunParamsBodyTextEmbeddings) MarshalJSON() (data []byte, err error) {
+func (AIRunParamsVariant9) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsVariant10 struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+	Prompt    param.Field[string] `json:"prompt,required"`
+	Lora      param.Field[string] `json:"lora"`
+	MaxTokens param.Field[int64]  `json:"max_tokens"`
+	Raw       param.Field[bool]   `json:"raw"`
+	Stream    param.Field[bool]   `json:"stream"`
+}
+
+func (r AIRunParamsVariant10) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTextEmbeddings) ImplementsWorkersAIRunParamsBody() {}
-
-// Satisfied by [shared.UnionString],
-// [workers.AIRunParamsBodyTextEmbeddingsTextArray].
-type AIRunParamsBodyTextEmbeddingsText interface {
-	ImplementsWorkersAIRunParamsBodyTextEmbeddingsText()
+func (r AIRunParamsVariant10) getAccountID() param.Field[string] {
+	return r.AccountID
 }
 
-type AIRunParamsBodyTextEmbeddingsTextArray []string
+func (AIRunParamsVariant10) ImplementsAIRunParams() {
 
-func (r AIRunParamsBodyTextEmbeddingsTextArray) ImplementsWorkersAIRunParamsBodyTextEmbeddingsText() {
 }
 
-type AIRunParamsBodyObject struct {
-	Audio param.Field[[]float64] `json:"audio"`
+type AIRunParamsVariant11 struct {
+	AccountID param.Field[string]                        `path:"account_id,required"`
+	Messages  param.Field[[]AIRunParamsVariant11Message] `json:"messages,required"`
+	MaxTokens param.Field[int64]                         `json:"max_tokens"`
+	Stream    param.Field[bool]                          `json:"stream"`
 }
 
-func (r AIRunParamsBodyObject) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsVariant11) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyObject) ImplementsWorkersAIRunParamsBody() {}
-
-type AIRunParamsBodyImageClassification struct {
-	Image param.Field[[]float64] `json:"image"`
+func (r AIRunParamsVariant11) getAccountID() param.Field[string] {
+	return r.AccountID
 }
 
-func (r AIRunParamsBodyImageClassification) MarshalJSON() (data []byte, err error) {
+func (AIRunParamsVariant11) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsVariant11Message struct {
+	Content param.Field[string] `json:"content,required"`
+	Role    param.Field[string] `json:"role,required"`
+}
+
+func (r AIRunParamsVariant11Message) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyImageClassification) ImplementsWorkersAIRunParamsBody() {}
-
-type AIRunParamsBodyObjectDetection struct {
-	Image param.Field[[]float64] `json:"image"`
-}
-
-func (r AIRunParamsBodyObjectDetection) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AIRunParamsBodyObjectDetection) ImplementsWorkersAIRunParamsBody() {}
-
-type AIRunParamsBodyTranslation struct {
+type AIRunParamsTranslation struct {
+	AccountID  param.Field[string] `path:"account_id,required"`
 	TargetLang param.Field[string] `json:"target_lang,required"`
 	Text       param.Field[string] `json:"text,required"`
 	SourceLang param.Field[string] `json:"source_lang"`
 }
 
-func (r AIRunParamsBodyTranslation) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsTranslation) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodyTranslation) ImplementsWorkersAIRunParamsBody() {}
+func (r AIRunParamsTranslation) getAccountID() param.Field[string] {
+	return r.AccountID
+}
 
-type AIRunParamsBodySummarization struct {
+func (AIRunParamsTranslation) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsSummarization struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	InputText param.Field[string] `json:"input_text,required"`
 	MaxLength param.Field[int64]  `json:"max_length"`
 }
 
-func (r AIRunParamsBodySummarization) MarshalJSON() (data []byte, err error) {
+func (r AIRunParamsSummarization) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AIRunParamsBodySummarization) ImplementsWorkersAIRunParamsBody() {}
+func (r AIRunParamsSummarization) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (AIRunParamsSummarization) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsVariant14 struct {
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Body      param.Field[io.Reader] `json:"body,required" format:"binary"`
+}
+
+func (r AIRunParamsVariant14) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+func (r AIRunParamsVariant14) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (AIRunParamsVariant14) ImplementsAIRunParams() {
+
+}
+
+type AIRunParamsVariant15 struct {
+	AccountID param.Field[string]    `path:"account_id,required"`
+	Image     param.Field[[]float64] `json:"image"`
+	MaxTokens param.Field[int64]     `json:"max_tokens"`
+	Prompt    param.Field[string]    `json:"prompt"`
+}
+
+func (r AIRunParamsVariant15) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsVariant15) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (AIRunParamsVariant15) ImplementsAIRunParams() {
+
+}
 
 type AIRunResponseEnvelope struct {
 	Result AIRunResponse             `json:"result" format:"binary"`
