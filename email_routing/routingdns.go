@@ -132,11 +132,11 @@ const (
 	EmailDNSRecordTypeLOC    EmailDNSRecordType = "LOC"
 	EmailDNSRecordTypeMX     EmailDNSRecordType = "MX"
 	EmailDNSRecordTypeNS     EmailDNSRecordType = "NS"
-	EmailDNSRecordTypeCert   EmailDNSRecordType = "CERT"
+	EmailDNSRecordTypeCERT   EmailDNSRecordType = "CERT"
 	EmailDNSRecordTypeDNSKEY EmailDNSRecordType = "DNSKEY"
 	EmailDNSRecordTypeDS     EmailDNSRecordType = "DS"
 	EmailDNSRecordTypeNAPTR  EmailDNSRecordType = "NAPTR"
-	EmailDNSRecordTypeSmimea EmailDNSRecordType = "SMIMEA"
+	EmailDNSRecordTypeSMIMEA EmailDNSRecordType = "SMIMEA"
 	EmailDNSRecordTypeSSHFP  EmailDNSRecordType = "SSHFP"
 	EmailDNSRecordTypeSVCB   EmailDNSRecordType = "SVCB"
 	EmailDNSRecordTypeTLSA   EmailDNSRecordType = "TLSA"
@@ -145,7 +145,7 @@ const (
 
 func (r EmailDNSRecordType) IsKnown() bool {
 	switch r {
-	case EmailDNSRecordTypeA, EmailDNSRecordTypeAAAA, EmailDNSRecordTypeCNAME, EmailDNSRecordTypeHTTPS, EmailDNSRecordTypeTXT, EmailDNSRecordTypeSRV, EmailDNSRecordTypeLOC, EmailDNSRecordTypeMX, EmailDNSRecordTypeNS, EmailDNSRecordTypeCert, EmailDNSRecordTypeDNSKEY, EmailDNSRecordTypeDS, EmailDNSRecordTypeNAPTR, EmailDNSRecordTypeSmimea, EmailDNSRecordTypeSSHFP, EmailDNSRecordTypeSVCB, EmailDNSRecordTypeTLSA, EmailDNSRecordTypeURI:
+	case EmailDNSRecordTypeA, EmailDNSRecordTypeAAAA, EmailDNSRecordTypeCNAME, EmailDNSRecordTypeHTTPS, EmailDNSRecordTypeTXT, EmailDNSRecordTypeSRV, EmailDNSRecordTypeLOC, EmailDNSRecordTypeMX, EmailDNSRecordTypeNS, EmailDNSRecordTypeCERT, EmailDNSRecordTypeDNSKEY, EmailDNSRecordTypeDS, EmailDNSRecordTypeNAPTR, EmailDNSRecordTypeSMIMEA, EmailDNSRecordTypeSSHFP, EmailDNSRecordTypeSVCB, EmailDNSRecordTypeTLSA, EmailDNSRecordTypeURI:
 		return true
 	}
 	return false

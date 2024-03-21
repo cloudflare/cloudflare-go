@@ -224,10 +224,10 @@ func (r accessIdentityIdpJSON) RawJSON() string {
 
 type AccessIdentityMTLSAuth struct {
 	AuthStatus    string                     `json:"auth_status"`
-	CertIssuerDn  string                     `json:"cert_issuer_dn"`
-	CertIssuerSki string                     `json:"cert_issuer_ski"`
-	CertPresented bool                       `json:"cert_presented"`
-	CertSerial    string                     `json:"cert_serial"`
+	CERTIssuerDn  string                     `json:"cert_issuer_dn"`
+	CERTIssuerSki string                     `json:"cert_issuer_ski"`
+	CERTPresented bool                       `json:"cert_presented"`
+	CERTSerial    string                     `json:"cert_serial"`
 	JSON          accessIdentityMTLSAuthJSON `json:"-"`
 }
 
@@ -235,10 +235,10 @@ type AccessIdentityMTLSAuth struct {
 // [AccessIdentityMTLSAuth]
 type accessIdentityMTLSAuthJSON struct {
 	AuthStatus    apijson.Field
-	CertIssuerDn  apijson.Field
-	CertIssuerSki apijson.Field
-	CertPresented apijson.Field
-	CertSerial    apijson.Field
+	CERTIssuerDn  apijson.Field
+	CERTIssuerSki apijson.Field
+	CERTPresented apijson.Field
+	CERTSerial    apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }

@@ -223,7 +223,7 @@ type UnionFloat float64
 func (UnionFloat) ImplementsDNSDNSRecordAttl()                                       {}
 func (UnionFloat) ImplementsDNSDNSRecordAaaattl()                                    {}
 func (UnionFloat) ImplementsDNSDNSRecordCaattl()                                     {}
-func (UnionFloat) ImplementsDNSDNSRecordCertTTL()                                    {}
+func (UnionFloat) ImplementsDNSDNSRecordCertttl()                                    {}
 func (UnionFloat) ImplementsDNSDNSRecordCnamettl()                                   {}
 func (UnionFloat) ImplementsDNSDNSRecordDnskeyttl()                                  {}
 func (UnionFloat) ImplementsDNSDNSRecordDsttl()                                      {}
@@ -233,7 +233,7 @@ func (UnionFloat) ImplementsDNSDNSRecordMxttl()                                 
 func (UnionFloat) ImplementsDNSDNSRecordNaptrttl()                                   {}
 func (UnionFloat) ImplementsDNSDNSRecordNsttl()                                      {}
 func (UnionFloat) ImplementsDNSDNSRecordPtrttl()                                     {}
-func (UnionFloat) ImplementsDNSDNSRecordSmimeaTTL()                                  {}
+func (UnionFloat) ImplementsDNSDNSRecordSmimeattl()                                  {}
 func (UnionFloat) ImplementsDNSDNSRecordSrvttl()                                     {}
 func (UnionFloat) ImplementsDNSDNSRecordSshfpttl()                                   {}
 func (UnionFloat) ImplementsDNSDNSRecordSvcbttl()                                    {}
