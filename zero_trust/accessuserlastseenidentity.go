@@ -53,7 +53,7 @@ type AccessIdentity struct {
 	Email              string                                 `json:"email"`
 	Geo                AccessIdentityGeo                      `json:"geo"`
 	Iat                float64                                `json:"iat"`
-	Idp                AccessIdentityIdp                      `json:"idp"`
+	IDP                AccessIdentityIDP                      `json:"idp"`
 	IP                 string                                 `json:"ip"`
 	IsGateway          bool                                   `json:"is_gateway"`
 	IsWARP             bool                                   `json:"is_warp"`
@@ -76,7 +76,7 @@ type accessIdentityJSON struct {
 	Email              apijson.Field
 	Geo                apijson.Field
 	Iat                apijson.Field
-	Idp                apijson.Field
+	IDP                apijson.Field
 	IP                 apijson.Field
 	IsGateway          apijson.Field
 	IsWARP             apijson.Field
@@ -199,26 +199,26 @@ func (r accessIdentityGeoJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessIdentityIdp struct {
+type AccessIdentityIDP struct {
 	ID   string                `json:"id"`
 	Type string                `json:"type"`
-	JSON accessIdentityIdpJSON `json:"-"`
+	JSON accessIdentityIDPJSON `json:"-"`
 }
 
-// accessIdentityIdpJSON contains the JSON metadata for the struct
-// [AccessIdentityIdp]
-type accessIdentityIdpJSON struct {
+// accessIdentityIDPJSON contains the JSON metadata for the struct
+// [AccessIdentityIDP]
+type accessIdentityIDPJSON struct {
 	ID          apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessIdentityIdp) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessIdentityIDP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessIdentityIdpJSON) RawJSON() string {
+func (r accessIdentityIDPJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -1964,7 +1964,7 @@ type AccessIdentityProvidersAccessSamlConfig struct {
 	// the Access callback.
 	HeaderAttributes []AccessIdentityProvidersAccessSamlConfigHeaderAttribute `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCERTs []string `json:"idp_public_certs"`
+	IDPPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
 	// Sign the SAML authentication request with Access credentials. To verify the
@@ -1981,7 +1981,7 @@ type accessIdentityProvidersAccessSamlConfigJSON struct {
 	Attributes         apijson.Field
 	EmailAttributeName apijson.Field
 	HeaderAttributes   apijson.Field
-	IdpPublicCERTs     apijson.Field
+	IDPPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
@@ -4174,7 +4174,7 @@ type IdentityProviderListResponseAccessSamlConfig struct {
 	// the Access callback.
 	HeaderAttributes []IdentityProviderListResponseAccessSamlConfigHeaderAttribute `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCERTs []string `json:"idp_public_certs"`
+	IDPPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
 	// Sign the SAML authentication request with Access credentials. To verify the
@@ -4191,7 +4191,7 @@ type identityProviderListResponseAccessSamlConfigJSON struct {
 	Attributes         apijson.Field
 	EmailAttributeName apijson.Field
 	HeaderAttributes   apijson.Field
-	IdpPublicCERTs     apijson.Field
+	IDPPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
@@ -4523,7 +4523,7 @@ type IdentityProviderNewParamsConfig struct {
 	// the Access callback.
 	HeaderAttributes param.Field[[]IdentityProviderNewParamsConfigHeaderAttribute] `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
+	IDPPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL param.Field[string] `json:"issuer_url"`
 	// Your okta account url
@@ -4789,7 +4789,7 @@ type IdentityProviderUpdateParamsConfig struct {
 	// the Access callback.
 	HeaderAttributes param.Field[[]IdentityProviderUpdateParamsConfigHeaderAttribute] `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
+	IDPPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL param.Field[string] `json:"issuer_url"`
 	// Your okta account url
