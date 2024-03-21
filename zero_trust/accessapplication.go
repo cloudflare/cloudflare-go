@@ -238,7 +238,7 @@ type AccessAppsSelfHostedApplication struct {
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps []string `json:"allowed_idps"`
+	AllowedIDPs []string `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
@@ -299,7 +299,7 @@ type accessAppsSelfHostedApplicationJSON struct {
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdps              apijson.Field
+	AllowedIDPs              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
@@ -406,7 +406,7 @@ type AccessAppsSaaSApplication struct {
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps []string `json:"allowed_idps"`
+	AllowedIDPs []string `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
@@ -435,7 +435,7 @@ type AccessAppsSaaSApplication struct {
 // [AccessAppsSaaSApplication]
 type accessAppsSaaSApplicationJSON struct {
 	ID                     apijson.Field
-	AllowedIdps            apijson.Field
+	AllowedIDPs            apijson.Field
 	AppLauncherVisible     apijson.Field
 	Aud                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
@@ -496,7 +496,7 @@ type AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
-	IdpEntityID string `json:"idp_entity_id"`
+	IDPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
 	NameIDFormat AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
@@ -522,7 +522,7 @@ type accessAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON struct {
 	CreatedAt              apijson.Field
 	CustomAttributes       apijson.Field
 	DefaultRelayState      apijson.Field
-	IdpEntityID            apijson.Field
+	IDPEntityID            apijson.Field
 	NameIDFormat           apijson.Field
 	NameIDTransformJsonata apijson.Field
 	PublicKey              apijson.Field
@@ -764,7 +764,7 @@ type AccessAppsBrowserSSHApplication struct {
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps []string `json:"allowed_idps"`
+	AllowedIDPs []string `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
@@ -825,7 +825,7 @@ type accessAppsBrowserSSHApplicationJSON struct {
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdps              apijson.Field
+	AllowedIDPs              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
@@ -942,7 +942,7 @@ type AccessAppsBrowserVncApplication struct {
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps []string `json:"allowed_idps"`
+	AllowedIDPs []string `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
@@ -1003,7 +1003,7 @@ type accessAppsBrowserVncApplicationJSON struct {
 	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowAuthenticateViaWARP apijson.Field
-	AllowedIdps              apijson.Field
+	AllowedIDPs              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
@@ -1112,7 +1112,7 @@ type AccessAppsAppLauncherApplication struct {
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps []string `json:"allowed_idps"`
+	AllowedIDPs []string `json:"allowed_idps"`
 	// Audience tag.
 	Aud string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -1137,7 +1137,7 @@ type AccessAppsAppLauncherApplication struct {
 type accessAppsAppLauncherApplicationJSON struct {
 	Type                   apijson.Field
 	ID                     apijson.Field
-	AllowedIdps            apijson.Field
+	AllowedIDPs            apijson.Field
 	Aud                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
 	CreatedAt              apijson.Field
@@ -1189,7 +1189,7 @@ type AccessAppsDeviceEnrollmentPermissionsApplication struct {
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps []string `json:"allowed_idps"`
+	AllowedIDPs []string `json:"allowed_idps"`
 	// Audience tag.
 	Aud string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -1214,7 +1214,7 @@ type AccessAppsDeviceEnrollmentPermissionsApplication struct {
 type accessAppsDeviceEnrollmentPermissionsApplicationJSON struct {
 	Type                   apijson.Field
 	ID                     apijson.Field
-	AllowedIdps            apijson.Field
+	AllowedIDPs            apijson.Field
 	Aud                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
 	CreatedAt              apijson.Field
@@ -1266,7 +1266,7 @@ type AccessAppsBrowserIsolationPermissionsApplication struct {
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps []string `json:"allowed_idps"`
+	AllowedIDPs []string `json:"allowed_idps"`
 	// Audience tag.
 	Aud string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -1291,7 +1291,7 @@ type AccessAppsBrowserIsolationPermissionsApplication struct {
 type accessAppsBrowserIsolationPermissionsApplicationJSON struct {
 	Type                   apijson.Field
 	ID                     apijson.Field
-	AllowedIdps            apijson.Field
+	AllowedIDPs            apijson.Field
 	Aud                    apijson.Field
 	AutoRedirectToIdentity apijson.Field
 	CreatedAt              apijson.Field
@@ -1421,7 +1421,7 @@ type AccessApplicationNewParams struct {
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps        param.Field[[]string]    `json:"allowed_idps"`
+	AllowedIDPs        param.Field[[]string]    `json:"allowed_idps"`
 	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
@@ -1542,7 +1542,7 @@ type AccessApplicationNewParamsSaasAppAccessSamlSaasApp struct {
 	// initiated logins.
 	DefaultRelayState param.Field[string] `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
-	IdpEntityID param.Field[string] `json:"idp_entity_id"`
+	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
 	NameIDFormat param.Field[AccessApplicationNewParamsSaasAppAccessSamlSaasAppNameIDFormat] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
@@ -1839,7 +1839,7 @@ type AccessApplicationUpdateParams struct {
 	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps        param.Field[[]string]    `json:"allowed_idps"`
+	AllowedIDPs        param.Field[[]string]    `json:"allowed_idps"`
 	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
@@ -1967,7 +1967,7 @@ type AccessApplicationUpdateParamsSaasAppAccessSamlSaasApp struct {
 	// initiated logins.
 	DefaultRelayState param.Field[string] `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
-	IdpEntityID param.Field[string] `json:"idp_entity_id"`
+	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
 	NameIDFormat param.Field[AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppNameIDFormat] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
