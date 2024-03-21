@@ -34,7 +34,7 @@ func NewSippyService(opts ...option.RequestOption) (r *SippyService) {
 func (r *SippyService) Update(ctx context.Context, bucketName string, params SippyUpdateParams, opts ...option.RequestOption) (res *R2Sippy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SippyUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.AccountID, bucketName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.getAccountID(), bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -217,26 +217,45 @@ func (r SippyDeleteResponseEnabled) IsKnown() bool {
 	return false
 }
 
-type SippyUpdateParams struct {
-	// Account ID
-	AccountID   param.Field[string]                       `path:"account_id,required"`
-	Destination param.Field[SippyUpdateParamsDestination] `json:"destination"`
-	Source      param.Field[SippyUpdateParamsSource]      `json:"source"`
+// This interface is a union satisfied by one of the following:
+// [SippyUpdateParamsR2EnableSippyAws], [SippyUpdateParamsR2EnableSippyGcs].
+type SippyUpdateParams interface {
+	ImplementsSippyUpdateParams()
+
+	getAccountID() param.Field[string]
 }
 
-func (r SippyUpdateParams) MarshalJSON() (data []byte, err error) {
+type SippyUpdateParamsR2EnableSippyAws struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+	// R2 bucket to copy objects to
+	Destination param.Field[SippyUpdateParamsR2EnableSippyAwsDestination] `json:"destination"`
+	// AWS S3 bucket to copy objects from
+	Source param.Field[SippyUpdateParamsR2EnableSippyAwsSource] `json:"source"`
+}
+
+func (r SippyUpdateParamsR2EnableSippyAws) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SippyUpdateParamsDestination struct {
+func (r SippyUpdateParamsR2EnableSippyAws) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (SippyUpdateParamsR2EnableSippyAws) ImplementsSippyUpdateParams() {
+
+}
+
+// R2 bucket to copy objects to
+type SippyUpdateParamsR2EnableSippyAwsDestination struct {
 	// ID of a Cloudflare API token. This is the value labelled "Access Key ID" when
 	// creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
 	// this token to the bucket you're enabling Sippy for.
-	AccessKeyID param.Field[string]                               `json:"accessKeyId"`
-	Provider    param.Field[SippyUpdateParamsDestinationProvider] `json:"provider"`
+	AccessKeyID param.Field[string]                                               `json:"accessKeyId"`
+	Provider    param.Field[SippyUpdateParamsR2EnableSippyAwsDestinationProvider] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
 	// when creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
@@ -246,54 +265,137 @@ type SippyUpdateParamsDestination struct {
 	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
 }
 
-func (r SippyUpdateParamsDestination) MarshalJSON() (data []byte, err error) {
+func (r SippyUpdateParamsR2EnableSippyAwsDestination) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SippyUpdateParamsDestinationProvider string
+type SippyUpdateParamsR2EnableSippyAwsDestinationProvider string
 
 const (
-	SippyUpdateParamsDestinationProviderR2 SippyUpdateParamsDestinationProvider = "r2"
+	SippyUpdateParamsR2EnableSippyAwsDestinationProviderR2 SippyUpdateParamsR2EnableSippyAwsDestinationProvider = "r2"
 )
 
-func (r SippyUpdateParamsDestinationProvider) IsKnown() bool {
+func (r SippyUpdateParamsR2EnableSippyAwsDestinationProvider) IsKnown() bool {
 	switch r {
-	case SippyUpdateParamsDestinationProviderR2:
+	case SippyUpdateParamsR2EnableSippyAwsDestinationProviderR2:
 		return true
 	}
 	return false
 }
 
-type SippyUpdateParamsSource struct {
+// AWS S3 bucket to copy objects from
+type SippyUpdateParamsR2EnableSippyAwsSource struct {
 	// Access Key ID of an IAM credential (ideally scoped to a single S3 bucket)
 	AccessKeyID param.Field[string] `json:"accessKeyId"`
-	// Name of the GCS bucket
-	Bucket param.Field[string] `json:"bucket"`
-	// Client email of an IAM credential (ideally scoped to a single GCS bucket)
-	ClientEmail param.Field[string] `json:"clientEmail"`
-	// Private Key of an IAM credential (ideally scoped to a single GCS bucket)
-	PrivateKey param.Field[string]                          `json:"privateKey"`
-	Provider   param.Field[SippyUpdateParamsSourceProvider] `json:"provider"`
+	// Name of the AWS S3 bucket
+	Bucket   param.Field[string]                                          `json:"bucket"`
+	Provider param.Field[SippyUpdateParamsR2EnableSippyAwsSourceProvider] `json:"provider"`
 	// Name of the AWS availability zone
 	Region param.Field[string] `json:"region"`
 	// Secret Access Key of an IAM credential (ideally scoped to a single S3 bucket)
 	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
 }
 
-func (r SippyUpdateParamsSource) MarshalJSON() (data []byte, err error) {
+func (r SippyUpdateParamsR2EnableSippyAwsSource) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SippyUpdateParamsSourceProvider string
+type SippyUpdateParamsR2EnableSippyAwsSourceProvider string
 
 const (
-	SippyUpdateParamsSourceProviderGcs SippyUpdateParamsSourceProvider = "gcs"
-	SippyUpdateParamsSourceProviderAws SippyUpdateParamsSourceProvider = "aws"
+	SippyUpdateParamsR2EnableSippyAwsSourceProviderAws SippyUpdateParamsR2EnableSippyAwsSourceProvider = "aws"
 )
 
-func (r SippyUpdateParamsSourceProvider) IsKnown() bool {
+func (r SippyUpdateParamsR2EnableSippyAwsSourceProvider) IsKnown() bool {
 	switch r {
-	case SippyUpdateParamsSourceProviderGcs, SippyUpdateParamsSourceProviderAws:
+	case SippyUpdateParamsR2EnableSippyAwsSourceProviderAws:
+		return true
+	}
+	return false
+}
+
+type SippyUpdateParamsR2EnableSippyGcs struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+	// R2 bucket to copy objects to
+	Destination param.Field[SippyUpdateParamsR2EnableSippyGcsDestination] `json:"destination"`
+	// GCS bucket to copy objects from
+	Source param.Field[SippyUpdateParamsR2EnableSippyGcsSource] `json:"source"`
+}
+
+func (r SippyUpdateParamsR2EnableSippyGcs) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SippyUpdateParamsR2EnableSippyGcs) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (SippyUpdateParamsR2EnableSippyGcs) ImplementsSippyUpdateParams() {
+
+}
+
+// R2 bucket to copy objects to
+type SippyUpdateParamsR2EnableSippyGcsDestination struct {
+	// ID of a Cloudflare API token. This is the value labelled "Access Key ID" when
+	// creating an API token from the
+	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
+	//
+	// Sippy will use this token when writing objects to R2, so it is best to scope
+	// this token to the bucket you're enabling Sippy for.
+	AccessKeyID param.Field[string]                                               `json:"accessKeyId"`
+	Provider    param.Field[SippyUpdateParamsR2EnableSippyGcsDestinationProvider] `json:"provider"`
+	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
+	// when creating an API token from the
+	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
+	//
+	// Sippy will use this token when writing objects to R2, so it is best to scope
+	// this token to the bucket you're enabling Sippy for.
+	SecretAccessKey param.Field[string] `json:"secretAccessKey"`
+}
+
+func (r SippyUpdateParamsR2EnableSippyGcsDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SippyUpdateParamsR2EnableSippyGcsDestinationProvider string
+
+const (
+	SippyUpdateParamsR2EnableSippyGcsDestinationProviderR2 SippyUpdateParamsR2EnableSippyGcsDestinationProvider = "r2"
+)
+
+func (r SippyUpdateParamsR2EnableSippyGcsDestinationProvider) IsKnown() bool {
+	switch r {
+	case SippyUpdateParamsR2EnableSippyGcsDestinationProviderR2:
+		return true
+	}
+	return false
+}
+
+// GCS bucket to copy objects from
+type SippyUpdateParamsR2EnableSippyGcsSource struct {
+	// Name of the GCS bucket
+	Bucket param.Field[string] `json:"bucket"`
+	// Client email of an IAM credential (ideally scoped to a single GCS bucket)
+	ClientEmail param.Field[string] `json:"clientEmail"`
+	// Private Key of an IAM credential (ideally scoped to a single GCS bucket)
+	PrivateKey param.Field[string]                                          `json:"privateKey"`
+	Provider   param.Field[SippyUpdateParamsR2EnableSippyGcsSourceProvider] `json:"provider"`
+}
+
+func (r SippyUpdateParamsR2EnableSippyGcsSource) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SippyUpdateParamsR2EnableSippyGcsSourceProvider string
+
+const (
+	SippyUpdateParamsR2EnableSippyGcsSourceProviderGcs SippyUpdateParamsR2EnableSippyGcsSourceProvider = "gcs"
+)
+
+func (r SippyUpdateParamsR2EnableSippyGcsSourceProvider) IsKnown() bool {
+	switch r {
+	case SippyUpdateParamsR2EnableSippyGcsSourceProviderGcs:
 		return true
 	}
 	return false

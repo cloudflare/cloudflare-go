@@ -10,7 +10,6 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/cache"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -29,13 +28,9 @@ func TestCachePurgeWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Cache.Purge(context.TODO(), cache.CachePurgeParams{
-		ZoneID:          cloudflare.F("string"),
-		Files:           cloudflare.F([]cache.CachePurgeParamsFile{shared.UnionString("http://www.example.com/css/styles.css"), shared.UnionString("http://www.example.com/css/styles.css"), shared.UnionString("http://www.example.com/css/styles.css")}),
-		Hosts:           cloudflare.F([]string{"www.example.com", "images.example.com"}),
-		Prefixes:        cloudflare.F([]string{"www.example.com/foo", "images.example.com/bar/baz"}),
-		PurgeEverything: cloudflare.F(true),
-		Tags:            cloudflare.F([]string{"some-tag", "another-tag"}),
+	_, err := client.Cache.Purge(context.TODO(), cache.CachePurgeParamsCachePurgeTags{
+		ZoneID: cloudflare.F("string"),
+		Tags:   cloudflare.F([]string{"some-tag", "another-tag"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
