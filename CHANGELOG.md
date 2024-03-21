@@ -1,4 +1,6 @@
-## 0.91.0 (Unreleased)
+## 0.92.0 (Unreleased)
+
+## 0.91.0 (March 22nd, 2024)
 
 ENHANCEMENTS:
 
