@@ -102,7 +102,6 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 				}),
 				Services: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewServices{
 					ServiceBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewServicesServiceBinding{
-						Entrypoint:  cloudflare.F("MyHandler"),
 						Environment: cloudflare.F("production"),
 						Service:     cloudflare.F("example-worker"),
 					}),
@@ -175,7 +174,6 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 				}),
 				Services: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionServices{
 					ServiceBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionServicesServiceBinding{
-						Entrypoint:  cloudflare.F("MyHandler"),
 						Environment: cloudflare.F("production"),
 						Service:     cloudflare.F("example-worker"),
 					}),

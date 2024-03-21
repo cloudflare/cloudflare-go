@@ -1033,8 +1033,6 @@ func (r pagesProjectsDeploymentConfigsPreviewServicesJSON) RawJSON() string {
 
 // Service binding.
 type PagesProjectsDeploymentConfigsPreviewServicesServiceBinding struct {
-	// The entrypoint to bind to.
-	Entrypoint string `json:"entrypoint,nullable"`
 	// The Service environment.
 	Environment string `json:"environment"`
 	// The Service name.
@@ -1046,7 +1044,6 @@ type PagesProjectsDeploymentConfigsPreviewServicesServiceBinding struct {
 // JSON metadata for the struct
 // [PagesProjectsDeploymentConfigsPreviewServicesServiceBinding]
 type pagesProjectsDeploymentConfigsPreviewServicesServiceBindingJSON struct {
-	Entrypoint  apijson.Field
 	Environment apijson.Field
 	Service     apijson.Field
 	raw         string
@@ -1736,8 +1733,6 @@ func (r pagesProjectsDeploymentConfigsProductionServicesJSON) RawJSON() string {
 
 // Service binding.
 type PagesProjectsDeploymentConfigsProductionServicesServiceBinding struct {
-	// The entrypoint to bind to.
-	Entrypoint string `json:"entrypoint,nullable"`
 	// The Service environment.
 	Environment string `json:"environment"`
 	// The Service name.
@@ -1749,7 +1744,6 @@ type PagesProjectsDeploymentConfigsProductionServicesServiceBinding struct {
 // JSON metadata for the struct
 // [PagesProjectsDeploymentConfigsProductionServicesServiceBinding]
 type pagesProjectsDeploymentConfigsProductionServicesServiceBindingJSON struct {
-	Entrypoint  apijson.Field
 	Environment apijson.Field
 	Service     apijson.Field
 	raw         string
@@ -2203,8 +2197,6 @@ func (r ProjectNewParamsDeploymentConfigsPreviewServices) MarshalJSON() (data []
 
 // Service binding.
 type ProjectNewParamsDeploymentConfigsPreviewServicesServiceBinding struct {
-	// The entrypoint to bind to.
-	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The Service environment.
 	Environment param.Field[string] `json:"environment"`
 	// The Service name.
@@ -2521,8 +2513,6 @@ func (r ProjectNewParamsDeploymentConfigsProductionServices) MarshalJSON() (data
 
 // Service binding.
 type ProjectNewParamsDeploymentConfigsProductionServicesServiceBinding struct {
-	// The entrypoint to bind to.
-	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The Service environment.
 	Environment param.Field[string] `json:"environment"`
 	// The Service name.
