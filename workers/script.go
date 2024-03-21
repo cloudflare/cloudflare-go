@@ -55,7 +55,7 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *WorkersScript, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.getAccountID(), scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -170,7 +170,15 @@ func (r workersScriptTailConsumerJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptUpdateParams struct {
+// This interface is a union satisfied by one of the following:
+// [ScriptUpdateParamsVariant0], [ScriptUpdateParamsVariant1].
+type ScriptUpdateParams interface {
+	ImplementsScriptUpdateParams()
+
+	getAccountID() param.Field[string]
+}
+
+type ScriptUpdateParamsVariant0 struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Rollback to provided deployment based on deployment ID. Request body will only
@@ -181,14 +189,11 @@ type ScriptUpdateParams struct {
 	// may be provided as separate named parts, but at least one module must be present
 	// and referenced in the metadata as `main_module` or `body_part` by part name.
 	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
-	// Rollback message to be associated with this deployment. Only parsed when query
-	// param `"rollback_to"` is present.
-	Message param.Field[string] `json:"message"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata"`
+	Metadata param.Field[ScriptUpdateParamsVariant0Metadata] `json:"metadata"`
 }
 
-func (r ScriptUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
+func (r ScriptUpdateParamsVariant0) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
 	err = apiform.MarshalRoot(r, writer)
@@ -203,16 +208,25 @@ func (r ScriptUpdateParams) MarshalMultipart() (data []byte, contentType string,
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// URLQuery serializes [ScriptUpdateParams]'s query parameters as `url.Values`.
-func (r ScriptUpdateParams) URLQuery() (v url.Values) {
+// URLQuery serializes [ScriptUpdateParamsVariant0]'s query parameters as
+// `url.Values`.
+func (r ScriptUpdateParamsVariant0) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
+func (r ScriptUpdateParamsVariant0) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (ScriptUpdateParamsVariant0) ImplementsScriptUpdateParams() {
+
+}
+
 // JSON encoded metadata about the uploaded parts and Worker configuration.
-type ScriptUpdateParamsMetadata struct {
+type ScriptUpdateParamsVariant0Metadata struct {
 	// List of bindings available to the worker.
 	Bindings param.Field[[]interface{}] `json:"bindings"`
 	// Name of the part in the multipart request that contains the script (e.g. the
@@ -234,33 +248,33 @@ type ScriptUpdateParamsMetadata struct {
 	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[ScriptUpdateParamsMetadataMigrations] `json:"migrations"`
-	Placement  param.Field[ScriptUpdateParamsMetadataPlacement]  `json:"placement"`
+	Migrations param.Field[ScriptUpdateParamsVariant0MetadataMigrations] `json:"migrations"`
+	Placement  param.Field[ScriptUpdateParamsVariant0MetadataPlacement]  `json:"placement"`
 	// List of strings to use as tags for this Worker
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]ScriptUpdateParamsMetadataTailConsumer] `json:"tail_consumers"`
+	TailConsumers param.Field[[]ScriptUpdateParamsVariant0MetadataTailConsumer] `json:"tail_consumers"`
 	// Usage model to apply to invocations.
-	UsageModel param.Field[ScriptUpdateParamsMetadataUsageModel] `json:"usage_model"`
+	UsageModel param.Field[ScriptUpdateParamsVariant0MetadataUsageModel] `json:"usage_model"`
 	// Key-value pairs to use as tags for this version of this Worker
 	VersionTags param.Field[interface{}] `json:"version_tags"`
 }
 
-func (r ScriptUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0Metadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by
-// [workers.ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations],
-// [workers.ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrations].
-type ScriptUpdateParamsMetadataMigrations interface {
-	implementsWorkersScriptUpdateParamsMetadataMigrations()
+// [workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations],
+// [workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations].
+type ScriptUpdateParamsVariant0MetadataMigrations interface {
+	implementsWorkersScriptUpdateParamsVariant0MetadataMigrations()
 }
 
 // A single set of migrations to apply.
-type ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations struct {
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations struct {
 	// A list of classes to delete Durable Object namespaces from.
 	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
@@ -271,120 +285,120 @@ type ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations struct {
 	// don't match, the upload is rejected.
 	OldTag param.Field[string] `json:"old_tag"`
 	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses param.Field[[]ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsRenamedClass] `json:"renamed_classes"`
+	RenamedClasses param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass] `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
 	// class to a class defined in this Worker.
-	TransferredClasses param.Field[[]ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsTransferredClass] `json:"transferred_classes"`
+	TransferredClasses param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass] `json:"transferred_classes"`
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations) implementsWorkersScriptUpdateParamsMetadataMigrations() {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) implementsWorkersScriptUpdateParamsVariant0MetadataMigrations() {
 }
 
-type ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsRenamedClass struct {
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass struct {
 	From param.Field[string] `json:"from"`
 	To   param.Field[string] `json:"to"`
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsRenamedClass) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsTransferredClass struct {
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass struct {
 	From       param.Field[string] `json:"from"`
 	FromScript param.Field[string] `json:"from_script"`
 	To         param.Field[string] `json:"to"`
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsTransferredClass) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrations struct {
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations struct {
 	// Tag to set as the latest migration tag.
 	NewTag param.Field[string] `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
 	OldTag param.Field[string] `json:"old_tag"`
 	// Migrations to apply in order.
-	Steps param.Field[[]ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrationsStep] `json:"steps"`
+	Steps param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep] `json:"steps"`
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrations) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrations) implementsWorkersScriptUpdateParamsMetadataMigrations() {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) implementsWorkersScriptUpdateParamsVariant0MetadataMigrations() {
 }
 
-type ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrationsStep struct {
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep struct {
 	// A list of classes to delete Durable Object namespaces from.
 	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
 	NewClasses param.Field[[]string] `json:"new_classes"`
 	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses param.Field[[]ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass] `json:"renamed_classes"`
+	RenamedClasses param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass] `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
 	// class to a class defined in this Worker.
-	TransferredClasses param.Field[[]ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass] `json:"transferred_classes"`
+	TransferredClasses param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass] `json:"transferred_classes"`
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrationsStep) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
 	From param.Field[string] `json:"from"`
 	To   param.Field[string] `json:"to"`
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
 	From       param.Field[string] `json:"from"`
 	FromScript param.Field[string] `json:"from_script"`
 	To         param.Field[string] `json:"to"`
 }
 
-func (r ScriptUpdateParamsMetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptUpdateParamsMetadataPlacement struct {
+type ScriptUpdateParamsVariant0MetadataPlacement struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	// Only `"smart"` is currently supported
-	Mode param.Field[ScriptUpdateParamsMetadataPlacementMode] `json:"mode"`
+	Mode param.Field[ScriptUpdateParamsVariant0MetadataPlacementMode] `json:"mode"`
 }
 
-func (r ScriptUpdateParamsMetadataPlacement) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0MetadataPlacement) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Enables
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 // Only `"smart"` is currently supported
-type ScriptUpdateParamsMetadataPlacementMode string
+type ScriptUpdateParamsVariant0MetadataPlacementMode string
 
 const (
-	ScriptUpdateParamsMetadataPlacementModeSmart ScriptUpdateParamsMetadataPlacementMode = "smart"
+	ScriptUpdateParamsVariant0MetadataPlacementModeSmart ScriptUpdateParamsVariant0MetadataPlacementMode = "smart"
 )
 
-func (r ScriptUpdateParamsMetadataPlacementMode) IsKnown() bool {
+func (r ScriptUpdateParamsVariant0MetadataPlacementMode) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataPlacementModeSmart:
+	case ScriptUpdateParamsVariant0MetadataPlacementModeSmart:
 		return true
 	}
 	return false
 }
 
 // A reference to a script that will consume logs from the attached Worker.
-type ScriptUpdateParamsMetadataTailConsumer struct {
+type ScriptUpdateParamsVariant0MetadataTailConsumer struct {
 	// Name of Worker that is to be the consumer.
 	Service param.Field[string] `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
@@ -393,24 +407,57 @@ type ScriptUpdateParamsMetadataTailConsumer struct {
 	Namespace param.Field[string] `json:"namespace"`
 }
 
-func (r ScriptUpdateParamsMetadataTailConsumer) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsVariant0MetadataTailConsumer) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Usage model to apply to invocations.
-type ScriptUpdateParamsMetadataUsageModel string
+type ScriptUpdateParamsVariant0MetadataUsageModel string
 
 const (
-	ScriptUpdateParamsMetadataUsageModelBundled ScriptUpdateParamsMetadataUsageModel = "bundled"
-	ScriptUpdateParamsMetadataUsageModelUnbound ScriptUpdateParamsMetadataUsageModel = "unbound"
+	ScriptUpdateParamsVariant0MetadataUsageModelBundled ScriptUpdateParamsVariant0MetadataUsageModel = "bundled"
+	ScriptUpdateParamsVariant0MetadataUsageModelUnbound ScriptUpdateParamsVariant0MetadataUsageModel = "unbound"
 )
 
-func (r ScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
+func (r ScriptUpdateParamsVariant0MetadataUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataUsageModelBundled, ScriptUpdateParamsMetadataUsageModelUnbound:
+	case ScriptUpdateParamsVariant0MetadataUsageModelBundled, ScriptUpdateParamsVariant0MetadataUsageModelUnbound:
 		return true
 	}
 	return false
+}
+
+type ScriptUpdateParamsVariant1 struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Rollback to provided deployment based on deployment ID. Request body will only
+	// parse a "message" part. You can learn more about deployments
+	// [here](https://developers.cloudflare.com/workers/platform/deployments/).
+	RollbackTo param.Field[string] `query:"rollback_to"`
+	// Rollback message to be associated with this deployment. Only parsed when query
+	// param `"rollback_to"` is present.
+	Message param.Field[string] `json:"message"`
+}
+
+func (r ScriptUpdateParamsVariant1) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [ScriptUpdateParamsVariant1]'s query parameters as
+// `url.Values`.
+func (r ScriptUpdateParamsVariant1) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+func (r ScriptUpdateParamsVariant1) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (ScriptUpdateParamsVariant1) ImplementsScriptUpdateParams() {
+
 }
 
 type ScriptUpdateResponseEnvelope struct {

@@ -50,7 +50,7 @@ func NewV1Service(opts ...option.RequestOption) (r *V1Service) {
 func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.RequestOption) (res *ImagesImage, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1NewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/images/v1", params.getAccountID())
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -315,16 +315,50 @@ func init() {
 	)
 }
 
-type V1NewParams struct {
-	// Account identifier tag.
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Metadata  param.Field[interface{}] `json:"metadata"`
-	// Indicates whether the image requires a signature token for the access.
-	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
+// This interface is a union satisfied by one of the following:
+// [V1NewParamsImagesImageUploadViaFile], [V1NewParamsImagesImageUploadViaURL].
+type V1NewParams interface {
+	ImplementsV1NewParams()
+
+	getAccountID() param.Field[string]
 }
 
-func (r V1NewParams) MarshalJSON() (data []byte, err error) {
+type V1NewParamsImagesImageUploadViaFile struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// An image binary data.
+	File param.Field[interface{}] `json:"file,required"`
+}
+
+func (r V1NewParamsImagesImageUploadViaFile) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+func (r V1NewParamsImagesImageUploadViaFile) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (V1NewParamsImagesImageUploadViaFile) ImplementsV1NewParams() {
+
+}
+
+type V1NewParamsImagesImageUploadViaURL struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// A URL to fetch an image from origin.
+	URL param.Field[string] `json:"url,required"`
+}
+
+func (r V1NewParamsImagesImageUploadViaURL) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r V1NewParamsImagesImageUploadViaURL) getAccountID() param.Field[string] {
+	return r.AccountID
+}
+
+func (V1NewParamsImagesImageUploadViaURL) ImplementsV1NewParams() {
+
 }
 
 type V1NewResponseEnvelope struct {
