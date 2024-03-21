@@ -98,8 +98,10 @@ type DispatchNamespaceNewResponse struct {
 	// API Resource UUID tag.
 	NamespaceID string `json:"namespace_id"`
 	// Name of the Workers for Platforms dispatch namespace.
-	NamespaceName string                           `json:"namespace_name"`
-	JSON          dispatchNamespaceNewResponseJSON `json:"-"`
+	NamespaceName string `json:"namespace_name"`
+	// The current number of scripts in this Dispatch Namespace
+	ScriptCount int64                            `json:"script_count"`
+	JSON        dispatchNamespaceNewResponseJSON `json:"-"`
 }
 
 // dispatchNamespaceNewResponseJSON contains the JSON metadata for the struct
@@ -111,6 +113,7 @@ type dispatchNamespaceNewResponseJSON struct {
 	ModifiedOn    apijson.Field
 	NamespaceID   apijson.Field
 	NamespaceName apijson.Field
+	ScriptCount   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -135,8 +138,10 @@ type DispatchNamespaceListResponse struct {
 	// API Resource UUID tag.
 	NamespaceID string `json:"namespace_id"`
 	// Name of the Workers for Platforms dispatch namespace.
-	NamespaceName string                            `json:"namespace_name"`
-	JSON          dispatchNamespaceListResponseJSON `json:"-"`
+	NamespaceName string `json:"namespace_name"`
+	// The current number of scripts in this Dispatch Namespace
+	ScriptCount int64                             `json:"script_count"`
+	JSON        dispatchNamespaceListResponseJSON `json:"-"`
 }
 
 // dispatchNamespaceListResponseJSON contains the JSON metadata for the struct
@@ -148,6 +153,7 @@ type dispatchNamespaceListResponseJSON struct {
 	ModifiedOn    apijson.Field
 	NamespaceID   apijson.Field
 	NamespaceName apijson.Field
+	ScriptCount   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -174,8 +180,10 @@ type DispatchNamespaceGetResponse struct {
 	// API Resource UUID tag.
 	NamespaceID string `json:"namespace_id"`
 	// Name of the Workers for Platforms dispatch namespace.
-	NamespaceName string                           `json:"namespace_name"`
-	JSON          dispatchNamespaceGetResponseJSON `json:"-"`
+	NamespaceName string `json:"namespace_name"`
+	// The current number of scripts in this Dispatch Namespace
+	ScriptCount int64                            `json:"script_count"`
+	JSON        dispatchNamespaceGetResponseJSON `json:"-"`
 }
 
 // dispatchNamespaceGetResponseJSON contains the JSON metadata for the struct
@@ -187,6 +195,7 @@ type dispatchNamespaceGetResponseJSON struct {
 	ModifiedOn    apijson.Field
 	NamespaceID   apijson.Field
 	NamespaceName apijson.Field
+	ScriptCount   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
