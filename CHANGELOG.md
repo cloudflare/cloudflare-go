@@ -1,5 +1,14 @@
 ## 0.91.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_application: add support for `saml_attribute_transform_jsonata` in saas apps ([#1562](https://github.com/cloudflare/cloudflare-go/issues/1562))
+
+DEPENDENCIES:
+
+* deps: bumps actions/checkout from 2 to 4 ([#1573](https://github.com/cloudflare/cloudflare-go/issues/1573))
+* deps: bumps google.golang.org/protobuf from 1.28.0 to 1.33.0 ([#1558](https://github.com/cloudflare/cloudflare-go/issues/1558))
+
 ## 0.90.0 (March 13th, 2024)
 
 ENHANCEMENTS:
