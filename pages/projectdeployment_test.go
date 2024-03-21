@@ -45,7 +45,7 @@ func TestProjectDeploymentNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestProjectDeploymentList(t *testing.T) {
+func TestProjectDeploymentListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -64,6 +64,7 @@ func TestProjectDeploymentList(t *testing.T) {
 		"this-is-my-project-01",
 		pages.ProjectDeploymentListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Env:       cloudflare.F(pages.ProjectDeploymentListParamsEnvPreview),
 		},
 	)
 	if err != nil {
