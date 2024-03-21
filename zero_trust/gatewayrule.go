@@ -265,7 +265,7 @@ type ZeroTrustGatewayRulesRuleSettings struct {
 	// resolver. Cannot be set when dns_resolvers are specified.
 	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCert ZeroTrustGatewayRulesRuleSettingsUntrustedCert `json:"untrusted_cert"`
+	UntrustedCERT ZeroTrustGatewayRulesRuleSettingsUntrustedCERT `json:"untrusted_cert"`
 	JSON          zeroTrustGatewayRulesRuleSettingsJSON          `json:"-"`
 }
 
@@ -291,7 +291,7 @@ type zeroTrustGatewayRulesRuleSettingsJSON struct {
 	OverrideIPs                     apijson.Field
 	PayloadLog                      apijson.Field
 	ResolveDNSThroughCloudflare     apijson.Field
-	UntrustedCert                   apijson.Field
+	UntrustedCERT                   apijson.Field
 	raw                             string
 	ExtraFields                     map[string]apijson.Field
 }
@@ -594,42 +594,42 @@ func (r zeroTrustGatewayRulesRuleSettingsPayloadLogJSON) RawJSON() string {
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type ZeroTrustGatewayRulesRuleSettingsUntrustedCert struct {
+type ZeroTrustGatewayRulesRuleSettingsUntrustedCERT struct {
 	// The action performed when an untrusted certificate is seen. The default action
 	// is an error with HTTP code 526.
-	Action ZeroTrustGatewayRulesRuleSettingsUntrustedCertAction `json:"action"`
-	JSON   zeroTrustGatewayRulesRuleSettingsUntrustedCertJSON   `json:"-"`
+	Action ZeroTrustGatewayRulesRuleSettingsUntrustedCERTAction `json:"action"`
+	JSON   zeroTrustGatewayRulesRuleSettingsUntrustedCERTJSON   `json:"-"`
 }
 
-// zeroTrustGatewayRulesRuleSettingsUntrustedCertJSON contains the JSON metadata
-// for the struct [ZeroTrustGatewayRulesRuleSettingsUntrustedCert]
-type zeroTrustGatewayRulesRuleSettingsUntrustedCertJSON struct {
+// zeroTrustGatewayRulesRuleSettingsUntrustedCERTJSON contains the JSON metadata
+// for the struct [ZeroTrustGatewayRulesRuleSettingsUntrustedCERT]
+type zeroTrustGatewayRulesRuleSettingsUntrustedCERTJSON struct {
 	Action      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayRulesRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayRulesRuleSettingsUntrustedCERT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustGatewayRulesRuleSettingsUntrustedCertJSON) RawJSON() string {
+func (r zeroTrustGatewayRulesRuleSettingsUntrustedCERTJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action performed when an untrusted certificate is seen. The default action
 // is an error with HTTP code 526.
-type ZeroTrustGatewayRulesRuleSettingsUntrustedCertAction string
+type ZeroTrustGatewayRulesRuleSettingsUntrustedCERTAction string
 
 const (
-	ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionPassThrough ZeroTrustGatewayRulesRuleSettingsUntrustedCertAction = "pass_through"
-	ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionBlock       ZeroTrustGatewayRulesRuleSettingsUntrustedCertAction = "block"
-	ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionError       ZeroTrustGatewayRulesRuleSettingsUntrustedCertAction = "error"
+	ZeroTrustGatewayRulesRuleSettingsUntrustedCERTActionPassThrough ZeroTrustGatewayRulesRuleSettingsUntrustedCERTAction = "pass_through"
+	ZeroTrustGatewayRulesRuleSettingsUntrustedCERTActionBlock       ZeroTrustGatewayRulesRuleSettingsUntrustedCERTAction = "block"
+	ZeroTrustGatewayRulesRuleSettingsUntrustedCERTActionError       ZeroTrustGatewayRulesRuleSettingsUntrustedCERTAction = "error"
 )
 
-func (r ZeroTrustGatewayRulesRuleSettingsUntrustedCertAction) IsKnown() bool {
+func (r ZeroTrustGatewayRulesRuleSettingsUntrustedCERTAction) IsKnown() bool {
 	switch r {
-	case ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionPassThrough, ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionBlock, ZeroTrustGatewayRulesRuleSettingsUntrustedCertActionError:
+	case ZeroTrustGatewayRulesRuleSettingsUntrustedCERTActionPassThrough, ZeroTrustGatewayRulesRuleSettingsUntrustedCERTActionBlock, ZeroTrustGatewayRulesRuleSettingsUntrustedCERTActionError:
 		return true
 	}
 	return false
@@ -850,7 +850,7 @@ type GatewayRuleNewParamsRuleSettings struct {
 	// resolver. Cannot be set when dns_resolvers are specified.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCert param.Field[GatewayRuleNewParamsRuleSettingsUntrustedCert] `json:"untrusted_cert"`
+	UntrustedCERT param.Field[GatewayRuleNewParamsRuleSettingsUntrustedCERT] `json:"untrusted_cert"`
 }
 
 func (r GatewayRuleNewParamsRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -1000,29 +1000,29 @@ func (r GatewayRuleNewParamsRuleSettingsPayloadLog) MarshalJSON() (data []byte, 
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type GatewayRuleNewParamsRuleSettingsUntrustedCert struct {
+type GatewayRuleNewParamsRuleSettingsUntrustedCERT struct {
 	// The action performed when an untrusted certificate is seen. The default action
 	// is an error with HTTP code 526.
-	Action param.Field[GatewayRuleNewParamsRuleSettingsUntrustedCertAction] `json:"action"`
+	Action param.Field[GatewayRuleNewParamsRuleSettingsUntrustedCERTAction] `json:"action"`
 }
 
-func (r GatewayRuleNewParamsRuleSettingsUntrustedCert) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsUntrustedCERT) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action performed when an untrusted certificate is seen. The default action
 // is an error with HTTP code 526.
-type GatewayRuleNewParamsRuleSettingsUntrustedCertAction string
+type GatewayRuleNewParamsRuleSettingsUntrustedCERTAction string
 
 const (
-	GatewayRuleNewParamsRuleSettingsUntrustedCertActionPassThrough GatewayRuleNewParamsRuleSettingsUntrustedCertAction = "pass_through"
-	GatewayRuleNewParamsRuleSettingsUntrustedCertActionBlock       GatewayRuleNewParamsRuleSettingsUntrustedCertAction = "block"
-	GatewayRuleNewParamsRuleSettingsUntrustedCertActionError       GatewayRuleNewParamsRuleSettingsUntrustedCertAction = "error"
+	GatewayRuleNewParamsRuleSettingsUntrustedCERTActionPassThrough GatewayRuleNewParamsRuleSettingsUntrustedCERTAction = "pass_through"
+	GatewayRuleNewParamsRuleSettingsUntrustedCERTActionBlock       GatewayRuleNewParamsRuleSettingsUntrustedCERTAction = "block"
+	GatewayRuleNewParamsRuleSettingsUntrustedCERTActionError       GatewayRuleNewParamsRuleSettingsUntrustedCERTAction = "error"
 )
 
-func (r GatewayRuleNewParamsRuleSettingsUntrustedCertAction) IsKnown() bool {
+func (r GatewayRuleNewParamsRuleSettingsUntrustedCERTAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleNewParamsRuleSettingsUntrustedCertActionPassThrough, GatewayRuleNewParamsRuleSettingsUntrustedCertActionBlock, GatewayRuleNewParamsRuleSettingsUntrustedCertActionError:
+	case GatewayRuleNewParamsRuleSettingsUntrustedCERTActionPassThrough, GatewayRuleNewParamsRuleSettingsUntrustedCERTActionBlock, GatewayRuleNewParamsRuleSettingsUntrustedCERTActionError:
 		return true
 	}
 	return false
@@ -1295,7 +1295,7 @@ type GatewayRuleUpdateParamsRuleSettings struct {
 	// resolver. Cannot be set when dns_resolvers are specified.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCert param.Field[GatewayRuleUpdateParamsRuleSettingsUntrustedCert] `json:"untrusted_cert"`
+	UntrustedCERT param.Field[GatewayRuleUpdateParamsRuleSettingsUntrustedCERT] `json:"untrusted_cert"`
 }
 
 func (r GatewayRuleUpdateParamsRuleSettings) MarshalJSON() (data []byte, err error) {
@@ -1445,29 +1445,29 @@ func (r GatewayRuleUpdateParamsRuleSettingsPayloadLog) MarshalJSON() (data []byt
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type GatewayRuleUpdateParamsRuleSettingsUntrustedCert struct {
+type GatewayRuleUpdateParamsRuleSettingsUntrustedCERT struct {
 	// The action performed when an untrusted certificate is seen. The default action
 	// is an error with HTTP code 526.
-	Action param.Field[GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction] `json:"action"`
+	Action param.Field[GatewayRuleUpdateParamsRuleSettingsUntrustedCERTAction] `json:"action"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsUntrustedCert) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleUpdateParamsRuleSettingsUntrustedCERT) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action performed when an untrusted certificate is seen. The default action
 // is an error with HTTP code 526.
-type GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction string
+type GatewayRuleUpdateParamsRuleSettingsUntrustedCERTAction string
 
 const (
-	GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionPassThrough GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction = "pass_through"
-	GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionBlock       GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction = "block"
-	GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionError       GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction = "error"
+	GatewayRuleUpdateParamsRuleSettingsUntrustedCERTActionPassThrough GatewayRuleUpdateParamsRuleSettingsUntrustedCERTAction = "pass_through"
+	GatewayRuleUpdateParamsRuleSettingsUntrustedCERTActionBlock       GatewayRuleUpdateParamsRuleSettingsUntrustedCERTAction = "block"
+	GatewayRuleUpdateParamsRuleSettingsUntrustedCERTActionError       GatewayRuleUpdateParamsRuleSettingsUntrustedCERTAction = "error"
 )
 
-func (r GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction) IsKnown() bool {
+func (r GatewayRuleUpdateParamsRuleSettingsUntrustedCERTAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionPassThrough, GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionBlock, GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionError:
+	case GatewayRuleUpdateParamsRuleSettingsUntrustedCERTActionPassThrough, GatewayRuleUpdateParamsRuleSettingsUntrustedCERTActionBlock, GatewayRuleUpdateParamsRuleSettingsUntrustedCERTActionError:
 		return true
 	}
 	return false
