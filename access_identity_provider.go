@@ -132,7 +132,7 @@ func (api *API) ListAccessIdentityProviders(ctx context.Context, rc *ResourceCon
 	}
 
 	var accessProviders []AccessIdentityProvider
-	var r AccessIdentityProvidersListResponse
+	var lastResultInfo *ResultInfo = nil
 
 	for {
 		uri := buildURI(baseURL, params)
@@ -140,11 +140,13 @@ func (api *API) ListAccessIdentityProviders(ctx context.Context, rc *ResourceCon
 		if err != nil {
 			return []AccessIdentityProvider{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
+		var r AccessIdentityProvidersListResponse
 
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []AccessIdentityProvider{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &r.ResultInfo
 
 		accessProviders = append(accessProviders, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
@@ -153,7 +155,7 @@ func (api *API) ListAccessIdentityProviders(ctx context.Context, rc *ResourceCon
 		}
 	}
 
-	return accessProviders, &r.ResultInfo, nil
+	return accessProviders, lastResultInfo, nil
 }
 
 // GetAccessIdentityProvider returns a single Access Identity

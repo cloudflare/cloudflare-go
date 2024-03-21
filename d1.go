@@ -90,25 +90,27 @@ func (api *API) ListD1Databases(ctx context.Context, rc *ResourceContainer, para
 		params.Page = 1
 	}
 	var databases []D1Database
-	var r ListD1Response
+	var lastResultInfo *ResultInfo = nil
 	for {
 		uri := buildURI(baseURL, params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
 			return []D1Database{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
+		var r ListD1Response
 
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []D1Database{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &r.ResultInfo
 		databases = append(databases, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
 			break
 		}
 	}
-	return databases, &r.ResultInfo, nil
+	return databases, lastResultInfo, nil
 }
 
 // CreateD1Database creates a new database for an account.

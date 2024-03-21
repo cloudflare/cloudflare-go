@@ -249,7 +249,7 @@ func (api *API) ListTunnels(ctx context.Context, rc *ResourceContainer, params T
 	}
 
 	var records []Tunnel
-	var listResponse TunnelsDetailResponse
+	var lastResultInfo *ResultInfo = nil
 
 	for {
 		uri := buildURI(fmt.Sprintf("/accounts/%s/cfd_tunnel", rc.Identifier), params)
@@ -258,10 +258,12 @@ func (api *API) ListTunnels(ctx context.Context, rc *ResourceContainer, params T
 			return []Tunnel{}, &ResultInfo{}, err
 		}
 
+		var listResponse TunnelsDetailResponse
 		err = json.Unmarshal(res, &listResponse)
 		if err != nil {
 			return []Tunnel{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &listResponse.ResultInfo
 
 		records = append(records, listResponse.Result...)
 		params.ResultInfo = listResponse.ResultInfo.Next()
@@ -270,7 +272,7 @@ func (api *API) ListTunnels(ctx context.Context, rc *ResourceContainer, params T
 		}
 	}
 
-	return records, &listResponse.ResultInfo, nil
+	return records, lastResultInfo, nil
 }
 
 // GetTunnel returns a single Argo tunnel.

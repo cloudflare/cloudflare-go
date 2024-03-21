@@ -110,7 +110,7 @@ func (api *API) ListTurnstileWidgets(ctx context.Context, rc *ResourceContainer,
 	}
 
 	var widgets []TurnstileWidget
-	var r ListTurnstileWidgetResponse
+	var lastResultInfo *ResultInfo = nil
 	for {
 		uri := buildURI(fmt.Sprintf("/accounts/%s/challenges/widgets", rc.Identifier), params)
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
@@ -118,10 +118,12 @@ func (api *API) ListTurnstileWidgets(ctx context.Context, rc *ResourceContainer,
 		if err != nil {
 			return []TurnstileWidget{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
+		var r ListTurnstileWidgetResponse
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []TurnstileWidget{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &r.ResultInfo
 
 		widgets = append(widgets, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
@@ -130,7 +132,7 @@ func (api *API) ListTurnstileWidgets(ctx context.Context, rc *ResourceContainer,
 		}
 	}
 
-	return widgets, &r.ResultInfo, nil
+	return widgets, lastResultInfo, nil
 }
 
 // GetTurnstileWidget shows a single challenge widget configuration.

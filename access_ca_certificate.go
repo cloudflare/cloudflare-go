@@ -60,7 +60,7 @@ func (api *API) ListAccessCACertificates(ctx context.Context, rc *ResourceContai
 	}
 
 	var accessCACertificates []AccessCACertificate
-	var r AccessCACertificateListResponse
+	var lastResultInfo *ResultInfo = nil
 
 	for {
 		uri := buildURI(baseURL, params)
@@ -68,11 +68,13 @@ func (api *API) ListAccessCACertificates(ctx context.Context, rc *ResourceContai
 		if err != nil {
 			return []AccessCACertificate{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
+		var r AccessCACertificateListResponse
 
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []AccessCACertificate{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &r.ResultInfo
 		accessCACertificates = append(accessCACertificates, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
@@ -80,7 +82,7 @@ func (api *API) ListAccessCACertificates(ctx context.Context, rc *ResourceContai
 		}
 	}
 
-	return accessCACertificates, &r.ResultInfo, nil
+	return accessCACertificates, lastResultInfo, nil
 }
 
 // GetAccessCACertificate returns a single CA certificate associated within
