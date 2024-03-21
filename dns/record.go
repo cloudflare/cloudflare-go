@@ -191,10 +191,10 @@ func (r *RecordService) Scan(ctx context.Context, body RecordScanParams, opts ..
 }
 
 // Union satisfied by [dns.DNSRecordA], [dns.DNSRecordAAAA], [dns.DNSRecordCAA],
-// [dns.DNSRecordCert], [dns.DNSRecordCNAME], [dns.DNSRecordDNSKEY],
+// [dns.DNSRecordCERT], [dns.DNSRecordCNAME], [dns.DNSRecordDNSKEY],
 // [dns.DNSRecordDS], [dns.DNSRecordHTTPS], [dns.DNSRecordLOC], [dns.DNSRecordMX],
 // [dns.DNSRecordNAPTR], [dns.DNSRecordNS], [dns.DNSRecordPTR],
-// [dns.DNSRecordSmimea], [dns.DNSRecordSRV], [dns.DNSRecordSSHFP],
+// [dns.DNSRecordSMIMEA], [dns.DNSRecordSRV], [dns.DNSRecordSSHFP],
 // [dns.DNSRecordSVCB], [dns.DNSRecordTLSA], [dns.DNSRecordTXT] or
 // [dns.DNSRecordURI].
 type DNSRecord interface {
@@ -222,7 +222,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DNSRecordCert{}),
+			Type:               reflect.TypeOf(DNSRecordCERT{}),
 			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
@@ -272,7 +272,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DNSRecordSmimea{}),
+			Type:               reflect.TypeOf(DNSRecordSMIMEA{}),
 			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
@@ -785,13 +785,13 @@ func (r DNSRecordCAATTLNumber) IsKnown() bool {
 	return false
 }
 
-type DNSRecordCert struct {
+type DNSRecordCERT struct {
 	// Components of a CERT record.
-	Data DNSRecordCertData `json:"data,required"`
+	Data DNSRecordCERTData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordCertType `json:"type,required"`
+	Type DNSRecordCERTType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -805,7 +805,7 @@ type DNSRecordCert struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordCertMeta `json:"meta"`
+	Meta DNSRecordCERTMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -815,16 +815,16 @@ type DNSRecordCert struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordCertTTL `json:"ttl"`
+	TTL DNSRecordCERTTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
 	ZoneName string            `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordCertJSON `json:"-"`
+	JSON     dnsRecordCERTJSON `json:"-"`
 }
 
-// dnsRecordCertJSON contains the JSON metadata for the struct [DNSRecordCert]
-type dnsRecordCertJSON struct {
+// dnsRecordCERTJSON contains the JSON metadata for the struct [DNSRecordCERT]
+type dnsRecordCERTJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -844,18 +844,18 @@ type dnsRecordCertJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordCert) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordCERT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsRecordCertJSON) RawJSON() string {
+func (r dnsRecordCERTJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DNSRecordCert) implementsDNSDNSRecord() {}
+func (r DNSRecordCERT) implementsDNSDNSRecord() {}
 
 // Components of a CERT record.
-type DNSRecordCertData struct {
+type DNSRecordCERTData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Certificate.
@@ -864,12 +864,12 @@ type DNSRecordCertData struct {
 	KeyTag float64 `json:"key_tag"`
 	// Type.
 	Type float64               `json:"type"`
-	JSON dnsRecordCertDataJSON `json:"-"`
+	JSON dnsRecordCERTDataJSON `json:"-"`
 }
 
-// dnsRecordCertDataJSON contains the JSON metadata for the struct
-// [DNSRecordCertData]
-type dnsRecordCertDataJSON struct {
+// dnsRecordCERTDataJSON contains the JSON metadata for the struct
+// [DNSRecordCERTData]
+type dnsRecordCERTDataJSON struct {
 	Algorithm   apijson.Field
 	Certificate apijson.Field
 	KeyTag      apijson.Field
@@ -878,53 +878,53 @@ type dnsRecordCertDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordCertData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordCERTData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsRecordCertDataJSON) RawJSON() string {
+func (r dnsRecordCERTDataJSON) RawJSON() string {
 	return r.raw
 }
 
 // Record type.
-type DNSRecordCertType string
+type DNSRecordCERTType string
 
 const (
-	DNSRecordCertTypeCert DNSRecordCertType = "CERT"
+	DNSRecordCERTTypeCERT DNSRecordCERTType = "CERT"
 )
 
-func (r DNSRecordCertType) IsKnown() bool {
+func (r DNSRecordCERTType) IsKnown() bool {
 	switch r {
-	case DNSRecordCertTypeCert:
+	case DNSRecordCERTTypeCERT:
 		return true
 	}
 	return false
 }
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordCertMeta struct {
+type DNSRecordCERTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
 	Source string                `json:"source"`
-	JSON   dnsRecordCertMetaJSON `json:"-"`
+	JSON   dnsRecordCERTMetaJSON `json:"-"`
 }
 
-// dnsRecordCertMetaJSON contains the JSON metadata for the struct
-// [DNSRecordCertMeta]
-type dnsRecordCertMetaJSON struct {
+// dnsRecordCERTMetaJSON contains the JSON metadata for the struct
+// [DNSRecordCERTMeta]
+type dnsRecordCERTMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordCertMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordCERTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsRecordCertMetaJSON) RawJSON() string {
+func (r dnsRecordCERTMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -932,14 +932,14 @@ func (r dnsRecordCertMetaJSON) RawJSON() string {
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or [dns.DNSRecordCertTTLNumber].
-type DNSRecordCertTTL interface {
-	ImplementsDNSDNSRecordCertTTL()
+// Union satisfied by [shared.UnionFloat] or [dns.DNSRecordCERTTTLNumber].
+type DNSRecordCERTTTL interface {
+	ImplementsDNSDNSRecordCertttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordCertTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordCERTTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -947,20 +947,20 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(DNSRecordCertTTLNumber(0)),
+			Type:       reflect.TypeOf(DNSRecordCERTTTLNumber(0)),
 		},
 	)
 }
 
-type DNSRecordCertTTLNumber float64
+type DNSRecordCERTTTLNumber float64
 
 const (
-	DNSRecordCertTTLNumber1 DNSRecordCertTTLNumber = 1
+	DNSRecordCERTTTLNumber1 DNSRecordCERTTTLNumber = 1
 )
 
-func (r DNSRecordCertTTLNumber) IsKnown() bool {
+func (r DNSRecordCERTTTLNumber) IsKnown() bool {
 	switch r {
-	case DNSRecordCertTTLNumber1:
+	case DNSRecordCERTTTLNumber1:
 		return true
 	}
 	return false
@@ -2518,13 +2518,13 @@ func (r DNSRecordPTRTTLNumber) IsKnown() bool {
 	return false
 }
 
-type DNSRecordSmimea struct {
+type DNSRecordSMIMEA struct {
 	// Components of a SMIMEA record.
-	Data DNSRecordSmimeaData `json:"data,required"`
+	Data DNSRecordSMIMEAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordSmimeaType `json:"type,required"`
+	Type DNSRecordSMIMEAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2538,7 +2538,7 @@ type DNSRecordSmimea struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordSmimeaMeta `json:"meta"`
+	Meta DNSRecordSMIMEAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2548,16 +2548,16 @@ type DNSRecordSmimea struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordSmimeaTTL `json:"ttl"`
+	TTL DNSRecordSMIMEATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
 	ZoneName string              `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordSmimeaJSON `json:"-"`
+	JSON     dnsRecordSMIMEAJSON `json:"-"`
 }
 
-// dnsRecordSmimeaJSON contains the JSON metadata for the struct [DNSRecordSmimea]
-type dnsRecordSmimeaJSON struct {
+// dnsRecordSMIMEAJSON contains the JSON metadata for the struct [DNSRecordSMIMEA]
+type dnsRecordSMIMEAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2577,18 +2577,18 @@ type dnsRecordSmimeaJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordSmimea) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordSMIMEA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsRecordSmimeaJSON) RawJSON() string {
+func (r dnsRecordSMIMEAJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DNSRecordSmimea) implementsDNSDNSRecord() {}
+func (r DNSRecordSMIMEA) implementsDNSDNSRecord() {}
 
 // Components of a SMIMEA record.
-type DNSRecordSmimeaData struct {
+type DNSRecordSMIMEAData struct {
 	// Certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -2597,12 +2597,12 @@ type DNSRecordSmimeaData struct {
 	Selector float64 `json:"selector"`
 	// Usage.
 	Usage float64                 `json:"usage"`
-	JSON  dnsRecordSmimeaDataJSON `json:"-"`
+	JSON  dnsRecordSMIMEADataJSON `json:"-"`
 }
 
-// dnsRecordSmimeaDataJSON contains the JSON metadata for the struct
-// [DNSRecordSmimeaData]
-type dnsRecordSmimeaDataJSON struct {
+// dnsRecordSMIMEADataJSON contains the JSON metadata for the struct
+// [DNSRecordSMIMEAData]
+type dnsRecordSMIMEADataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -2611,53 +2611,53 @@ type dnsRecordSmimeaDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordSmimeaData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordSMIMEAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsRecordSmimeaDataJSON) RawJSON() string {
+func (r dnsRecordSMIMEADataJSON) RawJSON() string {
 	return r.raw
 }
 
 // Record type.
-type DNSRecordSmimeaType string
+type DNSRecordSMIMEAType string
 
 const (
-	DNSRecordSmimeaTypeSmimea DNSRecordSmimeaType = "SMIMEA"
+	DNSRecordSMIMEATypeSMIMEA DNSRecordSMIMEAType = "SMIMEA"
 )
 
-func (r DNSRecordSmimeaType) IsKnown() bool {
+func (r DNSRecordSMIMEAType) IsKnown() bool {
 	switch r {
-	case DNSRecordSmimeaTypeSmimea:
+	case DNSRecordSMIMEATypeSMIMEA:
 		return true
 	}
 	return false
 }
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordSmimeaMeta struct {
+type DNSRecordSMIMEAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
 	Source string                  `json:"source"`
-	JSON   dnsRecordSmimeaMetaJSON `json:"-"`
+	JSON   dnsRecordSMIMEAMetaJSON `json:"-"`
 }
 
-// dnsRecordSmimeaMetaJSON contains the JSON metadata for the struct
-// [DNSRecordSmimeaMeta]
-type dnsRecordSmimeaMetaJSON struct {
+// dnsRecordSMIMEAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordSMIMEAMeta]
+type dnsRecordSMIMEAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordSMIMEAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsRecordSmimeaMetaJSON) RawJSON() string {
+func (r dnsRecordSMIMEAMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2665,14 +2665,14 @@ func (r dnsRecordSmimeaMetaJSON) RawJSON() string {
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or [dns.DNSRecordSmimeaTTLNumber].
-type DNSRecordSmimeaTTL interface {
-	ImplementsDNSDNSRecordSmimeaTTL()
+// Union satisfied by [shared.UnionFloat] or [dns.DNSRecordSMIMEATTLNumber].
+type DNSRecordSMIMEATTL interface {
+	ImplementsDNSDNSRecordSmimeattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordSmimeaTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordSMIMEATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -2680,20 +2680,20 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(DNSRecordSmimeaTTLNumber(0)),
+			Type:       reflect.TypeOf(DNSRecordSMIMEATTLNumber(0)),
 		},
 	)
 }
 
-type DNSRecordSmimeaTTLNumber float64
+type DNSRecordSMIMEATTLNumber float64
 
 const (
-	DNSRecordSmimeaTTLNumber1 DNSRecordSmimeaTTLNumber = 1
+	DNSRecordSMIMEATTLNumber1 DNSRecordSMIMEATTLNumber = 1
 )
 
-func (r DNSRecordSmimeaTTLNumber) IsKnown() bool {
+func (r DNSRecordSMIMEATTLNumber) IsKnown() bool {
 	switch r {
-	case DNSRecordSmimeaTTLNumber1:
+	case DNSRecordSMIMEATTLNumber1:
 		return true
 	}
 	return false
@@ -3875,7 +3875,7 @@ const (
 	RecordNewParamsTypeSVCB   RecordNewParamsType = "SVCB"
 	RecordNewParamsTypeSSHFP  RecordNewParamsType = "SSHFP"
 	RecordNewParamsTypeSRV    RecordNewParamsType = "SRV"
-	RecordNewParamsTypeSmimea RecordNewParamsType = "SMIMEA"
+	RecordNewParamsTypeSMIMEA RecordNewParamsType = "SMIMEA"
 	RecordNewParamsTypePTR    RecordNewParamsType = "PTR"
 	RecordNewParamsTypeNS     RecordNewParamsType = "NS"
 	RecordNewParamsTypeNAPTR  RecordNewParamsType = "NAPTR"
@@ -3885,7 +3885,7 @@ const (
 	RecordNewParamsTypeDS     RecordNewParamsType = "DS"
 	RecordNewParamsTypeDNSKEY RecordNewParamsType = "DNSKEY"
 	RecordNewParamsTypeCNAME  RecordNewParamsType = "CNAME"
-	RecordNewParamsTypeCert   RecordNewParamsType = "CERT"
+	RecordNewParamsTypeCERT   RecordNewParamsType = "CERT"
 	RecordNewParamsTypeCAA    RecordNewParamsType = "CAA"
 	RecordNewParamsTypeAAAA   RecordNewParamsType = "AAAA"
 	RecordNewParamsTypeA      RecordNewParamsType = "A"
@@ -3893,7 +3893,7 @@ const (
 
 func (r RecordNewParamsType) IsKnown() bool {
 	switch r {
-	case RecordNewParamsTypeURI, RecordNewParamsTypeTXT, RecordNewParamsTypeTLSA, RecordNewParamsTypeSVCB, RecordNewParamsTypeSSHFP, RecordNewParamsTypeSRV, RecordNewParamsTypeSmimea, RecordNewParamsTypePTR, RecordNewParamsTypeNS, RecordNewParamsTypeNAPTR, RecordNewParamsTypeMX, RecordNewParamsTypeLOC, RecordNewParamsTypeHTTPS, RecordNewParamsTypeDS, RecordNewParamsTypeDNSKEY, RecordNewParamsTypeCNAME, RecordNewParamsTypeCert, RecordNewParamsTypeCAA, RecordNewParamsTypeAAAA, RecordNewParamsTypeA:
+	case RecordNewParamsTypeURI, RecordNewParamsTypeTXT, RecordNewParamsTypeTLSA, RecordNewParamsTypeSVCB, RecordNewParamsTypeSSHFP, RecordNewParamsTypeSRV, RecordNewParamsTypeSMIMEA, RecordNewParamsTypePTR, RecordNewParamsTypeNS, RecordNewParamsTypeNAPTR, RecordNewParamsTypeMX, RecordNewParamsTypeLOC, RecordNewParamsTypeHTTPS, RecordNewParamsTypeDS, RecordNewParamsTypeDNSKEY, RecordNewParamsTypeCNAME, RecordNewParamsTypeCERT, RecordNewParamsTypeCAA, RecordNewParamsTypeAAAA, RecordNewParamsTypeA:
 		return true
 	}
 	return false
@@ -4188,7 +4188,7 @@ const (
 	RecordUpdateParamsTypeSVCB   RecordUpdateParamsType = "SVCB"
 	RecordUpdateParamsTypeSSHFP  RecordUpdateParamsType = "SSHFP"
 	RecordUpdateParamsTypeSRV    RecordUpdateParamsType = "SRV"
-	RecordUpdateParamsTypeSmimea RecordUpdateParamsType = "SMIMEA"
+	RecordUpdateParamsTypeSMIMEA RecordUpdateParamsType = "SMIMEA"
 	RecordUpdateParamsTypePTR    RecordUpdateParamsType = "PTR"
 	RecordUpdateParamsTypeNS     RecordUpdateParamsType = "NS"
 	RecordUpdateParamsTypeNAPTR  RecordUpdateParamsType = "NAPTR"
@@ -4198,7 +4198,7 @@ const (
 	RecordUpdateParamsTypeDS     RecordUpdateParamsType = "DS"
 	RecordUpdateParamsTypeDNSKEY RecordUpdateParamsType = "DNSKEY"
 	RecordUpdateParamsTypeCNAME  RecordUpdateParamsType = "CNAME"
-	RecordUpdateParamsTypeCert   RecordUpdateParamsType = "CERT"
+	RecordUpdateParamsTypeCERT   RecordUpdateParamsType = "CERT"
 	RecordUpdateParamsTypeCAA    RecordUpdateParamsType = "CAA"
 	RecordUpdateParamsTypeAAAA   RecordUpdateParamsType = "AAAA"
 	RecordUpdateParamsTypeA      RecordUpdateParamsType = "A"
@@ -4206,7 +4206,7 @@ const (
 
 func (r RecordUpdateParamsType) IsKnown() bool {
 	switch r {
-	case RecordUpdateParamsTypeURI, RecordUpdateParamsTypeTXT, RecordUpdateParamsTypeTLSA, RecordUpdateParamsTypeSVCB, RecordUpdateParamsTypeSSHFP, RecordUpdateParamsTypeSRV, RecordUpdateParamsTypeSmimea, RecordUpdateParamsTypePTR, RecordUpdateParamsTypeNS, RecordUpdateParamsTypeNAPTR, RecordUpdateParamsTypeMX, RecordUpdateParamsTypeLOC, RecordUpdateParamsTypeHTTPS, RecordUpdateParamsTypeDS, RecordUpdateParamsTypeDNSKEY, RecordUpdateParamsTypeCNAME, RecordUpdateParamsTypeCert, RecordUpdateParamsTypeCAA, RecordUpdateParamsTypeAAAA, RecordUpdateParamsTypeA:
+	case RecordUpdateParamsTypeURI, RecordUpdateParamsTypeTXT, RecordUpdateParamsTypeTLSA, RecordUpdateParamsTypeSVCB, RecordUpdateParamsTypeSSHFP, RecordUpdateParamsTypeSRV, RecordUpdateParamsTypeSMIMEA, RecordUpdateParamsTypePTR, RecordUpdateParamsTypeNS, RecordUpdateParamsTypeNAPTR, RecordUpdateParamsTypeMX, RecordUpdateParamsTypeLOC, RecordUpdateParamsTypeHTTPS, RecordUpdateParamsTypeDS, RecordUpdateParamsTypeDNSKEY, RecordUpdateParamsTypeCNAME, RecordUpdateParamsTypeCERT, RecordUpdateParamsTypeCAA, RecordUpdateParamsTypeAAAA, RecordUpdateParamsTypeA:
 		return true
 	}
 	return false
@@ -4644,7 +4644,7 @@ const (
 	RecordListParamsTypeA      RecordListParamsType = "A"
 	RecordListParamsTypeAAAA   RecordListParamsType = "AAAA"
 	RecordListParamsTypeCAA    RecordListParamsType = "CAA"
-	RecordListParamsTypeCert   RecordListParamsType = "CERT"
+	RecordListParamsTypeCERT   RecordListParamsType = "CERT"
 	RecordListParamsTypeCNAME  RecordListParamsType = "CNAME"
 	RecordListParamsTypeDNSKEY RecordListParamsType = "DNSKEY"
 	RecordListParamsTypeDS     RecordListParamsType = "DS"
@@ -4654,7 +4654,7 @@ const (
 	RecordListParamsTypeNAPTR  RecordListParamsType = "NAPTR"
 	RecordListParamsTypeNS     RecordListParamsType = "NS"
 	RecordListParamsTypePTR    RecordListParamsType = "PTR"
-	RecordListParamsTypeSmimea RecordListParamsType = "SMIMEA"
+	RecordListParamsTypeSMIMEA RecordListParamsType = "SMIMEA"
 	RecordListParamsTypeSRV    RecordListParamsType = "SRV"
 	RecordListParamsTypeSSHFP  RecordListParamsType = "SSHFP"
 	RecordListParamsTypeSVCB   RecordListParamsType = "SVCB"
@@ -4665,7 +4665,7 @@ const (
 
 func (r RecordListParamsType) IsKnown() bool {
 	switch r {
-	case RecordListParamsTypeA, RecordListParamsTypeAAAA, RecordListParamsTypeCAA, RecordListParamsTypeCert, RecordListParamsTypeCNAME, RecordListParamsTypeDNSKEY, RecordListParamsTypeDS, RecordListParamsTypeHTTPS, RecordListParamsTypeLOC, RecordListParamsTypeMX, RecordListParamsTypeNAPTR, RecordListParamsTypeNS, RecordListParamsTypePTR, RecordListParamsTypeSmimea, RecordListParamsTypeSRV, RecordListParamsTypeSSHFP, RecordListParamsTypeSVCB, RecordListParamsTypeTLSA, RecordListParamsTypeTXT, RecordListParamsTypeURI:
+	case RecordListParamsTypeA, RecordListParamsTypeAAAA, RecordListParamsTypeCAA, RecordListParamsTypeCERT, RecordListParamsTypeCNAME, RecordListParamsTypeDNSKEY, RecordListParamsTypeDS, RecordListParamsTypeHTTPS, RecordListParamsTypeLOC, RecordListParamsTypeMX, RecordListParamsTypeNAPTR, RecordListParamsTypeNS, RecordListParamsTypePTR, RecordListParamsTypeSMIMEA, RecordListParamsTypeSRV, RecordListParamsTypeSSHFP, RecordListParamsTypeSVCB, RecordListParamsTypeTLSA, RecordListParamsTypeTXT, RecordListParamsTypeURI:
 		return true
 	}
 	return false
@@ -4739,7 +4739,7 @@ const (
 	RecordEditParamsTypeSVCB   RecordEditParamsType = "SVCB"
 	RecordEditParamsTypeSSHFP  RecordEditParamsType = "SSHFP"
 	RecordEditParamsTypeSRV    RecordEditParamsType = "SRV"
-	RecordEditParamsTypeSmimea RecordEditParamsType = "SMIMEA"
+	RecordEditParamsTypeSMIMEA RecordEditParamsType = "SMIMEA"
 	RecordEditParamsTypePTR    RecordEditParamsType = "PTR"
 	RecordEditParamsTypeNS     RecordEditParamsType = "NS"
 	RecordEditParamsTypeNAPTR  RecordEditParamsType = "NAPTR"
@@ -4749,7 +4749,7 @@ const (
 	RecordEditParamsTypeDS     RecordEditParamsType = "DS"
 	RecordEditParamsTypeDNSKEY RecordEditParamsType = "DNSKEY"
 	RecordEditParamsTypeCNAME  RecordEditParamsType = "CNAME"
-	RecordEditParamsTypeCert   RecordEditParamsType = "CERT"
+	RecordEditParamsTypeCERT   RecordEditParamsType = "CERT"
 	RecordEditParamsTypeCAA    RecordEditParamsType = "CAA"
 	RecordEditParamsTypeAAAA   RecordEditParamsType = "AAAA"
 	RecordEditParamsTypeA      RecordEditParamsType = "A"
@@ -4757,7 +4757,7 @@ const (
 
 func (r RecordEditParamsType) IsKnown() bool {
 	switch r {
-	case RecordEditParamsTypeURI, RecordEditParamsTypeTXT, RecordEditParamsTypeTLSA, RecordEditParamsTypeSVCB, RecordEditParamsTypeSSHFP, RecordEditParamsTypeSRV, RecordEditParamsTypeSmimea, RecordEditParamsTypePTR, RecordEditParamsTypeNS, RecordEditParamsTypeNAPTR, RecordEditParamsTypeMX, RecordEditParamsTypeLOC, RecordEditParamsTypeHTTPS, RecordEditParamsTypeDS, RecordEditParamsTypeDNSKEY, RecordEditParamsTypeCNAME, RecordEditParamsTypeCert, RecordEditParamsTypeCAA, RecordEditParamsTypeAAAA, RecordEditParamsTypeA:
+	case RecordEditParamsTypeURI, RecordEditParamsTypeTXT, RecordEditParamsTypeTLSA, RecordEditParamsTypeSVCB, RecordEditParamsTypeSSHFP, RecordEditParamsTypeSRV, RecordEditParamsTypeSMIMEA, RecordEditParamsTypePTR, RecordEditParamsTypeNS, RecordEditParamsTypeNAPTR, RecordEditParamsTypeMX, RecordEditParamsTypeLOC, RecordEditParamsTypeHTTPS, RecordEditParamsTypeDS, RecordEditParamsTypeDNSKEY, RecordEditParamsTypeCNAME, RecordEditParamsTypeCERT, RecordEditParamsTypeCAA, RecordEditParamsTypeAAAA, RecordEditParamsTypeA:
 		return true
 	}
 	return false

@@ -65,13 +65,13 @@ func (r *HostnameService) Get(ctx context.Context, hostname string, query Hostna
 
 type TLSCertificatesAndHostnamesHostnameCertidObject struct {
 	// Identifier
-	CertID string `json:"cert_id"`
+	CERTID string `json:"cert_id"`
 	// Status of the certificate or the association.
-	CertStatus TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus `json:"cert_status"`
+	CERTStatus TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus `json:"cert_status"`
 	// The time when the certificate was updated.
-	CertUpdatedAt time.Time `json:"cert_updated_at" format:"date-time"`
+	CERTUpdatedAt time.Time `json:"cert_updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
-	CertUploadedOn time.Time `json:"cert_uploaded_on" format:"date-time"`
+	CERTUploadedOn time.Time `json:"cert_uploaded_on" format:"date-time"`
 	// The hostname certificate.
 	Certificate string `json:"certificate"`
 	// The time when the certificate was created.
@@ -100,10 +100,10 @@ type TLSCertificatesAndHostnamesHostnameCertidObject struct {
 // tlsCertificatesAndHostnamesHostnameCertidObjectJSON contains the JSON metadata
 // for the struct [TLSCertificatesAndHostnamesHostnameCertidObject]
 type tlsCertificatesAndHostnamesHostnameCertidObjectJSON struct {
-	CertID         apijson.Field
-	CertStatus     apijson.Field
-	CertUpdatedAt  apijson.Field
-	CertUploadedOn apijson.Field
+	CERTID         apijson.Field
+	CERTStatus     apijson.Field
+	CERTUpdatedAt  apijson.Field
+	CERTUploadedOn apijson.Field
 	Certificate    apijson.Field
 	CreatedAt      apijson.Field
 	Enabled        apijson.Field
@@ -127,21 +127,21 @@ func (r tlsCertificatesAndHostnamesHostnameCertidObjectJSON) RawJSON() string {
 }
 
 // Status of the certificate or the association.
-type TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus string
+type TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus string
 
 const (
-	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusInitializing       TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "initializing"
-	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusPendingDeployment  TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "pending_deployment"
-	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusPendingDeletion    TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "pending_deletion"
-	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusActive             TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "active"
-	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeleted            TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "deleted"
-	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeploymentTimedOut TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "deployment_timed_out"
-	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeletionTimedOut   TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "deletion_timed_out"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusInitializing       TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus = "initializing"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusPendingDeployment  TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus = "pending_deployment"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusPendingDeletion    TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus = "pending_deletion"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusActive             TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus = "active"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusDeleted            TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus = "deleted"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusDeploymentTimedOut TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus = "deployment_timed_out"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusDeletionTimedOut   TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus = "deletion_timed_out"
 )
 
-func (r TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus) IsKnown() bool {
+func (r TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatus) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusInitializing, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusPendingDeployment, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusPendingDeletion, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusActive, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeleted, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeploymentTimedOut, TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeletionTimedOut:
+	case TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusInitializing, TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusPendingDeployment, TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusPendingDeletion, TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusActive, TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusDeleted, TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusDeploymentTimedOut, TLSCertificatesAndHostnamesHostnameCertidObjectCERTStatusDeletionTimedOut:
 		return true
 	}
 	return false
@@ -180,7 +180,7 @@ func (r HostnameUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type HostnameUpdateParamsConfig struct {
 	// Certificate identifier tag.
-	CertID param.Field[string] `json:"cert_id"`
+	CERTID param.Field[string] `json:"cert_id"`
 	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
 	// value voids the association.
 	Enabled param.Field[bool] `json:"enabled"`

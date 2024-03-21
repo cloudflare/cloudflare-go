@@ -68,7 +68,7 @@ type TLSCertificatesAndHostnamesVerification struct {
 	// Certificate Authority is manually reviewing the order.
 	BrandCheck bool `json:"brand_check"`
 	// Certificate Pack UUID.
-	CertPackUUID string `json:"cert_pack_uuid"`
+	CERTPackUUID string `json:"cert_pack_uuid"`
 	// Certificate's signature algorithm.
 	Signature TLSCertificatesAndHostnamesVerificationSignature `json:"signature"`
 	// Validation method in use for a certificate pack order.
@@ -88,7 +88,7 @@ type TLSCertificatesAndHostnamesVerification struct {
 type tlsCertificatesAndHostnamesVerificationJSON struct {
 	CertificateStatus  apijson.Field
 	BrandCheck         apijson.Field
-	CertPackUUID       apijson.Field
+	CERTPackUUID       apijson.Field
 	Signature          apijson.Field
 	ValidationMethod   apijson.Field
 	VerificationInfo   apijson.Field

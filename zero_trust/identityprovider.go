@@ -1342,7 +1342,7 @@ type AccessIdentityProvidersAccessOidcConfig struct {
 	// The authorization_endpoint URL of your IdP
 	AuthURL string `json:"auth_url"`
 	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
-	CertsURL string `json:"certs_url"`
+	CERTsURL string `json:"certs_url"`
 	// Custom claims
 	Claims []string `json:"claims"`
 	// Your OAuth Client ID
@@ -1362,7 +1362,7 @@ type AccessIdentityProvidersAccessOidcConfig struct {
 // struct [AccessIdentityProvidersAccessOidcConfig]
 type accessIdentityProvidersAccessOidcConfigJSON struct {
 	AuthURL        apijson.Field
-	CertsURL       apijson.Field
+	CERTsURL       apijson.Field
 	Claims         apijson.Field
 	ClientID       apijson.Field
 	ClientSecret   apijson.Field
@@ -1964,7 +1964,7 @@ type AccessIdentityProvidersAccessSamlConfig struct {
 	// the Access callback.
 	HeaderAttributes []AccessIdentityProvidersAccessSamlConfigHeaderAttribute `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCerts []string `json:"idp_public_certs"`
+	IdpPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
 	// Sign the SAML authentication request with Access credentials. To verify the
@@ -1981,7 +1981,7 @@ type accessIdentityProvidersAccessSamlConfigJSON struct {
 	Attributes         apijson.Field
 	EmailAttributeName apijson.Field
 	HeaderAttributes   apijson.Field
-	IdpPublicCerts     apijson.Field
+	IdpPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
@@ -3550,7 +3550,7 @@ type IdentityProviderListResponseAccessOidcConfig struct {
 	// The authorization_endpoint URL of your IdP
 	AuthURL string `json:"auth_url"`
 	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
-	CertsURL string `json:"certs_url"`
+	CERTsURL string `json:"certs_url"`
 	// Custom claims
 	Claims []string `json:"claims"`
 	// Your OAuth Client ID
@@ -3570,7 +3570,7 @@ type IdentityProviderListResponseAccessOidcConfig struct {
 // the struct [IdentityProviderListResponseAccessOidcConfig]
 type identityProviderListResponseAccessOidcConfigJSON struct {
 	AuthURL        apijson.Field
-	CertsURL       apijson.Field
+	CERTsURL       apijson.Field
 	Claims         apijson.Field
 	ClientID       apijson.Field
 	ClientSecret   apijson.Field
@@ -4174,7 +4174,7 @@ type IdentityProviderListResponseAccessSamlConfig struct {
 	// the Access callback.
 	HeaderAttributes []IdentityProviderListResponseAccessSamlConfigHeaderAttribute `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCerts []string `json:"idp_public_certs"`
+	IdpPublicCERTs []string `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL string `json:"issuer_url"`
 	// Sign the SAML authentication request with Access credentials. To verify the
@@ -4191,7 +4191,7 @@ type identityProviderListResponseAccessSamlConfigJSON struct {
 	Attributes         apijson.Field
 	EmailAttributeName apijson.Field
 	HeaderAttributes   apijson.Field
-	IdpPublicCerts     apijson.Field
+	IdpPublicCERTs     apijson.Field
 	IssuerURL          apijson.Field
 	SignRequest        apijson.Field
 	SSOTargetURL       apijson.Field
@@ -4504,7 +4504,7 @@ type IdentityProviderNewParamsConfig struct {
 	// Your centrify app id
 	CentrifyAppID param.Field[string] `json:"centrify_app_id"`
 	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
-	CertsURL param.Field[string] `json:"certs_url"`
+	CERTsURL param.Field[string] `json:"certs_url"`
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
 	// Your OAuth Client ID
@@ -4523,7 +4523,7 @@ type IdentityProviderNewParamsConfig struct {
 	// the Access callback.
 	HeaderAttributes param.Field[[]IdentityProviderNewParamsConfigHeaderAttribute] `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCerts param.Field[[]string] `json:"idp_public_certs"`
+	IdpPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL param.Field[string] `json:"issuer_url"`
 	// Your okta account url
@@ -4770,7 +4770,7 @@ type IdentityProviderUpdateParamsConfig struct {
 	// Your centrify app id
 	CentrifyAppID param.Field[string] `json:"centrify_app_id"`
 	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
-	CertsURL param.Field[string] `json:"certs_url"`
+	CERTsURL param.Field[string] `json:"certs_url"`
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
 	// Your OAuth Client ID
@@ -4789,7 +4789,7 @@ type IdentityProviderUpdateParamsConfig struct {
 	// the Access callback.
 	HeaderAttributes param.Field[[]IdentityProviderUpdateParamsConfigHeaderAttribute] `json:"header_attributes"`
 	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCerts param.Field[[]string] `json:"idp_public_certs"`
+	IdpPublicCERTs param.Field[[]string] `json:"idp_public_certs"`
 	// IdP Entity ID or Issuer URL
 	IssuerURL param.Field[string] `json:"issuer_url"`
 	// Your okta account url

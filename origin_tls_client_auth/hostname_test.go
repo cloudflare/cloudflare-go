@@ -31,15 +31,15 @@ func TestHostnameUpdate(t *testing.T) {
 	_, err := client.OriginTLSClientAuth.Hostnames.Update(context.TODO(), origin_tls_client_auth.HostnameUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Config: cloudflare.F([]origin_tls_client_auth.HostnameUpdateParamsConfig{{
-			CertID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
+			CERTID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
 			Enabled:  cloudflare.F(true),
 			Hostname: cloudflare.F("app.example.com"),
 		}, {
-			CertID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
+			CERTID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
 			Enabled:  cloudflare.F(true),
 			Hostname: cloudflare.F("app.example.com"),
 		}, {
-			CertID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
+			CERTID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
 			Enabled:  cloudflare.F(true),
 			Hostname: cloudflare.F("app.example.com"),
 		}}),
