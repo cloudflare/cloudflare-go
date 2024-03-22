@@ -24,6 +24,7 @@ import (
 type ZoneService struct {
 	Options           []option.RequestOption
 	ActivationCheck   *ActivationCheckService
+	DNSSettings       *DNSSettingService
 	Settings          *SettingService
 	CustomNameservers *CustomNameserverService
 	Holds             *HoldService
@@ -38,6 +39,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r = &ZoneService{}
 	r.Options = opts
 	r.ActivationCheck = NewActivationCheckService(opts...)
+	r.DNSSettings = NewDNSSettingService(opts...)
 	r.Settings = NewSettingService(opts...)
 	r.CustomNameservers = NewCustomNameserverService(opts...)
 	r.Holds = NewHoldService(opts...)
