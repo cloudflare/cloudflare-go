@@ -6,8 +6,10 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -48,11 +50,11 @@ func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, 
 }
 
 // Fetch a list of project deployments.
-func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, query ProjectDeploymentListParams, opts ...option.RequestOption) (res *[]PagesDeployments, err error) {
+func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *[]PagesDeployments, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", query.AccountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", params.AccountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -214,6 +216,33 @@ func (r ProjectDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 type ProjectDeploymentListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// What type of deployments to fetch.
+	Env param.Field[ProjectDeploymentListParamsEnv] `query:"env"`
+}
+
+// URLQuery serializes [ProjectDeploymentListParams]'s query parameters as
+// `url.Values`.
+func (r ProjectDeploymentListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// What type of deployments to fetch.
+type ProjectDeploymentListParamsEnv string
+
+const (
+	ProjectDeploymentListParamsEnvProduction ProjectDeploymentListParamsEnv = "production"
+	ProjectDeploymentListParamsEnvPreview    ProjectDeploymentListParamsEnv = "preview"
+)
+
+func (r ProjectDeploymentListParamsEnv) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentListParamsEnvProduction, ProjectDeploymentListParamsEnvPreview:
+		return true
+	}
+	return false
 }
 
 type ProjectDeploymentListResponseEnvelope struct {

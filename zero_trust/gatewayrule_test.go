@@ -123,8 +123,8 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
-			UntrustedCert: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsUntrustedCert{
-				Action: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsUntrustedCertActionError),
+			UntrustedCERT: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsUntrustedCERT{
+				Action: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsUntrustedCERTActionError),
 			}),
 		}),
 		Schedule: cloudflare.F(zero_trust.GatewayRuleNewParamsSchedule{
@@ -260,8 +260,8 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
-				UntrustedCert: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsUntrustedCert{
-					Action: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionError),
+				UntrustedCERT: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsUntrustedCERT{
+					Action: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsUntrustedCERTActionError),
 				}),
 			}),
 			Schedule: cloudflare.F(zero_trust.GatewayRuleUpdateParamsSchedule{

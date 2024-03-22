@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/magic_network_monitoring"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -27,7 +28,9 @@ func TestConfigFullGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicNetworkMonitoring.Configs.Full.Get(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MagicNetworkMonitoring.Configs.Full.Get(context.TODO(), magic_network_monitoring.ConfigFullGetParams{
+		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

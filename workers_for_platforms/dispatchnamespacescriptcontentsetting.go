@@ -116,7 +116,7 @@ func (r dispatchNamespaceScriptContentSettingEditResponseJSON) RawJSON() string 
 // [workers_for_platforms.DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersD1Binding],
 // [workers_for_platforms.DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDispatchNamespaceBinding]
 // or
-// [workers_for_platforms.DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding].
+// [workers_for_platforms.DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBinding].
 type DispatchNamespaceScriptContentSettingEditResponseBinding interface {
 	implementsWorkersForPlatformsDispatchNamespaceScriptContentSettingEditResponseBinding()
 }
@@ -155,7 +155,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding{}),
+			Type:       reflect.TypeOf(DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBinding{}),
 		},
 	)
 }
@@ -562,20 +562,20 @@ func (r dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDispatch
 	return r.raw
 }
 
-type DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding struct {
+type DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingType `json:"type,required"`
+	Type DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBindingType `json:"type,required"`
 	// ID of the certificate to bind to
 	CertificateID string                                                                              `json:"certificate_id"`
-	JSON          dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingJSON `json:"-"`
+	JSON          dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMtlscertBindingJSON `json:"-"`
 }
 
-// dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingJSON
+// dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMtlscertBindingJSON
 // contains the JSON metadata for the struct
-// [DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding]
-type dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingJSON struct {
+// [DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBinding]
+type dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMtlscertBindingJSON struct {
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -583,27 +583,27 @@ type dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBin
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingJSON) RawJSON() string {
+func (r dispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMtlscertBindingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding) implementsWorkersForPlatformsDispatchNamespaceScriptContentSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBinding) implementsWorkersForPlatformsDispatchNamespaceScriptContentSettingEditResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingType string
+type DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBindingType string
 
 const (
-	DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingType = "mtls_certificate"
+	DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBindingTypeMTLSCertificate DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBindingType = "mtls_certificate"
 )
 
-func (r DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingType) IsKnown() bool {
+func (r DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBindingType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate:
+	case DispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCERTBindingTypeMTLSCertificate:
 		return true
 	}
 	return false
@@ -972,7 +972,7 @@ func (r dispatchNamespaceScriptContentSettingGetResponseJSON) RawJSON() string {
 // [workers_for_platforms.DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersD1Binding],
 // [workers_for_platforms.DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDispatchNamespaceBinding]
 // or
-// [workers_for_platforms.DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding].
+// [workers_for_platforms.DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBinding].
 type DispatchNamespaceScriptContentSettingGetResponseBinding interface {
 	implementsWorkersForPlatformsDispatchNamespaceScriptContentSettingGetResponseBinding()
 }
@@ -1011,7 +1011,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding{}),
+			Type:       reflect.TypeOf(DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBinding{}),
 		},
 	)
 }
@@ -1418,20 +1418,20 @@ func (r dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDispatchN
 	return r.raw
 }
 
-type DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding struct {
+type DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingType `json:"type,required"`
+	Type DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBindingType `json:"type,required"`
 	// ID of the certificate to bind to
 	CertificateID string                                                                             `json:"certificate_id"`
-	JSON          dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingJSON `json:"-"`
+	JSON          dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMtlscertBindingJSON `json:"-"`
 }
 
-// dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingJSON
+// dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMtlscertBindingJSON
 // contains the JSON metadata for the struct
-// [DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding]
-type dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingJSON struct {
+// [DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBinding]
+type dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMtlscertBindingJSON struct {
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -1439,27 +1439,27 @@ type dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBind
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingJSON) RawJSON() string {
+func (r dispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMtlscertBindingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding) implementsWorkersForPlatformsDispatchNamespaceScriptContentSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBinding) implementsWorkersForPlatformsDispatchNamespaceScriptContentSettingGetResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingType string
+type DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBindingType string
 
 const (
-	DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingType = "mtls_certificate"
+	DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBindingTypeMTLSCertificate DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBindingType = "mtls_certificate"
 )
 
-func (r DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingType) IsKnown() bool {
+func (r DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBindingType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingTypeMTLSCertificate:
+	case DispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCERTBindingTypeMTLSCertificate:
 		return true
 	}
 	return false
@@ -1838,7 +1838,7 @@ func (r DispatchNamespaceScriptContentSettingEditParamsResult) MarshalJSON() (da
 // [workers_for_platforms.DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersQueueBinding],
 // [workers_for_platforms.DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersD1Binding],
 // [workers_for_platforms.DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersDispatchNamespaceBinding],
-// [workers_for_platforms.DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBinding].
+// [workers_for_platforms.DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBinding].
 type DispatchNamespaceScriptContentSettingEditParamsResultBinding interface {
 	implementsWorkersForPlatformsDispatchNamespaceScriptContentSettingEditParamsResultBinding()
 }
@@ -2079,30 +2079,30 @@ func (r DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersDisp
 	return apijson.MarshalRoot(r)
 }
 
-type DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBinding struct {
+type DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBinding struct {
 	// The class of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBindingType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBindingType] `json:"type,required"`
 	// ID of the certificate to bind to
 	CertificateID param.Field[string] `json:"certificate_id"`
 }
 
-func (r DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBinding) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBinding) implementsWorkersForPlatformsDispatchNamespaceScriptContentSettingEditParamsResultBinding() {
+func (r DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBinding) implementsWorkersForPlatformsDispatchNamespaceScriptContentSettingEditParamsResultBinding() {
 }
 
 // The class of resource that the binding provides.
-type DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBindingType string
+type DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBindingType string
 
 const (
-	DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBindingTypeMTLSCertificate DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBindingType = "mtls_certificate"
+	DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBindingTypeMTLSCertificate DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBindingType = "mtls_certificate"
 )
 
-func (r DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBindingType) IsKnown() bool {
+func (r DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBindingType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCertBindingTypeMTLSCertificate:
+	case DispatchNamespaceScriptContentSettingEditParamsResultBindingsWorkersMTLSCERTBindingTypeMTLSCertificate:
 		return true
 	}
 	return false

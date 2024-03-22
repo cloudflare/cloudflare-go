@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/magic_network_monitoring"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -29,8 +30,10 @@ func TestRuleAdvertisementEdit(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.Advertisements.Edit(
 		context.TODO(),
-		"6f91088a406011ed95aed352566e8d4c",
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
+		magic_network_monitoring.RuleAdvertisementEditParams{
+			AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

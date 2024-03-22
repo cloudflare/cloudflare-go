@@ -28,49 +28,22 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.IdentityProviders.New(context.TODO(), zero_trust.IdentityProviderNewParams{
-		Config: cloudflare.F(zero_trust.IdentityProviderNewParamsConfig{
+	_, err := client.ZeroTrust.IdentityProviders.New(context.TODO(), zero_trust.IdentityProviderNewParamsAccessAzureAd{
+		Config: cloudflare.F(zero_trust.IdentityProviderNewParamsAccessAzureAdConfig{
 			ClientID:                 cloudflare.F("<your client id>"),
 			ClientSecret:             cloudflare.F("<your client secret>"),
 			Claims:                   cloudflare.F([]string{"email_verified", "preferred_username", "custom_claim_name"}),
 			EmailClaimName:           cloudflare.F("custom_claim_name"),
 			ConditionalAccessEnabled: cloudflare.F(true),
 			DirectoryID:              cloudflare.F("<your azure directory uuid>"),
-			Prompt:                   cloudflare.F(zero_trust.IdentityProviderNewParamsConfigPromptLogin),
+			Prompt:                   cloudflare.F(zero_trust.IdentityProviderNewParamsAccessAzureAdConfigPromptLogin),
 			SupportGroups:            cloudflare.F(true),
-			CentrifyAccount:          cloudflare.F("https://abc123.my.centrify.com/"),
-			CentrifyAppID:            cloudflare.F("exampleapp"),
-			AppsDomain:               cloudflare.F("mycompany.com"),
-			AuthURL:                  cloudflare.F("https://accounts.google.com/o/oauth2/auth"),
-			CertsURL:                 cloudflare.F("https://www.googleapis.com/oauth2/v3/certs"),
-			Scopes:                   cloudflare.F([]string{"openid", "email", "profile"}),
-			TokenURL:                 cloudflare.F("https://accounts.google.com/o/oauth2/token"),
-			AuthorizationServerID:    cloudflare.F("aus9o8wzkhckw9TLa0h7z"),
-			OktaAccount:              cloudflare.F("https://dev-abc123.oktapreview.com"),
-			OneloginAccount:          cloudflare.F("https://mycompany.onelogin.com"),
-			PingEnvID:                cloudflare.F("342b5660-0c32-4936-a5a4-ce21fae57b0a"),
-			Attributes:               cloudflare.F([]string{"group", "department_code", "divison"}),
-			EmailAttributeName:       cloudflare.F("Email"),
-			HeaderAttributes: cloudflare.F([]zero_trust.IdentityProviderNewParamsConfigHeaderAttribute{{
-				AttributeName: cloudflare.F("string"),
-				HeaderName:    cloudflare.F("string"),
-			}, {
-				AttributeName: cloudflare.F("string"),
-				HeaderName:    cloudflare.F("string"),
-			}, {
-				AttributeName: cloudflare.F("string"),
-				HeaderName:    cloudflare.F("string"),
-			}}),
-			IdpPublicCerts: cloudflare.F([]string{"string", "string", "string"}),
-			IssuerURL:      cloudflare.F("https://whoami.com"),
-			SignRequest:    cloudflare.F(true),
-			SSOTargetURL:   cloudflare.F("https://edgeaccess.org/idp/saml/login"),
 		}),
 		Name:      cloudflare.F("Widget Corps IDP"),
-		Type:      cloudflare.F(zero_trust.IdentityProviderNewParamsTypeOnetimepin),
+		Type:      cloudflare.F(zero_trust.IdentityProviderNewParamsAccessAzureAdTypeOnetimepin),
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
-		ScimConfig: cloudflare.F(zero_trust.IdentityProviderNewParamsScimConfig{
+		ScimConfig: cloudflare.F(zero_trust.IdentityProviderNewParamsAccessAzureAdScimConfig{
 			Enabled:                cloudflare.F(true),
 			GroupMemberDeprovision: cloudflare.F(true),
 			SeatDeprovision:        cloudflare.F(true),
@@ -104,49 +77,22 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.IdentityProviders.Update(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.IdentityProviderUpdateParams{
-			Config: cloudflare.F(zero_trust.IdentityProviderUpdateParamsConfig{
+		zero_trust.IdentityProviderUpdateParamsAccessAzureAd{
+			Config: cloudflare.F(zero_trust.IdentityProviderUpdateParamsAccessAzureAdConfig{
 				ClientID:                 cloudflare.F("<your client id>"),
 				ClientSecret:             cloudflare.F("<your client secret>"),
 				Claims:                   cloudflare.F([]string{"email_verified", "preferred_username", "custom_claim_name"}),
 				EmailClaimName:           cloudflare.F("custom_claim_name"),
 				ConditionalAccessEnabled: cloudflare.F(true),
 				DirectoryID:              cloudflare.F("<your azure directory uuid>"),
-				Prompt:                   cloudflare.F(zero_trust.IdentityProviderUpdateParamsConfigPromptLogin),
+				Prompt:                   cloudflare.F(zero_trust.IdentityProviderUpdateParamsAccessAzureAdConfigPromptLogin),
 				SupportGroups:            cloudflare.F(true),
-				CentrifyAccount:          cloudflare.F("https://abc123.my.centrify.com/"),
-				CentrifyAppID:            cloudflare.F("exampleapp"),
-				AppsDomain:               cloudflare.F("mycompany.com"),
-				AuthURL:                  cloudflare.F("https://accounts.google.com/o/oauth2/auth"),
-				CertsURL:                 cloudflare.F("https://www.googleapis.com/oauth2/v3/certs"),
-				Scopes:                   cloudflare.F([]string{"openid", "email", "profile"}),
-				TokenURL:                 cloudflare.F("https://accounts.google.com/o/oauth2/token"),
-				AuthorizationServerID:    cloudflare.F("aus9o8wzkhckw9TLa0h7z"),
-				OktaAccount:              cloudflare.F("https://dev-abc123.oktapreview.com"),
-				OneloginAccount:          cloudflare.F("https://mycompany.onelogin.com"),
-				PingEnvID:                cloudflare.F("342b5660-0c32-4936-a5a4-ce21fae57b0a"),
-				Attributes:               cloudflare.F([]string{"group", "department_code", "divison"}),
-				EmailAttributeName:       cloudflare.F("Email"),
-				HeaderAttributes: cloudflare.F([]zero_trust.IdentityProviderUpdateParamsConfigHeaderAttribute{{
-					AttributeName: cloudflare.F("string"),
-					HeaderName:    cloudflare.F("string"),
-				}, {
-					AttributeName: cloudflare.F("string"),
-					HeaderName:    cloudflare.F("string"),
-				}, {
-					AttributeName: cloudflare.F("string"),
-					HeaderName:    cloudflare.F("string"),
-				}}),
-				IdpPublicCerts: cloudflare.F([]string{"string", "string", "string"}),
-				IssuerURL:      cloudflare.F("https://whoami.com"),
-				SignRequest:    cloudflare.F(true),
-				SSOTargetURL:   cloudflare.F("https://edgeaccess.org/idp/saml/login"),
 			}),
 			Name:      cloudflare.F("Widget Corps IDP"),
-			Type:      cloudflare.F(zero_trust.IdentityProviderUpdateParamsTypeOnetimepin),
+			Type:      cloudflare.F(zero_trust.IdentityProviderUpdateParamsAccessAzureAdTypeOnetimepin),
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
-			ScimConfig: cloudflare.F(zero_trust.IdentityProviderUpdateParamsScimConfig{
+			ScimConfig: cloudflare.F(zero_trust.IdentityProviderUpdateParamsAccessAzureAdScimConfig{
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
 				SeatDeprovision:        cloudflare.F(true),

@@ -34,11 +34,10 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
-		workers_for_platforms.DispatchNamespaceScriptUpdateParams{
+		workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
-			Message:     cloudflare.F("string"),
-			Metadata: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadata{
+			Metadata: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0Metadata{
 				Bindings: cloudflare.F([]interface{}{map[string]interface{}{
 					"name": "MY_ENV_VAR",
 					"text": "my_data",
@@ -50,12 +49,12 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
 				Logpush:            cloudflare.F(false),
 				MainModule:         cloudflare.F("worker.js"),
-				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataMigrations](workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations](workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations(workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
+					RenamedClasses: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -65,7 +64,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
+					TransferredClasses: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -79,11 +78,11 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("string"),
 					}}),
 				})),
-				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacement{
-					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementModeSmart),
+				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacement{
+					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string", "string", "string"}),
-				TailConsumers: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataTailConsumer{{
+				TailConsumers: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataTailConsumer{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
@@ -96,7 +95,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
 				}}),
-				UsageModel:  cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataUsageModelBundled),
+				UsageModel:  cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataUsageModelBundled),
 				VersionTags: cloudflare.F[any](map[string]interface{}{}),
 			}),
 		},

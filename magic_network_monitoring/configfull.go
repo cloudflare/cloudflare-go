@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -30,16 +31,20 @@ func NewConfigFullService(opts ...option.RequestOption) (r *ConfigFullService) {
 }
 
 // Lists default sampling, router IPs, and rules for account.
-func (r *ConfigFullService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigFullGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config/full", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/config/full", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
 	return
+}
+
+type ConfigFullGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type ConfigFullGetResponseEnvelope struct {

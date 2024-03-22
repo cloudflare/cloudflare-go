@@ -5,6 +5,8 @@
 The Cloudflare Go library provides convenient access to [the Cloudflare REST
 API](https://developers.cloudflare.com/api) from applications written in Go. The full API of this library can be found in [api.md](api.md).
 
+It is generated with [Stainless](https://www.stainlessapi.com/).
+
 ## Installation
 
 <!-- x-release-please-start-version -->
@@ -22,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v2@v2.0.0-beta.11'
+go get -u 'github.com/cloudflare/cloudflare-go/v2@v2.0.0-beta.12'
 ```
 
 <!-- x-release-please-end -->

@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestV1NewWithOptionalParams(t *testing.T) {
+func TestV1New(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,10 +28,9 @@ func TestV1NewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Images.V1.New(context.TODO(), images.V1NewParams{
-		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Metadata:          cloudflare.F[any](map[string]interface{}{}),
-		RequireSignedURLs: cloudflare.F(true),
+	_, err := client.Images.V1.New(context.TODO(), images.V1NewParamsImagesImageUploadViaFile{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		File:      cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

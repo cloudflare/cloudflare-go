@@ -31,11 +31,9 @@ func TestAIRunWithOptionalParams(t *testing.T) {
 	_, err := client.Workers.AI.Run(
 		context.TODO(),
 		"string",
-		workers.AIRunParams{
+		workers.AIRunParamsTextClassification{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: cloudflare.F[workers.AIRunParamsBody](workers.AIRunParamsBodyTextClassification(workers.AIRunParamsBodyTextClassification{
-				Text: cloudflare.F("string"),
-			})),
+			Text:      cloudflare.F("string"),
 		},
 	)
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -31,10 +32,10 @@ func NewRuleAdvertisementService(opts ...option.RequestOption) (r *RuleAdvertise
 }
 
 // Update advertisement for rule.
-func (r *RuleAdvertisementService) Edit(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMRuleAdvertisable, err error) {
+func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID interface{}, body RuleAdvertisementEditParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRuleAdvertisable, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleAdvertisementEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules/%v/advertisement", accountIdentifier, ruleIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/rules/%v/advertisement", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -65,6 +66,10 @@ func (r *MagicVisibilityMNMRuleAdvertisable) UnmarshalJSON(data []byte) (err err
 
 func (r magicVisibilityMNMRuleAdvertisableJSON) RawJSON() string {
 	return r.raw
+}
+
+type RuleAdvertisementEditParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type RuleAdvertisementEditResponseEnvelope struct {

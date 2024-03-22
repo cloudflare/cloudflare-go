@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -33,10 +34,10 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Create network monitoring rules for account. Currently only supports creating a
 // single rule per API request.
-func (r *RuleService) New(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
+func (r *RuleService) New(ctx context.Context, body RuleNewParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/rules", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -46,10 +47,10 @@ func (r *RuleService) New(ctx context.Context, accountIdentifier interface{}, op
 }
 
 // Update network monitoring rules for account.
-func (r *RuleService) Update(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
+func (r *RuleService) Update(ctx context.Context, body RuleUpdateParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/rules", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -59,10 +60,10 @@ func (r *RuleService) Update(ctx context.Context, accountIdentifier interface{},
 }
 
 // Lists network monitoring rules for account.
-func (r *RuleService) List(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *[]MagicVisibilityMNMRule, err error) {
+func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *[]MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/rules", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -72,10 +73,10 @@ func (r *RuleService) List(ctx context.Context, accountIdentifier interface{}, o
 }
 
 // Delete a network monitoring rule for account.
-func (r *RuleService) Delete(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, ruleID interface{}, body RuleDeleteParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", accountIdentifier, ruleIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -85,10 +86,10 @@ func (r *RuleService) Delete(ctx context.Context, accountIdentifier interface{},
 }
 
 // Update a network monitoring rule for account.
-func (r *RuleService) Edit(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
+func (r *RuleService) Edit(ctx context.Context, ruleID interface{}, body RuleEditParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", accountIdentifier, ruleIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -98,10 +99,10 @@ func (r *RuleService) Edit(ctx context.Context, accountIdentifier interface{}, r
 }
 
 // List a single network monitoring rule for account.
-func (r *RuleService) Get(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
+func (r *RuleService) Get(ctx context.Context, ruleID interface{}, query RuleGetParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", accountIdentifier, ruleIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", query.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -156,6 +157,10 @@ func (r *MagicVisibilityMNMRule) UnmarshalJSON(data []byte) (err error) {
 
 func (r magicVisibilityMNMRuleJSON) RawJSON() string {
 	return r.raw
+}
+
+type RuleNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type RuleNewResponseEnvelope struct {
@@ -247,6 +252,10 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type RuleUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type RuleUpdateResponseEnvelope struct {
 	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -334,6 +343,10 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RuleListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type RuleListResponseEnvelope struct {
@@ -458,6 +471,10 @@ func (r ruleListResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 
+type RuleDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type RuleDeleteResponseEnvelope struct {
 	Errors   []RuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -547,6 +564,10 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type RuleEditParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type RuleEditResponseEnvelope struct {
 	Errors   []RuleEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleEditResponseEnvelopeMessages `json:"messages,required"`
@@ -634,6 +655,10 @@ func (r RuleEditResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RuleGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type RuleGetResponseEnvelope struct {

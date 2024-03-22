@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -32,10 +33,10 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 }
 
 // Create a new network monitoring configuration.
-func (r *ConfigService) New(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *ConfigService) New(ctx context.Context, body ConfigNewParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -46,10 +47,10 @@ func (r *ConfigService) New(ctx context.Context, accountIdentifier interface{}, 
 
 // Update an existing network monitoring configuration, requires the entire
 // configuration to be updated at once.
-func (r *ConfigService) Update(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *ConfigService) Update(ctx context.Context, body ConfigUpdateParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -59,10 +60,10 @@ func (r *ConfigService) Update(ctx context.Context, accountIdentifier interface{
 }
 
 // Delete an existing network monitoring configuration.
-func (r *ConfigService) Delete(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -72,10 +73,10 @@ func (r *ConfigService) Delete(ctx context.Context, accountIdentifier interface{
 }
 
 // Update fields in an existing network monitoring configuration.
-func (r *ConfigService) Edit(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *ConfigService) Edit(ctx context.Context, body ConfigEditParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -85,10 +86,10 @@ func (r *ConfigService) Edit(ctx context.Context, accountIdentifier interface{},
 }
 
 // Lists default sampling and router IPs for account.
-func (r *ConfigService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/mnm/config", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -123,6 +124,10 @@ func (r *MagicVisibilityMNMConfig) UnmarshalJSON(data []byte) (err error) {
 
 func (r magicVisibilityMNMConfigJSON) RawJSON() string {
 	return r.raw
+}
+
+type ConfigNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type ConfigNewResponseEnvelope struct {
@@ -214,6 +219,10 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type ConfigUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type ConfigUpdateResponseEnvelope struct {
 	Errors   []ConfigUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -301,6 +310,10 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type ConfigDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type ConfigDeleteResponseEnvelope struct {
@@ -392,6 +405,10 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type ConfigEditParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type ConfigEditResponseEnvelope struct {
 	Errors   []ConfigEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConfigEditResponseEnvelopeMessages `json:"messages,required"`
@@ -479,6 +496,10 @@ func (r ConfigEditResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type ConfigGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type ConfigGetResponseEnvelope struct {

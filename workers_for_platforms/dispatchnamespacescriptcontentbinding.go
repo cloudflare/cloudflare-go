@@ -54,7 +54,7 @@ func (r *DispatchNamespaceScriptContentBindingService) Get(ctx context.Context, 
 // [workers_for_platforms.DispatchNamespaceScriptContentBindingGetResponseWorkersD1Binding],
 // [workers_for_platforms.DispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBinding]
 // or
-// [workers_for_platforms.DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding].
+// [workers_for_platforms.DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBinding].
 type DispatchNamespaceScriptContentBindingGetResponse interface {
 	implementsWorkersForPlatformsDispatchNamespaceScriptContentBindingGetResponse()
 }
@@ -93,7 +93,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding{}),
+			Type:       reflect.TypeOf(DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBinding{}),
 		},
 	)
 }
@@ -500,20 +500,20 @@ func (r dispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespace
 	return r.raw
 }
 
-type DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding struct {
+type DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingType `json:"type,required"`
+	Type DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBindingType `json:"type,required"`
 	// ID of the certificate to bind to
 	CertificateID string                                                                     `json:"certificate_id"`
-	JSON          dispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingJSON `json:"-"`
+	JSON          dispatchNamespaceScriptContentBindingGetResponseWorkersMtlscertBindingJSON `json:"-"`
 }
 
-// dispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingJSON
+// dispatchNamespaceScriptContentBindingGetResponseWorkersMtlscertBindingJSON
 // contains the JSON metadata for the struct
-// [DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding]
-type dispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingJSON struct {
+// [DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBinding]
+type dispatchNamespaceScriptContentBindingGetResponseWorkersMtlscertBindingJSON struct {
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -521,27 +521,27 @@ type dispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingJSON 
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingJSON) RawJSON() string {
+func (r dispatchNamespaceScriptContentBindingGetResponseWorkersMtlscertBindingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding) implementsWorkersForPlatformsDispatchNamespaceScriptContentBindingGetResponse() {
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBinding) implementsWorkersForPlatformsDispatchNamespaceScriptContentBindingGetResponse() {
 }
 
 // The class of resource that the binding provides.
-type DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingType string
+type DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBindingType string
 
 const (
-	DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingTypeMTLSCertificate DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingType = "mtls_certificate"
+	DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBindingTypeMTLSCertificate DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBindingType = "mtls_certificate"
 )
 
-func (r DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingType) IsKnown() bool {
+func (r DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBindingType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingTypeMTLSCertificate:
+	case DispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCERTBindingTypeMTLSCertificate:
 		return true
 	}
 	return false

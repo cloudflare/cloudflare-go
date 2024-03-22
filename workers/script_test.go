@@ -35,12 +35,11 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Workers.Scripts.Update(
 		context.TODO(),
 		"this-is_my_script-01",
-		workers.ScriptUpdateParams{
+		workers.ScriptUpdateParamsVariant0{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			RollbackTo:  cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
-			Message:     cloudflare.F("string"),
-			Metadata: cloudflare.F(workers.ScriptUpdateParamsMetadata{
+			Metadata: cloudflare.F(workers.ScriptUpdateParamsVariant0Metadata{
 				Bindings: cloudflare.F([]interface{}{map[string]interface{}{
 					"name": "MY_ENV_VAR",
 					"text": "my_data",
@@ -52,12 +51,12 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
 				Logpush:            cloudflare.F(false),
 				MainModule:         cloudflare.F("worker.js"),
-				Migrations: cloudflare.F[workers.ScriptUpdateParamsMetadataMigrations](workers.ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations(workers.ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[workers.ScriptUpdateParamsVariant0MetadataMigrations](workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations(workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]workers.ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
+					RenamedClasses: cloudflare.F([]workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -67,7 +66,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]workers.ScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
+					TransferredClasses: cloudflare.F([]workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -81,11 +80,11 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("string"),
 					}}),
 				})),
-				Placement: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacement{
-					Mode: cloudflare.F(workers.ScriptUpdateParamsMetadataPlacementModeSmart),
+				Placement: cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataPlacement{
+					Mode: cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string", "string", "string"}),
-				TailConsumers: cloudflare.F([]workers.ScriptUpdateParamsMetadataTailConsumer{{
+				TailConsumers: cloudflare.F([]workers.ScriptUpdateParamsVariant0MetadataTailConsumer{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
@@ -98,7 +97,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
 				}}),
-				UsageModel:  cloudflare.F(workers.ScriptUpdateParamsMetadataUsageModelBundled),
+				UsageModel:  cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataUsageModelBundled),
 				VersionTags: cloudflare.F[any](map[string]interface{}{}),
 			}),
 		},

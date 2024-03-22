@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/magic_network_monitoring"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -27,7 +28,9 @@ func TestRuleNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicNetworkMonitoring.Rules.New(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MagicNetworkMonitoring.Rules.New(context.TODO(), magic_network_monitoring.RuleNewParams{
+		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -51,7 +54,9 @@ func TestRuleUpdate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicNetworkMonitoring.Rules.Update(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MagicNetworkMonitoring.Rules.Update(context.TODO(), magic_network_monitoring.RuleUpdateParams{
+		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -75,7 +80,9 @@ func TestRuleList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicNetworkMonitoring.Rules.List(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MagicNetworkMonitoring.Rules.List(context.TODO(), magic_network_monitoring.RuleListParams{
+		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -101,8 +108,10 @@ func TestRuleDelete(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.Delete(
 		context.TODO(),
-		"6f91088a406011ed95aed352566e8d4c",
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
+		magic_network_monitoring.RuleDeleteParams{
+			AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -129,8 +138,10 @@ func TestRuleEdit(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.Edit(
 		context.TODO(),
-		"6f91088a406011ed95aed352566e8d4c",
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
+		magic_network_monitoring.RuleEditParams{
+			AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -157,8 +168,10 @@ func TestRuleGet(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.Get(
 		context.TODO(),
-		"6f91088a406011ed95aed352566e8d4c",
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
+		magic_network_monitoring.RuleGetParams{
+			AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
