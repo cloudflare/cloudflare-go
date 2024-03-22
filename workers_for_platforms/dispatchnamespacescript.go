@@ -27,8 +27,10 @@ import (
 // instantiate this service directly, and instead use the
 // [NewDispatchNamespaceScriptService] method instead.
 type DispatchNamespaceScriptService struct {
-	Options []option.RequestOption
-	Content *DispatchNamespaceScriptContentService
+	Options  []option.RequestOption
+	Content  *DispatchNamespaceScriptContentService
+	Settings *DispatchNamespaceScriptSettingService
+	Bindings *DispatchNamespaceScriptBindingService
 }
 
 // NewDispatchNamespaceScriptService generates a new service that applies the given
@@ -38,6 +40,8 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 	r = &DispatchNamespaceScriptService{}
 	r.Options = opts
 	r.Content = NewDispatchNamespaceScriptContentService(opts...)
+	r.Settings = NewDispatchNamespaceScriptSettingService(opts...)
+	r.Bindings = NewDispatchNamespaceScriptBindingService(opts...)
 	return
 }
 

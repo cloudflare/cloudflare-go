@@ -29,7 +29,7 @@ func TestDirectUploadNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Stream.DirectUploads.New(context.TODO(), stream.DirectUploadNewParams{
+	_, err := client.Stream.DirectUpload.New(context.TODO(), stream.DirectUploadNewParams{
 		AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		MaxDurationSeconds: cloudflare.F(int64(1)),
 		AllowedOrigins:     cloudflare.F([]string{"example.com"}),

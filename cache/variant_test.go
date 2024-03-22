@@ -67,7 +67,7 @@ func TestVariantEditWithOptionalParams(t *testing.T) {
 			Png:  cloudflare.F([]interface{}{"image/webp", "image/avif"}),
 			Tif:  cloudflare.F([]interface{}{"image/webp", "image/avif"}),
 			Tiff: cloudflare.F([]interface{}{"image/webp", "image/avif"}),
-			Webp: cloudflare.F([]interface{}{"image/jpeg", "image/avif"}),
+			WebP: cloudflare.F([]interface{}{"image/jpeg", "image/avif"}),
 		}),
 	})
 	if err != nil {

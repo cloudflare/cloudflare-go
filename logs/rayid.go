@@ -18,40 +18,40 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// RayidService contains methods and other services that help with interacting with
+// RayIDService contains methods and other services that help with interacting with
 // the cloudflare API. Note, unlike clients, this service does not read variables
 // from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewRayidService] method instead.
-type RayidService struct {
+// directly, and instead use the [NewRayIDService] method instead.
+type RayIDService struct {
 	Options []option.RequestOption
 }
 
-// NewRayidService generates a new service that applies the given options to each
+// NewRayIDService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewRayidService(opts ...option.RequestOption) (r *RayidService) {
-	r = &RayidService{}
+func NewRayIDService(opts ...option.RequestOption) (r *RayIDService) {
+	r = &RayIDService{}
 	r.Options = opts
 	return
 }
 
 // The `/rayids` api route allows lookups by specific rayid. The rayids route will
 // return zero, one, or more records (ray ids are not unique).
-func (r *RayidService) Get(ctx context.Context, zoneIdentifier string, rayIdentifier string, query RayidGetParams, opts ...option.RequestOption) (res *RayidGetResponse, err error) {
+func (r *RayIDService) Get(ctx context.Context, zoneIdentifier string, rayIdentifier string, query RayIDGetParams, opts ...option.RequestOption) (res *RayIDGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logs/rayids/%s", zoneIdentifier, rayIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-// Union satisfied by [shared.UnionString] or [logs.RayidGetResponseUnknown].
-type RayidGetResponse interface {
-	ImplementsLogsRayidGetResponse()
+// Union satisfied by [shared.UnionString] or [logs.RayIDGetResponseUnknown].
+type RayIDGetResponse interface {
+	ImplementsLogsRayIDGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RayidGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*RayIDGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -60,7 +60,7 @@ func init() {
 	)
 }
 
-type RayidGetParams struct {
+type RayIDGetParams struct {
 	// The `/received` route by default returns a limited set of fields, and allows
 	// customers to override the default field set by specifying individual fields. The
 	// reasons for this are: 1. Most customers require only a small subset of fields,
@@ -78,11 +78,11 @@ type RayidGetParams struct {
 	// timestamps are returned. Possible values are: `unix`, `unixnano`, `rfc3339`.
 	// Note that `unix` and `unixnano` return timestamps as integers; `rfc3339` returns
 	// timestamps as strings.
-	Timestamps param.Field[RayidGetParamsTimestamps] `query:"timestamps"`
+	Timestamps param.Field[RayIDGetParamsTimestamps] `query:"timestamps"`
 }
 
-// URLQuery serializes [RayidGetParams]'s query parameters as `url.Values`.
-func (r RayidGetParams) URLQuery() (v url.Values) {
+// URLQuery serializes [RayIDGetParams]'s query parameters as `url.Values`.
+func (r RayIDGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -94,17 +94,17 @@ func (r RayidGetParams) URLQuery() (v url.Values) {
 // timestamps are returned. Possible values are: `unix`, `unixnano`, `rfc3339`.
 // Note that `unix` and `unixnano` return timestamps as integers; `rfc3339` returns
 // timestamps as strings.
-type RayidGetParamsTimestamps string
+type RayIDGetParamsTimestamps string
 
 const (
-	RayidGetParamsTimestampsUnix     RayidGetParamsTimestamps = "unix"
-	RayidGetParamsTimestampsUnixnano RayidGetParamsTimestamps = "unixnano"
-	RayidGetParamsTimestampsRfc3339  RayidGetParamsTimestamps = "rfc3339"
+	RayIDGetParamsTimestampsUnix     RayIDGetParamsTimestamps = "unix"
+	RayIDGetParamsTimestampsUnixnano RayIDGetParamsTimestamps = "unixnano"
+	RayIDGetParamsTimestampsRfc3339  RayIDGetParamsTimestamps = "rfc3339"
 )
 
-func (r RayidGetParamsTimestamps) IsKnown() bool {
+func (r RayIDGetParamsTimestamps) IsKnown() bool {
 	switch r {
-	case RayidGetParamsTimestampsUnix, RayidGetParamsTimestampsUnixnano, RayidGetParamsTimestampsRfc3339:
+	case RayIDGetParamsTimestampsUnix, RayIDGetParamsTimestampsUnixnano, RayIDGetParamsTimestampsRfc3339:
 		return true
 	}
 	return false

@@ -70,7 +70,7 @@ type SettingService struct {
 	TLSClientAuth                 *SettingTLSClientAuthService
 	TrueClientIPHeader            *SettingTrueClientIPHeaderService
 	WAF                           *SettingWAFService
-	Webp                          *SettingWebpService
+	WebP                          *SettingWebPService
 	Websocket                     *SettingWebsocketService
 	FontSettings                  *SettingFontSettingService
 }
@@ -129,7 +129,7 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r.TLSClientAuth = NewSettingTLSClientAuthService(opts...)
 	r.TrueClientIPHeader = NewSettingTrueClientIPHeaderService(opts...)
 	r.WAF = NewSettingWAFService(opts...)
-	r.Webp = NewSettingWebpService(opts...)
+	r.WebP = NewSettingWebPService(opts...)
 	r.Websocket = NewSettingWebsocketService(opts...)
 	r.FontSettings = NewSettingFontSettingService(opts...)
 	return
@@ -186,7 +186,7 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 // [zones.ZonesSortQueryStringForCache], [zones.ZonesSSL],
 // [zones.ZonesSSLRecommender], [zones.SettingEditResponseZonesTLS1_2Only],
 // [zones.ZonesTLS1_3], [zones.ZonesTLSClientAuth],
-// [zones.ZonesTrueClientIPHeader], [zones.ZonesWAF], [zones.ZonesWebp] or
+// [zones.ZonesTrueClientIPHeader], [zones.ZonesWAF], [zones.ZonesWebP] or
 // [zones.ZonesWebsockets].
 type SettingEditResponse interface {
 	implementsZonesSettingEditResponse()
@@ -406,7 +406,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesWebp{}),
+			Type:       reflect.TypeOf(ZonesWebP{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -947,7 +947,7 @@ func (r SettingEditResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
 // [zones.ZonesSortQueryStringForCache], [zones.ZonesSSL],
 // [zones.ZonesSSLRecommender], [zones.SettingGetResponseZonesTLS1_2Only],
 // [zones.ZonesTLS1_3], [zones.ZonesTLSClientAuth],
-// [zones.ZonesTrueClientIPHeader], [zones.ZonesWAF], [zones.ZonesWebp] or
+// [zones.ZonesTrueClientIPHeader], [zones.ZonesWAF], [zones.ZonesWebP] or
 // [zones.ZonesWebsockets].
 type SettingGetResponse interface {
 	implementsZonesSettingGetResponse()
@@ -1167,7 +1167,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesWebp{}),
+			Type:       reflect.TypeOf(ZonesWebP{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1724,7 +1724,7 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 // [zones.ZonesSSLRecommenderParam], [zones.SettingEditParamsItemsZonesTLS1_2Only],
 // [zones.ZonesTLS1_3Param], [zones.ZonesTLSClientAuthParam],
 // [zones.ZonesTrueClientIPHeaderParam], [zones.ZonesWAFParam],
-// [zones.ZonesWebpParam], [zones.ZonesWebsocketsParam].
+// [zones.ZonesWebPParam], [zones.ZonesWebsocketsParam].
 type SettingEditParamsItem interface {
 	implementsZonesSettingEditParamsItem()
 }

@@ -29,7 +29,7 @@ func TestDownloadGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	resp, err := client.PCAPs.Downloads.Get(
+	resp, err := client.PCAPs.Download.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		pcaps.DownloadGetParams{

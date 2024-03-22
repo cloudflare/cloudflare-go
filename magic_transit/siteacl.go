@@ -125,8 +125,8 @@ type SiteACLNewResponseACL struct {
 	ID string `json:"id"`
 	// Description for the ACL.
 	Description string                     `json:"description"`
-	Lan1        SiteACLNewResponseACLsLan1 `json:"lan_1"`
-	Lan2        SiteACLNewResponseACLsLan2 `json:"lan_2"`
+	LAN1        SiteACLNewResponseACLsLAN1 `json:"lan_1"`
+	LAN2        SiteACLNewResponseACLsLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                           `json:"name"`
 	Protocols []SiteACLNewResponseACLsProtocol `json:"protocols"`
@@ -138,8 +138,8 @@ type SiteACLNewResponseACL struct {
 type siteACLNewResponseACLJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
-	Lan1        apijson.Field
-	Lan2        apijson.Field
+	LAN1        apijson.Field
+	LAN2        apijson.Field
 	Name        apijson.Field
 	Protocols   apijson.Field
 	raw         string
@@ -154,32 +154,32 @@ func (r siteACLNewResponseACLJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteACLNewResponseACLsLan1 struct {
+type SiteACLNewResponseACLsLAN1 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLNewResponseACLsLan1Subnet `json:"subnets"`
+	Subnets []SiteACLNewResponseACLsLAN1Subnet `json:"subnets"`
 	JSON    siteACLNewResponseACLsLan1JSON     `json:"-"`
 }
 
 // siteACLNewResponseACLsLan1JSON contains the JSON metadata for the struct
-// [SiteACLNewResponseACLsLan1]
+// [SiteACLNewResponseACLsLAN1]
 type siteACLNewResponseACLsLan1JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLNewResponseACLsLan1) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLNewResponseACLsLAN1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -190,13 +190,13 @@ func (r siteACLNewResponseACLsLan1JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLNewResponseACLsLan1Subnet interface {
+type SiteACLNewResponseACLsLAN1Subnet interface {
 	ImplementsMagicTransitSiteACLNewResponseACLsLan1Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLNewResponseACLsLan1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLNewResponseACLsLAN1Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -209,32 +209,32 @@ func init() {
 	)
 }
 
-type SiteACLNewResponseACLsLan2 struct {
+type SiteACLNewResponseACLsLAN2 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLNewResponseACLsLan2Subnet `json:"subnets"`
+	Subnets []SiteACLNewResponseACLsLAN2Subnet `json:"subnets"`
 	JSON    siteACLNewResponseACLsLan2JSON     `json:"-"`
 }
 
 // siteACLNewResponseACLsLan2JSON contains the JSON metadata for the struct
-// [SiteACLNewResponseACLsLan2]
+// [SiteACLNewResponseACLsLAN2]
 type siteACLNewResponseACLsLan2JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLNewResponseACLsLan2) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLNewResponseACLsLAN2) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -245,13 +245,13 @@ func (r siteACLNewResponseACLsLan2JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLNewResponseACLsLan2Subnet interface {
+type SiteACLNewResponseACLsLAN2Subnet interface {
 	ImplementsMagicTransitSiteACLNewResponseACLsLan2Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLNewResponseACLsLan2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLNewResponseACLsLAN2Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -310,8 +310,8 @@ type SiteACLUpdateResponseACL struct {
 	ID string `json:"id"`
 	// Description for the ACL.
 	Description string                       `json:"description"`
-	Lan1        SiteACLUpdateResponseACLLan1 `json:"lan_1"`
-	Lan2        SiteACLUpdateResponseACLLan2 `json:"lan_2"`
+	LAN1        SiteACLUpdateResponseACLLAN1 `json:"lan_1"`
+	LAN2        SiteACLUpdateResponseACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                             `json:"name"`
 	Protocols []SiteACLUpdateResponseACLProtocol `json:"protocols"`
@@ -323,8 +323,8 @@ type SiteACLUpdateResponseACL struct {
 type siteACLUpdateResponseACLJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
-	Lan1        apijson.Field
-	Lan2        apijson.Field
+	LAN1        apijson.Field
+	LAN2        apijson.Field
 	Name        apijson.Field
 	Protocols   apijson.Field
 	raw         string
@@ -339,49 +339,49 @@ func (r siteACLUpdateResponseACLJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteACLUpdateResponseACLLan1 struct {
+type SiteACLUpdateResponseACLLAN1 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLUpdateResponseACLLan1Subnet `json:"subnets"`
-	JSON    siteACLUpdateResponseACLLan1JSON     `json:"-"`
+	Subnets []SiteACLUpdateResponseACLLAN1Subnet `json:"subnets"`
+	JSON    siteACLUpdateResponseAcllan1JSON     `json:"-"`
 }
 
-// siteACLUpdateResponseACLLan1JSON contains the JSON metadata for the struct
-// [SiteACLUpdateResponseACLLan1]
-type siteACLUpdateResponseACLLan1JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+// siteACLUpdateResponseAcllan1JSON contains the JSON metadata for the struct
+// [SiteACLUpdateResponseACLLAN1]
+type siteACLUpdateResponseAcllan1JSON struct {
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLUpdateResponseACLLan1) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLUpdateResponseACLLAN1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteACLUpdateResponseACLLan1JSON) RawJSON() string {
+func (r siteACLUpdateResponseAcllan1JSON) RawJSON() string {
 	return r.raw
 }
 
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLUpdateResponseACLLan1Subnet interface {
-	ImplementsMagicTransitSiteACLUpdateResponseACLLan1Subnet()
+type SiteACLUpdateResponseACLLAN1Subnet interface {
+	ImplementsMagicTransitSiteACLUpdateResponseAcllan1Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLUpdateResponseACLLan1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLUpdateResponseACLLAN1Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -394,49 +394,49 @@ func init() {
 	)
 }
 
-type SiteACLUpdateResponseACLLan2 struct {
+type SiteACLUpdateResponseACLLAN2 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLUpdateResponseACLLan2Subnet `json:"subnets"`
-	JSON    siteACLUpdateResponseACLLan2JSON     `json:"-"`
+	Subnets []SiteACLUpdateResponseACLLAN2Subnet `json:"subnets"`
+	JSON    siteACLUpdateResponseAcllan2JSON     `json:"-"`
 }
 
-// siteACLUpdateResponseACLLan2JSON contains the JSON metadata for the struct
-// [SiteACLUpdateResponseACLLan2]
-type siteACLUpdateResponseACLLan2JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+// siteACLUpdateResponseAcllan2JSON contains the JSON metadata for the struct
+// [SiteACLUpdateResponseACLLAN2]
+type siteACLUpdateResponseAcllan2JSON struct {
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLUpdateResponseACLLan2) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLUpdateResponseACLLAN2) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteACLUpdateResponseACLLan2JSON) RawJSON() string {
+func (r siteACLUpdateResponseAcllan2JSON) RawJSON() string {
 	return r.raw
 }
 
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLUpdateResponseACLLan2Subnet interface {
-	ImplementsMagicTransitSiteACLUpdateResponseACLLan2Subnet()
+type SiteACLUpdateResponseACLLAN2Subnet interface {
+	ImplementsMagicTransitSiteACLUpdateResponseAcllan2Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLUpdateResponseACLLan2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLUpdateResponseACLLAN2Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -494,8 +494,8 @@ type SiteACLListResponseACL struct {
 	ID string `json:"id"`
 	// Description for the ACL.
 	Description string                      `json:"description"`
-	Lan1        SiteACLListResponseACLsLan1 `json:"lan_1"`
-	Lan2        SiteACLListResponseACLsLan2 `json:"lan_2"`
+	LAN1        SiteACLListResponseACLsLAN1 `json:"lan_1"`
+	LAN2        SiteACLListResponseACLsLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                            `json:"name"`
 	Protocols []SiteACLListResponseACLsProtocol `json:"protocols"`
@@ -507,8 +507,8 @@ type SiteACLListResponseACL struct {
 type siteACLListResponseACLJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
-	Lan1        apijson.Field
-	Lan2        apijson.Field
+	LAN1        apijson.Field
+	LAN2        apijson.Field
 	Name        apijson.Field
 	Protocols   apijson.Field
 	raw         string
@@ -523,32 +523,32 @@ func (r siteACLListResponseACLJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteACLListResponseACLsLan1 struct {
+type SiteACLListResponseACLsLAN1 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLListResponseACLsLan1Subnet `json:"subnets"`
+	Subnets []SiteACLListResponseACLsLAN1Subnet `json:"subnets"`
 	JSON    siteACLListResponseACLsLan1JSON     `json:"-"`
 }
 
 // siteACLListResponseACLsLan1JSON contains the JSON metadata for the struct
-// [SiteACLListResponseACLsLan1]
+// [SiteACLListResponseACLsLAN1]
 type siteACLListResponseACLsLan1JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLListResponseACLsLan1) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLListResponseACLsLAN1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -559,13 +559,13 @@ func (r siteACLListResponseACLsLan1JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLListResponseACLsLan1Subnet interface {
+type SiteACLListResponseACLsLAN1Subnet interface {
 	ImplementsMagicTransitSiteACLListResponseACLsLan1Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLListResponseACLsLan1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLListResponseACLsLAN1Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -578,32 +578,32 @@ func init() {
 	)
 }
 
-type SiteACLListResponseACLsLan2 struct {
+type SiteACLListResponseACLsLAN2 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLListResponseACLsLan2Subnet `json:"subnets"`
+	Subnets []SiteACLListResponseACLsLAN2Subnet `json:"subnets"`
 	JSON    siteACLListResponseACLsLan2JSON     `json:"-"`
 }
 
 // siteACLListResponseACLsLan2JSON contains the JSON metadata for the struct
-// [SiteACLListResponseACLsLan2]
+// [SiteACLListResponseACLsLAN2]
 type siteACLListResponseACLsLan2JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLListResponseACLsLan2) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLListResponseACLsLAN2) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -614,13 +614,13 @@ func (r siteACLListResponseACLsLan2JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLListResponseACLsLan2Subnet interface {
+type SiteACLListResponseACLsLAN2Subnet interface {
 	ImplementsMagicTransitSiteACLListResponseACLsLan2Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLListResponseACLsLan2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLListResponseACLsLAN2Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -681,8 +681,8 @@ type SiteACLDeleteResponseDeletedACL struct {
 	ID string `json:"id"`
 	// Description for the ACL.
 	Description string                              `json:"description"`
-	Lan1        SiteACLDeleteResponseDeletedACLLan1 `json:"lan_1"`
-	Lan2        SiteACLDeleteResponseDeletedACLLan2 `json:"lan_2"`
+	LAN1        SiteACLDeleteResponseDeletedACLLAN1 `json:"lan_1"`
+	LAN2        SiteACLDeleteResponseDeletedACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                                    `json:"name"`
 	Protocols []SiteACLDeleteResponseDeletedACLProtocol `json:"protocols"`
@@ -694,8 +694,8 @@ type SiteACLDeleteResponseDeletedACL struct {
 type siteACLDeleteResponseDeletedACLJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
-	Lan1        apijson.Field
-	Lan2        apijson.Field
+	LAN1        apijson.Field
+	LAN2        apijson.Field
 	Name        apijson.Field
 	Protocols   apijson.Field
 	raw         string
@@ -710,49 +710,49 @@ func (r siteACLDeleteResponseDeletedACLJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteACLDeleteResponseDeletedACLLan1 struct {
+type SiteACLDeleteResponseDeletedACLLAN1 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLDeleteResponseDeletedACLLan1Subnet `json:"subnets"`
-	JSON    siteACLDeleteResponseDeletedACLLan1JSON     `json:"-"`
+	Subnets []SiteACLDeleteResponseDeletedACLLAN1Subnet `json:"subnets"`
+	JSON    siteACLDeleteResponseDeletedAcllan1JSON     `json:"-"`
 }
 
-// siteACLDeleteResponseDeletedACLLan1JSON contains the JSON metadata for the
-// struct [SiteACLDeleteResponseDeletedACLLan1]
-type siteACLDeleteResponseDeletedACLLan1JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+// siteACLDeleteResponseDeletedAcllan1JSON contains the JSON metadata for the
+// struct [SiteACLDeleteResponseDeletedACLLAN1]
+type siteACLDeleteResponseDeletedAcllan1JSON struct {
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLDeleteResponseDeletedACLLan1) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLDeleteResponseDeletedACLLAN1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteACLDeleteResponseDeletedACLLan1JSON) RawJSON() string {
+func (r siteACLDeleteResponseDeletedAcllan1JSON) RawJSON() string {
 	return r.raw
 }
 
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLDeleteResponseDeletedACLLan1Subnet interface {
-	ImplementsMagicTransitSiteACLDeleteResponseDeletedACLLan1Subnet()
+type SiteACLDeleteResponseDeletedACLLAN1Subnet interface {
+	ImplementsMagicTransitSiteACLDeleteResponseDeletedAcllan1Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLDeleteResponseDeletedACLLan1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLDeleteResponseDeletedACLLAN1Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -765,49 +765,49 @@ func init() {
 	)
 }
 
-type SiteACLDeleteResponseDeletedACLLan2 struct {
+type SiteACLDeleteResponseDeletedACLLAN2 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLDeleteResponseDeletedACLLan2Subnet `json:"subnets"`
-	JSON    siteACLDeleteResponseDeletedACLLan2JSON     `json:"-"`
+	Subnets []SiteACLDeleteResponseDeletedACLLAN2Subnet `json:"subnets"`
+	JSON    siteACLDeleteResponseDeletedAcllan2JSON     `json:"-"`
 }
 
-// siteACLDeleteResponseDeletedACLLan2JSON contains the JSON metadata for the
-// struct [SiteACLDeleteResponseDeletedACLLan2]
-type siteACLDeleteResponseDeletedACLLan2JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+// siteACLDeleteResponseDeletedAcllan2JSON contains the JSON metadata for the
+// struct [SiteACLDeleteResponseDeletedACLLAN2]
+type siteACLDeleteResponseDeletedAcllan2JSON struct {
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLDeleteResponseDeletedACLLan2) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLDeleteResponseDeletedACLLAN2) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteACLDeleteResponseDeletedACLLan2JSON) RawJSON() string {
+func (r siteACLDeleteResponseDeletedAcllan2JSON) RawJSON() string {
 	return r.raw
 }
 
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLDeleteResponseDeletedACLLan2Subnet interface {
-	ImplementsMagicTransitSiteACLDeleteResponseDeletedACLLan2Subnet()
+type SiteACLDeleteResponseDeletedACLLAN2Subnet interface {
+	ImplementsMagicTransitSiteACLDeleteResponseDeletedAcllan2Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLDeleteResponseDeletedACLLan2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLDeleteResponseDeletedACLLAN2Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -866,8 +866,8 @@ type SiteACLGetResponseACL struct {
 	ID string `json:"id"`
 	// Description for the ACL.
 	Description string                    `json:"description"`
-	Lan1        SiteACLGetResponseACLLan1 `json:"lan_1"`
-	Lan2        SiteACLGetResponseACLLan2 `json:"lan_2"`
+	LAN1        SiteACLGetResponseACLLAN1 `json:"lan_1"`
+	LAN2        SiteACLGetResponseACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                          `json:"name"`
 	Protocols []SiteACLGetResponseACLProtocol `json:"protocols"`
@@ -879,8 +879,8 @@ type SiteACLGetResponseACL struct {
 type siteACLGetResponseACLJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
-	Lan1        apijson.Field
-	Lan2        apijson.Field
+	LAN1        apijson.Field
+	LAN2        apijson.Field
 	Name        apijson.Field
 	Protocols   apijson.Field
 	raw         string
@@ -895,49 +895,49 @@ func (r siteACLGetResponseACLJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteACLGetResponseACLLan1 struct {
+type SiteACLGetResponseACLLAN1 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLGetResponseACLLan1Subnet `json:"subnets"`
-	JSON    siteACLGetResponseACLLan1JSON     `json:"-"`
+	Subnets []SiteACLGetResponseACLLAN1Subnet `json:"subnets"`
+	JSON    siteACLGetResponseAcllan1JSON     `json:"-"`
 }
 
-// siteACLGetResponseACLLan1JSON contains the JSON metadata for the struct
-// [SiteACLGetResponseACLLan1]
-type siteACLGetResponseACLLan1JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+// siteACLGetResponseAcllan1JSON contains the JSON metadata for the struct
+// [SiteACLGetResponseACLLAN1]
+type siteACLGetResponseAcllan1JSON struct {
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLGetResponseACLLan1) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLGetResponseACLLAN1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteACLGetResponseACLLan1JSON) RawJSON() string {
+func (r siteACLGetResponseAcllan1JSON) RawJSON() string {
 	return r.raw
 }
 
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLGetResponseACLLan1Subnet interface {
-	ImplementsMagicTransitSiteACLGetResponseACLLan1Subnet()
+type SiteACLGetResponseACLLAN1Subnet interface {
+	ImplementsMagicTransitSiteACLGetResponseAcllan1Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLGetResponseACLLan1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLGetResponseACLLAN1Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -950,49 +950,49 @@ func init() {
 	)
 }
 
-type SiteACLGetResponseACLLan2 struct {
+type SiteACLGetResponseACLLAN2 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID string `json:"lan_id,required"`
+	LANID string `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName string `json:"lan_name"`
+	LANName string `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLGetResponseACLLan2Subnet `json:"subnets"`
-	JSON    siteACLGetResponseACLLan2JSON     `json:"-"`
+	Subnets []SiteACLGetResponseACLLAN2Subnet `json:"subnets"`
+	JSON    siteACLGetResponseAcllan2JSON     `json:"-"`
 }
 
-// siteACLGetResponseACLLan2JSON contains the JSON metadata for the struct
-// [SiteACLGetResponseACLLan2]
-type siteACLGetResponseACLLan2JSON struct {
-	LanID       apijson.Field
-	LanName     apijson.Field
+// siteACLGetResponseAcllan2JSON contains the JSON metadata for the struct
+// [SiteACLGetResponseACLLAN2]
+type siteACLGetResponseAcllan2JSON struct {
+	LANID       apijson.Field
+	LANName     apijson.Field
 	Ports       apijson.Field
 	Subnets     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteACLGetResponseACLLan2) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteACLGetResponseACLLAN2) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteACLGetResponseACLLan2JSON) RawJSON() string {
+func (r siteACLGetResponseAcllan2JSON) RawJSON() string {
 	return r.raw
 }
 
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLGetResponseACLLan2Subnet interface {
-	ImplementsMagicTransitSiteACLGetResponseACLLan2Subnet()
+type SiteACLGetResponseACLLAN2Subnet interface {
+	ImplementsMagicTransitSiteACLGetResponseAcllan2Subnet()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLGetResponseACLLan2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLGetResponseACLLAN2Subnet)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -1034,8 +1034,8 @@ func (r SiteACLNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLNewParamsACL struct {
-	Lan1 param.Field[SiteACLNewParamsACLLan1] `json:"lan_1,required"`
-	Lan2 param.Field[SiteACLNewParamsACLLan2] `json:"lan_2,required"`
+	LAN1 param.Field[SiteACLNewParamsACLLAN1] `json:"lan_1,required"`
+	LAN2 param.Field[SiteACLNewParamsACLLAN2] `json:"lan_2,required"`
 	// The name of the ACL.
 	Name param.Field[string] `json:"name,required"`
 	// Description for the ACL.
@@ -1047,52 +1047,52 @@ func (r SiteACLNewParamsACL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteACLNewParamsACLLan1 struct {
+type SiteACLNewParamsACLLAN1 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID param.Field[string] `json:"lan_id,required"`
+	LANID param.Field[string] `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName param.Field[string] `json:"lan_name"`
+	LANName param.Field[string] `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets param.Field[[]SiteACLNewParamsACLLan1Subnet] `json:"subnets"`
+	Subnets param.Field[[]SiteACLNewParamsACLLAN1Subnet] `json:"subnets"`
 }
 
-func (r SiteACLNewParamsACLLan1) MarshalJSON() (data []byte, err error) {
+func (r SiteACLNewParamsACLLAN1) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A valid IPv4 address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type SiteACLNewParamsACLLan1Subnet interface {
-	ImplementsMagicTransitSiteACLNewParamsACLLan1Subnet()
+type SiteACLNewParamsACLLAN1Subnet interface {
+	ImplementsMagicTransitSiteACLNewParamsAcllan1Subnet()
 }
 
-type SiteACLNewParamsACLLan2 struct {
+type SiteACLNewParamsACLLAN2 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID param.Field[string] `json:"lan_id,required"`
+	LANID param.Field[string] `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName param.Field[string] `json:"lan_name"`
+	LANName param.Field[string] `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets param.Field[[]SiteACLNewParamsACLLan2Subnet] `json:"subnets"`
+	Subnets param.Field[[]SiteACLNewParamsACLLAN2Subnet] `json:"subnets"`
 }
 
-func (r SiteACLNewParamsACLLan2) MarshalJSON() (data []byte, err error) {
+func (r SiteACLNewParamsACLLAN2) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A valid IPv4 address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type SiteACLNewParamsACLLan2Subnet interface {
-	ImplementsMagicTransitSiteACLNewParamsACLLan2Subnet()
+type SiteACLNewParamsACLLAN2Subnet interface {
+	ImplementsMagicTransitSiteACLNewParamsAcllan2Subnet()
 }
 
 // Array of allowed communication protocols between configured LANs. If no
@@ -1215,8 +1215,8 @@ func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
 type SiteACLUpdateParamsACL struct {
 	// Description for the ACL.
 	Description param.Field[string]                     `json:"description"`
-	Lan1        param.Field[SiteACLUpdateParamsACLLan1] `json:"lan_1"`
-	Lan2        param.Field[SiteACLUpdateParamsACLLan2] `json:"lan_2"`
+	LAN1        param.Field[SiteACLUpdateParamsACLLAN1] `json:"lan_1"`
+	LAN2        param.Field[SiteACLUpdateParamsACLLAN2] `json:"lan_2"`
 	// The name of the ACL.
 	Name      param.Field[string]                           `json:"name"`
 	Protocols param.Field[[]SiteACLUpdateParamsACLProtocol] `json:"protocols"`
@@ -1226,52 +1226,52 @@ func (r SiteACLUpdateParamsACL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteACLUpdateParamsACLLan1 struct {
+type SiteACLUpdateParamsACLLAN1 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID param.Field[string] `json:"lan_id,required"`
+	LANID param.Field[string] `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName param.Field[string] `json:"lan_name"`
+	LANName param.Field[string] `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets param.Field[[]SiteACLUpdateParamsACLLan1Subnet] `json:"subnets"`
+	Subnets param.Field[[]SiteACLUpdateParamsACLLAN1Subnet] `json:"subnets"`
 }
 
-func (r SiteACLUpdateParamsACLLan1) MarshalJSON() (data []byte, err error) {
+func (r SiteACLUpdateParamsACLLAN1) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A valid IPv4 address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type SiteACLUpdateParamsACLLan1Subnet interface {
-	ImplementsMagicTransitSiteACLUpdateParamsACLLan1Subnet()
+type SiteACLUpdateParamsACLLAN1Subnet interface {
+	ImplementsMagicTransitSiteACLUpdateParamsAcllan1Subnet()
 }
 
-type SiteACLUpdateParamsACLLan2 struct {
+type SiteACLUpdateParamsACLLAN2 struct {
 	// The identifier for the LAN you want to create an ACL policy with.
-	LanID param.Field[string] `json:"lan_id,required"`
+	LANID param.Field[string] `json:"lan_id,required"`
 	// The name of the LAN based on the provided lan_id.
-	LanName param.Field[string] `json:"lan_name"`
+	LANName param.Field[string] `json:"lan_name"`
 	// Array of ports on the provided LAN that will be included in the ACL. If no ports
 	// are provided, communication on any port on this LAN is allowed.
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets param.Field[[]SiteACLUpdateParamsACLLan2Subnet] `json:"subnets"`
+	Subnets param.Field[[]SiteACLUpdateParamsACLLAN2Subnet] `json:"subnets"`
 }
 
-func (r SiteACLUpdateParamsACLLan2) MarshalJSON() (data []byte, err error) {
+func (r SiteACLUpdateParamsACLLAN2) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A valid IPv4 address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type SiteACLUpdateParamsACLLan2Subnet interface {
-	ImplementsMagicTransitSiteACLUpdateParamsACLLan2Subnet()
+type SiteACLUpdateParamsACLLAN2Subnet interface {
+	ImplementsMagicTransitSiteACLUpdateParamsAcllan2Subnet()
 }
 
 // Array of allowed communication protocols between configured LANs. If no

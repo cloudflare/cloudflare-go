@@ -13,7 +13,7 @@ import (
 type LogService struct {
 	Options  []option.RequestOption
 	Control  *ControlService
-	Rayid    *RayidService
+	RayID    *RayIDService
 	Received *ReceivedService
 }
 
@@ -24,7 +24,7 @@ func NewLogService(opts ...option.RequestOption) (r *LogService) {
 	r = &LogService{}
 	r.Options = opts
 	r.Control = NewControlService(opts...)
-	r.Rayid = NewRayidService(opts...)
+	r.RayID = NewRayIDService(opts...)
 	r.Received = NewReceivedService(opts...)
 	return
 }

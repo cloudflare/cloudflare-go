@@ -208,7 +208,7 @@ type VariantEditResponseValue struct {
 	Tiff []interface{} `json:"tiff"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for webp.
-	Webp []interface{}                `json:"webp"`
+	WebP []interface{}                `json:"webp"`
 	JSON variantEditResponseValueJSON `json:"-"`
 }
 
@@ -225,7 +225,7 @@ type variantEditResponseValueJSON struct {
 	Png         apijson.Field
 	Tif         apijson.Field
 	Tiff        apijson.Field
-	Webp        apijson.Field
+	WebP        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -320,7 +320,7 @@ type VariantGetResponseValue struct {
 	Tiff []interface{} `json:"tiff"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for webp.
-	Webp []interface{}               `json:"webp"`
+	WebP []interface{}               `json:"webp"`
 	JSON variantGetResponseValueJSON `json:"-"`
 }
 
@@ -337,7 +337,7 @@ type variantGetResponseValueJSON struct {
 	Png         apijson.Field
 	Tif         apijson.Field
 	Tiff        apijson.Field
-	Webp        apijson.Field
+	WebP        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -494,7 +494,7 @@ type VariantEditParamsValue struct {
 	Tiff param.Field[[]interface{}] `json:"tiff"`
 	// List of strings with the MIME types of all the variants that should be served
 	// for webp.
-	Webp param.Field[[]interface{}] `json:"webp"`
+	WebP param.Field[[]interface{}] `json:"webp"`
 }
 
 func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {

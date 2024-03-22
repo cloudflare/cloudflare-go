@@ -20,8 +20,8 @@ import (
 type SiteService struct {
 	Options []option.RequestOption
 	ACLs    *SiteACLService
-	Lans    *SiteLanService
-	Wans    *SiteWanService
+	LANs    *SiteLANService
+	WANs    *SiteWANService
 }
 
 // NewSiteService generates a new service that applies the given options to each
@@ -31,8 +31,8 @@ func NewSiteService(opts ...option.RequestOption) (r *SiteService) {
 	r = &SiteService{}
 	r.Options = opts
 	r.ACLs = NewSiteACLService(opts...)
-	r.Lans = NewSiteLanService(opts...)
-	r.Wans = NewSiteWanService(opts...)
+	r.LANs = NewSiteLANService(opts...)
+	r.WANs = NewSiteWANService(opts...)
 	return
 }
 

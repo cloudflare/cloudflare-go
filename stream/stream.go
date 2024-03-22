@@ -21,20 +21,20 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewStreamService] method instead.
 type StreamService struct {
-	Options       []option.RequestOption
-	AudioTracks   *AudioTrackService
-	Videos        *VideoService
-	Clips         *ClipService
-	Copies        *CopyService
-	DirectUploads *DirectUploadService
-	Keys          *KeyService
-	LiveInputs    *LiveInputService
-	Watermarks    *WatermarkService
-	Webhooks      *WebhookService
-	Captions      *CaptionService
-	Downloads     *DownloadService
-	Embeds        *EmbedService
-	Tokens        *TokenService
+	Options      []option.RequestOption
+	AudioTracks  *AudioTrackService
+	Videos       *VideoService
+	Clip         *ClipService
+	Copy         *CopyService
+	DirectUpload *DirectUploadService
+	Keys         *KeyService
+	LiveInputs   *LiveInputService
+	Watermarks   *WatermarkService
+	Webhooks     *WebhookService
+	Captions     *CaptionService
+	Downloads    *DownloadService
+	Embed        *EmbedService
+	Token        *TokenService
 }
 
 // NewStreamService generates a new service that applies the given options to each
@@ -45,17 +45,17 @@ func NewStreamService(opts ...option.RequestOption) (r *StreamService) {
 	r.Options = opts
 	r.AudioTracks = NewAudioTrackService(opts...)
 	r.Videos = NewVideoService(opts...)
-	r.Clips = NewClipService(opts...)
-	r.Copies = NewCopyService(opts...)
-	r.DirectUploads = NewDirectUploadService(opts...)
+	r.Clip = NewClipService(opts...)
+	r.Copy = NewCopyService(opts...)
+	r.DirectUpload = NewDirectUploadService(opts...)
 	r.Keys = NewKeyService(opts...)
 	r.LiveInputs = NewLiveInputService(opts...)
 	r.Watermarks = NewWatermarkService(opts...)
 	r.Webhooks = NewWebhookService(opts...)
 	r.Captions = NewCaptionService(opts...)
 	r.Downloads = NewDownloadService(opts...)
-	r.Embeds = NewEmbedService(opts...)
-	r.Tokens = NewTokenService(opts...)
+	r.Embed = NewEmbedService(opts...)
+	r.Token = NewTokenService(opts...)
 	return
 }
 
