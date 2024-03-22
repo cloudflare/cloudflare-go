@@ -14,20 +14,20 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-// SettingWebpService contains methods and other services that help with
+// SettingWebPService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewSettingWebpService] method
+// this service directly, and instead use the [NewSettingWebPService] method
 // instead.
-type SettingWebpService struct {
+type SettingWebPService struct {
 	Options []option.RequestOption
 }
 
-// NewSettingWebpService generates a new service that applies the given options to
+// NewSettingWebPService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewSettingWebpService(opts ...option.RequestOption) (r *SettingWebpService) {
-	r = &SettingWebpService{}
+func NewSettingWebPService(opts ...option.RequestOption) (r *SettingWebPService) {
+	r = &SettingWebPService{}
 	r.Options = opts
 	return
 }
@@ -35,9 +35,9 @@ func NewSettingWebpService(opts ...option.RequestOption) (r *SettingWebpService)
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
 // serve a WebP version of the original image.
-func (r *SettingWebpService) Edit(ctx context.Context, params SettingWebpEditParams, opts ...option.RequestOption) (res *ZonesWebp, err error) {
+func (r *SettingWebPService) Edit(ctx context.Context, params SettingWebPEditParams, opts ...option.RequestOption) (res *ZonesWebP, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingWebpEditResponseEnvelope
+	var env SettingWebPEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/webp", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -50,9 +50,9 @@ func (r *SettingWebpService) Edit(ctx context.Context, params SettingWebpEditPar
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
 // serve a WebP version of the original image.
-func (r *SettingWebpService) Get(ctx context.Context, query SettingWebpGetParams, opts ...option.RequestOption) (res *ZonesWebp, err error) {
+func (r *SettingWebPService) Get(ctx context.Context, query SettingWebPGetParams, opts ...option.RequestOption) (res *ZonesWebP, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingWebpGetResponseEnvelope
+	var env SettingWebPGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/webp", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -65,21 +65,21 @@ func (r *SettingWebpService) Get(ctx context.Context, query SettingWebpGetParams
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
 // serve a WebP version of the original image.
-type ZonesWebp struct {
+type ZonesWebP struct {
 	// ID of the zone setting.
-	ID ZonesWebpID `json:"id,required"`
+	ID ZonesWebPID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesWebpValue `json:"value,required"`
+	Value ZonesWebPValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesWebpEditable `json:"editable"`
+	Editable ZonesWebPEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesWebpJSON `json:"-"`
+	JSON       zonesWebPJSON `json:"-"`
 }
 
-// zonesWebpJSON contains the JSON metadata for the struct [ZonesWebp]
-type zonesWebpJSON struct {
+// zonesWebPJSON contains the JSON metadata for the struct [ZonesWebP]
+type zonesWebPJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -88,44 +88,44 @@ type zonesWebpJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesWebp) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesWebP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesWebpJSON) RawJSON() string {
+func (r zonesWebPJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZonesWebp) implementsZonesSettingEditResponse() {}
+func (r ZonesWebP) implementsZonesSettingEditResponse() {}
 
-func (r ZonesWebp) implementsZonesSettingGetResponse() {}
+func (r ZonesWebP) implementsZonesSettingGetResponse() {}
 
 // ID of the zone setting.
-type ZonesWebpID string
+type ZonesWebPID string
 
 const (
-	ZonesWebpIDWebp ZonesWebpID = "webp"
+	ZonesWebPIDWebP ZonesWebPID = "webp"
 )
 
-func (r ZonesWebpID) IsKnown() bool {
+func (r ZonesWebPID) IsKnown() bool {
 	switch r {
-	case ZonesWebpIDWebp:
+	case ZonesWebPIDWebP:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZonesWebpValue string
+type ZonesWebPValue string
 
 const (
-	ZonesWebpValueOff ZonesWebpValue = "off"
-	ZonesWebpValueOn  ZonesWebpValue = "on"
+	ZonesWebPValueOff ZonesWebPValue = "off"
+	ZonesWebPValueOn  ZonesWebPValue = "on"
 )
 
-func (r ZonesWebpValue) IsKnown() bool {
+func (r ZonesWebPValue) IsKnown() bool {
 	switch r {
-	case ZonesWebpValueOff, ZonesWebpValueOn:
+	case ZonesWebPValueOff, ZonesWebPValueOn:
 		return true
 	}
 	return false
@@ -133,16 +133,16 @@ func (r ZonesWebpValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesWebpEditable bool
+type ZonesWebPEditable bool
 
 const (
-	ZonesWebpEditableTrue  ZonesWebpEditable = true
-	ZonesWebpEditableFalse ZonesWebpEditable = false
+	ZonesWebPEditableTrue  ZonesWebPEditable = true
+	ZonesWebPEditableFalse ZonesWebPEditable = false
 )
 
-func (r ZonesWebpEditable) IsKnown() bool {
+func (r ZonesWebPEditable) IsKnown() bool {
 	switch r {
-	case ZonesWebpEditableTrue, ZonesWebpEditableFalse:
+	case ZonesWebPEditableTrue, ZonesWebPEditableFalse:
 		return true
 	}
 	return false
@@ -151,61 +151,61 @@ func (r ZonesWebpEditable) IsKnown() bool {
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
 // serve a WebP version of the original image.
-type ZonesWebpParam struct {
+type ZonesWebPParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesWebpID] `json:"id,required"`
+	ID param.Field[ZonesWebPID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesWebpValue] `json:"value,required"`
+	Value param.Field[ZonesWebPValue] `json:"value,required"`
 }
 
-func (r ZonesWebpParam) MarshalJSON() (data []byte, err error) {
+func (r ZonesWebPParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonesWebpParam) implementsZonesSettingEditParamsItem() {}
+func (r ZonesWebPParam) implementsZonesSettingEditParamsItem() {}
 
-type SettingWebpEditParams struct {
+type SettingWebPEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
-	Value param.Field[SettingWebpEditParamsValue] `json:"value,required"`
+	Value param.Field[SettingWebPEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingWebpEditParams) MarshalJSON() (data []byte, err error) {
+func (r SettingWebPEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingWebpEditParamsValue string
+type SettingWebPEditParamsValue string
 
 const (
-	SettingWebpEditParamsValueOff SettingWebpEditParamsValue = "off"
-	SettingWebpEditParamsValueOn  SettingWebpEditParamsValue = "on"
+	SettingWebPEditParamsValueOff SettingWebPEditParamsValue = "off"
+	SettingWebPEditParamsValueOn  SettingWebPEditParamsValue = "on"
 )
 
-func (r SettingWebpEditParamsValue) IsKnown() bool {
+func (r SettingWebPEditParamsValue) IsKnown() bool {
 	switch r {
-	case SettingWebpEditParamsValueOff, SettingWebpEditParamsValueOn:
+	case SettingWebPEditParamsValueOff, SettingWebPEditParamsValueOn:
 		return true
 	}
 	return false
 }
 
-type SettingWebpEditResponseEnvelope struct {
-	Errors   []SettingWebpEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWebpEditResponseEnvelopeMessages `json:"messages,required"`
+type SettingWebPEditResponseEnvelope struct {
+	Errors   []SettingWebPEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingWebPEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting the image supports the WebP image codec, and WebP
 	// offers a performance advantage over the original image format, Cloudflare will
 	// serve a WebP version of the original image.
-	Result ZonesWebp                           `json:"result"`
-	JSON   settingWebpEditResponseEnvelopeJSON `json:"-"`
+	Result ZonesWebP                           `json:"result"`
+	JSON   settingWebPEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingWebpEditResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingWebpEditResponseEnvelope]
-type settingWebpEditResponseEnvelopeJSON struct {
+// settingWebPEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingWebPEditResponseEnvelope]
+type settingWebPEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -214,80 +214,80 @@ type settingWebpEditResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWebpEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWebPEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingWebpEditResponseEnvelopeJSON) RawJSON() string {
+func (r settingWebPEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingWebpEditResponseEnvelopeErrors struct {
+type SettingWebPEditResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
-	JSON    settingWebpEditResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingWebPEditResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// settingWebpEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingWebpEditResponseEnvelopeErrors]
-type settingWebpEditResponseEnvelopeErrorsJSON struct {
+// settingWebPEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingWebPEditResponseEnvelopeErrors]
+type settingWebPEditResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWebpEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWebPEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingWebpEditResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r settingWebPEditResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingWebpEditResponseEnvelopeMessages struct {
+type SettingWebPEditResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
-	JSON    settingWebpEditResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    settingWebPEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingWebpEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingWebpEditResponseEnvelopeMessages]
-type settingWebpEditResponseEnvelopeMessagesJSON struct {
+// settingWebPEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingWebPEditResponseEnvelopeMessages]
+type settingWebPEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWebpEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWebPEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingWebpEditResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r settingWebPEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingWebpGetParams struct {
+type SettingWebPGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type SettingWebpGetResponseEnvelope struct {
-	Errors   []SettingWebpGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWebpGetResponseEnvelopeMessages `json:"messages,required"`
+type SettingWebPGetResponseEnvelope struct {
+	Errors   []SettingWebPGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingWebPGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting the image supports the WebP image codec, and WebP
 	// offers a performance advantage over the original image format, Cloudflare will
 	// serve a WebP version of the original image.
-	Result ZonesWebp                          `json:"result"`
-	JSON   settingWebpGetResponseEnvelopeJSON `json:"-"`
+	Result ZonesWebP                          `json:"result"`
+	JSON   settingWebPGetResponseEnvelopeJSON `json:"-"`
 }
 
-// settingWebpGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingWebpGetResponseEnvelope]
-type settingWebpGetResponseEnvelopeJSON struct {
+// settingWebPGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingWebPGetResponseEnvelope]
+type settingWebPGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -296,56 +296,56 @@ type settingWebpGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWebpGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWebPGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingWebpGetResponseEnvelopeJSON) RawJSON() string {
+func (r settingWebPGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingWebpGetResponseEnvelopeErrors struct {
+type SettingWebPGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
-	JSON    settingWebpGetResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingWebPGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// settingWebpGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingWebpGetResponseEnvelopeErrors]
-type settingWebpGetResponseEnvelopeErrorsJSON struct {
+// settingWebPGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingWebPGetResponseEnvelopeErrors]
+type settingWebPGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWebpGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWebPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingWebpGetResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r settingWebPGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingWebpGetResponseEnvelopeMessages struct {
+type SettingWebPGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
-	JSON    settingWebpGetResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    settingWebPGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingWebpGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingWebpGetResponseEnvelopeMessages]
-type settingWebpGetResponseEnvelopeMessagesJSON struct {
+// settingWebPGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingWebPGetResponseEnvelopeMessages]
+type settingWebPGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWebpGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWebPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingWebpGetResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r settingWebPGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

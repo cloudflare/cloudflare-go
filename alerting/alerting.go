@@ -11,8 +11,11 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewAlertingService] method instead.
 type AlertingService struct {
-	Options []option.RequestOption
-	V3      *V3Service
+	Options         []option.RequestOption
+	AvailableAlerts *AvailableAlertService
+	Destinations    *DestinationService
+	History         *HistoryService
+	Policies        *PolicyService
 }
 
 // NewAlertingService generates a new service that applies the given options to
@@ -21,6 +24,9 @@ type AlertingService struct {
 func NewAlertingService(opts ...option.RequestOption) (r *AlertingService) {
 	r = &AlertingService{}
 	r.Options = opts
-	r.V3 = NewV3Service(opts...)
+	r.AvailableAlerts = NewAvailableAlertService(opts...)
+	r.Destinations = NewDestinationService(opts...)
+	r.History = NewHistoryService(opts...)
+	r.Policies = NewPolicyService(opts...)
 	return
 }

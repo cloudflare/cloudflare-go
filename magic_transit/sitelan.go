@@ -13,28 +13,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-// SiteLanService contains methods and other services that help with interacting
+// SiteLANService contains methods and other services that help with interacting
 // with the cloudflare API. Note, unlike clients, this service does not read
 // variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewSiteLanService] method instead.
-type SiteLanService struct {
+// service directly, and instead use the [NewSiteLANService] method instead.
+type SiteLANService struct {
 	Options []option.RequestOption
 }
 
-// NewSiteLanService generates a new service that applies the given options to each
+// NewSiteLANService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewSiteLanService(opts ...option.RequestOption) (r *SiteLanService) {
-	r = &SiteLanService{}
+func NewSiteLANService(opts ...option.RequestOption) (r *SiteLANService) {
+	r = &SiteLANService{}
 	r.Options = opts
 	return
 }
 
 // Creates a new LAN. If the site is in high availability mode, static_addressing
 // is required along with secondary and virtual address.
-func (r *SiteLanService) New(ctx context.Context, siteID string, params SiteLanNewParams, opts ...option.RequestOption) (res *SiteLanNewResponse, err error) {
+func (r *SiteLANService) New(ctx context.Context, siteID string, params SiteLANNewParams, opts ...option.RequestOption) (res *SiteLANNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SiteLanNewResponseEnvelope
+	var env SiteLANNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -45,9 +45,9 @@ func (r *SiteLanService) New(ctx context.Context, siteID string, params SiteLanN
 }
 
 // Update a specific LAN.
-func (r *SiteLanService) Update(ctx context.Context, siteID string, lanID string, params SiteLanUpdateParams, opts ...option.RequestOption) (res *SiteLanUpdateResponse, err error) {
+func (r *SiteLANService) Update(ctx context.Context, siteID string, lanID string, params SiteLANUpdateParams, opts ...option.RequestOption) (res *SiteLANUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SiteLanUpdateResponseEnvelope
+	var env SiteLANUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", params.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
@@ -58,9 +58,9 @@ func (r *SiteLanService) Update(ctx context.Context, siteID string, lanID string
 }
 
 // Lists LANs associated with an account and site.
-func (r *SiteLanService) List(ctx context.Context, siteID string, query SiteLanListParams, opts ...option.RequestOption) (res *SiteLanListResponse, err error) {
+func (r *SiteLANService) List(ctx context.Context, siteID string, query SiteLANListParams, opts ...option.RequestOption) (res *SiteLANListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SiteLanListResponseEnvelope
+	var env SiteLANListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans", query.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -71,9 +71,9 @@ func (r *SiteLanService) List(ctx context.Context, siteID string, query SiteLanL
 }
 
 // Remove a specific LAN.
-func (r *SiteLanService) Delete(ctx context.Context, siteID string, lanID string, body SiteLanDeleteParams, opts ...option.RequestOption) (res *SiteLanDeleteResponse, err error) {
+func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string, body SiteLANDeleteParams, opts ...option.RequestOption) (res *SiteLANDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SiteLanDeleteResponseEnvelope
+	var env SiteLANDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", body.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -84,9 +84,9 @@ func (r *SiteLanService) Delete(ctx context.Context, siteID string, lanID string
 }
 
 // Get a specific LAN.
-func (r *SiteLanService) Get(ctx context.Context, siteID string, lanID string, query SiteLanGetParams, opts ...option.RequestOption) (res *SiteLanGetResponse, err error) {
+func (r *SiteLANService) Get(ctx context.Context, siteID string, lanID string, query SiteLANGetParams, opts ...option.RequestOption) (res *SiteLANGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SiteLanGetResponseEnvelope
+	var env SiteLANGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", query.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -96,51 +96,51 @@ func (r *SiteLanService) Get(ctx context.Context, siteID string, lanID string, q
 	return
 }
 
-type SiteLanNewResponse struct {
-	Lans []SiteLanNewResponseLan `json:"lans"`
-	JSON siteLanNewResponseJSON  `json:"-"`
+type SiteLANNewResponse struct {
+	LANs []SiteLANNewResponseLAN `json:"lans"`
+	JSON siteLANNewResponseJSON  `json:"-"`
 }
 
-// siteLanNewResponseJSON contains the JSON metadata for the struct
-// [SiteLanNewResponse]
-type siteLanNewResponseJSON struct {
-	Lans        apijson.Field
+// siteLANNewResponseJSON contains the JSON metadata for the struct
+// [SiteLANNewResponse]
+type siteLANNewResponseJSON struct {
+	LANs        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseJSON) RawJSON() string {
+func (r siteLANNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanNewResponseLan struct {
+type SiteLANNewResponseLAN struct {
 	// Identifier
 	ID          string `json:"id"`
 	Description string `json:"description"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
 	HaLink        bool                                 `json:"ha_link"`
-	Nat           SiteLanNewResponseLansNat            `json:"nat"`
+	Nat           SiteLANNewResponseLANsNat            `json:"nat"`
 	Physport      int64                                `json:"physport"`
-	RoutedSubnets []SiteLanNewResponseLansRoutedSubnet `json:"routed_subnets"`
+	RoutedSubnets []SiteLANNewResponseLANsRoutedSubnet `json:"routed_subnets"`
 	// Identifier
 	SiteID string `json:"site_id"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing SiteLanNewResponseLansStaticAddressing `json:"static_addressing"`
+	StaticAddressing SiteLANNewResponseLANsStaticAddressing `json:"static_addressing"`
 	// VLAN port number.
 	VlanTag int64                     `json:"vlan_tag"`
-	JSON    siteLanNewResponseLanJSON `json:"-"`
+	JSON    siteLANNewResponseLANJSON `json:"-"`
 }
 
-// siteLanNewResponseLanJSON contains the JSON metadata for the struct
-// [SiteLanNewResponseLan]
-type siteLanNewResponseLanJSON struct {
+// siteLANNewResponseLANJSON contains the JSON metadata for the struct
+// [SiteLANNewResponseLAN]
+type siteLANNewResponseLANJSON struct {
 	ID               apijson.Field
 	Description      apijson.Field
 	HaLink           apijson.Field
@@ -154,48 +154,48 @@ type siteLanNewResponseLanJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseLan) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseLAN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseLanJSON) RawJSON() string {
+func (r siteLANNewResponseLANJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanNewResponseLansNat struct {
+type SiteLANNewResponseLANsNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                        `json:"static_prefix"`
-	JSON         siteLanNewResponseLansNatJSON `json:"-"`
+	JSON         siteLANNewResponseLANsNatJSON `json:"-"`
 }
 
-// siteLanNewResponseLansNatJSON contains the JSON metadata for the struct
-// [SiteLanNewResponseLansNat]
-type siteLanNewResponseLansNatJSON struct {
+// siteLANNewResponseLANsNatJSON contains the JSON metadata for the struct
+// [SiteLANNewResponseLANsNat]
+type siteLANNewResponseLANsNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseLansNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseLANsNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseLansNatJSON) RawJSON() string {
+func (r siteLANNewResponseLANsNatJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanNewResponseLansRoutedSubnet struct {
+type SiteLANNewResponseLANsRoutedSubnet struct {
 	// A valid IPv4 address.
 	NextHop string `json:"next_hop,required"`
 	// A valid CIDR notation representing an IP range.
 	Prefix string                                 `json:"prefix,required"`
-	Nat    SiteLanNewResponseLansRoutedSubnetsNat `json:"nat"`
-	JSON   siteLanNewResponseLansRoutedSubnetJSON `json:"-"`
+	Nat    SiteLANNewResponseLANsRoutedSubnetsNat `json:"nat"`
+	JSON   siteLANNewResponseLANsRoutedSubnetJSON `json:"-"`
 }
 
-// siteLanNewResponseLansRoutedSubnetJSON contains the JSON metadata for the struct
-// [SiteLanNewResponseLansRoutedSubnet]
-type siteLanNewResponseLansRoutedSubnetJSON struct {
+// siteLANNewResponseLANsRoutedSubnetJSON contains the JSON metadata for the struct
+// [SiteLANNewResponseLANsRoutedSubnet]
+type siteLANNewResponseLANsRoutedSubnetJSON struct {
 	NextHop     apijson.Field
 	Prefix      apijson.Field
 	Nat         apijson.Field
@@ -203,54 +203,54 @@ type siteLanNewResponseLansRoutedSubnetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseLansRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseLANsRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseLansRoutedSubnetJSON) RawJSON() string {
+func (r siteLANNewResponseLANsRoutedSubnetJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanNewResponseLansRoutedSubnetsNat struct {
+type SiteLANNewResponseLANsRoutedSubnetsNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                                     `json:"static_prefix"`
-	JSON         siteLanNewResponseLansRoutedSubnetsNatJSON `json:"-"`
+	JSON         siteLANNewResponseLANsRoutedSubnetsNatJSON `json:"-"`
 }
 
-// siteLanNewResponseLansRoutedSubnetsNatJSON contains the JSON metadata for the
-// struct [SiteLanNewResponseLansRoutedSubnetsNat]
-type siteLanNewResponseLansRoutedSubnetsNatJSON struct {
+// siteLANNewResponseLANsRoutedSubnetsNatJSON contains the JSON metadata for the
+// struct [SiteLANNewResponseLANsRoutedSubnetsNat]
+type siteLANNewResponseLANsRoutedSubnetsNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseLansRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseLANsRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseLansRoutedSubnetsNatJSON) RawJSON() string {
+func (r siteLANNewResponseLANsRoutedSubnetsNatJSON) RawJSON() string {
 	return r.raw
 }
 
 // If the site is not configured in high availability mode, this configuration is
 // optional (if omitted, use DHCP). However, if in high availability mode,
 // static_address is required along with secondary and virtual address.
-type SiteLanNewResponseLansStaticAddressing struct {
+type SiteLANNewResponseLANsStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                           `json:"address,required"`
-	DhcpRelay  SiteLanNewResponseLansStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLanNewResponseLansStaticAddressingDhcpServer `json:"dhcp_server"`
+	DhcpRelay  SiteLANNewResponseLANsStaticAddressingDhcpRelay  `json:"dhcp_relay"`
+	DhcpServer SiteLANNewResponseLANsStaticAddressingDhcpServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
 	VirtualAddress string                                     `json:"virtual_address"`
-	JSON           siteLanNewResponseLansStaticAddressingJSON `json:"-"`
+	JSON           siteLANNewResponseLANsStaticAddressingJSON `json:"-"`
 }
 
-// siteLanNewResponseLansStaticAddressingJSON contains the JSON metadata for the
-// struct [SiteLanNewResponseLansStaticAddressing]
-type siteLanNewResponseLansStaticAddressingJSON struct {
+// siteLANNewResponseLANsStaticAddressingJSON contains the JSON metadata for the
+// struct [SiteLANNewResponseLANsStaticAddressing]
+type siteLANNewResponseLANsStaticAddressingJSON struct {
 	Address          apijson.Field
 	DhcpRelay        apijson.Field
 	DhcpServer       apijson.Field
@@ -260,37 +260,37 @@ type siteLanNewResponseLansStaticAddressingJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseLansStaticAddressing) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseLANsStaticAddressing) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseLansStaticAddressingJSON) RawJSON() string {
+func (r siteLANNewResponseLANsStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanNewResponseLansStaticAddressingDhcpRelay struct {
+type SiteLANNewResponseLANsStaticAddressingDhcpRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                            `json:"server_addresses"`
-	JSON            siteLanNewResponseLansStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANNewResponseLANsStaticAddressingDhcpRelayJSON `json:"-"`
 }
 
-// siteLanNewResponseLansStaticAddressingDhcpRelayJSON contains the JSON metadata
-// for the struct [SiteLanNewResponseLansStaticAddressingDhcpRelay]
-type siteLanNewResponseLansStaticAddressingDhcpRelayJSON struct {
+// siteLANNewResponseLANsStaticAddressingDhcpRelayJSON contains the JSON metadata
+// for the struct [SiteLANNewResponseLANsStaticAddressingDhcpRelay]
+type siteLANNewResponseLANsStaticAddressingDhcpRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseLansStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseLANsStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseLansStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANNewResponseLANsStaticAddressingDhcpRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanNewResponseLansStaticAddressingDhcpServer struct {
+type SiteLANNewResponseLANsStaticAddressingDhcpServer struct {
 	// A valid IPv4 address.
 	DhcpPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
@@ -299,12 +299,12 @@ type SiteLanNewResponseLansStaticAddressingDhcpServer struct {
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                    `json:"reservations"`
-	JSON         siteLanNewResponseLansStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANNewResponseLANsStaticAddressingDhcpServerJSON `json:"-"`
 }
 
-// siteLanNewResponseLansStaticAddressingDhcpServerJSON contains the JSON metadata
-// for the struct [SiteLanNewResponseLansStaticAddressingDhcpServer]
-type siteLanNewResponseLansStaticAddressingDhcpServerJSON struct {
+// siteLANNewResponseLANsStaticAddressingDhcpServerJSON contains the JSON metadata
+// for the struct [SiteLANNewResponseLANsStaticAddressingDhcpServer]
+type siteLANNewResponseLANsStaticAddressingDhcpServerJSON struct {
 	DhcpPoolEnd   apijson.Field
 	DhcpPoolStart apijson.Field
 	DNSServer     apijson.Field
@@ -313,59 +313,59 @@ type siteLanNewResponseLansStaticAddressingDhcpServerJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseLansStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseLANsStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseLansStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANNewResponseLANsStaticAddressingDhcpServerJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanUpdateResponse struct {
-	Lan  SiteLanUpdateResponseLan  `json:"lan"`
-	JSON siteLanUpdateResponseJSON `json:"-"`
+type SiteLANUpdateResponse struct {
+	LAN  SiteLANUpdateResponseLAN  `json:"lan"`
+	JSON siteLANUpdateResponseJSON `json:"-"`
 }
 
-// siteLanUpdateResponseJSON contains the JSON metadata for the struct
-// [SiteLanUpdateResponse]
-type siteLanUpdateResponseJSON struct {
-	Lan         apijson.Field
+// siteLANUpdateResponseJSON contains the JSON metadata for the struct
+// [SiteLANUpdateResponse]
+type siteLANUpdateResponseJSON struct {
+	LAN         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseJSON) RawJSON() string {
+func (r siteLANUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanUpdateResponseLan struct {
+type SiteLANUpdateResponseLAN struct {
 	// Identifier
 	ID          string `json:"id"`
 	Description string `json:"description"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
 	HaLink        bool                                   `json:"ha_link"`
-	Nat           SiteLanUpdateResponseLanNat            `json:"nat"`
+	Nat           SiteLANUpdateResponseLANNat            `json:"nat"`
 	Physport      int64                                  `json:"physport"`
-	RoutedSubnets []SiteLanUpdateResponseLanRoutedSubnet `json:"routed_subnets"`
+	RoutedSubnets []SiteLANUpdateResponseLANRoutedSubnet `json:"routed_subnets"`
 	// Identifier
 	SiteID string `json:"site_id"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing SiteLanUpdateResponseLanStaticAddressing `json:"static_addressing"`
+	StaticAddressing SiteLANUpdateResponseLANStaticAddressing `json:"static_addressing"`
 	// VLAN port number.
 	VlanTag int64                        `json:"vlan_tag"`
-	JSON    siteLanUpdateResponseLanJSON `json:"-"`
+	JSON    siteLANUpdateResponseLANJSON `json:"-"`
 }
 
-// siteLanUpdateResponseLanJSON contains the JSON metadata for the struct
-// [SiteLanUpdateResponseLan]
-type siteLanUpdateResponseLanJSON struct {
+// siteLANUpdateResponseLANJSON contains the JSON metadata for the struct
+// [SiteLANUpdateResponseLAN]
+type siteLANUpdateResponseLANJSON struct {
 	ID               apijson.Field
 	Description      apijson.Field
 	HaLink           apijson.Field
@@ -379,48 +379,48 @@ type siteLanUpdateResponseLanJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseLan) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseLAN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseLanJSON) RawJSON() string {
+func (r siteLANUpdateResponseLANJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanUpdateResponseLanNat struct {
+type SiteLANUpdateResponseLANNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                          `json:"static_prefix"`
-	JSON         siteLanUpdateResponseLanNatJSON `json:"-"`
+	JSON         siteLANUpdateResponseLANNatJSON `json:"-"`
 }
 
-// siteLanUpdateResponseLanNatJSON contains the JSON metadata for the struct
-// [SiteLanUpdateResponseLanNat]
-type siteLanUpdateResponseLanNatJSON struct {
+// siteLANUpdateResponseLANNatJSON contains the JSON metadata for the struct
+// [SiteLANUpdateResponseLANNat]
+type siteLANUpdateResponseLANNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseLanNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseLANNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseLanNatJSON) RawJSON() string {
+func (r siteLANUpdateResponseLANNatJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanUpdateResponseLanRoutedSubnet struct {
+type SiteLANUpdateResponseLANRoutedSubnet struct {
 	// A valid IPv4 address.
 	NextHop string `json:"next_hop,required"`
 	// A valid CIDR notation representing an IP range.
 	Prefix string                                   `json:"prefix,required"`
-	Nat    SiteLanUpdateResponseLanRoutedSubnetsNat `json:"nat"`
-	JSON   siteLanUpdateResponseLanRoutedSubnetJSON `json:"-"`
+	Nat    SiteLANUpdateResponseLANRoutedSubnetsNat `json:"nat"`
+	JSON   siteLANUpdateResponseLANRoutedSubnetJSON `json:"-"`
 }
 
-// siteLanUpdateResponseLanRoutedSubnetJSON contains the JSON metadata for the
-// struct [SiteLanUpdateResponseLanRoutedSubnet]
-type siteLanUpdateResponseLanRoutedSubnetJSON struct {
+// siteLANUpdateResponseLANRoutedSubnetJSON contains the JSON metadata for the
+// struct [SiteLANUpdateResponseLANRoutedSubnet]
+type siteLANUpdateResponseLANRoutedSubnetJSON struct {
 	NextHop     apijson.Field
 	Prefix      apijson.Field
 	Nat         apijson.Field
@@ -428,54 +428,54 @@ type siteLanUpdateResponseLanRoutedSubnetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseLanRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseLANRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseLanRoutedSubnetJSON) RawJSON() string {
+func (r siteLANUpdateResponseLANRoutedSubnetJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanUpdateResponseLanRoutedSubnetsNat struct {
+type SiteLANUpdateResponseLANRoutedSubnetsNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                                       `json:"static_prefix"`
-	JSON         siteLanUpdateResponseLanRoutedSubnetsNatJSON `json:"-"`
+	JSON         siteLANUpdateResponseLANRoutedSubnetsNatJSON `json:"-"`
 }
 
-// siteLanUpdateResponseLanRoutedSubnetsNatJSON contains the JSON metadata for the
-// struct [SiteLanUpdateResponseLanRoutedSubnetsNat]
-type siteLanUpdateResponseLanRoutedSubnetsNatJSON struct {
+// siteLANUpdateResponseLANRoutedSubnetsNatJSON contains the JSON metadata for the
+// struct [SiteLANUpdateResponseLANRoutedSubnetsNat]
+type siteLANUpdateResponseLANRoutedSubnetsNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseLanRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseLANRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseLanRoutedSubnetsNatJSON) RawJSON() string {
+func (r siteLANUpdateResponseLANRoutedSubnetsNatJSON) RawJSON() string {
 	return r.raw
 }
 
 // If the site is not configured in high availability mode, this configuration is
 // optional (if omitted, use DHCP). However, if in high availability mode,
 // static_address is required along with secondary and virtual address.
-type SiteLanUpdateResponseLanStaticAddressing struct {
+type SiteLANUpdateResponseLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                             `json:"address,required"`
-	DhcpRelay  SiteLanUpdateResponseLanStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLanUpdateResponseLanStaticAddressingDhcpServer `json:"dhcp_server"`
+	DhcpRelay  SiteLANUpdateResponseLANStaticAddressingDhcpRelay  `json:"dhcp_relay"`
+	DhcpServer SiteLANUpdateResponseLANStaticAddressingDhcpServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
 	VirtualAddress string                                       `json:"virtual_address"`
-	JSON           siteLanUpdateResponseLanStaticAddressingJSON `json:"-"`
+	JSON           siteLANUpdateResponseLANStaticAddressingJSON `json:"-"`
 }
 
-// siteLanUpdateResponseLanStaticAddressingJSON contains the JSON metadata for the
-// struct [SiteLanUpdateResponseLanStaticAddressing]
-type siteLanUpdateResponseLanStaticAddressingJSON struct {
+// siteLANUpdateResponseLANStaticAddressingJSON contains the JSON metadata for the
+// struct [SiteLANUpdateResponseLANStaticAddressing]
+type siteLANUpdateResponseLANStaticAddressingJSON struct {
 	Address          apijson.Field
 	DhcpRelay        apijson.Field
 	DhcpServer       apijson.Field
@@ -485,37 +485,37 @@ type siteLanUpdateResponseLanStaticAddressingJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseLanStaticAddressing) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseLANStaticAddressing) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseLanStaticAddressingJSON) RawJSON() string {
+func (r siteLANUpdateResponseLANStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanUpdateResponseLanStaticAddressingDhcpRelay struct {
+type SiteLANUpdateResponseLANStaticAddressingDhcpRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                              `json:"server_addresses"`
-	JSON            siteLanUpdateResponseLanStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANUpdateResponseLANStaticAddressingDhcpRelayJSON `json:"-"`
 }
 
-// siteLanUpdateResponseLanStaticAddressingDhcpRelayJSON contains the JSON metadata
-// for the struct [SiteLanUpdateResponseLanStaticAddressingDhcpRelay]
-type siteLanUpdateResponseLanStaticAddressingDhcpRelayJSON struct {
+// siteLANUpdateResponseLANStaticAddressingDhcpRelayJSON contains the JSON metadata
+// for the struct [SiteLANUpdateResponseLANStaticAddressingDhcpRelay]
+type siteLANUpdateResponseLANStaticAddressingDhcpRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseLanStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseLANStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseLanStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANUpdateResponseLANStaticAddressingDhcpRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanUpdateResponseLanStaticAddressingDhcpServer struct {
+type SiteLANUpdateResponseLANStaticAddressingDhcpServer struct {
 	// A valid IPv4 address.
 	DhcpPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
@@ -524,12 +524,12 @@ type SiteLanUpdateResponseLanStaticAddressingDhcpServer struct {
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                      `json:"reservations"`
-	JSON         siteLanUpdateResponseLanStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANUpdateResponseLANStaticAddressingDhcpServerJSON `json:"-"`
 }
 
-// siteLanUpdateResponseLanStaticAddressingDhcpServerJSON contains the JSON
-// metadata for the struct [SiteLanUpdateResponseLanStaticAddressingDhcpServer]
-type siteLanUpdateResponseLanStaticAddressingDhcpServerJSON struct {
+// siteLANUpdateResponseLANStaticAddressingDhcpServerJSON contains the JSON
+// metadata for the struct [SiteLANUpdateResponseLANStaticAddressingDhcpServer]
+type siteLANUpdateResponseLANStaticAddressingDhcpServerJSON struct {
 	DhcpPoolEnd   apijson.Field
 	DhcpPoolStart apijson.Field
 	DNSServer     apijson.Field
@@ -538,59 +538,59 @@ type siteLanUpdateResponseLanStaticAddressingDhcpServerJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseLanStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseLANStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseLanStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANUpdateResponseLANStaticAddressingDhcpServerJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanListResponse struct {
-	Lans []SiteLanListResponseLan `json:"lans"`
-	JSON siteLanListResponseJSON  `json:"-"`
+type SiteLANListResponse struct {
+	LANs []SiteLANListResponseLAN `json:"lans"`
+	JSON siteLANListResponseJSON  `json:"-"`
 }
 
-// siteLanListResponseJSON contains the JSON metadata for the struct
-// [SiteLanListResponse]
-type siteLanListResponseJSON struct {
-	Lans        apijson.Field
+// siteLANListResponseJSON contains the JSON metadata for the struct
+// [SiteLANListResponse]
+type siteLANListResponseJSON struct {
+	LANs        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseJSON) RawJSON() string {
+func (r siteLANListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanListResponseLan struct {
+type SiteLANListResponseLAN struct {
 	// Identifier
 	ID          string `json:"id"`
 	Description string `json:"description"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
 	HaLink        bool                                  `json:"ha_link"`
-	Nat           SiteLanListResponseLansNat            `json:"nat"`
+	Nat           SiteLANListResponseLANsNat            `json:"nat"`
 	Physport      int64                                 `json:"physport"`
-	RoutedSubnets []SiteLanListResponseLansRoutedSubnet `json:"routed_subnets"`
+	RoutedSubnets []SiteLANListResponseLANsRoutedSubnet `json:"routed_subnets"`
 	// Identifier
 	SiteID string `json:"site_id"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing SiteLanListResponseLansStaticAddressing `json:"static_addressing"`
+	StaticAddressing SiteLANListResponseLANsStaticAddressing `json:"static_addressing"`
 	// VLAN port number.
 	VlanTag int64                      `json:"vlan_tag"`
-	JSON    siteLanListResponseLanJSON `json:"-"`
+	JSON    siteLANListResponseLANJSON `json:"-"`
 }
 
-// siteLanListResponseLanJSON contains the JSON metadata for the struct
-// [SiteLanListResponseLan]
-type siteLanListResponseLanJSON struct {
+// siteLANListResponseLANJSON contains the JSON metadata for the struct
+// [SiteLANListResponseLAN]
+type siteLANListResponseLANJSON struct {
 	ID               apijson.Field
 	Description      apijson.Field
 	HaLink           apijson.Field
@@ -604,48 +604,48 @@ type siteLanListResponseLanJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseLan) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseLAN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseLanJSON) RawJSON() string {
+func (r siteLANListResponseLANJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanListResponseLansNat struct {
+type SiteLANListResponseLANsNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                         `json:"static_prefix"`
-	JSON         siteLanListResponseLansNatJSON `json:"-"`
+	JSON         siteLANListResponseLANsNatJSON `json:"-"`
 }
 
-// siteLanListResponseLansNatJSON contains the JSON metadata for the struct
-// [SiteLanListResponseLansNat]
-type siteLanListResponseLansNatJSON struct {
+// siteLANListResponseLANsNatJSON contains the JSON metadata for the struct
+// [SiteLANListResponseLANsNat]
+type siteLANListResponseLANsNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseLansNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseLANsNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseLansNatJSON) RawJSON() string {
+func (r siteLANListResponseLANsNatJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanListResponseLansRoutedSubnet struct {
+type SiteLANListResponseLANsRoutedSubnet struct {
 	// A valid IPv4 address.
 	NextHop string `json:"next_hop,required"`
 	// A valid CIDR notation representing an IP range.
 	Prefix string                                  `json:"prefix,required"`
-	Nat    SiteLanListResponseLansRoutedSubnetsNat `json:"nat"`
-	JSON   siteLanListResponseLansRoutedSubnetJSON `json:"-"`
+	Nat    SiteLANListResponseLANsRoutedSubnetsNat `json:"nat"`
+	JSON   siteLANListResponseLANsRoutedSubnetJSON `json:"-"`
 }
 
-// siteLanListResponseLansRoutedSubnetJSON contains the JSON metadata for the
-// struct [SiteLanListResponseLansRoutedSubnet]
-type siteLanListResponseLansRoutedSubnetJSON struct {
+// siteLANListResponseLANsRoutedSubnetJSON contains the JSON metadata for the
+// struct [SiteLANListResponseLANsRoutedSubnet]
+type siteLANListResponseLANsRoutedSubnetJSON struct {
 	NextHop     apijson.Field
 	Prefix      apijson.Field
 	Nat         apijson.Field
@@ -653,54 +653,54 @@ type siteLanListResponseLansRoutedSubnetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseLansRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseLANsRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseLansRoutedSubnetJSON) RawJSON() string {
+func (r siteLANListResponseLANsRoutedSubnetJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanListResponseLansRoutedSubnetsNat struct {
+type SiteLANListResponseLANsRoutedSubnetsNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                                      `json:"static_prefix"`
-	JSON         siteLanListResponseLansRoutedSubnetsNatJSON `json:"-"`
+	JSON         siteLANListResponseLANsRoutedSubnetsNatJSON `json:"-"`
 }
 
-// siteLanListResponseLansRoutedSubnetsNatJSON contains the JSON metadata for the
-// struct [SiteLanListResponseLansRoutedSubnetsNat]
-type siteLanListResponseLansRoutedSubnetsNatJSON struct {
+// siteLANListResponseLANsRoutedSubnetsNatJSON contains the JSON metadata for the
+// struct [SiteLANListResponseLANsRoutedSubnetsNat]
+type siteLANListResponseLANsRoutedSubnetsNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseLansRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseLANsRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseLansRoutedSubnetsNatJSON) RawJSON() string {
+func (r siteLANListResponseLANsRoutedSubnetsNatJSON) RawJSON() string {
 	return r.raw
 }
 
 // If the site is not configured in high availability mode, this configuration is
 // optional (if omitted, use DHCP). However, if in high availability mode,
 // static_address is required along with secondary and virtual address.
-type SiteLanListResponseLansStaticAddressing struct {
+type SiteLANListResponseLANsStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                            `json:"address,required"`
-	DhcpRelay  SiteLanListResponseLansStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLanListResponseLansStaticAddressingDhcpServer `json:"dhcp_server"`
+	DhcpRelay  SiteLANListResponseLANsStaticAddressingDhcpRelay  `json:"dhcp_relay"`
+	DhcpServer SiteLANListResponseLANsStaticAddressingDhcpServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
 	VirtualAddress string                                      `json:"virtual_address"`
-	JSON           siteLanListResponseLansStaticAddressingJSON `json:"-"`
+	JSON           siteLANListResponseLANsStaticAddressingJSON `json:"-"`
 }
 
-// siteLanListResponseLansStaticAddressingJSON contains the JSON metadata for the
-// struct [SiteLanListResponseLansStaticAddressing]
-type siteLanListResponseLansStaticAddressingJSON struct {
+// siteLANListResponseLANsStaticAddressingJSON contains the JSON metadata for the
+// struct [SiteLANListResponseLANsStaticAddressing]
+type siteLANListResponseLANsStaticAddressingJSON struct {
 	Address          apijson.Field
 	DhcpRelay        apijson.Field
 	DhcpServer       apijson.Field
@@ -710,37 +710,37 @@ type siteLanListResponseLansStaticAddressingJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseLansStaticAddressing) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseLANsStaticAddressing) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseLansStaticAddressingJSON) RawJSON() string {
+func (r siteLANListResponseLANsStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanListResponseLansStaticAddressingDhcpRelay struct {
+type SiteLANListResponseLANsStaticAddressingDhcpRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                             `json:"server_addresses"`
-	JSON            siteLanListResponseLansStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANListResponseLANsStaticAddressingDhcpRelayJSON `json:"-"`
 }
 
-// siteLanListResponseLansStaticAddressingDhcpRelayJSON contains the JSON metadata
-// for the struct [SiteLanListResponseLansStaticAddressingDhcpRelay]
-type siteLanListResponseLansStaticAddressingDhcpRelayJSON struct {
+// siteLANListResponseLANsStaticAddressingDhcpRelayJSON contains the JSON metadata
+// for the struct [SiteLANListResponseLANsStaticAddressingDhcpRelay]
+type siteLANListResponseLANsStaticAddressingDhcpRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseLansStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseLANsStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseLansStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANListResponseLANsStaticAddressingDhcpRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanListResponseLansStaticAddressingDhcpServer struct {
+type SiteLANListResponseLANsStaticAddressingDhcpServer struct {
 	// A valid IPv4 address.
 	DhcpPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
@@ -749,12 +749,12 @@ type SiteLanListResponseLansStaticAddressingDhcpServer struct {
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                     `json:"reservations"`
-	JSON         siteLanListResponseLansStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANListResponseLANsStaticAddressingDhcpServerJSON `json:"-"`
 }
 
-// siteLanListResponseLansStaticAddressingDhcpServerJSON contains the JSON metadata
-// for the struct [SiteLanListResponseLansStaticAddressingDhcpServer]
-type siteLanListResponseLansStaticAddressingDhcpServerJSON struct {
+// siteLANListResponseLANsStaticAddressingDhcpServerJSON contains the JSON metadata
+// for the struct [SiteLANListResponseLANsStaticAddressingDhcpServer]
+type siteLANListResponseLANsStaticAddressingDhcpServerJSON struct {
 	DhcpPoolEnd   apijson.Field
 	DhcpPoolStart apijson.Field
 	DNSServer     apijson.Field
@@ -763,61 +763,61 @@ type siteLanListResponseLansStaticAddressingDhcpServerJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseLansStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseLANsStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseLansStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANListResponseLANsStaticAddressingDhcpServerJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanDeleteResponse struct {
+type SiteLANDeleteResponse struct {
 	Deleted    bool                            `json:"deleted"`
-	DeletedLan SiteLanDeleteResponseDeletedLan `json:"deleted_lan"`
-	JSON       siteLanDeleteResponseJSON       `json:"-"`
+	DeletedLAN SiteLANDeleteResponseDeletedLAN `json:"deleted_lan"`
+	JSON       siteLANDeleteResponseJSON       `json:"-"`
 }
 
-// siteLanDeleteResponseJSON contains the JSON metadata for the struct
-// [SiteLanDeleteResponse]
-type siteLanDeleteResponseJSON struct {
+// siteLANDeleteResponseJSON contains the JSON metadata for the struct
+// [SiteLANDeleteResponse]
+type siteLANDeleteResponseJSON struct {
 	Deleted     apijson.Field
-	DeletedLan  apijson.Field
+	DeletedLAN  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseJSON) RawJSON() string {
+func (r siteLANDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanDeleteResponseDeletedLan struct {
+type SiteLANDeleteResponseDeletedLAN struct {
 	// Identifier
 	ID          string `json:"id"`
 	Description string `json:"description"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
 	HaLink        bool                                          `json:"ha_link"`
-	Nat           SiteLanDeleteResponseDeletedLanNat            `json:"nat"`
+	Nat           SiteLANDeleteResponseDeletedLANNat            `json:"nat"`
 	Physport      int64                                         `json:"physport"`
-	RoutedSubnets []SiteLanDeleteResponseDeletedLanRoutedSubnet `json:"routed_subnets"`
+	RoutedSubnets []SiteLANDeleteResponseDeletedLANRoutedSubnet `json:"routed_subnets"`
 	// Identifier
 	SiteID string `json:"site_id"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing SiteLanDeleteResponseDeletedLanStaticAddressing `json:"static_addressing"`
+	StaticAddressing SiteLANDeleteResponseDeletedLANStaticAddressing `json:"static_addressing"`
 	// VLAN port number.
 	VlanTag int64                               `json:"vlan_tag"`
-	JSON    siteLanDeleteResponseDeletedLanJSON `json:"-"`
+	JSON    siteLANDeleteResponseDeletedLANJSON `json:"-"`
 }
 
-// siteLanDeleteResponseDeletedLanJSON contains the JSON metadata for the struct
-// [SiteLanDeleteResponseDeletedLan]
-type siteLanDeleteResponseDeletedLanJSON struct {
+// siteLANDeleteResponseDeletedLANJSON contains the JSON metadata for the struct
+// [SiteLANDeleteResponseDeletedLAN]
+type siteLANDeleteResponseDeletedLANJSON struct {
 	ID               apijson.Field
 	Description      apijson.Field
 	HaLink           apijson.Field
@@ -831,48 +831,48 @@ type siteLanDeleteResponseDeletedLanJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseDeletedLan) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseDeletedLAN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseDeletedLanJSON) RawJSON() string {
+func (r siteLANDeleteResponseDeletedLANJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanDeleteResponseDeletedLanNat struct {
+type SiteLANDeleteResponseDeletedLANNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                                 `json:"static_prefix"`
-	JSON         siteLanDeleteResponseDeletedLanNatJSON `json:"-"`
+	JSON         siteLANDeleteResponseDeletedLANNatJSON `json:"-"`
 }
 
-// siteLanDeleteResponseDeletedLanNatJSON contains the JSON metadata for the struct
-// [SiteLanDeleteResponseDeletedLanNat]
-type siteLanDeleteResponseDeletedLanNatJSON struct {
+// siteLANDeleteResponseDeletedLANNatJSON contains the JSON metadata for the struct
+// [SiteLANDeleteResponseDeletedLANNat]
+type siteLANDeleteResponseDeletedLANNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseDeletedLanNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseDeletedLANNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseDeletedLanNatJSON) RawJSON() string {
+func (r siteLANDeleteResponseDeletedLANNatJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanDeleteResponseDeletedLanRoutedSubnet struct {
+type SiteLANDeleteResponseDeletedLANRoutedSubnet struct {
 	// A valid IPv4 address.
 	NextHop string `json:"next_hop,required"`
 	// A valid CIDR notation representing an IP range.
 	Prefix string                                          `json:"prefix,required"`
-	Nat    SiteLanDeleteResponseDeletedLanRoutedSubnetsNat `json:"nat"`
-	JSON   siteLanDeleteResponseDeletedLanRoutedSubnetJSON `json:"-"`
+	Nat    SiteLANDeleteResponseDeletedLANRoutedSubnetsNat `json:"nat"`
+	JSON   siteLANDeleteResponseDeletedLANRoutedSubnetJSON `json:"-"`
 }
 
-// siteLanDeleteResponseDeletedLanRoutedSubnetJSON contains the JSON metadata for
-// the struct [SiteLanDeleteResponseDeletedLanRoutedSubnet]
-type siteLanDeleteResponseDeletedLanRoutedSubnetJSON struct {
+// siteLANDeleteResponseDeletedLANRoutedSubnetJSON contains the JSON metadata for
+// the struct [SiteLANDeleteResponseDeletedLANRoutedSubnet]
+type siteLANDeleteResponseDeletedLANRoutedSubnetJSON struct {
 	NextHop     apijson.Field
 	Prefix      apijson.Field
 	Nat         apijson.Field
@@ -880,54 +880,54 @@ type siteLanDeleteResponseDeletedLanRoutedSubnetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseDeletedLanRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseDeletedLANRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseDeletedLanRoutedSubnetJSON) RawJSON() string {
+func (r siteLANDeleteResponseDeletedLANRoutedSubnetJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanDeleteResponseDeletedLanRoutedSubnetsNat struct {
+type SiteLANDeleteResponseDeletedLANRoutedSubnetsNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                                              `json:"static_prefix"`
-	JSON         siteLanDeleteResponseDeletedLanRoutedSubnetsNatJSON `json:"-"`
+	JSON         siteLANDeleteResponseDeletedLANRoutedSubnetsNatJSON `json:"-"`
 }
 
-// siteLanDeleteResponseDeletedLanRoutedSubnetsNatJSON contains the JSON metadata
-// for the struct [SiteLanDeleteResponseDeletedLanRoutedSubnetsNat]
-type siteLanDeleteResponseDeletedLanRoutedSubnetsNatJSON struct {
+// siteLANDeleteResponseDeletedLANRoutedSubnetsNatJSON contains the JSON metadata
+// for the struct [SiteLANDeleteResponseDeletedLANRoutedSubnetsNat]
+type siteLANDeleteResponseDeletedLANRoutedSubnetsNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseDeletedLanRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseDeletedLANRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseDeletedLanRoutedSubnetsNatJSON) RawJSON() string {
+func (r siteLANDeleteResponseDeletedLANRoutedSubnetsNatJSON) RawJSON() string {
 	return r.raw
 }
 
 // If the site is not configured in high availability mode, this configuration is
 // optional (if omitted, use DHCP). However, if in high availability mode,
 // static_address is required along with secondary and virtual address.
-type SiteLanDeleteResponseDeletedLanStaticAddressing struct {
+type SiteLANDeleteResponseDeletedLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                                    `json:"address,required"`
-	DhcpRelay  SiteLanDeleteResponseDeletedLanStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLanDeleteResponseDeletedLanStaticAddressingDhcpServer `json:"dhcp_server"`
+	DhcpRelay  SiteLANDeleteResponseDeletedLANStaticAddressingDhcpRelay  `json:"dhcp_relay"`
+	DhcpServer SiteLANDeleteResponseDeletedLANStaticAddressingDhcpServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
 	VirtualAddress string                                              `json:"virtual_address"`
-	JSON           siteLanDeleteResponseDeletedLanStaticAddressingJSON `json:"-"`
+	JSON           siteLANDeleteResponseDeletedLANStaticAddressingJSON `json:"-"`
 }
 
-// siteLanDeleteResponseDeletedLanStaticAddressingJSON contains the JSON metadata
-// for the struct [SiteLanDeleteResponseDeletedLanStaticAddressing]
-type siteLanDeleteResponseDeletedLanStaticAddressingJSON struct {
+// siteLANDeleteResponseDeletedLANStaticAddressingJSON contains the JSON metadata
+// for the struct [SiteLANDeleteResponseDeletedLANStaticAddressing]
+type siteLANDeleteResponseDeletedLANStaticAddressingJSON struct {
 	Address          apijson.Field
 	DhcpRelay        apijson.Field
 	DhcpServer       apijson.Field
@@ -937,38 +937,38 @@ type siteLanDeleteResponseDeletedLanStaticAddressingJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseDeletedLanStaticAddressing) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseDeletedLANStaticAddressing) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseDeletedLanStaticAddressingJSON) RawJSON() string {
+func (r siteLANDeleteResponseDeletedLANStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanDeleteResponseDeletedLanStaticAddressingDhcpRelay struct {
+type SiteLANDeleteResponseDeletedLANStaticAddressingDhcpRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                                     `json:"server_addresses"`
-	JSON            siteLanDeleteResponseDeletedLanStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANDeleteResponseDeletedLANStaticAddressingDhcpRelayJSON `json:"-"`
 }
 
-// siteLanDeleteResponseDeletedLanStaticAddressingDhcpRelayJSON contains the JSON
+// siteLANDeleteResponseDeletedLANStaticAddressingDhcpRelayJSON contains the JSON
 // metadata for the struct
-// [SiteLanDeleteResponseDeletedLanStaticAddressingDhcpRelay]
-type siteLanDeleteResponseDeletedLanStaticAddressingDhcpRelayJSON struct {
+// [SiteLANDeleteResponseDeletedLANStaticAddressingDhcpRelay]
+type siteLANDeleteResponseDeletedLANStaticAddressingDhcpRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseDeletedLanStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseDeletedLANStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseDeletedLanStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANDeleteResponseDeletedLANStaticAddressingDhcpRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanDeleteResponseDeletedLanStaticAddressingDhcpServer struct {
+type SiteLANDeleteResponseDeletedLANStaticAddressingDhcpServer struct {
 	// A valid IPv4 address.
 	DhcpPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
@@ -977,13 +977,13 @@ type SiteLanDeleteResponseDeletedLanStaticAddressingDhcpServer struct {
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                             `json:"reservations"`
-	JSON         siteLanDeleteResponseDeletedLanStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANDeleteResponseDeletedLANStaticAddressingDhcpServerJSON `json:"-"`
 }
 
-// siteLanDeleteResponseDeletedLanStaticAddressingDhcpServerJSON contains the JSON
+// siteLANDeleteResponseDeletedLANStaticAddressingDhcpServerJSON contains the JSON
 // metadata for the struct
-// [SiteLanDeleteResponseDeletedLanStaticAddressingDhcpServer]
-type siteLanDeleteResponseDeletedLanStaticAddressingDhcpServerJSON struct {
+// [SiteLANDeleteResponseDeletedLANStaticAddressingDhcpServer]
+type siteLANDeleteResponseDeletedLANStaticAddressingDhcpServerJSON struct {
 	DhcpPoolEnd   apijson.Field
 	DhcpPoolStart apijson.Field
 	DNSServer     apijson.Field
@@ -992,59 +992,59 @@ type siteLanDeleteResponseDeletedLanStaticAddressingDhcpServerJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseDeletedLanStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseDeletedLANStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseDeletedLanStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANDeleteResponseDeletedLANStaticAddressingDhcpServerJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanGetResponse struct {
-	Lan  SiteLanGetResponseLan  `json:"lan"`
-	JSON siteLanGetResponseJSON `json:"-"`
+type SiteLANGetResponse struct {
+	LAN  SiteLANGetResponseLAN  `json:"lan"`
+	JSON siteLANGetResponseJSON `json:"-"`
 }
 
-// siteLanGetResponseJSON contains the JSON metadata for the struct
-// [SiteLanGetResponse]
-type siteLanGetResponseJSON struct {
-	Lan         apijson.Field
+// siteLANGetResponseJSON contains the JSON metadata for the struct
+// [SiteLANGetResponse]
+type siteLANGetResponseJSON struct {
+	LAN         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseJSON) RawJSON() string {
+func (r siteLANGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanGetResponseLan struct {
+type SiteLANGetResponseLAN struct {
 	// Identifier
 	ID          string `json:"id"`
 	Description string `json:"description"`
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
 	HaLink        bool                                `json:"ha_link"`
-	Nat           SiteLanGetResponseLanNat            `json:"nat"`
+	Nat           SiteLANGetResponseLANNat            `json:"nat"`
 	Physport      int64                               `json:"physport"`
-	RoutedSubnets []SiteLanGetResponseLanRoutedSubnet `json:"routed_subnets"`
+	RoutedSubnets []SiteLANGetResponseLANRoutedSubnet `json:"routed_subnets"`
 	// Identifier
 	SiteID string `json:"site_id"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing SiteLanGetResponseLanStaticAddressing `json:"static_addressing"`
+	StaticAddressing SiteLANGetResponseLANStaticAddressing `json:"static_addressing"`
 	// VLAN port number.
 	VlanTag int64                     `json:"vlan_tag"`
-	JSON    siteLanGetResponseLanJSON `json:"-"`
+	JSON    siteLANGetResponseLANJSON `json:"-"`
 }
 
-// siteLanGetResponseLanJSON contains the JSON metadata for the struct
-// [SiteLanGetResponseLan]
-type siteLanGetResponseLanJSON struct {
+// siteLANGetResponseLANJSON contains the JSON metadata for the struct
+// [SiteLANGetResponseLAN]
+type siteLANGetResponseLANJSON struct {
 	ID               apijson.Field
 	Description      apijson.Field
 	HaLink           apijson.Field
@@ -1058,48 +1058,48 @@ type siteLanGetResponseLanJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseLan) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseLAN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseLanJSON) RawJSON() string {
+func (r siteLANGetResponseLANJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanGetResponseLanNat struct {
+type SiteLANGetResponseLANNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                       `json:"static_prefix"`
-	JSON         siteLanGetResponseLanNatJSON `json:"-"`
+	JSON         siteLANGetResponseLANNatJSON `json:"-"`
 }
 
-// siteLanGetResponseLanNatJSON contains the JSON metadata for the struct
-// [SiteLanGetResponseLanNat]
-type siteLanGetResponseLanNatJSON struct {
+// siteLANGetResponseLANNatJSON contains the JSON metadata for the struct
+// [SiteLANGetResponseLANNat]
+type siteLANGetResponseLANNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseLanNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseLANNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseLanNatJSON) RawJSON() string {
+func (r siteLANGetResponseLANNatJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanGetResponseLanRoutedSubnet struct {
+type SiteLANGetResponseLANRoutedSubnet struct {
 	// A valid IPv4 address.
 	NextHop string `json:"next_hop,required"`
 	// A valid CIDR notation representing an IP range.
 	Prefix string                                `json:"prefix,required"`
-	Nat    SiteLanGetResponseLanRoutedSubnetsNat `json:"nat"`
-	JSON   siteLanGetResponseLanRoutedSubnetJSON `json:"-"`
+	Nat    SiteLANGetResponseLANRoutedSubnetsNat `json:"nat"`
+	JSON   siteLANGetResponseLANRoutedSubnetJSON `json:"-"`
 }
 
-// siteLanGetResponseLanRoutedSubnetJSON contains the JSON metadata for the struct
-// [SiteLanGetResponseLanRoutedSubnet]
-type siteLanGetResponseLanRoutedSubnetJSON struct {
+// siteLANGetResponseLANRoutedSubnetJSON contains the JSON metadata for the struct
+// [SiteLANGetResponseLANRoutedSubnet]
+type siteLANGetResponseLANRoutedSubnetJSON struct {
 	NextHop     apijson.Field
 	Prefix      apijson.Field
 	Nat         apijson.Field
@@ -1107,54 +1107,54 @@ type siteLanGetResponseLanRoutedSubnetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseLanRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseLANRoutedSubnet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseLanRoutedSubnetJSON) RawJSON() string {
+func (r siteLANGetResponseLANRoutedSubnetJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanGetResponseLanRoutedSubnetsNat struct {
+type SiteLANGetResponseLANRoutedSubnetsNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix string                                    `json:"static_prefix"`
-	JSON         siteLanGetResponseLanRoutedSubnetsNatJSON `json:"-"`
+	JSON         siteLANGetResponseLANRoutedSubnetsNatJSON `json:"-"`
 }
 
-// siteLanGetResponseLanRoutedSubnetsNatJSON contains the JSON metadata for the
-// struct [SiteLanGetResponseLanRoutedSubnetsNat]
-type siteLanGetResponseLanRoutedSubnetsNatJSON struct {
+// siteLANGetResponseLANRoutedSubnetsNatJSON contains the JSON metadata for the
+// struct [SiteLANGetResponseLANRoutedSubnetsNat]
+type siteLANGetResponseLANRoutedSubnetsNatJSON struct {
 	StaticPrefix apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseLanRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseLANRoutedSubnetsNat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseLanRoutedSubnetsNatJSON) RawJSON() string {
+func (r siteLANGetResponseLANRoutedSubnetsNatJSON) RawJSON() string {
 	return r.raw
 }
 
 // If the site is not configured in high availability mode, this configuration is
 // optional (if omitted, use DHCP). However, if in high availability mode,
 // static_address is required along with secondary and virtual address.
-type SiteLanGetResponseLanStaticAddressing struct {
+type SiteLANGetResponseLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                          `json:"address,required"`
-	DhcpRelay  SiteLanGetResponseLanStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLanGetResponseLanStaticAddressingDhcpServer `json:"dhcp_server"`
+	DhcpRelay  SiteLANGetResponseLANStaticAddressingDhcpRelay  `json:"dhcp_relay"`
+	DhcpServer SiteLANGetResponseLANStaticAddressingDhcpServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
 	VirtualAddress string                                    `json:"virtual_address"`
-	JSON           siteLanGetResponseLanStaticAddressingJSON `json:"-"`
+	JSON           siteLANGetResponseLANStaticAddressingJSON `json:"-"`
 }
 
-// siteLanGetResponseLanStaticAddressingJSON contains the JSON metadata for the
-// struct [SiteLanGetResponseLanStaticAddressing]
-type siteLanGetResponseLanStaticAddressingJSON struct {
+// siteLANGetResponseLANStaticAddressingJSON contains the JSON metadata for the
+// struct [SiteLANGetResponseLANStaticAddressing]
+type siteLANGetResponseLANStaticAddressingJSON struct {
 	Address          apijson.Field
 	DhcpRelay        apijson.Field
 	DhcpServer       apijson.Field
@@ -1164,37 +1164,37 @@ type siteLanGetResponseLanStaticAddressingJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseLanStaticAddressing) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseLANStaticAddressing) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseLanStaticAddressingJSON) RawJSON() string {
+func (r siteLANGetResponseLANStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanGetResponseLanStaticAddressingDhcpRelay struct {
+type SiteLANGetResponseLANStaticAddressingDhcpRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                           `json:"server_addresses"`
-	JSON            siteLanGetResponseLanStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANGetResponseLANStaticAddressingDhcpRelayJSON `json:"-"`
 }
 
-// siteLanGetResponseLanStaticAddressingDhcpRelayJSON contains the JSON metadata
-// for the struct [SiteLanGetResponseLanStaticAddressingDhcpRelay]
-type siteLanGetResponseLanStaticAddressingDhcpRelayJSON struct {
+// siteLANGetResponseLANStaticAddressingDhcpRelayJSON contains the JSON metadata
+// for the struct [SiteLANGetResponseLANStaticAddressingDhcpRelay]
+type siteLANGetResponseLANStaticAddressingDhcpRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseLanStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseLANStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseLanStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANGetResponseLANStaticAddressingDhcpRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanGetResponseLanStaticAddressingDhcpServer struct {
+type SiteLANGetResponseLANStaticAddressingDhcpServer struct {
 	// A valid IPv4 address.
 	DhcpPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
@@ -1203,12 +1203,12 @@ type SiteLanGetResponseLanStaticAddressingDhcpServer struct {
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                   `json:"reservations"`
-	JSON         siteLanGetResponseLanStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANGetResponseLANStaticAddressingDhcpServerJSON `json:"-"`
 }
 
-// siteLanGetResponseLanStaticAddressingDhcpServerJSON contains the JSON metadata
-// for the struct [SiteLanGetResponseLanStaticAddressingDhcpServer]
-type siteLanGetResponseLanStaticAddressingDhcpServerJSON struct {
+// siteLANGetResponseLANStaticAddressingDhcpServerJSON contains the JSON metadata
+// for the struct [SiteLANGetResponseLANStaticAddressingDhcpServer]
+type siteLANGetResponseLANStaticAddressingDhcpServerJSON struct {
 	DhcpPoolEnd   apijson.Field
 	DhcpPoolStart apijson.Field
 	DNSServer     apijson.Field
@@ -1217,25 +1217,25 @@ type siteLanGetResponseLanStaticAddressingDhcpServerJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseLanStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseLANStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseLanStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANGetResponseLANStaticAddressingDhcpServerJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanNewParams struct {
+type SiteLANNewParams struct {
 	// Identifier
 	AccountID param.Field[string]              `path:"account_id,required"`
-	Lan       param.Field[SiteLanNewParamsLan] `json:"lan"`
+	LAN       param.Field[SiteLANNewParamsLAN] `json:"lan"`
 }
 
-func (r SiteLanNewParams) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanNewParamsLan struct {
+type SiteLANNewParamsLAN struct {
 	Physport param.Field[int64] `json:"physport,required"`
 	// VLAN port number.
 	VlanTag     param.Field[int64]  `json:"vlan_tag,required"`
@@ -1243,76 +1243,76 @@ type SiteLanNewParamsLan struct {
 	// mark true to use this LAN for HA probing. only works for site with HA turned on.
 	// only one LAN can be set as the ha_link.
 	HaLink        param.Field[bool]                              `json:"ha_link"`
-	Nat           param.Field[SiteLanNewParamsLanNat]            `json:"nat"`
-	RoutedSubnets param.Field[[]SiteLanNewParamsLanRoutedSubnet] `json:"routed_subnets"`
+	Nat           param.Field[SiteLANNewParamsLANNat]            `json:"nat"`
+	RoutedSubnets param.Field[[]SiteLANNewParamsLANRoutedSubnet] `json:"routed_subnets"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing param.Field[SiteLanNewParamsLanStaticAddressing] `json:"static_addressing"`
+	StaticAddressing param.Field[SiteLANNewParamsLANStaticAddressing] `json:"static_addressing"`
 }
 
-func (r SiteLanNewParamsLan) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParamsLAN) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanNewParamsLanNat struct {
+type SiteLANNewParamsLANNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix param.Field[string] `json:"static_prefix"`
 }
 
-func (r SiteLanNewParamsLanNat) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParamsLANNat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanNewParamsLanRoutedSubnet struct {
+type SiteLANNewParamsLANRoutedSubnet struct {
 	// A valid IPv4 address.
 	NextHop param.Field[string] `json:"next_hop,required"`
 	// A valid CIDR notation representing an IP range.
 	Prefix param.Field[string]                              `json:"prefix,required"`
-	Nat    param.Field[SiteLanNewParamsLanRoutedSubnetsNat] `json:"nat"`
+	Nat    param.Field[SiteLANNewParamsLANRoutedSubnetsNat] `json:"nat"`
 }
 
-func (r SiteLanNewParamsLanRoutedSubnet) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParamsLANRoutedSubnet) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanNewParamsLanRoutedSubnetsNat struct {
+type SiteLANNewParamsLANRoutedSubnetsNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix param.Field[string] `json:"static_prefix"`
 }
 
-func (r SiteLanNewParamsLanRoutedSubnetsNat) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParamsLANRoutedSubnetsNat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // If the site is not configured in high availability mode, this configuration is
 // optional (if omitted, use DHCP). However, if in high availability mode,
 // static_address is required along with secondary and virtual address.
-type SiteLanNewParamsLanStaticAddressing struct {
+type SiteLANNewParamsLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    param.Field[string]                                        `json:"address,required"`
-	DhcpRelay  param.Field[SiteLanNewParamsLanStaticAddressingDhcpRelay]  `json:"dhcp_relay"`
-	DhcpServer param.Field[SiteLanNewParamsLanStaticAddressingDhcpServer] `json:"dhcp_server"`
+	DhcpRelay  param.Field[SiteLANNewParamsLANStaticAddressingDhcpRelay]  `json:"dhcp_relay"`
+	DhcpServer param.Field[SiteLANNewParamsLANStaticAddressingDhcpServer] `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress param.Field[string] `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
 	VirtualAddress param.Field[string] `json:"virtual_address"`
 }
 
-func (r SiteLanNewParamsLanStaticAddressing) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParamsLANStaticAddressing) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanNewParamsLanStaticAddressingDhcpRelay struct {
+type SiteLANNewParamsLANStaticAddressingDhcpRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses param.Field[[]string] `json:"server_addresses"`
 }
 
-func (r SiteLanNewParamsLanStaticAddressingDhcpRelay) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParamsLANStaticAddressingDhcpRelay) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanNewParamsLanStaticAddressingDhcpServer struct {
+type SiteLANNewParamsLANStaticAddressingDhcpServer struct {
 	// A valid IPv4 address.
 	DhcpPoolEnd param.Field[string] `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
@@ -1323,22 +1323,22 @@ type SiteLanNewParamsLanStaticAddressingDhcpServer struct {
 	Reservations param.Field[map[string]string] `json:"reservations"`
 }
 
-func (r SiteLanNewParamsLanStaticAddressingDhcpServer) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParamsLANStaticAddressingDhcpServer) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanNewResponseEnvelope struct {
-	Errors   []SiteLanNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteLanNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteLanNewResponse                   `json:"result,required"`
+type SiteLANNewResponseEnvelope struct {
+	Errors   []SiteLANNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SiteLANNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   SiteLANNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SiteLanNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteLanNewResponseEnvelopeJSON    `json:"-"`
+	Success SiteLANNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteLANNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// siteLanNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteLanNewResponseEnvelope]
-type siteLanNewResponseEnvelopeJSON struct {
+// siteLANNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteLANNewResponseEnvelope]
+type siteLANNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1347,160 +1347,160 @@ type siteLanNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseEnvelopeJSON) RawJSON() string {
+func (r siteLANNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanNewResponseEnvelopeErrors struct {
+type SiteLANNewResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
-	JSON    siteLanNewResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    siteLANNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// siteLanNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteLanNewResponseEnvelopeErrors]
-type siteLanNewResponseEnvelopeErrorsJSON struct {
+// siteLANNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SiteLANNewResponseEnvelopeErrors]
+type siteLANNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r siteLANNewResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanNewResponseEnvelopeMessages struct {
+type SiteLANNewResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
-	JSON    siteLanNewResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    siteLANNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// siteLanNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteLanNewResponseEnvelopeMessages]
-type siteLanNewResponseEnvelopeMessagesJSON struct {
+// siteLANNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [SiteLANNewResponseEnvelopeMessages]
+type siteLANNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanNewResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r siteLANNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SiteLanNewResponseEnvelopeSuccess bool
+type SiteLANNewResponseEnvelopeSuccess bool
 
 const (
-	SiteLanNewResponseEnvelopeSuccessTrue SiteLanNewResponseEnvelopeSuccess = true
+	SiteLANNewResponseEnvelopeSuccessTrue SiteLANNewResponseEnvelopeSuccess = true
 )
 
-func (r SiteLanNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r SiteLANNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SiteLanNewResponseEnvelopeSuccessTrue:
+	case SiteLANNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SiteLanUpdateParams struct {
+type SiteLANUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string]                 `path:"account_id,required"`
-	Lan       param.Field[SiteLanUpdateParamsLan] `json:"lan"`
+	LAN       param.Field[SiteLANUpdateParamsLAN] `json:"lan"`
 }
 
-func (r SiteLanUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanUpdateParamsLan struct {
+type SiteLANUpdateParamsLAN struct {
 	Description   param.Field[string]                               `json:"description"`
-	Nat           param.Field[SiteLanUpdateParamsLanNat]            `json:"nat"`
+	Nat           param.Field[SiteLANUpdateParamsLANNat]            `json:"nat"`
 	Physport      param.Field[int64]                                `json:"physport"`
-	RoutedSubnets param.Field[[]SiteLanUpdateParamsLanRoutedSubnet] `json:"routed_subnets"`
+	RoutedSubnets param.Field[[]SiteLANUpdateParamsLANRoutedSubnet] `json:"routed_subnets"`
 	// If the site is not configured in high availability mode, this configuration is
 	// optional (if omitted, use DHCP). However, if in high availability mode,
 	// static_address is required along with secondary and virtual address.
-	StaticAddressing param.Field[SiteLanUpdateParamsLanStaticAddressing] `json:"static_addressing"`
+	StaticAddressing param.Field[SiteLANUpdateParamsLANStaticAddressing] `json:"static_addressing"`
 	// VLAN port number.
 	VlanTag param.Field[int64] `json:"vlan_tag"`
 }
 
-func (r SiteLanUpdateParamsLan) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParamsLAN) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanUpdateParamsLanNat struct {
+type SiteLANUpdateParamsLANNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix param.Field[string] `json:"static_prefix"`
 }
 
-func (r SiteLanUpdateParamsLanNat) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParamsLANNat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanUpdateParamsLanRoutedSubnet struct {
+type SiteLANUpdateParamsLANRoutedSubnet struct {
 	// A valid IPv4 address.
 	NextHop param.Field[string] `json:"next_hop,required"`
 	// A valid CIDR notation representing an IP range.
 	Prefix param.Field[string]                                 `json:"prefix,required"`
-	Nat    param.Field[SiteLanUpdateParamsLanRoutedSubnetsNat] `json:"nat"`
+	Nat    param.Field[SiteLANUpdateParamsLANRoutedSubnetsNat] `json:"nat"`
 }
 
-func (r SiteLanUpdateParamsLanRoutedSubnet) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParamsLANRoutedSubnet) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanUpdateParamsLanRoutedSubnetsNat struct {
+type SiteLANUpdateParamsLANRoutedSubnetsNat struct {
 	// A valid CIDR notation representing an IP range.
 	StaticPrefix param.Field[string] `json:"static_prefix"`
 }
 
-func (r SiteLanUpdateParamsLanRoutedSubnetsNat) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParamsLANRoutedSubnetsNat) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // If the site is not configured in high availability mode, this configuration is
 // optional (if omitted, use DHCP). However, if in high availability mode,
 // static_address is required along with secondary and virtual address.
-type SiteLanUpdateParamsLanStaticAddressing struct {
+type SiteLANUpdateParamsLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    param.Field[string]                                           `json:"address,required"`
-	DhcpRelay  param.Field[SiteLanUpdateParamsLanStaticAddressingDhcpRelay]  `json:"dhcp_relay"`
-	DhcpServer param.Field[SiteLanUpdateParamsLanStaticAddressingDhcpServer] `json:"dhcp_server"`
+	DhcpRelay  param.Field[SiteLANUpdateParamsLANStaticAddressingDhcpRelay]  `json:"dhcp_relay"`
+	DhcpServer param.Field[SiteLANUpdateParamsLANStaticAddressingDhcpServer] `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress param.Field[string] `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
 	VirtualAddress param.Field[string] `json:"virtual_address"`
 }
 
-func (r SiteLanUpdateParamsLanStaticAddressing) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParamsLANStaticAddressing) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanUpdateParamsLanStaticAddressingDhcpRelay struct {
+type SiteLANUpdateParamsLANStaticAddressingDhcpRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses param.Field[[]string] `json:"server_addresses"`
 }
 
-func (r SiteLanUpdateParamsLanStaticAddressingDhcpRelay) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParamsLANStaticAddressingDhcpRelay) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanUpdateParamsLanStaticAddressingDhcpServer struct {
+type SiteLANUpdateParamsLANStaticAddressingDhcpServer struct {
 	// A valid IPv4 address.
 	DhcpPoolEnd param.Field[string] `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
@@ -1511,22 +1511,22 @@ type SiteLanUpdateParamsLanStaticAddressingDhcpServer struct {
 	Reservations param.Field[map[string]string] `json:"reservations"`
 }
 
-func (r SiteLanUpdateParamsLanStaticAddressingDhcpServer) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParamsLANStaticAddressingDhcpServer) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLanUpdateResponseEnvelope struct {
-	Errors   []SiteLanUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteLanUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteLanUpdateResponse                   `json:"result,required"`
+type SiteLANUpdateResponseEnvelope struct {
+	Errors   []SiteLANUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SiteLANUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   SiteLANUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SiteLanUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteLanUpdateResponseEnvelopeJSON    `json:"-"`
+	Success SiteLANUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteLANUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// siteLanUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteLanUpdateResponseEnvelope]
-type siteLanUpdateResponseEnvelopeJSON struct {
+// siteLANUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteLANUpdateResponseEnvelope]
+type siteLANUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1535,92 +1535,92 @@ type siteLanUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseEnvelopeJSON) RawJSON() string {
+func (r siteLANUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanUpdateResponseEnvelopeErrors struct {
+type SiteLANUpdateResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
-	JSON    siteLanUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    siteLANUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// siteLanUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SiteLanUpdateResponseEnvelopeErrors]
-type siteLanUpdateResponseEnvelopeErrorsJSON struct {
+// siteLANUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SiteLANUpdateResponseEnvelopeErrors]
+type siteLANUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r siteLANUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanUpdateResponseEnvelopeMessages struct {
+type SiteLANUpdateResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
-	JSON    siteLanUpdateResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    siteLANUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// siteLanUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteLanUpdateResponseEnvelopeMessages]
-type siteLanUpdateResponseEnvelopeMessagesJSON struct {
+// siteLANUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SiteLANUpdateResponseEnvelopeMessages]
+type siteLANUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r siteLANUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SiteLanUpdateResponseEnvelopeSuccess bool
+type SiteLANUpdateResponseEnvelopeSuccess bool
 
 const (
-	SiteLanUpdateResponseEnvelopeSuccessTrue SiteLanUpdateResponseEnvelopeSuccess = true
+	SiteLANUpdateResponseEnvelopeSuccessTrue SiteLANUpdateResponseEnvelopeSuccess = true
 )
 
-func (r SiteLanUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r SiteLANUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SiteLanUpdateResponseEnvelopeSuccessTrue:
+	case SiteLANUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SiteLanListParams struct {
+type SiteLANListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SiteLanListResponseEnvelope struct {
-	Errors   []SiteLanListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteLanListResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteLanListResponse                   `json:"result,required"`
+type SiteLANListResponseEnvelope struct {
+	Errors   []SiteLANListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SiteLANListResponseEnvelopeMessages `json:"messages,required"`
+	Result   SiteLANListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SiteLanListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteLanListResponseEnvelopeJSON    `json:"-"`
+	Success SiteLANListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteLANListResponseEnvelopeJSON    `json:"-"`
 }
 
-// siteLanListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteLanListResponseEnvelope]
-type siteLanListResponseEnvelopeJSON struct {
+// siteLANListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteLANListResponseEnvelope]
+type siteLANListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1629,92 +1629,92 @@ type siteLanListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseEnvelopeJSON) RawJSON() string {
+func (r siteLANListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanListResponseEnvelopeErrors struct {
+type SiteLANListResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
-	JSON    siteLanListResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    siteLANListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// siteLanListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteLanListResponseEnvelopeErrors]
-type siteLanListResponseEnvelopeErrorsJSON struct {
+// siteLANListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SiteLANListResponseEnvelopeErrors]
+type siteLANListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r siteLANListResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanListResponseEnvelopeMessages struct {
+type SiteLANListResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
-	JSON    siteLanListResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    siteLANListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// siteLanListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteLanListResponseEnvelopeMessages]
-type siteLanListResponseEnvelopeMessagesJSON struct {
+// siteLANListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SiteLANListResponseEnvelopeMessages]
+type siteLANListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanListResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r siteLANListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SiteLanListResponseEnvelopeSuccess bool
+type SiteLANListResponseEnvelopeSuccess bool
 
 const (
-	SiteLanListResponseEnvelopeSuccessTrue SiteLanListResponseEnvelopeSuccess = true
+	SiteLANListResponseEnvelopeSuccessTrue SiteLANListResponseEnvelopeSuccess = true
 )
 
-func (r SiteLanListResponseEnvelopeSuccess) IsKnown() bool {
+func (r SiteLANListResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SiteLanListResponseEnvelopeSuccessTrue:
+	case SiteLANListResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SiteLanDeleteParams struct {
+type SiteLANDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SiteLanDeleteResponseEnvelope struct {
-	Errors   []SiteLanDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteLanDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteLanDeleteResponse                   `json:"result,required"`
+type SiteLANDeleteResponseEnvelope struct {
+	Errors   []SiteLANDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SiteLANDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   SiteLANDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SiteLanDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteLanDeleteResponseEnvelopeJSON    `json:"-"`
+	Success SiteLANDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteLANDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// siteLanDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteLanDeleteResponseEnvelope]
-type siteLanDeleteResponseEnvelopeJSON struct {
+// siteLANDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteLANDeleteResponseEnvelope]
+type siteLANDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1723,92 +1723,92 @@ type siteLanDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r siteLANDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanDeleteResponseEnvelopeErrors struct {
+type SiteLANDeleteResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
-	JSON    siteLanDeleteResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    siteLANDeleteResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// siteLanDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SiteLanDeleteResponseEnvelopeErrors]
-type siteLanDeleteResponseEnvelopeErrorsJSON struct {
+// siteLANDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SiteLANDeleteResponseEnvelopeErrors]
+type siteLANDeleteResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r siteLANDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanDeleteResponseEnvelopeMessages struct {
+type SiteLANDeleteResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
-	JSON    siteLanDeleteResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    siteLANDeleteResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// siteLanDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteLanDeleteResponseEnvelopeMessages]
-type siteLanDeleteResponseEnvelopeMessagesJSON struct {
+// siteLANDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SiteLANDeleteResponseEnvelopeMessages]
+type siteLANDeleteResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r siteLANDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SiteLanDeleteResponseEnvelopeSuccess bool
+type SiteLANDeleteResponseEnvelopeSuccess bool
 
 const (
-	SiteLanDeleteResponseEnvelopeSuccessTrue SiteLanDeleteResponseEnvelopeSuccess = true
+	SiteLANDeleteResponseEnvelopeSuccessTrue SiteLANDeleteResponseEnvelopeSuccess = true
 )
 
-func (r SiteLanDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r SiteLANDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SiteLanDeleteResponseEnvelopeSuccessTrue:
+	case SiteLANDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SiteLanGetParams struct {
+type SiteLANGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SiteLanGetResponseEnvelope struct {
-	Errors   []SiteLanGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteLanGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteLanGetResponse                   `json:"result,required"`
+type SiteLANGetResponseEnvelope struct {
+	Errors   []SiteLANGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SiteLANGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   SiteLANGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SiteLanGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    siteLanGetResponseEnvelopeJSON    `json:"-"`
+	Success SiteLANGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    siteLANGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// siteLanGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SiteLanGetResponseEnvelope]
-type siteLanGetResponseEnvelopeJSON struct {
+// siteLANGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SiteLANGetResponseEnvelope]
+type siteLANGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1817,70 +1817,70 @@ type siteLanGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseEnvelopeJSON) RawJSON() string {
+func (r siteLANGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanGetResponseEnvelopeErrors struct {
+type SiteLANGetResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
-	JSON    siteLanGetResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    siteLANGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// siteLanGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteLanGetResponseEnvelopeErrors]
-type siteLanGetResponseEnvelopeErrorsJSON struct {
+// siteLANGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [SiteLANGetResponseEnvelopeErrors]
+type siteLANGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r siteLANGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLanGetResponseEnvelopeMessages struct {
+type SiteLANGetResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
-	JSON    siteLanGetResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    siteLANGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// siteLanGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteLanGetResponseEnvelopeMessages]
-type siteLanGetResponseEnvelopeMessagesJSON struct {
+// siteLANGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [SiteLANGetResponseEnvelopeMessages]
+type siteLANGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SiteLanGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLanGetResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r siteLANGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type SiteLanGetResponseEnvelopeSuccess bool
+type SiteLANGetResponseEnvelopeSuccess bool
 
 const (
-	SiteLanGetResponseEnvelopeSuccessTrue SiteLanGetResponseEnvelopeSuccess = true
+	SiteLANGetResponseEnvelopeSuccessTrue SiteLANGetResponseEnvelopeSuccess = true
 )
 
-func (r SiteLanGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r SiteLANGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SiteLanGetResponseEnvelopeSuccessTrue:
+	case SiteLANGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

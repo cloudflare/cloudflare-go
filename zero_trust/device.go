@@ -27,9 +27,9 @@ type DeviceService struct {
 	Networks      *DeviceNetworkService
 	Policies      *DevicePolicyService
 	Posture       *DevicePostureService
-	Revokes       *DeviceRevokeService
+	Revoke        *DeviceRevokeService
 	Settings      *DeviceSettingService
-	Unrevokes     *DeviceUnrevokeService
+	Unrevoke      *DeviceUnrevokeService
 	OverrideCodes *DeviceOverrideCodeService
 }
 
@@ -43,9 +43,9 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	r.Networks = NewDeviceNetworkService(opts...)
 	r.Policies = NewDevicePolicyService(opts...)
 	r.Posture = NewDevicePostureService(opts...)
-	r.Revokes = NewDeviceRevokeService(opts...)
+	r.Revoke = NewDeviceRevokeService(opts...)
 	r.Settings = NewDeviceSettingService(opts...)
-	r.Unrevokes = NewDeviceUnrevokeService(opts...)
+	r.Unrevoke = NewDeviceUnrevokeService(opts...)
 	r.OverrideCodes = NewDeviceOverrideCodeService(opts...)
 	return
 }

@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestRayidGetWithOptionalParams(t *testing.T) {
+func TestRayIDGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,13 +28,13 @@ func TestRayidGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Logs.Rayid.Get(
+	_, err := client.Logs.RayID.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"41ddf1740f67442d",
-		logs.RayidGetParams{
+		logs.RayIDGetParams{
 			Fields:     cloudflare.F("ClientIP,RayID,EdgeStartTimestamp"),
-			Timestamps: cloudflare.F(logs.RayidGetParamsTimestampsUnixnano),
+			Timestamps: cloudflare.F(logs.RayIDGetParamsTimestampsUnixnano),
 		},
 	)
 	if err != nil {

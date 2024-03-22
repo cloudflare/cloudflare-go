@@ -28,7 +28,7 @@ func TestClipNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Stream.Clips.New(context.TODO(), stream.ClipNewParams{
+	_, err := client.Stream.Clip.New(context.TODO(), stream.ClipNewParams{
 		AccountID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ClippedFromVideoUid:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		EndTimeSeconds:        cloudflare.F(int64(0)),
