@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestSiteWanNewWithOptionalParams(t *testing.T) {
+func TestSiteWANNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,16 +28,16 @@ func TestSiteWanNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Wans.New(
+	_, err := client.MagicTransit.Sites.WANs.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteWanNewParams{
+		magic_transit.SiteWANNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Wan: cloudflare.F(magic_transit.SiteWanNewParamsWan{
+			WAN: cloudflare.F(magic_transit.SiteWANNewParamsWAN{
 				Description: cloudflare.F("string"),
 				Physport:    cloudflare.F(int64(1)),
 				Priority:    cloudflare.F(int64(0)),
-				StaticAddressing: cloudflare.F(magic_transit.SiteWanNewParamsWanStaticAddressing{
+				StaticAddressing: cloudflare.F(magic_transit.SiteWANNewParamsWANStaticAddressing{
 					Address:          cloudflare.F("192.0.2.0/24"),
 					GatewayAddress:   cloudflare.F("192.0.2.1"),
 					SecondaryAddress: cloudflare.F("192.0.2.0/24"),
@@ -55,7 +55,7 @@ func TestSiteWanNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSiteWanUpdateWithOptionalParams(t *testing.T) {
+func TestSiteWANUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -69,17 +69,17 @@ func TestSiteWanUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Wans.Update(
+	_, err := client.MagicTransit.Sites.WANs.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteWanUpdateParams{
+		magic_transit.SiteWANUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Wan: cloudflare.F(magic_transit.SiteWanUpdateParamsWan{
+			WAN: cloudflare.F(magic_transit.SiteWANUpdateParamsWAN{
 				Description: cloudflare.F("string"),
 				Physport:    cloudflare.F(int64(1)),
 				Priority:    cloudflare.F(int64(0)),
-				StaticAddressing: cloudflare.F(magic_transit.SiteWanUpdateParamsWanStaticAddressing{
+				StaticAddressing: cloudflare.F(magic_transit.SiteWANUpdateParamsWANStaticAddressing{
 					Address:          cloudflare.F("192.0.2.0/24"),
 					GatewayAddress:   cloudflare.F("192.0.2.1"),
 					SecondaryAddress: cloudflare.F("192.0.2.0/24"),
@@ -97,7 +97,7 @@ func TestSiteWanUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSiteWanList(t *testing.T) {
+func TestSiteWANList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -111,10 +111,10 @@ func TestSiteWanList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Wans.List(
+	_, err := client.MagicTransit.Sites.WANs.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteWanListParams{
+		magic_transit.SiteWANListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -127,7 +127,7 @@ func TestSiteWanList(t *testing.T) {
 	}
 }
 
-func TestSiteWanDelete(t *testing.T) {
+func TestSiteWANDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -141,11 +141,11 @@ func TestSiteWanDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Wans.Delete(
+	_, err := client.MagicTransit.Sites.WANs.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteWanDeleteParams{
+		magic_transit.SiteWANDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -158,7 +158,7 @@ func TestSiteWanDelete(t *testing.T) {
 	}
 }
 
-func TestSiteWanGet(t *testing.T) {
+func TestSiteWANGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -172,11 +172,11 @@ func TestSiteWanGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Wans.Get(
+	_, err := client.MagicTransit.Sites.WANs.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteWanGetParams{
+		magic_transit.SiteWANGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

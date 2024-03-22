@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zones"
 )
 
-func TestSettingWebpEdit(t *testing.T) {
+func TestSettingWebPEdit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,9 +28,9 @@ func TestSettingWebpEdit(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Zones.Settings.Webp.Edit(context.TODO(), zones.SettingWebpEditParams{
+	_, err := client.Zones.Settings.WebP.Edit(context.TODO(), zones.SettingWebPEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value:  cloudflare.F(zones.SettingWebpEditParamsValueOff),
+		Value:  cloudflare.F(zones.SettingWebPEditParamsValueOff),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -41,7 +41,7 @@ func TestSettingWebpEdit(t *testing.T) {
 	}
 }
 
-func TestSettingWebpGet(t *testing.T) {
+func TestSettingWebPGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,7 +55,7 @@ func TestSettingWebpGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Zones.Settings.Webp.Get(context.TODO(), zones.SettingWebpGetParams{
+	_, err := client.Zones.Settings.WebP.Get(context.TODO(), zones.SettingWebPGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {

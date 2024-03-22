@@ -20,9 +20,9 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewPCAPService] method instead.
 type PCAPService struct {
-	Options    []option.RequestOption
-	Ownerships *OwnershipService
-	Downloads  *DownloadService
+	Options   []option.RequestOption
+	Ownership *OwnershipService
+	Download  *DownloadService
 }
 
 // NewPCAPService generates a new service that applies the given options to each
@@ -31,8 +31,8 @@ type PCAPService struct {
 func NewPCAPService(opts ...option.RequestOption) (r *PCAPService) {
 	r = &PCAPService{}
 	r.Options = opts
-	r.Ownerships = NewOwnershipService(opts...)
-	r.Downloads = NewDownloadService(opts...)
+	r.Ownership = NewOwnershipService(opts...)
+	r.Download = NewDownloadService(opts...)
 	return
 }
 

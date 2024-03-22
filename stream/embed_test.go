@@ -28,7 +28,7 @@ func TestEmbedGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Stream.Embeds.Get(
+	_, err := client.Stream.Embed.Get(
 		context.TODO(),
 		"ea95132c15732412d22c1476fa83f27a",
 		stream.EmbedGetParams{

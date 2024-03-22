@@ -20,7 +20,7 @@ import (
 // service directly, and instead use the [NewVersionService] method instead.
 type VersionService struct {
 	Options []option.RequestOption
-	ByTags  *VersionByTagService
+	ByTag   *VersionByTagService
 }
 
 // NewVersionService generates a new service that applies the given options to each
@@ -29,7 +29,7 @@ type VersionService struct {
 func NewVersionService(opts ...option.RequestOption) (r *VersionService) {
 	r = &VersionService{}
 	r.Options = opts
-	r.ByTags = NewVersionByTagService(opts...)
+	r.ByTag = NewVersionByTagService(opts...)
 	return
 }
 

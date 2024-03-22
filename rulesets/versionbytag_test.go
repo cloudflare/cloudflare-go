@@ -28,7 +28,7 @@ func TestVersionByTagGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Rulesets.Versions.ByTags.Get(
+	_, err := client.Rulesets.Versions.ByTag.Get(
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		"1",

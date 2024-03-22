@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestSiteLanNewWithOptionalParams(t *testing.T) {
+func TestSiteLANNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,43 +28,43 @@ func TestSiteLanNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Lans.New(
+	_, err := client.MagicTransit.Sites.LANs.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteLanNewParams{
+		magic_transit.SiteLANNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Lan: cloudflare.F(magic_transit.SiteLanNewParamsLan{
+			LAN: cloudflare.F(magic_transit.SiteLANNewParamsLAN{
 				Description: cloudflare.F("string"),
 				HaLink:      cloudflare.F(true),
-				Nat: cloudflare.F(magic_transit.SiteLanNewParamsLanNat{
+				Nat: cloudflare.F(magic_transit.SiteLANNewParamsLANNat{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
 				Physport: cloudflare.F(int64(1)),
-				RoutedSubnets: cloudflare.F([]magic_transit.SiteLanNewParamsLanRoutedSubnet{{
-					Nat: cloudflare.F(magic_transit.SiteLanNewParamsLanRoutedSubnetsNat{
+				RoutedSubnets: cloudflare.F([]magic_transit.SiteLANNewParamsLANRoutedSubnet{{
+					Nat: cloudflare.F(magic_transit.SiteLANNewParamsLANRoutedSubnetsNat{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}, {
-					Nat: cloudflare.F(magic_transit.SiteLanNewParamsLanRoutedSubnetsNat{
+					Nat: cloudflare.F(magic_transit.SiteLANNewParamsLANRoutedSubnetsNat{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}, {
-					Nat: cloudflare.F(magic_transit.SiteLanNewParamsLanRoutedSubnetsNat{
+					Nat: cloudflare.F(magic_transit.SiteLANNewParamsLANRoutedSubnetsNat{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}}),
-				StaticAddressing: cloudflare.F(magic_transit.SiteLanNewParamsLanStaticAddressing{
+				StaticAddressing: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressing{
 					Address: cloudflare.F("192.0.2.0/24"),
-					DhcpRelay: cloudflare.F(magic_transit.SiteLanNewParamsLanStaticAddressingDhcpRelay{
+					DhcpRelay: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressingDhcpRelay{
 						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 					}),
-					DhcpServer: cloudflare.F(magic_transit.SiteLanNewParamsLanStaticAddressingDhcpServer{
+					DhcpServer: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressingDhcpServer{
 						DhcpPoolEnd:   cloudflare.F("192.0.2.1"),
 						DhcpPoolStart: cloudflare.F("192.0.2.1"),
 						DNSServer:     cloudflare.F("192.0.2.1"),
@@ -89,7 +89,7 @@ func TestSiteLanNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSiteLanUpdateWithOptionalParams(t *testing.T) {
+func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -103,43 +103,43 @@ func TestSiteLanUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Lans.Update(
+	_, err := client.MagicTransit.Sites.LANs.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteLanUpdateParams{
+		magic_transit.SiteLANUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Lan: cloudflare.F(magic_transit.SiteLanUpdateParamsLan{
+			LAN: cloudflare.F(magic_transit.SiteLANUpdateParamsLAN{
 				Description: cloudflare.F("string"),
-				Nat: cloudflare.F(magic_transit.SiteLanUpdateParamsLanNat{
+				Nat: cloudflare.F(magic_transit.SiteLANUpdateParamsLANNat{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
 				Physport: cloudflare.F(int64(1)),
-				RoutedSubnets: cloudflare.F([]magic_transit.SiteLanUpdateParamsLanRoutedSubnet{{
-					Nat: cloudflare.F(magic_transit.SiteLanUpdateParamsLanRoutedSubnetsNat{
+				RoutedSubnets: cloudflare.F([]magic_transit.SiteLANUpdateParamsLANRoutedSubnet{{
+					Nat: cloudflare.F(magic_transit.SiteLANUpdateParamsLANRoutedSubnetsNat{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}, {
-					Nat: cloudflare.F(magic_transit.SiteLanUpdateParamsLanRoutedSubnetsNat{
+					Nat: cloudflare.F(magic_transit.SiteLANUpdateParamsLANRoutedSubnetsNat{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}, {
-					Nat: cloudflare.F(magic_transit.SiteLanUpdateParamsLanRoutedSubnetsNat{
+					Nat: cloudflare.F(magic_transit.SiteLANUpdateParamsLANRoutedSubnetsNat{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}}),
-				StaticAddressing: cloudflare.F(magic_transit.SiteLanUpdateParamsLanStaticAddressing{
+				StaticAddressing: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressing{
 					Address: cloudflare.F("192.0.2.0/24"),
-					DhcpRelay: cloudflare.F(magic_transit.SiteLanUpdateParamsLanStaticAddressingDhcpRelay{
+					DhcpRelay: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressingDhcpRelay{
 						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 					}),
-					DhcpServer: cloudflare.F(magic_transit.SiteLanUpdateParamsLanStaticAddressingDhcpServer{
+					DhcpServer: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressingDhcpServer{
 						DhcpPoolEnd:   cloudflare.F("192.0.2.1"),
 						DhcpPoolStart: cloudflare.F("192.0.2.1"),
 						DNSServer:     cloudflare.F("192.0.2.1"),
@@ -164,7 +164,7 @@ func TestSiteLanUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSiteLanList(t *testing.T) {
+func TestSiteLANList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -178,10 +178,10 @@ func TestSiteLanList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Lans.List(
+	_, err := client.MagicTransit.Sites.LANs.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteLanListParams{
+		magic_transit.SiteLANListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -194,7 +194,7 @@ func TestSiteLanList(t *testing.T) {
 	}
 }
 
-func TestSiteLanDelete(t *testing.T) {
+func TestSiteLANDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -208,11 +208,11 @@ func TestSiteLanDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Lans.Delete(
+	_, err := client.MagicTransit.Sites.LANs.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteLanDeleteParams{
+		magic_transit.SiteLANDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -225,7 +225,7 @@ func TestSiteLanDelete(t *testing.T) {
 	}
 }
 
-func TestSiteLanGet(t *testing.T) {
+func TestSiteLANGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -239,11 +239,11 @@ func TestSiteLanGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicTransit.Sites.Lans.Get(
+	_, err := client.MagicTransit.Sites.LANs.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		magic_transit.SiteLanGetParams{
+		magic_transit.SiteLANGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

@@ -42,8 +42,8 @@ func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
 		DisableAutoFallback: cloudflare.F(true),
 		Enabled:             cloudflare.F(true),
 		ExcludeOfficeIPs:    cloudflare.F(true),
-		LanAllowMinutes:     cloudflare.F(30.000000),
-		LanAllowSubnetSize:  cloudflare.F(24.000000),
+		LANAllowMinutes:     cloudflare.F(30.000000),
+		LANAllowSubnetSize:  cloudflare.F(24.000000),
 		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyNewParamsServiceModeV2{
 			Mode: cloudflare.F("proxy"),
 			Port: cloudflare.F(3000.000000),
