@@ -506,6 +506,12 @@ type AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 	NameIDTransformJsonata string `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey string `json:"public_key"`
+	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
+	// user identities into attribute assertions in the SAML response. The expression
+	// can transform id, email, name, and groups values. It can also transform fields
+	// listed in the saml_attributes or oidc_fields of the identity provider used to
+	// authenticate. The output of this expression must be a JSON object.
+	SamlAttributeTransformJsonata string `json:"saml_attribute_transform_jsonata"`
 	// A globally unique name for an identity or service provider.
 	SpEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
@@ -517,20 +523,21 @@ type AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 // accessAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON contains the JSON metadata
 // for the struct [AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp]
 type accessAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON struct {
-	AuthType               apijson.Field
-	ConsumerServiceURL     apijson.Field
-	CreatedAt              apijson.Field
-	CustomAttributes       apijson.Field
-	DefaultRelayState      apijson.Field
-	IDPEntityID            apijson.Field
-	NameIDFormat           apijson.Field
-	NameIDTransformJsonata apijson.Field
-	PublicKey              apijson.Field
-	SpEntityID             apijson.Field
-	SSOEndpoint            apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	AuthType                      apijson.Field
+	ConsumerServiceURL            apijson.Field
+	CreatedAt                     apijson.Field
+	CustomAttributes              apijson.Field
+	DefaultRelayState             apijson.Field
+	IDPEntityID                   apijson.Field
+	NameIDFormat                  apijson.Field
+	NameIDTransformJsonata        apijson.Field
+	PublicKey                     apijson.Field
+	SamlAttributeTransformJsonata apijson.Field
+	SpEntityID                    apijson.Field
+	SSOEndpoint                   apijson.Field
+	UpdatedAt                     apijson.Field
+	raw                           string
+	ExtraFields                   map[string]apijson.Field
 }
 
 func (r *AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp) UnmarshalJSON(data []byte) (err error) {
@@ -1626,6 +1633,12 @@ type AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey param.Field[string] `json:"public_key"`
+	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
+	// user identities into attribute assertions in the SAML response. The expression
+	// can transform id, email, name, and groups values. It can also transform fields
+	// listed in the saml_attributes or oidc_fields of the identity provider used to
+	// authenticate. The output of this expression must be a JSON object.
+	SamlAttributeTransformJsonata param.Field[string] `json:"saml_attribute_transform_jsonata"`
 	// A globally unique name for an identity or service provider.
 	SpEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
@@ -2574,6 +2587,12 @@ type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasApp struct
 	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey param.Field[string] `json:"public_key"`
+	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
+	// user identities into attribute assertions in the SAML response. The expression
+	// can transform id, email, name, and groups values. It can also transform fields
+	// listed in the saml_attributes or oidc_fields of the identity provider used to
+	// authenticate. The output of this expression must be a JSON object.
+	SamlAttributeTransformJsonata param.Field[string] `json:"saml_attribute_transform_jsonata"`
 	// A globally unique name for an identity or service provider.
 	SpEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
