@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.0-beta.12 (2024-03-22)
+
+Full Changelog: [v2.0.0-beta.11...v2.0.0-beta.12](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.11...v2.0.0-beta.12)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#1594](https://github.com/cloudflare/cloudflare-go/issues/1594)) ([2e1bd60](https://github.com/cloudflare/cloudflare-go/commit/2e1bd60ed380e150870a12db06f283200a0bd7b9))
+* **api:** OpenAPI spec update via Stainless API ([#1595](https://github.com/cloudflare/cloudflare-go/issues/1595)) ([26a3686](https://github.com/cloudflare/cloudflare-go/commit/26a368675b3cae7406cd5d496c0b6930e10611cd))
+* **api:** OpenAPI spec update via Stainless API ([#1596](https://github.com/cloudflare/cloudflare-go/issues/1596)) ([9f43eae](https://github.com/cloudflare/cloudflare-go/commit/9f43eae93a509eea90bc2981e52590d849e2c067))
+* **api:** OpenAPI spec update via Stainless API ([#1597](https://github.com/cloudflare/cloudflare-go/issues/1597)) ([88b0d07](https://github.com/cloudflare/cloudflare-go/commit/88b0d07d5e3d85818127d5ead90ec2c35f8769de))
+* **api:** OpenAPI spec update via Stainless API ([#1598](https://github.com/cloudflare/cloudflare-go/issues/1598)) ([b9e1a5b](https://github.com/cloudflare/cloudflare-go/commit/b9e1a5bb7d3156abc3f07f5afaaa67bc8fb1fc1d))
+* **api:** OpenAPI spec update via Stainless API ([#1599](https://github.com/cloudflare/cloudflare-go/issues/1599)) ([b6207df](https://github.com/cloudflare/cloudflare-go/commit/b6207df96088ebfc935ea5bbb45ab307a92ace24))
+* **api:** OpenAPI spec update via Stainless API ([#1601](https://github.com/cloudflare/cloudflare-go/issues/1601)) ([3892f53](https://github.com/cloudflare/cloudflare-go/commit/3892f530b8643cf762d587f012a51eb442aab073))
+* **api:** update via SDK Studio ([#1590](https://github.com/cloudflare/cloudflare-go/issues/1590)) ([e1ff4f4](https://github.com/cloudflare/cloudflare-go/commit/e1ff4f41a283d7fe486e1d8800a00dc8e442c2a5))
+* **api:** update via SDK Studio ([#1592](https://github.com/cloudflare/cloudflare-go/issues/1592)) ([edc11a3](https://github.com/cloudflare/cloudflare-go/commit/edc11a3c8d7482fb12fe0fd92228b073ba34954b))
+* **api:** update via SDK Studio ([#1602](https://github.com/cloudflare/cloudflare-go/issues/1602)) ([8678d24](https://github.com/cloudflare/cloudflare-go/commit/8678d2480888ec8b2e78694761810794bc7256ca))
+
 ## 2.0.0-beta.11 (2024-03-20)
 
 Full Changelog: [v2.0.0-beta.10...v2.0.0-beta.11](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.10...v2.0.0-beta.11)
