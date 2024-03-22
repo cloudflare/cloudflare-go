@@ -138,10 +138,10 @@ type TeamsDevicesDeviceSettingsPolicy struct {
 	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
 	// laptop waking from sleep. Note that this field is omitted from the response if
 	// null or unset.
-	LanAllowMinutes float64 `json:"lan_allow_minutes"`
+	LANAllowMinutes float64 `json:"lan_allow_minutes"`
 	// The size of the subnet for the local access network. Note that this field is
 	// omitted from the response if null or unset.
-	LanAllowSubnetSize float64 `json:"lan_allow_subnet_size"`
+	LANAllowSubnetSize float64 `json:"lan_allow_subnet_size"`
 	// The wirefilter expression to match devices.
 	Match string `json:"match"`
 	// The name of the device settings profile.
@@ -176,8 +176,8 @@ type teamsDevicesDeviceSettingsPolicyJSON struct {
 	FallbackDomains     apijson.Field
 	GatewayUniqueID     apijson.Field
 	Include             apijson.Field
-	LanAllowMinutes     apijson.Field
-	LanAllowSubnetSize  apijson.Field
+	LANAllowMinutes     apijson.Field
+	LANAllowSubnetSize  apijson.Field
 	Match               apijson.Field
 	Name                apijson.Field
 	PolicyID            apijson.Field
@@ -262,10 +262,10 @@ type DevicePolicyNewParams struct {
 	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
 	// laptop waking from sleep. Note that this field is omitted from the response if
 	// null or unset.
-	LanAllowMinutes param.Field[float64] `json:"lan_allow_minutes"`
+	LANAllowMinutes param.Field[float64] `json:"lan_allow_minutes"`
 	// The size of the subnet for the local access network. Note that this field is
 	// omitted from the response if null or unset.
-	LanAllowSubnetSize param.Field[float64]                            `json:"lan_allow_subnet_size"`
+	LANAllowSubnetSize param.Field[float64]                            `json:"lan_allow_subnet_size"`
 	ServiceModeV2      param.Field[DevicePolicyNewParamsServiceModeV2] `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL param.Field[string] `json:"support_url"`

@@ -11,9 +11,9 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewRUMService] method instead.
 type RUMService struct {
-	Options   []option.RequestOption
-	SiteInfos *SiteInfoService
-	Rules     *RuleService
+	Options  []option.RequestOption
+	SiteInfo *SiteInfoService
+	Rules    *RuleService
 }
 
 // NewRUMService generates a new service that applies the given options to each
@@ -22,7 +22,7 @@ type RUMService struct {
 func NewRUMService(opts ...option.RequestOption) (r *RUMService) {
 	r = &RUMService{}
 	r.Options = opts
-	r.SiteInfos = NewSiteInfoService(opts...)
+	r.SiteInfo = NewSiteInfoService(opts...)
 	r.Rules = NewRuleService(opts...)
 	return
 }

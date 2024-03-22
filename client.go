@@ -11,8 +11,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/alerting"
 	"github.com/cloudflare/cloudflare-go/v2/argo"
 	"github.com/cloudflare/cloudflare-go/v2/audit_logs"
-	"github.com/cloudflare/cloudflare-go/v2/available_plans"
-	"github.com/cloudflare/cloudflare-go/v2/available_rate_plans"
 	"github.com/cloudflare/cloudflare-go/v2/billing"
 	"github.com/cloudflare/cloudflare-go/v2/bot_management"
 	"github.com/cloudflare/cloudflare-go/v2/brand_protection"
@@ -58,10 +56,12 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/pagerules"
 	"github.com/cloudflare/cloudflare-go/v2/pages"
 	"github.com/cloudflare/cloudflare-go/v2/pcaps"
+	"github.com/cloudflare/cloudflare-go/v2/plans"
 	"github.com/cloudflare/cloudflare-go/v2/queues"
 	"github.com/cloudflare/cloudflare-go/v2/r2"
 	"github.com/cloudflare/cloudflare-go/v2/radar"
 	"github.com/cloudflare/cloudflare-go/v2/rate_limits"
+	"github.com/cloudflare/cloudflare-go/v2/rate_plans"
 	"github.com/cloudflare/cloudflare-go/v2/registrar"
 	"github.com/cloudflare/cloudflare-go/v2/request_tracers"
 	"github.com/cloudflare/cloudflare-go/v2/rules"
@@ -105,8 +105,8 @@ type Client struct {
 	Subscriptions               *subscriptions.SubscriptionService
 	ACM                         *acm.ACMService
 	Argo                        *argo.ArgoService
-	AvailablePlans              *available_plans.AvailablePlanService
-	AvailableRatePlans          *available_rate_plans.AvailableRatePlanService
+	Plans                       *plans.PlanService
+	RatePlans                   *rate_plans.RatePlanService
 	CertificateAuthorities      *certificate_authorities.CertificateAuthorityService
 	ClientCertificates          *client_certificates.ClientCertificateService
 	CustomCertificates          *custom_certificates.CustomCertificateService
@@ -210,8 +210,8 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Subscriptions = subscriptions.NewSubscriptionService(opts...)
 	r.ACM = acm.NewACMService(opts...)
 	r.Argo = argo.NewArgoService(opts...)
-	r.AvailablePlans = available_plans.NewAvailablePlanService(opts...)
-	r.AvailableRatePlans = available_rate_plans.NewAvailableRatePlanService(opts...)
+	r.Plans = plans.NewPlanService(opts...)
+	r.RatePlans = rate_plans.NewRatePlanService(opts...)
 	r.CertificateAuthorities = certificate_authorities.NewCertificateAuthorityService(opts...)
 	r.ClientCertificates = client_certificates.NewClientCertificateService(opts...)
 	r.CustomCertificates = custom_certificates.NewCustomCertificateService(opts...)

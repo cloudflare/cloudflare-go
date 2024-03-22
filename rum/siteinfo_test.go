@@ -28,7 +28,7 @@ func TestSiteInfoNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RUM.SiteInfos.New(context.TODO(), rum.SiteInfoNewParams{
+	_, err := client.RUM.SiteInfo.New(context.TODO(), rum.SiteInfoNewParams{
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		AutoInstall: cloudflare.F(true),
 		Host:        cloudflare.F("example.com"),
@@ -57,7 +57,7 @@ func TestSiteInfoUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RUM.SiteInfos.Update(
+	_, err := client.RUM.SiteInfo.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		rum.SiteInfoUpdateParams{
@@ -90,7 +90,7 @@ func TestSiteInfoListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RUM.SiteInfos.List(context.TODO(), rum.SiteInfoListParams{
+	_, err := client.RUM.SiteInfo.List(context.TODO(), rum.SiteInfoListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		OrderBy:   cloudflare.F(rum.SiteInfoListParamsOrderByHost),
 		Page:      cloudflare.F(1.000000),
@@ -119,7 +119,7 @@ func TestSiteInfoDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RUM.SiteInfos.Delete(
+	_, err := client.RUM.SiteInfo.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		rum.SiteInfoDeleteParams{
@@ -149,7 +149,7 @@ func TestSiteInfoGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RUM.SiteInfos.Get(
+	_, err := client.RUM.SiteInfo.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		rum.SiteInfoGetParams{

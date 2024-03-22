@@ -28,7 +28,7 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Stream.Tokens.New(
+	_, err := client.Stream.Token.New(
 		context.TODO(),
 		"ea95132c15732412d22c1476fa83f27a",
 		stream.TokenNewParams{
