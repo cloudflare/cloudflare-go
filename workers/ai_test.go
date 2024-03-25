@@ -33,7 +33,7 @@ func TestAIRunWithOptionalParams(t *testing.T) {
 		"string",
 		workers.AIRunParamsTextClassification{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Text:      cloudflare.F("string"),
+			Text:      cloudflare.F("x"),
 		},
 	)
 	if err != nil {

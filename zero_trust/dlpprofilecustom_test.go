@@ -62,7 +62,7 @@ func TestDLPProfileCustomNew(t *testing.T) {
 				}),
 			}}),
 			Name:       cloudflare.F("Generic CVV Card Number"),
-			OcrEnabled: cloudflare.F(true),
+			OCREnabled: cloudflare.F(true),
 		}, {
 			AllowedMatchCount: cloudflare.F(5.000000),
 			ContextAwareness: cloudflare.F(zero_trust.DLPProfileCustomNewParamsProfilesContextAwareness{
@@ -95,7 +95,7 @@ func TestDLPProfileCustomNew(t *testing.T) {
 				}),
 			}}),
 			Name:       cloudflare.F("Generic CVV Card Number"),
-			OcrEnabled: cloudflare.F(true),
+			OCREnabled: cloudflare.F(true),
 		}, {
 			AllowedMatchCount: cloudflare.F(5.000000),
 			ContextAwareness: cloudflare.F(zero_trust.DLPProfileCustomNewParamsProfilesContextAwareness{
@@ -128,7 +128,7 @@ func TestDLPProfileCustomNew(t *testing.T) {
 				}),
 			}}),
 			Name:       cloudflare.F("Generic CVV Card Number"),
-			OcrEnabled: cloudflare.F(true),
+			OCREnabled: cloudflare.F(true),
 		}}),
 	})
 	if err != nil {
@@ -193,7 +193,7 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 				ProfileID: cloudflare.F[any](map[string]interface{}{}),
 			}}),
 			Name:       cloudflare.F("Generic CVV Card Number"),
-			OcrEnabled: cloudflare.F(true),
+			OCREnabled: cloudflare.F(true),
 			SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsSharedEntry{zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined(zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined{
 				Enabled: cloudflare.F(true),
 			}), zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined(zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined{

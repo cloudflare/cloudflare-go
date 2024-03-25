@@ -159,6 +159,7 @@ func (r AIRunResponseTextEmbeddings) ImplementsWorkersAIRunResponse() {}
 
 type AIRunResponseSpeechRecognition struct {
 	Text      string                               `json:"text,required"`
+	Vtt       string                               `json:"vtt"`
 	WordCount float64                              `json:"word_count"`
 	Words     []AIRunResponseSpeechRecognitionWord `json:"words"`
 	JSON      aiRunResponseSpeechRecognitionJSON   `json:"-"`
@@ -168,6 +169,7 @@ type AIRunResponseSpeechRecognition struct {
 // [AIRunResponseSpeechRecognition]
 type aiRunResponseSpeechRecognitionJSON struct {
 	Text        apijson.Field
+	Vtt         apijson.Field
 	WordCount   apijson.Field
 	Words       apijson.Field
 	raw         string
