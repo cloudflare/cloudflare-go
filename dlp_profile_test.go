@@ -51,7 +51,8 @@ func TestDLPProfiles(t *testing.T) {
 						"skip": {
 							"files": true
 						}
-					}
+					},
+					"ocr_enabled": false
 				},
 				{
 					"id": "29678c26-a191-428d-9f63-6e20a4a636a4",
@@ -75,7 +76,8 @@ func TestDLPProfiles(t *testing.T) {
 					"updated_at": "2022-10-18T08:00:57Z",
 					"type": "custom",
 					"description": "just a custom profile example",
-					"allowed_match_count": 1
+					"allowed_match_count": 1,
+					"ocr_enabled": true 
 				}
 			]
 		}
@@ -98,6 +100,7 @@ func TestDLPProfiles(t *testing.T) {
 					Files: BoolPtr(true),
 				},
 			},
+			OCREnabled: BoolPtr(false),
 			Entries: []DLPEntry{
 				{
 					ID:        "111b9d4b-a5c6-40f0-957d-9d53b25dd84a",
@@ -121,6 +124,7 @@ func TestDLPProfiles(t *testing.T) {
 			Description:       "just a custom profile example",
 			AllowedMatchCount: 1,
 			// Omit ContextAwareness to test ContextAwareness optionality
+			OCREnabled: BoolPtr(true),
 			Entries: []DLPEntry{
 				{
 					ID:        "ef79b054-12d4-4067-bb30-b85f6267b91c",
@@ -271,7 +275,8 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 				"updated_at": "2022-10-18T08:00:57Z",
 				"type": "custom",
 				"description": "`+requestProfile.Description+`",
-				"allowed_match_count": 0
+				"allowed_match_count": 0,
+				"ocr_enabled": true
 			}]
 		}`)
 	}
@@ -303,6 +308,7 @@ func TestCreateDLPCustomProfiles(t *testing.T) {
 			CreatedAt:         &createdAt,
 			UpdatedAt:         &updatedAt,
 			AllowedMatchCount: 0,
+			OCREnabled:        BoolPtr(true),
 		},
 	}
 

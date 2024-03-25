@@ -55,6 +55,7 @@ type DLPProfile struct {
 	Type              string `json:"type,omitempty"`
 	Description       string `json:"description,omitempty"`
 	AllowedMatchCount int    `json:"allowed_match_count"`
+	OCREnabled        *bool  `json:"ocr_enabled,omitempty"`
 
 	ContextAwareness *DLPContextAwareness `json:"context_awareness,omitempty"`
 
