@@ -171,6 +171,14 @@ func WithResponseInto(dst **http.Response) RequestOption {
 	}
 }
 
+// WithRequestBody returns a RequestOption that provides a custom serialized body with content type.
+func WithRequestBody(contentType string, body []byte) RequestOption {
+	return func(r *requestconfig.RequestConfig) error {
+		r.Buffer = body
+		return r.Apply(WithHeader("Content-Type", contentType))
+	}
+}
+
 // WithRequestTimeout returns a RequestOption that sets the timeout for
 // each request attempt. This should be smaller than the timeout defined in
 // the context, which spans all retries.
