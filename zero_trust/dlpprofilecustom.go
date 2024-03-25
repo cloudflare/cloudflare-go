@@ -98,7 +98,7 @@ type DLPCustomProfile struct {
 	// The name of the profile.
 	Name string `json:"name"`
 	// If true, scan images via OCR to determine if any text present matches filters.
-	OcrEnabled bool `json:"ocr_enabled"`
+	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
 	Type      DLPCustomProfileType `json:"type"`
 	UpdatedAt time.Time            `json:"updated_at" format:"date-time"`
@@ -115,7 +115,7 @@ type dlpCustomProfileJSON struct {
 	Description       apijson.Field
 	Entries           apijson.Field
 	Name              apijson.Field
-	OcrEnabled        apijson.Field
+	OCREnabled        apijson.Field
 	Type              apijson.Field
 	UpdatedAt         apijson.Field
 	raw               string
@@ -322,7 +322,7 @@ type DLPProfileCustomNewParamsProfile struct {
 	// The name of the profile.
 	Name param.Field[string] `json:"name"`
 	// If true, scan images via OCR to determine if any text present matches filters.
-	OcrEnabled param.Field[bool] `json:"ocr_enabled"`
+	OCREnabled param.Field[bool] `json:"ocr_enabled"`
 }
 
 func (r DLPProfileCustomNewParamsProfile) MarshalJSON() (data []byte, err error) {
@@ -535,7 +535,7 @@ type DLPProfileCustomUpdateParams struct {
 	// The name of the profile.
 	Name param.Field[string] `json:"name"`
 	// If true, scan images via OCR to determine if any text present matches filters.
-	OcrEnabled param.Field[bool] `json:"ocr_enabled"`
+	OCREnabled param.Field[bool] `json:"ocr_enabled"`
 	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
 	// Microsoft Information Protection profiles).
 	SharedEntries param.Field[[]DLPProfileCustomUpdateParamsSharedEntry] `json:"shared_entries"`
