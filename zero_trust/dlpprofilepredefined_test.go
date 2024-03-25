@@ -47,7 +47,7 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 			}, {
 				Enabled: cloudflare.F(true),
 			}}),
-			OcrEnabled: cloudflare.F(true),
+			OCREnabled: cloudflare.F(true),
 		},
 	)
 	if err != nil {
