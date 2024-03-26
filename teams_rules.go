@@ -146,10 +146,11 @@ type TeamsFilterType string
 type TeamsGatewayAction string
 
 const (
-	HttpFilter   TeamsFilterType = "http"
-	DnsFilter    TeamsFilterType = "dns"
-	L4Filter     TeamsFilterType = "l4"
-	EgressFilter TeamsFilterType = "egress"
+	HttpFilter        TeamsFilterType = "http"
+	DnsFilter         TeamsFilterType = "dns"
+	L4Filter          TeamsFilterType = "l4"
+	EgressFilter      TeamsFilterType = "egress"
+	DnsResolverFilter TeamsFilterType = "dns_resolver"
 )
 
 const (
@@ -167,6 +168,7 @@ const (
 	L4Override   TeamsGatewayAction = "l4_override"  // l4
 	Egress       TeamsGatewayAction = "egress"       // egress
 	AuditSSH     TeamsGatewayAction = "audit_ssh"    // l4
+	Resolve      TeamsGatewayAction = "resolve"      // resolve
 )
 
 func TeamsRulesActionValues() []string {
@@ -185,6 +187,7 @@ func TeamsRulesActionValues() []string {
 		string(L4Override),
 		string(Egress),
 		string(AuditSSH),
+		string(Resolve),
 	}
 }
 

@@ -532,6 +532,75 @@ func TestTeamsCreateL4Rule(t *testing.T) {
 	}
 }
 
+func TestTeamsCreateResolverPolicy(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"name": "resolve 4.4.4.4",
+				"description": "rule description",
+				"precedence": 1000,
+				"enabled": true,
+				"action": "resolve",
+				"filters": [
+					"dns_resolver"
+				],
+				"traffic": "any(dns.domains[*] == \"scottstots.com\")",
+				"identity": "",
+				"rule_settings": {
+					"audit_ssh": { "command_logging": true },
+					"resolve_dns_through_cloudflare": true
+				}
+			}
+		}
+		`)
+	}
+
+	want := TeamsRule{
+		Name:          "resolve 4.4.4.4",
+		Description:   "rule description",
+		Precedence:    1000,
+		Enabled:       true,
+		Action:        Resolve,
+		Filters:       []TeamsFilterType{DnsResolverFilter},
+		Traffic:       `any(dns.domains[*] == "scottstots.com")`,
+		Identity:      "",
+		DevicePosture: "",
+		RuleSettings: TeamsRuleSettings{
+			BlockPageEnabled:                false,
+			BlockReason:                     "",
+			OverrideIPs:                     nil,
+			OverrideHost:                    "",
+			L4Override:                      nil,
+			AddHeaders:                      nil,
+			BISOAdminControls:               nil,
+			CheckSession:                    nil,
+			InsecureDisableDNSSECValidation: false,
+			EgressSettings:                  nil,
+			AuditSSH: &AuditSSHRuleSettings{
+				CommandLogging: true,
+			},
+			ResolveDnsThroughCloudflare: BoolPtr(true),
+		},
+		DeletedAt: nil,
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/rules", handler)
+
+	actual, err := client.TeamsCreateRule(context.Background(), testAccountID, want)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestTeamsUpdateRule(t *testing.T) {
 	setup()
 	defer teardown()
