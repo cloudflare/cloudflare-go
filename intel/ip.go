@@ -53,7 +53,7 @@ type IntelSchemasIP struct {
 	// to.
 	BelongsToRef IntelSchemasIPBelongsToRef `json:"belongs_to_ref"`
 	IP           IntelSchemasIPIP           `json:"ip" format:"ipv4"`
-	RiskTypes    interface{}                `json:"risk_types"`
+	RiskTypes    []interface{}              `json:"risk_types"`
 	JSON         intelSchemasIPJSON         `json:"-"`
 }
 
@@ -77,9 +77,9 @@ func (r intelSchemasIPJSON) RawJSON() string {
 // Specifies a reference to the autonomous systems (AS) that the IP address belongs
 // to.
 type IntelSchemasIPBelongsToRef struct {
-	ID          interface{} `json:"id"`
-	Country     string      `json:"country"`
-	Description string      `json:"description"`
+	ID          string `json:"id"`
+	Country     string `json:"country"`
+	Description string `json:"description"`
 	// Infrastructure type of this ASN.
 	Type  IntelSchemasIPBelongsToRefType `json:"type"`
 	Value string                         `json:"value"`

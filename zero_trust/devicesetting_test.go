@@ -29,7 +29,7 @@ func TestDeviceSettingUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Settings.Update(context.TODO(), zero_trust.DeviceSettingUpdateParams{
-		AccountID:                          cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID:                          cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		GatewayProxyEnabled:                cloudflare.F(true),
 		GatewayUdpProxyEnabled:             cloudflare.F(true),
 		RootCertificateInstallationEnabled: cloudflare.F(true),
@@ -59,7 +59,7 @@ func TestDeviceSettingList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Settings.List(context.TODO(), zero_trust.DeviceSettingListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

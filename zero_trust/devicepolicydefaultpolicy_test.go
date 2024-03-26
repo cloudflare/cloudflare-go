@@ -29,7 +29,7 @@ func TestDevicePolicyDefaultPolicyGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.DefaultPolicy.Get(context.TODO(), zero_trust.DevicePolicyDefaultPolicyGetParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

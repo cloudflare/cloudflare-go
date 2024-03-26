@@ -219,15 +219,15 @@ func (r domainListResponseRegistrantContactJSON) RawJSON() string {
 // Statuses for domain transfers into Cloudflare Registrar.
 type DomainListResponseTransferIn struct {
 	// Form of authorization has been accepted by the registrant.
-	AcceptFoa interface{} `json:"accept_foa"`
+	AcceptFoa string `json:"accept_foa"`
 	// Shows transfer status with the registry.
-	ApproveTransfer interface{} `json:"approve_transfer"`
+	ApproveTransfer string `json:"approve_transfer"`
 	// Indicates if cancellation is still possible.
 	CanCancelTransfer bool `json:"can_cancel_transfer"`
 	// Privacy guards are disabled at the foreign registrar.
 	DisablePrivacy interface{} `json:"disable_privacy"`
 	// Auth code has been entered and verified.
-	EnterAuthCode interface{} `json:"enter_auth_code"`
+	EnterAuthCode string `json:"enter_auth_code"`
 	// Domain is unlocked at the foreign registrar.
 	UnlockDomain interface{}                      `json:"unlock_domain"`
 	JSON         domainListResponseTransferInJSON `json:"-"`

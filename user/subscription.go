@@ -265,7 +265,7 @@ func (r SubscriptionGetResponseFrequency) IsKnown() bool {
 // The rate plan applied to the subscription.
 type SubscriptionGetResponseRatePlan struct {
 	// The ID of the rate plan.
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The currency applied to the rate plan subscription.
 	Currency string `json:"currency"`
 	// Whether this rate plan is managed externally from Cloudflare.
@@ -412,7 +412,7 @@ func (r SubscriptionUpdateParamsFrequency) IsKnown() bool {
 // The rate plan applied to the subscription.
 type SubscriptionUpdateParamsRatePlan struct {
 	// The ID of the rate plan.
-	ID param.Field[interface{}] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The currency applied to the rate plan subscription.
 	Currency param.Field[string] `json:"currency"`
 	// Whether this rate plan is managed externally from Cloudflare.
@@ -590,7 +590,7 @@ func (r SubscriptionEditParamsFrequency) IsKnown() bool {
 // The rate plan applied to the subscription.
 type SubscriptionEditParamsRatePlan struct {
 	// The ID of the rate plan.
-	ID param.Field[interface{}] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The currency applied to the rate plan subscription.
 	Currency param.Field[string] `json:"currency"`
 	// Whether this rate plan is managed externally from Cloudflare.

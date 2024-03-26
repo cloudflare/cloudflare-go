@@ -29,7 +29,7 @@ func TestGatewayAuditSSHSettingUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.AuditSSHSettings.Update(context.TODO(), zero_trust.GatewayAuditSSHSettingUpdateParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		PublicKey: cloudflare.F("1pyl6I1tL7xfJuFYVzXlUW8uXXlpxegHXBzGCBKaSFA="),
 		SeedID:    cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 	})
@@ -57,7 +57,7 @@ func TestGatewayAuditSSHSettingGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.AuditSSHSettings.Get(context.TODO(), zero_trust.GatewayAuditSSHSettingGetParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -68,16 +68,16 @@ type MiscategorizationNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Content category IDs to add.
-	ContentAdds param.Field[interface{}] `json:"content_adds"`
+	ContentAdds param.Field[[]float64] `json:"content_adds"`
 	// Content category IDs to remove.
-	ContentRemoves param.Field[interface{}]                             `json:"content_removes"`
+	ContentRemoves param.Field[[]float64]                               `json:"content_removes"`
 	IndicatorType  param.Field[MiscategorizationNewParamsIndicatorType] `json:"indicator_type"`
 	// Provide only if indicator_type is `ipv4` or `ipv6`.
 	IP param.Field[interface{}] `json:"ip"`
 	// Security category IDs to add.
-	SecurityAdds param.Field[interface{}] `json:"security_adds"`
+	SecurityAdds param.Field[[]float64] `json:"security_adds"`
 	// Security category IDs to remove.
-	SecurityRemoves param.Field[interface{}] `json:"security_removes"`
+	SecurityRemoves param.Field[[]float64] `json:"security_removes"`
 	// Provide only if indicator_type is `domain` or `url`. Example if indicator_type
 	// is `domain`: `example.com`. Example if indicator_type is `url`:
 	// `https://example.com/news/`.

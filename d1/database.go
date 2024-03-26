@@ -112,7 +112,7 @@ func (r *DatabaseService) Query(ctx context.Context, accountIdentifier string, d
 
 type D1CreateDatabase struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt interface{}          `json:"created_at"`
+	CreatedAt string               `json:"created_at"`
 	Name      string               `json:"name"`
 	UUID      string               `json:"uuid"`
 	Version   string               `json:"version"`
@@ -140,7 +140,7 @@ func (r d1CreateDatabaseJSON) RawJSON() string {
 
 type D1DatabaseDetails struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt interface{} `json:"created_at"`
+	CreatedAt string `json:"created_at"`
 	// The D1 database's size, in bytes.
 	FileSize  float64               `json:"file_size"`
 	Name      string                `json:"name"`

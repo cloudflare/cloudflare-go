@@ -34,7 +34,7 @@ func NewTSIGService(opts ...option.RequestOption) (r *TSIGService) {
 func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -44,10 +44,10 @@ func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...opt
 }
 
 // Modify TSIG.
-func (r *TSIGService) Update(ctx context.Context, tsigID interface{}, params TSIGUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", params.AccountID, tsigID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", params.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -60,7 +60,7 @@ func (r *TSIGService) Update(ctx context.Context, tsigID interface{}, params TSI
 func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *[]SecondaryDNSTSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -70,10 +70,10 @@ func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...op
 }
 
 // Delete TSIG.
-func (r *TSIGService) Delete(ctx context.Context, tsigID interface{}, body TSIGDeleteParams, opts ...option.RequestOption) (res *TSIGDeleteResponse, err error) {
+func (r *TSIGService) Delete(ctx context.Context, tsigID string, body TSIGDeleteParams, opts ...option.RequestOption) (res *TSIGDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", body.AccountID, tsigID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", body.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -83,10 +83,10 @@ func (r *TSIGService) Delete(ctx context.Context, tsigID interface{}, body TSIGD
 }
 
 // Get TSIG.
-func (r *TSIGService) Get(ctx context.Context, tsigID interface{}, query TSIGGetParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *TSIGService) Get(ctx context.Context, tsigID string, query TSIGGetParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", query.AccountID, tsigID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", query.AccountID, tsigID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -96,7 +96,7 @@ func (r *TSIGService) Get(ctx context.Context, tsigID interface{}, query TSIGGet
 }
 
 type SecondaryDNSTSIG struct {
-	ID interface{} `json:"id,required"`
+	ID string `json:"id,required"`
 	// TSIG algorithm.
 	Algo string `json:"algo,required"`
 	// TSIG key name.
@@ -126,7 +126,7 @@ func (r secondaryDnstsigJSON) RawJSON() string {
 }
 
 type TSIGDeleteResponse struct {
-	ID   interface{}            `json:"id"`
+	ID   string                 `json:"id"`
 	JSON tsigDeleteResponseJSON `json:"-"`
 }
 
@@ -147,7 +147,7 @@ func (r tsigDeleteResponseJSON) RawJSON() string {
 }
 
 type TSIGNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// TSIG algorithm.
 	Algo param.Field[string] `json:"algo,required"`
 	// TSIG key name.
@@ -250,7 +250,7 @@ func (r TSIGNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TSIGUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// TSIG algorithm.
 	Algo param.Field[string] `json:"algo,required"`
 	// TSIG key name.
@@ -353,7 +353,7 @@ func (r TSIGUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TSIGListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type TSIGListResponseEnvelope struct {
@@ -479,7 +479,7 @@ func (r tsigListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type TSIGDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type TSIGDeleteResponseEnvelope struct {
@@ -572,7 +572,7 @@ func (r TSIGDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TSIGGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type TSIGGetResponseEnvelope struct {

@@ -39,7 +39,7 @@ func NewGatewayLocationService(opts ...option.RequestOption) (r *GatewayLocation
 func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocationNewParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLocations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/locations", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/locations", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -49,10 +49,10 @@ func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocation
 }
 
 // Updates a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Update(ctx context.Context, locationID interface{}, params GatewayLocationUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLocations, err error) {
+func (r *GatewayLocationService) Update(ctx context.Context, locationID string, params GatewayLocationUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLocations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/locations/%v", params.AccountID, locationID)
+	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", params.AccountID, locationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -65,7 +65,7 @@ func (r *GatewayLocationService) Update(ctx context.Context, locationID interfac
 func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayLocations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/locations", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/locations", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -75,10 +75,10 @@ func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocation
 }
 
 // Deletes a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Delete(ctx context.Context, locationID interface{}, body GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponse, err error) {
+func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, body GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/locations/%v", body.AccountID, locationID)
+	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", body.AccountID, locationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -88,10 +88,10 @@ func (r *GatewayLocationService) Delete(ctx context.Context, locationID interfac
 }
 
 // Fetches a single Zero Trust Gateway location.
-func (r *GatewayLocationService) Get(ctx context.Context, locationID interface{}, query GatewayLocationGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLocations, err error) {
+func (r *GatewayLocationService) Get(ctx context.Context, locationID string, query GatewayLocationGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLocations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/locations/%v", query.AccountID, locationID)
+	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", query.AccountID, locationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -101,7 +101,7 @@ func (r *GatewayLocationService) Get(ctx context.Context, locationID interface{}
 }
 
 type ZeroTrustGatewayLocations struct {
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// True if the location is the default location.
 	ClientDefault bool      `json:"client_default"`
 	CreatedAt     time.Time `json:"created_at" format:"date-time"`
@@ -186,7 +186,7 @@ func init() {
 }
 
 type GatewayLocationNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the location.
 	Name param.Field[string] `json:"name,required"`
 	// True if the location is the default location.
@@ -300,7 +300,7 @@ func (r GatewayLocationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayLocationUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the location.
 	Name param.Field[string] `json:"name,required"`
 	// True if the location is the default location.
@@ -414,7 +414,7 @@ func (r GatewayLocationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayLocationListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayLocationListResponseEnvelope struct {
@@ -540,7 +540,7 @@ func (r gatewayLocationListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type GatewayLocationDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayLocationDeleteResponseEnvelope struct {
@@ -633,7 +633,7 @@ func (r GatewayLocationDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayLocationGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayLocationGetResponseEnvelope struct {

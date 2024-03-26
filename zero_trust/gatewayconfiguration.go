@@ -36,7 +36,7 @@ func NewGatewayConfigurationService(opts ...option.RequestOption) (r *GatewayCon
 func (r *GatewayConfigurationService) Update(ctx context.Context, params GatewayConfigurationUpdateParams, opts ...option.RequestOption) (res *GatewayConfigurationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/configuration", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/configuration", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -53,7 +53,7 @@ func (r *GatewayConfigurationService) Update(ctx context.Context, params Gateway
 func (r *GatewayConfigurationService) Edit(ctx context.Context, params GatewayConfigurationEditParams, opts ...option.RequestOption) (res *GatewayConfigurationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/configuration", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/configuration", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -66,7 +66,7 @@ func (r *GatewayConfigurationService) Edit(ctx context.Context, params GatewayCo
 func (r *GatewayConfigurationService) Get(ctx context.Context, query GatewayConfigurationGetParams, opts ...option.RequestOption) (res *GatewayConfigurationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/configuration", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/configuration", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1243,7 +1243,7 @@ func (r gatewayConfigurationGetResponseSettingsTLSDecryptJSON) RawJSON() string 
 }
 
 type GatewayConfigurationUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// account settings.
 	Settings param.Field[GatewayConfigurationUpdateParamsSettings] `json:"settings"`
 }
@@ -1515,7 +1515,7 @@ func (r GatewayConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayConfigurationEditParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// account settings.
 	Settings param.Field[GatewayConfigurationEditParamsSettings] `json:"settings"`
 }
@@ -1787,7 +1787,7 @@ func (r GatewayConfigurationEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayConfigurationGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayConfigurationGetResponseEnvelope struct {

@@ -1351,7 +1351,7 @@ type AccessAppsBookmarkApplication struct {
 	Aud       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The URL or domain of the bookmark.
-	Domain interface{} `json:"domain"`
+	Domain string `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
@@ -2239,7 +2239,7 @@ type AccessApplicationNewParamsBookmarkApplication struct {
 	ZoneID             param.Field[string]      `path:"zone_id"`
 	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
-	Domain param.Field[interface{}] `json:"domain"`
+	Domain param.Field[string] `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
@@ -3228,7 +3228,7 @@ type AccessApplicationUpdateParamsBookmarkApplication struct {
 	ZoneID             param.Field[string]      `path:"zone_id"`
 	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
-	Domain param.Field[interface{}] `json:"domain"`
+	Domain param.Field[string] `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.

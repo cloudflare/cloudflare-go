@@ -29,7 +29,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Rules.New(context.TODO(), zero_trust.GatewayRuleNewParams{
-		AccountID:     cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Action:        cloudflare.F(zero_trust.GatewayRuleNewParamsActionAllow),
 		Name:          cloudflare.F("block bad websites"),
 		Description:   cloudflare.F("Block bad websites based on their host name."),
@@ -166,7 +166,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayRuleUpdateParams{
-			AccountID:     cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Action:        cloudflare.F(zero_trust.GatewayRuleUpdateParamsActionAllow),
 			Name:          cloudflare.F("block bad websites"),
 			Description:   cloudflare.F("Block bad websites based on their host name."),
@@ -301,7 +301,7 @@ func TestGatewayRuleList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Rules.List(context.TODO(), zero_trust.GatewayRuleListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -330,7 +330,7 @@ func TestGatewayRuleDelete(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayRuleDeleteParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {
@@ -360,7 +360,7 @@ func TestGatewayRuleGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayRuleGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

@@ -35,7 +35,7 @@ func NewDeviceSettingService(opts ...option.RequestOption) (r *DeviceSettingServ
 func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingUpdateParams, opts ...option.RequestOption) (res *TeamsDevicesZeroTrustAccountDeviceSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceSettingUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/settings", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -48,7 +48,7 @@ func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingU
 func (r *DeviceSettingService) List(ctx context.Context, query DeviceSettingListParams, opts ...option.RequestOption) (res *TeamsDevicesZeroTrustAccountDeviceSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceSettingListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/settings", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/settings", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -89,7 +89,7 @@ func (r teamsDevicesZeroTrustAccountDeviceSettingsJSON) RawJSON() string {
 }
 
 type DeviceSettingUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -194,7 +194,7 @@ func (r DeviceSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DeviceSettingListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DeviceSettingListResponseEnvelope struct {

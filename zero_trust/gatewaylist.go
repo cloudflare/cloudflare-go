@@ -41,7 +41,7 @@ func NewGatewayListService(opts ...option.RequestOption) (r *GatewayListService)
 func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParams, opts ...option.RequestOption) (res *GatewayListNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/lists", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -54,7 +54,7 @@ func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParam
 func (r *GatewayListService) Update(ctx context.Context, listID string, params GatewayListUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLists, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", params.AccountID, listID)
+	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -67,7 +67,7 @@ func (r *GatewayListService) Update(ctx context.Context, listID string, params G
 func (r *GatewayListService) List(ctx context.Context, query GatewayListListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayLists, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/lists", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -80,7 +80,7 @@ func (r *GatewayListService) List(ctx context.Context, query GatewayListListPara
 func (r *GatewayListService) Delete(ctx context.Context, listID string, body GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", body.AccountID, listID)
+	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", body.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -93,7 +93,7 @@ func (r *GatewayListService) Delete(ctx context.Context, listID string, body Gat
 func (r *GatewayListService) Edit(ctx context.Context, listID string, params GatewayListEditParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLists, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", params.AccountID, listID)
+	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -106,7 +106,7 @@ func (r *GatewayListService) Edit(ctx context.Context, listID string, params Gat
 func (r *GatewayListService) Get(ctx context.Context, listID string, query GatewayListGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLists, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", query.AccountID, listID)
+	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", query.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -271,7 +271,7 @@ func init() {
 }
 
 type GatewayListNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the list.
 	Name param.Field[string] `json:"name,required"`
 	// The type of list.
@@ -404,7 +404,7 @@ func (r GatewayListNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the list.
 	Name param.Field[string] `json:"name,required"`
 	// The description of the list.
@@ -505,7 +505,7 @@ func (r GatewayListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayListListResponseEnvelope struct {
@@ -631,7 +631,7 @@ func (r gatewayListListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type GatewayListDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayListDeleteResponseEnvelope struct {
@@ -724,7 +724,7 @@ func (r GatewayListDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListEditParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The items in the list.
 	Append param.Field[[]GatewayListEditParamsAppend] `json:"append"`
 	// A list of the item values you want to remove.
@@ -834,7 +834,7 @@ func (r GatewayListEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayListGetResponseEnvelope struct {

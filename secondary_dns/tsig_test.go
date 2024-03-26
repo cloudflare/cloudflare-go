@@ -29,7 +29,7 @@ func TestTSIGNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.TSIGs.New(context.TODO(), secondary_dns.TSIGNewParams{
-		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		Algo:      cloudflare.F("hmac-sha512."),
 		Name:      cloudflare.F("tsig.customer.cf."),
 		Secret:    cloudflare.F("caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c"),
@@ -61,7 +61,7 @@ func TestTSIGUpdate(t *testing.T) {
 		context.TODO(),
 		"69cd1e104af3e6ed3cb344f263fd0d5a",
 		secondary_dns.TSIGUpdateParams{
-			AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			Algo:      cloudflare.F("hmac-sha512."),
 			Name:      cloudflare.F("tsig.customer.cf."),
 			Secret:    cloudflare.F("caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c"),
@@ -91,7 +91,7 @@ func TestTSIGList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.TSIGs.List(context.TODO(), secondary_dns.TSIGListParams{
-		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -120,7 +120,7 @@ func TestTSIGDelete(t *testing.T) {
 		context.TODO(),
 		"69cd1e104af3e6ed3cb344f263fd0d5a",
 		secondary_dns.TSIGDeleteParams{
-			AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		},
 	)
 	if err != nil {
@@ -150,7 +150,7 @@ func TestTSIGGet(t *testing.T) {
 		context.TODO(),
 		"69cd1e104af3e6ed3cb344f263fd0d5a",
 		secondary_dns.TSIGGetParams{
-			AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		},
 	)
 	if err != nil {

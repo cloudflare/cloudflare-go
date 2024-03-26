@@ -32,10 +32,10 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 }
 
 // Get the result of a previous preview operation using the provided preview_id.
-func (r *PreviewService) Get(ctx context.Context, previewID interface{}, query PreviewGetParams, opts ...option.RequestOption) (res *user.LoadBalancingPreviewResult, err error) {
+func (r *PreviewService) Get(ctx context.Context, previewID string, query PreviewGetParams, opts ...option.RequestOption) (res *user.LoadBalancingPreviewResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%v", query.AccountID, previewID)
+	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%s", query.AccountID, previewID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

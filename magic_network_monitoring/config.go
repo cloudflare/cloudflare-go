@@ -36,7 +36,7 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 func (r *ConfigService) New(ctx context.Context, body ConfigNewParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -50,7 +50,7 @@ func (r *ConfigService) New(ctx context.Context, body ConfigNewParams, opts ...o
 func (r *ConfigService) Update(ctx context.Context, body ConfigUpdateParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -63,7 +63,7 @@ func (r *ConfigService) Update(ctx context.Context, body ConfigUpdateParams, opt
 func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -76,7 +76,7 @@ func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opt
 func (r *ConfigService) Edit(ctx context.Context, body ConfigEditParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -89,7 +89,7 @@ func (r *ConfigService) Edit(ctx context.Context, body ConfigEditParams, opts ..
 func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -127,7 +127,7 @@ func (r magicVisibilityMNMConfigJSON) RawJSON() string {
 }
 
 type ConfigNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConfigNewResponseEnvelope struct {
@@ -220,7 +220,7 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConfigUpdateResponseEnvelope struct {
@@ -313,7 +313,7 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConfigDeleteResponseEnvelope struct {
@@ -406,7 +406,7 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigEditParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConfigEditResponseEnvelope struct {
@@ -499,7 +499,7 @@ func (r ConfigEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConfigGetResponseEnvelope struct {

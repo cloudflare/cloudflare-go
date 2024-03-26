@@ -36,7 +36,7 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *DeviceOverrideCodeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceOverrideCodeListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/%s/override_codes", query.AccountID, deviceID)
+	path := fmt.Sprintf("accounts/%s/devices/%s/override_codes", query.AccountID, deviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -68,15 +68,15 @@ func (r deviceOverrideCodeListResponseJSON) RawJSON() string {
 
 type DeviceOverrideCodeListResponseDisableForTime struct {
 	// Override code that is valid for 1 hour.
-	Number1 interface{} `json:"1"`
+	Number1 string `json:"1"`
 	// Override code that is valid for 12 hour2.
-	Number12 interface{} `json:"12"`
+	Number12 string `json:"12"`
 	// Override code that is valid for 24 hour.2.
-	Number24 interface{} `json:"24"`
+	Number24 string `json:"24"`
 	// Override code that is valid for 3 hours.
-	Number3 interface{} `json:"3"`
+	Number3 string `json:"3"`
 	// Override code that is valid for 6 hours.
-	Number6 interface{}                                      `json:"6"`
+	Number6 string                                           `json:"6"`
 	JSON    deviceOverrideCodeListResponseDisableForTimeJSON `json:"-"`
 }
 
@@ -101,7 +101,7 @@ func (r deviceOverrideCodeListResponseDisableForTimeJSON) RawJSON() string {
 }
 
 type DeviceOverrideCodeListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DeviceOverrideCodeListResponseEnvelope struct {

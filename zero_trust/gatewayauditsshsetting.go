@@ -36,7 +36,7 @@ func NewGatewayAuditSSHSettingService(opts ...option.RequestOption) (r *GatewayA
 func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewaySettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayAuditSSHSettingUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/audit_ssh_settings", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/audit_ssh_settings", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -49,7 +49,7 @@ func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params Gatew
 func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewaySettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayAuditSSHSettingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/audit_ssh_settings", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/audit_ssh_settings", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -88,7 +88,7 @@ func (r zeroTrustGatewaySettingsJSON) RawJSON() string {
 }
 
 type GatewayAuditSSHSettingUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// SSH encryption public key
 	PublicKey param.Field[string] `json:"public_key,required"`
 	// Seed ID
@@ -189,7 +189,7 @@ func (r GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayAuditSSHSettingGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayAuditSSHSettingGetResponseEnvelope struct {
