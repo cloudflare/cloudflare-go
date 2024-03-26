@@ -36,7 +36,7 @@ func NewGatewayListItemService(opts ...option.RequestOption) (r *GatewayListItem
 func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *[][]GatewayListItemListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListItemListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists/%s/items", query.AccountID, listID)
+	path := fmt.Sprintf("accounts/%s/gateway/lists/%s/items", query.AccountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -70,7 +70,7 @@ func (r gatewayListItemListResponseJSON) RawJSON() string {
 }
 
 type GatewayListItemListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayListItemListResponseEnvelope struct {

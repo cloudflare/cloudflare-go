@@ -33,10 +33,10 @@ func NewEventDetailService(opts ...option.RequestOption) (r *EventDetailService)
 
 // Previews an event's configuration as if it was active. Inherited fields from the
 // waiting room will be displayed with their current values.
-func (r *EventDetailService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, opts ...option.RequestOption) (res *WaitingroomEventDetailsResult, err error) {
+func (r *EventDetailService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID string, eventID string, opts ...option.RequestOption) (res *WaitingroomEventDetailsResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventDetailGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v/details", zoneIdentifier, waitingRoomID, eventID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s/details", zoneIdentifier, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -46,9 +46,9 @@ func (r *EventDetailService) Get(ctx context.Context, zoneIdentifier string, wai
 }
 
 type WaitingroomEventDetailsResult struct {
-	ID             interface{} `json:"id"`
-	CreatedOn      time.Time   `json:"created_on" format:"date-time"`
-	CustomPageHTML string      `json:"custom_page_html"`
+	ID             string    `json:"id"`
+	CreatedOn      time.Time `json:"created_on" format:"date-time"`
+	CustomPageHTML string    `json:"custom_page_html"`
 	// A note that you can use to add more details about the event.
 	Description           string `json:"description"`
 	DisableSessionRenewal bool   `json:"disable_session_renewal"`

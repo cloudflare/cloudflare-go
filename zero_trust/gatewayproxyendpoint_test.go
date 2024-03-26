@@ -29,7 +29,7 @@ func TestGatewayProxyEndpointNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.New(context.TODO(), zero_trust.GatewayProxyEndpointNewParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		IPs:       cloudflare.F([]string{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
 		Name:      cloudflare.F("Devops team"),
 		Subdomain: cloudflare.F("oli3n9zkz5.proxy.cloudflare-gateway.com"),
@@ -58,7 +58,7 @@ func TestGatewayProxyEndpointList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.List(context.TODO(), zero_trust.GatewayProxyEndpointListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -87,7 +87,7 @@ func TestGatewayProxyEndpointDelete(t *testing.T) {
 		context.TODO(),
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayProxyEndpointDeleteParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {
@@ -117,7 +117,7 @@ func TestGatewayProxyEndpointEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayProxyEndpointEditParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			IPs:       cloudflare.F([]string{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
 			Name:      cloudflare.F("Devops team"),
 			Subdomain: cloudflare.F("oli3n9zkz5.proxy.cloudflare-gateway.com"),
@@ -150,7 +150,7 @@ func TestGatewayProxyEndpointGet(t *testing.T) {
 		context.TODO(),
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayProxyEndpointGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

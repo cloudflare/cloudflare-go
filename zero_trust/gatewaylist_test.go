@@ -29,7 +29,7 @@ func TestGatewayListNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Lists.New(context.TODO(), zero_trust.GatewayListNewParams{
-		AccountID:   cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID:   cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Name:        cloudflare.F("Admin Serial Numbers"),
 		Type:        cloudflare.F(zero_trust.GatewayListNewParamsTypeSerial),
 		Description: cloudflare.F("The serial numbers for administrators"),
@@ -68,7 +68,7 @@ func TestGatewayListUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayListUpdateParams{
-			AccountID:   cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID:   cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Name:        cloudflare.F("Admin Serial Numbers"),
 			Description: cloudflare.F("The serial numbers for administrators"),
 		},
@@ -97,7 +97,7 @@ func TestGatewayListList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Lists.List(context.TODO(), zero_trust.GatewayListListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -126,7 +126,7 @@ func TestGatewayListDelete(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayListDeleteParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {
@@ -156,7 +156,7 @@ func TestGatewayListEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayListEditParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Append: cloudflare.F([]zero_trust.GatewayListEditParamsAppend{{
 				Value: cloudflare.F("8GE8721REF"),
 			}, {
@@ -194,7 +194,7 @@ func TestGatewayListGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayListGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

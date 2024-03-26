@@ -29,7 +29,7 @@ func TestConfigFullGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Configs.Full.Get(context.TODO(), magic_network_monitoring.ConfigFullGetParams{
-		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

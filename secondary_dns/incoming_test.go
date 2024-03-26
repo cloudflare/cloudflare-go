@@ -29,7 +29,7 @@ func TestIncomingNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Incoming.New(context.TODO(), secondary_dns.IncomingNewParams{
-		ZoneID:             cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
+		ZoneID:             cloudflare.F("269d8f4853475ca241c4e730be286b20"),
 		AutoRefreshSeconds: cloudflare.F(86400.000000),
 		Name:               cloudflare.F("www.example.com."),
 		Peers:              cloudflare.F([]interface{}{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
@@ -58,7 +58,7 @@ func TestIncomingUpdate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Incoming.Update(context.TODO(), secondary_dns.IncomingUpdateParams{
-		ZoneID:             cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
+		ZoneID:             cloudflare.F("269d8f4853475ca241c4e730be286b20"),
 		AutoRefreshSeconds: cloudflare.F(86400.000000),
 		Name:               cloudflare.F("www.example.com."),
 		Peers:              cloudflare.F([]interface{}{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
@@ -87,7 +87,7 @@ func TestIncomingDelete(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Incoming.Delete(context.TODO(), secondary_dns.IncomingDeleteParams{
-		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
+		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -113,7 +113,7 @@ func TestIncomingGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Incoming.Get(context.TODO(), secondary_dns.IncomingGetParams{
-		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
+		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

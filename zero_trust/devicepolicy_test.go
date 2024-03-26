@@ -29,7 +29,7 @@ func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.New(context.TODO(), zero_trust.DevicePolicyNewParams{
-		AccountID:           cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Match:               cloudflare.F("user.identity == \"test@cloudflare.com\""),
 		Name:                cloudflare.F("Allow Developers"),
 		Precedence:          cloudflare.F(100.000000),
@@ -75,7 +75,7 @@ func TestDevicePolicyList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.List(context.TODO(), zero_trust.DevicePolicyListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -104,7 +104,7 @@ func TestDevicePolicyDelete(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePolicyDeleteParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {
@@ -134,7 +134,7 @@ func TestDevicePolicyEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePolicyEditParams{
-			AccountID:           cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			AllowModeSwitch:     cloudflare.F(true),
 			AllowUpdates:        cloudflare.F(true),
 			AllowedToLeave:      cloudflare.F(true),
@@ -182,7 +182,7 @@ func TestDevicePolicyGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePolicyGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

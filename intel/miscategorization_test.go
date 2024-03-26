@@ -29,23 +29,14 @@ func TestMiscategorizationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Intel.Miscategorizations.New(context.TODO(), intel.MiscategorizationNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ContentAdds: cloudflare.F[any](map[string]interface{}{
-			"0": int64(82),
-		}),
-		ContentRemoves: cloudflare.F[any](map[string]interface{}{
-			"0": int64(155),
-		}),
-		IndicatorType: cloudflare.F(intel.MiscategorizationNewParamsIndicatorTypeDomain),
-		IP:            cloudflare.F[any](map[string]interface{}{}),
-		SecurityAdds: cloudflare.F[any](map[string]interface{}{
-			"0": int64(117),
-			"1": int64(131),
-		}),
-		SecurityRemoves: cloudflare.F[any](map[string]interface{}{
-			"0": int64(83),
-		}),
-		URL: cloudflare.F("string"),
+		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ContentAdds:     cloudflare.F([]float64{82.000000}),
+		ContentRemoves:  cloudflare.F([]float64{155.000000}),
+		IndicatorType:   cloudflare.F(intel.MiscategorizationNewParamsIndicatorTypeDomain),
+		IP:              cloudflare.F[any](map[string]interface{}{}),
+		SecurityAdds:    cloudflare.F([]float64{117.000000, 131.000000}),
+		SecurityRemoves: cloudflare.F([]float64{83.000000}),
+		URL:             cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

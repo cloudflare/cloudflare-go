@@ -54,16 +54,16 @@ func (r *ConnectionService) Get(ctx context.Context, connectionID string, query 
 }
 
 type PageShieldConnection struct {
-	ID                      interface{}              `json:"id"`
-	AddedAt                 interface{}              `json:"added_at"`
-	DomainReportedMalicious interface{}              `json:"domain_reported_malicious"`
-	FirstPageURL            interface{}              `json:"first_page_url"`
-	FirstSeenAt             interface{}              `json:"first_seen_at"`
-	Host                    interface{}              `json:"host"`
-	LastSeenAt              interface{}              `json:"last_seen_at"`
-	PageURLs                interface{}              `json:"page_urls"`
-	URL                     interface{}              `json:"url"`
-	URLContainsCdnCgiPath   interface{}              `json:"url_contains_cdn_cgi_path"`
+	ID                      string                   `json:"id"`
+	AddedAt                 string                   `json:"added_at"`
+	DomainReportedMalicious bool                     `json:"domain_reported_malicious"`
+	FirstPageURL            string                   `json:"first_page_url"`
+	FirstSeenAt             string                   `json:"first_seen_at"`
+	Host                    string                   `json:"host"`
+	LastSeenAt              string                   `json:"last_seen_at"`
+	PageURLs                []string                 `json:"page_urls"`
+	URL                     string                   `json:"url"`
+	URLContainsCdnCgiPath   bool                     `json:"url_contains_cdn_cgi_path"`
 	JSON                    pageShieldConnectionJSON `json:"-"`
 }
 

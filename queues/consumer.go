@@ -196,7 +196,7 @@ func (r workersConsumerCreatedSettingsJSON) RawJSON() string {
 
 type WorkersConsumerUpdated struct {
 	CreatedOn       interface{}                    `json:"created_on"`
-	DeadLetterQueue interface{}                    `json:"dead_letter_queue"`
+	DeadLetterQueue string                         `json:"dead_letter_queue"`
 	Environment     interface{}                    `json:"environment"`
 	QueueName       interface{}                    `json:"queue_name"`
 	ScriptName      interface{}                    `json:"script_name"`
@@ -725,7 +725,7 @@ type ConsumerGetResponseEnvelopeResultInfo struct {
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
 	TotalCount float64                                   `json:"total_count"`
-	TotalPages interface{}                               `json:"total_pages"`
+	TotalPages float64                                   `json:"total_pages"`
 	JSON       consumerGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 

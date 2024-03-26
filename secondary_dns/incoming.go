@@ -34,7 +34,7 @@ func NewIncomingService(opts ...option.RequestOption) (r *IncomingService) {
 func (r *IncomingService) New(ctx context.Context, params IncomingNewParams, opts ...option.RequestOption) (res *IncomingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingNewResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -47,7 +47,7 @@ func (r *IncomingService) New(ctx context.Context, params IncomingNewParams, opt
 func (r *IncomingService) Update(ctx context.Context, params IncomingUpdateParams, opts ...option.RequestOption) (res *IncomingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -60,7 +60,7 @@ func (r *IncomingService) Update(ctx context.Context, params IncomingUpdateParam
 func (r *IncomingService) Delete(ctx context.Context, body IncomingDeleteParams, opts ...option.RequestOption) (res *IncomingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -73,7 +73,7 @@ func (r *IncomingService) Delete(ctx context.Context, body IncomingDeleteParams,
 func (r *IncomingService) Get(ctx context.Context, query IncomingGetParams, opts ...option.RequestOption) (res *IncomingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IncomingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", query.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/incoming", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -83,7 +83,7 @@ func (r *IncomingService) Get(ctx context.Context, query IncomingGetParams, opts
 }
 
 type IncomingNewResponse struct {
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
 	AutoRefreshSeconds float64 `json:"auto_refresh_seconds"`
@@ -126,7 +126,7 @@ func (r incomingNewResponseJSON) RawJSON() string {
 }
 
 type IncomingUpdateResponse struct {
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
 	AutoRefreshSeconds float64 `json:"auto_refresh_seconds"`
@@ -169,7 +169,7 @@ func (r incomingUpdateResponseJSON) RawJSON() string {
 }
 
 type IncomingDeleteResponse struct {
-	ID   interface{}                `json:"id"`
+	ID   string                     `json:"id"`
 	JSON incomingDeleteResponseJSON `json:"-"`
 }
 
@@ -190,7 +190,7 @@ func (r incomingDeleteResponseJSON) RawJSON() string {
 }
 
 type IncomingGetResponse struct {
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
 	AutoRefreshSeconds float64 `json:"auto_refresh_seconds"`
@@ -233,7 +233,7 @@ func (r incomingGetResponseJSON) RawJSON() string {
 }
 
 type IncomingNewParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
 	AutoRefreshSeconds param.Field[float64] `json:"auto_refresh_seconds,required"`
@@ -337,7 +337,7 @@ func (r IncomingNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IncomingUpdateParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
 	AutoRefreshSeconds param.Field[float64] `json:"auto_refresh_seconds,required"`
@@ -441,7 +441,7 @@ func (r IncomingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IncomingDeleteParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type IncomingDeleteResponseEnvelope struct {
@@ -534,7 +534,7 @@ func (r IncomingDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IncomingGetParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type IncomingGetResponseEnvelope struct {

@@ -102,8 +102,8 @@ func (r scriptUsageModelGetResponseJSON) RawJSON() string {
 
 type ScriptUsageModelUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      param.Field[string] `json:"body,required"`
 }
 
 func (r ScriptUsageModelUpdateParams) MarshalJSON() (data []byte, err error) {

@@ -54,7 +54,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDevices, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -67,7 +67,7 @@ func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts .
 func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/%s", query.AccountID, deviceID)
+	path := fmt.Sprintf("accounts/%s/devices/%s", query.AccountID, deviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -217,7 +217,7 @@ func init() {
 }
 
 type DeviceListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DeviceListResponseEnvelope struct {
@@ -343,7 +343,7 @@ func (r deviceListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type DeviceGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DeviceGetResponseEnvelope struct {

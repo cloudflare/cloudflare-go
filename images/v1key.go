@@ -31,10 +31,10 @@ func NewV1KeyService(opts ...option.RequestOption) (r *V1KeyService) {
 }
 
 // Create a new signing key with specified name. Returns all keys available.
-func (r *V1KeyService) Update(ctx context.Context, signingKeyName interface{}, body V1KeyUpdateParams, opts ...option.RequestOption) (res *ImagesImageKeys, err error) {
+func (r *V1KeyService) Update(ctx context.Context, signingKeyName string, body V1KeyUpdateParams, opts ...option.RequestOption) (res *ImagesImageKeys, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1KeyUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/keys/%v", body.AccountID, signingKeyName)
+	path := fmt.Sprintf("accounts/%s/images/v1/keys/%s", body.AccountID, signingKeyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -58,10 +58,10 @@ func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...
 
 // Delete signing key with specified name. Returns all keys available. When last
 // key is removed, a new default signing key will be generated.
-func (r *V1KeyService) Delete(ctx context.Context, signingKeyName interface{}, body V1KeyDeleteParams, opts ...option.RequestOption) (res *ImagesImageKeys, err error) {
+func (r *V1KeyService) Delete(ctx context.Context, signingKeyName string, body V1KeyDeleteParams, opts ...option.RequestOption) (res *ImagesImageKeys, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1KeyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/keys/%v", body.AccountID, signingKeyName)
+	path := fmt.Sprintf("accounts/%s/images/v1/keys/%s", body.AccountID, signingKeyName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return

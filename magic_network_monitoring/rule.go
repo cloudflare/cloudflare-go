@@ -37,7 +37,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 func (r *RuleService) New(ctx context.Context, body RuleNewParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -50,7 +50,7 @@ func (r *RuleService) New(ctx context.Context, body RuleNewParams, opts ...optio
 func (r *RuleService) Update(ctx context.Context, body RuleUpdateParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -63,7 +63,7 @@ func (r *RuleService) Update(ctx context.Context, body RuleUpdateParams, opts ..
 func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *[]MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -73,10 +73,10 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 }
 
 // Delete a network monitoring rule for account.
-func (r *RuleService) Delete(ctx context.Context, ruleID interface{}, body RuleDeleteParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", body.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -86,10 +86,10 @@ func (r *RuleService) Delete(ctx context.Context, ruleID interface{}, body RuleD
 }
 
 // Update a network monitoring rule for account.
-func (r *RuleService) Edit(ctx context.Context, ruleID interface{}, body RuleEditParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
+func (r *RuleService) Edit(ctx context.Context, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", body.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -99,10 +99,10 @@ func (r *RuleService) Edit(ctx context.Context, ruleID interface{}, body RuleEdi
 }
 
 // List a single network monitoring rule for account.
-func (r *RuleService) Get(ctx context.Context, ruleID interface{}, query RuleGetParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
+func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *MagicVisibilityMNMRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", query.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", query.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -125,9 +125,9 @@ type MagicVisibilityMNMRule struct {
 	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
 	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
 	// the rule name. Max 256 characters.
-	Name     string      `json:"name,required"`
-	Prefixes []string    `json:"prefixes,required"`
-	ID       interface{} `json:"id"`
+	Name     string   `json:"name,required"`
+	Prefixes []string `json:"prefixes,required"`
+	ID       string   `json:"id"`
 	// The number of bits per second for the rule. When this value is exceeded for the
 	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
 	BandwidthThreshold float64 `json:"bandwidth_threshold"`
@@ -160,7 +160,7 @@ func (r magicVisibilityMNMRuleJSON) RawJSON() string {
 }
 
 type RuleNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RuleNewResponseEnvelope struct {
@@ -253,7 +253,7 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RuleUpdateResponseEnvelope struct {
@@ -346,7 +346,7 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RuleListResponseEnvelope struct {
@@ -472,7 +472,7 @@ func (r ruleListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type RuleDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RuleDeleteResponseEnvelope struct {
@@ -565,7 +565,7 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleEditParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RuleEditResponseEnvelope struct {
@@ -658,7 +658,7 @@ func (r RuleEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RuleGetResponseEnvelope struct {

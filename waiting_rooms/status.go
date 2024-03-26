@@ -47,10 +47,10 @@ func NewStatusService(opts ...option.RequestOption) (r *StatusService) {
 //     currently active on the origin.
 //  5. `max_estimated_time_minutes`: Integer of the maximum estimated time currently
 //     presented to the users.
-func (r *StatusService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *StatusGetResponse, err error) {
+func (r *StatusService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *StatusGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StatusGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/status", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/status", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

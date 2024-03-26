@@ -29,7 +29,7 @@ func TestDeviceNetworkNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Networks.New(context.TODO(), zero_trust.DeviceNetworkNewParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Config: cloudflare.F(zero_trust.DeviceNetworkNewParamsConfig{
 			Sha256:      cloudflare.F("b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"),
 			TLSSockaddr: cloudflare.F("foo.bar:1234"),
@@ -64,7 +64,7 @@ func TestDeviceNetworkUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DeviceNetworkUpdateParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Config: cloudflare.F(zero_trust.DeviceNetworkUpdateParamsConfig{
 				Sha256:      cloudflare.F("b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"),
 				TLSSockaddr: cloudflare.F("foo.bar:1234"),
@@ -97,7 +97,7 @@ func TestDeviceNetworkList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Networks.List(context.TODO(), zero_trust.DeviceNetworkListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -126,7 +126,7 @@ func TestDeviceNetworkDelete(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DeviceNetworkDeleteParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {
@@ -156,7 +156,7 @@ func TestDeviceNetworkGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DeviceNetworkGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

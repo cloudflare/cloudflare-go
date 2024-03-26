@@ -32,7 +32,7 @@ func TestDevicePolicyFallbackDomainUpdate(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePolicyFallbackDomainUpdateParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Body: cloudflare.F([]zero_trust.TeamsDevicesFallbackDomainParam{{
 				Description: cloudflare.F("Domain bypass for local development"),
 				DNSServer:   cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
@@ -72,7 +72,7 @@ func TestDevicePolicyFallbackDomainList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.FallbackDomains.List(context.TODO(), zero_trust.DevicePolicyFallbackDomainListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -101,7 +101,7 @@ func TestDevicePolicyFallbackDomainGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePolicyFallbackDomainGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

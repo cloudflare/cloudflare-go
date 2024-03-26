@@ -29,7 +29,7 @@ func TestDevicePolicyIncludeUpdate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Includes.Update(context.TODO(), zero_trust.DevicePolicyIncludeUpdateParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Body: cloudflare.F([]zero_trust.TeamsDevicesSplitTunnelIncludeParam{{
 			Address:     cloudflare.F("192.0.2.0/24"),
 			Description: cloudflare.F("Include testing domains from the tunnel"),
@@ -68,7 +68,7 @@ func TestDevicePolicyIncludeList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Includes.List(context.TODO(), zero_trust.DevicePolicyIncludeListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -97,7 +97,7 @@ func TestDevicePolicyIncludeGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePolicyIncludeGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

@@ -35,7 +35,7 @@ func NewDevicePolicyExcludeService(opts ...option.RequestOption) (r *DevicePolic
 func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePolicyExcludeUpdateParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/exclude", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/exclude", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -48,7 +48,7 @@ func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePo
 func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolicyExcludeListParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/exclude", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/exclude", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -62,7 +62,7 @@ func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolic
 func (r *DevicePolicyExcludeService) Get(ctx context.Context, policyID string, query DevicePolicyExcludeGetParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s/exclude", query.AccountID, policyID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/%s/exclude", query.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -117,7 +117,7 @@ func (r TeamsDevicesSplitTunnelParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DevicePolicyExcludeUpdateParams struct {
-	AccountID param.Field[interface{}]                    `path:"account_id,required"`
+	AccountID param.Field[string]                         `path:"account_id,required"`
 	Body      param.Field[[]TeamsDevicesSplitTunnelParam] `json:"body,required"`
 }
 
@@ -248,7 +248,7 @@ func (r devicePolicyExcludeUpdateResponseEnvelopeResultInfoJSON) RawJSON() strin
 }
 
 type DevicePolicyExcludeListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyExcludeListResponseEnvelope struct {
@@ -374,7 +374,7 @@ func (r devicePolicyExcludeListResponseEnvelopeResultInfoJSON) RawJSON() string 
 }
 
 type DevicePolicyExcludeGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyExcludeGetResponseEnvelope struct {
