@@ -36,7 +36,7 @@ func NewOutgoingService(opts ...option.RequestOption) (r *OutgoingService) {
 func (r *OutgoingService) New(ctx context.Context, params OutgoingNewParams, opts ...option.RequestOption) (res *OutgoingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingNewResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -49,7 +49,7 @@ func (r *OutgoingService) New(ctx context.Context, params OutgoingNewParams, opt
 func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParams, opts ...option.RequestOption) (res *OutgoingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -62,7 +62,7 @@ func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParam
 func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -76,7 +76,7 @@ func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams,
 func (r *OutgoingService) Disable(ctx context.Context, body OutgoingDisableParams, opts ...option.RequestOption) (res *SecondaryDNSDisableTransferResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/disable", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/disable", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -89,7 +89,7 @@ func (r *OutgoingService) Disable(ctx context.Context, body OutgoingDisableParam
 func (r *OutgoingService) Enable(ctx context.Context, body OutgoingEnableParams, opts ...option.RequestOption) (res *SecondaryDNSEnableTransferResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/enable", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/enable", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -102,7 +102,7 @@ func (r *OutgoingService) Enable(ctx context.Context, body OutgoingEnableParams,
 func (r *OutgoingService) ForceNotify(ctx context.Context, body OutgoingForceNotifyParams, opts ...option.RequestOption) (res *SecondaryDNSSchemasForceResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/force_notify", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/force_notify", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -115,7 +115,7 @@ func (r *OutgoingService) ForceNotify(ctx context.Context, body OutgoingForceNot
 func (r *OutgoingService) Get(ctx context.Context, query OutgoingGetParams, opts ...option.RequestOption) (res *OutgoingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", query.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -131,7 +131,7 @@ type SecondaryDNSEnableTransferResult = string
 type SecondaryDNSSchemasForceResult = string
 
 type OutgoingNewResponse struct {
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The time for a specific event.
 	CheckedTime string `json:"checked_time"`
 	// The time for a specific event.
@@ -170,7 +170,7 @@ func (r outgoingNewResponseJSON) RawJSON() string {
 }
 
 type OutgoingUpdateResponse struct {
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The time for a specific event.
 	CheckedTime string `json:"checked_time"`
 	// The time for a specific event.
@@ -209,7 +209,7 @@ func (r outgoingUpdateResponseJSON) RawJSON() string {
 }
 
 type OutgoingDeleteResponse struct {
-	ID   interface{}                `json:"id"`
+	ID   string                     `json:"id"`
 	JSON outgoingDeleteResponseJSON `json:"-"`
 }
 
@@ -230,7 +230,7 @@ func (r outgoingDeleteResponseJSON) RawJSON() string {
 }
 
 type OutgoingGetResponse struct {
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The time for a specific event.
 	CheckedTime string `json:"checked_time"`
 	// The time for a specific event.
@@ -269,7 +269,7 @@ func (r outgoingGetResponseJSON) RawJSON() string {
 }
 
 type OutgoingNewParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Zone name.
 	Name param.Field[string] `json:"name,required"`
 	// A list of peer tags.
@@ -370,7 +370,7 @@ func (r OutgoingNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingUpdateParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Zone name.
 	Name param.Field[string] `json:"name,required"`
 	// A list of peer tags.
@@ -471,7 +471,7 @@ func (r OutgoingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingDeleteParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OutgoingDeleteResponseEnvelope struct {
@@ -564,7 +564,7 @@ func (r OutgoingDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingDisableParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OutgoingDisableResponseEnvelope struct {
@@ -658,7 +658,7 @@ func (r OutgoingDisableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingEnableParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OutgoingEnableResponseEnvelope struct {
@@ -752,7 +752,7 @@ func (r OutgoingEnableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingForceNotifyParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OutgoingForceNotifyResponseEnvelope struct {
@@ -847,7 +847,7 @@ func (r OutgoingForceNotifyResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingGetParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OutgoingGetResponseEnvelope struct {

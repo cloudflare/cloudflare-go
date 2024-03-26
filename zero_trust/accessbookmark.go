@@ -32,10 +32,10 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 }
 
 // Create a new Bookmark application.
-func (r *AccessBookmarkService) New(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
+func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
+	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -45,10 +45,10 @@ func (r *AccessBookmarkService) New(ctx context.Context, identifier interface{},
 }
 
 // Updates a configured Bookmark application.
-func (r *AccessBookmarkService) Update(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
+func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
+	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -58,10 +58,10 @@ func (r *AccessBookmarkService) Update(ctx context.Context, identifier interface
 }
 
 // Lists Bookmark applications.
-func (r *AccessBookmarkService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]AccessBookmarks, err error) {
+func (r *AccessBookmarkService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/access/bookmarks", identifier)
+	path := fmt.Sprintf("accounts/%s/access/bookmarks", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -71,10 +71,10 @@ func (r *AccessBookmarkService) List(ctx context.Context, identifier interface{}
 }
 
 // Deletes a Bookmark application.
-func (r *AccessBookmarkService) Delete(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
+func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
+	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -84,10 +84,10 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, identifier interface
 }
 
 // Fetches a single Bookmark application.
-func (r *AccessBookmarkService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
+func (r *AccessBookmarkService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
+	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

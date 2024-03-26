@@ -51,7 +51,7 @@ type DomainBulkGetResponse struct {
 	// Application that the hostname belongs to.
 	Application DomainBulkGetResponseApplication `json:"application"`
 	// Current content categories.
-	ContentCategories          interface{}                                     `json:"content_categories"`
+	ContentCategories          []interface{}                                   `json:"content_categories"`
 	Domain                     string                                          `json:"domain"`
 	InheritedContentCategories []DomainBulkGetResponseInheritedContentCategory `json:"inherited_content_categories"`
 	// Domain from which `inherited_content_categories` and `inherited_risk_types` are
@@ -64,7 +64,7 @@ type DomainBulkGetResponse struct {
 	// Hostname risk score, which is a value between 0 (lowest risk) to 1 (highest
 	// risk).
 	RiskScore float64                   `json:"risk_score"`
-	RiskTypes interface{}               `json:"risk_types"`
+	RiskTypes []interface{}             `json:"risk_types"`
 	JSON      domainBulkGetResponseJSON `json:"-"`
 }
 

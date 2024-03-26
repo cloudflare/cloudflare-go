@@ -35,7 +35,7 @@ func NewDevicePolicyDefaultPolicyService(opts ...option.RequestOption) (r *Devic
 func (r *DevicePolicyDefaultPolicyService) Get(ctx context.Context, query DevicePolicyDefaultPolicyGetParams, opts ...option.RequestOption) (res *[]DevicePolicyDefaultPolicyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDefaultPolicyGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/policy", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -47,7 +47,7 @@ func (r *DevicePolicyDefaultPolicyService) Get(ctx context.Context, query Device
 type DevicePolicyDefaultPolicyGetResponse = interface{}
 
 type DevicePolicyDefaultPolicyGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyDefaultPolicyGetResponseEnvelope struct {

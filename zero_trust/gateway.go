@@ -52,7 +52,7 @@ func NewGatewayService(opts ...option.RequestOption) (r *GatewayService) {
 func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ...option.RequestOption) (res *GatewayNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -65,7 +65,7 @@ func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ..
 func (r *GatewayService) List(ctx context.Context, query GatewayListParams, opts ...option.RequestOption) (res *GatewayListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -131,7 +131,7 @@ func (r gatewayListResponseJSON) RawJSON() string {
 }
 
 type GatewayNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayNewResponseEnvelope struct {
@@ -224,7 +224,7 @@ func (r GatewayNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayListResponseEnvelope struct {

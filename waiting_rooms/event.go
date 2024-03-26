@@ -39,10 +39,10 @@ func NewEventService(opts ...option.RequestOption) (r *EventService) {
 // some of the properties in the event's configuration may either override or
 // inherit from the waiting room's configuration. Note that events cannot overlap
 // with each other, so only one event can be active at a time.
-func (r *EventService) New(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body EventNewParams, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
+func (r *EventService) New(ctx context.Context, zoneIdentifier string, waitingRoomID string, body EventNewParams, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -52,10 +52,10 @@ func (r *EventService) New(ctx context.Context, zoneIdentifier string, waitingRo
 }
 
 // Updates a configured event for a waiting room.
-func (r *EventService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, body EventUpdateParams, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
+func (r *EventService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID string, eventID string, body EventUpdateParams, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v", zoneIdentifier, waitingRoomID, eventID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", zoneIdentifier, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -65,10 +65,10 @@ func (r *EventService) Update(ctx context.Context, zoneIdentifier string, waitin
 }
 
 // Lists events for a waiting room.
-func (r *EventService) List(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *[]WaitingroomEventResult, err error) {
+func (r *EventService) List(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *[]WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -78,10 +78,10 @@ func (r *EventService) List(ctx context.Context, zoneIdentifier string, waitingR
 }
 
 // Deletes an event for a waiting room.
-func (r *EventService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
+func (r *EventService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID string, eventID string, opts ...option.RequestOption) (res *EventDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v", zoneIdentifier, waitingRoomID, eventID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", zoneIdentifier, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -91,10 +91,10 @@ func (r *EventService) Delete(ctx context.Context, zoneIdentifier string, waitin
 }
 
 // Patches a configured event for a waiting room.
-func (r *EventService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, body EventEditParams, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
+func (r *EventService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID string, eventID string, body EventEditParams, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v", zoneIdentifier, waitingRoomID, eventID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", zoneIdentifier, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -104,10 +104,10 @@ func (r *EventService) Edit(ctx context.Context, zoneIdentifier string, waitingR
 }
 
 // Fetches a single configured event for a waiting room.
-func (r *EventService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
+func (r *EventService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID string, eventID string, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v", zoneIdentifier, waitingRoomID, eventID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", zoneIdentifier, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -117,8 +117,8 @@ func (r *EventService) Get(ctx context.Context, zoneIdentifier string, waitingRo
 }
 
 type WaitingroomEventResult struct {
-	ID        interface{} `json:"id"`
-	CreatedOn time.Time   `json:"created_on" format:"date-time"`
+	ID        string    `json:"id"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// If set, the event will override the waiting room's `custom_page_html` property
 	// while it is active. If null, the event will inherit it.
 	CustomPageHTML string `json:"custom_page_html,nullable"`
@@ -200,7 +200,7 @@ func (r waitingroomEventResultJSON) RawJSON() string {
 }
 
 type EventDeleteResponse struct {
-	ID   interface{}             `json:"id"`
+	ID   string                  `json:"id"`
 	JSON eventDeleteResponseJSON `json:"-"`
 }
 

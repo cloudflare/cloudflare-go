@@ -55,7 +55,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 			RatePlan: cloudflare.F(user.SubscriptionUpdateParamsRatePlan{
 				Currency:          cloudflare.F("USD"),
 				ExternallyManaged: cloudflare.F(false),
-				ID:                cloudflare.F[any]("free"),
+				ID:                cloudflare.F("free"),
 				IsContract:        cloudflare.F(false),
 				PublicName:        cloudflare.F("Business Plan"),
 				Scope:             cloudflare.F("zone"),
@@ -138,7 +138,7 @@ func TestSubscriptionEditWithOptionalParams(t *testing.T) {
 			RatePlan: cloudflare.F(user.SubscriptionEditParamsRatePlan{
 				Currency:          cloudflare.F("USD"),
 				ExternallyManaged: cloudflare.F(false),
-				ID:                cloudflare.F[any]("free"),
+				ID:                cloudflare.F("free"),
 				IsContract:        cloudflare.F(false),
 				PublicName:        cloudflare.F("Business Plan"),
 				Scope:             cloudflare.F("zone"),

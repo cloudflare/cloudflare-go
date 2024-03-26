@@ -29,7 +29,7 @@ func TestPeerNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Peers.New(context.TODO(), secondary_dns.PeerNewParams{
-		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		Body:      cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
@@ -59,7 +59,7 @@ func TestPeerUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"23ff594956f20c2a721606e94745a8aa",
 		secondary_dns.PeerUpdateParams{
-			AccountID:  cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+			AccountID:  cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			Name:       cloudflare.F("my-peer-1"),
 			IP:         cloudflare.F("192.0.2.53"),
 			IxfrEnable: cloudflare.F(false),
@@ -91,7 +91,7 @@ func TestPeerList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Peers.List(context.TODO(), secondary_dns.PeerListParams{
-		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -120,7 +120,7 @@ func TestPeerDelete(t *testing.T) {
 		context.TODO(),
 		"23ff594956f20c2a721606e94745a8aa",
 		secondary_dns.PeerDeleteParams{
-			AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		},
 	)
 	if err != nil {
@@ -150,7 +150,7 @@ func TestPeerGet(t *testing.T) {
 		context.TODO(),
 		"23ff594956f20c2a721606e94745a8aa",
 		secondary_dns.PeerGetParams{
-			AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		},
 	)
 	if err != nil {

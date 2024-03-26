@@ -34,7 +34,7 @@ func NewPeerService(opts ...option.RequestOption) (r *PeerService) {
 func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/peers", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -44,10 +44,10 @@ func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...opt
 }
 
 // Modify Peer.
-func (r *PeerService) Update(ctx context.Context, peerID interface{}, params PeerUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
+func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", params.AccountID, peerID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", params.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -60,7 +60,7 @@ func (r *PeerService) Update(ctx context.Context, peerID interface{}, params Pee
 func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *[]SecondaryDNSPeer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/peers", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -70,10 +70,10 @@ func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...op
 }
 
 // Delete Peer.
-func (r *PeerService) Delete(ctx context.Context, peerID interface{}, body PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
+func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", body.AccountID, peerID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", body.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -83,10 +83,10 @@ func (r *PeerService) Delete(ctx context.Context, peerID interface{}, body PeerD
 }
 
 // Get Peer.
-func (r *PeerService) Get(ctx context.Context, peerID interface{}, query PeerGetParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
+func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", query.AccountID, peerID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", query.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -96,7 +96,7 @@ func (r *PeerService) Get(ctx context.Context, peerID interface{}, query PeerGet
 }
 
 type SecondaryDNSPeer struct {
-	ID interface{} `json:"id,required"`
+	ID string `json:"id,required"`
 	// The name of the peer.
 	Name string `json:"name,required"`
 	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
@@ -138,7 +138,7 @@ func (r secondaryDNSPeerJSON) RawJSON() string {
 }
 
 type PeerDeleteResponse struct {
-	ID   interface{}            `json:"id"`
+	ID   string                 `json:"id"`
 	JSON peerDeleteResponseJSON `json:"-"`
 }
 
@@ -159,7 +159,7 @@ func (r peerDeleteResponseJSON) RawJSON() string {
 }
 
 type PeerNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
 	Body      param.Field[interface{}] `json:"body,required"`
 }
 
@@ -257,7 +257,7 @@ func (r PeerNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PeerUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the peer.
 	Name param.Field[string] `json:"name,required"`
 	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
@@ -370,7 +370,7 @@ func (r PeerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PeerListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PeerListResponseEnvelope struct {
@@ -496,7 +496,7 @@ func (r peerListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type PeerDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PeerDeleteResponseEnvelope struct {
@@ -589,7 +589,7 @@ func (r PeerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PeerGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PeerGetResponseEnvelope struct {

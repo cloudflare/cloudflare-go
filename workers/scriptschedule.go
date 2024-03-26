@@ -151,8 +151,8 @@ func (r scriptScheduleGetResponseScheduleJSON) RawJSON() string {
 
 type ScriptScheduleUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Body      param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      param.Field[string] `json:"body,required"`
 }
 
 func (r ScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {

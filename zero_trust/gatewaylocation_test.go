@@ -29,7 +29,7 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Locations.New(context.TODO(), zero_trust.GatewayLocationNewParams{
-		AccountID:     cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Name:          cloudflare.F("Austin Office Location"),
 		ClientDefault: cloudflare.F(false),
 		EcsSupport:    cloudflare.F(false),
@@ -68,7 +68,7 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayLocationUpdateParams{
-			AccountID:     cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Name:          cloudflare.F("Austin Office Location"),
 			ClientDefault: cloudflare.F(false),
 			EcsSupport:    cloudflare.F(false),
@@ -105,7 +105,7 @@ func TestGatewayLocationList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Locations.List(context.TODO(), zero_trust.GatewayLocationListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -134,7 +134,7 @@ func TestGatewayLocationDelete(t *testing.T) {
 		context.TODO(),
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayLocationDeleteParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {
@@ -164,7 +164,7 @@ func TestGatewayLocationGet(t *testing.T) {
 		context.TODO(),
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayLocationGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

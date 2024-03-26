@@ -37,7 +37,7 @@ func NewDevicePolicyFallbackDomainService(opts ...option.RequestOption) (r *Devi
 func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID string, params DevicePolicyFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]TeamsDevicesFallbackDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", params.AccountID, policyID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", params.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -51,7 +51,7 @@ func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID
 func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query DevicePolicyFallbackDomainListParams, opts ...option.RequestOption) (res *[]TeamsDevicesFallbackDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/fallback_domains", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/fallback_domains", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -66,7 +66,7 @@ func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query Devi
 func (r *DevicePolicyFallbackDomainService) Get(ctx context.Context, policyID string, query DevicePolicyFallbackDomainGetParams, opts ...option.RequestOption) (res *[]TeamsDevicesFallbackDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", query.AccountID, policyID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", query.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -117,7 +117,7 @@ func (r TeamsDevicesFallbackDomainParam) MarshalJSON() (data []byte, err error) 
 }
 
 type DevicePolicyFallbackDomainUpdateParams struct {
-	AccountID param.Field[interface{}]                       `path:"account_id,required"`
+	AccountID param.Field[string]                            `path:"account_id,required"`
 	Body      param.Field[[]TeamsDevicesFallbackDomainParam] `json:"body,required"`
 }
 
@@ -250,7 +250,7 @@ func (r devicePolicyFallbackDomainUpdateResponseEnvelopeResultInfoJSON) RawJSON(
 }
 
 type DevicePolicyFallbackDomainListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyFallbackDomainListResponseEnvelope struct {
@@ -377,7 +377,7 @@ func (r devicePolicyFallbackDomainListResponseEnvelopeResultInfoJSON) RawJSON() 
 }
 
 type DevicePolicyFallbackDomainGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyFallbackDomainGetResponseEnvelope struct {

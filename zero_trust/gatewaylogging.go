@@ -35,7 +35,7 @@ func NewGatewayLoggingService(opts ...option.RequestOption) (r *GatewayLoggingSe
 func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayGatewayAccountLoggingSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/logging", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/logging", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -48,7 +48,7 @@ func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggin
 func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayGatewayAccountLoggingSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/logging", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/logging", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -114,7 +114,7 @@ func (r zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON) Raw
 }
 
 type GatewayLoggingUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii param.Field[bool] `json:"redact_pii"`
@@ -230,7 +230,7 @@ func (r GatewayLoggingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayLoggingGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayLoggingGetResponseEnvelope struct {

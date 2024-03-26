@@ -56,10 +56,10 @@ func (r *WaitingRoomService) New(ctx context.Context, zoneIdentifier string, bod
 }
 
 // Updates a configured waiting room.
-func (r *WaitingRoomService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body WaitingRoomUpdateParams, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
+func (r *WaitingRoomService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID string, body WaitingRoomUpdateParams, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -82,10 +82,10 @@ func (r *WaitingRoomService) List(ctx context.Context, zoneIdentifier string, op
 }
 
 // Deletes a waiting room.
-func (r *WaitingRoomService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
+func (r *WaitingRoomService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -95,10 +95,10 @@ func (r *WaitingRoomService) Delete(ctx context.Context, zoneIdentifier string, 
 }
 
 // Patches a configured waiting room.
-func (r *WaitingRoomService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body WaitingRoomEditParams, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
+func (r *WaitingRoomService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID string, body WaitingRoomEditParams, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -108,10 +108,10 @@ func (r *WaitingRoomService) Edit(ctx context.Context, zoneIdentifier string, wa
 }
 
 // Fetches a single configured waiting room.
-func (r *WaitingRoomService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
+func (r *WaitingRoomService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -121,7 +121,7 @@ func (r *WaitingRoomService) Get(ctx context.Context, zoneIdentifier string, wai
 }
 
 type WaitingroomWaitingroom struct {
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// Only available for the Waiting Room Advanced subscription. Additional hostname
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
@@ -623,7 +623,7 @@ func (r WaitingroomWaitingroomQueueingStatusCode) IsKnown() bool {
 }
 
 type WaitingRoomDeleteResponse struct {
-	ID   interface{}                   `json:"id"`
+	ID   string                        `json:"id"`
 	JSON waitingRoomDeleteResponseJSON `json:"-"`
 }
 

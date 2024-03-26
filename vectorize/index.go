@@ -168,11 +168,11 @@ func (r *IndexService) Upsert(ctx context.Context, accountIdentifier string, ind
 type VectorizeCreateIndex struct {
 	Config VectorizeCreateIndexConfig `json:"config"`
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedOn interface{} `json:"created_on"`
+	CreatedOn string `json:"created_on"`
 	// Specifies the description of the index.
 	Description string `json:"description"`
 	// Specifies the timestamp the resource was modified as an ISO8601 string.
-	ModifiedOn interface{}              `json:"modified_on"`
+	ModifiedOn string                   `json:"modified_on"`
 	Name       string                   `json:"name"`
 	JSON       vectorizeCreateIndexJSON `json:"-"`
 }

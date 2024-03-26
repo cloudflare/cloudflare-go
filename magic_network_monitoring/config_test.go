@@ -29,7 +29,7 @@ func TestConfigNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Configs.New(context.TODO(), magic_network_monitoring.ConfigNewParams{
-		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -55,7 +55,7 @@ func TestConfigUpdate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Configs.Update(context.TODO(), magic_network_monitoring.ConfigUpdateParams{
-		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -81,7 +81,7 @@ func TestConfigDelete(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Configs.Delete(context.TODO(), magic_network_monitoring.ConfigDeleteParams{
-		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -107,7 +107,7 @@ func TestConfigEdit(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Configs.Edit(context.TODO(), magic_network_monitoring.ConfigEditParams{
-		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -133,7 +133,7 @@ func TestConfigGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Configs.Get(context.TODO(), magic_network_monitoring.ConfigGetParams{
-		AccountID: cloudflare.F[any]("6f91088a406011ed95aed352566e8d4c"),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

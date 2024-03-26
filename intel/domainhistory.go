@@ -71,7 +71,7 @@ func (r intelDomainHistoryJSON) RawJSON() string {
 }
 
 type IntelDomainHistoryCategorization struct {
-	Categories interface{}                          `json:"categories"`
+	Categories []interface{}                        `json:"categories"`
 	End        time.Time                            `json:"end" format:"date"`
 	Start      time.Time                            `json:"start" format:"date"`
 	JSON       intelDomainHistoryCategorizationJSON `json:"-"`
@@ -97,8 +97,8 @@ func (r intelDomainHistoryCategorizationJSON) RawJSON() string {
 
 type DomainHistoryGetParams struct {
 	// Identifier
-	AccountID param.Field[string]      `path:"account_id,required"`
-	Domain    param.Field[interface{}] `query:"domain"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	Domain    param.Field[string] `query:"domain"`
 }
 
 // URLQuery serializes [DomainHistoryGetParams]'s query parameters as `url.Values`.

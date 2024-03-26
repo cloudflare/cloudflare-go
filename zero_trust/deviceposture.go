@@ -39,7 +39,7 @@ func NewDevicePostureService(opts ...option.RequestOption) (r *DevicePostureServ
 func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewParams, opts ...option.RequestOption) (res *TeamsDevicesDevicePostureRules, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/posture", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -52,7 +52,7 @@ func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewP
 func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params DevicePostureUpdateParams, opts ...option.RequestOption) (res *TeamsDevicesDevicePostureRules, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/%s", params.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/devices/posture/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -65,7 +65,7 @@ func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params
 func (r *DevicePostureService) List(ctx context.Context, query DevicePostureListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDevicePostureRules, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/posture", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -78,7 +78,7 @@ func (r *DevicePostureService) List(ctx context.Context, query DevicePostureList
 func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, body DevicePostureDeleteParams, opts ...option.RequestOption) (res *DevicePostureDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/%s", body.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/devices/posture/%s", body.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -91,7 +91,7 @@ func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, body D
 func (r *DevicePostureService) Get(ctx context.Context, ruleID string, query DevicePostureGetParams, opts ...option.RequestOption) (res *TeamsDevicesDevicePostureRules, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/%s", query.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/devices/posture/%s", query.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1241,7 +1241,7 @@ func (r devicePostureDeleteResponseJSON) RawJSON() string {
 }
 
 type DevicePostureNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the device posture rule.
 	Name param.Field[string] `json:"name,required"`
 	// The type of device posture rule.
@@ -2073,7 +2073,7 @@ func (r DevicePostureNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the device posture rule.
 	Name param.Field[string] `json:"name,required"`
 	// The type of device posture rule.
@@ -2905,7 +2905,7 @@ func (r DevicePostureUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePostureListResponseEnvelope struct {
@@ -3031,7 +3031,7 @@ func (r devicePostureListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type DevicePostureDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePostureDeleteResponseEnvelope struct {
@@ -3124,7 +3124,7 @@ func (r DevicePostureDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DevicePostureGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePostureGetResponseEnvelope struct {
