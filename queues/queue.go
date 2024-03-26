@@ -536,7 +536,7 @@ type QueueListResponseEnvelopeResultInfo struct {
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
 	TotalCount float64                                 `json:"total_count"`
-	TotalPages interface{}                             `json:"total_pages"`
+	TotalPages float64                                 `json:"total_pages"`
 	JSON       queueListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 

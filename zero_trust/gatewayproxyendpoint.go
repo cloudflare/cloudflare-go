@@ -39,7 +39,7 @@ func NewGatewayProxyEndpointService(opts ...option.RequestOption) (r *GatewayPro
 func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayProxyEndpointNewParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -52,7 +52,7 @@ func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayPro
 func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayProxyEndpoints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -62,10 +62,10 @@ func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayPro
 }
 
 // Deletes a configured Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID interface{}, body GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponse, err error) {
+func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, body GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", body.AccountID, proxyEndpointID)
+	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", body.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -75,10 +75,10 @@ func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointI
 }
 
 // Updates a configured Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID interface{}, params GatewayProxyEndpointEditParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
+func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointEditParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", params.AccountID, proxyEndpointID)
+	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", params.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -88,10 +88,10 @@ func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID 
 }
 
 // Fetches all Zero Trust Gateway proxy endpoints for an account.
-func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID interface{}, query GatewayProxyEndpointGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
+func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID string, query GatewayProxyEndpointGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", query.AccountID, proxyEndpointID)
+	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", query.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -101,8 +101,8 @@ func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID i
 }
 
 type ZeroTrustGatewayProxyEndpoints struct {
-	ID        interface{} `json:"id"`
-	CreatedAt time.Time   `json:"created_at" format:"date-time"`
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// A list of CIDRs to restrict ingress connections.
 	IPs []string `json:"ips"`
 	// The name of the proxy endpoint.
@@ -152,7 +152,7 @@ func init() {
 }
 
 type GatewayProxyEndpointNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of CIDRs to restrict ingress connections.
 	IPs param.Field[[]string] `json:"ips,required"`
 	// The name of the proxy endpoint.
@@ -255,7 +255,7 @@ func (r GatewayProxyEndpointNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayProxyEndpointListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayProxyEndpointListResponseEnvelope struct {
@@ -381,7 +381,7 @@ func (r gatewayProxyEndpointListResponseEnvelopeResultInfoJSON) RawJSON() string
 }
 
 type GatewayProxyEndpointDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayProxyEndpointDeleteResponseEnvelope struct {
@@ -474,7 +474,7 @@ func (r GatewayProxyEndpointDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayProxyEndpointEditParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of CIDRs to restrict ingress connections.
 	IPs param.Field[[]string] `json:"ips"`
 	// The name of the proxy endpoint.
@@ -577,7 +577,7 @@ func (r GatewayProxyEndpointEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type GatewayProxyEndpointGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayProxyEndpointGetResponseEnvelope struct {

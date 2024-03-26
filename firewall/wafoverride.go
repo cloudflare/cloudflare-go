@@ -188,11 +188,11 @@ func (r legacyJhsOverrideJSON) RawJSON() string {
 type LegacyJhsOverrideRewriteAction struct {
 	// The WAF rule action to apply.
 	Block     LegacyJhsOverrideRewriteActionBlock `json:"block"`
-	Challenge interface{}                         `json:"challenge"`
-	Default   interface{}                         `json:"default"`
+	Challenge string                              `json:"challenge"`
+	Default   string                              `json:"default"`
 	// The WAF rule action to apply.
 	Disable  LegacyJhsOverrideRewriteActionDisable `json:"disable"`
-	Simulate interface{}                           `json:"simulate"`
+	Simulate string                                `json:"simulate"`
 	JSON     legacyJhsOverrideRewriteActionJSON    `json:"-"`
 }
 

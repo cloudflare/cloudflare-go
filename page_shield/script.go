@@ -54,21 +54,21 @@ func (r *ScriptService) Get(ctx context.Context, scriptID string, query ScriptGe
 }
 
 type PageShieldScript struct {
-	ID                      interface{}          `json:"id"`
-	AddedAt                 interface{}          `json:"added_at"`
-	DataflowScore           interface{}          `json:"dataflow_score"`
-	DomainReportedMalicious interface{}          `json:"domain_reported_malicious"`
-	FetchedAt               interface{}          `json:"fetched_at"`
-	FirstPageURL            interface{}          `json:"first_page_url"`
-	FirstSeenAt             interface{}          `json:"first_seen_at"`
-	Hash                    interface{}          `json:"hash"`
-	Host                    interface{}          `json:"host"`
-	JsIntegrityScore        interface{}          `json:"js_integrity_score"`
-	LastSeenAt              interface{}          `json:"last_seen_at"`
-	ObfuscationScore        interface{}          `json:"obfuscation_score"`
-	PageURLs                interface{}          `json:"page_urls"`
-	URL                     interface{}          `json:"url"`
-	URLContainsCdnCgiPath   interface{}          `json:"url_contains_cdn_cgi_path"`
+	ID                      string               `json:"id"`
+	AddedAt                 string               `json:"added_at"`
+	DataflowScore           float64              `json:"dataflow_score"`
+	DomainReportedMalicious bool                 `json:"domain_reported_malicious"`
+	FetchedAt               string               `json:"fetched_at"`
+	FirstPageURL            string               `json:"first_page_url"`
+	FirstSeenAt             string               `json:"first_seen_at"`
+	Hash                    string               `json:"hash"`
+	Host                    string               `json:"host"`
+	JsIntegrityScore        float64              `json:"js_integrity_score"`
+	LastSeenAt              string               `json:"last_seen_at"`
+	ObfuscationScore        float64              `json:"obfuscation_score"`
+	PageURLs                []string             `json:"page_urls"`
+	URL                     string               `json:"url"`
+	URLContainsCdnCgiPath   bool                 `json:"url_contains_cdn_cgi_path"`
 	JSON                    pageShieldScriptJSON `json:"-"`
 }
 
@@ -103,21 +103,21 @@ func (r pageShieldScriptJSON) RawJSON() string {
 }
 
 type ScriptGetResponse struct {
-	ID                      interface{}                `json:"id"`
-	AddedAt                 interface{}                `json:"added_at"`
-	DataflowScore           interface{}                `json:"dataflow_score"`
-	DomainReportedMalicious interface{}                `json:"domain_reported_malicious"`
-	FetchedAt               interface{}                `json:"fetched_at"`
-	FirstPageURL            interface{}                `json:"first_page_url"`
-	FirstSeenAt             interface{}                `json:"first_seen_at"`
-	Hash                    interface{}                `json:"hash"`
-	Host                    interface{}                `json:"host"`
-	JsIntegrityScore        interface{}                `json:"js_integrity_score"`
-	LastSeenAt              interface{}                `json:"last_seen_at"`
-	ObfuscationScore        interface{}                `json:"obfuscation_score"`
-	PageURLs                interface{}                `json:"page_urls"`
-	URL                     interface{}                `json:"url"`
-	URLContainsCdnCgiPath   interface{}                `json:"url_contains_cdn_cgi_path"`
+	ID                      string                     `json:"id"`
+	AddedAt                 string                     `json:"added_at"`
+	DataflowScore           float64                    `json:"dataflow_score"`
+	DomainReportedMalicious bool                       `json:"domain_reported_malicious"`
+	FetchedAt               string                     `json:"fetched_at"`
+	FirstPageURL            string                     `json:"first_page_url"`
+	FirstSeenAt             string                     `json:"first_seen_at"`
+	Hash                    string                     `json:"hash"`
+	Host                    string                     `json:"host"`
+	JsIntegrityScore        float64                    `json:"js_integrity_score"`
+	LastSeenAt              string                     `json:"last_seen_at"`
+	ObfuscationScore        float64                    `json:"obfuscation_score"`
+	PageURLs                []string                   `json:"page_urls"`
+	URL                     string                     `json:"url"`
+	URLContainsCdnCgiPath   bool                       `json:"url_contains_cdn_cgi_path"`
 	Versions                []ScriptGetResponseVersion `json:"versions,nullable"`
 	JSON                    scriptGetResponseJSON      `json:"-"`
 }

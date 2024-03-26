@@ -33,10 +33,10 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Only available for the Waiting Room Advanced subscription. Creates a rule for a
 // waiting room.
-func (r *RuleService) New(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body RuleNewParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) New(ctx context.Context, zoneIdentifier string, waitingRoomID string, body RuleNewParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -47,10 +47,10 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, waitingRoo
 
 // Only available for the Waiting Room Advanced subscription. Replaces all rules
 // for a waiting room.
-func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID string, body RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -60,10 +60,10 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waiting
 }
 
 // Lists rules for a waiting room.
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -73,10 +73,10 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRo
 }
 
 // Deletes a rule for a waiting room.
-func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID string, ruleID string, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -86,10 +86,10 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, waiting
 }
 
 // Patches a rule for a waiting room.
-func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID string, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return

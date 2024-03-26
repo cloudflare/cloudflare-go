@@ -35,7 +35,7 @@ func NewDevicePolicyIncludeService(opts ...option.RequestOption) (r *DevicePolic
 func (r *DevicePolicyIncludeService) Update(ctx context.Context, params DevicePolicyIncludeUpdateParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnelInclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/include", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/include", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -48,7 +48,7 @@ func (r *DevicePolicyIncludeService) Update(ctx context.Context, params DevicePo
 func (r *DevicePolicyIncludeService) List(ctx context.Context, query DevicePolicyIncludeListParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnelInclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/include", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/include", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -62,7 +62,7 @@ func (r *DevicePolicyIncludeService) List(ctx context.Context, query DevicePolic
 func (r *DevicePolicyIncludeService) Get(ctx context.Context, policyID string, query DevicePolicyIncludeGetParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnelInclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s/include", query.AccountID, policyID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/%s/include", query.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -117,7 +117,7 @@ func (r TeamsDevicesSplitTunnelIncludeParam) MarshalJSON() (data []byte, err err
 }
 
 type DevicePolicyIncludeUpdateParams struct {
-	AccountID param.Field[interface{}]                           `path:"account_id,required"`
+	AccountID param.Field[string]                                `path:"account_id,required"`
 	Body      param.Field[[]TeamsDevicesSplitTunnelIncludeParam] `json:"body,required"`
 }
 
@@ -248,7 +248,7 @@ func (r devicePolicyIncludeUpdateResponseEnvelopeResultInfoJSON) RawJSON() strin
 }
 
 type DevicePolicyIncludeListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyIncludeListResponseEnvelope struct {
@@ -374,7 +374,7 @@ func (r devicePolicyIncludeListResponseEnvelopeResultInfoJSON) RawJSON() string 
 }
 
 type DevicePolicyIncludeGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyIncludeGetResponseEnvelope struct {

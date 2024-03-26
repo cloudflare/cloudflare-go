@@ -44,7 +44,7 @@ func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyServic
 func (r *DevicePolicyService) New(ctx context.Context, params DevicePolicyNewParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/policy", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -57,7 +57,7 @@ func (r *DevicePolicyService) New(ctx context.Context, params DevicePolicyNewPar
 func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policies", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/devices/policies", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -71,7 +71,7 @@ func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListPa
 func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body DevicePolicyDeleteParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s", body.AccountID, policyID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/%s", body.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -84,7 +84,7 @@ func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body 
 func (r *DevicePolicyService) Edit(ctx context.Context, policyID string, params DevicePolicyEditParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s", params.AccountID, policyID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/%s", params.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -97,7 +97,7 @@ func (r *DevicePolicyService) Edit(ctx context.Context, policyID string, params 
 func (r *DevicePolicyService) Get(ctx context.Context, policyID string, query DevicePolicyGetParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s", query.AccountID, policyID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/%s", query.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -229,7 +229,7 @@ type DevicePolicyEditResponse = interface{}
 type DevicePolicyGetResponse = interface{}
 
 type DevicePolicyNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The wirefilter expression to match devices.
 	Match param.Field[string] `json:"match,required"`
 	// The name of the device settings profile.
@@ -411,7 +411,7 @@ func (r devicePolicyNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type DevicePolicyListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyListResponseEnvelope struct {
@@ -537,7 +537,7 @@ func (r devicePolicyListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type DevicePolicyDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyDeleteResponseEnvelope struct {
@@ -663,7 +663,7 @@ func (r devicePolicyDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type DevicePolicyEditParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether to allow the user to switch WARP between modes.
 	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
 	// Whether to receive update notifications when a new version of the client is
@@ -837,7 +837,7 @@ func (r devicePolicyEditResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type DevicePolicyGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DevicePolicyGetResponseEnvelope struct {

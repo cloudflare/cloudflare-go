@@ -29,7 +29,7 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Update(context.TODO(), zero_trust.GatewayConfigurationUpdateParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Settings: cloudflare.F(zero_trust.GatewayConfigurationUpdateParamsSettings{
 			ActivityLog: cloudflare.F(zero_trust.GatewayConfigurationUpdateParamsSettingsActivityLog{
 				Enabled: cloudflare.F(true),
@@ -104,7 +104,7 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Edit(context.TODO(), zero_trust.GatewayConfigurationEditParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Settings: cloudflare.F(zero_trust.GatewayConfigurationEditParamsSettings{
 			ActivityLog: cloudflare.F(zero_trust.GatewayConfigurationEditParamsSettingsActivityLog{
 				Enabled: cloudflare.F(true),
@@ -179,7 +179,7 @@ func TestGatewayConfigurationGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Get(context.TODO(), zero_trust.GatewayConfigurationGetParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

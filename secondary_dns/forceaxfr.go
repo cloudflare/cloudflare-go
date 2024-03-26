@@ -34,7 +34,7 @@ func NewForceAXFRService(opts ...option.RequestOption) (r *ForceAXFRService) {
 func (r *ForceAXFRService) New(ctx context.Context, body ForceAXFRNewParams, opts ...option.RequestOption) (res *SecondaryDNSForceResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ForceAXFRNewResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/force_axfr", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/force_axfr", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -46,7 +46,7 @@ func (r *ForceAXFRService) New(ctx context.Context, body ForceAXFRNewParams, opt
 type SecondaryDNSForceResult = string
 
 type ForceAXFRNewParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type ForceAXFRNewResponseEnvelope struct {

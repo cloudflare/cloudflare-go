@@ -29,7 +29,7 @@ func TestForceAXFRNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.ForceAXFR.New(context.TODO(), secondary_dns.ForceAXFRNewParams{
-		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
+		ZoneID: cloudflare.F("269d8f4853475ca241c4e730be286b20"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

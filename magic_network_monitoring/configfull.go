@@ -34,7 +34,7 @@ func NewConfigFullService(opts ...option.RequestOption) (r *ConfigFullService) {
 func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigFullGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config/full", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config/full", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -44,7 +44,7 @@ func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, 
 }
 
 type ConfigFullGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConfigFullGetResponseEnvelope struct {

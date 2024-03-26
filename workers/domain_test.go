@@ -29,11 +29,11 @@ func TestDomainUpdate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Domains.Update(context.TODO(), workers.DomainUpdateParams{
-		AccountID:   cloudflare.F[any]("9a7806061c88ada191ed06f989cc3dac"),
+		AccountID:   cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
 		Environment: cloudflare.F("production"),
 		Hostname:    cloudflare.F("foo.example.com"),
 		Service:     cloudflare.F("foo"),
-		ZoneID:      cloudflare.F[any]("593c9c94de529bbbfaac7c53ced0447d"),
+		ZoneID:      cloudflare.F("593c9c94de529bbbfaac7c53ced0447d"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -59,11 +59,11 @@ func TestDomainListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Domains.List(context.TODO(), workers.DomainListParams{
-		AccountID:   cloudflare.F[any]("9a7806061c88ada191ed06f989cc3dac"),
+		AccountID:   cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
 		Environment: cloudflare.F("production"),
 		Hostname:    cloudflare.F("foo.example.com"),
 		Service:     cloudflare.F("foo"),
-		ZoneID:      cloudflare.F[any]("593c9c94de529bbbfaac7c53ced0447d"),
+		ZoneID:      cloudflare.F("593c9c94de529bbbfaac7c53ced0447d"),
 		ZoneName:    cloudflare.F("example.com"),
 	})
 	if err != nil {
@@ -93,7 +93,7 @@ func TestDomainDelete(t *testing.T) {
 		context.TODO(),
 		"dbe10b4bc17c295377eabd600e1787fd",
 		workers.DomainDeleteParams{
-			AccountID: cloudflare.F[any]("9a7806061c88ada191ed06f989cc3dac"),
+			AccountID: cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
 		},
 	)
 	if err != nil {
@@ -123,7 +123,7 @@ func TestDomainGet(t *testing.T) {
 		context.TODO(),
 		"dbe10b4bc17c295377eabd600e1787fd",
 		workers.DomainGetParams{
-			AccountID: cloudflare.F[any]("9a7806061c88ada191ed06f989cc3dac"),
+			AccountID: cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
 		},
 	)
 	if err != nil {

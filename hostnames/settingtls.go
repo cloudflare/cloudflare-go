@@ -143,11 +143,11 @@ type TLSCertificatesAndHostnamesSettingObjectDelete struct {
 	// This is the time the tls setting was originally created for this hostname.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The hostname for which the tls settings are set.
-	Hostname string      `json:"hostname"`
-	Status   interface{} `json:"status"`
+	Hostname string `json:"hostname"`
+	Status   string `json:"status"`
 	// This is the time the tls setting was updated.
 	UpdatedAt time.Time                                          `json:"updated_at" format:"date-time"`
-	Value     interface{}                                        `json:"value"`
+	Value     string                                             `json:"value"`
 	JSON      tlsCertificatesAndHostnamesSettingObjectDeleteJSON `json:"-"`
 }
 

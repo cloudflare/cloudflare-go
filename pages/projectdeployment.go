@@ -337,10 +337,10 @@ func (r ProjectDeploymentListResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ProjectDeploymentListResponseEnvelopeResultInfo struct {
-	Count      interface{}                                         `json:"count"`
-	Page       interface{}                                         `json:"page"`
-	PerPage    interface{}                                         `json:"per_page"`
-	TotalCount interface{}                                         `json:"total_count"`
+	Count      float64                                             `json:"count"`
+	Page       float64                                             `json:"page"`
+	PerPage    float64                                             `json:"per_page"`
+	TotalCount float64                                             `json:"total_count"`
 	JSON       projectDeploymentListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 

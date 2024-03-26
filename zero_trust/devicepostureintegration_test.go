@@ -29,7 +29,7 @@ func TestDevicePostureIntegrationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Posture.Integrations.New(context.TODO(), zero_trust.DevicePostureIntegrationNewParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Config: cloudflare.F[zero_trust.DevicePostureIntegrationNewParamsConfig](zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest(zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
 			APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
 			AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
@@ -64,7 +64,7 @@ func TestDevicePostureIntegrationList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Posture.Integrations.List(context.TODO(), zero_trust.DevicePostureIntegrationListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -93,7 +93,7 @@ func TestDevicePostureIntegrationDelete(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureIntegrationDeleteParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {
@@ -123,7 +123,7 @@ func TestDevicePostureIntegrationEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureIntegrationEditParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Config: cloudflare.F[zero_trust.DevicePostureIntegrationEditParamsConfig](zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest(zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
 				APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
 				AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
@@ -162,7 +162,7 @@ func TestDevicePostureIntegrationGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureIntegrationGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

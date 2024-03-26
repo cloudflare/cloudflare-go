@@ -30,7 +30,7 @@ func TestDomainHistoryGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Intel.DomainHistory.Get(context.TODO(), intel.DomainHistoryGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Domain:    cloudflare.F[any]("example.com"),
+		Domain:    cloudflare.F("example.com"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

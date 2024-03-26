@@ -2229,7 +2229,7 @@ func (r DNSRecordNAPTRTTLNumber) IsKnown() bool {
 
 type DNSRecordNS struct {
 	// A valid name server host name.
-	Content interface{} `json:"content,required"`
+	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
@@ -4807,7 +4807,7 @@ type RecordNewParamsDNSRecordsNSRecord struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A valid name server host name.
-	Content param.Field[interface{}] `json:"content,required"`
+	Content param.Field[string] `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
@@ -6618,7 +6618,7 @@ type RecordUpdateParamsDNSRecordsNSRecord struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A valid name server host name.
-	Content param.Field[interface{}] `json:"content,required"`
+	Content param.Field[string] `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
@@ -8661,7 +8661,7 @@ type RecordEditParamsDNSRecordsNSRecord struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A valid name server host name.
-	Content param.Field[interface{}] `json:"content,required"`
+	Content param.Field[string] `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Record type.

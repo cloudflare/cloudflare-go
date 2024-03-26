@@ -29,7 +29,7 @@ func TestDevicePostureNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Posture.New(context.TODO(), zero_trust.DevicePostureNewParams{
-		AccountID:   cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID:   cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Name:        cloudflare.F("Admin Serial Numbers"),
 		Type:        cloudflare.F(zero_trust.DevicePostureNewParamsTypeFile),
 		Description: cloudflare.F("The rule for admin serial numbers"),
@@ -77,7 +77,7 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureUpdateParams{
-			AccountID:   cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID:   cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Name:        cloudflare.F("Admin Serial Numbers"),
 			Type:        cloudflare.F(zero_trust.DevicePostureUpdateParamsTypeFile),
 			Description: cloudflare.F("The rule for admin serial numbers"),
@@ -123,7 +123,7 @@ func TestDevicePostureList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Posture.List(context.TODO(), zero_trust.DevicePostureListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -152,7 +152,7 @@ func TestDevicePostureDelete(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureDeleteParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {
@@ -182,7 +182,7 @@ func TestDevicePostureGet(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

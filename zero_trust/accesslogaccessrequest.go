@@ -52,7 +52,7 @@ type AccessAccessRequests struct {
 	// The URL of the Access application.
 	AppDomain string `json:"app_domain"`
 	// The unique identifier for the Access application.
-	AppUid interface{} `json:"app_uid"`
+	AppUid string `json:"app_uid"`
 	// The IdP used to authenticate.
 	Connection string    `json:"connection"`
 	CreatedAt  time.Time `json:"created_at" format:"date-time"`

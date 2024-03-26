@@ -34,7 +34,7 @@ func NewACLService(opts ...option.RequestOption) (r *ACLService) {
 func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/acls", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -44,10 +44,10 @@ func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...optio
 }
 
 // Modify ACL.
-func (r *ACLService) Update(ctx context.Context, aclID interface{}, params ACLUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
+func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", params.AccountID, aclID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", params.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -60,7 +60,7 @@ func (r *ACLService) Update(ctx context.Context, aclID interface{}, params ACLUp
 func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *[]SecondaryDNSACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", query.AccountID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/acls", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -70,10 +70,10 @@ func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...opti
 }
 
 // Delete ACL.
-func (r *ACLService) Delete(ctx context.Context, aclID interface{}, body ACLDeleteParams, opts ...option.RequestOption) (res *ACLDeleteResponse, err error) {
+func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeleteParams, opts ...option.RequestOption) (res *ACLDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", body.AccountID, aclID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", body.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -83,10 +83,10 @@ func (r *ACLService) Delete(ctx context.Context, aclID interface{}, body ACLDele
 }
 
 // Get ACL.
-func (r *ACLService) Get(ctx context.Context, aclID interface{}, query ACLGetParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
+func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", query.AccountID, aclID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", query.AccountID, aclID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -96,7 +96,7 @@ func (r *ACLService) Get(ctx context.Context, aclID interface{}, query ACLGetPar
 }
 
 type SecondaryDNSACL struct {
-	ID interface{} `json:"id,required"`
+	ID string `json:"id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
 	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
@@ -126,7 +126,7 @@ func (r secondaryDnsaclJSON) RawJSON() string {
 }
 
 type ACLDeleteResponse struct {
-	ID   interface{}           `json:"id"`
+	ID   string                `json:"id"`
 	JSON aclDeleteResponseJSON `json:"-"`
 }
 
@@ -147,7 +147,7 @@ func (r aclDeleteResponseJSON) RawJSON() string {
 }
 
 type ACLNewParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
 	Body      param.Field[interface{}] `json:"body,required"`
 }
 
@@ -245,7 +245,7 @@ func (r ACLNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ACLUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
 	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
@@ -350,7 +350,7 @@ func (r ACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ACLListParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ACLListResponseEnvelope struct {
@@ -476,7 +476,7 @@ func (r aclListResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type ACLDeleteParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ACLDeleteResponseEnvelope struct {
@@ -569,7 +569,7 @@ func (r ACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ACLGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ACLGetResponseEnvelope struct {

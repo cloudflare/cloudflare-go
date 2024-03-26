@@ -35,7 +35,7 @@ func NewOutgoingStatusService(opts ...option.RequestOption) (r *OutgoingStatusSe
 func (r *OutgoingStatusService) Get(ctx context.Context, query OutgoingStatusGetParams, opts ...option.RequestOption) (res *SecondaryDNSEnableTransferResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingStatusGetResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/status", query.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/status", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -45,7 +45,7 @@ func (r *OutgoingStatusService) Get(ctx context.Context, query OutgoingStatusGet
 }
 
 type OutgoingStatusGetParams struct {
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OutgoingStatusGetResponseEnvelope struct {
