@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"net/textproto"
 	"path"
 	"reflect"
 	"sort"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -302,15 +304,33 @@ func (e encoder) newInterfaceEncoder() encoderFunc {
 	}
 }
 
+var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
+
+func escapeQuotes(s string) string {
+	return quoteEscaper.Replace(s)
+}
+
 func (e *encoder) newReaderTypeEncoder() encoderFunc {
 	return func(key string, value reflect.Value, writer *multipart.Writer) error {
 		reader := value.Convert(reflect.TypeOf((*io.Reader)(nil)).Elem()).Interface().(io.Reader)
 		filename := "anonymous_file"
+		contentType := "application/octet-stream"
 		if named, ok := reader.(interface{ Name() string }); ok {
 			filename = path.Base(named.Name())
 		}
-		filewriter, err := writer.CreateFormFile(key, filename)
-		io.Copy(filewriter, reader)
+		if typed, ok := reader.(interface{ ContentType() string }); ok {
+			contentType = path.Base(typed.ContentType())
+		}
+
+		// Below is taken almost 1-for-1 from [multipart.CreateFormFile]
+		h := make(textproto.MIMEHeader)
+		h.Set("Content-Disposition", fmt.Sprintf(`form-data; name="%s"; filename="%s"`, escapeQuotes(key), escapeQuotes(filename)))
+		h.Set("Content-Type", contentType)
+		filewriter, err := writer.CreatePart(h)
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(filewriter, reader)
 		return err
 	}
 }
