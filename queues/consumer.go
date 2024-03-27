@@ -34,10 +34,10 @@ func NewConsumerService(opts ...option.RequestOption) (r *ConsumerService) {
 }
 
 // Creates a new consumer for a queue.
-func (r *ConsumerService) New(ctx context.Context, name string, params ConsumerNewParams, opts ...option.RequestOption) (res *WorkersConsumerCreated, err error) {
+func (r *ConsumerService) New(ctx context.Context, queueID string, params ConsumerNewParams, opts ...option.RequestOption) (res *ConsumerNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers", params.AccountID, name)
+	path := fmt.Sprintf("accounts/%s/queues/%s/consumers", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -47,10 +47,10 @@ func (r *ConsumerService) New(ctx context.Context, name string, params ConsumerN
 }
 
 // Updates the consumer for a queue, or creates one if it does not exist.
-func (r *ConsumerService) Update(ctx context.Context, name string, consumerName string, params ConsumerUpdateParams, opts ...option.RequestOption) (res *WorkersConsumerUpdated, err error) {
+func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID string, params ConsumerUpdateParams, opts ...option.RequestOption) (res *ConsumerUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers/%s", params.AccountID, name, consumerName)
+	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", params.AccountID, queueID, consumerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -60,10 +60,10 @@ func (r *ConsumerService) Update(ctx context.Context, name string, consumerName 
 }
 
 // Deletes the consumer for a queue.
-func (r *ConsumerService) Delete(ctx context.Context, name string, consumerName string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponse, err error) {
+func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers/%s", body.AccountID, name, consumerName)
+	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", body.AccountID, queueID, consumerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -73,10 +73,10 @@ func (r *ConsumerService) Delete(ctx context.Context, name string, consumerName 
 }
 
 // Returns the consumers for a queue.
-func (r *ConsumerService) Get(ctx context.Context, name string, query ConsumerGetParams, opts ...option.RequestOption) (res *[]WorkersConsumer, err error) {
+func (r *ConsumerService) Get(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) (res *[]ConsumerGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers", query.AccountID, name)
+	path := fmt.Sprintf("accounts/%s/queues/%s/consumers", query.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -85,72 +85,19 @@ func (r *ConsumerService) Get(ctx context.Context, name string, query ConsumerGe
 	return
 }
 
-type WorkersConsumer struct {
-	CreatedOn   interface{}             `json:"created_on"`
-	Environment interface{}             `json:"environment"`
-	QueueName   interface{}             `json:"queue_name"`
-	Service     interface{}             `json:"service"`
-	Settings    WorkersConsumerSettings `json:"settings"`
-	JSON        workersConsumerJSON     `json:"-"`
+type ConsumerNewResponse struct {
+	CreatedOn       interface{}                 `json:"created_on"`
+	DeadLetterQueue string                      `json:"dead_letter_queue"`
+	Environment     interface{}                 `json:"environment"`
+	QueueName       interface{}                 `json:"queue_name"`
+	ScriptName      interface{}                 `json:"script_name"`
+	Settings        ConsumerNewResponseSettings `json:"settings"`
+	JSON            consumerNewResponseJSON     `json:"-"`
 }
 
-// workersConsumerJSON contains the JSON metadata for the struct [WorkersConsumer]
-type workersConsumerJSON struct {
-	CreatedOn   apijson.Field
-	Environment apijson.Field
-	QueueName   apijson.Field
-	Service     apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkersConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r workersConsumerJSON) RawJSON() string {
-	return r.raw
-}
-
-type WorkersConsumerSettings struct {
-	BatchSize     float64                     `json:"batch_size"`
-	MaxRetries    float64                     `json:"max_retries"`
-	MaxWaitTimeMs float64                     `json:"max_wait_time_ms"`
-	JSON          workersConsumerSettingsJSON `json:"-"`
-}
-
-// workersConsumerSettingsJSON contains the JSON metadata for the struct
-// [WorkersConsumerSettings]
-type workersConsumerSettingsJSON struct {
-	BatchSize     apijson.Field
-	MaxRetries    apijson.Field
-	MaxWaitTimeMs apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *WorkersConsumerSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r workersConsumerSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WorkersConsumerCreated struct {
-	CreatedOn       interface{}                    `json:"created_on"`
-	DeadLetterQueue string                         `json:"dead_letter_queue"`
-	Environment     interface{}                    `json:"environment"`
-	QueueName       interface{}                    `json:"queue_name"`
-	ScriptName      interface{}                    `json:"script_name"`
-	Settings        WorkersConsumerCreatedSettings `json:"settings"`
-	JSON            workersConsumerCreatedJSON     `json:"-"`
-}
-
-// workersConsumerCreatedJSON contains the JSON metadata for the struct
-// [WorkersConsumerCreated]
-type workersConsumerCreatedJSON struct {
+// consumerNewResponseJSON contains the JSON metadata for the struct
+// [ConsumerNewResponse]
+type consumerNewResponseJSON struct {
 	CreatedOn       apijson.Field
 	DeadLetterQueue apijson.Field
 	Environment     apijson.Field
@@ -161,24 +108,25 @@ type workersConsumerCreatedJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *WorkersConsumerCreated) UnmarshalJSON(data []byte) (err error) {
+func (r *ConsumerNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersConsumerCreatedJSON) RawJSON() string {
+func (r consumerNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type WorkersConsumerCreatedSettings struct {
-	BatchSize     float64                            `json:"batch_size"`
-	MaxRetries    float64                            `json:"max_retries"`
-	MaxWaitTimeMs float64                            `json:"max_wait_time_ms"`
-	JSON          workersConsumerCreatedSettingsJSON `json:"-"`
+type ConsumerNewResponseSettings struct {
+	// The maximum number of messages to include in a batch
+	BatchSize     float64                         `json:"batch_size"`
+	MaxRetries    float64                         `json:"max_retries"`
+	MaxWaitTimeMs float64                         `json:"max_wait_time_ms"`
+	JSON          consumerNewResponseSettingsJSON `json:"-"`
 }
 
-// workersConsumerCreatedSettingsJSON contains the JSON metadata for the struct
-// [WorkersConsumerCreatedSettings]
-type workersConsumerCreatedSettingsJSON struct {
+// consumerNewResponseSettingsJSON contains the JSON metadata for the struct
+// [ConsumerNewResponseSettings]
+type consumerNewResponseSettingsJSON struct {
 	BatchSize     apijson.Field
 	MaxRetries    apijson.Field
 	MaxWaitTimeMs apijson.Field
@@ -186,27 +134,27 @@ type workersConsumerCreatedSettingsJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WorkersConsumerCreatedSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *ConsumerNewResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersConsumerCreatedSettingsJSON) RawJSON() string {
+func (r consumerNewResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-type WorkersConsumerUpdated struct {
+type ConsumerUpdateResponse struct {
 	CreatedOn       interface{}                    `json:"created_on"`
 	DeadLetterQueue string                         `json:"dead_letter_queue"`
 	Environment     interface{}                    `json:"environment"`
 	QueueName       interface{}                    `json:"queue_name"`
 	ScriptName      interface{}                    `json:"script_name"`
-	Settings        WorkersConsumerUpdatedSettings `json:"settings"`
-	JSON            workersConsumerUpdatedJSON     `json:"-"`
+	Settings        ConsumerUpdateResponseSettings `json:"settings"`
+	JSON            consumerUpdateResponseJSON     `json:"-"`
 }
 
-// workersConsumerUpdatedJSON contains the JSON metadata for the struct
-// [WorkersConsumerUpdated]
-type workersConsumerUpdatedJSON struct {
+// consumerUpdateResponseJSON contains the JSON metadata for the struct
+// [ConsumerUpdateResponse]
+type consumerUpdateResponseJSON struct {
 	CreatedOn       apijson.Field
 	DeadLetterQueue apijson.Field
 	Environment     apijson.Field
@@ -217,24 +165,24 @@ type workersConsumerUpdatedJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *WorkersConsumerUpdated) UnmarshalJSON(data []byte) (err error) {
+func (r *ConsumerUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersConsumerUpdatedJSON) RawJSON() string {
+func (r consumerUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type WorkersConsumerUpdatedSettings struct {
+type ConsumerUpdateResponseSettings struct {
 	BatchSize     float64                            `json:"batch_size"`
 	MaxRetries    float64                            `json:"max_retries"`
 	MaxWaitTimeMs float64                            `json:"max_wait_time_ms"`
-	JSON          workersConsumerUpdatedSettingsJSON `json:"-"`
+	JSON          consumerUpdateResponseSettingsJSON `json:"-"`
 }
 
-// workersConsumerUpdatedSettingsJSON contains the JSON metadata for the struct
-// [WorkersConsumerUpdatedSettings]
-type workersConsumerUpdatedSettingsJSON struct {
+// consumerUpdateResponseSettingsJSON contains the JSON metadata for the struct
+// [ConsumerUpdateResponseSettings]
+type consumerUpdateResponseSettingsJSON struct {
 	BatchSize     apijson.Field
 	MaxRetries    apijson.Field
 	MaxWaitTimeMs apijson.Field
@@ -242,11 +190,11 @@ type workersConsumerUpdatedSettingsJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WorkersConsumerUpdatedSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *ConsumerUpdateResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersConsumerUpdatedSettingsJSON) RawJSON() string {
+func (r consumerUpdateResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -275,6 +223,61 @@ type ConsumerDeleteResponseArray []interface{}
 
 func (r ConsumerDeleteResponseArray) ImplementsQueuesConsumerDeleteResponse() {}
 
+type ConsumerGetResponse struct {
+	CreatedOn   interface{}                 `json:"created_on"`
+	Environment interface{}                 `json:"environment"`
+	QueueName   interface{}                 `json:"queue_name"`
+	Service     interface{}                 `json:"service"`
+	Settings    ConsumerGetResponseSettings `json:"settings"`
+	JSON        consumerGetResponseJSON     `json:"-"`
+}
+
+// consumerGetResponseJSON contains the JSON metadata for the struct
+// [ConsumerGetResponse]
+type consumerGetResponseJSON struct {
+	CreatedOn   apijson.Field
+	Environment apijson.Field
+	QueueName   apijson.Field
+	Service     apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerGetResponseSettings struct {
+	// The maximum number of messages to include in a batch
+	BatchSize     float64                         `json:"batch_size"`
+	MaxRetries    float64                         `json:"max_retries"`
+	MaxWaitTimeMs float64                         `json:"max_wait_time_ms"`
+	JSON          consumerGetResponseSettingsJSON `json:"-"`
+}
+
+// consumerGetResponseSettingsJSON contains the JSON metadata for the struct
+// [ConsumerGetResponseSettings]
+type consumerGetResponseSettingsJSON struct {
+	BatchSize     apijson.Field
+	MaxRetries    apijson.Field
+	MaxWaitTimeMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ConsumerGetResponseSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerGetResponseSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ConsumerNewParams struct {
 	// Identifier
 	AccountID param.Field[string]      `path:"account_id,required"`
@@ -288,7 +291,7 @@ func (r ConsumerNewParams) MarshalJSON() (data []byte, err error) {
 type ConsumerNewResponseEnvelope struct {
 	Errors   []ConsumerNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConsumerNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersConsumerCreated                `json:"result,required,nullable"`
+	Result   ConsumerNewResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ConsumerNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -420,7 +423,7 @@ func (r ConsumerUpdateParams) MarshalJSON() (data []byte, err error) {
 type ConsumerUpdateResponseEnvelope struct {
 	Errors   []ConsumerUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConsumerUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersConsumerUpdated                   `json:"result,required,nullable"`
+	Result   ConsumerUpdateResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ConsumerUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -672,9 +675,9 @@ type ConsumerGetParams struct {
 }
 
 type ConsumerGetResponseEnvelope struct {
-	Errors   []interface{}     `json:"errors,required,nullable"`
-	Messages []interface{}     `json:"messages,required,nullable"`
-	Result   []WorkersConsumer `json:"result,required,nullable"`
+	Errors   []ConsumerGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ConsumerGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []ConsumerGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ConsumerGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -698,6 +701,52 @@ func (r *ConsumerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r consumerGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerGetResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    consumerGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// consumerGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ConsumerGetResponseEnvelopeErrors]
+type consumerGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerGetResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    consumerGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// consumerGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ConsumerGetResponseEnvelopeMessages]
+type consumerGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
