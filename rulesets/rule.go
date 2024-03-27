@@ -75,7 +75,7 @@ func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID strin
 	return
 }
 
-// Updates an existing rule in an account ruleset.
+// Updates an existing rule in an account or zone ruleset.
 func (r *RuleService) Edit(ctx context.Context, rulesetID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
