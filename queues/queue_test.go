@@ -59,7 +59,7 @@ func TestQueueUpdate(t *testing.T) {
 	)
 	_, err := client.Queues.Update(
 		context.TODO(),
-		"example-queue",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.QueueUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: cloudflare.F[any](map[string]interface{}{
@@ -118,7 +118,7 @@ func TestQueueDelete(t *testing.T) {
 	)
 	_, err := client.Queues.Delete(
 		context.TODO(),
-		"example-queue",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.QueueDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -148,7 +148,7 @@ func TestQueueGet(t *testing.T) {
 	)
 	_, err := client.Queues.Get(
 		context.TODO(),
-		"example-queue",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.QueueGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
