@@ -33,7 +33,6 @@ type DNSRecord struct {
 	TTL        int         `json:"ttl,omitempty"`
 	Proxied    *bool       `json:"proxied,omitempty"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
-	Locked     bool        `json:"locked,omitempty"`
 	Comment    string      `json:"comment,omitempty"` // the server will omit the comment field when the comment is empty
 	Tags       []string    `json:"tags,omitempty"`
 }
@@ -192,7 +191,6 @@ type CreateDNSRecordParams struct {
 	TTL        int         `json:"ttl,omitempty"`
 	Proxied    *bool       `json:"proxied,omitempty" url:"proxied,omitempty"`
 	Proxiable  bool        `json:"proxiable,omitempty"`
-	Locked     bool        `json:"locked,omitempty"`
 	Comment    string      `json:"comment,omitempty" url:"comment,omitempty"` // to the server, there's no difference between "no comment" and "empty comment"
 	Tags       []string    `json:"tags,omitempty"`
 }
