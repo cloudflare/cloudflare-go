@@ -121,9 +121,9 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 	return
 }
 
-// Updates an IP Access rule defined at the account level.
+// Updates an IP Access rule defined.
 //
-// Note: This operation will affect all zones in the account.
+// Note: This operation will affect all zones in the account or zone.
 func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *AccessRuleEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleEditResponseEnvelope
