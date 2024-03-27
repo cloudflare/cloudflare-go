@@ -30,7 +30,7 @@ func TestConsumerNew(t *testing.T) {
 	)
 	_, err := client.Queues.Consumers.New(
 		context.TODO(),
-		"example-queue",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: cloudflare.F[any](map[string]interface{}{
@@ -70,8 +70,8 @@ func TestConsumerUpdate(t *testing.T) {
 	)
 	_, err := client.Queues.Consumers.Update(
 		context.TODO(),
-		"example-queue",
-		"example-consumer",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: cloudflare.F[any](map[string]interface{}{
@@ -109,8 +109,8 @@ func TestConsumerDelete(t *testing.T) {
 	)
 	_, err := client.Queues.Consumers.Delete(
 		context.TODO(),
-		"example-queue",
-		"example-consumer",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -140,7 +140,7 @@ func TestConsumerGet(t *testing.T) {
 	)
 	_, err := client.Queues.Consumers.Get(
 		context.TODO(),
-		"example-queue",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

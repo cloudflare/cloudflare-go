@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"io"
 )
 
 // F is a param field helper used to initialize a [param.Field] generic struct.
@@ -11,7 +12,7 @@ import (
 // [README]: https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2#readme-request-fields
 func F[T any](value T) param.Field[T] { return param.Field[T]{Value: value, Present: true} }
 
-// Null is a param field helper which explciitly sends null to the API.
+// Null is a param field helper which explicitly sends null to the API.
 func Null[T any]() param.Field[T] { return param.Field[T]{Null: true, Present: true} }
 
 // Raw is a param field helper for specifying values for fields when the
@@ -33,3 +34,17 @@ func Float(value float64) param.Field[float64] { return F(value) }
 
 // Bool is a param field helper which helps specify bools.
 func Bool(value bool) param.Field[bool] { return F(value) }
+
+// FileParam is a param field helper which helps files with a mime content-type.
+func FileParam(reader io.Reader, filename string, contentType string) param.Field[io.Reader] {
+	return F[io.Reader](&file{reader, filename, contentType})
+}
+
+type file struct {
+	io.Reader
+	name        string
+	contentType string
+}
+
+func (f *file) Name() string        { return f.name }
+func (f *file) ContentType() string { return f.contentType }
