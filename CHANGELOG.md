@@ -1,14 +1,19 @@
 ## 0.92.0 (Unreleased)
 
-## 0.91.0 (March 22nd, 2024)
-
 ENHANCEMENTS:
 
 * access_application: add support for `saml_attribute_transform_jsonata` in saas apps ([#1562](https://github.com/cloudflare/cloudflare-go/issues/1562))
+* dlp: Adds support for ocr_enabled boolean flag ([#1600](https://github.com/cloudflare/cloudflare-go/issues/1600))
+
+BUG FIXES:
+
+* teams_rules: add "resolve" to allowable actions ([#1615](https://github.com/cloudflare/cloudflare-go/issues/1615))
 
 DEPENDENCIES:
 
 * deps: bumps actions/checkout from 2 to 4 ([#1573](https://github.com/cloudflare/cloudflare-go/issues/1573))
+* deps: bumps dependabot/fetch-metadata from 1.6.0 to 1.7.0 ([#1593](https://github.com/cloudflare/cloudflare-go/issues/1593))
+* deps: bumps dependabot/fetch-metadata from 1.7.0 to 2.0.0 ([#1607](https://github.com/cloudflare/cloudflare-go/issues/1607))
 * deps: bumps google.golang.org/protobuf from 1.28.0 to 1.33.0 ([#1558](https://github.com/cloudflare/cloudflare-go/issues/1558))
 
 ## 0.90.0 (March 13th, 2024)
