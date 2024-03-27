@@ -20,7 +20,6 @@ func formatDNSRecord(record cloudflare.DNSRecord) []string {
 		strconv.FormatInt(int64(record.TTL), 10),
 		strconv.FormatBool(record.Proxiable),
 		strconv.FormatBool(*record.Proxied),
-		strconv.FormatBool(record.Locked),
 	}
 }
 
@@ -60,7 +59,7 @@ func dnsCreate(c *cli.Context) error {
 		formatDNSRecord(result),
 	}
 
-	writeTable(c, output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
+	writeTable(c, output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy")
 
 	return nil
 }
@@ -135,7 +134,7 @@ func dnsCreateOrUpdate(c *cli.Context) error {
 		formatDNSRecord(result),
 	}
 
-	writeTable(c, output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy", "Locked")
+	writeTable(c, output, "ID", "Name", "Type", "Content", "TTL", "Proxiable", "Proxy")
 
 	return nil
 }

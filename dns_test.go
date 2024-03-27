@@ -98,7 +98,6 @@ func TestCreateDNSRecord(t *testing.T) {
 				"proxiable": true,
 				"proxied": false,
 				"ttl": 120,
-				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
 				"created_on": "2014-01-01T05:20:00Z",
@@ -180,7 +179,6 @@ func TestListDNSRecords(t *testing.T) {
 					"proxiable": true,
 					"proxied": false,
 					"ttl": 120,
-					"locked": false,
 					"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 					"zone_name": "example.com",
 					"created_on": "2014-01-01T05:20:00Z",
@@ -214,7 +212,6 @@ func TestListDNSRecords(t *testing.T) {
 		Proxiable:  true,
 		Proxied:    &proxied,
 		TTL:        120,
-		Locked:     false,
 		ZoneID:     testZoneID,
 		ZoneName:   "example.com",
 		CreatedOn:  createdOn,
@@ -275,7 +272,6 @@ func TestListDNSRecordsSearch(t *testing.T) {
 					"proxiable": true,
 					"proxied": true,
 					"ttl": 120,
-					"locked": false,
 					"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 					"zone_name": "example.com",
 					"created_on": "2014-01-01T05:20:00Z",
@@ -310,7 +306,6 @@ func TestListDNSRecordsSearch(t *testing.T) {
 		Proxiable:  true,
 		Proxied:    &proxied,
 		TTL:        120,
-		Locked:     false,
 		ZoneID:     testZoneID,
 		ZoneName:   "example.com",
 		CreatedOn:  createdOn,
@@ -408,7 +403,6 @@ func TestListDNSRecordsPagination(t *testing.T) {
 		assert.Equal(t, expected["proxiable"].(bool), actualRecord.Proxiable)
 		assert.Equal(t, expected["proxied"].(bool), *actualRecord.Proxied)
 		assert.Equal(t, int(expected["ttl"].(float64)), actualRecord.TTL)
-		assert.Equal(t, expected["locked"].(bool), actualRecord.Locked)
 		assert.Equal(t, expected["zone_id"].(string), actualRecord.ZoneID)
 		assert.Equal(t, expected["zone_name"].(string), actualRecord.ZoneName)
 		assert.Equal(t, expected["data"], actualRecord.Data)
@@ -436,7 +430,6 @@ func TestGetDNSRecord(t *testing.T) {
 				"proxiable": true,
 				"proxied": false,
 				"ttl": 120,
-				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
 				"created_on": "2014-01-01T05:20:00Z",
@@ -528,7 +521,6 @@ func TestUpdateDNSRecord(t *testing.T) {
 				"proxiable": true,
 				"proxied": false,
 				"ttl": 120,
-				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
 				"created_on": "2014-01-01T05:20:00Z",
@@ -594,7 +586,6 @@ func TestUpdateDNSRecord_ClearComment(t *testing.T) {
 				"proxiable": true,
 				"proxied": false,
 				"ttl": 120,
-				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
 				"created_on": "2014-01-01T05:20:00Z",
@@ -651,7 +642,6 @@ func TestUpdateDNSRecord_KeepComment(t *testing.T) {
 				"proxiable": true,
 				"proxied": false,
 				"ttl": 120,
-				"locked": false,
 				"zone_id": "d56084adb405e0b7e32c52321bf07be6",
 				"zone_name": "example.com",
 				"created_on": "2014-01-01T05:20:00Z",

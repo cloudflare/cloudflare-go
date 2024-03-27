@@ -98,9 +98,9 @@ a23b50de3c064a5a860e8b84cd2b382c Challenge Chrome v61 challenge Mozilla/5.0 (Mac
 ```sh
 ~ flarectl dns create --zone="example.com" --name="app" --type="CNAME" --content="myapp.herokuapp.com" --proxy
 
-ID                               Name                      Type  Content             TTL Proxiable Proxy Locked
--------------------------------- ------------------------- ----- ------------------- --- --------- ----- ------
-5c5d051f7944cf4715127270dd4d05f4 app.questionable.services CNAME myapp.herokuapp.com 1   true      true  false
+ID                               Name                      Type  Content             TTL Proxiable Proxy
+-------------------------------- ------------------------- ----- ------------------- --- --------- -----
+5c5d051f7944cf4715127270dd4d05f4 app.questionable.services CNAME myapp.herokuapp.com 1   true      true
 ```
 
 ## License
