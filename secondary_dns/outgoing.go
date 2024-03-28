@@ -99,7 +99,7 @@ func (r *OutgoingService) Enable(ctx context.Context, body OutgoingEnableParams,
 }
 
 // Notifies the secondary nameserver(s) and clears IXFR backlog of primary zone.
-func (r *OutgoingService) ForceNotify(ctx context.Context, body OutgoingForceNotifyParams, opts ...option.RequestOption) (res *SecondaryDNSForce, err error) {
+func (r *OutgoingService) ForceNotify(ctx context.Context, body OutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/force_notify", body.ZoneID)
@@ -127,8 +127,6 @@ func (r *OutgoingService) Get(ctx context.Context, query OutgoingGetParams, opts
 type SecondaryDNSDisableTransfer = string
 
 type SecondaryDNSEnableTransfer = string
-
-type SecondaryDNSForce = string
 
 type OutgoingNewResponse struct {
 	ID string `json:"id"`
@@ -760,7 +758,7 @@ type OutgoingForceNotifyResponseEnvelope struct {
 	Messages []OutgoingForceNotifyResponseEnvelopeMessages `json:"messages,required"`
 	// When force_notify query parameter is set to true, the response is a simple
 	// string
-	Result SecondaryDNSForce `json:"result,required"`
+	Result string `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingForceNotifyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingForceNotifyResponseEnvelopeJSON    `json:"-"`
