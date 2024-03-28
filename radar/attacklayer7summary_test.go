@@ -72,7 +72,7 @@ func TestAttackLayer7SummaryHTTPMethodWithOptionalParams(t *testing.T) {
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7SummaryHTTPMethodParamsHTTPVersion{radar.AttackLayer7SummaryHTTPMethodParamsHTTPVersionHttPv1, radar.AttackLayer7SummaryHTTPMethodParamsHTTPVersionHttPv2, radar.AttackLayer7SummaryHTTPMethodParamsHTTPVersionHttPv3}),
 		IPVersion:         cloudflare.F([]radar.AttackLayer7SummaryHTTPMethodParamsIPVersion{radar.AttackLayer7SummaryHTTPMethodParamsIPVersionIPv4, radar.AttackLayer7SummaryHTTPMethodParamsIPVersionIPv6}),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryHTTPMethodParamsMitigationProduct{radar.AttackLayer7SummaryHTTPMethodParamsMitigationProductDDOS, radar.AttackLayer7SummaryHTTPMethodParamsMitigationProductWAF, radar.AttackLayer7SummaryHTTPMethodParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryHTTPMethodParamsMitigationProduct{radar.AttackLayer7SummaryHTTPMethodParamsMitigationProductDDoS, radar.AttackLayer7SummaryHTTPMethodParamsMitigationProductWAF, radar.AttackLayer7SummaryHTTPMethodParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
@@ -108,7 +108,7 @@ func TestAttackLayer7SummaryHTTPVersionWithOptionalParams(t *testing.T) {
 		HTTPMethod:        cloudflare.F([]radar.AttackLayer7SummaryHTTPVersionParamsHTTPMethod{radar.AttackLayer7SummaryHTTPVersionParamsHTTPMethodGet, radar.AttackLayer7SummaryHTTPVersionParamsHTTPMethodPost, radar.AttackLayer7SummaryHTTPVersionParamsHTTPMethodDelete}),
 		IPVersion:         cloudflare.F([]radar.AttackLayer7SummaryHTTPVersionParamsIPVersion{radar.AttackLayer7SummaryHTTPVersionParamsIPVersionIPv4, radar.AttackLayer7SummaryHTTPVersionParamsIPVersionIPv6}),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryHTTPVersionParamsMitigationProduct{radar.AttackLayer7SummaryHTTPVersionParamsMitigationProductDDOS, radar.AttackLayer7SummaryHTTPVersionParamsMitigationProductWAF, radar.AttackLayer7SummaryHTTPVersionParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryHTTPVersionParamsMitigationProduct{radar.AttackLayer7SummaryHTTPVersionParamsMitigationProductDDoS, radar.AttackLayer7SummaryHTTPVersionParamsMitigationProductWAF, radar.AttackLayer7SummaryHTTPVersionParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
@@ -144,7 +144,7 @@ func TestAttackLayer7SummaryIPVersionWithOptionalParams(t *testing.T) {
 		HTTPMethod:        cloudflare.F([]radar.AttackLayer7SummaryIPVersionParamsHTTPMethod{radar.AttackLayer7SummaryIPVersionParamsHTTPMethodGet, radar.AttackLayer7SummaryIPVersionParamsHTTPMethodPost, radar.AttackLayer7SummaryIPVersionParamsHTTPMethodDelete}),
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7SummaryIPVersionParamsHTTPVersion{radar.AttackLayer7SummaryIPVersionParamsHTTPVersionHttPv1, radar.AttackLayer7SummaryIPVersionParamsHTTPVersionHttPv2, radar.AttackLayer7SummaryIPVersionParamsHTTPVersionHttPv3}),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryIPVersionParamsMitigationProduct{radar.AttackLayer7SummaryIPVersionParamsMitigationProductDDOS, radar.AttackLayer7SummaryIPVersionParamsMitigationProductWAF, radar.AttackLayer7SummaryIPVersionParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryIPVersionParamsMitigationProduct{radar.AttackLayer7SummaryIPVersionParamsMitigationProductDDoS, radar.AttackLayer7SummaryIPVersionParamsMitigationProductWAF, radar.AttackLayer7SummaryIPVersionParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
@@ -181,7 +181,7 @@ func TestAttackLayer7SummaryManagedRulesWithOptionalParams(t *testing.T) {
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7SummaryManagedRulesParamsHTTPVersion{radar.AttackLayer7SummaryManagedRulesParamsHTTPVersionHttPv1, radar.AttackLayer7SummaryManagedRulesParamsHTTPVersionHttPv2, radar.AttackLayer7SummaryManagedRulesParamsHTTPVersionHttPv3}),
 		IPVersion:         cloudflare.F([]radar.AttackLayer7SummaryManagedRulesParamsIPVersion{radar.AttackLayer7SummaryManagedRulesParamsIPVersionIPv4, radar.AttackLayer7SummaryManagedRulesParamsIPVersionIPv6}),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryManagedRulesParamsMitigationProduct{radar.AttackLayer7SummaryManagedRulesParamsMitigationProductDDOS, radar.AttackLayer7SummaryManagedRulesParamsMitigationProductWAF, radar.AttackLayer7SummaryManagedRulesParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7SummaryManagedRulesParamsMitigationProduct{radar.AttackLayer7SummaryManagedRulesParamsMitigationProductDDoS, radar.AttackLayer7SummaryManagedRulesParamsMitigationProductWAF, radar.AttackLayer7SummaryManagedRulesParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {

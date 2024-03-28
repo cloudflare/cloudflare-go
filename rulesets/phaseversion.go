@@ -139,8 +139,8 @@ func (r PhaseVersionListResponseKind) IsKnown() bool {
 type PhaseVersionListResponsePhase string
 
 const (
-	PhaseVersionListResponsePhaseDDOSL4                         PhaseVersionListResponsePhase = "ddos_l4"
-	PhaseVersionListResponsePhaseDDOSL7                         PhaseVersionListResponsePhase = "ddos_l7"
+	PhaseVersionListResponsePhaseDDoSL4                         PhaseVersionListResponsePhase = "ddos_l4"
+	PhaseVersionListResponsePhaseDDoSL7                         PhaseVersionListResponsePhase = "ddos_l7"
 	PhaseVersionListResponsePhaseHTTPConfigSettings             PhaseVersionListResponsePhase = "http_config_settings"
 	PhaseVersionListResponsePhaseHTTPCustomErrors               PhaseVersionListResponsePhase = "http_custom_errors"
 	PhaseVersionListResponsePhaseHTTPLogCustomFields            PhaseVersionListResponsePhase = "http_log_custom_fields"
@@ -166,7 +166,7 @@ const (
 
 func (r PhaseVersionListResponsePhase) IsKnown() bool {
 	switch r {
-	case PhaseVersionListResponsePhaseDDOSL4, PhaseVersionListResponsePhaseDDOSL7, PhaseVersionListResponsePhaseHTTPConfigSettings, PhaseVersionListResponsePhaseHTTPCustomErrors, PhaseVersionListResponsePhaseHTTPLogCustomFields, PhaseVersionListResponsePhaseHTTPRatelimit, PhaseVersionListResponsePhaseHTTPRequestCacheSettings, PhaseVersionListResponsePhaseHTTPRequestDynamicRedirect, PhaseVersionListResponsePhaseHTTPRequestFirewallCustom, PhaseVersionListResponsePhaseHTTPRequestFirewallManaged, PhaseVersionListResponsePhaseHTTPRequestLateTransform, PhaseVersionListResponsePhaseHTTPRequestOrigin, PhaseVersionListResponsePhaseHTTPRequestRedirect, PhaseVersionListResponsePhaseHTTPRequestSanitize, PhaseVersionListResponsePhaseHTTPRequestSbfm, PhaseVersionListResponsePhaseHTTPRequestSelectConfiguration, PhaseVersionListResponsePhaseHTTPRequestTransform, PhaseVersionListResponsePhaseHTTPResponseCompression, PhaseVersionListResponsePhaseHTTPResponseFirewallManaged, PhaseVersionListResponsePhaseHTTPResponseHeadersTransform, PhaseVersionListResponsePhaseMagicTransit, PhaseVersionListResponsePhaseMagicTransitIDsManaged, PhaseVersionListResponsePhaseMagicTransitManaged:
+	case PhaseVersionListResponsePhaseDDoSL4, PhaseVersionListResponsePhaseDDoSL7, PhaseVersionListResponsePhaseHTTPConfigSettings, PhaseVersionListResponsePhaseHTTPCustomErrors, PhaseVersionListResponsePhaseHTTPLogCustomFields, PhaseVersionListResponsePhaseHTTPRatelimit, PhaseVersionListResponsePhaseHTTPRequestCacheSettings, PhaseVersionListResponsePhaseHTTPRequestDynamicRedirect, PhaseVersionListResponsePhaseHTTPRequestFirewallCustom, PhaseVersionListResponsePhaseHTTPRequestFirewallManaged, PhaseVersionListResponsePhaseHTTPRequestLateTransform, PhaseVersionListResponsePhaseHTTPRequestOrigin, PhaseVersionListResponsePhaseHTTPRequestRedirect, PhaseVersionListResponsePhaseHTTPRequestSanitize, PhaseVersionListResponsePhaseHTTPRequestSbfm, PhaseVersionListResponsePhaseHTTPRequestSelectConfiguration, PhaseVersionListResponsePhaseHTTPRequestTransform, PhaseVersionListResponsePhaseHTTPResponseCompression, PhaseVersionListResponsePhaseHTTPResponseFirewallManaged, PhaseVersionListResponsePhaseHTTPResponseHeadersTransform, PhaseVersionListResponsePhaseMagicTransit, PhaseVersionListResponsePhaseMagicTransitIDsManaged, PhaseVersionListResponsePhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -183,8 +183,8 @@ type PhaseVersionListParams struct {
 type PhaseVersionListParamsRulesetPhase string
 
 const (
-	PhaseVersionListParamsRulesetPhaseDDOSL4                         PhaseVersionListParamsRulesetPhase = "ddos_l4"
-	PhaseVersionListParamsRulesetPhaseDDOSL7                         PhaseVersionListParamsRulesetPhase = "ddos_l7"
+	PhaseVersionListParamsRulesetPhaseDDoSL4                         PhaseVersionListParamsRulesetPhase = "ddos_l4"
+	PhaseVersionListParamsRulesetPhaseDDoSL7                         PhaseVersionListParamsRulesetPhase = "ddos_l7"
 	PhaseVersionListParamsRulesetPhaseHTTPConfigSettings             PhaseVersionListParamsRulesetPhase = "http_config_settings"
 	PhaseVersionListParamsRulesetPhaseHTTPCustomErrors               PhaseVersionListParamsRulesetPhase = "http_custom_errors"
 	PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields            PhaseVersionListParamsRulesetPhase = "http_log_custom_fields"
@@ -210,7 +210,7 @@ const (
 
 func (r PhaseVersionListParamsRulesetPhase) IsKnown() bool {
 	switch r {
-	case PhaseVersionListParamsRulesetPhaseDDOSL4, PhaseVersionListParamsRulesetPhaseDDOSL7, PhaseVersionListParamsRulesetPhaseHTTPConfigSettings, PhaseVersionListParamsRulesetPhaseHTTPCustomErrors, PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionListParamsRulesetPhaseHTTPRatelimit, PhaseVersionListParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionListParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionListParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionListParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionListParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionListParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionListParamsRulesetPhaseHTTPRequestTransform, PhaseVersionListParamsRulesetPhaseHTTPResponseCompression, PhaseVersionListParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionListParamsRulesetPhaseMagicTransit, PhaseVersionListParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionListParamsRulesetPhaseMagicTransitManaged:
+	case PhaseVersionListParamsRulesetPhaseDDoSL4, PhaseVersionListParamsRulesetPhaseDDoSL7, PhaseVersionListParamsRulesetPhaseHTTPConfigSettings, PhaseVersionListParamsRulesetPhaseHTTPCustomErrors, PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionListParamsRulesetPhaseHTTPRatelimit, PhaseVersionListParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionListParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionListParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionListParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionListParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionListParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionListParamsRulesetPhaseHTTPRequestTransform, PhaseVersionListParamsRulesetPhaseHTTPResponseCompression, PhaseVersionListParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionListParamsRulesetPhaseMagicTransit, PhaseVersionListParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionListParamsRulesetPhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -378,8 +378,8 @@ type PhaseVersionGetParams struct {
 type PhaseVersionGetParamsRulesetPhase string
 
 const (
-	PhaseVersionGetParamsRulesetPhaseDDOSL4                         PhaseVersionGetParamsRulesetPhase = "ddos_l4"
-	PhaseVersionGetParamsRulesetPhaseDDOSL7                         PhaseVersionGetParamsRulesetPhase = "ddos_l7"
+	PhaseVersionGetParamsRulesetPhaseDDoSL4                         PhaseVersionGetParamsRulesetPhase = "ddos_l4"
+	PhaseVersionGetParamsRulesetPhaseDDoSL7                         PhaseVersionGetParamsRulesetPhase = "ddos_l7"
 	PhaseVersionGetParamsRulesetPhaseHTTPConfigSettings             PhaseVersionGetParamsRulesetPhase = "http_config_settings"
 	PhaseVersionGetParamsRulesetPhaseHTTPCustomErrors               PhaseVersionGetParamsRulesetPhase = "http_custom_errors"
 	PhaseVersionGetParamsRulesetPhaseHTTPLogCustomFields            PhaseVersionGetParamsRulesetPhase = "http_log_custom_fields"
@@ -405,7 +405,7 @@ const (
 
 func (r PhaseVersionGetParamsRulesetPhase) IsKnown() bool {
 	switch r {
-	case PhaseVersionGetParamsRulesetPhaseDDOSL4, PhaseVersionGetParamsRulesetPhaseDDOSL7, PhaseVersionGetParamsRulesetPhaseHTTPConfigSettings, PhaseVersionGetParamsRulesetPhaseHTTPCustomErrors, PhaseVersionGetParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionGetParamsRulesetPhaseHTTPRatelimit, PhaseVersionGetParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionGetParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionGetParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionGetParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionGetParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionGetParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionGetParamsRulesetPhaseHTTPRequestTransform, PhaseVersionGetParamsRulesetPhaseHTTPResponseCompression, PhaseVersionGetParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionGetParamsRulesetPhaseMagicTransit, PhaseVersionGetParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionGetParamsRulesetPhaseMagicTransitManaged:
+	case PhaseVersionGetParamsRulesetPhaseDDoSL4, PhaseVersionGetParamsRulesetPhaseDDoSL7, PhaseVersionGetParamsRulesetPhaseHTTPConfigSettings, PhaseVersionGetParamsRulesetPhaseHTTPCustomErrors, PhaseVersionGetParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionGetParamsRulesetPhaseHTTPRatelimit, PhaseVersionGetParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionGetParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionGetParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionGetParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionGetParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionGetParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionGetParamsRulesetPhaseHTTPRequestTransform, PhaseVersionGetParamsRulesetPhaseHTTPResponseCompression, PhaseVersionGetParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionGetParamsRulesetPhaseMagicTransit, PhaseVersionGetParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionGetParamsRulesetPhaseMagicTransitManaged:
 		return true
 	}
 	return false

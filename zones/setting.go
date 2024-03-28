@@ -23,7 +23,7 @@ import (
 type SettingService struct {
 	Options                       []option.RequestOption
 	ZeroRTT                       *SettingZeroRTTService
-	AdvancedDDOS                  *SettingAdvancedDDOSService
+	AdvancedDDoS                  *SettingAdvancedDDoSService
 	AlwaysOnline                  *SettingAlwaysOnlineService
 	AlwaysUseHTTPS                *SettingAlwaysUseHTTPSService
 	AutomaticHTTPSRewrites        *SettingAutomaticHTTPSRewriteService
@@ -82,7 +82,7 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r = &SettingService{}
 	r.Options = opts
 	r.ZeroRTT = NewSettingZeroRTTService(opts...)
-	r.AdvancedDDOS = NewSettingAdvancedDDOSService(opts...)
+	r.AdvancedDDoS = NewSettingAdvancedDDoSService(opts...)
 	r.AlwaysOnline = NewSettingAlwaysOnlineService(opts...)
 	r.AlwaysUseHTTPS = NewSettingAlwaysUseHTTPSService(opts...)
 	r.AutomaticHTTPSRewrites = NewSettingAutomaticHTTPSRewriteService(opts...)
@@ -163,7 +163,7 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Union satisfied by [zones.ZoneSetting0rtt], [zones.ZoneSettingAdvancedDDOS],
+// Union satisfied by [zones.ZoneSetting0rtt], [zones.ZoneSettingAdvancedDDoS],
 // [zones.ZoneSettingAlwaysOnline], [zones.ZoneSettingAlwaysUseHTTPS],
 // [zones.ZoneSettingAutomaticHTTPSRewrites], [zones.ZoneSettingBrotli],
 // [zones.ZoneSettingBrowserCacheTTL], [zones.ZoneSettingBrowserCheck],
@@ -207,7 +207,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZoneSettingAdvancedDDOS{}),
+			Type:       reflect.TypeOf(ZoneSettingAdvancedDDoS{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -929,7 +929,7 @@ func (r SettingEditResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Union satisfied by [zones.ZoneSetting0rtt], [zones.ZoneSettingAdvancedDDOS],
+// Union satisfied by [zones.ZoneSetting0rtt], [zones.ZoneSettingAdvancedDDoS],
 // [zones.ZoneSettingAlwaysOnline], [zones.ZoneSettingAlwaysUseHTTPS],
 // [zones.ZoneSettingAutomaticHTTPSRewrites], [zones.ZoneSettingBrotli],
 // [zones.ZoneSettingBrowserCacheTTL], [zones.ZoneSettingBrowserCheck],
@@ -973,7 +973,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZoneSettingAdvancedDDOS{}),
+			Type:       reflect.TypeOf(ZoneSettingAdvancedDDoS{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1706,7 +1706,7 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Satisfied by [zones.ZoneSetting0rttParam], [zones.ZoneSettingAdvancedDDOSParam],
+// Satisfied by [zones.ZoneSetting0rttParam], [zones.ZoneSettingAdvancedDDoSParam],
 // [zones.ZoneSettingAlwaysOnlineParam], [zones.ZoneSettingAlwaysUseHTTPSParam],
 // [zones.ZoneSettingAutomaticHTTPSRewritesParam], [zones.ZoneSettingBrotliParam],
 // [zones.ZoneSettingBrowserCacheTTLParam], [zones.ZoneSettingBrowserCheckParam],
