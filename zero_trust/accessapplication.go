@@ -41,7 +41,7 @@ func NewAccessApplicationService(opts ...option.RequestOption) (r *AccessApplica
 }
 
 // Adds a new application to Access.
-func (r *AccessApplicationService) New(ctx context.Context, params AccessApplicationNewParams, opts ...option.RequestOption) (res *AccessApps, err error) {
+func (r *AccessApplicationService) New(ctx context.Context, params AccessApplicationNewParams, opts ...option.RequestOption) (res *ZeroTrustApps, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationNewResponseEnvelope
 	var accountOrZone string
@@ -63,7 +63,7 @@ func (r *AccessApplicationService) New(ctx context.Context, params AccessApplica
 }
 
 // Updates an Access application.
-func (r *AccessApplicationService) Update(ctx context.Context, appID AccessApplicationUpdateParamsSelfHostedApplicationAppID, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *AccessApps, err error) {
+func (r *AccessApplicationService) Update(ctx context.Context, appID AccessApplicationUpdateParamsSelfHostedApplicationAppID, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *ZeroTrustApps, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationUpdateResponseEnvelope
 	var accountOrZone string
@@ -85,7 +85,7 @@ func (r *AccessApplicationService) Update(ctx context.Context, appID AccessAppli
 }
 
 // Lists all Access applications in an account or zone.
-func (r *AccessApplicationService) List(ctx context.Context, query AccessApplicationListParams, opts ...option.RequestOption) (res *[]AccessApps, err error) {
+func (r *AccessApplicationService) List(ctx context.Context, query AccessApplicationListParams, opts ...option.RequestOption) (res *[]ZeroTrustApps, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationListResponseEnvelope
 	var accountOrZone string
@@ -129,7 +129,7 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AccessAppli
 }
 
 // Fetches information about an Access application.
-func (r *AccessApplicationService) Get(ctx context.Context, appID AccessApplicationGetParamsAppID, query AccessApplicationGetParams, opts ...option.RequestOption) (res *AccessApps, err error) {
+func (r *AccessApplicationService) Get(ctx context.Context, appID AccessApplicationGetParamsAppID, query AccessApplicationGetParams, opts ...option.RequestOption) (res *ZeroTrustApps, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationGetResponseEnvelope
 	var accountOrZone string
@@ -172,58 +172,58 @@ func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID Acces
 	return
 }
 
-// Union satisfied by [zero_trust.AccessAppsSelfHostedApplication],
-// [zero_trust.AccessAppsSaaSApplication],
-// [zero_trust.AccessAppsBrowserSSHApplication],
-// [zero_trust.AccessAppsBrowserVncApplication],
-// [zero_trust.AccessAppsAppLauncherApplication],
-// [zero_trust.AccessAppsDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessAppsBrowserIsolationPermissionsApplication] or
-// [zero_trust.AccessAppsBookmarkApplication].
-type AccessApps interface {
-	implementsZeroTrustAccessApps()
+// Union satisfied by [zero_trust.ZeroTrustAppsSelfHostedApplication],
+// [zero_trust.ZeroTrustAppsSaaSApplication],
+// [zero_trust.ZeroTrustAppsBrowserSSHApplication],
+// [zero_trust.ZeroTrustAppsBrowserVncApplication],
+// [zero_trust.ZeroTrustAppsAppLauncherApplication],
+// [zero_trust.ZeroTrustAppsDeviceEnrollmentPermissionsApplication],
+// [zero_trust.ZeroTrustAppsBrowserIsolationPermissionsApplication] or
+// [zero_trust.ZeroTrustAppsBookmarkApplication].
+type ZeroTrustApps interface {
+	implementsZeroTrustZeroTrustApps()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApps)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustApps)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsSelfHostedApplication{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsSelfHostedApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsSaaSApplication{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsSaaSApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsBrowserSSHApplication{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsBrowserSSHApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsBrowserVncApplication{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsBrowserVncApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsAppLauncherApplication{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsAppLauncherApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsDeviceEnrollmentPermissionsApplication{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsDeviceEnrollmentPermissionsApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsBrowserIsolationPermissionsApplication{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsBrowserIsolationPermissionsApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsBookmarkApplication{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsBookmarkApplication{}),
 		},
 	)
 }
 
-type AccessAppsSelfHostedApplication struct {
+type ZeroTrustAppsSelfHostedApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
@@ -245,9 +245,9 @@ type AccessAppsSelfHostedApplication struct {
 	Aud string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                       `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppsSelfHostedApplicationCorsHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                  `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool                                          `json:"auto_redirect_to_identity"`
+	CorsHeaders            ZeroTrustAppsSelfHostedApplicationCorsHeaders `json:"cors_headers"`
+	CreatedAt              time.Time                                     `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -287,14 +287,14 @@ type AccessAppsSelfHostedApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags      []string                            `json:"tags"`
-	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
-	JSON      accessAppsSelfHostedApplicationJSON `json:"-"`
+	Tags      []string                               `json:"tags"`
+	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAppsSelfHostedApplicationJSON `json:"-"`
 }
 
-// accessAppsSelfHostedApplicationJSON contains the JSON metadata for the struct
-// [AccessAppsSelfHostedApplication]
-type accessAppsSelfHostedApplicationJSON struct {
+// zeroTrustAppsSelfHostedApplicationJSON contains the JSON metadata for the struct
+// [ZeroTrustAppsSelfHostedApplication]
+type zeroTrustAppsSelfHostedApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
@@ -325,17 +325,17 @@ type accessAppsSelfHostedApplicationJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessAppsSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsSelfHostedApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsSelfHostedApplicationJSON) RawJSON() string {
+func (r zeroTrustAppsSelfHostedApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsSelfHostedApplication) implementsZeroTrustAccessApps() {}
+func (r ZeroTrustAppsSelfHostedApplication) implementsZeroTrustZeroTrustApps() {}
 
-type AccessAppsSelfHostedApplicationCorsHeaders struct {
+type ZeroTrustAppsSelfHostedApplicationCorsHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -348,17 +348,17 @@ type AccessAppsSelfHostedApplicationCorsHeaders struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders []interface{} `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod `json:"allowed_methods"`
+	AllowedMethods []ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []interface{} `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                        `json:"max_age"`
-	JSON   accessAppsSelfHostedApplicationCorsHeadersJSON `json:"-"`
+	MaxAge float64                                           `json:"max_age"`
+	JSON   zeroTrustAppsSelfHostedApplicationCorsHeadersJSON `json:"-"`
 }
 
-// accessAppsSelfHostedApplicationCorsHeadersJSON contains the JSON metadata for
-// the struct [AccessAppsSelfHostedApplicationCorsHeaders]
-type accessAppsSelfHostedApplicationCorsHeadersJSON struct {
+// zeroTrustAppsSelfHostedApplicationCorsHeadersJSON contains the JSON metadata for
+// the struct [ZeroTrustAppsSelfHostedApplicationCorsHeaders]
+type zeroTrustAppsSelfHostedApplicationCorsHeadersJSON struct {
 	AllowAllHeaders  apijson.Field
 	AllowAllMethods  apijson.Field
 	AllowAllOrigins  apijson.Field
@@ -371,37 +371,37 @@ type accessAppsSelfHostedApplicationCorsHeadersJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AccessAppsSelfHostedApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsSelfHostedApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsSelfHostedApplicationCorsHeadersJSON) RawJSON() string {
+func (r zeroTrustAppsSelfHostedApplicationCorsHeadersJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod string
+type ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod string
 
 const (
-	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodGet     AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "GET"
-	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPost    AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "POST"
-	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodHead    AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "HEAD"
-	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPut     AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "PUT"
-	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodDelete  AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "DELETE"
-	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodConnect AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodOptions AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodTrace   AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "TRACE"
-	AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPatch   AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod = "PATCH"
+	ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodGet     ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod = "GET"
+	ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodPost    ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod = "POST"
+	ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodHead    ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod = "HEAD"
+	ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodPut     ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod = "PUT"
+	ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodDelete  ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod = "DELETE"
+	ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodConnect ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod = "CONNECT"
+	ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodOptions ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod = "OPTIONS"
+	ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodTrace   ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod = "TRACE"
+	ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodPatch   ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod = "PATCH"
 )
 
-func (r AccessAppsSelfHostedApplicationCorsHeadersAllowedMethod) IsKnown() bool {
+func (r ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod) IsKnown() bool {
 	switch r {
-	case AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodGet, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPost, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodHead, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPut, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodDelete, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodConnect, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodOptions, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodTrace, AccessAppsSelfHostedApplicationCorsHeadersAllowedMethodPatch:
+	case ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodGet, ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodPost, ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodHead, ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodPut, ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodDelete, ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodConnect, ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodOptions, ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodTrace, ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethodPatch:
 		return true
 	}
 	return false
 }
 
-type AccessAppsSaaSApplication struct {
+type ZeroTrustAppsSaaSApplication struct {
 	// UUID
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -420,20 +420,20 @@ type AccessAppsSaaSApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
-	Name    string                           `json:"name"`
-	SaasApp AccessAppsSaaSApplicationSaasApp `json:"saas_app"`
+	Name    string                              `json:"name"`
+	SaasApp ZeroTrustAppsSaaSApplicationSaasApp `json:"saas_app"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                        `json:"type"`
-	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
-	JSON      accessAppsSaaSApplicationJSON `json:"-"`
+	Type      string                           `json:"type"`
+	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAppsSaaSApplicationJSON `json:"-"`
 }
 
-// accessAppsSaaSApplicationJSON contains the JSON metadata for the struct
-// [AccessAppsSaaSApplication]
-type accessAppsSaaSApplicationJSON struct {
+// zeroTrustAppsSaaSApplicationJSON contains the JSON metadata for the struct
+// [ZeroTrustAppsSaaSApplication]
+type zeroTrustAppsSaaSApplicationJSON struct {
 	ID                     apijson.Field
 	AllowedIDPs            apijson.Field
 	AppLauncherVisible     apijson.Field
@@ -451,54 +451,54 @@ type accessAppsSaaSApplicationJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *AccessAppsSaaSApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsSaaSApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsSaaSApplicationJSON) RawJSON() string {
+func (r zeroTrustAppsSaaSApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsSaaSApplication) implementsZeroTrustAccessApps() {}
+func (r ZeroTrustAppsSaaSApplication) implementsZeroTrustZeroTrustApps() {}
 
 // Union satisfied by
-// [zero_trust.AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp] or
-// [zero_trust.AccessAppsSaaSApplicationSaasAppAccessOidcSaasApp].
-type AccessAppsSaaSApplicationSaasApp interface {
-	implementsZeroTrustAccessAppsSaaSApplicationSaasApp()
+// [zero_trust.ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasApp] or
+// [zero_trust.ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasApp].
+type ZeroTrustAppsSaaSApplicationSaasApp interface {
+	implementsZeroTrustZeroTrustAppsSaaSApplicationSaasApp()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAppsSaaSApplicationSaasApp)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustAppsSaaSApplicationSaasApp)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasApp{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessAppsSaaSApplicationSaasAppAccessOidcSaasApp{}),
+			Type:       reflect.TypeOf(ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasApp{}),
 		},
 	)
 }
 
-type AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp struct {
+type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
-	AuthType AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType `json:"auth_type"`
+	AuthType ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string                                                            `json:"consumer_service_url"`
-	CreatedAt          time.Time                                                         `json:"created_at" format:"date-time"`
-	CustomAttributes   AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes `json:"custom_attributes"`
+	ConsumerServiceURL string                                                               `json:"consumer_service_url"`
+	CreatedAt          time.Time                                                            `json:"created_at" format:"date-time"`
+	CustomAttributes   ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
 	IDPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat `json:"name_id_format"`
+	NameIDFormat ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -515,14 +515,14 @@ type AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 	// A globally unique name for an identity or service provider.
 	SpEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint string                                                `json:"sso_endpoint"`
-	UpdatedAt   time.Time                                             `json:"updated_at" format:"date-time"`
-	JSON        accessAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON `json:"-"`
+	SSOEndpoint string                                                   `json:"sso_endpoint"`
+	UpdatedAt   time.Time                                                `json:"updated_at" format:"date-time"`
+	JSON        zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON `json:"-"`
 }
 
-// accessAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON contains the JSON metadata
-// for the struct [AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp]
-type accessAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON struct {
+// zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON contains the JSON
+// metadata for the struct [ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasApp]
+type zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON struct {
 	AuthType                      apijson.Field
 	ConsumerServiceURL            apijson.Field
 	CreatedAt                     apijson.Field
@@ -540,47 +540,47 @@ type accessAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON struct {
 	ExtraFields                   map[string]apijson.Field
 }
 
-func (r *AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasApp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON) RawJSON() string {
+func (r zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustAccessAppsSaaSApplicationSaasApp() {
+func (r ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustZeroTrustAppsSaaSApplicationSaasApp() {
 }
 
 // Optional identifier indicating the authentication protocol used for the saas
 // app. Required for OIDC. Default if unset is "saml"
-type AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType string
+type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType string
 
 const (
-	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeSaml AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType = "saml"
-	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeOidc AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType = "oidc"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeSaml ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType = "saml"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeOidc ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType = "oidc"
 )
 
-func (r AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType) IsKnown() bool {
+func (r ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthType) IsKnown() bool {
 	switch r {
-	case AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeSaml, AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeOidc:
+	case ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeSaml, ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppAuthTypeOidc:
 		return true
 	}
 	return false
 }
 
-type AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes struct {
+type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes struct {
 	// The name of the attribute.
 	Name string `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat `json:"name_format"`
-	Source     AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource     `json:"source"`
-	JSON       accessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON       `json:"-"`
+	NameFormat ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat `json:"name_format"`
+	Source     ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource     `json:"source"`
+	JSON       zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON       `json:"-"`
 }
 
-// accessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON contains
-// the JSON metadata for the struct
-// [AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes]
-type accessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON struct {
+// zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON
+// contains the JSON metadata for the struct
+// [ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes]
+type zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON struct {
 	Name        apijson.Field
 	NameFormat  apijson.Field
 	Source      apijson.Field
@@ -588,83 +588,83 @@ type accessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON struc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON) RawJSON() string {
+func (r zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON) RawJSON() string {
 	return r.raw
 }
 
 // A globally unique name for an identity or service provider.
-type AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat string
+type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat string
 
 const (
-	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI         AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI         ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
 )
 
-func (r AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat) IsKnown() bool {
+func (r ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat) IsKnown() bool {
 	switch r {
-	case AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic, AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI:
+	case ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic, ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI:
 		return true
 	}
 	return false
 }
 
-type AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource struct {
+type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource struct {
 	// The name of the IdP attribute.
-	Name string                                                                      `json:"name"`
-	JSON accessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON `json:"-"`
+	Name string                                                                         `json:"name"`
+	JSON zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON `json:"-"`
 }
 
-// accessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON
+// zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON
 // contains the JSON metadata for the struct
-// [AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource]
-type accessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON struct {
+// [ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource]
+type zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON) RawJSON() string {
+func (r zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
 // The format of the name identifier sent to the SaaS application.
-type AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat string
+type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat string
 
 const (
-	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID    AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "id"
-	AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "email"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID    ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "id"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "email"
 )
 
-func (r AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat) IsKnown() bool {
+func (r ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat) IsKnown() bool {
 	switch r {
-	case AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID, AccessAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail:
+	case ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID, ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail:
 		return true
 	}
 	return false
 }
 
-type AccessAppsSaaSApplicationSaasAppAccessOidcSaasApp struct {
+type ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasApp struct {
 	// The URL where this applications tile redirects users
 	AppLauncherURL string `json:"app_launcher_url"`
 	// Identifier of the authentication protocol used for the saas app. Required for
 	// OIDC.
-	AuthType AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType `json:"auth_type"`
+	AuthType ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType `json:"auth_type"`
 	// The application client id
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret string    `json:"client_secret"`
 	CreatedAt    time.Time `json:"created_at" format:"date-time"`
 	// The OIDC flows supported by this application
-	GrantTypes []AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType `json:"grant_types"`
+	GrantTypes []ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
 	GroupFilterRegex string `json:"group_filter_regex"`
 	// The Access public certificate that will be used to verify your identity.
@@ -673,14 +673,14 @@ type AccessAppsSaaSApplicationSaasAppAccessOidcSaasApp struct {
 	// tokens
 	RedirectURIs []string `json:"redirect_uris"`
 	// Define the user information shared with access
-	Scopes    []AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope `json:"scopes"`
-	UpdatedAt time.Time                                                `json:"updated_at" format:"date-time"`
-	JSON      accessAppsSaaSApplicationSaasAppAccessOidcSaasAppJSON    `json:"-"`
+	Scopes    []ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScope `json:"scopes"`
+	UpdatedAt time.Time                                                   `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppJSON    `json:"-"`
 }
 
-// accessAppsSaaSApplicationSaasAppAccessOidcSaasAppJSON contains the JSON metadata
-// for the struct [AccessAppsSaaSApplicationSaasAppAccessOidcSaasApp]
-type accessAppsSaaSApplicationSaasAppAccessOidcSaasAppJSON struct {
+// zeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppJSON contains the JSON
+// metadata for the struct [ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasApp]
+type zeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppJSON struct {
 	AppLauncherURL   apijson.Field
 	AuthType         apijson.Field
 	ClientID         apijson.Field
@@ -696,67 +696,67 @@ type accessAppsSaaSApplicationSaasAppAccessOidcSaasAppJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AccessAppsSaaSApplicationSaasAppAccessOidcSaasApp) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasApp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsSaaSApplicationSaasAppAccessOidcSaasAppJSON) RawJSON() string {
+func (r zeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustAccessAppsSaaSApplicationSaasApp() {
+func (r ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustZeroTrustAppsSaaSApplicationSaasApp() {
 }
 
 // Identifier of the authentication protocol used for the saas app. Required for
 // OIDC.
-type AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType string
+type ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType string
 
 const (
-	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeSaml AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType = "saml"
-	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeOidc AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType = "oidc"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeSaml ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType = "saml"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeOidc ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType = "oidc"
 )
 
-func (r AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType) IsKnown() bool {
+func (r ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthType) IsKnown() bool {
 	switch r {
-	case AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeSaml, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeOidc:
+	case ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeSaml, ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppAuthTypeOidc:
 		return true
 	}
 	return false
 }
 
-type AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType string
+type ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType string
 
 const (
-	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode         AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType = "authorization_code"
-	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType = "authorization_code_with_pkce"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode         ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType = "authorization_code"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType = "authorization_code_with_pkce"
 )
 
-func (r AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType) IsKnown() bool {
+func (r ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantType) IsKnown() bool {
 	switch r {
-	case AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce:
+	case ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCode, ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce:
 		return true
 	}
 	return false
 }
 
-type AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope string
+type ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScope string
 
 const (
-	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeOpenid  AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "openid"
-	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeGroups  AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "groups"
-	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeEmail   AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "email"
-	AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeProfile AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "profile"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeOpenid  ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "openid"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeGroups  ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "groups"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeEmail   ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "email"
+	ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeProfile ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScope = "profile"
 )
 
-func (r AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScope) IsKnown() bool {
+func (r ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScope) IsKnown() bool {
 	switch r {
-	case AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeOpenid, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeGroups, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeEmail, AccessAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeProfile:
+	case ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeOpenid, ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeGroups, ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeEmail, ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeProfile:
 		return true
 	}
 	return false
 }
 
-type AccessAppsBrowserSSHApplication struct {
+type ZeroTrustAppsBrowserSSHApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
@@ -778,9 +778,9 @@ type AccessAppsBrowserSSHApplication struct {
 	Aud string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                       `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppsBrowserSSHApplicationCorsHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                  `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool                                          `json:"auto_redirect_to_identity"`
+	CorsHeaders            ZeroTrustAppsBrowserSSHApplicationCorsHeaders `json:"cors_headers"`
+	CreatedAt              time.Time                                     `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -820,14 +820,14 @@ type AccessAppsBrowserSSHApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags      []string                            `json:"tags"`
-	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
-	JSON      accessAppsBrowserSSHApplicationJSON `json:"-"`
+	Tags      []string                               `json:"tags"`
+	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAppsBrowserSSHApplicationJSON `json:"-"`
 }
 
-// accessAppsBrowserSSHApplicationJSON contains the JSON metadata for the struct
-// [AccessAppsBrowserSSHApplication]
-type accessAppsBrowserSSHApplicationJSON struct {
+// zeroTrustAppsBrowserSSHApplicationJSON contains the JSON metadata for the struct
+// [ZeroTrustAppsBrowserSSHApplication]
+type zeroTrustAppsBrowserSSHApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
@@ -858,17 +858,17 @@ type accessAppsBrowserSSHApplicationJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessAppsBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsBrowserSSHApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsBrowserSSHApplicationJSON) RawJSON() string {
+func (r zeroTrustAppsBrowserSSHApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsBrowserSSHApplication) implementsZeroTrustAccessApps() {}
+func (r ZeroTrustAppsBrowserSSHApplication) implementsZeroTrustZeroTrustApps() {}
 
-type AccessAppsBrowserSSHApplicationCorsHeaders struct {
+type ZeroTrustAppsBrowserSSHApplicationCorsHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -881,17 +881,17 @@ type AccessAppsBrowserSSHApplicationCorsHeaders struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders []interface{} `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod `json:"allowed_methods"`
+	AllowedMethods []ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []interface{} `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                        `json:"max_age"`
-	JSON   accessAppsBrowserSSHApplicationCorsHeadersJSON `json:"-"`
+	MaxAge float64                                           `json:"max_age"`
+	JSON   zeroTrustAppsBrowserSSHApplicationCorsHeadersJSON `json:"-"`
 }
 
-// accessAppsBrowserSSHApplicationCorsHeadersJSON contains the JSON metadata for
-// the struct [AccessAppsBrowserSSHApplicationCorsHeaders]
-type accessAppsBrowserSSHApplicationCorsHeadersJSON struct {
+// zeroTrustAppsBrowserSSHApplicationCorsHeadersJSON contains the JSON metadata for
+// the struct [ZeroTrustAppsBrowserSSHApplicationCorsHeaders]
+type zeroTrustAppsBrowserSSHApplicationCorsHeadersJSON struct {
 	AllowAllHeaders  apijson.Field
 	AllowAllMethods  apijson.Field
 	AllowAllOrigins  apijson.Field
@@ -904,37 +904,37 @@ type accessAppsBrowserSSHApplicationCorsHeadersJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AccessAppsBrowserSSHApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsBrowserSSHApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsBrowserSSHApplicationCorsHeadersJSON) RawJSON() string {
+func (r zeroTrustAppsBrowserSSHApplicationCorsHeadersJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod string
+type ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod string
 
 const (
-	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodGet     AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "GET"
-	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPost    AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "POST"
-	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodHead    AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "HEAD"
-	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPut     AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "PUT"
-	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodDelete  AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "DELETE"
-	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodConnect AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodOptions AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodTrace   AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "TRACE"
-	AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPatch   AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "PATCH"
+	ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodGet     ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "GET"
+	ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodPost    ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "POST"
+	ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodHead    ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "HEAD"
+	ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodPut     ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "PUT"
+	ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodDelete  ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "DELETE"
+	ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodConnect ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "CONNECT"
+	ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodOptions ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "OPTIONS"
+	ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodTrace   ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "TRACE"
+	ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodPatch   ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod = "PATCH"
 )
 
-func (r AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethod) IsKnown() bool {
+func (r ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod) IsKnown() bool {
 	switch r {
-	case AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodGet, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPost, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodHead, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPut, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodDelete, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodConnect, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodOptions, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodTrace, AccessAppsBrowserSSHApplicationCorsHeadersAllowedMethodPatch:
+	case ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodGet, ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodPost, ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodHead, ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodPut, ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodDelete, ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodConnect, ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodOptions, ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodTrace, ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethodPatch:
 		return true
 	}
 	return false
 }
 
-type AccessAppsBrowserVncApplication struct {
+type ZeroTrustAppsBrowserVncApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
@@ -956,9 +956,9 @@ type AccessAppsBrowserVncApplication struct {
 	Aud string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                       `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppsBrowserVncApplicationCorsHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                  `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool                                          `json:"auto_redirect_to_identity"`
+	CorsHeaders            ZeroTrustAppsBrowserVncApplicationCorsHeaders `json:"cors_headers"`
+	CreatedAt              time.Time                                     `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -998,14 +998,14 @@ type AccessAppsBrowserVncApplication struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags      []string                            `json:"tags"`
-	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
-	JSON      accessAppsBrowserVncApplicationJSON `json:"-"`
+	Tags      []string                               `json:"tags"`
+	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAppsBrowserVncApplicationJSON `json:"-"`
 }
 
-// accessAppsBrowserVncApplicationJSON contains the JSON metadata for the struct
-// [AccessAppsBrowserVncApplication]
-type accessAppsBrowserVncApplicationJSON struct {
+// zeroTrustAppsBrowserVncApplicationJSON contains the JSON metadata for the struct
+// [ZeroTrustAppsBrowserVncApplication]
+type zeroTrustAppsBrowserVncApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
@@ -1036,17 +1036,17 @@ type accessAppsBrowserVncApplicationJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessAppsBrowserVncApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsBrowserVncApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsBrowserVncApplicationJSON) RawJSON() string {
+func (r zeroTrustAppsBrowserVncApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsBrowserVncApplication) implementsZeroTrustAccessApps() {}
+func (r ZeroTrustAppsBrowserVncApplication) implementsZeroTrustZeroTrustApps() {}
 
-type AccessAppsBrowserVncApplicationCorsHeaders struct {
+type ZeroTrustAppsBrowserVncApplicationCorsHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -1059,17 +1059,17 @@ type AccessAppsBrowserVncApplicationCorsHeaders struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders []interface{} `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod `json:"allowed_methods"`
+	AllowedMethods []ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []interface{} `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                        `json:"max_age"`
-	JSON   accessAppsBrowserVncApplicationCorsHeadersJSON `json:"-"`
+	MaxAge float64                                           `json:"max_age"`
+	JSON   zeroTrustAppsBrowserVncApplicationCorsHeadersJSON `json:"-"`
 }
 
-// accessAppsBrowserVncApplicationCorsHeadersJSON contains the JSON metadata for
-// the struct [AccessAppsBrowserVncApplicationCorsHeaders]
-type accessAppsBrowserVncApplicationCorsHeadersJSON struct {
+// zeroTrustAppsBrowserVncApplicationCorsHeadersJSON contains the JSON metadata for
+// the struct [ZeroTrustAppsBrowserVncApplicationCorsHeaders]
+type zeroTrustAppsBrowserVncApplicationCorsHeadersJSON struct {
 	AllowAllHeaders  apijson.Field
 	AllowAllMethods  apijson.Field
 	AllowAllOrigins  apijson.Field
@@ -1082,39 +1082,39 @@ type accessAppsBrowserVncApplicationCorsHeadersJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AccessAppsBrowserVncApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsBrowserVncApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsBrowserVncApplicationCorsHeadersJSON) RawJSON() string {
+func (r zeroTrustAppsBrowserVncApplicationCorsHeadersJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod string
+type ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod string
 
 const (
-	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodGet     AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "GET"
-	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPost    AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "POST"
-	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodHead    AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "HEAD"
-	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPut     AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "PUT"
-	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodDelete  AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "DELETE"
-	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodConnect AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodOptions AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodTrace   AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "TRACE"
-	AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPatch   AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod = "PATCH"
+	ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodGet     ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod = "GET"
+	ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodPost    ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod = "POST"
+	ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodHead    ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod = "HEAD"
+	ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodPut     ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod = "PUT"
+	ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodDelete  ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod = "DELETE"
+	ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodConnect ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod = "CONNECT"
+	ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodOptions ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod = "OPTIONS"
+	ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodTrace   ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod = "TRACE"
+	ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodPatch   ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod = "PATCH"
 )
 
-func (r AccessAppsBrowserVncApplicationCorsHeadersAllowedMethod) IsKnown() bool {
+func (r ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod) IsKnown() bool {
 	switch r {
-	case AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodGet, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPost, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodHead, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPut, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodDelete, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodConnect, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodOptions, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodTrace, AccessAppsBrowserVncApplicationCorsHeadersAllowedMethodPatch:
+	case ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodGet, ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodPost, ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodHead, ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodPut, ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodDelete, ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodConnect, ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodOptions, ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodTrace, ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethodPatch:
 		return true
 	}
 	return false
 }
 
-type AccessAppsAppLauncherApplication struct {
+type ZeroTrustAppsAppLauncherApplication struct {
 	// The application type.
-	Type AccessAppsAppLauncherApplicationType `json:"type,required"`
+	Type ZeroTrustAppsAppLauncherApplicationType `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -1134,14 +1134,14 @@ type AccessAppsAppLauncherApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                               `json:"session_duration"`
-	UpdatedAt       time.Time                            `json:"updated_at" format:"date-time"`
-	JSON            accessAppsAppLauncherApplicationJSON `json:"-"`
+	SessionDuration string                                  `json:"session_duration"`
+	UpdatedAt       time.Time                               `json:"updated_at" format:"date-time"`
+	JSON            zeroTrustAppsAppLauncherApplicationJSON `json:"-"`
 }
 
-// accessAppsAppLauncherApplicationJSON contains the JSON metadata for the struct
-// [AccessAppsAppLauncherApplication]
-type accessAppsAppLauncherApplicationJSON struct {
+// zeroTrustAppsAppLauncherApplicationJSON contains the JSON metadata for the
+// struct [ZeroTrustAppsAppLauncherApplication]
+type zeroTrustAppsAppLauncherApplicationJSON struct {
 	Type                   apijson.Field
 	ID                     apijson.Field
 	AllowedIDPs            apijson.Field
@@ -1156,42 +1156,42 @@ type accessAppsAppLauncherApplicationJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *AccessAppsAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsAppLauncherApplicationJSON) RawJSON() string {
+func (r zeroTrustAppsAppLauncherApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsAppLauncherApplication) implementsZeroTrustAccessApps() {}
+func (r ZeroTrustAppsAppLauncherApplication) implementsZeroTrustZeroTrustApps() {}
 
 // The application type.
-type AccessAppsAppLauncherApplicationType string
+type ZeroTrustAppsAppLauncherApplicationType string
 
 const (
-	AccessAppsAppLauncherApplicationTypeSelfHosted  AccessAppsAppLauncherApplicationType = "self_hosted"
-	AccessAppsAppLauncherApplicationTypeSaas        AccessAppsAppLauncherApplicationType = "saas"
-	AccessAppsAppLauncherApplicationTypeSSH         AccessAppsAppLauncherApplicationType = "ssh"
-	AccessAppsAppLauncherApplicationTypeVnc         AccessAppsAppLauncherApplicationType = "vnc"
-	AccessAppsAppLauncherApplicationTypeAppLauncher AccessAppsAppLauncherApplicationType = "app_launcher"
-	AccessAppsAppLauncherApplicationTypeWARP        AccessAppsAppLauncherApplicationType = "warp"
-	AccessAppsAppLauncherApplicationTypeBiso        AccessAppsAppLauncherApplicationType = "biso"
-	AccessAppsAppLauncherApplicationTypeBookmark    AccessAppsAppLauncherApplicationType = "bookmark"
-	AccessAppsAppLauncherApplicationTypeDashSSO     AccessAppsAppLauncherApplicationType = "dash_sso"
+	ZeroTrustAppsAppLauncherApplicationTypeSelfHosted  ZeroTrustAppsAppLauncherApplicationType = "self_hosted"
+	ZeroTrustAppsAppLauncherApplicationTypeSaas        ZeroTrustAppsAppLauncherApplicationType = "saas"
+	ZeroTrustAppsAppLauncherApplicationTypeSSH         ZeroTrustAppsAppLauncherApplicationType = "ssh"
+	ZeroTrustAppsAppLauncherApplicationTypeVnc         ZeroTrustAppsAppLauncherApplicationType = "vnc"
+	ZeroTrustAppsAppLauncherApplicationTypeAppLauncher ZeroTrustAppsAppLauncherApplicationType = "app_launcher"
+	ZeroTrustAppsAppLauncherApplicationTypeWARP        ZeroTrustAppsAppLauncherApplicationType = "warp"
+	ZeroTrustAppsAppLauncherApplicationTypeBiso        ZeroTrustAppsAppLauncherApplicationType = "biso"
+	ZeroTrustAppsAppLauncherApplicationTypeBookmark    ZeroTrustAppsAppLauncherApplicationType = "bookmark"
+	ZeroTrustAppsAppLauncherApplicationTypeDashSSO     ZeroTrustAppsAppLauncherApplicationType = "dash_sso"
 )
 
-func (r AccessAppsAppLauncherApplicationType) IsKnown() bool {
+func (r ZeroTrustAppsAppLauncherApplicationType) IsKnown() bool {
 	switch r {
-	case AccessAppsAppLauncherApplicationTypeSelfHosted, AccessAppsAppLauncherApplicationTypeSaas, AccessAppsAppLauncherApplicationTypeSSH, AccessAppsAppLauncherApplicationTypeVnc, AccessAppsAppLauncherApplicationTypeAppLauncher, AccessAppsAppLauncherApplicationTypeWARP, AccessAppsAppLauncherApplicationTypeBiso, AccessAppsAppLauncherApplicationTypeBookmark, AccessAppsAppLauncherApplicationTypeDashSSO:
+	case ZeroTrustAppsAppLauncherApplicationTypeSelfHosted, ZeroTrustAppsAppLauncherApplicationTypeSaas, ZeroTrustAppsAppLauncherApplicationTypeSSH, ZeroTrustAppsAppLauncherApplicationTypeVnc, ZeroTrustAppsAppLauncherApplicationTypeAppLauncher, ZeroTrustAppsAppLauncherApplicationTypeWARP, ZeroTrustAppsAppLauncherApplicationTypeBiso, ZeroTrustAppsAppLauncherApplicationTypeBookmark, ZeroTrustAppsAppLauncherApplicationTypeDashSSO:
 		return true
 	}
 	return false
 }
 
-type AccessAppsDeviceEnrollmentPermissionsApplication struct {
+type ZeroTrustAppsDeviceEnrollmentPermissionsApplication struct {
 	// The application type.
-	Type AccessAppsDeviceEnrollmentPermissionsApplicationType `json:"type,required"`
+	Type ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -1211,14 +1211,14 @@ type AccessAppsDeviceEnrollmentPermissionsApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                               `json:"session_duration"`
-	UpdatedAt       time.Time                                            `json:"updated_at" format:"date-time"`
-	JSON            accessAppsDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                  `json:"session_duration"`
+	UpdatedAt       time.Time                                               `json:"updated_at" format:"date-time"`
+	JSON            zeroTrustAppsDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
-// accessAppsDeviceEnrollmentPermissionsApplicationJSON contains the JSON metadata
-// for the struct [AccessAppsDeviceEnrollmentPermissionsApplication]
-type accessAppsDeviceEnrollmentPermissionsApplicationJSON struct {
+// zeroTrustAppsDeviceEnrollmentPermissionsApplicationJSON contains the JSON
+// metadata for the struct [ZeroTrustAppsDeviceEnrollmentPermissionsApplication]
+type zeroTrustAppsDeviceEnrollmentPermissionsApplicationJSON struct {
 	Type                   apijson.Field
 	ID                     apijson.Field
 	AllowedIDPs            apijson.Field
@@ -1233,42 +1233,42 @@ type accessAppsDeviceEnrollmentPermissionsApplicationJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *AccessAppsDeviceEnrollmentPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsDeviceEnrollmentPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsDeviceEnrollmentPermissionsApplicationJSON) RawJSON() string {
+func (r zeroTrustAppsDeviceEnrollmentPermissionsApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApps() {}
+func (r ZeroTrustAppsDeviceEnrollmentPermissionsApplication) implementsZeroTrustZeroTrustApps() {}
 
 // The application type.
-type AccessAppsDeviceEnrollmentPermissionsApplicationType string
+type ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType string
 
 const (
-	AccessAppsDeviceEnrollmentPermissionsApplicationTypeSelfHosted  AccessAppsDeviceEnrollmentPermissionsApplicationType = "self_hosted"
-	AccessAppsDeviceEnrollmentPermissionsApplicationTypeSaas        AccessAppsDeviceEnrollmentPermissionsApplicationType = "saas"
-	AccessAppsDeviceEnrollmentPermissionsApplicationTypeSSH         AccessAppsDeviceEnrollmentPermissionsApplicationType = "ssh"
-	AccessAppsDeviceEnrollmentPermissionsApplicationTypeVnc         AccessAppsDeviceEnrollmentPermissionsApplicationType = "vnc"
-	AccessAppsDeviceEnrollmentPermissionsApplicationTypeAppLauncher AccessAppsDeviceEnrollmentPermissionsApplicationType = "app_launcher"
-	AccessAppsDeviceEnrollmentPermissionsApplicationTypeWARP        AccessAppsDeviceEnrollmentPermissionsApplicationType = "warp"
-	AccessAppsDeviceEnrollmentPermissionsApplicationTypeBiso        AccessAppsDeviceEnrollmentPermissionsApplicationType = "biso"
-	AccessAppsDeviceEnrollmentPermissionsApplicationTypeBookmark    AccessAppsDeviceEnrollmentPermissionsApplicationType = "bookmark"
-	AccessAppsDeviceEnrollmentPermissionsApplicationTypeDashSSO     AccessAppsDeviceEnrollmentPermissionsApplicationType = "dash_sso"
+	ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeSelfHosted  ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType = "self_hosted"
+	ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeSaas        ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType = "saas"
+	ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeSSH         ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType = "ssh"
+	ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeVnc         ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType = "vnc"
+	ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeAppLauncher ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType = "app_launcher"
+	ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeWARP        ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType = "warp"
+	ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeBiso        ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType = "biso"
+	ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeBookmark    ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType = "bookmark"
+	ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeDashSSO     ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType = "dash_sso"
 )
 
-func (r AccessAppsDeviceEnrollmentPermissionsApplicationType) IsKnown() bool {
+func (r ZeroTrustAppsDeviceEnrollmentPermissionsApplicationType) IsKnown() bool {
 	switch r {
-	case AccessAppsDeviceEnrollmentPermissionsApplicationTypeSelfHosted, AccessAppsDeviceEnrollmentPermissionsApplicationTypeSaas, AccessAppsDeviceEnrollmentPermissionsApplicationTypeSSH, AccessAppsDeviceEnrollmentPermissionsApplicationTypeVnc, AccessAppsDeviceEnrollmentPermissionsApplicationTypeAppLauncher, AccessAppsDeviceEnrollmentPermissionsApplicationTypeWARP, AccessAppsDeviceEnrollmentPermissionsApplicationTypeBiso, AccessAppsDeviceEnrollmentPermissionsApplicationTypeBookmark, AccessAppsDeviceEnrollmentPermissionsApplicationTypeDashSSO:
+	case ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeSelfHosted, ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeSaas, ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeSSH, ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeVnc, ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeAppLauncher, ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeWARP, ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeBiso, ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeBookmark, ZeroTrustAppsDeviceEnrollmentPermissionsApplicationTypeDashSSO:
 		return true
 	}
 	return false
 }
 
-type AccessAppsBrowserIsolationPermissionsApplication struct {
+type ZeroTrustAppsBrowserIsolationPermissionsApplication struct {
 	// The application type.
-	Type AccessAppsBrowserIsolationPermissionsApplicationType `json:"type,required"`
+	Type ZeroTrustAppsBrowserIsolationPermissionsApplicationType `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The identity providers your users can select when connecting to this
@@ -1288,14 +1288,14 @@ type AccessAppsBrowserIsolationPermissionsApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                               `json:"session_duration"`
-	UpdatedAt       time.Time                                            `json:"updated_at" format:"date-time"`
-	JSON            accessAppsBrowserIsolationPermissionsApplicationJSON `json:"-"`
+	SessionDuration string                                                  `json:"session_duration"`
+	UpdatedAt       time.Time                                               `json:"updated_at" format:"date-time"`
+	JSON            zeroTrustAppsBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
-// accessAppsBrowserIsolationPermissionsApplicationJSON contains the JSON metadata
-// for the struct [AccessAppsBrowserIsolationPermissionsApplication]
-type accessAppsBrowserIsolationPermissionsApplicationJSON struct {
+// zeroTrustAppsBrowserIsolationPermissionsApplicationJSON contains the JSON
+// metadata for the struct [ZeroTrustAppsBrowserIsolationPermissionsApplication]
+type zeroTrustAppsBrowserIsolationPermissionsApplicationJSON struct {
 	Type                   apijson.Field
 	ID                     apijson.Field
 	AllowedIDPs            apijson.Field
@@ -1310,40 +1310,40 @@ type accessAppsBrowserIsolationPermissionsApplicationJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *AccessAppsBrowserIsolationPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsBrowserIsolationPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsBrowserIsolationPermissionsApplicationJSON) RawJSON() string {
+func (r zeroTrustAppsBrowserIsolationPermissionsApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApps() {}
+func (r ZeroTrustAppsBrowserIsolationPermissionsApplication) implementsZeroTrustZeroTrustApps() {}
 
 // The application type.
-type AccessAppsBrowserIsolationPermissionsApplicationType string
+type ZeroTrustAppsBrowserIsolationPermissionsApplicationType string
 
 const (
-	AccessAppsBrowserIsolationPermissionsApplicationTypeSelfHosted  AccessAppsBrowserIsolationPermissionsApplicationType = "self_hosted"
-	AccessAppsBrowserIsolationPermissionsApplicationTypeSaas        AccessAppsBrowserIsolationPermissionsApplicationType = "saas"
-	AccessAppsBrowserIsolationPermissionsApplicationTypeSSH         AccessAppsBrowserIsolationPermissionsApplicationType = "ssh"
-	AccessAppsBrowserIsolationPermissionsApplicationTypeVnc         AccessAppsBrowserIsolationPermissionsApplicationType = "vnc"
-	AccessAppsBrowserIsolationPermissionsApplicationTypeAppLauncher AccessAppsBrowserIsolationPermissionsApplicationType = "app_launcher"
-	AccessAppsBrowserIsolationPermissionsApplicationTypeWARP        AccessAppsBrowserIsolationPermissionsApplicationType = "warp"
-	AccessAppsBrowserIsolationPermissionsApplicationTypeBiso        AccessAppsBrowserIsolationPermissionsApplicationType = "biso"
-	AccessAppsBrowserIsolationPermissionsApplicationTypeBookmark    AccessAppsBrowserIsolationPermissionsApplicationType = "bookmark"
-	AccessAppsBrowserIsolationPermissionsApplicationTypeDashSSO     AccessAppsBrowserIsolationPermissionsApplicationType = "dash_sso"
+	ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeSelfHosted  ZeroTrustAppsBrowserIsolationPermissionsApplicationType = "self_hosted"
+	ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeSaas        ZeroTrustAppsBrowserIsolationPermissionsApplicationType = "saas"
+	ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeSSH         ZeroTrustAppsBrowserIsolationPermissionsApplicationType = "ssh"
+	ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeVnc         ZeroTrustAppsBrowserIsolationPermissionsApplicationType = "vnc"
+	ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeAppLauncher ZeroTrustAppsBrowserIsolationPermissionsApplicationType = "app_launcher"
+	ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeWARP        ZeroTrustAppsBrowserIsolationPermissionsApplicationType = "warp"
+	ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeBiso        ZeroTrustAppsBrowserIsolationPermissionsApplicationType = "biso"
+	ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeBookmark    ZeroTrustAppsBrowserIsolationPermissionsApplicationType = "bookmark"
+	ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeDashSSO     ZeroTrustAppsBrowserIsolationPermissionsApplicationType = "dash_sso"
 )
 
-func (r AccessAppsBrowserIsolationPermissionsApplicationType) IsKnown() bool {
+func (r ZeroTrustAppsBrowserIsolationPermissionsApplicationType) IsKnown() bool {
 	switch r {
-	case AccessAppsBrowserIsolationPermissionsApplicationTypeSelfHosted, AccessAppsBrowserIsolationPermissionsApplicationTypeSaas, AccessAppsBrowserIsolationPermissionsApplicationTypeSSH, AccessAppsBrowserIsolationPermissionsApplicationTypeVnc, AccessAppsBrowserIsolationPermissionsApplicationTypeAppLauncher, AccessAppsBrowserIsolationPermissionsApplicationTypeWARP, AccessAppsBrowserIsolationPermissionsApplicationTypeBiso, AccessAppsBrowserIsolationPermissionsApplicationTypeBookmark, AccessAppsBrowserIsolationPermissionsApplicationTypeDashSSO:
+	case ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeSelfHosted, ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeSaas, ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeSSH, ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeVnc, ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeAppLauncher, ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeWARP, ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeBiso, ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeBookmark, ZeroTrustAppsBrowserIsolationPermissionsApplicationTypeDashSSO:
 		return true
 	}
 	return false
 }
 
-type AccessAppsBookmarkApplication struct {
+type ZeroTrustAppsBookmarkApplication struct {
 	// UUID
 	ID                 string      `json:"id"`
 	AppLauncherVisible interface{} `json:"app_launcher_visible"`
@@ -1360,14 +1360,14 @@ type AccessAppsBookmarkApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                            `json:"type"`
-	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
-	JSON      accessAppsBookmarkApplicationJSON `json:"-"`
+	Type      string                               `json:"type"`
+	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAppsBookmarkApplicationJSON `json:"-"`
 }
 
-// accessAppsBookmarkApplicationJSON contains the JSON metadata for the struct
-// [AccessAppsBookmarkApplication]
-type accessAppsBookmarkApplicationJSON struct {
+// zeroTrustAppsBookmarkApplicationJSON contains the JSON metadata for the struct
+// [ZeroTrustAppsBookmarkApplication]
+type zeroTrustAppsBookmarkApplicationJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
 	Aud                apijson.Field
@@ -1382,15 +1382,15 @@ type accessAppsBookmarkApplicationJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessAppsBookmarkApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAppsBookmarkApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessAppsBookmarkApplicationJSON) RawJSON() string {
+func (r zeroTrustAppsBookmarkApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessAppsBookmarkApplication) implementsZeroTrustAccessApps() {}
+func (r ZeroTrustAppsBookmarkApplication) implementsZeroTrustZeroTrustApps() {}
 
 type AccessApplicationDeleteResponse struct {
 	// UUID
@@ -2270,7 +2270,7 @@ func (AccessApplicationNewParamsBookmarkApplication) ImplementsAccessApplication
 type AccessApplicationNewResponseEnvelope struct {
 	Errors   []AccessApplicationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApps                                     `json:"result,required"`
+	Result   ZeroTrustApps                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationNewResponseEnvelopeJSON    `json:"-"`
@@ -3266,7 +3266,7 @@ type AccessApplicationUpdateParamsBookmarkApplicationAppID interface {
 type AccessApplicationUpdateResponseEnvelope struct {
 	Errors   []AccessApplicationUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApps                                        `json:"result,required"`
+	Result   ZeroTrustApps                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -3362,7 +3362,7 @@ type AccessApplicationListParams struct {
 type AccessApplicationListResponseEnvelope struct {
 	Errors   []AccessApplicationListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessApps                                    `json:"result,required,nullable"`
+	Result   []ZeroTrustApps                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessApplicationListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessApplicationListResponseEnvelopeResultInfo `json:"result_info"`
@@ -3601,7 +3601,7 @@ type AccessApplicationGetParamsAppID interface {
 type AccessApplicationGetResponseEnvelope struct {
 	Errors   []AccessApplicationGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApps                                     `json:"result,required"`
+	Result   ZeroTrustApps                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationGetResponseEnvelopeJSON    `json:"-"`

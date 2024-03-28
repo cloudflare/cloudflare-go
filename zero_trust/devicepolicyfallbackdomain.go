@@ -34,7 +34,7 @@ func NewDevicePolicyFallbackDomainService(opts ...option.RequestOption) (r *Devi
 // Sets the list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead. This will only apply to the
 // specified device settings profile.
-func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID string, params DevicePolicyFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]TeamsDevicesFallbackDomain, err error) {
+func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID string, params DevicePolicyFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]DevicesFallbackDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", params.AccountID, policyID)
@@ -48,7 +48,7 @@ func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID
 
 // Fetches a list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead.
-func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query DevicePolicyFallbackDomainListParams, opts ...option.RequestOption) (res *[]TeamsDevicesFallbackDomain, err error) {
+func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query DevicePolicyFallbackDomainListParams, opts ...option.RequestOption) (res *[]DevicesFallbackDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/policy/fallback_domains", query.AccountID)
@@ -63,7 +63,7 @@ func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query Devi
 // Fetches the list of domains to bypass Gateway DNS resolution from a specified
 // device settings profile. These domains will use the specified local DNS resolver
 // instead.
-func (r *DevicePolicyFallbackDomainService) Get(ctx context.Context, policyID string, query DevicePolicyFallbackDomainGetParams, opts ...option.RequestOption) (res *[]TeamsDevicesFallbackDomain, err error) {
+func (r *DevicePolicyFallbackDomainService) Get(ctx context.Context, policyID string, query DevicePolicyFallbackDomainGetParams, opts ...option.RequestOption) (res *[]DevicesFallbackDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/fallback_domains", query.AccountID, policyID)
@@ -75,19 +75,19 @@ func (r *DevicePolicyFallbackDomainService) Get(ctx context.Context, policyID st
 	return
 }
 
-type TeamsDevicesFallbackDomain struct {
+type DevicesFallbackDomain struct {
 	// The domain suffix to match when resolving locally.
 	Suffix string `json:"suffix,required"`
 	// A description of the fallback domain, displayed in the client UI.
 	Description string `json:"description"`
 	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}                  `json:"dns_server"`
-	JSON      teamsDevicesFallbackDomainJSON `json:"-"`
+	DNSServer []interface{}             `json:"dns_server"`
+	JSON      devicesFallbackDomainJSON `json:"-"`
 }
 
-// teamsDevicesFallbackDomainJSON contains the JSON metadata for the struct
-// [TeamsDevicesFallbackDomain]
-type teamsDevicesFallbackDomainJSON struct {
+// devicesFallbackDomainJSON contains the JSON metadata for the struct
+// [DevicesFallbackDomain]
+type devicesFallbackDomainJSON struct {
 	Suffix      apijson.Field
 	Description apijson.Field
 	DNSServer   apijson.Field
@@ -95,15 +95,15 @@ type teamsDevicesFallbackDomainJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesFallbackDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicesFallbackDomain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesFallbackDomainJSON) RawJSON() string {
+func (r devicesFallbackDomainJSON) RawJSON() string {
 	return r.raw
 }
 
-type TeamsDevicesFallbackDomainParam struct {
+type DevicesFallbackDomainParam struct {
 	// The domain suffix to match when resolving locally.
 	Suffix param.Field[string] `json:"suffix,required"`
 	// A description of the fallback domain, displayed in the client UI.
@@ -112,13 +112,13 @@ type TeamsDevicesFallbackDomainParam struct {
 	DNSServer param.Field[[]interface{}] `json:"dns_server"`
 }
 
-func (r TeamsDevicesFallbackDomainParam) MarshalJSON() (data []byte, err error) {
+func (r DevicesFallbackDomainParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type DevicePolicyFallbackDomainUpdateParams struct {
-	AccountID param.Field[string]                            `path:"account_id,required"`
-	Body      param.Field[[]TeamsDevicesFallbackDomainParam] `json:"body,required"`
+	AccountID param.Field[string]                       `path:"account_id,required"`
+	Body      param.Field[[]DevicesFallbackDomainParam] `json:"body,required"`
 }
 
 func (r DevicePolicyFallbackDomainUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -128,7 +128,7 @@ func (r DevicePolicyFallbackDomainUpdateParams) MarshalJSON() (data []byte, err 
 type DevicePolicyFallbackDomainUpdateResponseEnvelope struct {
 	Errors   []DevicePolicyFallbackDomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyFallbackDomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesFallbackDomain                               `json:"result,required,nullable"`
+	Result   []DevicesFallbackDomain                                    `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyFallbackDomainUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyFallbackDomainUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -256,7 +256,7 @@ type DevicePolicyFallbackDomainListParams struct {
 type DevicePolicyFallbackDomainListResponseEnvelope struct {
 	Errors   []DevicePolicyFallbackDomainListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyFallbackDomainListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesFallbackDomain                             `json:"result,required,nullable"`
+	Result   []DevicesFallbackDomain                                  `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyFallbackDomainListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyFallbackDomainListResponseEnvelopeResultInfo `json:"result_info"`
@@ -383,7 +383,7 @@ type DevicePolicyFallbackDomainGetParams struct {
 type DevicePolicyFallbackDomainGetResponseEnvelope struct {
 	Errors   []DevicePolicyFallbackDomainGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyFallbackDomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesFallbackDomain                            `json:"result,required,nullable"`
+	Result   []DevicesFallbackDomain                                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyFallbackDomainGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyFallbackDomainGetResponseEnvelopeResultInfo `json:"result_info"`

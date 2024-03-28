@@ -33,7 +33,7 @@ func NewSettingZeroRTTService(opts ...option.RequestOption) (r *SettingZeroRTTSe
 }
 
 // Changes the 0-RTT session resumption setting.
-func (r *SettingZeroRTTService) Edit(ctx context.Context, params SettingZeroRTTEditParams, opts ...option.RequestOption) (res *Zones0rtt, err error) {
+func (r *SettingZeroRTTService) Edit(ctx context.Context, params SettingZeroRTTEditParams, opts ...option.RequestOption) (res *ZoneSetting0rtt, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingZeroRTTEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/0rtt", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *SettingZeroRTTService) Edit(ctx context.Context, params SettingZeroRTTE
 }
 
 // Gets 0-RTT session resumption setting.
-func (r *SettingZeroRTTService) Get(ctx context.Context, query SettingZeroRTTGetParams, opts ...option.RequestOption) (res *Zones0rtt, err error) {
+func (r *SettingZeroRTTService) Get(ctx context.Context, query SettingZeroRTTGetParams, opts ...option.RequestOption) (res *ZoneSetting0rtt, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingZeroRTTGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/0rtt", query.ZoneID)
@@ -59,21 +59,21 @@ func (r *SettingZeroRTTService) Get(ctx context.Context, query SettingZeroRTTGet
 }
 
 // 0-RTT session resumption enabled for this zone.
-type Zones0rtt struct {
+type ZoneSetting0rtt struct {
 	// ID of the zone setting.
-	ID Zones0rttID `json:"id,required"`
+	ID ZoneSetting0rttID `json:"id,required"`
 	// Current value of the zone setting.
-	Value Zones0rttValue `json:"value,required"`
+	Value ZoneSetting0rttValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable Zones0rttEditable `json:"editable"`
+	Editable ZoneSetting0rttEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zones0rttJSON `json:"-"`
+	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSetting0rttJSON `json:"-"`
 }
 
-// zones0rttJSON contains the JSON metadata for the struct [Zones0rtt]
-type zones0rttJSON struct {
+// zoneSetting0rttJSON contains the JSON metadata for the struct [ZoneSetting0rtt]
+type zoneSetting0rttJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -82,44 +82,44 @@ type zones0rttJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Zones0rtt) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSetting0rtt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zones0rttJSON) RawJSON() string {
+func (r zoneSetting0rttJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Zones0rtt) implementsZonesSettingEditResponse() {}
+func (r ZoneSetting0rtt) implementsZonesSettingEditResponse() {}
 
-func (r Zones0rtt) implementsZonesSettingGetResponse() {}
+func (r ZoneSetting0rtt) implementsZonesSettingGetResponse() {}
 
 // ID of the zone setting.
-type Zones0rttID string
+type ZoneSetting0rttID string
 
 const (
-	Zones0rttID0rtt Zones0rttID = "0rtt"
+	ZoneSetting0rttID0rtt ZoneSetting0rttID = "0rtt"
 )
 
-func (r Zones0rttID) IsKnown() bool {
+func (r ZoneSetting0rttID) IsKnown() bool {
 	switch r {
-	case Zones0rttID0rtt:
+	case ZoneSetting0rttID0rtt:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type Zones0rttValue string
+type ZoneSetting0rttValue string
 
 const (
-	Zones0rttValueOn  Zones0rttValue = "on"
-	Zones0rttValueOff Zones0rttValue = "off"
+	ZoneSetting0rttValueOn  ZoneSetting0rttValue = "on"
+	ZoneSetting0rttValueOff ZoneSetting0rttValue = "off"
 )
 
-func (r Zones0rttValue) IsKnown() bool {
+func (r ZoneSetting0rttValue) IsKnown() bool {
 	switch r {
-	case Zones0rttValueOn, Zones0rttValueOff:
+	case ZoneSetting0rttValueOn, ZoneSetting0rttValueOff:
 		return true
 	}
 	return false
@@ -127,34 +127,34 @@ func (r Zones0rttValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type Zones0rttEditable bool
+type ZoneSetting0rttEditable bool
 
 const (
-	Zones0rttEditableTrue  Zones0rttEditable = true
-	Zones0rttEditableFalse Zones0rttEditable = false
+	ZoneSetting0rttEditableTrue  ZoneSetting0rttEditable = true
+	ZoneSetting0rttEditableFalse ZoneSetting0rttEditable = false
 )
 
-func (r Zones0rttEditable) IsKnown() bool {
+func (r ZoneSetting0rttEditable) IsKnown() bool {
 	switch r {
-	case Zones0rttEditableTrue, Zones0rttEditableFalse:
+	case ZoneSetting0rttEditableTrue, ZoneSetting0rttEditableFalse:
 		return true
 	}
 	return false
 }
 
 // 0-RTT session resumption enabled for this zone.
-type Zones0rttParam struct {
+type ZoneSetting0rttParam struct {
 	// ID of the zone setting.
-	ID param.Field[Zones0rttID] `json:"id,required"`
+	ID param.Field[ZoneSetting0rttID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[Zones0rttValue] `json:"value,required"`
+	Value param.Field[ZoneSetting0rttValue] `json:"value,required"`
 }
 
-func (r Zones0rttParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSetting0rttParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r Zones0rttParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSetting0rttParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingZeroRTTEditParams struct {
 	// Identifier
@@ -189,7 +189,7 @@ type SettingZeroRTTEditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.
-	Result Zones0rtt                              `json:"result"`
+	Result ZoneSetting0rtt                        `json:"result"`
 	JSON   settingZeroRTTEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -269,7 +269,7 @@ type SettingZeroRTTGetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.
-	Result Zones0rtt                             `json:"result"`
+	Result ZoneSetting0rtt                       `json:"result"`
 	JSON   settingZeroRTTGetResponseEnvelopeJSON `json:"-"`
 }
 

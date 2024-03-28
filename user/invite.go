@@ -92,7 +92,7 @@ type InviteListResponse struct {
 	// Organization name.
 	OrganizationName string `json:"organization_name"`
 	// Roles to be assigned to this user.
-	Roles []accounts.IamSchemasRole `json:"roles"`
+	Roles []accounts.Role `json:"roles"`
 	// Current status of the invitation.
 	Status InviteListResponseStatus `json:"status"`
 	JSON   inviteListResponseJSON   `json:"-"`

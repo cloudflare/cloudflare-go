@@ -35,7 +35,7 @@ func NewClientCertificateService(opts ...option.RequestOption) (r *ClientCertifi
 }
 
 // Create a new API Shield mTLS Client Certificate
-func (r *ClientCertificateService) New(ctx context.Context, params ClientCertificateNewParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesClientCertificate, err error) {
+func (r *ClientCertificateService) New(ctx context.Context, params ClientCertificateNewParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/client_certificates", params.ZoneID)
@@ -49,7 +49,7 @@ func (r *ClientCertificateService) New(ctx context.Context, params ClientCertifi
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
 // using Pagination
-func (r *ClientCertificateService) List(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TLSCertificatesAndHostnamesClientCertificate], err error) {
+func (r *ClientCertificateService) List(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ClientCertificate], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,13 +68,13 @@ func (r *ClientCertificateService) List(ctx context.Context, params ClientCertif
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
 // using Pagination
-func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TLSCertificatesAndHostnamesClientCertificate] {
+func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ClientCertificate] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Set a API Shield mTLS Client Certificate to pending_revocation status for
 // processing to revoked status.
-func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificateID string, body ClientCertificateDeleteParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesClientCertificate, err error) {
+func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificateID string, body ClientCertificateDeleteParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/client_certificates/%s", body.ZoneID, clientCertificateID)
@@ -88,7 +88,7 @@ func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificate
 
 // If a API Shield mTLS Client Certificate is in a pending_revocation state, you
 // may reactivate it with this endpoint.
-func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID string, body ClientCertificateEditParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesClientCertificate, err error) {
+func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID string, body ClientCertificateEditParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/client_certificates/%s", body.ZoneID, clientCertificateID)
@@ -101,7 +101,7 @@ func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID
 }
 
 // Get Details for a single mTLS API Shield Client Certificate
-func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID string, query ClientCertificateGetParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesClientCertificate, err error) {
+func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID string, query ClientCertificateGetParams, opts ...option.RequestOption) (res *ClientCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/client_certificates/%s", query.ZoneID, clientCertificateID)
@@ -113,13 +113,13 @@ func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID 
 	return
 }
 
-type TLSCertificatesAndHostnamesClientCertificate struct {
+type ClientCertificate struct {
 	// Identifier
 	ID string `json:"id"`
 	// The Client Certificate PEM
 	Certificate string `json:"certificate"`
 	// Certificate Authority used to issue the Client Certificate
-	CertificateAuthority TLSCertificatesAndHostnamesClientCertificateCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority ClientCertificateCertificateAuthority `json:"certificate_authority"`
 	// Common Name of the Client Certificate
 	CommonName string `json:"common_name"`
 	// Country, provided by the CSR
@@ -148,15 +148,15 @@ type TLSCertificatesAndHostnamesClientCertificate struct {
 	State string `json:"state"`
 	// Client Certificates may be active or revoked, and the pending_reactivation or
 	// pending_revocation represent in-progress asynchronous transitions
-	Status TLSCertificatesAndHostnamesClientCertificateStatus `json:"status"`
+	Status ClientCertificateStatus `json:"status"`
 	// The number of days the Client Certificate will be valid after the issued_on date
-	ValidityDays int64                                            `json:"validity_days"`
-	JSON         tlsCertificatesAndHostnamesClientCertificateJSON `json:"-"`
+	ValidityDays int64                 `json:"validity_days"`
+	JSON         clientCertificateJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesClientCertificateJSON contains the JSON metadata for
-// the struct [TLSCertificatesAndHostnamesClientCertificate]
-type tlsCertificatesAndHostnamesClientCertificateJSON struct {
+// clientCertificateJSON contains the JSON metadata for the struct
+// [ClientCertificate]
+type clientCertificateJSON struct {
 	ID                   apijson.Field
 	Certificate          apijson.Field
 	CertificateAuthority apijson.Field
@@ -179,53 +179,52 @@ type tlsCertificatesAndHostnamesClientCertificateJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesClientCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *ClientCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesClientCertificateJSON) RawJSON() string {
+func (r clientCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
 // Certificate Authority used to issue the Client Certificate
-type TLSCertificatesAndHostnamesClientCertificateCertificateAuthority struct {
-	ID   string                                                               `json:"id"`
-	Name string                                                               `json:"name"`
-	JSON tlsCertificatesAndHostnamesClientCertificateCertificateAuthorityJSON `json:"-"`
+type ClientCertificateCertificateAuthority struct {
+	ID   string                                    `json:"id"`
+	Name string                                    `json:"name"`
+	JSON clientCertificateCertificateAuthorityJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesClientCertificateCertificateAuthorityJSON contains
-// the JSON metadata for the struct
-// [TLSCertificatesAndHostnamesClientCertificateCertificateAuthority]
-type tlsCertificatesAndHostnamesClientCertificateCertificateAuthorityJSON struct {
+// clientCertificateCertificateAuthorityJSON contains the JSON metadata for the
+// struct [ClientCertificateCertificateAuthority]
+type clientCertificateCertificateAuthorityJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesClientCertificateCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
+func (r *ClientCertificateCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesClientCertificateCertificateAuthorityJSON) RawJSON() string {
+func (r clientCertificateCertificateAuthorityJSON) RawJSON() string {
 	return r.raw
 }
 
 // Client Certificates may be active or revoked, and the pending_reactivation or
 // pending_revocation represent in-progress asynchronous transitions
-type TLSCertificatesAndHostnamesClientCertificateStatus string
+type ClientCertificateStatus string
 
 const (
-	TLSCertificatesAndHostnamesClientCertificateStatusActive              TLSCertificatesAndHostnamesClientCertificateStatus = "active"
-	TLSCertificatesAndHostnamesClientCertificateStatusPendingReactivation TLSCertificatesAndHostnamesClientCertificateStatus = "pending_reactivation"
-	TLSCertificatesAndHostnamesClientCertificateStatusPendingRevocation   TLSCertificatesAndHostnamesClientCertificateStatus = "pending_revocation"
-	TLSCertificatesAndHostnamesClientCertificateStatusRevoked             TLSCertificatesAndHostnamesClientCertificateStatus = "revoked"
+	ClientCertificateStatusActive              ClientCertificateStatus = "active"
+	ClientCertificateStatusPendingReactivation ClientCertificateStatus = "pending_reactivation"
+	ClientCertificateStatusPendingRevocation   ClientCertificateStatus = "pending_revocation"
+	ClientCertificateStatusRevoked             ClientCertificateStatus = "revoked"
 )
 
-func (r TLSCertificatesAndHostnamesClientCertificateStatus) IsKnown() bool {
+func (r ClientCertificateStatus) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesClientCertificateStatusActive, TLSCertificatesAndHostnamesClientCertificateStatusPendingReactivation, TLSCertificatesAndHostnamesClientCertificateStatusPendingRevocation, TLSCertificatesAndHostnamesClientCertificateStatusRevoked:
+	case ClientCertificateStatusActive, ClientCertificateStatusPendingReactivation, ClientCertificateStatusPendingRevocation, ClientCertificateStatusRevoked:
 		return true
 	}
 	return false
@@ -247,7 +246,7 @@ func (r ClientCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type ClientCertificateNewResponseEnvelope struct {
 	Errors   []ClientCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClientCertificateNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesClientCertificate   `json:"result,required"`
+	Result   ClientCertificate                              `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -384,7 +383,7 @@ type ClientCertificateDeleteParams struct {
 type ClientCertificateDeleteResponseEnvelope struct {
 	Errors   []ClientCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClientCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesClientCertificate      `json:"result,required"`
+	Result   ClientCertificate                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -478,7 +477,7 @@ type ClientCertificateEditParams struct {
 type ClientCertificateEditResponseEnvelope struct {
 	Errors   []ClientCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClientCertificateEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesClientCertificate    `json:"result,required"`
+	Result   ClientCertificate                               `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -572,7 +571,7 @@ type ClientCertificateGetParams struct {
 type ClientCertificateGetResponseEnvelope struct {
 	Errors   []ClientCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClientCertificateGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesClientCertificate   `json:"result,required"`
+	Result   ClientCertificate                              `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateGetResponseEnvelopeJSON    `json:"-"`

@@ -32,7 +32,7 @@ func NewAccessTagService(opts ...option.RequestOption) (r *AccessTagService) {
 }
 
 // Create a tag
-func (r *AccessTagService) New(ctx context.Context, identifier string, body AccessTagNewParams, opts ...option.RequestOption) (res *AccessTag, err error) {
+func (r *AccessTagService) New(ctx context.Context, identifier string, body AccessTagNewParams, opts ...option.RequestOption) (res *ZeroTrustTag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/tags", identifier)
@@ -45,7 +45,7 @@ func (r *AccessTagService) New(ctx context.Context, identifier string, body Acce
 }
 
 // Update a tag
-func (r *AccessTagService) Update(ctx context.Context, identifier string, tagName string, body AccessTagUpdateParams, opts ...option.RequestOption) (res *AccessTag, err error) {
+func (r *AccessTagService) Update(ctx context.Context, identifier string, tagName string, body AccessTagUpdateParams, opts ...option.RequestOption) (res *ZeroTrustTag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, tagName)
@@ -58,7 +58,7 @@ func (r *AccessTagService) Update(ctx context.Context, identifier string, tagNam
 }
 
 // List tags
-func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessTag, err error) {
+func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]ZeroTrustTag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/tags", identifier)
@@ -84,7 +84,7 @@ func (r *AccessTagService) Delete(ctx context.Context, identifier string, name s
 }
 
 // Get a tag
-func (r *AccessTagService) Get(ctx context.Context, identifier string, name string, opts ...option.RequestOption) (res *AccessTag, err error) {
+func (r *AccessTagService) Get(ctx context.Context, identifier string, name string, opts ...option.RequestOption) (res *ZeroTrustTag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, name)
@@ -97,18 +97,18 @@ func (r *AccessTagService) Get(ctx context.Context, identifier string, name stri
 }
 
 // A tag
-type AccessTag struct {
+type ZeroTrustTag struct {
 	// The name of the tag
 	Name string `json:"name,required"`
 	// The number of applications that have this tag
-	AppCount  int64         `json:"app_count"`
-	CreatedAt time.Time     `json:"created_at" format:"date-time"`
-	UpdatedAt time.Time     `json:"updated_at" format:"date-time"`
-	JSON      accessTagJSON `json:"-"`
+	AppCount  int64            `json:"app_count"`
+	CreatedAt time.Time        `json:"created_at" format:"date-time"`
+	UpdatedAt time.Time        `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustTagJSON `json:"-"`
 }
 
-// accessTagJSON contains the JSON metadata for the struct [AccessTag]
-type accessTagJSON struct {
+// zeroTrustTagJSON contains the JSON metadata for the struct [ZeroTrustTag]
+type zeroTrustTagJSON struct {
 	Name        apijson.Field
 	AppCount    apijson.Field
 	CreatedAt   apijson.Field
@@ -117,11 +117,11 @@ type accessTagJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessTag) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustTag) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessTagJSON) RawJSON() string {
+func (r zeroTrustTagJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -160,7 +160,7 @@ type AccessTagNewResponseEnvelope struct {
 	Errors   []AccessTagNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessTagNewResponseEnvelopeMessages `json:"messages,required"`
 	// A tag
-	Result AccessTag `json:"result,required"`
+	Result ZeroTrustTag `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessTagNewResponseEnvelopeJSON    `json:"-"`
@@ -259,7 +259,7 @@ type AccessTagUpdateResponseEnvelope struct {
 	Errors   []AccessTagUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessTagUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// A tag
-	Result AccessTag `json:"result,required"`
+	Result ZeroTrustTag `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessTagUpdateResponseEnvelopeJSON    `json:"-"`
@@ -348,7 +348,7 @@ func (r AccessTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type AccessTagListResponseEnvelope struct {
 	Errors   []AccessTagListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessTagListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessTag                             `json:"result,required,nullable"`
+	Result   []ZeroTrustTag                          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessTagListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessTagListResponseEnvelopeResultInfo `json:"result_info"`
@@ -560,7 +560,7 @@ type AccessTagGetResponseEnvelope struct {
 	Errors   []AccessTagGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessTagGetResponseEnvelopeMessages `json:"messages,required"`
 	// A tag
-	Result AccessTag `json:"result,required"`
+	Result ZeroTrustTag `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessTagGetResponseEnvelopeJSON    `json:"-"`

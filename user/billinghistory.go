@@ -34,7 +34,7 @@ func NewBillingHistoryService(opts ...option.RequestOption) (r *BillingHistorySe
 }
 
 // Accesses your billing history object.
-func (r *BillingHistoryService) Get(ctx context.Context, query BillingHistoryGetParams, opts ...option.RequestOption) (res *[]BillSubsAPIBillingHistory, err error) {
+func (r *BillingHistoryService) Get(ctx context.Context, query BillingHistoryGetParams, opts ...option.RequestOption) (res *[]BillingHistory, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BillingHistoryGetResponseEnvelope
 	path := "user/billing/history"
@@ -46,7 +46,7 @@ func (r *BillingHistoryService) Get(ctx context.Context, query BillingHistoryGet
 	return
 }
 
-type BillSubsAPIBillingHistory struct {
+type BillingHistory struct {
 	// Billing item identifier tag.
 	ID string `json:"id,required"`
 	// The billing item action.
@@ -60,14 +60,13 @@ type BillSubsAPIBillingHistory struct {
 	// When the billing item was created.
 	OccurredAt time.Time `json:"occurred_at,required" format:"date-time"`
 	// The billing item type.
-	Type string                        `json:"type,required"`
-	Zone BillSubsAPIBillingHistoryZone `json:"zone,required"`
-	JSON billSubsAPIBillingHistoryJSON `json:"-"`
+	Type string             `json:"type,required"`
+	Zone BillingHistoryZone `json:"zone,required"`
+	JSON billingHistoryJSON `json:"-"`
 }
 
-// billSubsAPIBillingHistoryJSON contains the JSON metadata for the struct
-// [BillSubsAPIBillingHistory]
-type billSubsAPIBillingHistoryJSON struct {
+// billingHistoryJSON contains the JSON metadata for the struct [BillingHistory]
+type billingHistoryJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Amount      apijson.Field
@@ -80,32 +79,32 @@ type billSubsAPIBillingHistoryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BillSubsAPIBillingHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *BillingHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r billSubsAPIBillingHistoryJSON) RawJSON() string {
+func (r billingHistoryJSON) RawJSON() string {
 	return r.raw
 }
 
-type BillSubsAPIBillingHistoryZone struct {
-	Name interface{}                       `json:"name"`
-	JSON billSubsAPIBillingHistoryZoneJSON `json:"-"`
+type BillingHistoryZone struct {
+	Name interface{}            `json:"name"`
+	JSON billingHistoryZoneJSON `json:"-"`
 }
 
-// billSubsAPIBillingHistoryZoneJSON contains the JSON metadata for the struct
-// [BillSubsAPIBillingHistoryZone]
-type billSubsAPIBillingHistoryZoneJSON struct {
+// billingHistoryZoneJSON contains the JSON metadata for the struct
+// [BillingHistoryZone]
+type billingHistoryZoneJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BillSubsAPIBillingHistoryZone) UnmarshalJSON(data []byte) (err error) {
+func (r *BillingHistoryZone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r billSubsAPIBillingHistoryZoneJSON) RawJSON() string {
+func (r billingHistoryZoneJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -147,7 +146,7 @@ func (r BillingHistoryGetParamsOrder) IsKnown() bool {
 type BillingHistoryGetResponseEnvelope struct {
 	Errors   []BillingHistoryGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []BillingHistoryGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []BillSubsAPIBillingHistory                 `json:"result,required,nullable"`
+	Result   []BillingHistory                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    BillingHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo BillingHistoryGetResponseEnvelopeResultInfo `json:"result_info"`

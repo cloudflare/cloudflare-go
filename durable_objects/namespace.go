@@ -33,7 +33,7 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 }
 
 // Returns the Durable Object namespaces owned by an account.
-func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) (res *[]WorkersNamespace, err error) {
+func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) (res *[]DurableObjectNamespace, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces", query.AccountID)
@@ -45,17 +45,17 @@ func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, 
 	return
 }
 
-type WorkersNamespace struct {
-	ID     interface{}          `json:"id"`
-	Class  interface{}          `json:"class"`
-	Name   interface{}          `json:"name"`
-	Script interface{}          `json:"script"`
-	JSON   workersNamespaceJSON `json:"-"`
+type DurableObjectNamespace struct {
+	ID     interface{}                `json:"id"`
+	Class  interface{}                `json:"class"`
+	Name   interface{}                `json:"name"`
+	Script interface{}                `json:"script"`
+	JSON   durableObjectNamespaceJSON `json:"-"`
 }
 
-// workersNamespaceJSON contains the JSON metadata for the struct
-// [WorkersNamespace]
-type workersNamespaceJSON struct {
+// durableObjectNamespaceJSON contains the JSON metadata for the struct
+// [DurableObjectNamespace]
+type durableObjectNamespaceJSON struct {
 	ID          apijson.Field
 	Class       apijson.Field
 	Name        apijson.Field
@@ -64,11 +64,11 @@ type workersNamespaceJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersNamespace) UnmarshalJSON(data []byte) (err error) {
+func (r *DurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersNamespaceJSON) RawJSON() string {
+func (r durableObjectNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -80,7 +80,7 @@ type NamespaceListParams struct {
 type NamespaceListResponseEnvelope struct {
 	Errors   []NamespaceListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NamespaceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersNamespace                      `json:"result,required,nullable"`
+	Result   []DurableObjectNamespace                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    NamespaceListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo NamespaceListResponseEnvelopeResultInfo `json:"result_info"`

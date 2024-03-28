@@ -31,7 +31,7 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 }
 
 // Create a new preview health check.
-func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *PreviewService) New(ctx context.Context, params PreviewNewParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/healthchecks/preview", params.ZoneID)
@@ -57,7 +57,7 @@ func (r *PreviewService) Delete(ctx context.Context, healthcheckID string, body 
 }
 
 // Fetch a single configured health check preview.
-func (r *PreviewService) Get(ctx context.Context, healthcheckID string, query PreviewGetParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *PreviewService) Get(ctx context.Context, healthcheckID string, query PreviewGetParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/healthchecks/preview/%s", query.ZoneID, healthcheckID)
@@ -240,7 +240,7 @@ func (r PreviewNewParamsTcpConfigMethod) IsKnown() bool {
 type PreviewNewResponseEnvelope struct {
 	Errors   []PreviewNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PreviewNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   HealthchecksHealthchecks             `json:"result,required"`
+	Result   Healthcheck                          `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewNewResponseEnvelopeJSON    `json:"-"`
@@ -428,7 +428,7 @@ type PreviewGetParams struct {
 type PreviewGetResponseEnvelope struct {
 	Errors   []PreviewGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PreviewGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   HealthchecksHealthchecks             `json:"result,required"`
+	Result   Healthcheck                          `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`

@@ -33,7 +33,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Only available for the Waiting Room Advanced subscription. Creates a rule for a
 // waiting room.
-func (r *RuleService) New(ctx context.Context, zoneIdentifier string, waitingRoomID string, body RuleNewParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) New(ctx context.Context, zoneIdentifier string, waitingRoomID string, body RuleNewParams, opts ...option.RequestOption) (res *[]WaitingroomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", zoneIdentifier, waitingRoomID)
@@ -47,7 +47,7 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, waitingRoo
 
 // Only available for the Waiting Room Advanced subscription. Replaces all rules
 // for a waiting room.
-func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID string, body RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID string, body RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingroomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", zoneIdentifier, waitingRoomID)
@@ -60,7 +60,7 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waiting
 }
 
 // Lists rules for a waiting room.
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *[]WaitingroomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules", zoneIdentifier, waitingRoomID)
@@ -73,7 +73,7 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRo
 }
 
 // Deletes a rule for a waiting room.
-func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID string, ruleID string, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID string, ruleID string, opts ...option.RequestOption) (res *[]WaitingroomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
@@ -86,7 +86,7 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, waiting
 }
 
 // Patches a rule for a waiting room.
-func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID string, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
+func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID string, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *[]WaitingroomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
@@ -98,11 +98,11 @@ func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, waitingRo
 	return
 }
 
-type WaitingroomRuleResult struct {
+type WaitingroomRule struct {
 	// The ID of the rule.
 	ID string `json:"id"`
 	// The action to take when the expression matches.
-	Action WaitingroomRuleResultAction `json:"action"`
+	Action WaitingroomRuleAction `json:"action"`
 	// The description of the rule.
 	Description string `json:"description"`
 	// When set to true, the rule is enabled.
@@ -111,13 +111,12 @@ type WaitingroomRuleResult struct {
 	Expression  string    `json:"expression"`
 	LastUpdated time.Time `json:"last_updated" format:"date-time"`
 	// The version of the rule.
-	Version string                    `json:"version"`
-	JSON    waitingroomRuleResultJSON `json:"-"`
+	Version string              `json:"version"`
+	JSON    waitingroomRuleJSON `json:"-"`
 }
 
-// waitingroomRuleResultJSON contains the JSON metadata for the struct
-// [WaitingroomRuleResult]
-type waitingroomRuleResultJSON struct {
+// waitingroomRuleJSON contains the JSON metadata for the struct [WaitingroomRule]
+type waitingroomRuleJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -129,24 +128,24 @@ type waitingroomRuleResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingroomRuleResult) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingroomRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r waitingroomRuleResultJSON) RawJSON() string {
+func (r waitingroomRuleJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action to take when the expression matches.
-type WaitingroomRuleResultAction string
+type WaitingroomRuleAction string
 
 const (
-	WaitingroomRuleResultActionBypassWaitingRoom WaitingroomRuleResultAction = "bypass_waiting_room"
+	WaitingroomRuleActionBypassWaitingRoom WaitingroomRuleAction = "bypass_waiting_room"
 )
 
-func (r WaitingroomRuleResultAction) IsKnown() bool {
+func (r WaitingroomRuleAction) IsKnown() bool {
 	switch r {
-	case WaitingroomRuleResultActionBypassWaitingRoom:
+	case WaitingroomRuleActionBypassWaitingRoom:
 		return true
 	}
 	return false
@@ -185,7 +184,7 @@ func (r RuleNewParamsAction) IsKnown() bool {
 type RuleNewResponseEnvelope struct {
 	Errors   []RuleNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomRuleResult           `json:"result,required,nullable"`
+	Result   []WaitingroomRule                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -345,7 +344,7 @@ func (r RuleUpdateParamsBodyAction) IsKnown() bool {
 type RuleUpdateResponseEnvelope struct {
 	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomRuleResult              `json:"result,required,nullable"`
+	Result   []WaitingroomRule                    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -467,7 +466,7 @@ func (r ruleUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 type RuleListResponseEnvelope struct {
 	Errors   []RuleListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomRuleResult            `json:"result,required,nullable"`
+	Result   []WaitingroomRule                  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleListResponseEnvelopeResultInfo `json:"result_info"`
@@ -589,7 +588,7 @@ func (r ruleListResponseEnvelopeResultInfoJSON) RawJSON() string {
 type RuleDeleteResponseEnvelope struct {
 	Errors   []RuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomRuleResult              `json:"result,required,nullable"`
+	Result   []WaitingroomRule                    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -766,7 +765,7 @@ func (r RuleEditParamsPositionObject) implementsWaitingRoomsRuleEditParamsPositi
 type RuleEditResponseEnvelope struct {
 	Errors   []RuleEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomRuleResult            `json:"result,required,nullable"`
+	Result   []WaitingroomRule                  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`

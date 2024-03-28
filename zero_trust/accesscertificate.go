@@ -35,7 +35,7 @@ func NewAccessCertificateService(opts ...option.RequestOption) (r *AccessCertifi
 }
 
 // Adds a new mTLS root certificate to Access.
-func (r *AccessCertificateService) New(ctx context.Context, params AccessCertificateNewParams, opts ...option.RequestOption) (res *AccessCertificates, err error) {
+func (r *AccessCertificateService) New(ctx context.Context, params AccessCertificateNewParams, opts ...option.RequestOption) (res *ZeroTrustCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateNewResponseEnvelope
 	var accountOrZone string
@@ -57,7 +57,7 @@ func (r *AccessCertificateService) New(ctx context.Context, params AccessCertifi
 }
 
 // Updates a configured mTLS certificate.
-func (r *AccessCertificateService) Update(ctx context.Context, uuid string, params AccessCertificateUpdateParams, opts ...option.RequestOption) (res *AccessCertificates, err error) {
+func (r *AccessCertificateService) Update(ctx context.Context, uuid string, params AccessCertificateUpdateParams, opts ...option.RequestOption) (res *ZeroTrustCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateUpdateResponseEnvelope
 	var accountOrZone string
@@ -79,7 +79,7 @@ func (r *AccessCertificateService) Update(ctx context.Context, uuid string, para
 }
 
 // Lists all mTLS root certificates.
-func (r *AccessCertificateService) List(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) (res *[]AccessCertificates, err error) {
+func (r *AccessCertificateService) List(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) (res *[]ZeroTrustCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateListResponseEnvelope
 	var accountOrZone string
@@ -123,7 +123,7 @@ func (r *AccessCertificateService) Delete(ctx context.Context, uuid string, body
 }
 
 // Fetches a single mTLS certificate.
-func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query AccessCertificateGetParams, opts ...option.RequestOption) (res *AccessCertificates, err error) {
+func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query AccessCertificateGetParams, opts ...option.RequestOption) (res *ZeroTrustCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateGetResponseEnvelope
 	var accountOrZone string
@@ -144,7 +144,7 @@ func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query A
 	return
 }
 
-type AccessCertificates struct {
+type ZeroTrustCertificates struct {
 	// The ID of the application that will use this certificate.
 	ID interface{} `json:"id"`
 	// The hostnames of the applications that will use this certificate.
@@ -154,14 +154,14 @@ type AccessCertificates struct {
 	// The MD5 fingerprint of the certificate.
 	Fingerprint string `json:"fingerprint"`
 	// The name of the certificate.
-	Name      string                 `json:"name"`
-	UpdatedAt time.Time              `json:"updated_at" format:"date-time"`
-	JSON      accessCertificatesJSON `json:"-"`
+	Name      string                    `json:"name"`
+	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustCertificatesJSON `json:"-"`
 }
 
-// accessCertificatesJSON contains the JSON metadata for the struct
-// [AccessCertificates]
-type accessCertificatesJSON struct {
+// zeroTrustCertificatesJSON contains the JSON metadata for the struct
+// [ZeroTrustCertificates]
+type zeroTrustCertificatesJSON struct {
 	ID                  apijson.Field
 	AssociatedHostnames apijson.Field
 	CreatedAt           apijson.Field
@@ -173,11 +173,11 @@ type accessCertificatesJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *AccessCertificates) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustCertificates) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessCertificatesJSON) RawJSON() string {
+func (r zeroTrustCertificatesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -223,7 +223,7 @@ func (r AccessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type AccessCertificateNewResponseEnvelope struct {
 	Errors   []AccessCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessCertificates                             `json:"result,required"`
+	Result   ZeroTrustCertificates                          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -327,7 +327,7 @@ func (r AccessCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessCertificateUpdateResponseEnvelope struct {
 	Errors   []AccessCertificateUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessCertificates                                `json:"result,required"`
+	Result   ZeroTrustCertificates                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
@@ -423,7 +423,7 @@ type AccessCertificateListParams struct {
 type AccessCertificateListResponseEnvelope struct {
 	Errors   []AccessCertificateListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessCertificates                            `json:"result,required,nullable"`
+	Result   []ZeroTrustCertificates                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessCertificateListResponseEnvelopeResultInfo `json:"result_info"`
@@ -648,7 +648,7 @@ type AccessCertificateGetParams struct {
 type AccessCertificateGetResponseEnvelope struct {
 	Errors   []AccessCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessCertificates                             `json:"result,required"`
+	Result   ZeroTrustCertificates                          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateGetResponseEnvelopeJSON    `json:"-"`

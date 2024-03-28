@@ -35,7 +35,7 @@ func NewNamespaceObjectService(opts ...option.RequestOption) (r *NamespaceObject
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *shared.CursorLimitPagination[WorkersObject], err error) {
+func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *shared.CursorLimitPagination[DurableObject], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,31 +53,31 @@ func (r *NamespaceObjectService) List(ctx context.Context, id string, params Nam
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *shared.CursorLimitPaginationAutoPager[WorkersObject] {
+func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *shared.CursorLimitPaginationAutoPager[DurableObject] {
 	return shared.NewCursorLimitPaginationAutoPager(r.List(ctx, id, params, opts...))
 }
 
-type WorkersObject struct {
+type DurableObject struct {
 	// ID of the Durable Object.
 	ID string `json:"id"`
 	// Whether the Durable Object has stored data.
 	HasStoredData bool              `json:"hasStoredData"`
-	JSON          workersObjectJSON `json:"-"`
+	JSON          durableObjectJSON `json:"-"`
 }
 
-// workersObjectJSON contains the JSON metadata for the struct [WorkersObject]
-type workersObjectJSON struct {
+// durableObjectJSON contains the JSON metadata for the struct [DurableObject]
+type durableObjectJSON struct {
 	ID            apijson.Field
 	HasStoredData apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WorkersObject) UnmarshalJSON(data []byte) (err error) {
+func (r *DurableObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersObjectJSON) RawJSON() string {
+func (r durableObjectJSON) RawJSON() string {
 	return r.raw
 }
 

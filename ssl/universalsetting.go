@@ -32,7 +32,7 @@ func NewUniversalSettingService(opts ...option.RequestOption) (r *UniversalSetti
 }
 
 // Patch Universal SSL Settings for a Zone.
-func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSettingEditParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesUniversal, err error) {
+func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSettingEditParams, opts ...option.RequestOption) (res *UniversalSSLSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UniversalSettingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/universal/settings", params.ZoneID)
@@ -45,7 +45,7 @@ func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSett
 }
 
 // Get Universal SSL Settings for a Zone.
-func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettingGetParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesUniversal, err error) {
+func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettingGetParams, opts ...option.RequestOption) (res *UniversalSSLSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UniversalSettingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/universal/settings", query.ZoneID)
@@ -57,7 +57,7 @@ func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettin
 	return
 }
 
-type TLSCertificatesAndHostnamesUniversal struct {
+type UniversalSSLSettings struct {
 	// Disabling Universal SSL removes any currently active Universal SSL certificates
 	// for your zone from the edge and prevents any future Universal SSL certificates
 	// from being ordered. If there are no advanced certificates or custom certificates
@@ -83,23 +83,23 @@ type TLSCertificatesAndHostnamesUniversal struct {
 	// and are unsure if any of the above Cloudflare settings are enabled, or if any
 	// HTTP redirects exist at your origin, we advise leaving Universal SSL enabled for
 	// your domain.
-	Enabled bool                                     `json:"enabled"`
-	JSON    tlsCertificatesAndHostnamesUniversalJSON `json:"-"`
+	Enabled bool                     `json:"enabled"`
+	JSON    universalSSLSettingsJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesUniversalJSON contains the JSON metadata for the
-// struct [TLSCertificatesAndHostnamesUniversal]
-type tlsCertificatesAndHostnamesUniversalJSON struct {
+// universalSSLSettingsJSON contains the JSON metadata for the struct
+// [UniversalSSLSettings]
+type universalSSLSettingsJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesUniversal) UnmarshalJSON(data []byte) (err error) {
+func (r *UniversalSSLSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesUniversalJSON) RawJSON() string {
+func (r universalSSLSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -141,7 +141,7 @@ func (r UniversalSettingEditParams) MarshalJSON() (data []byte, err error) {
 type UniversalSettingEditResponseEnvelope struct {
 	Errors   []UniversalSettingEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []UniversalSettingEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesUniversal           `json:"result,required"`
+	Result   UniversalSSLSettings                           `json:"result,required"`
 	// Whether the API call was successful
 	Success UniversalSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    universalSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -235,7 +235,7 @@ type UniversalSettingGetParams struct {
 type UniversalSettingGetResponseEnvelope struct {
 	Errors   []UniversalSettingGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []UniversalSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesUniversal          `json:"result,required"`
+	Result   UniversalSSLSettings                          `json:"result,required"`
 	// Whether the API call was successful
 	Success UniversalSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    universalSettingGetResponseEnvelopeJSON    `json:"-"`

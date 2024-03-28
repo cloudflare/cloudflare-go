@@ -34,18 +34,18 @@ func TestHostnameIPFSUniversalPathContentListUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		web3.HostnameIPFSUniversalPathContentListUpdateParams{
 			Action: cloudflare.F(web3.HostnameIPFSUniversalPathContentListUpdateParamsActionBlock),
-			Entries: cloudflare.F([]web3.DwebConfigContentListEntryParam{{
+			Entries: cloudflare.F([]web3.DistributedWebConfigContentListEntryParam{{
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(web3.DwebConfigContentListEntryTypeCid),
+				Type:        cloudflare.F(web3.DistributedWebConfigContentListEntryTypeCid),
 			}, {
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(web3.DwebConfigContentListEntryTypeCid),
+				Type:        cloudflare.F(web3.DistributedWebConfigContentListEntryTypeCid),
 			}, {
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(web3.DwebConfigContentListEntryTypeCid),
+				Type:        cloudflare.F(web3.DistributedWebConfigContentListEntryTypeCid),
 			}}),
 		},
 	)

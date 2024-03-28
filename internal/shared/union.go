@@ -51,8 +51,8 @@ func (UnionString) ImplementsCustomHostnamesFallbackOriginUpdateResponse()      
 func (UnionString) ImplementsCustomHostnamesFallbackOriginDeleteResponse()                        {}
 func (UnionString) ImplementsCustomHostnamesFallbackOriginGetResponse()                           {}
 func (UnionString) ImplementsCustomNameserversCustomNameserverDeleteResponse()                    {}
-func (UnionString) ImplementsDNSDNSFirewallDNSFirewallDNSFirewallIP()                             {}
-func (UnionString) ImplementsDNSDNSFirewallDNSFirewallUpstreamIP()                                {}
+func (UnionString) ImplementsDNSDNSFirewallDNSFirewallIP()                                        {}
+func (UnionString) ImplementsDNSDNSFirewallUpstreamIP()                                           {}
 func (UnionString) ImplementsDNSFirewallNewParamsUpstreamIP()                                     {}
 func (UnionString) ImplementsDNSFirewallEditParamsDNSFirewallIP()                                 {}
 func (UnionString) ImplementsDNSFirewallEditParamsUpstreamIP()                                    {}
@@ -115,7 +115,7 @@ func (UnionString) ImplementsAddressingPrefixDeleteResponse()                   
 func (UnionString) ImplementsAddressingPrefixBGPBindingDeleteResponse()                           {}
 func (UnionString) ImplementsAuditLogsAuditLogListResponse()                                      {}
 func (UnionString) ImplementsBillingProfileGetResponse()                                          {}
-func (UnionString) ImplementsImagesImagesImageVariant()                                           {}
+func (UnionString) ImplementsImagesImageVariant()                                                 {}
 func (UnionString) ImplementsImagesV1DeleteResponse()                                             {}
 func (UnionString) ImplementsImagesV1VariantDeleteResponse()                                      {}
 func (UnionString) ImplementsIntelIntelSchemasIpip()                                              {}
@@ -161,7 +161,7 @@ func (UnionString) ImplementsAlertingAvailableAlertListResponse()               
 func (UnionString) ImplementsAlertingDestinationEligibleGetResponse()                             {}
 func (UnionString) ImplementsAlertingDestinationPagerdutyDeleteResponse()                         {}
 func (UnionString) ImplementsAlertingDestinationWebhookDeleteResponse()                           {}
-func (UnionString) ImplementsAlertingAaaPoliciesMechanismsID()                                    {}
+func (UnionString) ImplementsAlertingAlertingPoliciesMechanismsID()                               {}
 func (UnionString) ImplementsAlertingPolicyDeleteResponse()                                       {}
 func (UnionString) ImplementsAlertingPolicyNewParamsMechanismsID()                                {}
 func (UnionString) ImplementsAlertingPolicyUpdateParamsMechanismsID()                             {}

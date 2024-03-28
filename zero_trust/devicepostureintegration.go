@@ -35,7 +35,7 @@ func NewDevicePostureIntegrationService(opts ...option.RequestOption) (r *Device
 }
 
 // Create a new device posture integration.
-func (r *DevicePostureIntegrationService) New(ctx context.Context, params DevicePostureIntegrationNewParams, opts ...option.RequestOption) (res *TeamsDevicesDevicePostureIntegrations, err error) {
+func (r *DevicePostureIntegrationService) New(ctx context.Context, params DevicePostureIntegrationNewParams, opts ...option.RequestOption) (res *DevicePostureIntegrations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration", params.AccountID)
@@ -48,7 +48,7 @@ func (r *DevicePostureIntegrationService) New(ctx context.Context, params Device
 }
 
 // Fetches the list of device posture integrations for an account.
-func (r *DevicePostureIntegrationService) List(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDevicePostureIntegrations, err error) {
+func (r *DevicePostureIntegrationService) List(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) (res *[]DevicePostureIntegrations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration", query.AccountID)
@@ -74,7 +74,7 @@ func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integratio
 }
 
 // Updates a configured device posture integration.
-func (r *DevicePostureIntegrationService) Edit(ctx context.Context, integrationID string, params DevicePostureIntegrationEditParams, opts ...option.RequestOption) (res *TeamsDevicesDevicePostureIntegrations, err error) {
+func (r *DevicePostureIntegrationService) Edit(ctx context.Context, integrationID string, params DevicePostureIntegrationEditParams, opts ...option.RequestOption) (res *DevicePostureIntegrations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration/%s", params.AccountID, integrationID)
@@ -87,7 +87,7 @@ func (r *DevicePostureIntegrationService) Edit(ctx context.Context, integrationI
 }
 
 // Fetches details for a single device posture integration.
-func (r *DevicePostureIntegrationService) Get(ctx context.Context, integrationID string, query DevicePostureIntegrationGetParams, opts ...option.RequestOption) (res *TeamsDevicesDevicePostureIntegrations, err error) {
+func (r *DevicePostureIntegrationService) Get(ctx context.Context, integrationID string, query DevicePostureIntegrationGetParams, opts ...option.RequestOption) (res *DevicePostureIntegrations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration/%s", query.AccountID, integrationID)
@@ -99,24 +99,24 @@ func (r *DevicePostureIntegrationService) Get(ctx context.Context, integrationID
 	return
 }
 
-type TeamsDevicesDevicePostureIntegrations struct {
+type DevicePostureIntegrations struct {
 	// API UUID.
 	ID string `json:"id"`
 	// The configuration object containing third-party integration information.
-	Config TeamsDevicesDevicePostureIntegrationsConfig `json:"config"`
+	Config DevicePostureIntegrationsConfig `json:"config"`
 	// The interval between each posture check with the third-party API. Use `m` for
 	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
 	Interval string `json:"interval"`
 	// The name of the device posture integration.
 	Name string `json:"name"`
 	// The type of device posture integration.
-	Type TeamsDevicesDevicePostureIntegrationsType `json:"type"`
-	JSON teamsDevicesDevicePostureIntegrationsJSON `json:"-"`
+	Type DevicePostureIntegrationsType `json:"type"`
+	JSON devicePostureIntegrationsJSON `json:"-"`
 }
 
-// teamsDevicesDevicePostureIntegrationsJSON contains the JSON metadata for the
-// struct [TeamsDevicesDevicePostureIntegrations]
-type teamsDevicesDevicePostureIntegrationsJSON struct {
+// devicePostureIntegrationsJSON contains the JSON metadata for the struct
+// [DevicePostureIntegrations]
+type devicePostureIntegrationsJSON struct {
 	ID          apijson.Field
 	Config      apijson.Field
 	Interval    apijson.Field
@@ -126,28 +126,28 @@ type teamsDevicesDevicePostureIntegrationsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDevicePostureIntegrations) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureIntegrations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDevicePostureIntegrationsJSON) RawJSON() string {
+func (r devicePostureIntegrationsJSON) RawJSON() string {
 	return r.raw
 }
 
 // The configuration object containing third-party integration information.
-type TeamsDevicesDevicePostureIntegrationsConfig struct {
+type DevicePostureIntegrationsConfig struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
 	APIURL string `json:"api_url,required"`
 	// The Workspace One Authorization URL depending on your region.
 	AuthURL string `json:"auth_url,required"`
 	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID string                                          `json:"client_id,required"`
-	JSON     teamsDevicesDevicePostureIntegrationsConfigJSON `json:"-"`
+	ClientID string                              `json:"client_id,required"`
+	JSON     devicePostureIntegrationsConfigJSON `json:"-"`
 }
 
-// teamsDevicesDevicePostureIntegrationsConfigJSON contains the JSON metadata for
-// the struct [TeamsDevicesDevicePostureIntegrationsConfig]
-type teamsDevicesDevicePostureIntegrationsConfigJSON struct {
+// devicePostureIntegrationsConfigJSON contains the JSON metadata for the struct
+// [DevicePostureIntegrationsConfig]
+type devicePostureIntegrationsConfigJSON struct {
 	APIURL      apijson.Field
 	AuthURL     apijson.Field
 	ClientID    apijson.Field
@@ -155,30 +155,30 @@ type teamsDevicesDevicePostureIntegrationsConfigJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDevicePostureIntegrationsConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureIntegrationsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDevicePostureIntegrationsConfigJSON) RawJSON() string {
+func (r devicePostureIntegrationsConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of device posture integration.
-type TeamsDevicesDevicePostureIntegrationsType string
+type DevicePostureIntegrationsType string
 
 const (
-	TeamsDevicesDevicePostureIntegrationsTypeWorkspaceOne   TeamsDevicesDevicePostureIntegrationsType = "workspace_one"
-	TeamsDevicesDevicePostureIntegrationsTypeCrowdstrikeS2s TeamsDevicesDevicePostureIntegrationsType = "crowdstrike_s2s"
-	TeamsDevicesDevicePostureIntegrationsTypeUptycs         TeamsDevicesDevicePostureIntegrationsType = "uptycs"
-	TeamsDevicesDevicePostureIntegrationsTypeIntune         TeamsDevicesDevicePostureIntegrationsType = "intune"
-	TeamsDevicesDevicePostureIntegrationsTypeKolide         TeamsDevicesDevicePostureIntegrationsType = "kolide"
-	TeamsDevicesDevicePostureIntegrationsTypeTanium         TeamsDevicesDevicePostureIntegrationsType = "tanium"
-	TeamsDevicesDevicePostureIntegrationsTypeSentineloneS2s TeamsDevicesDevicePostureIntegrationsType = "sentinelone_s2s"
+	DevicePostureIntegrationsTypeWorkspaceOne   DevicePostureIntegrationsType = "workspace_one"
+	DevicePostureIntegrationsTypeCrowdstrikeS2s DevicePostureIntegrationsType = "crowdstrike_s2s"
+	DevicePostureIntegrationsTypeUptycs         DevicePostureIntegrationsType = "uptycs"
+	DevicePostureIntegrationsTypeIntune         DevicePostureIntegrationsType = "intune"
+	DevicePostureIntegrationsTypeKolide         DevicePostureIntegrationsType = "kolide"
+	DevicePostureIntegrationsTypeTanium         DevicePostureIntegrationsType = "tanium"
+	DevicePostureIntegrationsTypeSentineloneS2s DevicePostureIntegrationsType = "sentinelone_s2s"
 )
 
-func (r TeamsDevicesDevicePostureIntegrationsType) IsKnown() bool {
+func (r DevicePostureIntegrationsType) IsKnown() bool {
 	switch r {
-	case TeamsDevicesDevicePostureIntegrationsTypeWorkspaceOne, TeamsDevicesDevicePostureIntegrationsTypeCrowdstrikeS2s, TeamsDevicesDevicePostureIntegrationsTypeUptycs, TeamsDevicesDevicePostureIntegrationsTypeIntune, TeamsDevicesDevicePostureIntegrationsTypeKolide, TeamsDevicesDevicePostureIntegrationsTypeTanium, TeamsDevicesDevicePostureIntegrationsTypeSentineloneS2s:
+	case DevicePostureIntegrationsTypeWorkspaceOne, DevicePostureIntegrationsTypeCrowdstrikeS2s, DevicePostureIntegrationsTypeUptycs, DevicePostureIntegrationsTypeIntune, DevicePostureIntegrationsTypeKolide, DevicePostureIntegrationsTypeTanium, DevicePostureIntegrationsTypeSentineloneS2s:
 		return true
 	}
 	return false
@@ -374,7 +374,7 @@ func (r DevicePostureIntegrationNewParamsType) IsKnown() bool {
 type DevicePostureIntegrationNewResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureIntegrationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesDevicePostureIntegrations                 `json:"result,required,nullable"`
+	Result   DevicePostureIntegrations                             `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationNewResponseEnvelopeJSON    `json:"-"`
@@ -467,7 +467,7 @@ type DevicePostureIntegrationListParams struct {
 type DevicePostureIntegrationListResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureIntegrationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesDevicePostureIntegrations                `json:"result,required,nullable"`
+	Result   []DevicePostureIntegrations                            `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePostureIntegrationListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePostureIntegrationListResponseEnvelopeResultInfo `json:"result_info"`
@@ -852,7 +852,7 @@ func (r DevicePostureIntegrationEditParamsType) IsKnown() bool {
 type DevicePostureIntegrationEditResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureIntegrationEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesDevicePostureIntegrations                  `json:"result,required,nullable"`
+	Result   DevicePostureIntegrations                              `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationEditResponseEnvelopeJSON    `json:"-"`
@@ -945,7 +945,7 @@ type DevicePostureIntegrationGetParams struct {
 type DevicePostureIntegrationGetResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureIntegrationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesDevicePostureIntegrations                 `json:"result,required,nullable"`
+	Result   DevicePostureIntegrations                             `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationGetResponseEnvelopeJSON    `json:"-"`
