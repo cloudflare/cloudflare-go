@@ -48,16 +48,26 @@ func (r *DevicePostureIntegrationService) New(ctx context.Context, params Device
 }
 
 // Fetches the list of device posture integrations for an account.
-func (r *DevicePostureIntegrationService) List(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) (res *[]DevicePostureIntegrations, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePostureIntegrationListResponseEnvelope
+func (r *DevicePostureIntegrationService) List(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) (res *shared.SinglePage[DevicePostureIntegrations], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches the list of device posture integrations for an account.
+func (r *DevicePostureIntegrationService) ListAutoPaging(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DevicePostureIntegrations] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a configured device posture integration.
@@ -462,128 +472,6 @@ func (r DevicePostureIntegrationNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type DevicePostureIntegrationListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DevicePostureIntegrationListResponseEnvelope struct {
-	Errors   []DevicePostureIntegrationListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePostureIntegrationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePostureIntegrations                            `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePostureIntegrationListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePostureIntegrationListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePostureIntegrationListResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePostureIntegrationListResponseEnvelopeJSON contains the JSON metadata for
-// the struct [DevicePostureIntegrationListResponseEnvelope]
-type devicePostureIntegrationListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureIntegrationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureIntegrationListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePostureIntegrationListResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    devicePostureIntegrationListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePostureIntegrationListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [DevicePostureIntegrationListResponseEnvelopeErrors]
-type devicePostureIntegrationListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureIntegrationListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureIntegrationListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePostureIntegrationListResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    devicePostureIntegrationListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePostureIntegrationListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [DevicePostureIntegrationListResponseEnvelopeMessages]
-type devicePostureIntegrationListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureIntegrationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureIntegrationListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DevicePostureIntegrationListResponseEnvelopeSuccess bool
-
-const (
-	DevicePostureIntegrationListResponseEnvelopeSuccessTrue DevicePostureIntegrationListResponseEnvelopeSuccess = true
-)
-
-func (r DevicePostureIntegrationListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DevicePostureIntegrationListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DevicePostureIntegrationListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                    `json:"total_count"`
-	JSON       devicePostureIntegrationListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePostureIntegrationListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [DevicePostureIntegrationListResponseEnvelopeResultInfo]
-type devicePostureIntegrationListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureIntegrationListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureIntegrationListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type DevicePostureIntegrationDeleteParams struct {

@@ -50,16 +50,26 @@ func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVi
 }
 
 // Lists and filters virtual networks in an account.
-func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *[]TunnelVirtualNetwork, err error) {
-	opts = append(r.Options[:], opts...)
-	var env NetworkVirtualNetworkListResponseEnvelope
+func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *shared.SinglePage[TunnelVirtualNetwork], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists and filters virtual networks in an account.
+func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[TunnelVirtualNetwork] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing virtual network.
@@ -330,128 +340,6 @@ func (r NetworkVirtualNetworkListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type NetworkVirtualNetworkListResponseEnvelope struct {
-	Errors   []NetworkVirtualNetworkListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []NetworkVirtualNetworkListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TunnelVirtualNetwork                              `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    NetworkVirtualNetworkListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo NetworkVirtualNetworkListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       networkVirtualNetworkListResponseEnvelopeJSON       `json:"-"`
-}
-
-// networkVirtualNetworkListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [NetworkVirtualNetworkListResponseEnvelope]
-type networkVirtualNetworkListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkVirtualNetworkListResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    networkVirtualNetworkListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// networkVirtualNetworkListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [NetworkVirtualNetworkListResponseEnvelopeErrors]
-type networkVirtualNetworkListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkVirtualNetworkListResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    networkVirtualNetworkListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// networkVirtualNetworkListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [NetworkVirtualNetworkListResponseEnvelopeMessages]
-type networkVirtualNetworkListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type NetworkVirtualNetworkListResponseEnvelopeSuccess bool
-
-const (
-	NetworkVirtualNetworkListResponseEnvelopeSuccessTrue NetworkVirtualNetworkListResponseEnvelopeSuccess = true
-)
-
-func (r NetworkVirtualNetworkListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case NetworkVirtualNetworkListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type NetworkVirtualNetworkListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                 `json:"total_count"`
-	JSON       networkVirtualNetworkListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// networkVirtualNetworkListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [NetworkVirtualNetworkListResponseEnvelopeResultInfo]
-type networkVirtualNetworkListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NetworkVirtualNetworkListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkVirtualNetworkListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type NetworkVirtualNetworkDeleteParams struct {

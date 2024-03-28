@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -59,16 +60,26 @@ func (r *AccessCustomPageService) Update(ctx context.Context, identifier string,
 }
 
 // List custom pages
-func (r *AccessCustomPageService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]ZeroTrustCustomPageWithoutHTML, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessCustomPageListResponseEnvelope
+func (r *AccessCustomPageService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustCustomPageWithoutHTML], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/access/custom_pages", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List custom pages
+func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustCustomPageWithoutHTML] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
 }
 
 // Delete a custom page
@@ -462,128 +473,6 @@ func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type AccessCustomPageListResponseEnvelope struct {
-	Errors   []AccessCustomPageListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCustomPageListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustCustomPageWithoutHTML               `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccessCustomPageListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessCustomPageListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessCustomPageListResponseEnvelopeJSON       `json:"-"`
-}
-
-// accessCustomPageListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessCustomPageListResponseEnvelope]
-type accessCustomPageListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCustomPageListResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    accessCustomPageListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessCustomPageListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessCustomPageListResponseEnvelopeErrors]
-type accessCustomPageListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCustomPageListResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessCustomPageListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessCustomPageListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AccessCustomPageListResponseEnvelopeMessages]
-type accessCustomPageListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessCustomPageListResponseEnvelopeSuccess bool
-
-const (
-	AccessCustomPageListResponseEnvelopeSuccessTrue AccessCustomPageListResponseEnvelopeSuccess = true
-)
-
-func (r AccessCustomPageListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessCustomPageListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AccessCustomPageListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                            `json:"total_count"`
-	JSON       accessCustomPageListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessCustomPageListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [AccessCustomPageListResponseEnvelopeResultInfo]
-type accessCustomPageListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessCustomPageDeleteResponseEnvelope struct {

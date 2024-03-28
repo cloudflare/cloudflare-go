@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -31,16 +32,26 @@ func NewPageService(opts ...option.RequestOption) (r *PageService) {
 }
 
 // Lists all webpages which have been tested.
-func (r *PageService) List(ctx context.Context, query PageListParams, opts ...option.RequestOption) (res *[]PageListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PageListResponseEnvelope
+func (r *PageService) List(ctx context.Context, query PageListParams, opts ...option.RequestOption) (res *shared.SinglePage[PageListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/speed_api/pages", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all webpages which have been tested.
+func (r *PageService) ListAutoPaging(ctx context.Context, query PageListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PageListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type PageListResponse struct {
@@ -152,25 +163,4 @@ func (r PageListResponseScheduleFrequency) IsKnown() bool {
 type PageListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type PageListResponseEnvelope struct {
-	Result []PageListResponse           `json:"result"`
-	JSON   pageListResponseEnvelopeJSON `json:"-"`
-}
-
-// pageListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PageListResponseEnvelope]
-type pageListResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }

@@ -36,16 +36,26 @@ func NewInviteService(opts ...option.RequestOption) (r *InviteService) {
 }
 
 // Lists all invitations associated with my user.
-func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) (res *[]InviteListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env InviteListResponseEnvelope
+func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) (res *shared.SinglePage[InviteListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/invites"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all invitations associated with my user.
+func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *shared.SinglePageAutoPager[InviteListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
 // Responds to an invitation.
@@ -171,128 +181,6 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
-}
-
-type InviteListResponseEnvelope struct {
-	Errors   []InviteListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []InviteListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []InviteListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    InviteListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo InviteListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       inviteListResponseEnvelopeJSON       `json:"-"`
-}
-
-// inviteListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [InviteListResponseEnvelope]
-type inviteListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InviteListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r inviteListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type InviteListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    inviteListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// inviteListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [InviteListResponseEnvelopeErrors]
-type inviteListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InviteListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r inviteListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type InviteListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    inviteListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// inviteListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [InviteListResponseEnvelopeMessages]
-type inviteListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InviteListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r inviteListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type InviteListResponseEnvelopeSuccess bool
-
-const (
-	InviteListResponseEnvelopeSuccessTrue InviteListResponseEnvelopeSuccess = true
-)
-
-func (r InviteListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case InviteListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type InviteListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       inviteListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// inviteListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [InviteListResponseEnvelopeResultInfo]
-type inviteListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InviteListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r inviteListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type InviteEditParams struct {

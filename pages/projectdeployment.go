@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -50,16 +51,26 @@ func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, 
 }
 
 // Fetch a list of project deployments.
-func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *[]PagesDeployments, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ProjectDeploymentListResponseEnvelope
+func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *shared.SinglePage[PagesDeployments], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", params.AccountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetch a list of project deployments.
+func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PagesDeployments] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, projectName, params, opts...))
 }
 
 // Delete a deployment.
@@ -243,124 +254,6 @@ func (r ProjectDeploymentListParamsEnv) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type ProjectDeploymentListResponseEnvelope struct {
-	Errors   []ProjectDeploymentListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PagesDeployments                              `json:"result,required"`
-	// Whether the API call was successful
-	Success    ProjectDeploymentListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ProjectDeploymentListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       projectDeploymentListResponseEnvelopeJSON       `json:"-"`
-}
-
-// projectDeploymentListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ProjectDeploymentListResponseEnvelope]
-type projectDeploymentListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentListResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    projectDeploymentListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentListResponseEnvelopeErrors]
-type projectDeploymentListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentListResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    projectDeploymentListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ProjectDeploymentListResponseEnvelopeMessages]
-type projectDeploymentListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ProjectDeploymentListResponseEnvelopeSuccess bool
-
-const (
-	ProjectDeploymentListResponseEnvelopeSuccessTrue ProjectDeploymentListResponseEnvelopeSuccess = true
-)
-
-func (r ProjectDeploymentListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ProjectDeploymentListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ProjectDeploymentListResponseEnvelopeResultInfo struct {
-	Count      float64                                             `json:"count"`
-	Page       float64                                             `json:"page"`
-	PerPage    float64                                             `json:"per_page"`
-	TotalCount float64                                             `json:"total_count"`
-	JSON       projectDeploymentListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// projectDeploymentListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [ProjectDeploymentListResponseEnvelopeResultInfo]
-type projectDeploymentListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type ProjectDeploymentDeleteParams struct {

@@ -57,9 +57,10 @@ func (r *AccessApplicationCAService) New(ctx context.Context, uuid string, body 
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *[]ZeroTrustCA, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessApplicationCAListResponseEnvelope
+func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustCA], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -70,12 +71,21 @@ func (r *AccessApplicationCAService) List(ctx context.Context, query AccessAppli
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/ca", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists short-lived certificate CAs and their public keys.
+func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustCA] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a short-lived certificate CA.
@@ -307,128 +317,6 @@ type AccessApplicationCAListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-type AccessApplicationCAListResponseEnvelope struct {
-	Errors   []AccessApplicationCAListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationCAListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustCA                                     `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccessApplicationCAListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessApplicationCAListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessApplicationCAListResponseEnvelopeJSON       `json:"-"`
-}
-
-// accessApplicationCAListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessApplicationCAListResponseEnvelope]
-type accessApplicationCAListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCAListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCAListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCAListResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    accessApplicationCAListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationCAListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessApplicationCAListResponseEnvelopeErrors]
-type accessApplicationCAListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCAListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCAListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationCAListResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    accessApplicationCAListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationCAListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessApplicationCAListResponseEnvelopeMessages]
-type accessApplicationCAListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCAListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCAListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessApplicationCAListResponseEnvelopeSuccess bool
-
-const (
-	AccessApplicationCAListResponseEnvelopeSuccessTrue AccessApplicationCAListResponseEnvelopeSuccess = true
-)
-
-func (r AccessApplicationCAListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessApplicationCAListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationCAListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                               `json:"total_count"`
-	JSON       accessApplicationCAListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessApplicationCAListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [AccessApplicationCAListResponseEnvelopeResultInfo]
-type accessApplicationCAListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCAListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCAListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationCADeleteParams struct {

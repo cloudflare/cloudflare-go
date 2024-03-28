@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -60,16 +61,26 @@ func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params
 }
 
 // Fetch all datasets with information about available versions.
-func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) (res *DLPDatasetArray, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DLPDatasetListResponseEnvelope
+func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) (res *shared.SinglePage[DLPDataset], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/dlp/datasets", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetch all datasets with information about available versions.
+func (r *DLPDatasetService) ListAutoPaging(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DLPDataset] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a dataset.
@@ -462,112 +473,6 @@ func (r dlpDatasetUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type DLPDatasetListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DLPDatasetListResponseEnvelope struct {
-	Errors     []DLPDatasetListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages   []DLPDatasetListResponseEnvelopeMessages `json:"messages,required"`
-	Success    bool                                     `json:"success,required"`
-	Result     DLPDatasetArray                          `json:"result"`
-	ResultInfo DLPDatasetListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpDatasetListResponseEnvelopeJSON       `json:"-"`
-}
-
-// dlpDatasetListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DLPDatasetListResponseEnvelope]
-type dlpDatasetListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPDatasetListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPDatasetListResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    dlpDatasetListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dlpDatasetListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DLPDatasetListResponseEnvelopeErrors]
-type dlpDatasetListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPDatasetListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPDatasetListResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    dlpDatasetListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dlpDatasetListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DLPDatasetListResponseEnvelopeMessages]
-type dlpDatasetListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPDatasetListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPDatasetListResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                        `json:"total_count,required"`
-	JSON       dlpDatasetListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// dlpDatasetListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DLPDatasetListResponseEnvelopeResultInfo]
-type dlpDatasetListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPDatasetListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type DLPDatasetDeleteParams struct {

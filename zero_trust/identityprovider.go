@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -78,9 +79,10 @@ func (r *IdentityProviderService) Update(ctx context.Context, uuid string, param
 }
 
 // Lists all configured identity providers.
-func (r *IdentityProviderService) List(ctx context.Context, query IdentityProviderListParams, opts ...option.RequestOption) (res *[]IdentityProviderListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env IdentityProviderListResponseEnvelope
+func (r *IdentityProviderService) List(ctx context.Context, query IdentityProviderListParams, opts ...option.RequestOption) (res *shared.SinglePage[IdentityProviderListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -91,12 +93,21 @@ func (r *IdentityProviderService) List(ctx context.Context, query IdentityProvid
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/identity_providers", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all configured identity providers.
+func (r *IdentityProviderService) ListAutoPaging(ctx context.Context, query IdentityProviderListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[IdentityProviderListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an identity provider from Access.
@@ -7872,128 +7883,6 @@ type IdentityProviderListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-type IdentityProviderListResponseEnvelope struct {
-	Errors   []IdentityProviderListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IdentityProviderListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IdentityProviderListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    IdentityProviderListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo IdentityProviderListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       identityProviderListResponseEnvelopeJSON       `json:"-"`
-}
-
-// identityProviderListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [IdentityProviderListResponseEnvelope]
-type identityProviderListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IdentityProviderListResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    identityProviderListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// identityProviderListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [IdentityProviderListResponseEnvelopeErrors]
-type identityProviderListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IdentityProviderListResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    identityProviderListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// identityProviderListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [IdentityProviderListResponseEnvelopeMessages]
-type identityProviderListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type IdentityProviderListResponseEnvelopeSuccess bool
-
-const (
-	IdentityProviderListResponseEnvelopeSuccessTrue IdentityProviderListResponseEnvelopeSuccess = true
-)
-
-func (r IdentityProviderListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case IdentityProviderListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type IdentityProviderListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                            `json:"total_count"`
-	JSON       identityProviderListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// identityProviderListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [IdentityProviderListResponseEnvelopeResultInfo]
-type identityProviderListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type IdentityProviderDeleteParams struct {

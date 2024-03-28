@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,16 +35,26 @@ func NewLoadBalancerAnalyticsEventService(opts ...option.RequestOption) (r *Load
 }
 
 // List origin health changes.
-func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) (res *[]LoadBalancingAnalytics, err error) {
-	opts = append(r.Options[:], opts...)
-	var env LoadBalancerAnalyticsEventListResponseEnvelope
+func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) (res *shared.SinglePage[LoadBalancingAnalytics], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/load_balancing_analytics/events"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List origin health changes.
+func (r *LoadBalancerAnalyticsEventService) ListAutoPaging(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[LoadBalancingAnalytics] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type LoadBalancingAnalytics struct {
@@ -98,127 +109,4 @@ func (r LoadBalancerAnalyticsEventListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type LoadBalancerAnalyticsEventListResponseEnvelope struct {
-	Errors   []LoadBalancerAnalyticsEventListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerAnalyticsEventListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LoadBalancingAnalytics                                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    LoadBalancerAnalyticsEventListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo LoadBalancerAnalyticsEventListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       loadBalancerAnalyticsEventListResponseEnvelopeJSON       `json:"-"`
-}
-
-// loadBalancerAnalyticsEventListResponseEnvelopeJSON contains the JSON metadata
-// for the struct [LoadBalancerAnalyticsEventListResponseEnvelope]
-type loadBalancerAnalyticsEventListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerAnalyticsEventListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerAnalyticsEventListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerAnalyticsEventListResponseEnvelopeErrors struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    loadBalancerAnalyticsEventListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerAnalyticsEventListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [LoadBalancerAnalyticsEventListResponseEnvelopeErrors]
-type loadBalancerAnalyticsEventListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerAnalyticsEventListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerAnalyticsEventListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerAnalyticsEventListResponseEnvelopeMessages struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    loadBalancerAnalyticsEventListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerAnalyticsEventListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [LoadBalancerAnalyticsEventListResponseEnvelopeMessages]
-type loadBalancerAnalyticsEventListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerAnalyticsEventListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerAnalyticsEventListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type LoadBalancerAnalyticsEventListResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerAnalyticsEventListResponseEnvelopeSuccessTrue LoadBalancerAnalyticsEventListResponseEnvelopeSuccess = true
-)
-
-func (r LoadBalancerAnalyticsEventListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case LoadBalancerAnalyticsEventListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerAnalyticsEventListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                      `json:"total_count"`
-	JSON       loadBalancerAnalyticsEventListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// loadBalancerAnalyticsEventListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct
-// [LoadBalancerAnalyticsEventListResponseEnvelopeResultInfo]
-type loadBalancerAnalyticsEventListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerAnalyticsEventListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerAnalyticsEventListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

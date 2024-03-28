@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -46,16 +47,26 @@ func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, para
 }
 
 // List all delegations for a given account IP prefix.
-func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) (res *[]AddressingIpamDelegations, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PrefixDelegationListResponseEnvelope
+func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) (res *shared.SinglePage[AddressingIpamDelegations], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", query.AccountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List all delegations for a given account IP prefix.
+func (r *PrefixDelegationService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AddressingIpamDelegations] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
 // Delete an account delegation for a given IP prefix.
@@ -233,128 +244,6 @@ func (r PrefixDelegationNewResponseEnvelopeSuccess) IsKnown() bool {
 type PrefixDelegationListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type PrefixDelegationListResponseEnvelope struct {
-	Errors   []PrefixDelegationListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixDelegationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AddressingIpamDelegations                    `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    PrefixDelegationListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PrefixDelegationListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       prefixDelegationListResponseEnvelopeJSON       `json:"-"`
-}
-
-// prefixDelegationListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [PrefixDelegationListResponseEnvelope]
-type prefixDelegationListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationListResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    prefixDelegationListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixDelegationListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [PrefixDelegationListResponseEnvelopeErrors]
-type prefixDelegationListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationListResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    prefixDelegationListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixDelegationListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixDelegationListResponseEnvelopeMessages]
-type prefixDelegationListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PrefixDelegationListResponseEnvelopeSuccess bool
-
-const (
-	PrefixDelegationListResponseEnvelopeSuccessTrue PrefixDelegationListResponseEnvelopeSuccess = true
-)
-
-func (r PrefixDelegationListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PrefixDelegationListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PrefixDelegationListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                            `json:"total_count"`
-	JSON       prefixDelegationListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// prefixDelegationListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [PrefixDelegationListResponseEnvelopeResultInfo]
-type prefixDelegationListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type PrefixDelegationDeleteParams struct {

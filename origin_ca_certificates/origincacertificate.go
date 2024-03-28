@@ -52,16 +52,28 @@ func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACerti
 // List all existing Origin CA certificates for a given zone. Use your Origin CA
 // Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) (res *[]OriginCACertificate, err error) {
-	opts = append(r.Options[:], opts...)
-	var env OriginCACertificateListResponseEnvelope
+func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) (res *shared.SinglePage[OriginCACertificate], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "certificates"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List all existing Origin CA certificates for a given zone. Use your Origin CA
+// Key as your User Service Key when calling this endpoint
+// ([see above](#requests)).
+func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[OriginCACertificate] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Revoke an existing Origin CA certificate by its serial number. Use your Origin
@@ -379,128 +391,6 @@ func (r OriginCACertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OriginCACertificateListParams struct {
-}
-
-type OriginCACertificateListResponseEnvelope struct {
-	Errors   []OriginCACertificateListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginCACertificateListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []OriginCACertificate                             `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    OriginCACertificateListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo OriginCACertificateListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       originCACertificateListResponseEnvelopeJSON       `json:"-"`
-}
-
-// originCACertificateListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [OriginCACertificateListResponseEnvelope]
-type originCACertificateListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCACertificateListResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    originCACertificateListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originCACertificateListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [OriginCACertificateListResponseEnvelopeErrors]
-type originCACertificateListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCACertificateListResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    originCACertificateListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originCACertificateListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [OriginCACertificateListResponseEnvelopeMessages]
-type originCACertificateListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type OriginCACertificateListResponseEnvelopeSuccess bool
-
-const (
-	OriginCACertificateListResponseEnvelopeSuccessTrue OriginCACertificateListResponseEnvelopeSuccess = true
-)
-
-func (r OriginCACertificateListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case OriginCACertificateListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type OriginCACertificateListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                               `json:"total_count"`
-	JSON       originCACertificateListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// originCACertificateListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [OriginCACertificateListResponseEnvelopeResultInfo]
-type originCACertificateListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type OriginCACertificateDeleteResponseEnvelope struct {

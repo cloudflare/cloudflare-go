@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -59,16 +60,26 @@ func (r *LoadBalancerMonitorService) Update(ctx context.Context, monitorID strin
 }
 
 // List configured monitors for a user.
-func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.RequestOption) (res *[]LoadBalancingMonitor, err error) {
-	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorListResponseEnvelope
+func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.RequestOption) (res *shared.SinglePage[LoadBalancingMonitor], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/load_balancers/monitors"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List configured monitors for a user.
+func (r *LoadBalancerMonitorService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *shared.SinglePageAutoPager[LoadBalancingMonitor] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
 // Delete a configured monitor.
@@ -666,128 +677,6 @@ func (r LoadBalancerMonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type LoadBalancerMonitorListResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerMonitorListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LoadBalancingMonitor                            `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    LoadBalancerMonitorListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo LoadBalancerMonitorListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       loadBalancerMonitorListResponseEnvelopeJSON       `json:"-"`
-}
-
-// loadBalancerMonitorListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerMonitorListResponseEnvelope]
-type loadBalancerMonitorListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerMonitorListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerMonitorListResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    loadBalancerMonitorListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerMonitorListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerMonitorListResponseEnvelopeErrors]
-type loadBalancerMonitorListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerMonitorListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerMonitorListResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    loadBalancerMonitorListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerMonitorListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [LoadBalancerMonitorListResponseEnvelopeMessages]
-type loadBalancerMonitorListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerMonitorListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type LoadBalancerMonitorListResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerMonitorListResponseEnvelopeSuccessTrue LoadBalancerMonitorListResponseEnvelopeSuccess = true
-)
-
-func (r LoadBalancerMonitorListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case LoadBalancerMonitorListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerMonitorListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                               `json:"total_count"`
-	JSON       loadBalancerMonitorListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// loadBalancerMonitorListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [LoadBalancerMonitorListResponseEnvelopeResultInfo]
-type loadBalancerMonitorListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerMonitorListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type LoadBalancerMonitorDeleteResponseEnvelope struct {
