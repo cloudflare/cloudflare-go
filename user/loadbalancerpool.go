@@ -64,16 +64,26 @@ func (r *LoadBalancerPoolService) Update(ctx context.Context, poolID string, bod
 }
 
 // List configured pools.
-func (r *LoadBalancerPoolService) List(ctx context.Context, query LoadBalancerPoolListParams, opts ...option.RequestOption) (res *[]LoadBalancingPool, err error) {
-	opts = append(r.Options[:], opts...)
-	var env LoadBalancerPoolListResponseEnvelope
+func (r *LoadBalancerPoolService) List(ctx context.Context, query LoadBalancerPoolListParams, opts ...option.RequestOption) (res *shared.SinglePage[LoadBalancingPool], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/load_balancers/pools"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List configured pools.
+func (r *LoadBalancerPoolService) ListAutoPaging(ctx context.Context, query LoadBalancerPoolListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[LoadBalancingPool] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a configured pool.
@@ -1432,128 +1442,6 @@ func (r LoadBalancerPoolListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type LoadBalancerPoolListResponseEnvelope struct {
-	Errors   []LoadBalancerPoolListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPoolListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LoadBalancingPool                            `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    LoadBalancerPoolListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo LoadBalancerPoolListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       loadBalancerPoolListResponseEnvelopeJSON       `json:"-"`
-}
-
-// loadBalancerPoolListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolListResponseEnvelope]
-type loadBalancerPoolListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolListResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    loadBalancerPoolListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPoolListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolListResponseEnvelopeErrors]
-type loadBalancerPoolListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolListResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    loadBalancerPoolListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPoolListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolListResponseEnvelopeMessages]
-type loadBalancerPoolListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type LoadBalancerPoolListResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerPoolListResponseEnvelopeSuccessTrue LoadBalancerPoolListResponseEnvelopeSuccess = true
-)
-
-func (r LoadBalancerPoolListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerPoolListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                            `json:"total_count"`
-	JSON       loadBalancerPoolListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// loadBalancerPoolListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [LoadBalancerPoolListResponseEnvelopeResultInfo]
-type loadBalancerPoolListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type LoadBalancerPoolDeleteResponseEnvelope struct {

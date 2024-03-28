@@ -48,16 +48,26 @@ func (r *DomainService) Update(ctx context.Context, domainName string, params Do
 }
 
 // List domains handled by Registrar.
-func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *[]DomainListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DomainListResponseEnvelope
+func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *shared.SinglePage[DomainListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/registrar/domains", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List domains handled by Registrar.
+func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DomainListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Show individual domain.
@@ -387,128 +397,6 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DomainListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DomainListResponseEnvelope struct {
-	Errors   []DomainListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DomainListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    DomainListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DomainListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       domainListResponseEnvelopeJSON       `json:"-"`
-}
-
-// domainListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DomainListResponseEnvelope]
-type domainListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    domainListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// domainListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DomainListResponseEnvelopeErrors]
-type domainListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    domainListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// domainListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DomainListResponseEnvelopeMessages]
-type domainListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DomainListResponseEnvelopeSuccess bool
-
-const (
-	DomainListResponseEnvelopeSuccessTrue DomainListResponseEnvelopeSuccess = true
-)
-
-func (r DomainListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DomainListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DomainListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       domainListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// domainListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DomainListResponseEnvelopeResultInfo]
-type domainListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type DomainGetParams struct {

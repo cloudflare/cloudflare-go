@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -73,16 +74,27 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 
 // Lists up to 1000 videos from a single request. For a specific range, refer to
 // the optional parameters.
-func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *[]StreamVideos, err error) {
-	opts = append(r.Options[:], opts...)
-	var env StreamListResponseEnvelope
+func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *shared.SinglePage[StreamVideos], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/stream", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists up to 1000 videos from a single request. For a specific range, refer to
+// the optional parameters.
+func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[StreamVideos] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a video and its copies from Cloudflare Stream.
@@ -403,101 +415,6 @@ const (
 func (r StreamListParamsStatus) IsKnown() bool {
 	switch r {
 	case StreamListParamsStatusPendingupload, StreamListParamsStatusDownloading, StreamListParamsStatusQueued, StreamListParamsStatusInprogress, StreamListParamsStatusReady, StreamListParamsStatusError:
-		return true
-	}
-	return false
-}
-
-type StreamListResponseEnvelope struct {
-	Errors   []StreamListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamVideos                       `json:"result,required"`
-	// Whether the API call was successful
-	Success StreamListResponseEnvelopeSuccess `json:"success,required"`
-	// The total number of remaining videos based on cursor position.
-	Range int64 `json:"range"`
-	// The total number of videos that match the provided filters.
-	Total int64                          `json:"total"`
-	JSON  streamListResponseEnvelopeJSON `json:"-"`
-}
-
-// streamListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [StreamListResponseEnvelope]
-type streamListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	Range       apijson.Field
-	Total       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type StreamListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    streamListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [StreamListResponseEnvelopeErrors]
-type streamListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type StreamListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    streamListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [StreamListResponseEnvelopeMessages]
-type streamListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type StreamListResponseEnvelopeSuccess bool
-
-const (
-	StreamListResponseEnvelopeSuccessTrue StreamListResponseEnvelopeSuccess = true
-)
-
-func (r StreamListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case StreamListResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

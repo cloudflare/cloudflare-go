@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -58,16 +59,26 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 }
 
 // Fetch all DEX tests.
-func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *[]DEXTestSchemasHTTP, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DeviceDEXTestListResponseEnvelope
+func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *shared.SinglePage[DEXTestSchemasHTTP], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetch all DEX tests.
+func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DEXTestSchemasHTTP] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a Device DEX test. Returns the remaining device dex tests for the
@@ -410,95 +421,6 @@ func (r DeviceDEXTestUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DeviceDEXTestListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DeviceDEXTestListResponseEnvelope struct {
-	Errors   []DeviceDEXTestListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceDEXTestListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DEXTestSchemasHTTP                        `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success DeviceDEXTestListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    deviceDEXTestListResponseEnvelopeJSON    `json:"-"`
-}
-
-// deviceDEXTestListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DeviceDEXTestListResponseEnvelope]
-type deviceDEXTestListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceDEXTestListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    deviceDEXTestListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceDEXTestListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceDEXTestListResponseEnvelopeErrors]
-type deviceDEXTestListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceDEXTestListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    deviceDEXTestListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceDEXTestListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DeviceDEXTestListResponseEnvelopeMessages]
-type deviceDEXTestListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceDEXTestListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceDEXTestListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DeviceDEXTestListResponseEnvelopeSuccess bool
-
-const (
-	DeviceDEXTestListResponseEnvelopeSuccessTrue DeviceDEXTestListResponseEnvelopeSuccess = true
-)
-
-func (r DeviceDEXTestListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DeviceDEXTestListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type DeviceDEXTestDeleteParams struct {

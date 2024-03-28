@@ -60,16 +60,26 @@ func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params 
 }
 
 // Returns a list of Hyperdrives
-func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *[]ConfigListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ConfigListResponseEnvelope
+func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *shared.SinglePage[ConfigListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns a list of Hyperdrives
+func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ConfigListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes the specified Hyperdrive.
@@ -460,95 +470,6 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type ConfigListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ConfigListResponseEnvelope struct {
-	Errors   []ConfigListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ConfigListResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success ConfigListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    configListResponseEnvelopeJSON    `json:"-"`
-}
-
-// configListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ConfigListResponseEnvelope]
-type configListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    configListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// configListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConfigListResponseEnvelopeErrors]
-type configListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    configListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// configListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ConfigListResponseEnvelopeMessages]
-type configListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ConfigListResponseEnvelopeSuccess bool
-
-const (
-	ConfigListResponseEnvelopeSuccessTrue ConfigListResponseEnvelopeSuccess = true
-)
-
-func (r ConfigListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ConfigListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type ConfigDeleteParams struct {

@@ -17,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -65,16 +66,26 @@ func (r *ScriptService) Update(ctx context.Context, scriptName string, params Sc
 }
 
 // Fetch a list of uploaded workers.
-func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) (res *[]WorkersScript, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ScriptListResponseEnvelope
+func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) (res *shared.SinglePage[WorkersScript], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/workers/scripts", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetch a list of uploaded workers.
+func (r *ScriptService) ListAutoPaging(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[WorkersScript] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete your worker. This call has no response body on a successful delete.
@@ -552,95 +563,6 @@ func (r ScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type ScriptListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ScriptListResponseEnvelope struct {
-	Errors   []ScriptListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersScript                      `json:"result,required"`
-	// Whether the API call was successful
-	Success ScriptListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    scriptListResponseEnvelopeJSON    `json:"-"`
-}
-
-// scriptListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ScriptListResponseEnvelope]
-type scriptListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    scriptListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// scriptListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ScriptListResponseEnvelopeErrors]
-type scriptListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    scriptListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// scriptListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ScriptListResponseEnvelopeMessages]
-type scriptListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ScriptListResponseEnvelopeSuccess bool
-
-const (
-	ScriptListResponseEnvelopeSuccessTrue ScriptListResponseEnvelopeSuccess = true
-)
-
-func (r ScriptListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ScriptListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type ScriptDeleteParams struct {

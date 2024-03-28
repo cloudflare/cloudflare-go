@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -60,16 +61,26 @@ func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) (res *[]StreamOutput, err error) {
-	opts = append(r.Options[:], opts...)
-	var env LiveInputOutputListResponseEnvelope
+func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) (res *shared.SinglePage[StreamOutput], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", query.AccountID, liveInputIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Retrieves all outputs associated with a specified live input.
+func (r *LiveInputOutputService) ListAutoPaging(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[StreamOutput] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, liveInputIdentifier, query, opts...))
 }
 
 // Deletes an output and removes it from the associated live input.
@@ -330,95 +341,6 @@ func (r LiveInputOutputUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type LiveInputOutputListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type LiveInputOutputListResponseEnvelope struct {
-	Errors   []LiveInputOutputListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LiveInputOutputListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamOutput                                `json:"result,required"`
-	// Whether the API call was successful
-	Success LiveInputOutputListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    liveInputOutputListResponseEnvelopeJSON    `json:"-"`
-}
-
-// liveInputOutputListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LiveInputOutputListResponseEnvelope]
-type liveInputOutputListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputOutputListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputOutputListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LiveInputOutputListResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    liveInputOutputListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// liveInputOutputListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [LiveInputOutputListResponseEnvelopeErrors]
-type liveInputOutputListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputOutputListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputOutputListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LiveInputOutputListResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    liveInputOutputListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// liveInputOutputListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [LiveInputOutputListResponseEnvelopeMessages]
-type liveInputOutputListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputOutputListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputOutputListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type LiveInputOutputListResponseEnvelopeSuccess bool
-
-const (
-	LiveInputOutputListResponseEnvelopeSuccessTrue LiveInputOutputListResponseEnvelopeSuccess = true
-)
-
-func (r LiveInputOutputListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case LiveInputOutputListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type LiveInputOutputDeleteParams struct {

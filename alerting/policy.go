@@ -61,16 +61,26 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 }
 
 // Get a list of all Notification policies.
-func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *[]AlertingPolicies, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PolicyListResponseEnvelope
+func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *shared.SinglePage[AlertingPolicies], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get a list of all Notification policies.
+func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AlertingPolicies] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a Notification policy.
@@ -1205,128 +1215,6 @@ func (r PolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type PolicyListParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type PolicyListResponseEnvelope struct {
-	Errors   []PolicyListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PolicyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AlertingPolicies                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    PolicyListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PolicyListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       policyListResponseEnvelopeJSON       `json:"-"`
-}
-
-// policyListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PolicyListResponseEnvelope]
-type policyListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolicyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PolicyListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    policyListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// policyListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PolicyListResponseEnvelopeErrors]
-type policyListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolicyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PolicyListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    policyListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// policyListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PolicyListResponseEnvelopeMessages]
-type policyListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolicyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PolicyListResponseEnvelopeSuccess bool
-
-const (
-	PolicyListResponseEnvelopeSuccessTrue PolicyListResponseEnvelopeSuccess = true
-)
-
-func (r PolicyListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PolicyListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PolicyListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       policyListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// policyListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [PolicyListResponseEnvelopeResultInfo]
-type policyListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type PolicyDeleteParams struct {

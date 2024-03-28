@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -69,16 +70,26 @@ func (r *WaitingRoomService) Update(ctx context.Context, zoneIdentifier string, 
 }
 
 // Lists waiting rooms.
-func (r *WaitingRoomService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]WaitingRoom, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WaitingRoomListResponseEnvelope
+func (r *WaitingRoomService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[WaitingRoom], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/waiting_rooms", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists waiting rooms.
+func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[WaitingRoom] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
 }
 
 // Deletes a waiting room.
@@ -1545,128 +1556,6 @@ func (r *WaitingRoomUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r waitingRoomUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WaitingRoomListResponseEnvelope struct {
-	Errors   []WaitingRoomListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WaitingRoomListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingRoom                             `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    WaitingRoomListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo WaitingRoomListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       waitingRoomListResponseEnvelopeJSON       `json:"-"`
-}
-
-// waitingRoomListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WaitingRoomListResponseEnvelope]
-type waitingRoomListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WaitingRoomListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r waitingRoomListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WaitingRoomListResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    waitingRoomListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// waitingRoomListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WaitingRoomListResponseEnvelopeErrors]
-type waitingRoomListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WaitingRoomListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r waitingRoomListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WaitingRoomListResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    waitingRoomListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// waitingRoomListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WaitingRoomListResponseEnvelopeMessages]
-type waitingRoomListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WaitingRoomListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r waitingRoomListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type WaitingRoomListResponseEnvelopeSuccess bool
-
-const (
-	WaitingRoomListResponseEnvelopeSuccessTrue WaitingRoomListResponseEnvelopeSuccess = true
-)
-
-func (r WaitingRoomListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case WaitingRoomListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type WaitingRoomListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                       `json:"total_count"`
-	JSON       waitingRoomListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// waitingRoomListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [WaitingRoomListResponseEnvelopeResultInfo]
-type waitingRoomListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WaitingRoomListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r waitingRoomListResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 

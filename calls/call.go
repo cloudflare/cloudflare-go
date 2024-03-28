@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -59,16 +60,26 @@ func (r *CallService) Update(ctx context.Context, appID string, params CallUpdat
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *[]CallsApp, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CallListResponseEnvelope
+func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *shared.SinglePage[CallsApp], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/calls/apps", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all apps in the Cloudflare account
+func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[CallsApp] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an app from Cloudflare Calls
@@ -364,95 +375,6 @@ func (r CallUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type CallListParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type CallListResponseEnvelope struct {
-	Errors   []CallListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CallListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CallsApp                         `json:"result,required"`
-	// Whether the API call was successful
-	Success CallListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    callListResponseEnvelopeJSON    `json:"-"`
-}
-
-// callListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [CallListResponseEnvelope]
-type callListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CallListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r callListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CallListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    callListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// callListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [CallListResponseEnvelopeErrors]
-type callListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CallListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r callListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CallListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    callListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// callListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [CallListResponseEnvelopeMessages]
-type callListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CallListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r callListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type CallListResponseEnvelopeSuccess bool
-
-const (
-	CallListResponseEnvelopeSuccessTrue CallListResponseEnvelopeSuccess = true
-)
-
-func (r CallListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case CallListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type CallDeleteParams struct {

@@ -62,16 +62,26 @@ func (r *GatewayLocationService) Update(ctx context.Context, locationID string, 
 }
 
 // Fetches Zero Trust Gateway locations for an account.
-func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayLocations, err error) {
-	opts = append(r.Options[:], opts...)
-	var env GatewayLocationListResponseEnvelope
+func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustGatewayLocations], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/gateway/locations", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches Zero Trust Gateway locations for an account.
+func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustGatewayLocations] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a configured Zero Trust Gateway location.
@@ -415,128 +425,6 @@ func (r GatewayLocationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayLocationListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type GatewayLocationListResponseEnvelope struct {
-	Errors   []GatewayLocationListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayLocationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustGatewayLocations                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    GatewayLocationListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo GatewayLocationListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       gatewayLocationListResponseEnvelopeJSON       `json:"-"`
-}
-
-// gatewayLocationListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [GatewayLocationListResponseEnvelope]
-type gatewayLocationListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLocationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLocationListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayLocationListResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    gatewayLocationListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayLocationListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayLocationListResponseEnvelopeErrors]
-type gatewayLocationListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLocationListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLocationListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayLocationListResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    gatewayLocationListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayLocationListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [GatewayLocationListResponseEnvelopeMessages]
-type gatewayLocationListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLocationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLocationListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type GatewayLocationListResponseEnvelopeSuccess bool
-
-const (
-	GatewayLocationListResponseEnvelopeSuccessTrue GatewayLocationListResponseEnvelopeSuccess = true
-)
-
-func (r GatewayLocationListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case GatewayLocationListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type GatewayLocationListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	JSON       gatewayLocationListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// gatewayLocationListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [GatewayLocationListResponseEnvelopeResultInfo]
-type gatewayLocationListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLocationListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLocationListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type GatewayLocationDeleteParams struct {

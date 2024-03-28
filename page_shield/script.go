@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,16 +34,26 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 }
 
 // Lists all scripts detected by Page Shield.
-func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *[]PageShieldScript, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ScriptListResponseEnvelope
+func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *shared.SinglePage[PageShieldScript], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/scripts", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all scripts detected by Page Shield.
+func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PageShieldScript] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Fetches a script detected by Page Shield by script ID.
@@ -298,128 +309,6 @@ func (r ScriptListParamsOrderBy) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type ScriptListResponseEnvelope struct {
-	Errors   []ScriptListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PageShieldScript                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    ScriptListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ScriptListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       scriptListResponseEnvelopeJSON       `json:"-"`
-}
-
-// scriptListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ScriptListResponseEnvelope]
-type scriptListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    scriptListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// scriptListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ScriptListResponseEnvelopeErrors]
-type scriptListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    scriptListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// scriptListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ScriptListResponseEnvelopeMessages]
-type scriptListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ScriptListResponseEnvelopeSuccess bool
-
-const (
-	ScriptListResponseEnvelopeSuccessTrue ScriptListResponseEnvelopeSuccess = true
-)
-
-func (r ScriptListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ScriptListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ScriptListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       scriptListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// scriptListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ScriptListResponseEnvelopeResultInfo]
-type scriptListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type ScriptGetParams struct {

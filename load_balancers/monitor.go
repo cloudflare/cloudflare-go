@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/user"
 )
@@ -62,16 +63,26 @@ func (r *MonitorService) Update(ctx context.Context, monitorID string, params Mo
 }
 
 // List configured monitors for an account.
-func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) (res *[]user.LoadBalancingMonitor, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MonitorListResponseEnvelope
+func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) (res *shared.SinglePage[user.LoadBalancingMonitor], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List configured monitors for an account.
+func (r *MonitorService) ListAutoPaging(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[user.LoadBalancingMonitor] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a configured monitor.
@@ -473,128 +484,6 @@ func (r MonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type MonitorListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type MonitorListResponseEnvelope struct {
-	Errors   []MonitorListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MonitorListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []user.LoadBalancingMonitor           `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    MonitorListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo MonitorListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       monitorListResponseEnvelopeJSON       `json:"-"`
-}
-
-// monitorListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MonitorListResponseEnvelope]
-type monitorListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MonitorListResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    monitorListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// monitorListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [MonitorListResponseEnvelopeErrors]
-type monitorListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MonitorListResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    monitorListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// monitorListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [MonitorListResponseEnvelopeMessages]
-type monitorListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type MonitorListResponseEnvelopeSuccess bool
-
-const (
-	MonitorListResponseEnvelopeSuccessTrue MonitorListResponseEnvelopeSuccess = true
-)
-
-func (r MonitorListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case MonitorListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type MonitorListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                   `json:"total_count"`
-	JSON       monitorListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// monitorListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [MonitorListResponseEnvelopeResultInfo]
-type monitorListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type MonitorDeleteParams struct {

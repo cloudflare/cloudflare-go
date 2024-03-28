@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/user"
 )
@@ -64,16 +65,26 @@ func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpda
 }
 
 // List configured pools.
-func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *[]user.LoadBalancingPool, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PoolListResponseEnvelope
+func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *shared.SinglePage[user.LoadBalancingPool], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List configured pools.
+func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[user.LoadBalancingPool] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a configured pool.
@@ -855,128 +866,6 @@ func (r PoolListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type PoolListResponseEnvelope struct {
-	Errors   []PoolListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PoolListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []user.LoadBalancingPool           `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    PoolListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PoolListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       poolListResponseEnvelopeJSON       `json:"-"`
-}
-
-// poolListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PoolListResponseEnvelope]
-type poolListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PoolListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    poolListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// poolListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PoolListResponseEnvelopeErrors]
-type poolListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PoolListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    poolListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// poolListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PoolListResponseEnvelopeMessages]
-type poolListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PoolListResponseEnvelopeSuccess bool
-
-const (
-	PoolListResponseEnvelopeSuccessTrue PoolListResponseEnvelopeSuccess = true
-)
-
-func (r PoolListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PoolListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PoolListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       poolListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// poolListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [PoolListResponseEnvelopeResultInfo]
-type poolListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type PoolDeleteParams struct {

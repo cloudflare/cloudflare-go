@@ -49,16 +49,26 @@ func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayPro
 }
 
 // Fetches a single Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayProxyEndpoints, err error) {
-	opts = append(r.Options[:], opts...)
-	var env GatewayProxyEndpointListResponseEnvelope
+func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustGatewayProxyEndpoints], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches a single Zero Trust Gateway proxy endpoint.
+func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustGatewayProxyEndpoints] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a configured Zero Trust Gateway proxy endpoint.
@@ -256,128 +266,6 @@ func (r GatewayProxyEndpointNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayProxyEndpointListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type GatewayProxyEndpointListResponseEnvelope struct {
-	Errors   []GatewayProxyEndpointListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayProxyEndpointListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustGatewayProxyEndpoints                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    GatewayProxyEndpointListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo GatewayProxyEndpointListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       gatewayProxyEndpointListResponseEnvelopeJSON       `json:"-"`
-}
-
-// gatewayProxyEndpointListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [GatewayProxyEndpointListResponseEnvelope]
-type gatewayProxyEndpointListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayProxyEndpointListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayProxyEndpointListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayProxyEndpointListResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    gatewayProxyEndpointListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayProxyEndpointListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [GatewayProxyEndpointListResponseEnvelopeErrors]
-type gatewayProxyEndpointListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayProxyEndpointListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayProxyEndpointListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayProxyEndpointListResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    gatewayProxyEndpointListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayProxyEndpointListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [GatewayProxyEndpointListResponseEnvelopeMessages]
-type gatewayProxyEndpointListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayProxyEndpointListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayProxyEndpointListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type GatewayProxyEndpointListResponseEnvelopeSuccess bool
-
-const (
-	GatewayProxyEndpointListResponseEnvelopeSuccessTrue GatewayProxyEndpointListResponseEnvelopeSuccess = true
-)
-
-func (r GatewayProxyEndpointListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case GatewayProxyEndpointListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type GatewayProxyEndpointListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                `json:"total_count"`
-	JSON       gatewayProxyEndpointListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// gatewayProxyEndpointListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [GatewayProxyEndpointListResponseEnvelopeResultInfo]
-type gatewayProxyEndpointListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayProxyEndpointListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayProxyEndpointListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type GatewayProxyEndpointDeleteParams struct {

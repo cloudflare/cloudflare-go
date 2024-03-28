@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -84,9 +85,10 @@ func (r *RulesetService) Update(ctx context.Context, rulesetID string, params Ru
 }
 
 // Fetches all rulesets.
-func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) (res *RulesetsRulesetsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RulesetListResponseEnvelope
+func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) (res *shared.SinglePage[RulesetListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -97,12 +99,21 @@ func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches all rulesets.
+func (r *RulesetService) ListAutoPaging(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[RulesetListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes all versions of an existing account or zone ruleset.
@@ -2522,157 +2533,6 @@ type RulesetListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-// A response object.
-type RulesetListResponseEnvelope struct {
-	// A list of error messages.
-	Errors []RulesetListResponseEnvelopeErrors `json:"errors,required"`
-	// A list of warning messages.
-	Messages []RulesetListResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
-	Result RulesetsRulesetsResponse `json:"result,required"`
-	// Whether the API call was successful.
-	Success RulesetListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    rulesetListResponseEnvelopeJSON    `json:"-"`
-}
-
-// rulesetListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RulesetListResponseEnvelope]
-type rulesetListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// A message.
-type RulesetListResponseEnvelopeErrors struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source RulesetListResponseEnvelopeErrorsSource `json:"source"`
-	JSON   rulesetListResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// rulesetListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RulesetListResponseEnvelopeErrors]
-type rulesetListResponseEnvelopeErrorsJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-// The source of this message.
-type RulesetListResponseEnvelopeErrorsSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                      `json:"pointer,required"`
-	JSON    rulesetListResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// rulesetListResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [RulesetListResponseEnvelopeErrorsSource]
-type rulesetListResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// A message.
-type RulesetListResponseEnvelopeMessages struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source RulesetListResponseEnvelopeMessagesSource `json:"source"`
-	JSON   rulesetListResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// rulesetListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RulesetListResponseEnvelopeMessages]
-type rulesetListResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The source of this message.
-type RulesetListResponseEnvelopeMessagesSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                        `json:"pointer,required"`
-	JSON    rulesetListResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// rulesetListResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
-// struct [RulesetListResponseEnvelopeMessagesSource]
-type rulesetListResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesetListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type RulesetListResponseEnvelopeSuccess bool
-
-const (
-	RulesetListResponseEnvelopeSuccessTrue RulesetListResponseEnvelopeSuccess = true
-)
-
-func (r RulesetListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RulesetListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type RulesetDeleteParams struct {

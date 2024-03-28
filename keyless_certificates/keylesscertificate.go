@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -46,16 +47,26 @@ func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCerti
 }
 
 // List all Keyless SSL configurations for a given zone.
-func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) (res *[]KeylessCertificateHostname, err error) {
-	opts = append(r.Options[:], opts...)
-	var env KeylessCertificateListResponseEnvelope
+func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) (res *shared.SinglePage[KeylessCertificateHostname], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/keyless_certificates", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List all Keyless SSL configurations for a given zone.
+func (r *KeylessCertificateService) ListAutoPaging(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[KeylessCertificateHostname] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Keyless SSL Configuration
@@ -362,128 +373,6 @@ func (r KeylessCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 type KeylessCertificateListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type KeylessCertificateListResponseEnvelope struct {
-	Errors   []KeylessCertificateListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeylessCertificateListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []KeylessCertificateHostname                     `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    KeylessCertificateListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo KeylessCertificateListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       keylessCertificateListResponseEnvelopeJSON       `json:"-"`
-}
-
-// keylessCertificateListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [KeylessCertificateListResponseEnvelope]
-type keylessCertificateListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessCertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keylessCertificateListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type KeylessCertificateListResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    keylessCertificateListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// keylessCertificateListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [KeylessCertificateListResponseEnvelopeErrors]
-type keylessCertificateListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessCertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keylessCertificateListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type KeylessCertificateListResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    keylessCertificateListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// keylessCertificateListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [KeylessCertificateListResponseEnvelopeMessages]
-type keylessCertificateListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessCertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keylessCertificateListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type KeylessCertificateListResponseEnvelopeSuccess bool
-
-const (
-	KeylessCertificateListResponseEnvelopeSuccessTrue KeylessCertificateListResponseEnvelopeSuccess = true
-)
-
-func (r KeylessCertificateListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case KeylessCertificateListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type KeylessCertificateListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                              `json:"total_count"`
-	JSON       keylessCertificateListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// keylessCertificateListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [KeylessCertificateListResponseEnvelopeResultInfo]
-type keylessCertificateListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r keylessCertificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type KeylessCertificateDeleteParams struct {

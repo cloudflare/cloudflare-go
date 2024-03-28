@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -36,16 +37,29 @@ func NewPrefixBGPPrefixService(opts ...option.RequestOption) (r *PrefixBGPPrefix
 // control which specific subnets are advertised to the Internet. It is possible to
 // advertise subnets more specific than an IP Prefix by creating more specific BGP
 // Prefixes.
-func (r *PrefixBGPPrefixService) List(ctx context.Context, prefixID string, query PrefixBGPPrefixListParams, opts ...option.RequestOption) (res *[]AddressingIpamBGPPrefixes, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PrefixBGPPrefixListResponseEnvelope
+func (r *PrefixBGPPrefixService) List(ctx context.Context, prefixID string, query PrefixBGPPrefixListParams, opts ...option.RequestOption) (res *shared.SinglePage[AddressingIpamBGPPrefixes], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes", query.AccountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List all BGP Prefixes within the specified IP Prefix. BGP Prefixes are used to
+// control which specific subnets are advertised to the Internet. It is possible to
+// advertise subnets more specific than an IP Prefix by creating more specific BGP
+// Prefixes.
+func (r *PrefixBGPPrefixService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixBGPPrefixListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AddressingIpamBGPPrefixes] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
 // Update the properties of a BGP Prefix, such as the on demand advertisement
@@ -176,128 +190,6 @@ func (r addressingIpamBGPPrefixesOnDemandJSON) RawJSON() string {
 type PrefixBGPPrefixListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type PrefixBGPPrefixListResponseEnvelope struct {
-	Errors   []PrefixBGPPrefixListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPPrefixListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AddressingIpamBGPPrefixes                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    PrefixBGPPrefixListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PrefixBGPPrefixListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       prefixBGPPrefixListResponseEnvelopeJSON       `json:"-"`
-}
-
-// prefixBGPPrefixListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [PrefixBGPPrefixListResponseEnvelope]
-type prefixBGPPrefixListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPPrefixListResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    prefixBGPPrefixListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixBGPPrefixListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixBGPPrefixListResponseEnvelopeErrors]
-type prefixBGPPrefixListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPPrefixListResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    prefixBGPPrefixListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixBGPPrefixListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixBGPPrefixListResponseEnvelopeMessages]
-type prefixBGPPrefixListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PrefixBGPPrefixListResponseEnvelopeSuccess bool
-
-const (
-	PrefixBGPPrefixListResponseEnvelopeSuccessTrue PrefixBGPPrefixListResponseEnvelopeSuccess = true
-)
-
-func (r PrefixBGPPrefixListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PrefixBGPPrefixListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PrefixBGPPrefixListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	JSON       prefixBGPPrefixListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// prefixBGPPrefixListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [PrefixBGPPrefixListResponseEnvelopeResultInfo]
-type prefixBGPPrefixListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPPrefixListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPPrefixListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type PrefixBGPPrefixEditParams struct {

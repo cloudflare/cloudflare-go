@@ -62,16 +62,26 @@ func (r *DestinationWebhookService) Update(ctx context.Context, webhookID string
 }
 
 // Gets a list of all configured webhook destinations.
-func (r *DestinationWebhookService) List(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) (res *[]AlertingWebhooks, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DestinationWebhookListResponseEnvelope
+func (r *DestinationWebhookService) List(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) (res *shared.SinglePage[AlertingWebhooks], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Gets a list of all configured webhook destinations.
+func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AlertingWebhooks] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a configured webhook destination.
@@ -451,128 +461,6 @@ func (r DestinationWebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DestinationWebhookListParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DestinationWebhookListResponseEnvelope struct {
-	Errors   []DestinationWebhookListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationWebhookListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AlertingWebhooks                               `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    DestinationWebhookListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DestinationWebhookListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       destinationWebhookListResponseEnvelopeJSON       `json:"-"`
-}
-
-// destinationWebhookListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DestinationWebhookListResponseEnvelope]
-type destinationWebhookListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationWebhookListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationWebhookListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationWebhookListResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    destinationWebhookListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// destinationWebhookListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DestinationWebhookListResponseEnvelopeErrors]
-type destinationWebhookListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationWebhookListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationWebhookListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationWebhookListResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    destinationWebhookListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// destinationWebhookListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DestinationWebhookListResponseEnvelopeMessages]
-type destinationWebhookListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationWebhookListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationWebhookListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DestinationWebhookListResponseEnvelopeSuccess bool
-
-const (
-	DestinationWebhookListResponseEnvelopeSuccessTrue DestinationWebhookListResponseEnvelopeSuccess = true
-)
-
-func (r DestinationWebhookListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DestinationWebhookListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DestinationWebhookListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                              `json:"total_count"`
-	JSON       destinationWebhookListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// destinationWebhookListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [DestinationWebhookListResponseEnvelopeResultInfo]
-type destinationWebhookListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationWebhookListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationWebhookListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type DestinationWebhookDeleteParams struct {

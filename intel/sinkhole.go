@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,16 +33,26 @@ func NewSinkholeService(opts ...option.RequestOption) (r *SinkholeService) {
 }
 
 // List sinkholes owned by this account
-func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *[]IntelSinkholeItem, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SinkholeListResponseEnvelope
+func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *shared.SinglePage[IntelSinkholeItem], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/intel/sinkholes", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List sinkholes owned by this account
+func (r *SinkholeService) ListAutoPaging(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[IntelSinkholeItem] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type IntelSinkholeItem struct {
@@ -87,93 +98,4 @@ func (r intelSinkholeItemJSON) RawJSON() string {
 type SinkholeListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type SinkholeListResponseEnvelope struct {
-	Errors   []SinkholeListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SinkholeListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelSinkholeItem                    `json:"result,required"`
-	// Whether the API call was successful
-	Success SinkholeListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    sinkholeListResponseEnvelopeJSON    `json:"-"`
-}
-
-// sinkholeListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SinkholeListResponseEnvelope]
-type sinkholeListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SinkholeListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sinkholeListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SinkholeListResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    sinkholeListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// sinkholeListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SinkholeListResponseEnvelopeErrors]
-type sinkholeListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SinkholeListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sinkholeListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SinkholeListResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    sinkholeListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// sinkholeListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SinkholeListResponseEnvelopeMessages]
-type sinkholeListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SinkholeListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sinkholeListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SinkholeListResponseEnvelopeSuccess bool
-
-const (
-	SinkholeListResponseEnvelopeSuccessTrue SinkholeListResponseEnvelopeSuccess = true
-)
-
-func (r SinkholeListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SinkholeListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
