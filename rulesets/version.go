@@ -85,7 +85,7 @@ func (r *VersionService) Delete(ctx context.Context, rulesetID string, rulesetVe
 }
 
 // Fetches a specific version of an account or zone ruleset.
-func (r *VersionService) Get(ctx context.Context, rulesetID string, rulesetVersion string, query VersionGetParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
+func (r *VersionService) Get(ctx context.Context, rulesetID string, rulesetVersion string, query VersionGetParams, opts ...option.RequestOption) (res *Ruleset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VersionGetResponseEnvelope
 	var accountOrZone string
@@ -230,7 +230,7 @@ type VersionGetResponseEnvelope struct {
 	// A list of warning messages.
 	Messages []VersionGetResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result RulesetsRulesetResponse `json:"result,required"`
+	Result Ruleset `json:"result,required"`
 	// Whether the API call was successful.
 	Success VersionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    versionGetResponseEnvelopeJSON    `json:"-"`

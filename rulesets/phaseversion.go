@@ -66,7 +66,7 @@ func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase P
 }
 
 // Fetches a specific version of an account or zone entry point ruleset.
-func (r *PhaseVersionService) Get(ctx context.Context, rulesetPhase PhaseVersionGetParamsRulesetPhase, rulesetVersion string, query PhaseVersionGetParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
+func (r *PhaseVersionService) Get(ctx context.Context, rulesetPhase PhaseVersionGetParamsRulesetPhase, rulesetVersion string, query PhaseVersionGetParams, opts ...option.RequestOption) (res *Ruleset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PhaseVersionGetResponseEnvelope
 	var accountOrZone string
@@ -278,7 +278,7 @@ type PhaseVersionGetResponseEnvelope struct {
 	// A list of warning messages.
 	Messages []PhaseVersionGetResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result RulesetsRulesetResponse `json:"result,required"`
+	Result Ruleset `json:"result,required"`
 	// Whether the API call was successful.
 	Success PhaseVersionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    phaseVersionGetResponseEnvelopeJSON    `json:"-"`
