@@ -43,13 +43,13 @@ func (r *TraceService) New(ctx context.Context, accountIdentifier string, body T
 	return
 }
 
-type RequestTracerTrace []RequestTracerTrace
+type RequestTrace []RequestTraceItem
 
 // Trace result with an origin status code
 type TraceNewResponse struct {
 	// HTTP Status code of zone response
 	StatusCode int64                `json:"status_code"`
-	Trace      RequestTracerTrace   `json:"trace"`
+	Trace      RequestTrace         `json:"trace"`
 	JSON       traceNewResponseJSON `json:"-"`
 }
 

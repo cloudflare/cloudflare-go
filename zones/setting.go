@@ -163,31 +163,36 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Union satisfied by [zones.Zones0rtt], [zones.ZonesAdvancedDDOS],
-// [zones.ZonesAlwaysOnline], [zones.ZonesAlwaysUseHTTPS],
-// [zones.ZonesAutomaticHTTPSRewrites], [zones.ZonesBrotli],
-// [zones.ZonesBrowserCacheTTL], [zones.ZonesBrowserCheck],
-// [zones.ZonesCacheLevel], [zones.ZonesChallengeTTL], [zones.ZonesCiphers],
-// [zones.SettingEditResponseZonesCNAMEFlattening], [zones.ZonesDevelopmentMode],
-// [zones.ZonesEarlyHints], [zones.SettingEditResponseZonesEdgeCacheTTL],
-// [zones.ZonesEmailObfuscation], [zones.ZonesH2Prioritization],
-// [zones.ZonesHotlinkProtection], [zones.ZonesHTTP2], [zones.ZonesHTTP3],
-// [zones.ZonesImageResizing], [zones.ZonesIPGeolocation], [zones.ZonesIPV6],
-// [zones.SettingEditResponseZonesMaxUpload], [zones.ZonesMinTLSVersion],
-// [zones.ZonesMinify], [zones.ZonesMirage], [zones.ZonesMobileRedirect],
-// [zones.ZonesNEL], [zones.ZonesOpportunisticEncryption],
-// [zones.ZonesOpportunisticOnion], [zones.ZonesOrangeToOrange],
-// [zones.ZonesOriginErrorPagePassThru], [zones.ZonesPolish],
-// [zones.ZonesPrefetchPreload], [zones.ZonesProxyReadTimeout],
-// [zones.ZonesPseudoIPV4], [zones.ZonesBuffering], [zones.ZonesRocketLoader],
+// Union satisfied by [zones.ZoneSetting0rtt], [zones.ZoneSettingAdvancedDDOS],
+// [zones.ZoneSettingAlwaysOnline], [zones.ZoneSettingAlwaysUseHTTPS],
+// [zones.ZoneSettingAutomaticHTTPSRewrites], [zones.ZoneSettingBrotli],
+// [zones.ZoneSettingBrowserCacheTTL], [zones.ZoneSettingBrowserCheck],
+// [zones.ZoneSettingCacheLevel], [zones.ZoneSettingChallengeTTL],
+// [zones.ZoneSettingCiphers], [zones.SettingEditResponseZonesCNAMEFlattening],
+// [zones.ZoneSettingDevelopmentMode], [zones.ZoneSettingEarlyHints],
+// [zones.SettingEditResponseZonesEdgeCacheTTL],
+// [zones.ZoneSettingEmailObfuscation], [zones.ZoneSettingH2Prioritization],
+// [zones.ZoneSettingHotlinkProtection], [zones.ZoneSettingHTTP2],
+// [zones.ZoneSettingHTTP3], [zones.ZoneSettingImageResizing],
+// [zones.ZoneSettingIPGeolocation], [zones.ZoneSettingIPV6],
+// [zones.SettingEditResponseZonesMaxUpload], [zones.ZoneSettingMinTLSVersion],
+// [zones.ZoneSettingMinify], [zones.ZoneSettingMirage],
+// [zones.ZoneSettingMobileRedirect], [zones.ZoneSettingNEL],
+// [zones.ZoneSettingOpportunisticEncryption],
+// [zones.ZoneSettingOpportunisticOnion], [zones.ZoneSettingOrangeToOrange],
+// [zones.ZoneSettingOriginErrorPagePassThru], [zones.ZoneSettingPolish],
+// [zones.ZoneSettingPrefetchPreload], [zones.ZoneSettingProxyReadTimeout],
+// [zones.ZoneSettingPseudoIPV4], [zones.ZoneSettingBuffering],
+// [zones.ZoneSettingRocketLoader],
 // [zones.SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
-// [zones.ZonesSecurityHeader], [zones.ZonesSecurityLevel],
-// [zones.ZonesServerSideExclude], [zones.SettingEditResponseZonesSha1Support],
-// [zones.ZonesSortQueryStringForCache], [zones.ZonesSSL],
-// [zones.ZonesSSLRecommender], [zones.SettingEditResponseZonesTLS1_2Only],
-// [zones.ZonesTLS1_3], [zones.ZonesTLSClientAuth],
-// [zones.ZonesTrueClientIPHeader], [zones.ZonesWAF], [zones.ZonesWebP] or
-// [zones.ZonesWebsockets].
+// [zones.ZoneSettingSecurityHeader], [zones.ZoneSettingSecurityLevel],
+// [zones.ZoneSettingServerSideExclude],
+// [zones.SettingEditResponseZonesSha1Support],
+// [zones.ZoneSettingSortQueryStringForCache], [zones.ZoneSettingSSL],
+// [zones.ZoneSettingSSLRecommender], [zones.SettingEditResponseZonesTLS1_2Only],
+// [zones.ZoneSettingTLS1_3], [zones.ZoneSettingTLSClientAuth],
+// [zones.ZoneSettingTrueClientIPHeader], [zones.ZoneSettingWAF],
+// [zones.ZoneSettingWebP] or [zones.ZoneSettingWebsockets].
 type SettingEditResponse interface {
 	implementsZonesSettingEditResponse()
 }
@@ -198,47 +203,47 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Zones0rtt{}),
+			Type:       reflect.TypeOf(ZoneSetting0rtt{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesAdvancedDDOS{}),
+			Type:       reflect.TypeOf(ZoneSettingAdvancedDDOS{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesAlwaysOnline{}),
+			Type:       reflect.TypeOf(ZoneSettingAlwaysOnline{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesAlwaysUseHTTPS{}),
+			Type:       reflect.TypeOf(ZoneSettingAlwaysUseHTTPS{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesAutomaticHTTPSRewrites{}),
+			Type:       reflect.TypeOf(ZoneSettingAutomaticHTTPSRewrites{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesBrotli{}),
+			Type:       reflect.TypeOf(ZoneSettingBrotli{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesBrowserCacheTTL{}),
+			Type:       reflect.TypeOf(ZoneSettingBrowserCacheTTL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesBrowserCheck{}),
+			Type:       reflect.TypeOf(ZoneSettingBrowserCheck{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesCacheLevel{}),
+			Type:       reflect.TypeOf(ZoneSettingCacheLevel{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesChallengeTTL{}),
+			Type:       reflect.TypeOf(ZoneSettingChallengeTTL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesCiphers{}),
+			Type:       reflect.TypeOf(ZoneSettingCiphers{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -246,11 +251,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesDevelopmentMode{}),
+			Type:       reflect.TypeOf(ZoneSettingDevelopmentMode{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesEarlyHints{}),
+			Type:       reflect.TypeOf(ZoneSettingEarlyHints{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -258,35 +263,35 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesEmailObfuscation{}),
+			Type:       reflect.TypeOf(ZoneSettingEmailObfuscation{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesH2Prioritization{}),
+			Type:       reflect.TypeOf(ZoneSettingH2Prioritization{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesHotlinkProtection{}),
+			Type:       reflect.TypeOf(ZoneSettingHotlinkProtection{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesHTTP2{}),
+			Type:       reflect.TypeOf(ZoneSettingHTTP2{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesHTTP3{}),
+			Type:       reflect.TypeOf(ZoneSettingHTTP3{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesImageResizing{}),
+			Type:       reflect.TypeOf(ZoneSettingImageResizing{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesIPGeolocation{}),
+			Type:       reflect.TypeOf(ZoneSettingIPGeolocation{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesIPV6{}),
+			Type:       reflect.TypeOf(ZoneSettingIPV6{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -294,63 +299,63 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesMinTLSVersion{}),
+			Type:       reflect.TypeOf(ZoneSettingMinTLSVersion{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesMinify{}),
+			Type:       reflect.TypeOf(ZoneSettingMinify{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesMirage{}),
+			Type:       reflect.TypeOf(ZoneSettingMirage{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesMobileRedirect{}),
+			Type:       reflect.TypeOf(ZoneSettingMobileRedirect{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesNEL{}),
+			Type:       reflect.TypeOf(ZoneSettingNEL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesOpportunisticEncryption{}),
+			Type:       reflect.TypeOf(ZoneSettingOpportunisticEncryption{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesOpportunisticOnion{}),
+			Type:       reflect.TypeOf(ZoneSettingOpportunisticOnion{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesOrangeToOrange{}),
+			Type:       reflect.TypeOf(ZoneSettingOrangeToOrange{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesOriginErrorPagePassThru{}),
+			Type:       reflect.TypeOf(ZoneSettingOriginErrorPagePassThru{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesPolish{}),
+			Type:       reflect.TypeOf(ZoneSettingPolish{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesPrefetchPreload{}),
+			Type:       reflect.TypeOf(ZoneSettingPrefetchPreload{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesProxyReadTimeout{}),
+			Type:       reflect.TypeOf(ZoneSettingProxyReadTimeout{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesPseudoIPV4{}),
+			Type:       reflect.TypeOf(ZoneSettingPseudoIPV4{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesBuffering{}),
+			Type:       reflect.TypeOf(ZoneSettingBuffering{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesRocketLoader{}),
+			Type:       reflect.TypeOf(ZoneSettingRocketLoader{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -358,15 +363,15 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSecurityHeader{}),
+			Type:       reflect.TypeOf(ZoneSettingSecurityHeader{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSecurityLevel{}),
+			Type:       reflect.TypeOf(ZoneSettingSecurityLevel{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesServerSideExclude{}),
+			Type:       reflect.TypeOf(ZoneSettingServerSideExclude{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -374,15 +379,15 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSortQueryStringForCache{}),
+			Type:       reflect.TypeOf(ZoneSettingSortQueryStringForCache{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSSL{}),
+			Type:       reflect.TypeOf(ZoneSettingSSL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSSLRecommender{}),
+			Type:       reflect.TypeOf(ZoneSettingSSLRecommender{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -390,27 +395,27 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesTLS1_3{}),
+			Type:       reflect.TypeOf(ZoneSettingTLS1_3{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesTLSClientAuth{}),
+			Type:       reflect.TypeOf(ZoneSettingTLSClientAuth{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesTrueClientIPHeader{}),
+			Type:       reflect.TypeOf(ZoneSettingTrueClientIPHeader{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesWAF{}),
+			Type:       reflect.TypeOf(ZoneSettingWAF{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesWebP{}),
+			Type:       reflect.TypeOf(ZoneSettingWebP{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesWebsockets{}),
+			Type:       reflect.TypeOf(ZoneSettingWebsockets{}),
 		},
 	)
 }
@@ -692,7 +697,7 @@ type SettingEditResponseZonesSchemasAutomaticPlatformOptimization struct {
 	// ID of the zone setting.
 	ID SettingEditResponseZonesSchemasAutomaticPlatformOptimizationID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesAutomaticPlatformOptimization `json:"value,required"`
+	Value ZoneSettingAutomaticPlatformOptimization `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditable `json:"editable"`
@@ -924,31 +929,36 @@ func (r SettingEditResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Union satisfied by [zones.Zones0rtt], [zones.ZonesAdvancedDDOS],
-// [zones.ZonesAlwaysOnline], [zones.ZonesAlwaysUseHTTPS],
-// [zones.ZonesAutomaticHTTPSRewrites], [zones.ZonesBrotli],
-// [zones.ZonesBrowserCacheTTL], [zones.ZonesBrowserCheck],
-// [zones.ZonesCacheLevel], [zones.ZonesChallengeTTL], [zones.ZonesCiphers],
-// [zones.SettingGetResponseZonesCNAMEFlattening], [zones.ZonesDevelopmentMode],
-// [zones.ZonesEarlyHints], [zones.SettingGetResponseZonesEdgeCacheTTL],
-// [zones.ZonesEmailObfuscation], [zones.ZonesH2Prioritization],
-// [zones.ZonesHotlinkProtection], [zones.ZonesHTTP2], [zones.ZonesHTTP3],
-// [zones.ZonesImageResizing], [zones.ZonesIPGeolocation], [zones.ZonesIPV6],
-// [zones.SettingGetResponseZonesMaxUpload], [zones.ZonesMinTLSVersion],
-// [zones.ZonesMinify], [zones.ZonesMirage], [zones.ZonesMobileRedirect],
-// [zones.ZonesNEL], [zones.ZonesOpportunisticEncryption],
-// [zones.ZonesOpportunisticOnion], [zones.ZonesOrangeToOrange],
-// [zones.ZonesOriginErrorPagePassThru], [zones.ZonesPolish],
-// [zones.ZonesPrefetchPreload], [zones.ZonesProxyReadTimeout],
-// [zones.ZonesPseudoIPV4], [zones.ZonesBuffering], [zones.ZonesRocketLoader],
+// Union satisfied by [zones.ZoneSetting0rtt], [zones.ZoneSettingAdvancedDDOS],
+// [zones.ZoneSettingAlwaysOnline], [zones.ZoneSettingAlwaysUseHTTPS],
+// [zones.ZoneSettingAutomaticHTTPSRewrites], [zones.ZoneSettingBrotli],
+// [zones.ZoneSettingBrowserCacheTTL], [zones.ZoneSettingBrowserCheck],
+// [zones.ZoneSettingCacheLevel], [zones.ZoneSettingChallengeTTL],
+// [zones.ZoneSettingCiphers], [zones.SettingGetResponseZonesCNAMEFlattening],
+// [zones.ZoneSettingDevelopmentMode], [zones.ZoneSettingEarlyHints],
+// [zones.SettingGetResponseZonesEdgeCacheTTL],
+// [zones.ZoneSettingEmailObfuscation], [zones.ZoneSettingH2Prioritization],
+// [zones.ZoneSettingHotlinkProtection], [zones.ZoneSettingHTTP2],
+// [zones.ZoneSettingHTTP3], [zones.ZoneSettingImageResizing],
+// [zones.ZoneSettingIPGeolocation], [zones.ZoneSettingIPV6],
+// [zones.SettingGetResponseZonesMaxUpload], [zones.ZoneSettingMinTLSVersion],
+// [zones.ZoneSettingMinify], [zones.ZoneSettingMirage],
+// [zones.ZoneSettingMobileRedirect], [zones.ZoneSettingNEL],
+// [zones.ZoneSettingOpportunisticEncryption],
+// [zones.ZoneSettingOpportunisticOnion], [zones.ZoneSettingOrangeToOrange],
+// [zones.ZoneSettingOriginErrorPagePassThru], [zones.ZoneSettingPolish],
+// [zones.ZoneSettingPrefetchPreload], [zones.ZoneSettingProxyReadTimeout],
+// [zones.ZoneSettingPseudoIPV4], [zones.ZoneSettingBuffering],
+// [zones.ZoneSettingRocketLoader],
 // [zones.SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
-// [zones.ZonesSecurityHeader], [zones.ZonesSecurityLevel],
-// [zones.ZonesServerSideExclude], [zones.SettingGetResponseZonesSha1Support],
-// [zones.ZonesSortQueryStringForCache], [zones.ZonesSSL],
-// [zones.ZonesSSLRecommender], [zones.SettingGetResponseZonesTLS1_2Only],
-// [zones.ZonesTLS1_3], [zones.ZonesTLSClientAuth],
-// [zones.ZonesTrueClientIPHeader], [zones.ZonesWAF], [zones.ZonesWebP] or
-// [zones.ZonesWebsockets].
+// [zones.ZoneSettingSecurityHeader], [zones.ZoneSettingSecurityLevel],
+// [zones.ZoneSettingServerSideExclude],
+// [zones.SettingGetResponseZonesSha1Support],
+// [zones.ZoneSettingSortQueryStringForCache], [zones.ZoneSettingSSL],
+// [zones.ZoneSettingSSLRecommender], [zones.SettingGetResponseZonesTLS1_2Only],
+// [zones.ZoneSettingTLS1_3], [zones.ZoneSettingTLSClientAuth],
+// [zones.ZoneSettingTrueClientIPHeader], [zones.ZoneSettingWAF],
+// [zones.ZoneSettingWebP] or [zones.ZoneSettingWebsockets].
 type SettingGetResponse interface {
 	implementsZonesSettingGetResponse()
 }
@@ -959,47 +969,47 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Zones0rtt{}),
+			Type:       reflect.TypeOf(ZoneSetting0rtt{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesAdvancedDDOS{}),
+			Type:       reflect.TypeOf(ZoneSettingAdvancedDDOS{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesAlwaysOnline{}),
+			Type:       reflect.TypeOf(ZoneSettingAlwaysOnline{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesAlwaysUseHTTPS{}),
+			Type:       reflect.TypeOf(ZoneSettingAlwaysUseHTTPS{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesAutomaticHTTPSRewrites{}),
+			Type:       reflect.TypeOf(ZoneSettingAutomaticHTTPSRewrites{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesBrotli{}),
+			Type:       reflect.TypeOf(ZoneSettingBrotli{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesBrowserCacheTTL{}),
+			Type:       reflect.TypeOf(ZoneSettingBrowserCacheTTL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesBrowserCheck{}),
+			Type:       reflect.TypeOf(ZoneSettingBrowserCheck{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesCacheLevel{}),
+			Type:       reflect.TypeOf(ZoneSettingCacheLevel{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesChallengeTTL{}),
+			Type:       reflect.TypeOf(ZoneSettingChallengeTTL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesCiphers{}),
+			Type:       reflect.TypeOf(ZoneSettingCiphers{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1007,11 +1017,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesDevelopmentMode{}),
+			Type:       reflect.TypeOf(ZoneSettingDevelopmentMode{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesEarlyHints{}),
+			Type:       reflect.TypeOf(ZoneSettingEarlyHints{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1019,35 +1029,35 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesEmailObfuscation{}),
+			Type:       reflect.TypeOf(ZoneSettingEmailObfuscation{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesH2Prioritization{}),
+			Type:       reflect.TypeOf(ZoneSettingH2Prioritization{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesHotlinkProtection{}),
+			Type:       reflect.TypeOf(ZoneSettingHotlinkProtection{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesHTTP2{}),
+			Type:       reflect.TypeOf(ZoneSettingHTTP2{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesHTTP3{}),
+			Type:       reflect.TypeOf(ZoneSettingHTTP3{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesImageResizing{}),
+			Type:       reflect.TypeOf(ZoneSettingImageResizing{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesIPGeolocation{}),
+			Type:       reflect.TypeOf(ZoneSettingIPGeolocation{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesIPV6{}),
+			Type:       reflect.TypeOf(ZoneSettingIPV6{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1055,63 +1065,63 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesMinTLSVersion{}),
+			Type:       reflect.TypeOf(ZoneSettingMinTLSVersion{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesMinify{}),
+			Type:       reflect.TypeOf(ZoneSettingMinify{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesMirage{}),
+			Type:       reflect.TypeOf(ZoneSettingMirage{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesMobileRedirect{}),
+			Type:       reflect.TypeOf(ZoneSettingMobileRedirect{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesNEL{}),
+			Type:       reflect.TypeOf(ZoneSettingNEL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesOpportunisticEncryption{}),
+			Type:       reflect.TypeOf(ZoneSettingOpportunisticEncryption{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesOpportunisticOnion{}),
+			Type:       reflect.TypeOf(ZoneSettingOpportunisticOnion{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesOrangeToOrange{}),
+			Type:       reflect.TypeOf(ZoneSettingOrangeToOrange{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesOriginErrorPagePassThru{}),
+			Type:       reflect.TypeOf(ZoneSettingOriginErrorPagePassThru{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesPolish{}),
+			Type:       reflect.TypeOf(ZoneSettingPolish{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesPrefetchPreload{}),
+			Type:       reflect.TypeOf(ZoneSettingPrefetchPreload{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesProxyReadTimeout{}),
+			Type:       reflect.TypeOf(ZoneSettingProxyReadTimeout{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesPseudoIPV4{}),
+			Type:       reflect.TypeOf(ZoneSettingPseudoIPV4{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesBuffering{}),
+			Type:       reflect.TypeOf(ZoneSettingBuffering{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesRocketLoader{}),
+			Type:       reflect.TypeOf(ZoneSettingRocketLoader{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1119,15 +1129,15 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSecurityHeader{}),
+			Type:       reflect.TypeOf(ZoneSettingSecurityHeader{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSecurityLevel{}),
+			Type:       reflect.TypeOf(ZoneSettingSecurityLevel{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesServerSideExclude{}),
+			Type:       reflect.TypeOf(ZoneSettingServerSideExclude{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1135,15 +1145,15 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSortQueryStringForCache{}),
+			Type:       reflect.TypeOf(ZoneSettingSortQueryStringForCache{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSSL{}),
+			Type:       reflect.TypeOf(ZoneSettingSSL{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesSSLRecommender{}),
+			Type:       reflect.TypeOf(ZoneSettingSSLRecommender{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1151,27 +1161,27 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesTLS1_3{}),
+			Type:       reflect.TypeOf(ZoneSettingTLS1_3{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesTLSClientAuth{}),
+			Type:       reflect.TypeOf(ZoneSettingTLSClientAuth{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesTrueClientIPHeader{}),
+			Type:       reflect.TypeOf(ZoneSettingTrueClientIPHeader{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesWAF{}),
+			Type:       reflect.TypeOf(ZoneSettingWAF{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesWebP{}),
+			Type:       reflect.TypeOf(ZoneSettingWebP{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZonesWebsockets{}),
+			Type:       reflect.TypeOf(ZoneSettingWebsockets{}),
 		},
 	)
 }
@@ -1453,7 +1463,7 @@ type SettingGetResponseZonesSchemasAutomaticPlatformOptimization struct {
 	// ID of the zone setting.
 	ID SettingGetResponseZonesSchemasAutomaticPlatformOptimizationID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesAutomaticPlatformOptimization `json:"value,required"`
+	Value ZoneSettingAutomaticPlatformOptimization `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable SettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable `json:"editable"`
@@ -1696,35 +1706,40 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 
 // 0-RTT session resumption enabled for this zone.
 //
-// Satisfied by [zones.Zones0rttParam], [zones.ZonesAdvancedDDOSParam],
-// [zones.ZonesAlwaysOnlineParam], [zones.ZonesAlwaysUseHTTPSParam],
-// [zones.ZonesAutomaticHTTPSRewritesParam], [zones.ZonesBrotliParam],
-// [zones.ZonesBrowserCacheTTLParam], [zones.ZonesBrowserCheckParam],
-// [zones.ZonesCacheLevelParam], [zones.ZonesChallengeTTLParam],
-// [zones.ZonesCiphersParam], [zones.SettingEditParamsItemsZonesCNAMEFlattening],
-// [zones.ZonesDevelopmentModeParam], [zones.ZonesEarlyHintsParam],
+// Satisfied by [zones.ZoneSetting0rttParam], [zones.ZoneSettingAdvancedDDOSParam],
+// [zones.ZoneSettingAlwaysOnlineParam], [zones.ZoneSettingAlwaysUseHTTPSParam],
+// [zones.ZoneSettingAutomaticHTTPSRewritesParam], [zones.ZoneSettingBrotliParam],
+// [zones.ZoneSettingBrowserCacheTTLParam], [zones.ZoneSettingBrowserCheckParam],
+// [zones.ZoneSettingCacheLevelParam], [zones.ZoneSettingChallengeTTLParam],
+// [zones.ZoneSettingCiphersParam],
+// [zones.SettingEditParamsItemsZonesCNAMEFlattening],
+// [zones.ZoneSettingDevelopmentModeParam], [zones.ZoneSettingEarlyHintsParam],
 // [zones.SettingEditParamsItemsZonesEdgeCacheTTL],
-// [zones.ZonesEmailObfuscationParam], [zones.ZonesH2PrioritizationParam],
-// [zones.ZonesHotlinkProtectionParam], [zones.ZonesHTTP2Param],
-// [zones.ZonesHTTP3Param], [zones.ZonesImageResizingParam],
-// [zones.ZonesIPGeolocationParam], [zones.ZonesIPV6Param],
-// [zones.SettingEditParamsItemsZonesMaxUpload], [zones.ZonesMinTLSVersionParam],
-// [zones.ZonesMinifyParam], [zones.ZonesMirageParam],
-// [zones.ZonesMobileRedirectParam], [zones.ZonesNELParam],
-// [zones.ZonesOpportunisticEncryptionParam], [zones.ZonesOpportunisticOnionParam],
-// [zones.ZonesOrangeToOrangeParam], [zones.ZonesOriginErrorPagePassThruParam],
-// [zones.ZonesPolishParam], [zones.ZonesPrefetchPreloadParam],
-// [zones.ZonesProxyReadTimeoutParam], [zones.ZonesPseudoIPV4Param],
-// [zones.ZonesBufferingParam], [zones.ZonesRocketLoaderParam],
+// [zones.ZoneSettingEmailObfuscationParam],
+// [zones.ZoneSettingH2PrioritizationParam],
+// [zones.ZoneSettingHotlinkProtectionParam], [zones.ZoneSettingHTTP2Param],
+// [zones.ZoneSettingHTTP3Param], [zones.ZoneSettingImageResizingParam],
+// [zones.ZoneSettingIPGeolocationParam], [zones.ZoneSettingIPV6Param],
+// [zones.SettingEditParamsItemsZonesMaxUpload],
+// [zones.ZoneSettingMinTLSVersionParam], [zones.ZoneSettingMinifyParam],
+// [zones.ZoneSettingMirageParam], [zones.ZoneSettingMobileRedirectParam],
+// [zones.ZoneSettingNELParam], [zones.ZoneSettingOpportunisticEncryptionParam],
+// [zones.ZoneSettingOpportunisticOnionParam],
+// [zones.ZoneSettingOrangeToOrangeParam],
+// [zones.ZoneSettingOriginErrorPagePassThruParam], [zones.ZoneSettingPolishParam],
+// [zones.ZoneSettingPrefetchPreloadParam],
+// [zones.ZoneSettingProxyReadTimeoutParam], [zones.ZoneSettingPseudoIPV4Param],
+// [zones.ZoneSettingBufferingParam], [zones.ZoneSettingRocketLoaderParam],
 // [zones.SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimization],
-// [zones.ZonesSecurityHeaderParam], [zones.ZonesSecurityLevelParam],
-// [zones.ZonesServerSideExcludeParam],
+// [zones.ZoneSettingSecurityHeaderParam], [zones.ZoneSettingSecurityLevelParam],
+// [zones.ZoneSettingServerSideExcludeParam],
 // [zones.SettingEditParamsItemsZonesSha1Support],
-// [zones.ZonesSortQueryStringForCacheParam], [zones.ZonesSSLParam],
-// [zones.ZonesSSLRecommenderParam], [zones.SettingEditParamsItemsZonesTLS1_2Only],
-// [zones.ZonesTLS1_3Param], [zones.ZonesTLSClientAuthParam],
-// [zones.ZonesTrueClientIPHeaderParam], [zones.ZonesWAFParam],
-// [zones.ZonesWebPParam], [zones.ZonesWebsocketsParam].
+// [zones.ZoneSettingSortQueryStringForCacheParam], [zones.ZoneSettingSSLParam],
+// [zones.ZoneSettingSSLRecommenderParam],
+// [zones.SettingEditParamsItemsZonesTLS1_2Only], [zones.ZoneSettingTLS1_3Param],
+// [zones.ZoneSettingTLSClientAuthParam],
+// [zones.ZoneSettingTrueClientIPHeaderParam], [zones.ZoneSettingWAFParam],
+// [zones.ZoneSettingWebPParam], [zones.ZoneSettingWebsocketsParam].
 type SettingEditParamsItem interface {
 	implementsZonesSettingEditParamsItem()
 }
@@ -1943,7 +1958,7 @@ type SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimization struct {
 	// ID of the zone setting.
 	ID param.Field[SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimizationID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesAutomaticPlatformOptimizationParam] `json:"value,required"`
+	Value param.Field[ZoneSettingAutomaticPlatformOptimizationParam] `json:"value,required"`
 }
 
 func (r SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimization) MarshalJSON() (data []byte, err error) {

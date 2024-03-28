@@ -35,7 +35,7 @@ func NewSettingPolishService(opts ...option.RequestOption) (r *SettingPolishServ
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/polish-solving-mobile-speed)
 // for more information.
-func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEditParams, opts ...option.RequestOption) (res *ZonesPolish, err error) {
+func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEditParams, opts ...option.RequestOption) (res *ZoneSettingPolish, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/polish", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEdi
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/polish-solving-mobile-speed)
 // for more information.
-func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetParams, opts ...option.RequestOption) (res *ZonesPolish, err error) {
+func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetParams, opts ...option.RequestOption) (res *ZoneSettingPolish, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/polish", query.ZoneID)
@@ -68,21 +68,22 @@ func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetPa
 // image loading. Larger JPEGs are converted to progressive images, loading a
 // lower-resolution image first and ending in a higher-resolution version. Not
 // recommended for hi-res photography sites.
-type ZonesPolish struct {
+type ZoneSettingPolish struct {
 	// ID of the zone setting.
-	ID ZonesPolishID `json:"id,required"`
+	ID ZoneSettingPolishID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesPolishValue `json:"value,required"`
+	Value ZoneSettingPolishValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesPolishEditable `json:"editable"`
+	Editable ZoneSettingPolishEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesPolishJSON `json:"-"`
+	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingPolishJSON `json:"-"`
 }
 
-// zonesPolishJSON contains the JSON metadata for the struct [ZonesPolish]
-type zonesPolishJSON struct {
+// zoneSettingPolishJSON contains the JSON metadata for the struct
+// [ZoneSettingPolish]
+type zoneSettingPolishJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -91,45 +92,45 @@ type zonesPolishJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesPolish) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingPolish) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesPolishJSON) RawJSON() string {
+func (r zoneSettingPolishJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZonesPolish) implementsZonesSettingEditResponse() {}
+func (r ZoneSettingPolish) implementsZonesSettingEditResponse() {}
 
-func (r ZonesPolish) implementsZonesSettingGetResponse() {}
+func (r ZoneSettingPolish) implementsZonesSettingGetResponse() {}
 
 // ID of the zone setting.
-type ZonesPolishID string
+type ZoneSettingPolishID string
 
 const (
-	ZonesPolishIDPolish ZonesPolishID = "polish"
+	ZoneSettingPolishIDPolish ZoneSettingPolishID = "polish"
 )
 
-func (r ZonesPolishID) IsKnown() bool {
+func (r ZoneSettingPolishID) IsKnown() bool {
 	switch r {
-	case ZonesPolishIDPolish:
+	case ZoneSettingPolishIDPolish:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZonesPolishValue string
+type ZoneSettingPolishValue string
 
 const (
-	ZonesPolishValueOff      ZonesPolishValue = "off"
-	ZonesPolishValueLossless ZonesPolishValue = "lossless"
-	ZonesPolishValueLossy    ZonesPolishValue = "lossy"
+	ZoneSettingPolishValueOff      ZoneSettingPolishValue = "off"
+	ZoneSettingPolishValueLossless ZoneSettingPolishValue = "lossless"
+	ZoneSettingPolishValueLossy    ZoneSettingPolishValue = "lossy"
 )
 
-func (r ZonesPolishValue) IsKnown() bool {
+func (r ZoneSettingPolishValue) IsKnown() bool {
 	switch r {
-	case ZonesPolishValueOff, ZonesPolishValueLossless, ZonesPolishValueLossy:
+	case ZoneSettingPolishValueOff, ZoneSettingPolishValueLossless, ZoneSettingPolishValueLossy:
 		return true
 	}
 	return false
@@ -137,16 +138,16 @@ func (r ZonesPolishValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesPolishEditable bool
+type ZoneSettingPolishEditable bool
 
 const (
-	ZonesPolishEditableTrue  ZonesPolishEditable = true
-	ZonesPolishEditableFalse ZonesPolishEditable = false
+	ZoneSettingPolishEditableTrue  ZoneSettingPolishEditable = true
+	ZoneSettingPolishEditableFalse ZoneSettingPolishEditable = false
 )
 
-func (r ZonesPolishEditable) IsKnown() bool {
+func (r ZoneSettingPolishEditable) IsKnown() bool {
 	switch r {
-	case ZonesPolishEditableTrue, ZonesPolishEditableFalse:
+	case ZoneSettingPolishEditableTrue, ZoneSettingPolishEditableFalse:
 		return true
 	}
 	return false
@@ -158,18 +159,18 @@ func (r ZonesPolishEditable) IsKnown() bool {
 // image loading. Larger JPEGs are converted to progressive images, loading a
 // lower-resolution image first and ending in a higher-resolution version. Not
 // recommended for hi-res photography sites.
-type ZonesPolishParam struct {
+type ZoneSettingPolishParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesPolishID] `json:"id,required"`
+	ID param.Field[ZoneSettingPolishID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesPolishValue] `json:"value,required"`
+	Value param.Field[ZoneSettingPolishValue] `json:"value,required"`
 }
 
-func (r ZonesPolishParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingPolishParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonesPolishParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingPolishParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingPolishEditParams struct {
 	// Identifier
@@ -180,7 +181,7 @@ type SettingPolishEditParams struct {
 	// image loading. Larger JPEGs are converted to progressive images, loading a
 	// lower-resolution image first and ending in a higher-resolution version. Not
 	// recommended for hi-res photography sites.
-	Value param.Field[ZonesPolishParam] `json:"value,required"`
+	Value param.Field[ZoneSettingPolishParam] `json:"value,required"`
 }
 
 func (r SettingPolishEditParams) MarshalJSON() (data []byte, err error) {
@@ -198,7 +199,7 @@ type SettingPolishEditResponseEnvelope struct {
 	// image loading. Larger JPEGs are converted to progressive images, loading a
 	// lower-resolution image first and ending in a higher-resolution version. Not
 	// recommended for hi-res photography sites.
-	Result ZonesPolish                           `json:"result"`
+	Result ZoneSettingPolish                     `json:"result"`
 	JSON   settingPolishEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -283,7 +284,7 @@ type SettingPolishGetResponseEnvelope struct {
 	// image loading. Larger JPEGs are converted to progressive images, loading a
 	// lower-resolution image first and ending in a higher-resolution version. Not
 	// recommended for hi-res photography sites.
-	Result ZonesPolish                          `json:"result"`
+	Result ZoneSettingPolish                    `json:"result"`
 	JSON   settingPolishGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -33,7 +33,7 @@ func NewPrioritizeService(opts ...option.RequestOption) (r *PrioritizeService) {
 // If a zone has multiple SSL certificates, you can set the order in which they
 // should be used during a request. The higher priority will break ties across
 // overlapping 'legacy_custom' certificates.
-func (r *PrioritizeService) Update(ctx context.Context, params PrioritizeUpdateParams, opts ...option.RequestOption) (res *[]TLSCertificatesAndHostnamesCustomCertificate, err error) {
+func (r *PrioritizeService) Update(ctx context.Context, params PrioritizeUpdateParams, opts ...option.RequestOption) (res *[]CustomCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrioritizeUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/prioritize", params.ZoneID)
@@ -69,9 +69,9 @@ func (r PrioritizeUpdateParamsCertificate) MarshalJSON() (data []byte, err error
 }
 
 type PrioritizeUpdateResponseEnvelope struct {
-	Errors   []PrioritizeUpdateResponseEnvelopeErrors       `json:"errors,required"`
-	Messages []PrioritizeUpdateResponseEnvelopeMessages     `json:"messages,required"`
-	Result   []TLSCertificatesAndHostnamesCustomCertificate `json:"result,required,nullable"`
+	Errors   []PrioritizeUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrioritizeUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   []CustomCertificate                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PrioritizeUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PrioritizeUpdateResponseEnvelopeResultInfo `json:"result_info"`

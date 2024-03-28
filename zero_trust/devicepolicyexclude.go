@@ -32,7 +32,7 @@ func NewDevicePolicyExcludeService(opts ...option.RequestOption) (r *DevicePolic
 }
 
 // Sets the list of routes excluded from the WARP client's tunnel.
-func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePolicyExcludeUpdateParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnel, err error) {
+func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePolicyExcludeUpdateParams, opts ...option.RequestOption) (res *[]DevicesSplitTunnel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/policy/exclude", params.AccountID)
@@ -45,7 +45,7 @@ func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePo
 }
 
 // Fetches the list of routes excluded from the WARP client's tunnel.
-func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolicyExcludeListParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnel, err error) {
+func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolicyExcludeListParams, opts ...option.RequestOption) (res *[]DevicesSplitTunnel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/policy/exclude", query.AccountID)
@@ -59,7 +59,7 @@ func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolic
 
 // Fetches the list of routes excluded from the WARP client's tunnel for a specific
 // device settings profile.
-func (r *DevicePolicyExcludeService) Get(ctx context.Context, policyID string, query DevicePolicyExcludeGetParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnel, err error) {
+func (r *DevicePolicyExcludeService) Get(ctx context.Context, policyID string, query DevicePolicyExcludeGetParams, opts ...option.RequestOption) (res *[]DevicesSplitTunnel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/policy/%s/exclude", query.AccountID, policyID)
@@ -71,7 +71,7 @@ func (r *DevicePolicyExcludeService) Get(ctx context.Context, policyID string, q
 	return
 }
 
-type TeamsDevicesSplitTunnel struct {
+type DevicesSplitTunnel struct {
 	// The address in CIDR format to exclude from the tunnel. If `address` is present,
 	// `host` must not be present.
 	Address string `json:"address,required"`
@@ -79,13 +79,13 @@ type TeamsDevicesSplitTunnel struct {
 	Description string `json:"description,required"`
 	// The domain name to exclude from the tunnel. If `host` is present, `address` must
 	// not be present.
-	Host string                      `json:"host"`
-	JSON teamsDevicesSplitTunnelJSON `json:"-"`
+	Host string                 `json:"host"`
+	JSON devicesSplitTunnelJSON `json:"-"`
 }
 
-// teamsDevicesSplitTunnelJSON contains the JSON metadata for the struct
-// [TeamsDevicesSplitTunnel]
-type teamsDevicesSplitTunnelJSON struct {
+// devicesSplitTunnelJSON contains the JSON metadata for the struct
+// [DevicesSplitTunnel]
+type devicesSplitTunnelJSON struct {
 	Address     apijson.Field
 	Description apijson.Field
 	Host        apijson.Field
@@ -93,15 +93,15 @@ type teamsDevicesSplitTunnelJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesSplitTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicesSplitTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesSplitTunnelJSON) RawJSON() string {
+func (r devicesSplitTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-type TeamsDevicesSplitTunnelParam struct {
+type DevicesSplitTunnelParam struct {
 	// The address in CIDR format to exclude from the tunnel. If `address` is present,
 	// `host` must not be present.
 	Address param.Field[string] `json:"address,required"`
@@ -112,13 +112,13 @@ type TeamsDevicesSplitTunnelParam struct {
 	Host param.Field[string] `json:"host"`
 }
 
-func (r TeamsDevicesSplitTunnelParam) MarshalJSON() (data []byte, err error) {
+func (r DevicesSplitTunnelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type DevicePolicyExcludeUpdateParams struct {
-	AccountID param.Field[string]                         `path:"account_id,required"`
-	Body      param.Field[[]TeamsDevicesSplitTunnelParam] `json:"body,required"`
+	AccountID param.Field[string]                    `path:"account_id,required"`
+	Body      param.Field[[]DevicesSplitTunnelParam] `json:"body,required"`
 }
 
 func (r DevicePolicyExcludeUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -128,7 +128,7 @@ func (r DevicePolicyExcludeUpdateParams) MarshalJSON() (data []byte, err error) 
 type DevicePolicyExcludeUpdateResponseEnvelope struct {
 	Errors   []DevicePolicyExcludeUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyExcludeUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesSplitTunnel                           `json:"result,required,nullable"`
+	Result   []DevicesSplitTunnel                                `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyExcludeUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyExcludeUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -254,7 +254,7 @@ type DevicePolicyExcludeListParams struct {
 type DevicePolicyExcludeListResponseEnvelope struct {
 	Errors   []DevicePolicyExcludeListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyExcludeListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesSplitTunnel                         `json:"result,required,nullable"`
+	Result   []DevicesSplitTunnel                              `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyExcludeListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyExcludeListResponseEnvelopeResultInfo `json:"result_info"`
@@ -380,7 +380,7 @@ type DevicePolicyExcludeGetParams struct {
 type DevicePolicyExcludeGetResponseEnvelope struct {
 	Errors   []DevicePolicyExcludeGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyExcludeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesSplitTunnel                        `json:"result,required,nullable"`
+	Result   []DevicesSplitTunnel                             `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyExcludeGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyExcludeGetResponseEnvelopeResultInfo `json:"result_info"`

@@ -32,7 +32,7 @@ func NewSinkholeService(opts ...option.RequestOption) (r *SinkholeService) {
 }
 
 // List sinkholes owned by this account
-func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *[]IntelSinkholesSinkholeItem, err error) {
+func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *[]IntelSinkholeItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SinkholeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/sinkholes", query.AccountID)
@@ -44,7 +44,7 @@ func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, op
 	return
 }
 
-type IntelSinkholesSinkholeItem struct {
+type IntelSinkholeItem struct {
 	// The unique identifier for the sinkhole
 	ID int64 `json:"id"`
 	// The account tag that owns this sinkhole
@@ -58,13 +58,13 @@ type IntelSinkholesSinkholeItem struct {
 	// The name of the R2 bucket to store results
 	R2Bucket string `json:"r2_bucket"`
 	// The id of the R2 instance
-	R2ID string                         `json:"r2_id"`
-	JSON intelSinkholesSinkholeItemJSON `json:"-"`
+	R2ID string                `json:"r2_id"`
+	JSON intelSinkholeItemJSON `json:"-"`
 }
 
-// intelSinkholesSinkholeItemJSON contains the JSON metadata for the struct
-// [IntelSinkholesSinkholeItem]
-type intelSinkholesSinkholeItemJSON struct {
+// intelSinkholeItemJSON contains the JSON metadata for the struct
+// [IntelSinkholeItem]
+type intelSinkholeItemJSON struct {
 	ID          apijson.Field
 	AccountTag  apijson.Field
 	CreatedOn   apijson.Field
@@ -76,11 +76,11 @@ type intelSinkholesSinkholeItemJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelSinkholesSinkholeItem) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelSinkholeItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r intelSinkholesSinkholeItemJSON) RawJSON() string {
+func (r intelSinkholeItemJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -92,7 +92,7 @@ type SinkholeListParams struct {
 type SinkholeListResponseEnvelope struct {
 	Errors   []SinkholeListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SinkholeListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelSinkholesSinkholeItem           `json:"result,required"`
+	Result   []IntelSinkholeItem                    `json:"result,required"`
 	// Whether the API call was successful
 	Success SinkholeListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sinkholeListResponseEnvelopeJSON    `json:"-"`

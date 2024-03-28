@@ -32,7 +32,7 @@ func NewDeviceDEXTestService(opts ...option.RequestOption) (r *DeviceDEXTestServ
 }
 
 // Create a DEX test.
-func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
+func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewParams, opts ...option.RequestOption) (res *DEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests", params.AccountID)
@@ -45,7 +45,7 @@ func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewP
 }
 
 // Update a DEX test.
-func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, params DeviceDEXTestUpdateParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
+func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, params DeviceDEXTestUpdateParams, opts ...option.RequestOption) (res *DEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", params.AccountID, dexTestID)
@@ -58,7 +58,7 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 }
 
 // Fetch all DEX tests.
-func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
+func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *[]DEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests", query.AccountID)
@@ -72,7 +72,7 @@ func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestList
 
 // Delete a Device DEX test. Returns the remaining device dex tests for the
 // account.
-func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body DeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
+func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body DeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *[]DEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", body.AccountID, dexTestID)
@@ -85,7 +85,7 @@ func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, bod
 }
 
 // Fetch a single DEX test.
-func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query DeviceDEXTestGetParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
+func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query DeviceDEXTestGetParams, opts ...option.RequestOption) (res *DEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/dex_tests/%s", query.AccountID, dexTestID)
@@ -97,10 +97,10 @@ func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query 
 	return
 }
 
-type TeamsDevicesDeviceDEXTestSchemasHTTP struct {
+type DEXTestSchemasHTTP struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data TeamsDevicesDeviceDEXTestSchemasHTTPData `json:"data,required"`
+	Data DEXTestSchemasHTTPData `json:"data,required"`
 	// Determines whether or not the test is active.
 	Enabled bool `json:"enabled,required"`
 	// How often the test will run.
@@ -108,13 +108,13 @@ type TeamsDevicesDeviceDEXTestSchemasHTTP struct {
 	// The name of the DEX test. Must be unique.
 	Name string `json:"name,required"`
 	// Additional details about the test.
-	Description string                                   `json:"description"`
-	JSON        teamsDevicesDeviceDEXTestSchemasHTTPJSON `json:"-"`
+	Description string                 `json:"description"`
+	JSON        dexTestSchemasHTTPJSON `json:"-"`
 }
 
-// teamsDevicesDeviceDEXTestSchemasHTTPJSON contains the JSON metadata for the
-// struct [TeamsDevicesDeviceDEXTestSchemasHTTP]
-type teamsDevicesDeviceDEXTestSchemasHTTPJSON struct {
+// dexTestSchemasHTTPJSON contains the JSON metadata for the struct
+// [DEXTestSchemasHTTP]
+type dexTestSchemasHTTPJSON struct {
 	Data        apijson.Field
 	Enabled     apijson.Field
 	Interval    apijson.Field
@@ -124,29 +124,29 @@ type teamsDevicesDeviceDEXTestSchemasHTTPJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDeviceDEXTestSchemasHTTP) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestSchemasHTTP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDeviceDEXTestSchemasHTTPJSON) RawJSON() string {
+func (r dexTestSchemasHTTPJSON) RawJSON() string {
 	return r.raw
 }
 
 // The configuration object which contains the details for the WARP client to
 // conduct the test.
-type TeamsDevicesDeviceDEXTestSchemasHTTPData struct {
+type DEXTestSchemasHTTPData struct {
 	// The desired endpoint to test.
 	Host string `json:"host"`
 	// The type of test.
 	Kind string `json:"kind"`
 	// The HTTP request method type.
-	Method string                                       `json:"method"`
-	JSON   teamsDevicesDeviceDEXTestSchemasHTTPDataJSON `json:"-"`
+	Method string                     `json:"method"`
+	JSON   dexTestSchemasHTTPDataJSON `json:"-"`
 }
 
-// teamsDevicesDeviceDEXTestSchemasHTTPDataJSON contains the JSON metadata for the
-// struct [TeamsDevicesDeviceDEXTestSchemasHTTPData]
-type teamsDevicesDeviceDEXTestSchemasHTTPDataJSON struct {
+// dexTestSchemasHTTPDataJSON contains the JSON metadata for the struct
+// [DEXTestSchemasHTTPData]
+type dexTestSchemasHTTPDataJSON struct {
 	Host        apijson.Field
 	Kind        apijson.Field
 	Method      apijson.Field
@@ -154,11 +154,11 @@ type teamsDevicesDeviceDEXTestSchemasHTTPDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDeviceDEXTestSchemasHTTPData) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestSchemasHTTPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDeviceDEXTestSchemasHTTPDataJSON) RawJSON() string {
+func (r dexTestSchemasHTTPDataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -199,7 +199,7 @@ func (r DeviceDEXTestNewParamsData) MarshalJSON() (data []byte, err error) {
 type DeviceDEXTestNewResponseEnvelope struct {
 	Errors   []DeviceDEXTestNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceDEXTestNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesDeviceDEXTestSchemasHTTP       `json:"result,required,nullable"`
+	Result   DEXTestSchemasHTTP                         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestNewResponseEnvelopeJSON    `json:"-"`
@@ -322,7 +322,7 @@ func (r DeviceDEXTestUpdateParamsData) MarshalJSON() (data []byte, err error) {
 type DeviceDEXTestUpdateResponseEnvelope struct {
 	Errors   []DeviceDEXTestUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceDEXTestUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesDeviceDEXTestSchemasHTTP          `json:"result,required,nullable"`
+	Result   DEXTestSchemasHTTP                            `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestUpdateResponseEnvelopeJSON    `json:"-"`
@@ -415,7 +415,7 @@ type DeviceDEXTestListParams struct {
 type DeviceDEXTestListResponseEnvelope struct {
 	Errors   []DeviceDEXTestListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceDEXTestListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesDeviceDEXTestSchemasHTTP      `json:"result,required,nullable"`
+	Result   []DEXTestSchemasHTTP                        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestListResponseEnvelopeJSON    `json:"-"`
@@ -508,7 +508,7 @@ type DeviceDEXTestDeleteParams struct {
 type DeviceDEXTestDeleteResponseEnvelope struct {
 	Errors   []DeviceDEXTestDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceDEXTestDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesDeviceDEXTestSchemasHTTP        `json:"result,required,nullable"`
+	Result   []DEXTestSchemasHTTP                          `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestDeleteResponseEnvelopeJSON    `json:"-"`
@@ -601,7 +601,7 @@ type DeviceDEXTestGetParams struct {
 type DeviceDEXTestGetResponseEnvelope struct {
 	Errors   []DeviceDEXTestGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceDEXTestGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesDeviceDEXTestSchemasHTTP       `json:"result,required,nullable"`
+	Result   DEXTestSchemasHTTP                         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestGetResponseEnvelopeJSON    `json:"-"`

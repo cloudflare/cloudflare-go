@@ -56,7 +56,7 @@ func (r *CustomCertificateService) New(ctx context.Context, params CustomCertifi
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *CustomCertificateService) List(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TLSCertificatesAndHostnamesCustomCertificate], err error) {
+func (r *CustomCertificateService) List(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CustomCertificate], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,7 +76,7 @@ func (r *CustomCertificateService) List(ctx context.Context, params CustomCertif
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TLSCertificatesAndHostnamesCustomCertificate] {
+func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[CustomCertificate] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -121,14 +121,14 @@ func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID 
 	return
 }
 
-type TLSCertificatesAndHostnamesCustomCertificate struct {
+type CustomCertificate struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod TLSCertificatesAndHostnamesCustomCertificateBundleMethod `json:"bundle_method,required"`
+	BundleMethod CustomCertificateBundleMethod `json:"bundle_method,required"`
 	// When the certificate from the authority expires.
 	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
 	Hosts     []string  `json:"hosts,required"`
@@ -144,7 +144,7 @@ type TLSCertificatesAndHostnamesCustomCertificate struct {
 	// The type of hash used for the certificate.
 	Signature string `json:"signature,required"`
 	// Status of the zone's custom SSL.
-	Status TLSCertificatesAndHostnamesCustomCertificateStatus `json:"status,required"`
+	Status CustomCertificateStatus `json:"status,required"`
 	// When the certificate was uploaded to Cloudflare.
 	UploadedOn time.Time `json:"uploaded_on,required" format:"date-time"`
 	// Identifier
@@ -156,8 +156,8 @@ type TLSCertificatesAndHostnamesCustomCertificate struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions TLSCertificatesAndHostnamesCustomCertificateGeoRestrictions `json:"geo_restrictions"`
-	KeylessServer   keyless_certificates.TLSCertificatesAndHostnamesBase        `json:"keyless_server"`
+	GeoRestrictions CustomCertificateGeoRestrictions                `json:"geo_restrictions"`
+	KeylessServer   keyless_certificates.KeylessCertificateHostname `json:"keyless_server"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -167,13 +167,13 @@ type TLSCertificatesAndHostnamesCustomCertificate struct {
 	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
 	// the EU region. If there are too few data centers satisfying the policy, it will
 	// be rejected.
-	Policy string                                           `json:"policy"`
-	JSON   tlsCertificatesAndHostnamesCustomCertificateJSON `json:"-"`
+	Policy string                `json:"policy"`
+	JSON   customCertificateJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesCustomCertificateJSON contains the JSON metadata for
-// the struct [TLSCertificatesAndHostnamesCustomCertificate]
-type tlsCertificatesAndHostnamesCustomCertificateJSON struct {
+// customCertificateJSON contains the JSON metadata for the struct
+// [CustomCertificate]
+type customCertificateJSON struct {
 	ID              apijson.Field
 	BundleMethod    apijson.Field
 	ExpiresOn       apijson.Field
@@ -192,11 +192,11 @@ type tlsCertificatesAndHostnamesCustomCertificateJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesCustomCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesCustomCertificateJSON) RawJSON() string {
+func (r customCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -204,36 +204,36 @@ func (r tlsCertificatesAndHostnamesCustomCertificateJSON) RawJSON() string {
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
 // chain, but does not otherwise modify it.
-type TLSCertificatesAndHostnamesCustomCertificateBundleMethod string
+type CustomCertificateBundleMethod string
 
 const (
-	TLSCertificatesAndHostnamesCustomCertificateBundleMethodUbiquitous TLSCertificatesAndHostnamesCustomCertificateBundleMethod = "ubiquitous"
-	TLSCertificatesAndHostnamesCustomCertificateBundleMethodOptimal    TLSCertificatesAndHostnamesCustomCertificateBundleMethod = "optimal"
-	TLSCertificatesAndHostnamesCustomCertificateBundleMethodForce      TLSCertificatesAndHostnamesCustomCertificateBundleMethod = "force"
+	CustomCertificateBundleMethodUbiquitous CustomCertificateBundleMethod = "ubiquitous"
+	CustomCertificateBundleMethodOptimal    CustomCertificateBundleMethod = "optimal"
+	CustomCertificateBundleMethodForce      CustomCertificateBundleMethod = "force"
 )
 
-func (r TLSCertificatesAndHostnamesCustomCertificateBundleMethod) IsKnown() bool {
+func (r CustomCertificateBundleMethod) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesCustomCertificateBundleMethodUbiquitous, TLSCertificatesAndHostnamesCustomCertificateBundleMethodOptimal, TLSCertificatesAndHostnamesCustomCertificateBundleMethodForce:
+	case CustomCertificateBundleMethodUbiquitous, CustomCertificateBundleMethodOptimal, CustomCertificateBundleMethodForce:
 		return true
 	}
 	return false
 }
 
 // Status of the zone's custom SSL.
-type TLSCertificatesAndHostnamesCustomCertificateStatus string
+type CustomCertificateStatus string
 
 const (
-	TLSCertificatesAndHostnamesCustomCertificateStatusActive       TLSCertificatesAndHostnamesCustomCertificateStatus = "active"
-	TLSCertificatesAndHostnamesCustomCertificateStatusExpired      TLSCertificatesAndHostnamesCustomCertificateStatus = "expired"
-	TLSCertificatesAndHostnamesCustomCertificateStatusDeleted      TLSCertificatesAndHostnamesCustomCertificateStatus = "deleted"
-	TLSCertificatesAndHostnamesCustomCertificateStatusPending      TLSCertificatesAndHostnamesCustomCertificateStatus = "pending"
-	TLSCertificatesAndHostnamesCustomCertificateStatusInitializing TLSCertificatesAndHostnamesCustomCertificateStatus = "initializing"
+	CustomCertificateStatusActive       CustomCertificateStatus = "active"
+	CustomCertificateStatusExpired      CustomCertificateStatus = "expired"
+	CustomCertificateStatusDeleted      CustomCertificateStatus = "deleted"
+	CustomCertificateStatusPending      CustomCertificateStatus = "pending"
+	CustomCertificateStatusInitializing CustomCertificateStatus = "initializing"
 )
 
-func (r TLSCertificatesAndHostnamesCustomCertificateStatus) IsKnown() bool {
+func (r CustomCertificateStatus) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesCustomCertificateStatusActive, TLSCertificatesAndHostnamesCustomCertificateStatusExpired, TLSCertificatesAndHostnamesCustomCertificateStatusDeleted, TLSCertificatesAndHostnamesCustomCertificateStatusPending, TLSCertificatesAndHostnamesCustomCertificateStatusInitializing:
+	case CustomCertificateStatusActive, CustomCertificateStatusExpired, CustomCertificateStatusDeleted, CustomCertificateStatusPending, CustomCertificateStatusInitializing:
 		return true
 	}
 	return false
@@ -246,39 +246,38 @@ func (r TLSCertificatesAndHostnamesCustomCertificateStatus) IsKnown() bool {
 // only to U.S. data centers, only to E.U. data centers, or only to highest
 // security data centers. Default distribution is to all Cloudflare datacenters,
 // for optimal performance.
-type TLSCertificatesAndHostnamesCustomCertificateGeoRestrictions struct {
-	Label TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel `json:"label"`
-	JSON  tlsCertificatesAndHostnamesCustomCertificateGeoRestrictionsJSON  `json:"-"`
+type CustomCertificateGeoRestrictions struct {
+	Label CustomCertificateGeoRestrictionsLabel `json:"label"`
+	JSON  customCertificateGeoRestrictionsJSON  `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesCustomCertificateGeoRestrictionsJSON contains the
-// JSON metadata for the struct
-// [TLSCertificatesAndHostnamesCustomCertificateGeoRestrictions]
-type tlsCertificatesAndHostnamesCustomCertificateGeoRestrictionsJSON struct {
+// customCertificateGeoRestrictionsJSON contains the JSON metadata for the struct
+// [CustomCertificateGeoRestrictions]
+type customCertificateGeoRestrictionsJSON struct {
 	Label       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesCustomCertificateGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificateGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesCustomCertificateGeoRestrictionsJSON) RawJSON() string {
+func (r customCertificateGeoRestrictionsJSON) RawJSON() string {
 	return r.raw
 }
 
-type TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel string
+type CustomCertificateGeoRestrictionsLabel string
 
 const (
-	TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelUs              TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel = "us"
-	TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelEu              TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel = "eu"
-	TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelHighestSecurity TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel = "highest_security"
+	CustomCertificateGeoRestrictionsLabelUs              CustomCertificateGeoRestrictionsLabel = "us"
+	CustomCertificateGeoRestrictionsLabelEu              CustomCertificateGeoRestrictionsLabel = "eu"
+	CustomCertificateGeoRestrictionsLabelHighestSecurity CustomCertificateGeoRestrictionsLabel = "highest_security"
 )
 
-func (r TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel) IsKnown() bool {
+func (r CustomCertificateGeoRestrictionsLabel) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelUs, TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelEu, TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelHighestSecurity:
+	case CustomCertificateGeoRestrictionsLabelUs, CustomCertificateGeoRestrictionsLabelEu, CustomCertificateGeoRestrictionsLabelHighestSecurity:
 		return true
 	}
 	return false

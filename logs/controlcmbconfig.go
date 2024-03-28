@@ -35,7 +35,7 @@ func NewControlCmbConfigService(opts ...option.RequestOption) (r *ControlCmbConf
 }
 
 // Updates CMB config.
-func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConfigNewParams, opts ...option.RequestOption) (res *LogcontrolCmbConfig, err error) {
+func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConfigNewParams, opts ...option.RequestOption) (res *CmbConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
@@ -61,7 +61,7 @@ func (r *ControlCmbConfigService) Delete(ctx context.Context, body ControlCmbCon
 }
 
 // Gets CMB config.
-func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfigGetParams, opts ...option.RequestOption) (res *LogcontrolCmbConfig, err error) {
+func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfigGetParams, opts ...option.RequestOption) (res *CmbConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", query.AccountID)
@@ -73,25 +73,24 @@ func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfi
 	return
 }
 
-type LogcontrolCmbConfig struct {
+type CmbConfig struct {
 	// Comma-separated list of regions.
-	Regions string                  `json:"regions"`
-	JSON    logcontrolCmbConfigJSON `json:"-"`
+	Regions string        `json:"regions"`
+	JSON    cmbConfigJSON `json:"-"`
 }
 
-// logcontrolCmbConfigJSON contains the JSON metadata for the struct
-// [LogcontrolCmbConfig]
-type logcontrolCmbConfigJSON struct {
+// cmbConfigJSON contains the JSON metadata for the struct [CmbConfig]
+type cmbConfigJSON struct {
 	Regions     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogcontrolCmbConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *CmbConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r logcontrolCmbConfigJSON) RawJSON() string {
+func (r cmbConfigJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -134,7 +133,7 @@ func (r ControlCmbConfigNewParams) MarshalJSON() (data []byte, err error) {
 type ControlCmbConfigNewResponseEnvelope struct {
 	Errors   []ControlCmbConfigNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ControlCmbConfigNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogcontrolCmbConfig                           `json:"result,required,nullable"`
+	Result   CmbConfig                                     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigNewResponseEnvelopeJSON    `json:"-"`
@@ -322,7 +321,7 @@ type ControlCmbConfigGetParams struct {
 type ControlCmbConfigGetResponseEnvelope struct {
 	Errors   []ControlCmbConfigGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ControlCmbConfigGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogcontrolCmbConfig                           `json:"result,required,nullable"`
+	Result   CmbConfig                                     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigGetResponseEnvelopeJSON    `json:"-"`

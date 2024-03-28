@@ -61,7 +61,7 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 }
 
 // Get a list of all Notification policies.
-func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *[]AaaPolicies, err error) {
+func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *[]AlertingPolicies, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PolicyListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", query.AccountID)
@@ -87,7 +87,7 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 }
 
 // Get details for a single policy.
-func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *AaaPolicies, err error) {
+func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *AlertingPolicies, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PolicyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", query.AccountID, policyID)
@@ -99,14 +99,14 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	return
 }
 
-type AaaPolicies struct {
+type AlertingPolicies struct {
 	// The unique identifier of a notification policy
 	ID string `json:"id"`
 	// Refers to which event will trigger a Notification dispatch. You can use the
 	// endpoint to get available alert types which then will give you a list of
 	// possible values.
-	AlertType AaaPoliciesAlertType `json:"alert_type"`
-	Created   time.Time            `json:"created" format:"date-time"`
+	AlertType AlertingPoliciesAlertType `json:"alert_type"`
+	Created   time.Time                 `json:"created" format:"date-time"`
 	// Optional description for the Notification policy.
 	Description string `json:"description"`
 	// Whether or not the Notification policy is enabled.
@@ -114,18 +114,19 @@ type AaaPolicies struct {
 	// Optional filters that allow you to be alerted only on a subset of events for
 	// that alert type based on some criteria. This is only available for select alert
 	// types. See alert type documentation for more details.
-	Filters AaaPoliciesFilters `json:"filters"`
+	Filters AlertingPoliciesFilters `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms map[string][]AaaPoliciesMechanisms `json:"mechanisms"`
-	Modified   time.Time                          `json:"modified" format:"date-time"`
+	Mechanisms map[string][]AlertingPoliciesMechanisms `json:"mechanisms"`
+	Modified   time.Time                               `json:"modified" format:"date-time"`
 	// Name of the policy.
-	Name string          `json:"name"`
-	JSON aaaPoliciesJSON `json:"-"`
+	Name string               `json:"name"`
+	JSON alertingPoliciesJSON `json:"-"`
 }
 
-// aaaPoliciesJSON contains the JSON metadata for the struct [AaaPolicies]
-type aaaPoliciesJSON struct {
+// alertingPoliciesJSON contains the JSON metadata for the struct
+// [AlertingPolicies]
+type alertingPoliciesJSON struct {
 	ID          apijson.Field
 	AlertType   apijson.Field
 	Created     apijson.Field
@@ -139,80 +140,80 @@ type aaaPoliciesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AaaPolicies) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingPolicies) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aaaPoliciesJSON) RawJSON() string {
+func (r alertingPoliciesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Refers to which event will trigger a Notification dispatch. You can use the
 // endpoint to get available alert types which then will give you a list of
 // possible values.
-type AaaPoliciesAlertType string
+type AlertingPoliciesAlertType string
 
 const (
-	AaaPoliciesAlertTypeAccessCustomCertificateExpirationType         AaaPoliciesAlertType = "access_custom_certificate_expiration_type"
-	AaaPoliciesAlertTypeAdvancedDDOSAttackL4Alert                     AaaPoliciesAlertType = "advanced_ddos_attack_l4_alert"
-	AaaPoliciesAlertTypeAdvancedDDOSAttackL7Alert                     AaaPoliciesAlertType = "advanced_ddos_attack_l7_alert"
-	AaaPoliciesAlertTypeAdvancedHTTPAlertError                        AaaPoliciesAlertType = "advanced_http_alert_error"
-	AaaPoliciesAlertTypeBGPHijackNotification                         AaaPoliciesAlertType = "bgp_hijack_notification"
-	AaaPoliciesAlertTypeBillingUsageAlert                             AaaPoliciesAlertType = "billing_usage_alert"
-	AaaPoliciesAlertTypeBlockNotificationBlockRemoved                 AaaPoliciesAlertType = "block_notification_block_removed"
-	AaaPoliciesAlertTypeBlockNotificationNewBlock                     AaaPoliciesAlertType = "block_notification_new_block"
-	AaaPoliciesAlertTypeBlockNotificationReviewRejected               AaaPoliciesAlertType = "block_notification_review_rejected"
-	AaaPoliciesAlertTypeBrandProtectionAlert                          AaaPoliciesAlertType = "brand_protection_alert"
-	AaaPoliciesAlertTypeBrandProtectionDigest                         AaaPoliciesAlertType = "brand_protection_digest"
-	AaaPoliciesAlertTypeClickhouseAlertFwAnomaly                      AaaPoliciesAlertType = "clickhouse_alert_fw_anomaly"
-	AaaPoliciesAlertTypeClickhouseAlertFwEntAnomaly                   AaaPoliciesAlertType = "clickhouse_alert_fw_ent_anomaly"
-	AaaPoliciesAlertTypeCustomSSLCertificateEventType                 AaaPoliciesAlertType = "custom_ssl_certificate_event_type"
-	AaaPoliciesAlertTypeDedicatedSSLCertificateEventType              AaaPoliciesAlertType = "dedicated_ssl_certificate_event_type"
-	AaaPoliciesAlertTypeDosAttackL4                                   AaaPoliciesAlertType = "dos_attack_l4"
-	AaaPoliciesAlertTypeDosAttackL7                                   AaaPoliciesAlertType = "dos_attack_l7"
-	AaaPoliciesAlertTypeExpiringServiceTokenAlert                     AaaPoliciesAlertType = "expiring_service_token_alert"
-	AaaPoliciesAlertTypeFailingLogpushJobDisabledAlert                AaaPoliciesAlertType = "failing_logpush_job_disabled_alert"
-	AaaPoliciesAlertTypeFbmAutoAdvertisement                          AaaPoliciesAlertType = "fbm_auto_advertisement"
-	AaaPoliciesAlertTypeFbmDosdAttack                                 AaaPoliciesAlertType = "fbm_dosd_attack"
-	AaaPoliciesAlertTypeFbmVolumetricAttack                           AaaPoliciesAlertType = "fbm_volumetric_attack"
-	AaaPoliciesAlertTypeHealthCheckStatusNotification                 AaaPoliciesAlertType = "health_check_status_notification"
-	AaaPoliciesAlertTypeHostnameAopCustomCertificateExpirationType    AaaPoliciesAlertType = "hostname_aop_custom_certificate_expiration_type"
-	AaaPoliciesAlertTypeHTTPAlertEdgeError                            AaaPoliciesAlertType = "http_alert_edge_error"
-	AaaPoliciesAlertTypeHTTPAlertOriginError                          AaaPoliciesAlertType = "http_alert_origin_error"
-	AaaPoliciesAlertTypeIncidentAlert                                 AaaPoliciesAlertType = "incident_alert"
-	AaaPoliciesAlertTypeLoadBalancingHealthAlert                      AaaPoliciesAlertType = "load_balancing_health_alert"
-	AaaPoliciesAlertTypeLoadBalancingPoolEnablementAlert              AaaPoliciesAlertType = "load_balancing_pool_enablement_alert"
-	AaaPoliciesAlertTypeLogoMatchAlert                                AaaPoliciesAlertType = "logo_match_alert"
-	AaaPoliciesAlertTypeMagicTunnelHealthCheckEvent                   AaaPoliciesAlertType = "magic_tunnel_health_check_event"
-	AaaPoliciesAlertTypeMaintenanceEventNotification                  AaaPoliciesAlertType = "maintenance_event_notification"
-	AaaPoliciesAlertTypeMTLSCertificateStoreCertificateExpirationType AaaPoliciesAlertType = "mtls_certificate_store_certificate_expiration_type"
-	AaaPoliciesAlertTypePagesEventAlert                               AaaPoliciesAlertType = "pages_event_alert"
-	AaaPoliciesAlertTypeRadarNotification                             AaaPoliciesAlertType = "radar_notification"
-	AaaPoliciesAlertTypeRealOriginMonitoring                          AaaPoliciesAlertType = "real_origin_monitoring"
-	AaaPoliciesAlertTypeScriptmonitorAlertNewCodeChangeDetections     AaaPoliciesAlertType = "scriptmonitor_alert_new_code_change_detections"
-	AaaPoliciesAlertTypeScriptmonitorAlertNewHosts                    AaaPoliciesAlertType = "scriptmonitor_alert_new_hosts"
-	AaaPoliciesAlertTypeScriptmonitorAlertNewMaliciousHosts           AaaPoliciesAlertType = "scriptmonitor_alert_new_malicious_hosts"
-	AaaPoliciesAlertTypeScriptmonitorAlertNewMaliciousScripts         AaaPoliciesAlertType = "scriptmonitor_alert_new_malicious_scripts"
-	AaaPoliciesAlertTypeScriptmonitorAlertNewMaliciousURL             AaaPoliciesAlertType = "scriptmonitor_alert_new_malicious_url"
-	AaaPoliciesAlertTypeScriptmonitorAlertNewMaxLengthResourceURL     AaaPoliciesAlertType = "scriptmonitor_alert_new_max_length_resource_url"
-	AaaPoliciesAlertTypeScriptmonitorAlertNewResources                AaaPoliciesAlertType = "scriptmonitor_alert_new_resources"
-	AaaPoliciesAlertTypeSecondaryDNSAllPrimariesFailing               AaaPoliciesAlertType = "secondary_dns_all_primaries_failing"
-	AaaPoliciesAlertTypeSecondaryDNSPrimariesFailing                  AaaPoliciesAlertType = "secondary_dns_primaries_failing"
-	AaaPoliciesAlertTypeSecondaryDNSZoneSuccessfullyUpdated           AaaPoliciesAlertType = "secondary_dns_zone_successfully_updated"
-	AaaPoliciesAlertTypeSecondaryDNSZoneValidationWarning             AaaPoliciesAlertType = "secondary_dns_zone_validation_warning"
-	AaaPoliciesAlertTypeSentinelAlert                                 AaaPoliciesAlertType = "sentinel_alert"
-	AaaPoliciesAlertTypeStreamLiveNotifications                       AaaPoliciesAlertType = "stream_live_notifications"
-	AaaPoliciesAlertTypeTrafficAnomaliesAlert                         AaaPoliciesAlertType = "traffic_anomalies_alert"
-	AaaPoliciesAlertTypeTunnelHealthEvent                             AaaPoliciesAlertType = "tunnel_health_event"
-	AaaPoliciesAlertTypeTunnelUpdateEvent                             AaaPoliciesAlertType = "tunnel_update_event"
-	AaaPoliciesAlertTypeUniversalSSLEventType                         AaaPoliciesAlertType = "universal_ssl_event_type"
-	AaaPoliciesAlertTypeWebAnalyticsMetricsUpdate                     AaaPoliciesAlertType = "web_analytics_metrics_update"
-	AaaPoliciesAlertTypeZoneAopCustomCertificateExpirationType        AaaPoliciesAlertType = "zone_aop_custom_certificate_expiration_type"
+	AlertingPoliciesAlertTypeAccessCustomCertificateExpirationType         AlertingPoliciesAlertType = "access_custom_certificate_expiration_type"
+	AlertingPoliciesAlertTypeAdvancedDDOSAttackL4Alert                     AlertingPoliciesAlertType = "advanced_ddos_attack_l4_alert"
+	AlertingPoliciesAlertTypeAdvancedDDOSAttackL7Alert                     AlertingPoliciesAlertType = "advanced_ddos_attack_l7_alert"
+	AlertingPoliciesAlertTypeAdvancedHTTPAlertError                        AlertingPoliciesAlertType = "advanced_http_alert_error"
+	AlertingPoliciesAlertTypeBGPHijackNotification                         AlertingPoliciesAlertType = "bgp_hijack_notification"
+	AlertingPoliciesAlertTypeBillingUsageAlert                             AlertingPoliciesAlertType = "billing_usage_alert"
+	AlertingPoliciesAlertTypeBlockNotificationBlockRemoved                 AlertingPoliciesAlertType = "block_notification_block_removed"
+	AlertingPoliciesAlertTypeBlockNotificationNewBlock                     AlertingPoliciesAlertType = "block_notification_new_block"
+	AlertingPoliciesAlertTypeBlockNotificationReviewRejected               AlertingPoliciesAlertType = "block_notification_review_rejected"
+	AlertingPoliciesAlertTypeBrandProtectionAlert                          AlertingPoliciesAlertType = "brand_protection_alert"
+	AlertingPoliciesAlertTypeBrandProtectionDigest                         AlertingPoliciesAlertType = "brand_protection_digest"
+	AlertingPoliciesAlertTypeClickhouseAlertFwAnomaly                      AlertingPoliciesAlertType = "clickhouse_alert_fw_anomaly"
+	AlertingPoliciesAlertTypeClickhouseAlertFwEntAnomaly                   AlertingPoliciesAlertType = "clickhouse_alert_fw_ent_anomaly"
+	AlertingPoliciesAlertTypeCustomSSLCertificateEventType                 AlertingPoliciesAlertType = "custom_ssl_certificate_event_type"
+	AlertingPoliciesAlertTypeDedicatedSSLCertificateEventType              AlertingPoliciesAlertType = "dedicated_ssl_certificate_event_type"
+	AlertingPoliciesAlertTypeDosAttackL4                                   AlertingPoliciesAlertType = "dos_attack_l4"
+	AlertingPoliciesAlertTypeDosAttackL7                                   AlertingPoliciesAlertType = "dos_attack_l7"
+	AlertingPoliciesAlertTypeExpiringServiceTokenAlert                     AlertingPoliciesAlertType = "expiring_service_token_alert"
+	AlertingPoliciesAlertTypeFailingLogpushJobDisabledAlert                AlertingPoliciesAlertType = "failing_logpush_job_disabled_alert"
+	AlertingPoliciesAlertTypeFbmAutoAdvertisement                          AlertingPoliciesAlertType = "fbm_auto_advertisement"
+	AlertingPoliciesAlertTypeFbmDosdAttack                                 AlertingPoliciesAlertType = "fbm_dosd_attack"
+	AlertingPoliciesAlertTypeFbmVolumetricAttack                           AlertingPoliciesAlertType = "fbm_volumetric_attack"
+	AlertingPoliciesAlertTypeHealthCheckStatusNotification                 AlertingPoliciesAlertType = "health_check_status_notification"
+	AlertingPoliciesAlertTypeHostnameAopCustomCertificateExpirationType    AlertingPoliciesAlertType = "hostname_aop_custom_certificate_expiration_type"
+	AlertingPoliciesAlertTypeHTTPAlertEdgeError                            AlertingPoliciesAlertType = "http_alert_edge_error"
+	AlertingPoliciesAlertTypeHTTPAlertOriginError                          AlertingPoliciesAlertType = "http_alert_origin_error"
+	AlertingPoliciesAlertTypeIncidentAlert                                 AlertingPoliciesAlertType = "incident_alert"
+	AlertingPoliciesAlertTypeLoadBalancingHealthAlert                      AlertingPoliciesAlertType = "load_balancing_health_alert"
+	AlertingPoliciesAlertTypeLoadBalancingPoolEnablementAlert              AlertingPoliciesAlertType = "load_balancing_pool_enablement_alert"
+	AlertingPoliciesAlertTypeLogoMatchAlert                                AlertingPoliciesAlertType = "logo_match_alert"
+	AlertingPoliciesAlertTypeMagicTunnelHealthCheckEvent                   AlertingPoliciesAlertType = "magic_tunnel_health_check_event"
+	AlertingPoliciesAlertTypeMaintenanceEventNotification                  AlertingPoliciesAlertType = "maintenance_event_notification"
+	AlertingPoliciesAlertTypeMTLSCertificateStoreCertificateExpirationType AlertingPoliciesAlertType = "mtls_certificate_store_certificate_expiration_type"
+	AlertingPoliciesAlertTypePagesEventAlert                               AlertingPoliciesAlertType = "pages_event_alert"
+	AlertingPoliciesAlertTypeRadarNotification                             AlertingPoliciesAlertType = "radar_notification"
+	AlertingPoliciesAlertTypeRealOriginMonitoring                          AlertingPoliciesAlertType = "real_origin_monitoring"
+	AlertingPoliciesAlertTypeScriptmonitorAlertNewCodeChangeDetections     AlertingPoliciesAlertType = "scriptmonitor_alert_new_code_change_detections"
+	AlertingPoliciesAlertTypeScriptmonitorAlertNewHosts                    AlertingPoliciesAlertType = "scriptmonitor_alert_new_hosts"
+	AlertingPoliciesAlertTypeScriptmonitorAlertNewMaliciousHosts           AlertingPoliciesAlertType = "scriptmonitor_alert_new_malicious_hosts"
+	AlertingPoliciesAlertTypeScriptmonitorAlertNewMaliciousScripts         AlertingPoliciesAlertType = "scriptmonitor_alert_new_malicious_scripts"
+	AlertingPoliciesAlertTypeScriptmonitorAlertNewMaliciousURL             AlertingPoliciesAlertType = "scriptmonitor_alert_new_malicious_url"
+	AlertingPoliciesAlertTypeScriptmonitorAlertNewMaxLengthResourceURL     AlertingPoliciesAlertType = "scriptmonitor_alert_new_max_length_resource_url"
+	AlertingPoliciesAlertTypeScriptmonitorAlertNewResources                AlertingPoliciesAlertType = "scriptmonitor_alert_new_resources"
+	AlertingPoliciesAlertTypeSecondaryDNSAllPrimariesFailing               AlertingPoliciesAlertType = "secondary_dns_all_primaries_failing"
+	AlertingPoliciesAlertTypeSecondaryDNSPrimariesFailing                  AlertingPoliciesAlertType = "secondary_dns_primaries_failing"
+	AlertingPoliciesAlertTypeSecondaryDNSZoneSuccessfullyUpdated           AlertingPoliciesAlertType = "secondary_dns_zone_successfully_updated"
+	AlertingPoliciesAlertTypeSecondaryDNSZoneValidationWarning             AlertingPoliciesAlertType = "secondary_dns_zone_validation_warning"
+	AlertingPoliciesAlertTypeSentinelAlert                                 AlertingPoliciesAlertType = "sentinel_alert"
+	AlertingPoliciesAlertTypeStreamLiveNotifications                       AlertingPoliciesAlertType = "stream_live_notifications"
+	AlertingPoliciesAlertTypeTrafficAnomaliesAlert                         AlertingPoliciesAlertType = "traffic_anomalies_alert"
+	AlertingPoliciesAlertTypeTunnelHealthEvent                             AlertingPoliciesAlertType = "tunnel_health_event"
+	AlertingPoliciesAlertTypeTunnelUpdateEvent                             AlertingPoliciesAlertType = "tunnel_update_event"
+	AlertingPoliciesAlertTypeUniversalSSLEventType                         AlertingPoliciesAlertType = "universal_ssl_event_type"
+	AlertingPoliciesAlertTypeWebAnalyticsMetricsUpdate                     AlertingPoliciesAlertType = "web_analytics_metrics_update"
+	AlertingPoliciesAlertTypeZoneAopCustomCertificateExpirationType        AlertingPoliciesAlertType = "zone_aop_custom_certificate_expiration_type"
 )
 
-func (r AaaPoliciesAlertType) IsKnown() bool {
+func (r AlertingPoliciesAlertType) IsKnown() bool {
 	switch r {
-	case AaaPoliciesAlertTypeAccessCustomCertificateExpirationType, AaaPoliciesAlertTypeAdvancedDDOSAttackL4Alert, AaaPoliciesAlertTypeAdvancedDDOSAttackL7Alert, AaaPoliciesAlertTypeAdvancedHTTPAlertError, AaaPoliciesAlertTypeBGPHijackNotification, AaaPoliciesAlertTypeBillingUsageAlert, AaaPoliciesAlertTypeBlockNotificationBlockRemoved, AaaPoliciesAlertTypeBlockNotificationNewBlock, AaaPoliciesAlertTypeBlockNotificationReviewRejected, AaaPoliciesAlertTypeBrandProtectionAlert, AaaPoliciesAlertTypeBrandProtectionDigest, AaaPoliciesAlertTypeClickhouseAlertFwAnomaly, AaaPoliciesAlertTypeClickhouseAlertFwEntAnomaly, AaaPoliciesAlertTypeCustomSSLCertificateEventType, AaaPoliciesAlertTypeDedicatedSSLCertificateEventType, AaaPoliciesAlertTypeDosAttackL4, AaaPoliciesAlertTypeDosAttackL7, AaaPoliciesAlertTypeExpiringServiceTokenAlert, AaaPoliciesAlertTypeFailingLogpushJobDisabledAlert, AaaPoliciesAlertTypeFbmAutoAdvertisement, AaaPoliciesAlertTypeFbmDosdAttack, AaaPoliciesAlertTypeFbmVolumetricAttack, AaaPoliciesAlertTypeHealthCheckStatusNotification, AaaPoliciesAlertTypeHostnameAopCustomCertificateExpirationType, AaaPoliciesAlertTypeHTTPAlertEdgeError, AaaPoliciesAlertTypeHTTPAlertOriginError, AaaPoliciesAlertTypeIncidentAlert, AaaPoliciesAlertTypeLoadBalancingHealthAlert, AaaPoliciesAlertTypeLoadBalancingPoolEnablementAlert, AaaPoliciesAlertTypeLogoMatchAlert, AaaPoliciesAlertTypeMagicTunnelHealthCheckEvent, AaaPoliciesAlertTypeMaintenanceEventNotification, AaaPoliciesAlertTypeMTLSCertificateStoreCertificateExpirationType, AaaPoliciesAlertTypePagesEventAlert, AaaPoliciesAlertTypeRadarNotification, AaaPoliciesAlertTypeRealOriginMonitoring, AaaPoliciesAlertTypeScriptmonitorAlertNewCodeChangeDetections, AaaPoliciesAlertTypeScriptmonitorAlertNewHosts, AaaPoliciesAlertTypeScriptmonitorAlertNewMaliciousHosts, AaaPoliciesAlertTypeScriptmonitorAlertNewMaliciousScripts, AaaPoliciesAlertTypeScriptmonitorAlertNewMaliciousURL, AaaPoliciesAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, AaaPoliciesAlertTypeScriptmonitorAlertNewResources, AaaPoliciesAlertTypeSecondaryDNSAllPrimariesFailing, AaaPoliciesAlertTypeSecondaryDNSPrimariesFailing, AaaPoliciesAlertTypeSecondaryDNSZoneSuccessfullyUpdated, AaaPoliciesAlertTypeSecondaryDNSZoneValidationWarning, AaaPoliciesAlertTypeSentinelAlert, AaaPoliciesAlertTypeStreamLiveNotifications, AaaPoliciesAlertTypeTrafficAnomaliesAlert, AaaPoliciesAlertTypeTunnelHealthEvent, AaaPoliciesAlertTypeTunnelUpdateEvent, AaaPoliciesAlertTypeUniversalSSLEventType, AaaPoliciesAlertTypeWebAnalyticsMetricsUpdate, AaaPoliciesAlertTypeZoneAopCustomCertificateExpirationType:
+	case AlertingPoliciesAlertTypeAccessCustomCertificateExpirationType, AlertingPoliciesAlertTypeAdvancedDDOSAttackL4Alert, AlertingPoliciesAlertTypeAdvancedDDOSAttackL7Alert, AlertingPoliciesAlertTypeAdvancedHTTPAlertError, AlertingPoliciesAlertTypeBGPHijackNotification, AlertingPoliciesAlertTypeBillingUsageAlert, AlertingPoliciesAlertTypeBlockNotificationBlockRemoved, AlertingPoliciesAlertTypeBlockNotificationNewBlock, AlertingPoliciesAlertTypeBlockNotificationReviewRejected, AlertingPoliciesAlertTypeBrandProtectionAlert, AlertingPoliciesAlertTypeBrandProtectionDigest, AlertingPoliciesAlertTypeClickhouseAlertFwAnomaly, AlertingPoliciesAlertTypeClickhouseAlertFwEntAnomaly, AlertingPoliciesAlertTypeCustomSSLCertificateEventType, AlertingPoliciesAlertTypeDedicatedSSLCertificateEventType, AlertingPoliciesAlertTypeDosAttackL4, AlertingPoliciesAlertTypeDosAttackL7, AlertingPoliciesAlertTypeExpiringServiceTokenAlert, AlertingPoliciesAlertTypeFailingLogpushJobDisabledAlert, AlertingPoliciesAlertTypeFbmAutoAdvertisement, AlertingPoliciesAlertTypeFbmDosdAttack, AlertingPoliciesAlertTypeFbmVolumetricAttack, AlertingPoliciesAlertTypeHealthCheckStatusNotification, AlertingPoliciesAlertTypeHostnameAopCustomCertificateExpirationType, AlertingPoliciesAlertTypeHTTPAlertEdgeError, AlertingPoliciesAlertTypeHTTPAlertOriginError, AlertingPoliciesAlertTypeIncidentAlert, AlertingPoliciesAlertTypeLoadBalancingHealthAlert, AlertingPoliciesAlertTypeLoadBalancingPoolEnablementAlert, AlertingPoliciesAlertTypeLogoMatchAlert, AlertingPoliciesAlertTypeMagicTunnelHealthCheckEvent, AlertingPoliciesAlertTypeMaintenanceEventNotification, AlertingPoliciesAlertTypeMTLSCertificateStoreCertificateExpirationType, AlertingPoliciesAlertTypePagesEventAlert, AlertingPoliciesAlertTypeRadarNotification, AlertingPoliciesAlertTypeRealOriginMonitoring, AlertingPoliciesAlertTypeScriptmonitorAlertNewCodeChangeDetections, AlertingPoliciesAlertTypeScriptmonitorAlertNewHosts, AlertingPoliciesAlertTypeScriptmonitorAlertNewMaliciousHosts, AlertingPoliciesAlertTypeScriptmonitorAlertNewMaliciousScripts, AlertingPoliciesAlertTypeScriptmonitorAlertNewMaliciousURL, AlertingPoliciesAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, AlertingPoliciesAlertTypeScriptmonitorAlertNewResources, AlertingPoliciesAlertTypeSecondaryDNSAllPrimariesFailing, AlertingPoliciesAlertTypeSecondaryDNSPrimariesFailing, AlertingPoliciesAlertTypeSecondaryDNSZoneSuccessfullyUpdated, AlertingPoliciesAlertTypeSecondaryDNSZoneValidationWarning, AlertingPoliciesAlertTypeSentinelAlert, AlertingPoliciesAlertTypeStreamLiveNotifications, AlertingPoliciesAlertTypeTrafficAnomaliesAlert, AlertingPoliciesAlertTypeTunnelHealthEvent, AlertingPoliciesAlertTypeTunnelUpdateEvent, AlertingPoliciesAlertTypeUniversalSSLEventType, AlertingPoliciesAlertTypeWebAnalyticsMetricsUpdate, AlertingPoliciesAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false
@@ -221,7 +222,7 @@ func (r AaaPoliciesAlertType) IsKnown() bool {
 // Optional filters that allow you to be alerted only on a subset of events for
 // that alert type based on some criteria. This is only available for select alert
 // types. See alert type documentation for more details.
-type AaaPoliciesFilters struct {
+type AlertingPoliciesFilters struct {
 	// Usage depends on specific alert type
 	Actions []string `json:"actions"`
 	// Used for configuring radar_notification
@@ -236,7 +237,7 @@ type AaaPoliciesFilters struct {
 	// Usage depends on specific alert type
 	AlertTriggerPreferences []string `json:"alert_trigger_preferences"`
 	// Used for configuring magic_tunnel_health_check_event
-	AlertTriggerPreferencesValue []AaaPoliciesFiltersAlertTriggerPreferencesValue `json:"alert_trigger_preferences_value"`
+	AlertTriggerPreferencesValue []AlertingPoliciesFiltersAlertTriggerPreferencesValue `json:"alert_trigger_preferences_value"`
 	// Used for configuring load_balancing_pool_enablement_alert
 	Enabled []string `json:"enabled"`
 	// Used for configuring pages_event_alert
@@ -252,7 +253,7 @@ type AaaPoliciesFilters struct {
 	// Used for configuring health_check_status_notification
 	HealthCheckID []string `json:"health_check_id"`
 	// Used for configuring incident_alert
-	IncidentImpact []AaaPoliciesFiltersIncidentImpact `json:"incident_impact"`
+	IncidentImpact []AlertingPoliciesFiltersIncidentImpact `json:"incident_impact"`
 	// Used for configuring stream_live_notifications
 	InputID []string `json:"input_id"`
 	// Used for configuring billing_usage_alert
@@ -294,7 +295,7 @@ type AaaPoliciesFilters struct {
 	// Used for configuring advanced_ddos_attack_l7_alert
 	TargetZoneName []string `json:"target_zone_name"`
 	// Used for configuring traffic_anomalies_alert
-	TrafficExclusions []AaaPoliciesFiltersTrafficExclusion `json:"traffic_exclusions"`
+	TrafficExclusions []AlertingPoliciesFiltersTrafficExclusion `json:"traffic_exclusions"`
 	// Used for configuring tunnel_health_event
 	TunnelID []string `json:"tunnel_id"`
 	// Used for configuring magic_tunnel_health_check_event
@@ -302,13 +303,13 @@ type AaaPoliciesFilters struct {
 	// Usage depends on specific alert type
 	Where []string `json:"where"`
 	// Usage depends on specific alert type
-	Zones []string               `json:"zones"`
-	JSON  aaaPoliciesFiltersJSON `json:"-"`
+	Zones []string                    `json:"zones"`
+	JSON  alertingPoliciesFiltersJSON `json:"-"`
 }
 
-// aaaPoliciesFiltersJSON contains the JSON metadata for the struct
-// [AaaPoliciesFilters]
-type aaaPoliciesFiltersJSON struct {
+// alertingPoliciesFiltersJSON contains the JSON metadata for the struct
+// [AlertingPoliciesFilters]
+type alertingPoliciesFiltersJSON struct {
 	Actions                      apijson.Field
 	AffectedASNs                 apijson.Field
 	AffectedComponents           apijson.Field
@@ -353,93 +354,93 @@ type aaaPoliciesFiltersJSON struct {
 	ExtraFields                  map[string]apijson.Field
 }
 
-func (r *AaaPoliciesFilters) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingPoliciesFilters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aaaPoliciesFiltersJSON) RawJSON() string {
+func (r alertingPoliciesFiltersJSON) RawJSON() string {
 	return r.raw
 }
 
-type AaaPoliciesFiltersAlertTriggerPreferencesValue string
+type AlertingPoliciesFiltersAlertTriggerPreferencesValue string
 
 const (
-	AaaPoliciesFiltersAlertTriggerPreferencesValue99_0 AaaPoliciesFiltersAlertTriggerPreferencesValue = "99.0"
-	AaaPoliciesFiltersAlertTriggerPreferencesValue98_0 AaaPoliciesFiltersAlertTriggerPreferencesValue = "98.0"
-	AaaPoliciesFiltersAlertTriggerPreferencesValue97_0 AaaPoliciesFiltersAlertTriggerPreferencesValue = "97.0"
+	AlertingPoliciesFiltersAlertTriggerPreferencesValue99_0 AlertingPoliciesFiltersAlertTriggerPreferencesValue = "99.0"
+	AlertingPoliciesFiltersAlertTriggerPreferencesValue98_0 AlertingPoliciesFiltersAlertTriggerPreferencesValue = "98.0"
+	AlertingPoliciesFiltersAlertTriggerPreferencesValue97_0 AlertingPoliciesFiltersAlertTriggerPreferencesValue = "97.0"
 )
 
-func (r AaaPoliciesFiltersAlertTriggerPreferencesValue) IsKnown() bool {
+func (r AlertingPoliciesFiltersAlertTriggerPreferencesValue) IsKnown() bool {
 	switch r {
-	case AaaPoliciesFiltersAlertTriggerPreferencesValue99_0, AaaPoliciesFiltersAlertTriggerPreferencesValue98_0, AaaPoliciesFiltersAlertTriggerPreferencesValue97_0:
+	case AlertingPoliciesFiltersAlertTriggerPreferencesValue99_0, AlertingPoliciesFiltersAlertTriggerPreferencesValue98_0, AlertingPoliciesFiltersAlertTriggerPreferencesValue97_0:
 		return true
 	}
 	return false
 }
 
-type AaaPoliciesFiltersIncidentImpact string
+type AlertingPoliciesFiltersIncidentImpact string
 
 const (
-	AaaPoliciesFiltersIncidentImpactIncidentImpactNone     AaaPoliciesFiltersIncidentImpact = "INCIDENT_IMPACT_NONE"
-	AaaPoliciesFiltersIncidentImpactIncidentImpactMinor    AaaPoliciesFiltersIncidentImpact = "INCIDENT_IMPACT_MINOR"
-	AaaPoliciesFiltersIncidentImpactIncidentImpactMajor    AaaPoliciesFiltersIncidentImpact = "INCIDENT_IMPACT_MAJOR"
-	AaaPoliciesFiltersIncidentImpactIncidentImpactCritical AaaPoliciesFiltersIncidentImpact = "INCIDENT_IMPACT_CRITICAL"
+	AlertingPoliciesFiltersIncidentImpactIncidentImpactNone     AlertingPoliciesFiltersIncidentImpact = "INCIDENT_IMPACT_NONE"
+	AlertingPoliciesFiltersIncidentImpactIncidentImpactMinor    AlertingPoliciesFiltersIncidentImpact = "INCIDENT_IMPACT_MINOR"
+	AlertingPoliciesFiltersIncidentImpactIncidentImpactMajor    AlertingPoliciesFiltersIncidentImpact = "INCIDENT_IMPACT_MAJOR"
+	AlertingPoliciesFiltersIncidentImpactIncidentImpactCritical AlertingPoliciesFiltersIncidentImpact = "INCIDENT_IMPACT_CRITICAL"
 )
 
-func (r AaaPoliciesFiltersIncidentImpact) IsKnown() bool {
+func (r AlertingPoliciesFiltersIncidentImpact) IsKnown() bool {
 	switch r {
-	case AaaPoliciesFiltersIncidentImpactIncidentImpactNone, AaaPoliciesFiltersIncidentImpactIncidentImpactMinor, AaaPoliciesFiltersIncidentImpactIncidentImpactMajor, AaaPoliciesFiltersIncidentImpactIncidentImpactCritical:
+	case AlertingPoliciesFiltersIncidentImpactIncidentImpactNone, AlertingPoliciesFiltersIncidentImpactIncidentImpactMinor, AlertingPoliciesFiltersIncidentImpactIncidentImpactMajor, AlertingPoliciesFiltersIncidentImpactIncidentImpactCritical:
 		return true
 	}
 	return false
 }
 
-type AaaPoliciesFiltersTrafficExclusion string
+type AlertingPoliciesFiltersTrafficExclusion string
 
 const (
-	AaaPoliciesFiltersTrafficExclusionSecurityEvents AaaPoliciesFiltersTrafficExclusion = "security_events"
+	AlertingPoliciesFiltersTrafficExclusionSecurityEvents AlertingPoliciesFiltersTrafficExclusion = "security_events"
 )
 
-func (r AaaPoliciesFiltersTrafficExclusion) IsKnown() bool {
+func (r AlertingPoliciesFiltersTrafficExclusion) IsKnown() bool {
 	switch r {
-	case AaaPoliciesFiltersTrafficExclusionSecurityEvents:
+	case AlertingPoliciesFiltersTrafficExclusionSecurityEvents:
 		return true
 	}
 	return false
 }
 
-type AaaPoliciesMechanisms struct {
+type AlertingPoliciesMechanisms struct {
 	// UUID
-	ID   AaaPoliciesMechanismsID   `json:"id"`
-	JSON aaaPoliciesMechanismsJSON `json:"-"`
+	ID   AlertingPoliciesMechanismsID   `json:"id"`
+	JSON alertingPoliciesMechanismsJSON `json:"-"`
 }
 
-// aaaPoliciesMechanismsJSON contains the JSON metadata for the struct
-// [AaaPoliciesMechanisms]
-type aaaPoliciesMechanismsJSON struct {
+// alertingPoliciesMechanismsJSON contains the JSON metadata for the struct
+// [AlertingPoliciesMechanisms]
+type alertingPoliciesMechanismsJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AaaPoliciesMechanisms) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingPoliciesMechanisms) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aaaPoliciesMechanismsJSON) RawJSON() string {
+func (r alertingPoliciesMechanismsJSON) RawJSON() string {
 	return r.raw
 }
 
 // UUID
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type AaaPoliciesMechanismsID interface {
-	ImplementsAlertingAaaPoliciesMechanismsID()
+type AlertingPoliciesMechanismsID interface {
+	ImplementsAlertingAlertingPoliciesMechanismsID()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AaaPoliciesMechanismsID)(nil)).Elem(),
+		reflect.TypeOf((*AlertingPoliciesMechanismsID)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -1209,7 +1210,7 @@ type PolicyListParams struct {
 type PolicyListResponseEnvelope struct {
 	Errors   []PolicyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PolicyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AaaPolicies                        `json:"result,required,nullable"`
+	Result   []AlertingPolicies                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PolicyListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PolicyListResponseEnvelopeResultInfo `json:"result_info"`
@@ -1463,7 +1464,7 @@ type PolicyGetParams struct {
 type PolicyGetResponseEnvelope struct {
 	Errors   []PolicyGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PolicyGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AaaPolicies                         `json:"result,required"`
+	Result   AlertingPolicies                    `json:"result,required"`
 	// Whether the API call was successful
 	Success PolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    policyGetResponseEnvelopeJSON    `json:"-"`

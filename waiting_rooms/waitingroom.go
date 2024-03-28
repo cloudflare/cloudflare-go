@@ -43,7 +43,7 @@ func NewWaitingRoomService(opts ...option.RequestOption) (r *WaitingRoomService)
 }
 
 // Creates a new waiting room.
-func (r *WaitingRoomService) New(ctx context.Context, zoneIdentifier string, body WaitingRoomNewParams, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
+func (r *WaitingRoomService) New(ctx context.Context, zoneIdentifier string, body WaitingRoomNewParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms", zoneIdentifier)
@@ -56,7 +56,7 @@ func (r *WaitingRoomService) New(ctx context.Context, zoneIdentifier string, bod
 }
 
 // Updates a configured waiting room.
-func (r *WaitingRoomService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID string, body WaitingRoomUpdateParams, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
+func (r *WaitingRoomService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID string, body WaitingRoomUpdateParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", zoneIdentifier, waitingRoomID)
@@ -69,7 +69,7 @@ func (r *WaitingRoomService) Update(ctx context.Context, zoneIdentifier string, 
 }
 
 // Lists waiting rooms.
-func (r *WaitingRoomService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]WaitingroomWaitingroom, err error) {
+func (r *WaitingRoomService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]WaitingRoom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms", zoneIdentifier)
@@ -95,7 +95,7 @@ func (r *WaitingRoomService) Delete(ctx context.Context, zoneIdentifier string, 
 }
 
 // Patches a configured waiting room.
-func (r *WaitingRoomService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID string, body WaitingRoomEditParams, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
+func (r *WaitingRoomService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID string, body WaitingRoomEditParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", zoneIdentifier, waitingRoomID)
@@ -108,7 +108,7 @@ func (r *WaitingRoomService) Edit(ctx context.Context, zoneIdentifier string, wa
 }
 
 // Fetches a single configured waiting room.
-func (r *WaitingRoomService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *WaitingroomWaitingroom, err error) {
+func (r *WaitingRoomService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *WaitingRoom, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", zoneIdentifier, waitingRoomID)
@@ -120,16 +120,16 @@ func (r *WaitingRoomService) Get(ctx context.Context, zoneIdentifier string, wai
 	return
 }
 
-type WaitingroomWaitingroom struct {
+type WaitingRoom struct {
 	ID string `json:"id"`
 	// Only available for the Waiting Room Advanced subscription. Additional hostname
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
 	// be unique to this and all other waiting rooms.
-	AdditionalRoutes []WaitingroomWaitingroomAdditionalRoute `json:"additional_routes"`
+	AdditionalRoutes []WaitingRoomAdditionalRoute `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
-	CookieAttributes WaitingroomWaitingroomCookieAttributes `json:"cookie_attributes"`
+	CookieAttributes WaitingRoomCookieAttributes `json:"cookie_attributes"`
 	// Appends a '\_' + a custom suffix to the end of Cloudflare Waiting Room's cookie
 	// name(**cf_waitingroom). If `cookie_suffix` is "abcd", the cookie name will be
 	// `**cf_waitingroom_abcd`. This field is required if using `additional_routes`.
@@ -159,7 +159,7 @@ type WaitingroomWaitingroom struct {
 	CustomPageHTML string `json:"custom_page_html"`
 	// The language of the default page template. If no default_template_language is
 	// provided, then `en-US` (English) will be used.
-	DefaultTemplateLanguage WaitingroomWaitingroomDefaultTemplateLanguage `json:"default_template_language"`
+	DefaultTemplateLanguage WaitingRoomDefaultTemplateLanguage `json:"default_template_language"`
 	// A note that you can use to add more details about the waiting room.
 	Description string `json:"description"`
 	// Only available for the Waiting Room Advanced subscription. Disables automatic
@@ -367,9 +367,9 @@ type WaitingroomWaitingroom struct {
 	//     events override this with `fifo`, `random`, or `passthrough`. When this
 	//     queueing method is enabled and neither `queueAll` is enabled nor an event is
 	//     prequeueing, the waiting room page **will not refresh automatically**.
-	QueueingMethod WaitingroomWaitingroomQueueingMethod `json:"queueing_method"`
+	QueueingMethod WaitingRoomQueueingMethod `json:"queueing_method"`
 	// HTTP status code returned to a user while in the queue.
-	QueueingStatusCode WaitingroomWaitingroomQueueingStatusCode `json:"queueing_status_code"`
+	QueueingStatusCode WaitingRoomQueueingStatusCode `json:"queueing_status_code"`
 	// Lifetime of a cookie (in minutes) set by Cloudflare for users who get access to
 	// the route. If a user is not seen by Cloudflare again in that time period, they
 	// will be treated as a new user that visits the route.
@@ -383,13 +383,12 @@ type WaitingroomWaitingroom struct {
 	// the route. It is possible to have a situation where there are more or less
 	// active users sessions on the route based on the traffic patterns at that time
 	// around the world.
-	TotalActiveUsers int64                      `json:"total_active_users"`
-	JSON             waitingroomWaitingroomJSON `json:"-"`
+	TotalActiveUsers int64           `json:"total_active_users"`
+	JSON             waitingRoomJSON `json:"-"`
 }
 
-// waitingroomWaitingroomJSON contains the JSON metadata for the struct
-// [WaitingroomWaitingroom]
-type waitingroomWaitingroomJSON struct {
+// waitingRoomJSON contains the JSON metadata for the struct [WaitingRoom]
+type waitingRoomJSON struct {
 	ID                         apijson.Field
 	AdditionalRoutes           apijson.Field
 	CookieAttributes           apijson.Field
@@ -417,15 +416,15 @@ type waitingroomWaitingroomJSON struct {
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *WaitingroomWaitingroom) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoom) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r waitingroomWaitingroomJSON) RawJSON() string {
+func (r waitingRoomJSON) RawJSON() string {
 	return r.raw
 }
 
-type WaitingroomWaitingroomAdditionalRoute struct {
+type WaitingRoomAdditionalRoute struct {
 	// The hostname to which this waiting room will be applied (no wildcards). The
 	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
 	// for SaaS) of this zone. Please do not include the scheme (http:// or https://).
@@ -434,57 +433,57 @@ type WaitingroomWaitingroomAdditionalRoute struct {
 	// will be enabled for all subpaths as well. If there are two waiting rooms on the
 	// same subpath, the waiting room for the most specific path will be chosen.
 	// Wildcards and query parameters are not supported.
-	Path string                                    `json:"path"`
-	JSON waitingroomWaitingroomAdditionalRouteJSON `json:"-"`
+	Path string                         `json:"path"`
+	JSON waitingRoomAdditionalRouteJSON `json:"-"`
 }
 
-// waitingroomWaitingroomAdditionalRouteJSON contains the JSON metadata for the
-// struct [WaitingroomWaitingroomAdditionalRoute]
-type waitingroomWaitingroomAdditionalRouteJSON struct {
+// waitingRoomAdditionalRouteJSON contains the JSON metadata for the struct
+// [WaitingRoomAdditionalRoute]
+type waitingRoomAdditionalRouteJSON struct {
 	Host        apijson.Field
 	Path        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingroomWaitingroomAdditionalRoute) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomAdditionalRoute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r waitingroomWaitingroomAdditionalRouteJSON) RawJSON() string {
+func (r waitingRoomAdditionalRouteJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configures cookie attributes for the waiting room cookie. This encrypted cookie
 // stores a user's status in the waiting room, such as queue position.
-type WaitingroomWaitingroomCookieAttributes struct {
+type WaitingRoomCookieAttributes struct {
 	// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
 	// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
 	// Note that when using value `none`, the secure attribute cannot be set to
 	// `never`.
-	Samesite WaitingroomWaitingroomCookieAttributesSamesite `json:"samesite"`
+	Samesite WaitingRoomCookieAttributesSamesite `json:"samesite"`
 	// Configures the Secure attribute on the waiting room cookie. Value `always`
 	// indicates that the Secure attribute will be set in the Set-Cookie header,
 	// `never` indicates that the Secure attribute will not be set, and `auto` will set
 	// the Secure attribute depending if **Always Use HTTPS** is enabled.
-	Secure WaitingroomWaitingroomCookieAttributesSecure `json:"secure"`
-	JSON   waitingroomWaitingroomCookieAttributesJSON   `json:"-"`
+	Secure WaitingRoomCookieAttributesSecure `json:"secure"`
+	JSON   waitingRoomCookieAttributesJSON   `json:"-"`
 }
 
-// waitingroomWaitingroomCookieAttributesJSON contains the JSON metadata for the
-// struct [WaitingroomWaitingroomCookieAttributes]
-type waitingroomWaitingroomCookieAttributesJSON struct {
+// waitingRoomCookieAttributesJSON contains the JSON metadata for the struct
+// [WaitingRoomCookieAttributes]
+type waitingRoomCookieAttributesJSON struct {
 	Samesite    apijson.Field
 	Secure      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingroomWaitingroomCookieAttributes) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomCookieAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r waitingroomWaitingroomCookieAttributesJSON) RawJSON() string {
+func (r waitingRoomCookieAttributesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -492,18 +491,18 @@ func (r waitingroomWaitingroomCookieAttributesJSON) RawJSON() string {
 // be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
 // Note that when using value `none`, the secure attribute cannot be set to
 // `never`.
-type WaitingroomWaitingroomCookieAttributesSamesite string
+type WaitingRoomCookieAttributesSamesite string
 
 const (
-	WaitingroomWaitingroomCookieAttributesSamesiteAuto   WaitingroomWaitingroomCookieAttributesSamesite = "auto"
-	WaitingroomWaitingroomCookieAttributesSamesiteLax    WaitingroomWaitingroomCookieAttributesSamesite = "lax"
-	WaitingroomWaitingroomCookieAttributesSamesiteNone   WaitingroomWaitingroomCookieAttributesSamesite = "none"
-	WaitingroomWaitingroomCookieAttributesSamesiteStrict WaitingroomWaitingroomCookieAttributesSamesite = "strict"
+	WaitingRoomCookieAttributesSamesiteAuto   WaitingRoomCookieAttributesSamesite = "auto"
+	WaitingRoomCookieAttributesSamesiteLax    WaitingRoomCookieAttributesSamesite = "lax"
+	WaitingRoomCookieAttributesSamesiteNone   WaitingRoomCookieAttributesSamesite = "none"
+	WaitingRoomCookieAttributesSamesiteStrict WaitingRoomCookieAttributesSamesite = "strict"
 )
 
-func (r WaitingroomWaitingroomCookieAttributesSamesite) IsKnown() bool {
+func (r WaitingRoomCookieAttributesSamesite) IsKnown() bool {
 	switch r {
-	case WaitingroomWaitingroomCookieAttributesSamesiteAuto, WaitingroomWaitingroomCookieAttributesSamesiteLax, WaitingroomWaitingroomCookieAttributesSamesiteNone, WaitingroomWaitingroomCookieAttributesSamesiteStrict:
+	case WaitingRoomCookieAttributesSamesiteAuto, WaitingRoomCookieAttributesSamesiteLax, WaitingRoomCookieAttributesSamesiteNone, WaitingRoomCookieAttributesSamesiteStrict:
 		return true
 	}
 	return false
@@ -513,17 +512,17 @@ func (r WaitingroomWaitingroomCookieAttributesSamesite) IsKnown() bool {
 // indicates that the Secure attribute will be set in the Set-Cookie header,
 // `never` indicates that the Secure attribute will not be set, and `auto` will set
 // the Secure attribute depending if **Always Use HTTPS** is enabled.
-type WaitingroomWaitingroomCookieAttributesSecure string
+type WaitingRoomCookieAttributesSecure string
 
 const (
-	WaitingroomWaitingroomCookieAttributesSecureAuto   WaitingroomWaitingroomCookieAttributesSecure = "auto"
-	WaitingroomWaitingroomCookieAttributesSecureAlways WaitingroomWaitingroomCookieAttributesSecure = "always"
-	WaitingroomWaitingroomCookieAttributesSecureNever  WaitingroomWaitingroomCookieAttributesSecure = "never"
+	WaitingRoomCookieAttributesSecureAuto   WaitingRoomCookieAttributesSecure = "auto"
+	WaitingRoomCookieAttributesSecureAlways WaitingRoomCookieAttributesSecure = "always"
+	WaitingRoomCookieAttributesSecureNever  WaitingRoomCookieAttributesSecure = "never"
 )
 
-func (r WaitingroomWaitingroomCookieAttributesSecure) IsKnown() bool {
+func (r WaitingRoomCookieAttributesSecure) IsKnown() bool {
 	switch r {
-	case WaitingroomWaitingroomCookieAttributesSecureAuto, WaitingroomWaitingroomCookieAttributesSecureAlways, WaitingroomWaitingroomCookieAttributesSecureNever:
+	case WaitingRoomCookieAttributesSecureAuto, WaitingRoomCookieAttributesSecureAlways, WaitingRoomCookieAttributesSecureNever:
 		return true
 	}
 	return false
@@ -531,31 +530,31 @@ func (r WaitingroomWaitingroomCookieAttributesSecure) IsKnown() bool {
 
 // The language of the default page template. If no default_template_language is
 // provided, then `en-US` (English) will be used.
-type WaitingroomWaitingroomDefaultTemplateLanguage string
+type WaitingRoomDefaultTemplateLanguage string
 
 const (
-	WaitingroomWaitingroomDefaultTemplateLanguageEnUs WaitingroomWaitingroomDefaultTemplateLanguage = "en-US"
-	WaitingroomWaitingroomDefaultTemplateLanguageEsEs WaitingroomWaitingroomDefaultTemplateLanguage = "es-ES"
-	WaitingroomWaitingroomDefaultTemplateLanguageDeDe WaitingroomWaitingroomDefaultTemplateLanguage = "de-DE"
-	WaitingroomWaitingroomDefaultTemplateLanguageFrFr WaitingroomWaitingroomDefaultTemplateLanguage = "fr-FR"
-	WaitingroomWaitingroomDefaultTemplateLanguageItIt WaitingroomWaitingroomDefaultTemplateLanguage = "it-IT"
-	WaitingroomWaitingroomDefaultTemplateLanguageJaJp WaitingroomWaitingroomDefaultTemplateLanguage = "ja-JP"
-	WaitingroomWaitingroomDefaultTemplateLanguageKoKr WaitingroomWaitingroomDefaultTemplateLanguage = "ko-KR"
-	WaitingroomWaitingroomDefaultTemplateLanguagePtBr WaitingroomWaitingroomDefaultTemplateLanguage = "pt-BR"
-	WaitingroomWaitingroomDefaultTemplateLanguageZhCn WaitingroomWaitingroomDefaultTemplateLanguage = "zh-CN"
-	WaitingroomWaitingroomDefaultTemplateLanguageZhTw WaitingroomWaitingroomDefaultTemplateLanguage = "zh-TW"
-	WaitingroomWaitingroomDefaultTemplateLanguageNlNl WaitingroomWaitingroomDefaultTemplateLanguage = "nl-NL"
-	WaitingroomWaitingroomDefaultTemplateLanguagePlPl WaitingroomWaitingroomDefaultTemplateLanguage = "pl-PL"
-	WaitingroomWaitingroomDefaultTemplateLanguageIDID WaitingroomWaitingroomDefaultTemplateLanguage = "id-ID"
-	WaitingroomWaitingroomDefaultTemplateLanguageTrTr WaitingroomWaitingroomDefaultTemplateLanguage = "tr-TR"
-	WaitingroomWaitingroomDefaultTemplateLanguageArEg WaitingroomWaitingroomDefaultTemplateLanguage = "ar-EG"
-	WaitingroomWaitingroomDefaultTemplateLanguageRuRu WaitingroomWaitingroomDefaultTemplateLanguage = "ru-RU"
-	WaitingroomWaitingroomDefaultTemplateLanguageFaIr WaitingroomWaitingroomDefaultTemplateLanguage = "fa-IR"
+	WaitingRoomDefaultTemplateLanguageEnUs WaitingRoomDefaultTemplateLanguage = "en-US"
+	WaitingRoomDefaultTemplateLanguageEsEs WaitingRoomDefaultTemplateLanguage = "es-ES"
+	WaitingRoomDefaultTemplateLanguageDeDe WaitingRoomDefaultTemplateLanguage = "de-DE"
+	WaitingRoomDefaultTemplateLanguageFrFr WaitingRoomDefaultTemplateLanguage = "fr-FR"
+	WaitingRoomDefaultTemplateLanguageItIt WaitingRoomDefaultTemplateLanguage = "it-IT"
+	WaitingRoomDefaultTemplateLanguageJaJp WaitingRoomDefaultTemplateLanguage = "ja-JP"
+	WaitingRoomDefaultTemplateLanguageKoKr WaitingRoomDefaultTemplateLanguage = "ko-KR"
+	WaitingRoomDefaultTemplateLanguagePtBr WaitingRoomDefaultTemplateLanguage = "pt-BR"
+	WaitingRoomDefaultTemplateLanguageZhCn WaitingRoomDefaultTemplateLanguage = "zh-CN"
+	WaitingRoomDefaultTemplateLanguageZhTw WaitingRoomDefaultTemplateLanguage = "zh-TW"
+	WaitingRoomDefaultTemplateLanguageNlNl WaitingRoomDefaultTemplateLanguage = "nl-NL"
+	WaitingRoomDefaultTemplateLanguagePlPl WaitingRoomDefaultTemplateLanguage = "pl-PL"
+	WaitingRoomDefaultTemplateLanguageIDID WaitingRoomDefaultTemplateLanguage = "id-ID"
+	WaitingRoomDefaultTemplateLanguageTrTr WaitingRoomDefaultTemplateLanguage = "tr-TR"
+	WaitingRoomDefaultTemplateLanguageArEg WaitingRoomDefaultTemplateLanguage = "ar-EG"
+	WaitingRoomDefaultTemplateLanguageRuRu WaitingRoomDefaultTemplateLanguage = "ru-RU"
+	WaitingRoomDefaultTemplateLanguageFaIr WaitingRoomDefaultTemplateLanguage = "fa-IR"
 )
 
-func (r WaitingroomWaitingroomDefaultTemplateLanguage) IsKnown() bool {
+func (r WaitingRoomDefaultTemplateLanguage) IsKnown() bool {
 	switch r {
-	case WaitingroomWaitingroomDefaultTemplateLanguageEnUs, WaitingroomWaitingroomDefaultTemplateLanguageEsEs, WaitingroomWaitingroomDefaultTemplateLanguageDeDe, WaitingroomWaitingroomDefaultTemplateLanguageFrFr, WaitingroomWaitingroomDefaultTemplateLanguageItIt, WaitingroomWaitingroomDefaultTemplateLanguageJaJp, WaitingroomWaitingroomDefaultTemplateLanguageKoKr, WaitingroomWaitingroomDefaultTemplateLanguagePtBr, WaitingroomWaitingroomDefaultTemplateLanguageZhCn, WaitingroomWaitingroomDefaultTemplateLanguageZhTw, WaitingroomWaitingroomDefaultTemplateLanguageNlNl, WaitingroomWaitingroomDefaultTemplateLanguagePlPl, WaitingroomWaitingroomDefaultTemplateLanguageIDID, WaitingroomWaitingroomDefaultTemplateLanguageTrTr, WaitingroomWaitingroomDefaultTemplateLanguageArEg, WaitingroomWaitingroomDefaultTemplateLanguageRuRu, WaitingroomWaitingroomDefaultTemplateLanguageFaIr:
+	case WaitingRoomDefaultTemplateLanguageEnUs, WaitingRoomDefaultTemplateLanguageEsEs, WaitingRoomDefaultTemplateLanguageDeDe, WaitingRoomDefaultTemplateLanguageFrFr, WaitingRoomDefaultTemplateLanguageItIt, WaitingRoomDefaultTemplateLanguageJaJp, WaitingRoomDefaultTemplateLanguageKoKr, WaitingRoomDefaultTemplateLanguagePtBr, WaitingRoomDefaultTemplateLanguageZhCn, WaitingRoomDefaultTemplateLanguageZhTw, WaitingRoomDefaultTemplateLanguageNlNl, WaitingRoomDefaultTemplateLanguagePlPl, WaitingRoomDefaultTemplateLanguageIDID, WaitingRoomDefaultTemplateLanguageTrTr, WaitingRoomDefaultTemplateLanguageArEg, WaitingRoomDefaultTemplateLanguageRuRu, WaitingRoomDefaultTemplateLanguageFaIr:
 		return true
 	}
 	return false
@@ -588,35 +587,35 @@ func (r WaitingroomWaitingroomDefaultTemplateLanguage) IsKnown() bool {
 //     events override this with `fifo`, `random`, or `passthrough`. When this
 //     queueing method is enabled and neither `queueAll` is enabled nor an event is
 //     prequeueing, the waiting room page **will not refresh automatically**.
-type WaitingroomWaitingroomQueueingMethod string
+type WaitingRoomQueueingMethod string
 
 const (
-	WaitingroomWaitingroomQueueingMethodFifo        WaitingroomWaitingroomQueueingMethod = "fifo"
-	WaitingroomWaitingroomQueueingMethodRandom      WaitingroomWaitingroomQueueingMethod = "random"
-	WaitingroomWaitingroomQueueingMethodPassthrough WaitingroomWaitingroomQueueingMethod = "passthrough"
-	WaitingroomWaitingroomQueueingMethodReject      WaitingroomWaitingroomQueueingMethod = "reject"
+	WaitingRoomQueueingMethodFifo        WaitingRoomQueueingMethod = "fifo"
+	WaitingRoomQueueingMethodRandom      WaitingRoomQueueingMethod = "random"
+	WaitingRoomQueueingMethodPassthrough WaitingRoomQueueingMethod = "passthrough"
+	WaitingRoomQueueingMethodReject      WaitingRoomQueueingMethod = "reject"
 )
 
-func (r WaitingroomWaitingroomQueueingMethod) IsKnown() bool {
+func (r WaitingRoomQueueingMethod) IsKnown() bool {
 	switch r {
-	case WaitingroomWaitingroomQueueingMethodFifo, WaitingroomWaitingroomQueueingMethodRandom, WaitingroomWaitingroomQueueingMethodPassthrough, WaitingroomWaitingroomQueueingMethodReject:
+	case WaitingRoomQueueingMethodFifo, WaitingRoomQueueingMethodRandom, WaitingRoomQueueingMethodPassthrough, WaitingRoomQueueingMethodReject:
 		return true
 	}
 	return false
 }
 
 // HTTP status code returned to a user while in the queue.
-type WaitingroomWaitingroomQueueingStatusCode int64
+type WaitingRoomQueueingStatusCode int64
 
 const (
-	WaitingroomWaitingroomQueueingStatusCode200 WaitingroomWaitingroomQueueingStatusCode = 200
-	WaitingroomWaitingroomQueueingStatusCode202 WaitingroomWaitingroomQueueingStatusCode = 202
-	WaitingroomWaitingroomQueueingStatusCode429 WaitingroomWaitingroomQueueingStatusCode = 429
+	WaitingRoomQueueingStatusCode200 WaitingRoomQueueingStatusCode = 200
+	WaitingRoomQueueingStatusCode202 WaitingRoomQueueingStatusCode = 202
+	WaitingRoomQueueingStatusCode429 WaitingRoomQueueingStatusCode = 429
 )
 
-func (r WaitingroomWaitingroomQueueingStatusCode) IsKnown() bool {
+func (r WaitingRoomQueueingStatusCode) IsKnown() bool {
 	switch r {
-	case WaitingroomWaitingroomQueueingStatusCode200, WaitingroomWaitingroomQueueingStatusCode202, WaitingroomWaitingroomQueueingStatusCode429:
+	case WaitingRoomQueueingStatusCode200, WaitingRoomQueueingStatusCode202, WaitingRoomQueueingStatusCode429:
 		return true
 	}
 	return false
@@ -1076,7 +1075,7 @@ func (r WaitingRoomNewParamsQueueingStatusCode) IsKnown() bool {
 }
 
 type WaitingRoomNewResponseEnvelope struct {
-	Result WaitingroomWaitingroom             `json:"result,required"`
+	Result WaitingRoom                        `json:"result,required"`
 	JSON   waitingRoomNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1529,7 +1528,7 @@ func (r WaitingRoomUpdateParamsQueueingStatusCode) IsKnown() bool {
 }
 
 type WaitingRoomUpdateResponseEnvelope struct {
-	Result WaitingroomWaitingroom                `json:"result,required"`
+	Result WaitingRoom                           `json:"result,required"`
 	JSON   waitingRoomUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1552,7 +1551,7 @@ func (r waitingRoomUpdateResponseEnvelopeJSON) RawJSON() string {
 type WaitingRoomListResponseEnvelope struct {
 	Errors   []WaitingRoomListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WaitingRoomListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomWaitingroom                  `json:"result,required,nullable"`
+	Result   []WaitingRoom                             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    WaitingRoomListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo WaitingRoomListResponseEnvelopeResultInfo `json:"result_info"`
@@ -2125,7 +2124,7 @@ func (r WaitingRoomEditParamsQueueingStatusCode) IsKnown() bool {
 }
 
 type WaitingRoomEditResponseEnvelope struct {
-	Result WaitingroomWaitingroom              `json:"result,required"`
+	Result WaitingRoom                         `json:"result,required"`
 	JSON   waitingRoomEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -2146,7 +2145,7 @@ func (r waitingRoomEditResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WaitingRoomGetResponseEnvelope struct {
-	Result WaitingroomWaitingroom             `json:"result,required"`
+	Result WaitingRoom                        `json:"result,required"`
 	JSON   waitingRoomGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -62,7 +62,7 @@ func (r *DestinationWebhookService) Update(ctx context.Context, webhookID string
 }
 
 // Gets a list of all configured webhook destinations.
-func (r *DestinationWebhookService) List(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) (res *[]AaaWebhooks, err error) {
+func (r *DestinationWebhookService) List(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) (res *[]AlertingWebhooks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", query.AccountID)
@@ -88,7 +88,7 @@ func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string
 }
 
 // Get details for a single webhooks destination.
-func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, query DestinationWebhookGetParams, opts ...option.RequestOption) (res *AaaWebhooks, err error) {
+func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, query DestinationWebhookGetParams, opts ...option.RequestOption) (res *AlertingWebhooks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", query.AccountID, webhookID)
@@ -100,7 +100,7 @@ func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, q
 	return
 }
 
-type AaaWebhooks struct {
+type AlertingWebhooks struct {
 	// The unique identifier of a webhook
 	ID string `json:"id"`
 	// Timestamp of when the webhook destination was created.
@@ -119,14 +119,15 @@ type AaaWebhooks struct {
 	// destinations. Secrets are not returned in any API response body.
 	Secret string `json:"secret"`
 	// Type of webhook endpoint.
-	Type AaaWebhooksType `json:"type"`
+	Type AlertingWebhooksType `json:"type"`
 	// The POST endpoint to call when dispatching a notification.
-	URL  string          `json:"url"`
-	JSON aaaWebhooksJSON `json:"-"`
+	URL  string               `json:"url"`
+	JSON alertingWebhooksJSON `json:"-"`
 }
 
-// aaaWebhooksJSON contains the JSON metadata for the struct [AaaWebhooks]
-type aaaWebhooksJSON struct {
+// alertingWebhooksJSON contains the JSON metadata for the struct
+// [AlertingWebhooks]
+type alertingWebhooksJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	LastFailure apijson.Field
@@ -139,26 +140,26 @@ type aaaWebhooksJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AaaWebhooks) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingWebhooks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aaaWebhooksJSON) RawJSON() string {
+func (r alertingWebhooksJSON) RawJSON() string {
 	return r.raw
 }
 
 // Type of webhook endpoint.
-type AaaWebhooksType string
+type AlertingWebhooksType string
 
 const (
-	AaaWebhooksTypeSlack   AaaWebhooksType = "slack"
-	AaaWebhooksTypeGeneric AaaWebhooksType = "generic"
-	AaaWebhooksTypeGchat   AaaWebhooksType = "gchat"
+	AlertingWebhooksTypeSlack   AlertingWebhooksType = "slack"
+	AlertingWebhooksTypeGeneric AlertingWebhooksType = "generic"
+	AlertingWebhooksTypeGchat   AlertingWebhooksType = "gchat"
 )
 
-func (r AaaWebhooksType) IsKnown() bool {
+func (r AlertingWebhooksType) IsKnown() bool {
 	switch r {
-	case AaaWebhooksTypeSlack, AaaWebhooksTypeGeneric, AaaWebhooksTypeGchat:
+	case AlertingWebhooksTypeSlack, AlertingWebhooksTypeGeneric, AlertingWebhooksTypeGchat:
 		return true
 	}
 	return false
@@ -455,7 +456,7 @@ type DestinationWebhookListParams struct {
 type DestinationWebhookListResponseEnvelope struct {
 	Errors   []DestinationWebhookListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DestinationWebhookListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AaaWebhooks                                    `json:"result,required,nullable"`
+	Result   []AlertingWebhooks                               `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationWebhookListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationWebhookListResponseEnvelopeResultInfo `json:"result_info"`
@@ -709,7 +710,7 @@ type DestinationWebhookGetParams struct {
 type DestinationWebhookGetResponseEnvelope struct {
 	Errors   []DestinationWebhookGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DestinationWebhookGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AaaWebhooks                                     `json:"result,required"`
+	Result   AlertingWebhooks                                `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationWebhookGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationWebhookGetResponseEnvelopeJSON    `json:"-"`

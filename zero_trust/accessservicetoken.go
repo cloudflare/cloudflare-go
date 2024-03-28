@@ -57,7 +57,7 @@ func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServic
 }
 
 // Updates a configured service token.
-func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
+func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ZeroTrustServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenUpdateResponseEnvelope
 	var accountOrZone string
@@ -79,7 +79,7 @@ func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, par
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *[]AccessServiceTokens, err error) {
+func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *[]ZeroTrustServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenListResponseEnvelope
 	var accountOrZone string
@@ -101,7 +101,7 @@ func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServic
 }
 
 // Deletes a service token.
-func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
+func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *ZeroTrustServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenDeleteResponseEnvelope
 	var accountOrZone string
@@ -123,7 +123,7 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, bod
 }
 
 // Refreshes the expiration of a service token.
-func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
+func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZeroTrustServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenRefreshResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/refresh", identifier, uuid)
@@ -148,7 +148,7 @@ func (r *AccessServiceTokenService) Rotate(ctx context.Context, identifier strin
 	return
 }
 
-type AccessServiceTokens struct {
+type ZeroTrustServiceTokens struct {
 	// The ID of the service token.
 	ID interface{} `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
@@ -160,14 +160,14 @@ type AccessServiceTokens struct {
 	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
-	Name      string                  `json:"name"`
-	UpdatedAt time.Time               `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokensJSON `json:"-"`
+	Name      string                     `json:"name"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustServiceTokensJSON `json:"-"`
 }
 
-// accessServiceTokensJSON contains the JSON metadata for the struct
-// [AccessServiceTokens]
-type accessServiceTokensJSON struct {
+// zeroTrustServiceTokensJSON contains the JSON metadata for the struct
+// [ZeroTrustServiceTokens]
+type zeroTrustServiceTokensJSON struct {
 	ID          apijson.Field
 	ClientID    apijson.Field
 	CreatedAt   apijson.Field
@@ -178,11 +178,11 @@ type accessServiceTokensJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessServiceTokens) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustServiceTokens) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessServiceTokensJSON) RawJSON() string {
+func (r zeroTrustServiceTokensJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -396,7 +396,7 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessServiceTokenUpdateResponseEnvelope struct {
 	Errors   []AccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokens                                `json:"result,required"`
+	Result   ZeroTrustServiceTokens                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
@@ -492,7 +492,7 @@ type AccessServiceTokenListParams struct {
 type AccessServiceTokenListResponseEnvelope struct {
 	Errors   []AccessServiceTokenListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessServiceTokens                            `json:"result,required,nullable"`
+	Result   []ZeroTrustServiceTokens                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessServiceTokenListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessServiceTokenListResponseEnvelopeResultInfo `json:"result_info"`
@@ -621,7 +621,7 @@ type AccessServiceTokenDeleteParams struct {
 type AccessServiceTokenDeleteResponseEnvelope struct {
 	Errors   []AccessServiceTokenDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokens                                `json:"result,required"`
+	Result   ZeroTrustServiceTokens                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
@@ -710,7 +710,7 @@ func (r AccessServiceTokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AccessServiceTokenRefreshResponseEnvelope struct {
 	Errors   []AccessServiceTokenRefreshResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenRefreshResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokens                                 `json:"result,required"`
+	Result   ZeroTrustServiceTokens                              `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenRefreshResponseEnvelopeJSON    `json:"-"`
