@@ -364,19 +364,19 @@ Methods:
 - <code title="patch /zones/{zone_id}/settings/0rtt">client.Zones.Settings.ZeroRTT.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingZeroRTTService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingZeroRTTEditParams">SettingZeroRTTEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSetting0rtt">ZoneSetting0rtt</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/settings/0rtt">client.Zones.Settings.ZeroRTT.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingZeroRTTService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingZeroRTTGetParams">SettingZeroRTTGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSetting0rtt">ZoneSetting0rtt</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-### AdvancedDDOS
+### AdvancedDDoS
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAdvancedDDOSParam">ZoneSettingAdvancedDDOSParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAdvancedDDoSParam">ZoneSettingAdvancedDDoSParam</a>
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAdvancedDDOS">ZoneSettingAdvancedDDOS</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAdvancedDDoS">ZoneSettingAdvancedDDoS</a>
 
 Methods:
 
-- <code title="get /zones/{zone_id}/settings/advanced_ddos">client.Zones.Settings.AdvancedDDOS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingAdvancedDDOSService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingAdvancedDDOSGetParams">SettingAdvancedDDOSGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAdvancedDDOS">ZoneSettingAdvancedDDOS</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/settings/advanced_ddos">client.Zones.Settings.AdvancedDDoS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingAdvancedDDoSService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingAdvancedDDoSGetParams">SettingAdvancedDDoSGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAdvancedDDoS">ZoneSettingAdvancedDDoS</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### AlwaysOnline
 
