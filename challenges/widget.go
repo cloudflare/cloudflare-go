@@ -35,7 +35,7 @@ func NewWidgetService(opts ...option.RequestOption) (r *WidgetService) {
 }
 
 // Lists challenge widgets.
-func (r *WidgetService) New(ctx context.Context, params WidgetNewParams, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
+func (r *WidgetService) New(ctx context.Context, params WidgetNewParams, opts ...option.RequestOption) (res *ChallengesWidget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets", params.AccountID)
@@ -48,7 +48,7 @@ func (r *WidgetService) New(ctx context.Context, params WidgetNewParams, opts ..
 }
 
 // Update the configuration of a widget.
-func (r *WidgetService) Update(ctx context.Context, sitekey string, params WidgetUpdateParams, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
+func (r *WidgetService) Update(ctx context.Context, sitekey string, params WidgetUpdateParams, opts ...option.RequestOption) (res *ChallengesWidget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", params.AccountID, sitekey)
@@ -61,7 +61,7 @@ func (r *WidgetService) Update(ctx context.Context, sitekey string, params Widge
 }
 
 // Lists all turnstile widgets of an account.
-func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[NcChallengesAdminWidgetList], err error) {
+func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ChallengesWidgetList], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,12 +79,12 @@ func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts 
 }
 
 // Lists all turnstile widgets of an account.
-func (r *WidgetService) ListAutoPaging(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[NcChallengesAdminWidgetList] {
+func (r *WidgetService) ListAutoPaging(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ChallengesWidgetList] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Destroy a Turnstile Widget.
-func (r *WidgetService) Delete(ctx context.Context, sitekey string, body WidgetDeleteParams, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
+func (r *WidgetService) Delete(ctx context.Context, sitekey string, body WidgetDeleteParams, opts ...option.RequestOption) (res *ChallengesWidget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", body.AccountID, sitekey)
@@ -97,7 +97,7 @@ func (r *WidgetService) Delete(ctx context.Context, sitekey string, body WidgetD
 }
 
 // Show a single challenge widget configuration.
-func (r *WidgetService) Get(ctx context.Context, sitekey string, query WidgetGetParams, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
+func (r *WidgetService) Get(ctx context.Context, sitekey string, query WidgetGetParams, opts ...option.RequestOption) (res *ChallengesWidget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", query.AccountID, sitekey)
@@ -113,7 +113,7 @@ func (r *WidgetService) Get(ctx context.Context, sitekey string, query WidgetGet
 // `false`, the previous secret remains valid for 2 hours.
 //
 // Note that secrets cannot be rotated again during the grace period.
-func (r *WidgetService) RotateSecret(ctx context.Context, sitekey string, params WidgetRotateSecretParams, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
+func (r *WidgetService) RotateSecret(ctx context.Context, sitekey string, params WidgetRotateSecretParams, opts ...option.RequestOption) (res *ChallengesWidget, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetRotateSecretResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s/rotate_secret", params.AccountID, sitekey)
@@ -126,18 +126,18 @@ func (r *WidgetService) RotateSecret(ctx context.Context, sitekey string, params
 }
 
 // A Turnstile widget's detailed configuration
-type NcChallengesAdminWidgetDetail struct {
+type ChallengesWidget struct {
 	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
 	// challenges in response to malicious bots (ENT only).
 	BotFightMode bool `json:"bot_fight_mode,required"`
 	// If Turnstile is embedded on a Cloudflare site and the widget should grant
 	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel NcChallengesAdminWidgetDetailClearanceLevel `json:"clearance_level,required"`
+	ClearanceLevel ChallengesWidgetClearanceLevel `json:"clearance_level,required"`
 	// When the widget was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	Domains   []string  `json:"domains,required"`
 	// Widget Mode
-	Mode NcChallengesAdminWidgetDetailMode `json:"mode,required"`
+	Mode ChallengesWidgetMode `json:"mode,required"`
 	// When the widget was modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
@@ -147,17 +147,17 @@ type NcChallengesAdminWidgetDetail struct {
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel bool `json:"offlabel,required"`
 	// Region where this widget can be used.
-	Region NcChallengesAdminWidgetDetailRegion `json:"region,required"`
+	Region ChallengesWidgetRegion `json:"region,required"`
 	// Secret key for this widget.
 	Secret string `json:"secret,required"`
 	// Widget item identifier tag.
-	Sitekey string                            `json:"sitekey,required"`
-	JSON    ncChallengesAdminWidgetDetailJSON `json:"-"`
+	Sitekey string               `json:"sitekey,required"`
+	JSON    challengesWidgetJSON `json:"-"`
 }
 
-// ncChallengesAdminWidgetDetailJSON contains the JSON metadata for the struct
-// [NcChallengesAdminWidgetDetail]
-type ncChallengesAdminWidgetDetailJSON struct {
+// challengesWidgetJSON contains the JSON metadata for the struct
+// [ChallengesWidget]
+type challengesWidgetJSON struct {
 	BotFightMode   apijson.Field
 	ClearanceLevel apijson.Field
 	CreatedOn      apijson.Field
@@ -173,78 +173,78 @@ type ncChallengesAdminWidgetDetailJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *NcChallengesAdminWidgetDetail) UnmarshalJSON(data []byte) (err error) {
+func (r *ChallengesWidget) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ncChallengesAdminWidgetDetailJSON) RawJSON() string {
+func (r challengesWidgetJSON) RawJSON() string {
 	return r.raw
 }
 
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
-type NcChallengesAdminWidgetDetailClearanceLevel string
+type ChallengesWidgetClearanceLevel string
 
 const (
-	NcChallengesAdminWidgetDetailClearanceLevelNoClearance NcChallengesAdminWidgetDetailClearanceLevel = "no_clearance"
-	NcChallengesAdminWidgetDetailClearanceLevelJschallenge NcChallengesAdminWidgetDetailClearanceLevel = "jschallenge"
-	NcChallengesAdminWidgetDetailClearanceLevelManaged     NcChallengesAdminWidgetDetailClearanceLevel = "managed"
-	NcChallengesAdminWidgetDetailClearanceLevelInteractive NcChallengesAdminWidgetDetailClearanceLevel = "interactive"
+	ChallengesWidgetClearanceLevelNoClearance ChallengesWidgetClearanceLevel = "no_clearance"
+	ChallengesWidgetClearanceLevelJschallenge ChallengesWidgetClearanceLevel = "jschallenge"
+	ChallengesWidgetClearanceLevelManaged     ChallengesWidgetClearanceLevel = "managed"
+	ChallengesWidgetClearanceLevelInteractive ChallengesWidgetClearanceLevel = "interactive"
 )
 
-func (r NcChallengesAdminWidgetDetailClearanceLevel) IsKnown() bool {
+func (r ChallengesWidgetClearanceLevel) IsKnown() bool {
 	switch r {
-	case NcChallengesAdminWidgetDetailClearanceLevelNoClearance, NcChallengesAdminWidgetDetailClearanceLevelJschallenge, NcChallengesAdminWidgetDetailClearanceLevelManaged, NcChallengesAdminWidgetDetailClearanceLevelInteractive:
+	case ChallengesWidgetClearanceLevelNoClearance, ChallengesWidgetClearanceLevelJschallenge, ChallengesWidgetClearanceLevelManaged, ChallengesWidgetClearanceLevelInteractive:
 		return true
 	}
 	return false
 }
 
 // Widget Mode
-type NcChallengesAdminWidgetDetailMode string
+type ChallengesWidgetMode string
 
 const (
-	NcChallengesAdminWidgetDetailModeNonInteractive NcChallengesAdminWidgetDetailMode = "non-interactive"
-	NcChallengesAdminWidgetDetailModeInvisible      NcChallengesAdminWidgetDetailMode = "invisible"
-	NcChallengesAdminWidgetDetailModeManaged        NcChallengesAdminWidgetDetailMode = "managed"
+	ChallengesWidgetModeNonInteractive ChallengesWidgetMode = "non-interactive"
+	ChallengesWidgetModeInvisible      ChallengesWidgetMode = "invisible"
+	ChallengesWidgetModeManaged        ChallengesWidgetMode = "managed"
 )
 
-func (r NcChallengesAdminWidgetDetailMode) IsKnown() bool {
+func (r ChallengesWidgetMode) IsKnown() bool {
 	switch r {
-	case NcChallengesAdminWidgetDetailModeNonInteractive, NcChallengesAdminWidgetDetailModeInvisible, NcChallengesAdminWidgetDetailModeManaged:
+	case ChallengesWidgetModeNonInteractive, ChallengesWidgetModeInvisible, ChallengesWidgetModeManaged:
 		return true
 	}
 	return false
 }
 
 // Region where this widget can be used.
-type NcChallengesAdminWidgetDetailRegion string
+type ChallengesWidgetRegion string
 
 const (
-	NcChallengesAdminWidgetDetailRegionWorld NcChallengesAdminWidgetDetailRegion = "world"
+	ChallengesWidgetRegionWorld ChallengesWidgetRegion = "world"
 )
 
-func (r NcChallengesAdminWidgetDetailRegion) IsKnown() bool {
+func (r ChallengesWidgetRegion) IsKnown() bool {
 	switch r {
-	case NcChallengesAdminWidgetDetailRegionWorld:
+	case ChallengesWidgetRegionWorld:
 		return true
 	}
 	return false
 }
 
 // A Turnstile Widgets configuration as it appears in listings
-type NcChallengesAdminWidgetList struct {
+type ChallengesWidgetList struct {
 	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
 	// challenges in response to malicious bots (ENT only).
 	BotFightMode bool `json:"bot_fight_mode,required"`
 	// If Turnstile is embedded on a Cloudflare site and the widget should grant
 	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel NcChallengesAdminWidgetListClearanceLevel `json:"clearance_level,required"`
+	ClearanceLevel ChallengesWidgetListClearanceLevel `json:"clearance_level,required"`
 	// When the widget was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	Domains   []string  `json:"domains,required"`
 	// Widget Mode
-	Mode NcChallengesAdminWidgetListMode `json:"mode,required"`
+	Mode ChallengesWidgetListMode `json:"mode,required"`
 	// When the widget was modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
@@ -254,15 +254,15 @@ type NcChallengesAdminWidgetList struct {
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel bool `json:"offlabel,required"`
 	// Region where this widget can be used.
-	Region NcChallengesAdminWidgetListRegion `json:"region,required"`
+	Region ChallengesWidgetListRegion `json:"region,required"`
 	// Widget item identifier tag.
-	Sitekey string                          `json:"sitekey,required"`
-	JSON    ncChallengesAdminWidgetListJSON `json:"-"`
+	Sitekey string                   `json:"sitekey,required"`
+	JSON    challengesWidgetListJSON `json:"-"`
 }
 
-// ncChallengesAdminWidgetListJSON contains the JSON metadata for the struct
-// [NcChallengesAdminWidgetList]
-type ncChallengesAdminWidgetListJSON struct {
+// challengesWidgetListJSON contains the JSON metadata for the struct
+// [ChallengesWidgetList]
+type challengesWidgetListJSON struct {
 	BotFightMode   apijson.Field
 	ClearanceLevel apijson.Field
 	CreatedOn      apijson.Field
@@ -277,60 +277,60 @@ type ncChallengesAdminWidgetListJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *NcChallengesAdminWidgetList) UnmarshalJSON(data []byte) (err error) {
+func (r *ChallengesWidgetList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ncChallengesAdminWidgetListJSON) RawJSON() string {
+func (r challengesWidgetListJSON) RawJSON() string {
 	return r.raw
 }
 
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
-type NcChallengesAdminWidgetListClearanceLevel string
+type ChallengesWidgetListClearanceLevel string
 
 const (
-	NcChallengesAdminWidgetListClearanceLevelNoClearance NcChallengesAdminWidgetListClearanceLevel = "no_clearance"
-	NcChallengesAdminWidgetListClearanceLevelJschallenge NcChallengesAdminWidgetListClearanceLevel = "jschallenge"
-	NcChallengesAdminWidgetListClearanceLevelManaged     NcChallengesAdminWidgetListClearanceLevel = "managed"
-	NcChallengesAdminWidgetListClearanceLevelInteractive NcChallengesAdminWidgetListClearanceLevel = "interactive"
+	ChallengesWidgetListClearanceLevelNoClearance ChallengesWidgetListClearanceLevel = "no_clearance"
+	ChallengesWidgetListClearanceLevelJschallenge ChallengesWidgetListClearanceLevel = "jschallenge"
+	ChallengesWidgetListClearanceLevelManaged     ChallengesWidgetListClearanceLevel = "managed"
+	ChallengesWidgetListClearanceLevelInteractive ChallengesWidgetListClearanceLevel = "interactive"
 )
 
-func (r NcChallengesAdminWidgetListClearanceLevel) IsKnown() bool {
+func (r ChallengesWidgetListClearanceLevel) IsKnown() bool {
 	switch r {
-	case NcChallengesAdminWidgetListClearanceLevelNoClearance, NcChallengesAdminWidgetListClearanceLevelJschallenge, NcChallengesAdminWidgetListClearanceLevelManaged, NcChallengesAdminWidgetListClearanceLevelInteractive:
+	case ChallengesWidgetListClearanceLevelNoClearance, ChallengesWidgetListClearanceLevelJschallenge, ChallengesWidgetListClearanceLevelManaged, ChallengesWidgetListClearanceLevelInteractive:
 		return true
 	}
 	return false
 }
 
 // Widget Mode
-type NcChallengesAdminWidgetListMode string
+type ChallengesWidgetListMode string
 
 const (
-	NcChallengesAdminWidgetListModeNonInteractive NcChallengesAdminWidgetListMode = "non-interactive"
-	NcChallengesAdminWidgetListModeInvisible      NcChallengesAdminWidgetListMode = "invisible"
-	NcChallengesAdminWidgetListModeManaged        NcChallengesAdminWidgetListMode = "managed"
+	ChallengesWidgetListModeNonInteractive ChallengesWidgetListMode = "non-interactive"
+	ChallengesWidgetListModeInvisible      ChallengesWidgetListMode = "invisible"
+	ChallengesWidgetListModeManaged        ChallengesWidgetListMode = "managed"
 )
 
-func (r NcChallengesAdminWidgetListMode) IsKnown() bool {
+func (r ChallengesWidgetListMode) IsKnown() bool {
 	switch r {
-	case NcChallengesAdminWidgetListModeNonInteractive, NcChallengesAdminWidgetListModeInvisible, NcChallengesAdminWidgetListModeManaged:
+	case ChallengesWidgetListModeNonInteractive, ChallengesWidgetListModeInvisible, ChallengesWidgetListModeManaged:
 		return true
 	}
 	return false
 }
 
 // Region where this widget can be used.
-type NcChallengesAdminWidgetListRegion string
+type ChallengesWidgetListRegion string
 
 const (
-	NcChallengesAdminWidgetListRegionWorld NcChallengesAdminWidgetListRegion = "world"
+	ChallengesWidgetListRegionWorld ChallengesWidgetListRegion = "world"
 )
 
-func (r NcChallengesAdminWidgetListRegion) IsKnown() bool {
+func (r ChallengesWidgetListRegion) IsKnown() bool {
 	switch r {
-	case NcChallengesAdminWidgetListRegionWorld:
+	case ChallengesWidgetListRegionWorld:
 		return true
 	}
 	return false
@@ -470,7 +470,7 @@ type WidgetNewResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result     NcChallengesAdminWidgetDetail       `json:"result"`
+	Result     ChallengesWidget                    `json:"result"`
 	ResultInfo WidgetNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       widgetNewResponseEnvelopeJSON       `json:"-"`
 }
@@ -638,7 +638,7 @@ type WidgetUpdateResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result NcChallengesAdminWidgetDetail    `json:"result"`
+	Result ChallengesWidget                 `json:"result"`
 	JSON   widgetUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -774,7 +774,7 @@ type WidgetDeleteResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result NcChallengesAdminWidgetDetail    `json:"result"`
+	Result ChallengesWidget                 `json:"result"`
 	JSON   widgetDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -854,7 +854,7 @@ type WidgetGetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result NcChallengesAdminWidgetDetail `json:"result"`
+	Result ChallengesWidget              `json:"result"`
 	JSON   widgetGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -942,7 +942,7 @@ type WidgetRotateSecretResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result NcChallengesAdminWidgetDetail          `json:"result"`
+	Result ChallengesWidget                       `json:"result"`
 	JSON   widgetRotateSecretResponseEnvelopeJSON `json:"-"`
 }
 
