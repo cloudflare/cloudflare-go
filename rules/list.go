@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,16 +62,26 @@ func (r *ListService) Update(ctx context.Context, listID string, params ListUpda
 }
 
 // Fetches all lists in the account.
-func (r *ListService) List(ctx context.Context, query ListListParams, opts ...option.RequestOption) (res *[]ListsList, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ListListResponseEnvelope
+func (r *ListService) List(ctx context.Context, query ListListParams, opts ...option.RequestOption) (res *shared.SinglePage[ListsList], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/rules/lists", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches all lists in the account.
+func (r *ListService) ListAutoPaging(ctx context.Context, query ListListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ListsList] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a specific list and all its items.
@@ -416,95 +427,6 @@ func (r ListUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type ListListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ListListResponseEnvelope struct {
-	Errors   []ListListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ListListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ListsList                        `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success ListListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    listListResponseEnvelopeJSON    `json:"-"`
-}
-
-// listListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ListListResponseEnvelope]
-type listListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ListListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    listListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// listListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ListListResponseEnvelopeErrors]
-type listListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ListListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    listListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// listListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ListListResponseEnvelopeMessages]
-type listListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ListListResponseEnvelopeSuccess bool
-
-const (
-	ListListResponseEnvelopeSuccessTrue ListListResponseEnvelopeSuccess = true
-)
-
-func (r ListListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ListListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type ListDeleteParams struct {

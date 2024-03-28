@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -47,16 +48,26 @@ func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCer
 }
 
 // List Certificates
-func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *[]OriginTLSClientCertificateID, err error) {
-	opts = append(r.Options[:], opts...)
-	var env HostnameCertificateListResponseEnvelope
+func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *shared.SinglePage[OriginTLSClientCertificateID], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List Certificates
+func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[OriginTLSClientCertificateID] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Hostname Client Certificate
@@ -254,128 +265,6 @@ func (r HostnameCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 type HostnameCertificateListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type HostnameCertificateListResponseEnvelope struct {
-	Errors   []HostnameCertificateListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameCertificateListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []OriginTLSClientCertificateID                    `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    HostnameCertificateListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo HostnameCertificateListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       hostnameCertificateListResponseEnvelopeJSON       `json:"-"`
-}
-
-// hostnameCertificateListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [HostnameCertificateListResponseEnvelope]
-type hostnameCertificateListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameCertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameCertificateListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameCertificateListResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    hostnameCertificateListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameCertificateListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [HostnameCertificateListResponseEnvelopeErrors]
-type hostnameCertificateListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameCertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameCertificateListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameCertificateListResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    hostnameCertificateListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameCertificateListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [HostnameCertificateListResponseEnvelopeMessages]
-type hostnameCertificateListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameCertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameCertificateListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type HostnameCertificateListResponseEnvelopeSuccess bool
-
-const (
-	HostnameCertificateListResponseEnvelopeSuccessTrue HostnameCertificateListResponseEnvelopeSuccess = true
-)
-
-func (r HostnameCertificateListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case HostnameCertificateListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type HostnameCertificateListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                               `json:"total_count"`
-	JSON       hostnameCertificateListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// hostnameCertificateListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [HostnameCertificateListResponseEnvelopeResultInfo]
-type hostnameCertificateListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameCertificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type HostnameCertificateDeleteParams struct {

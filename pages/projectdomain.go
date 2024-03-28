@@ -48,16 +48,26 @@ func (r *ProjectDomainService) New(ctx context.Context, projectName string, para
 }
 
 // Fetch a list of all domains associated with a Pages project.
-func (r *ProjectDomainService) List(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) (res *[]ProjectDomainListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ProjectDomainListResponseEnvelope
+func (r *ProjectDomainService) List(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) (res *shared.SinglePage[ProjectDomainListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", query.AccountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetch a list of all domains associated with a Pages project.
+func (r *ProjectDomainService) ListAutoPaging(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ProjectDomainListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, projectName, query, opts...))
 }
 
 // Delete a Pages project's domain.
@@ -275,124 +285,6 @@ func (r ProjectDomainNewResponseEnvelopeSuccess) IsKnown() bool {
 type ProjectDomainListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ProjectDomainListResponseEnvelope struct {
-	Errors   []ProjectDomainListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDomainListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ProjectDomainListResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success    ProjectDomainListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ProjectDomainListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       projectDomainListResponseEnvelopeJSON       `json:"-"`
-}
-
-// projectDomainListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ProjectDomainListResponseEnvelope]
-type projectDomainListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDomainListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    projectDomainListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDomainListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ProjectDomainListResponseEnvelopeErrors]
-type projectDomainListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDomainListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    projectDomainListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDomainListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ProjectDomainListResponseEnvelopeMessages]
-type projectDomainListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ProjectDomainListResponseEnvelopeSuccess bool
-
-const (
-	ProjectDomainListResponseEnvelopeSuccessTrue ProjectDomainListResponseEnvelopeSuccess = true
-)
-
-func (r ProjectDomainListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ProjectDomainListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ProjectDomainListResponseEnvelopeResultInfo struct {
-	Count      float64                                         `json:"count"`
-	Page       float64                                         `json:"page"`
-	PerPage    float64                                         `json:"per_page"`
-	TotalCount float64                                         `json:"total_count"`
-	JSON       projectDomainListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// projectDomainListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [ProjectDomainListResponseEnvelopeResultInfo]
-type projectDomainListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDomainListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDomainListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type ProjectDomainDeleteParams struct {

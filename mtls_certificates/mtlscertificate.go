@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -48,16 +49,26 @@ func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificate
 }
 
 // Lists all mTLS certificates.
-func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) (res *[]MTLSCertificate, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MTLSCertificateListResponseEnvelope
+func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) (res *shared.SinglePage[MTLSCertificate], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all mTLS certificates.
+func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[MTLSCertificate] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes the mTLS certificate unless the certificate is in use by one or more
@@ -290,130 +301,6 @@ func (r MTLSCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 type MTLSCertificateListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type MTLSCertificateListResponseEnvelope struct {
-	Errors   []MTLSCertificateListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MTLSCertificateListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []MTLSCertificate                             `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    MTLSCertificateListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo MTLSCertificateListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       mtlsCertificateListResponseEnvelopeJSON       `json:"-"`
-}
-
-// mtlsCertificateListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [MTLSCertificateListResponseEnvelope]
-type mtlsCertificateListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MTLSCertificateListResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    mtlsCertificateListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// mtlsCertificateListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MTLSCertificateListResponseEnvelopeErrors]
-type mtlsCertificateListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MTLSCertificateListResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    mtlsCertificateListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// mtlsCertificateListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MTLSCertificateListResponseEnvelopeMessages]
-type mtlsCertificateListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type MTLSCertificateListResponseEnvelopeSuccess bool
-
-const (
-	MTLSCertificateListResponseEnvelopeSuccessTrue MTLSCertificateListResponseEnvelopeSuccess = true
-)
-
-func (r MTLSCertificateListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case MTLSCertificateListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type MTLSCertificateListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	TotalPages float64                                           `json:"total_pages"`
-	JSON       mtlsCertificateListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// mtlsCertificateListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [MTLSCertificateListResponseEnvelopeResultInfo]
-type mtlsCertificateListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type MTLSCertificateDeleteParams struct {

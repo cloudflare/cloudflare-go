@@ -54,16 +54,26 @@ func (r *AddressMapService) New(ctx context.Context, params AddressMapNewParams,
 }
 
 // List all address maps owned by the account.
-func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) (res *[]AddressingAddressMaps, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AddressMapListResponseEnvelope
+func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) (res *shared.SinglePage[AddressingAddressMaps], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List all address maps owned by the account.
+func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AddressingAddressMaps] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a particular address map owned by the account. An Address Map must be
@@ -539,128 +549,6 @@ func (r AddressMapNewResponseEnvelopeSuccess) IsKnown() bool {
 type AddressMapListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type AddressMapListResponseEnvelope struct {
-	Errors   []AddressMapListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AddressingAddressMaps                  `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AddressMapListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AddressMapListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       addressMapListResponseEnvelopeJSON       `json:"-"`
-}
-
-// addressMapListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AddressMapListResponseEnvelope]
-type addressMapListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapListResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    addressMapListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressMapListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AddressMapListResponseEnvelopeErrors]
-type addressMapListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapListResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    addressMapListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressMapListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AddressMapListResponseEnvelopeMessages]
-type addressMapListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AddressMapListResponseEnvelopeSuccess bool
-
-const (
-	AddressMapListResponseEnvelopeSuccessTrue AddressMapListResponseEnvelopeSuccess = true
-)
-
-func (r AddressMapListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AddressMapListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AddressMapListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                      `json:"total_count"`
-	JSON       addressMapListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// addressMapListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [AddressMapListResponseEnvelopeResultInfo]
-type addressMapListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type AddressMapDeleteParams struct {

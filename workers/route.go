@@ -60,16 +60,26 @@ func (r *RouteService) Update(ctx context.Context, routeID string, params RouteU
 }
 
 // Returns routes for a zone.
-func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *[]WorkersRoute, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RouteListResponseEnvelope
+func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *shared.SinglePage[WorkersRoute], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/workers/routes", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns routes for a zone.
+func (r *RouteService) ListAutoPaging(ctx context.Context, query RouteListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[WorkersRoute] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a route.
@@ -361,95 +371,6 @@ func (r RouteUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type RouteListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type RouteListResponseEnvelope struct {
-	Errors   []RouteListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RouteListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersRoute                      `json:"result,required"`
-	// Whether the API call was successful
-	Success RouteListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    routeListResponseEnvelopeJSON    `json:"-"`
-}
-
-// routeListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RouteListResponseEnvelope]
-type routeListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteListResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    routeListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// routeListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RouteListResponseEnvelopeErrors]
-type routeListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RouteListResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    routeListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// routeListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RouteListResponseEnvelopeMessages]
-type routeListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RouteListResponseEnvelopeSuccess bool
-
-const (
-	RouteListResponseEnvelopeSuccessTrue RouteListResponseEnvelopeSuccess = true
-)
-
-func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RouteListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type RouteDeleteParams struct {

@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -57,16 +58,26 @@ func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateP
 }
 
 // List ACLs.
-func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *[]SecondaryDNSACL, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ACLListResponseEnvelope
+func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *shared.SinglePage[SecondaryDNSACL], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List ACLs.
+func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[SecondaryDNSACL] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete ACL.
@@ -351,128 +362,6 @@ func (r ACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type ACLListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ACLListResponseEnvelope struct {
-	Errors   []ACLListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ACLListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []SecondaryDNSACL                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    ACLListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ACLListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       aclListResponseEnvelopeJSON       `json:"-"`
-}
-
-// aclListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ACLListResponseEnvelope]
-type aclListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ACLListResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    aclListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// aclListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ACLListResponseEnvelopeErrors]
-type aclListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ACLListResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    aclListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// aclListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ACLListResponseEnvelopeMessages]
-type aclListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ACLListResponseEnvelopeSuccess bool
-
-const (
-	ACLListResponseEnvelopeSuccessTrue ACLListResponseEnvelopeSuccess = true
-)
-
-func (r ACLListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ACLListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ACLListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                               `json:"total_count"`
-	JSON       aclListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// aclListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [ACLListResponseEnvelopeResultInfo]
-type aclListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ACLListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aclListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type ACLDeleteParams struct {

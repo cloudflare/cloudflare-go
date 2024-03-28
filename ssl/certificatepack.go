@@ -41,16 +41,26 @@ func NewCertificatePackService(opts ...option.RequestOption) (r *CertificatePack
 }
 
 // For a given zone, list all active certificate packs.
-func (r *CertificatePackService) List(ctx context.Context, params CertificatePackListParams, opts ...option.RequestOption) (res *[]CertificatePackListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CertificatePackListResponseEnvelope
+func (r *CertificatePackService) List(ctx context.Context, params CertificatePackListParams, opts ...option.RequestOption) (res *shared.SinglePage[CertificatePackListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// For a given zone, list all active certificate packs.
+func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params CertificatePackListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[CertificatePackListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // For a given zone, delete an advanced certificate pack.
@@ -314,128 +324,6 @@ func (r CertificatePackListParamsStatus) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type CertificatePackListResponseEnvelope struct {
-	Errors   []CertificatePackListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CertificatePackListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    CertificatePackListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo CertificatePackListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       certificatePackListResponseEnvelopeJSON       `json:"-"`
-}
-
-// certificatePackListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [CertificatePackListResponseEnvelope]
-type certificatePackListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackListResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    certificatePackListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// certificatePackListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CertificatePackListResponseEnvelopeErrors]
-type certificatePackListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackListResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    certificatePackListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// certificatePackListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CertificatePackListResponseEnvelopeMessages]
-type certificatePackListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type CertificatePackListResponseEnvelopeSuccess bool
-
-const (
-	CertificatePackListResponseEnvelopeSuccessTrue CertificatePackListResponseEnvelopeSuccess = true
-)
-
-func (r CertificatePackListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case CertificatePackListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type CertificatePackListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	JSON       certificatePackListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// certificatePackListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [CertificatePackListResponseEnvelopeResultInfo]
-type certificatePackListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type CertificatePackDeleteParams struct {

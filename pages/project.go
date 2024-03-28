@@ -52,16 +52,26 @@ func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts 
 }
 
 // Fetch a list of all user projects.
-func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *[]PagesDeployments, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ProjectListResponseEnvelope
+func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *shared.SinglePage[PagesDeployments], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetch a list of all user projects.
+func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PagesDeployments] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a project by name.
@@ -2644,124 +2654,6 @@ func (r ProjectNewResponseEnvelopeSuccess) IsKnown() bool {
 type ProjectListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ProjectListResponseEnvelope struct {
-	Errors   []ProjectListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PagesDeployments                    `json:"result,required"`
-	// Whether the API call was successful
-	Success    ProjectListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ProjectListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       projectListResponseEnvelopeJSON       `json:"-"`
-}
-
-// projectListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ProjectListResponseEnvelope]
-type projectListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectListResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    projectListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ProjectListResponseEnvelopeErrors]
-type projectListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectListResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    projectListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ProjectListResponseEnvelopeMessages]
-type projectListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ProjectListResponseEnvelopeSuccess bool
-
-const (
-	ProjectListResponseEnvelopeSuccessTrue ProjectListResponseEnvelopeSuccess = true
-)
-
-func (r ProjectListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ProjectListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ProjectListResponseEnvelopeResultInfo struct {
-	Count      float64                                   `json:"count"`
-	Page       float64                                   `json:"page"`
-	PerPage    float64                                   `json:"per_page"`
-	TotalCount float64                                   `json:"total_count"`
-	JSON       projectListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// projectListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ProjectListResponseEnvelopeResultInfo]
-type projectListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type ProjectDeleteParams struct {

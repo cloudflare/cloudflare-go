@@ -9,6 +9,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -30,16 +31,26 @@ func NewPlanService(opts ...option.RequestOption) (r *PlanService) {
 }
 
 // Lists available plans the zone can subscribe to.
-func (r *PlanService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]AvailableRatePlan, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PlanListResponseEnvelope
+func (r *PlanService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[AvailableRatePlan], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/available_plans", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists available plans the zone can subscribe to.
+func (r *PlanService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[AvailableRatePlan] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
 }
 
 // Details of the available plan that the zone can subscribe to.
@@ -120,128 +131,6 @@ func (r AvailableRatePlanFrequency) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type PlanListResponseEnvelope struct {
-	Errors   []PlanListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PlanListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AvailableRatePlan                `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    PlanListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PlanListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       planListResponseEnvelopeJSON       `json:"-"`
-}
-
-// planListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PlanListResponseEnvelope]
-type planListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PlanListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r planListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PlanListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    planListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// planListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PlanListResponseEnvelopeErrors]
-type planListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PlanListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r planListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PlanListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    planListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// planListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PlanListResponseEnvelopeMessages]
-type planListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PlanListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r planListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PlanListResponseEnvelopeSuccess bool
-
-const (
-	PlanListResponseEnvelopeSuccessTrue PlanListResponseEnvelopeSuccess = true
-)
-
-func (r PlanListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PlanListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PlanListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       planListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// planListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [PlanListResponseEnvelopeResultInfo]
-type planListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PlanListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r planListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type PlanGetResponseEnvelope struct {

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,16 +34,26 @@ func NewConnectionService(opts ...option.RequestOption) (r *ConnectionService) {
 }
 
 // Lists all connections detected by Page Shield.
-func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *[]PageShieldConnection, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ConnectionListResponseEnvelope
+func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *shared.SinglePage[PageShieldConnection], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/connections", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all connections detected by Page Shield.
+func (r *ConnectionService) ListAutoPaging(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PageShieldConnection] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Fetches a connection detected by Page Shield by connection ID.
@@ -197,128 +208,6 @@ func (r ConnectionListParamsOrderBy) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type ConnectionListResponseEnvelope struct {
-	Errors   []ConnectionListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConnectionListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PageShieldConnection                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    ConnectionListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ConnectionListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       connectionListResponseEnvelopeJSON       `json:"-"`
-}
-
-// connectionListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ConnectionListResponseEnvelope]
-type connectionListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectionListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectionListResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    connectionListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// connectionListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ConnectionListResponseEnvelopeErrors]
-type connectionListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectionListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectionListResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    connectionListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// connectionListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConnectionListResponseEnvelopeMessages]
-type connectionListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectionListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ConnectionListResponseEnvelopeSuccess bool
-
-const (
-	ConnectionListResponseEnvelopeSuccessTrue ConnectionListResponseEnvelopeSuccess = true
-)
-
-func (r ConnectionListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ConnectionListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ConnectionListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                      `json:"total_count"`
-	JSON       connectionListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// connectionListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ConnectionListResponseEnvelopeResultInfo]
-type connectionListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConnectionListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectionListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type ConnectionGetParams struct {

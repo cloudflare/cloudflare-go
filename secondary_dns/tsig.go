@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -57,16 +58,26 @@ func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpda
 }
 
 // List TSIGs.
-func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *[]SecondaryDNSTSIG, err error) {
-	opts = append(r.Options[:], opts...)
-	var env TSIGListResponseEnvelope
+func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *shared.SinglePage[SecondaryDNSTSIG], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List TSIGs.
+func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[SecondaryDNSTSIG] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete TSIG.
@@ -354,128 +365,6 @@ func (r TSIGUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type TSIGListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type TSIGListResponseEnvelope struct {
-	Errors   []TSIGListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TSIGListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []SecondaryDNSTSIG                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    TSIGListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo TSIGListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       tsigListResponseEnvelopeJSON       `json:"-"`
-}
-
-// tsigListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TSIGListResponseEnvelope]
-type tsigListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    tsigListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tsigListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TSIGListResponseEnvelopeErrors]
-type tsigListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    tsigListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tsigListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TSIGListResponseEnvelopeMessages]
-type tsigListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type TSIGListResponseEnvelopeSuccess bool
-
-const (
-	TSIGListResponseEnvelopeSuccessTrue TSIGListResponseEnvelopeSuccess = true
-)
-
-func (r TSIGListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TSIGListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type TSIGListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       tsigListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// tsigListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [TSIGListResponseEnvelopeResultInfo]
-type tsigListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type TSIGDeleteParams struct {

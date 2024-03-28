@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,16 +35,28 @@ func NewDEXColoService(opts ...option.RequestOption) (r *DEXColoService) {
 // List Cloudflare colos that account's devices were connected to during a time
 // period, sorted by usage starting from the most used colo. Colos without traffic
 // are also returned and sorted alphabetically.
-func (r *DEXColoService) List(ctx context.Context, params DEXColoListParams, opts ...option.RequestOption) (res *[]DEXColoListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DEXColoListResponseEnvelope
+func (r *DEXColoService) List(ctx context.Context, params DEXColoListParams, opts ...option.RequestOption) (res *shared.SinglePage[DEXColoListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/dex/colos", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List Cloudflare colos that account's devices were connected to during a time
+// period, sorted by usage starting from the most used colo. Colos without traffic
+// are also returned and sorted alphabetically.
+func (r *DEXColoService) ListAutoPaging(ctx context.Context, params DEXColoListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DEXColoListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 type DEXColoListResponse = interface{}
@@ -83,127 +95,4 @@ func (r DEXColoListParamsSortBy) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type DEXColoListResponseEnvelope struct {
-	Errors   []DEXColoListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXColoListResponseEnvelopeMessages `json:"messages,required"`
-	// array of colos.
-	Result []DEXColoListResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    DEXColoListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DEXColoListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dexColoListResponseEnvelopeJSON       `json:"-"`
-}
-
-// dexColoListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DEXColoListResponseEnvelope]
-type dexColoListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXColoListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexColoListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXColoListResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    dexColoListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dexColoListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DEXColoListResponseEnvelopeErrors]
-type dexColoListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXColoListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexColoListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXColoListResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    dexColoListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dexColoListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DEXColoListResponseEnvelopeMessages]
-type dexColoListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXColoListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexColoListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DEXColoListResponseEnvelopeSuccess bool
-
-const (
-	DEXColoListResponseEnvelopeSuccessTrue DEXColoListResponseEnvelopeSuccess = true
-)
-
-func (r DEXColoListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DEXColoListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DEXColoListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                   `json:"total_count"`
-	JSON       dexColoListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// dexColoListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DEXColoListResponseEnvelopeResultInfo]
-type dexColoListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXColoListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexColoListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

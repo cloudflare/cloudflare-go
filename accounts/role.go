@@ -34,16 +34,26 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *[]Role, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RoleListResponseEnvelope
+func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *shared.SinglePage[Role], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%v/roles", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get all available roles for an account.
+func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[Role] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Get information about a specific role for an account.
@@ -107,128 +117,6 @@ func init() {
 
 type RoleListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
-}
-
-type RoleListResponseEnvelope struct {
-	Errors   []RoleListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RoleListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []Role                             `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    RoleListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo RoleListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       roleListResponseEnvelopeJSON       `json:"-"`
-}
-
-// roleListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RoleListResponseEnvelope]
-type roleListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RoleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RoleListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    roleListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// roleListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RoleListResponseEnvelopeErrors]
-type roleListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RoleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RoleListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    roleListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// roleListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RoleListResponseEnvelopeMessages]
-type roleListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RoleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type RoleListResponseEnvelopeSuccess bool
-
-const (
-	RoleListResponseEnvelopeSuccessTrue RoleListResponseEnvelopeSuccess = true
-)
-
-func (r RoleListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case RoleListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type RoleListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       roleListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// roleListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [RoleListResponseEnvelopeResultInfo]
-type roleListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RoleListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type RoleGetParams struct {
