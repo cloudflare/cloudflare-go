@@ -85,6 +85,11 @@ type ZoneRatePlan struct {
 	Components []zoneRatePlanComponents `json:"components,omitempty"`
 }
 
+// ZoneCTM contains the Certificate Transparency Monitoring information for a zone.
+type ZoneCTM struct {
+	Enabled bool `json:"enabled"`
+}
+
 // ZonePlanCommon contains fields used by various Plan endpoints.
 type ZonePlanCommon struct {
 	ID        string `json:"id"`
@@ -142,6 +147,12 @@ type AvailableZonePlansResponse struct {
 type ZoneRatePlanResponse struct {
 	Response
 	Result ZoneRatePlan `json:"result"`
+}
+
+// ZoneCTMResponse represents the response from the Certificate Transparency Monitoring endpoint.
+type ZoneCTMResponse struct {
+	Response
+	Result ZoneCTM `json:"result"`
 }
 
 // ZoneSetting contains settings for a zone.
@@ -304,6 +315,10 @@ type zoneSubscriptionRatePlanPayload struct {
 	RatePlan struct {
 		ID string `json:"id"`
 	} `json:"rate_plan"`
+}
+
+type zoneCTMPayload struct {
+	Enabled bool `json:"enabled"`
 }
 
 type GetZoneSettingParams struct {
@@ -580,6 +595,38 @@ func (api *API) ZoneSetVanityNS(ctx context.Context, zoneID string, ns []string)
 	}
 
 	return zone, nil
+}
+
+// ZoneCTM returns information of the Certificate Transparency Monitoring for the zone
+// API reference: N/A
+func (api *API) ZoneCTM(ctx context.Context, zoneID string) (ZoneCTM, error) {
+	uri := fmt.Sprintf("/zones/%s/ct/alerting", zoneID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return ZoneCTM{}, err
+	}
+	var r ZoneCTMResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneCTM{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
+// ZoneSetCTM enables / disables Certificate Transparency Monitoring for the zone
+// API reference: N/A
+func (api *API) ZoneSetCTM(ctx context.Context, zoneID string, ctm bool) error {
+	zoneCTMPayload := zoneCTMPayload{}
+	zoneCTMPayload.Enabled = ctm
+
+	uri := fmt.Sprintf("/zones/%s/ct/alerting", zoneID)
+
+	_, err := api.makeRequestContext(ctx, http.MethodPost, uri, zoneCTMPayload)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // ZoneSetPlan sets the rate plan of an existing zone.

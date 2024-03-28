@@ -1610,3 +1610,20 @@ func TestUpdateZoneSettingWithCustomPathPrefix(t *testing.T) {
 		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
 	}
 }
+
+func TestUpdateZoneCTM(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		_, _ = fmt.Fprintf(w, `{
+			"result": {
+				“enabled”: false
+			}
+		}`)
+	}
+	mux.HandleFunc("/zones/foo/ct/alerting", handler)
+	err := client.ZoneSetCTM(context.Background(), "foo", false)
+	assert.NoError(t, err)
+}
