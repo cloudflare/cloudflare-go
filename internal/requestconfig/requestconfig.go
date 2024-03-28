@@ -77,24 +77,29 @@ func getPlatformProperties() map[string]string {
 }
 
 func NewRequestConfig(ctx context.Context, method string, u string, body interface{}, dst interface{}, opts ...func(*RequestConfig) error) (*RequestConfig, error) {
-	var b []byte
+	var reader io.Reader
 
 	contentType := "application/json"
 	hasSerializationFunc := false
+
 	if body, ok := body.(json.Marshaler); ok {
-		var err error
-		b, err = body.MarshalJSON()
+		content, err := body.MarshalJSON()
 		if err != nil {
 			return nil, err
 		}
+		reader = bytes.NewBuffer(content)
 		hasSerializationFunc = true
 	}
 	if body, ok := body.(apiform.Marshaler); ok {
-		var err error
-		b, contentType, err = body.MarshalMultipart()
+		var (
+			content []byte
+			err     error
+		)
+		content, contentType, err = body.MarshalMultipart()
 		if err != nil {
 			return nil, err
 		}
+		reader = bytes.NewBuffer(content)
 		hasSerializationFunc = true
 	}
 	if body, ok := body.(apiquery.Queryer); ok {
@@ -104,22 +109,30 @@ func NewRequestConfig(ctx context.Context, method string, u string, body interfa
 			u = u + "?" + params
 		}
 	}
+	if body, ok := body.([]byte); ok {
+		reader = bytes.NewBuffer(body)
+		hasSerializationFunc = true
+	}
+	if body, ok := body.(io.Reader); ok {
+		reader = body
+		hasSerializationFunc = true
+	}
 
 	// Fallback to json serialization if none of the serialization functions that we expect
 	// to see is present.
 	if body != nil && !hasSerializationFunc {
-		var err error
-		b, err = json.Marshal(body)
+		content, err := json.Marshal(body)
 		if err != nil {
 			return nil, err
 		}
+		reader = bytes.NewBuffer(content)
 	}
 
 	req, err := http.NewRequestWithContext(ctx, method, u, nil)
 	if err != nil {
 		return nil, err
 	}
-	if b != nil {
+	if reader != nil {
 		req.Header.Set("Content-Type", contentType)
 	}
 
@@ -136,7 +149,7 @@ func NewRequestConfig(ctx context.Context, method string, u string, body interfa
 		Context:    ctx,
 		Request:    req,
 		HTTPClient: http.DefaultClient,
-		Buffer:     b,
+		Body:       reader,
 	}
 	cfg.ResponseBodyInto = dst
 	err = cfg.Apply(opts...)
@@ -169,7 +182,7 @@ type RequestConfig struct {
 	// ResponseInto copies the \*http.Response of the corresponding request into the
 	// given address
 	ResponseInto **http.Response
-	Buffer       []byte
+	Body         io.Reader
 }
 
 // middleware is exactly the same type as the Middleware type found in the [option] package,
@@ -288,15 +301,32 @@ func retryDelay(res *http.Response, retryCount int) time.Duration {
 }
 
 func (cfg *RequestConfig) Execute() (err error) {
-	cfg.Request.URL, err = cfg.BaseURL.Parse(cfg.Request.URL.String())
+	cfg.Request.URL, err = cfg.BaseURL.Parse(strings.TrimLeft(cfg.Request.URL.String(), "/"))
 	if err != nil {
 		return err
 	}
 
-	if len(cfg.Buffer) != 0 && cfg.Request.Body == nil {
-		cfg.Request.ContentLength = int64(len(cfg.Buffer))
-		cfg.Request.GetBody = func() (io.ReadCloser, error) { return io.NopCloser(bytes.NewReader(cfg.Buffer)), nil }
-		cfg.Request.Body, _ = cfg.Request.GetBody()
+	if cfg.Body != nil && cfg.Request.Body == nil {
+		switch body := cfg.Body.(type) {
+		case *bytes.Buffer:
+			b := body.Bytes()
+			cfg.Request.ContentLength = int64(body.Len())
+			cfg.Request.GetBody = func() (io.ReadCloser, error) { return io.NopCloser(bytes.NewReader(b)), nil }
+			cfg.Request.Body, _ = cfg.Request.GetBody()
+		case *bytes.Reader:
+			cfg.Request.ContentLength = int64(body.Len())
+			cfg.Request.GetBody = func() (io.ReadCloser, error) {
+				_, err := body.Seek(0, 0)
+				return io.NopCloser(body), err
+			}
+			cfg.Request.Body, _ = cfg.Request.GetBody()
+		default:
+			if rc, ok := body.(io.ReadCloser); ok {
+				cfg.Request.Body = rc
+			} else {
+				cfg.Request.Body = io.NopCloser(body)
+			}
+		}
 	}
 
 	handler := cfg.HTTPClient.Do
@@ -329,9 +359,26 @@ func (cfg *RequestConfig) Execute() (err error) {
 			}
 		}
 
+		// Can't actually refresh the body, so we don't attempt to retry here
+		if cfg.Request.GetBody == nil && cfg.Request.Body != nil {
+			break
+		}
+
 		time.Sleep(retryDelay(res, retryCount))
 	}
 
+	// Save *http.Response if it is requested to, even if there was an error making the request. This is
+	// useful in cases where you might want to debug by inspecting the response. Note that if err != nil,
+	// the response should be generally be empty, but there are edge cases.
+	if cfg.ResponseInto != nil {
+		*cfg.ResponseInto = res
+	}
+	if responseBodyInto, ok := cfg.ResponseBodyInto.(**http.Response); ok {
+		*responseBodyInto = res
+	}
+
+	// If there was a connection error in the final request or any other transport error,
+	// return that early without trying to coerce into an APIError.
 	if err != nil {
 		return err
 	}
@@ -352,16 +399,10 @@ func (cfg *RequestConfig) Execute() (err error) {
 		return &aerr
 	}
 
-	if cfg.ResponseInto != nil {
-		*cfg.ResponseInto = res
-	}
-
 	if cfg.ResponseBodyInto == nil {
 		return nil
 	}
-
-	if responseBodyInto, ok := cfg.ResponseBodyInto.(**http.Response); ok {
-		*responseBodyInto = res
+	if _, ok := cfg.ResponseBodyInto.(**http.Response); ok {
 		return nil
 	}
 
@@ -370,7 +411,7 @@ func (cfg *RequestConfig) Execute() (err error) {
 		return fmt.Errorf("error reading response body: %w", err)
 	}
 
-	// If we are not json return plaintext
+	// If we are not json, return plaintext
 	isJSON := strings.Contains(res.Header.Get("content-type"), "application/json")
 	if !isJSON {
 		switch dst := cfg.ResponseBodyInto.(type) {
@@ -385,6 +426,12 @@ func (cfg *RequestConfig) Execute() (err error) {
 			return fmt.Errorf("expected destination type of 'string' or '[]byte' for responses with content-type that is not 'application/json'")
 		}
 		return nil
+	}
+
+	// If the response happens to be a byte array, deserialize the body as-is.
+	switch dst := cfg.ResponseBodyInto.(type) {
+	case *[]byte:
+		*dst = contents
 	}
 
 	err = json.NewDecoder(bytes.NewReader(contents)).Decode(cfg.ResponseBodyInto)
