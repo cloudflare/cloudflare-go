@@ -74,7 +74,7 @@ func TestAttackLayer7TimeseriesGroupHTTPMethodWithOptionalParams(t *testing.T) {
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion{radar.AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv1, radar.AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv2, radar.AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv3}),
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion{radar.AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersionIPv4, radar.AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersionIPv6}),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDDOS, radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDDoS, radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupHTTPMethodParamsNormalizationPercentage),
 	})
@@ -112,7 +112,7 @@ func TestAttackLayer7TimeseriesGroupHTTPVersionWithOptionalParams(t *testing.T) 
 		HTTPMethod:        cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod{radar.AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodGet, radar.AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPost, radar.AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodDelete}),
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion{radar.AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersionIPv4, radar.AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersionIPv6}),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDDOS, radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDDoS, radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupHTTPVersionParamsNormalizationPercentage),
 	})
@@ -152,7 +152,7 @@ func TestAttackLayer7TimeseriesGroupIndustryWithOptionalParams(t *testing.T) {
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TimeseriesGroupIndustryParamsIPVersion{radar.AttackLayer7TimeseriesGroupIndustryParamsIPVersionIPv4, radar.AttackLayer7TimeseriesGroupIndustryParamsIPVersionIPv6}),
 		LimitPerGroup:     cloudflare.F(int64(4)),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDDOS, radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDDoS, radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupIndustryParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupIndustryParamsNormalizationPercentage),
 	})
@@ -190,7 +190,7 @@ func TestAttackLayer7TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		HTTPMethod:        cloudflare.F([]radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod{radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodGet, radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPost, radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodDelete}),
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion{radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv1, radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv2, radar.AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv3}),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDDOS, radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDDoS, radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupIPVersionParamsNormalizationPercentage),
 	})
@@ -229,7 +229,7 @@ func TestAttackLayer7TimeseriesGroupManagedRulesWithOptionalParams(t *testing.T)
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion{radar.AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv1, radar.AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv2, radar.AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv3}),
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion{radar.AttackLayer7TimeseriesGroupManagedRulesParamsIPVersionIPv4, radar.AttackLayer7TimeseriesGroupManagedRulesParamsIPVersionIPv6}),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDDOS, radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDDoS, radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupManagedRulesParamsNormalizationPercentage),
 	})
@@ -307,7 +307,7 @@ func TestAttackLayer7TimeseriesGroupVerticalWithOptionalParams(t *testing.T) {
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TimeseriesGroupVerticalParamsIPVersion{radar.AttackLayer7TimeseriesGroupVerticalParamsIPVersionIPv4, radar.AttackLayer7TimeseriesGroupVerticalParamsIPVersionIPv6}),
 		LimitPerGroup:     cloudflare.F(int64(4)),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDDOS, radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProductBotManagement}),
+		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct{radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDDoS, radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProductWAF, radar.AttackLayer7TimeseriesGroupVerticalParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesGroupVerticalParamsNormalizationPercentage),
 	})
