@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -60,7 +60,7 @@ func (r *CallService) Update(ctx context.Context, appID string, params CallUpdat
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *shared.SinglePage[CallsApp], err error) {
+func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CallsApp], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,8 +78,8 @@ func (r *CallService) List(ctx context.Context, query CallListParams, opts ...op
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[CallsApp] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CallsApp] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an app from Cloudflare Calls

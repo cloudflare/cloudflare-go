@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -59,7 +59,7 @@ func (r *AccessTagService) Update(ctx context.Context, identifier string, tagNam
 }
 
 // List tags
-func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustTag], err error) {
+func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustTag], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,8 +77,8 @@ func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...
 }
 
 // List tags
-func (r *AccessTagService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustTag] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
+func (r *AccessTagService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustTag] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
 }
 
 // Delete a tag

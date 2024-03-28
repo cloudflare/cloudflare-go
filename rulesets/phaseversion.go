@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +34,7 @@ func NewPhaseVersionService(opts ...option.RequestOption) (r *PhaseVersionServic
 }
 
 // Fetches the versions of an account or zone entry point ruleset.
-func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) (res *shared.SinglePage[PhaseVersionListResponse], err error) {
+func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PhaseVersionListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -61,8 +61,8 @@ func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersio
 }
 
 // Fetches the versions of an account or zone entry point ruleset.
-func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PhaseVersionListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, rulesetPhase, query, opts...))
+func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PhaseVersionListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, rulesetPhase, query, opts...))
 }
 
 // Fetches a specific version of an account or zone entry point ruleset.

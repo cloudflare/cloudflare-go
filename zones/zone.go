@@ -11,9 +11,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -62,7 +62,7 @@ func (r *ZoneService) New(ctx context.Context, body ZoneNewParams, opts ...optio
 }
 
 // Lists, searches, sorts, and filters your zones.
-func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[Zone], err error) {
+func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Zone], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,8 +80,8 @@ func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...op
 }
 
 // Lists, searches, sorts, and filters your zones.
-func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[Zone] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
+func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Zone] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an existing zone.

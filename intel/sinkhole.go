@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,7 +33,7 @@ func NewSinkholeService(opts ...option.RequestOption) (r *SinkholeService) {
 }
 
 // List sinkholes owned by this account
-func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *shared.SinglePage[IntelSinkholeItem], err error) {
+func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IntelSinkholeItem], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -51,8 +51,8 @@ func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, op
 }
 
 // List sinkholes owned by this account
-func (r *SinkholeService) ListAutoPaging(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[IntelSinkholeItem] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *SinkholeService) ListAutoPaging(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IntelSinkholeItem] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type IntelSinkholeItem struct {

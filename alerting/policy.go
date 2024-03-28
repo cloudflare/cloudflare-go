@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -61,7 +62,7 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 }
 
 // Get a list of all Notification policies.
-func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *shared.SinglePage[AlertingPolicies], err error) {
+func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AlertingPolicies], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,8 +80,8 @@ func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts .
 }
 
 // Get a list of all Notification policies.
-func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AlertingPolicies] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AlertingPolicies] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a Notification policy.

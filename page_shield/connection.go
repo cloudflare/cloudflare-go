@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +34,7 @@ func NewConnectionService(opts ...option.RequestOption) (r *ConnectionService) {
 }
 
 // Lists all connections detected by Page Shield.
-func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *shared.SinglePage[PageShieldConnection], err error) {
+func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PageShieldConnection], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,8 +52,8 @@ func (r *ConnectionService) List(ctx context.Context, params ConnectionListParam
 }
 
 // Lists all connections detected by Page Shield.
-func (r *ConnectionService) ListAutoPaging(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PageShieldConnection] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *ConnectionService) ListAutoPaging(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PageShieldConnection] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Fetches a connection detected by Page Shield by connection ID.

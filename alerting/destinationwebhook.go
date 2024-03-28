@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -62,7 +63,7 @@ func (r *DestinationWebhookService) Update(ctx context.Context, webhookID string
 }
 
 // Gets a list of all configured webhook destinations.
-func (r *DestinationWebhookService) List(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) (res *shared.SinglePage[AlertingWebhooks], err error) {
+func (r *DestinationWebhookService) List(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AlertingWebhooks], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,8 +81,8 @@ func (r *DestinationWebhookService) List(ctx context.Context, query DestinationW
 }
 
 // Gets a list of all configured webhook destinations.
-func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AlertingWebhooks] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AlertingWebhooks] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a configured webhook destination.

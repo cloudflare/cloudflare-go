@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -48,7 +49,7 @@ func (r *DomainService) Update(ctx context.Context, domainName string, params Do
 }
 
 // List domains handled by Registrar.
-func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *shared.SinglePage[DomainListResponse], err error) {
+func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DomainListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,8 +67,8 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 }
 
 // List domains handled by Registrar.
-func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DomainListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DomainListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Show individual domain.

@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -67,7 +68,7 @@ func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body Tok
 }
 
 // List all access tokens you created.
-func (r *TokenService) List(ctx context.Context, query TokenListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TokenListResponse], err error) {
+func (r *TokenService) List(ctx context.Context, query TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TokenListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -85,8 +86,8 @@ func (r *TokenService) List(ctx context.Context, query TokenListParams, opts ...
 }
 
 // List all access tokens you created.
-func (r *TokenService) ListAutoPaging(ctx context.Context, query TokenListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TokenListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
+func (r *TokenService) ListAutoPaging(ctx context.Context, query TokenListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[TokenListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
 // Destroy a token.

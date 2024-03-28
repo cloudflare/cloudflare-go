@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,7 +35,7 @@ func NewNamespaceObjectService(opts ...option.RequestOption) (r *NamespaceObject
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *shared.CursorLimitPagination[DurableObject], err error) {
+func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *pagination.CursorLimitPagination[DurableObject], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,8 +53,8 @@ func (r *NamespaceObjectService) List(ctx context.Context, id string, params Nam
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *shared.CursorLimitPaginationAutoPager[DurableObject] {
-	return shared.NewCursorLimitPaginationAutoPager(r.List(ctx, id, params, opts...))
+func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *pagination.CursorLimitPaginationAutoPager[DurableObject] {
+	return pagination.NewCursorLimitPaginationAutoPager(r.List(ctx, id, params, opts...))
 }
 
 type DurableObject struct {

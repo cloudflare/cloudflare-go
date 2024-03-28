@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -60,7 +61,7 @@ func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params 
 }
 
 // Returns a list of Hyperdrives
-func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *shared.SinglePage[ConfigListResponse], err error) {
+func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConfigListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,8 +79,8 @@ func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts .
 }
 
 // Returns a list of Hyperdrives
-func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ConfigListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ConfigListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes the specified Hyperdrive.

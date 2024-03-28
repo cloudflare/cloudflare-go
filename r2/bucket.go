@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -47,7 +47,7 @@ func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ..
 }
 
 // Lists all R2 buckets on your account
-func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *shared.CursorPagination[R2Bucket], err error) {
+func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[R2Bucket], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -65,8 +65,8 @@ func (r *BucketService) List(ctx context.Context, params BucketListParams, opts 
 }
 
 // Lists all R2 buckets on your account
-func (r *BucketService) ListAutoPaging(ctx context.Context, params BucketListParams, opts ...option.RequestOption) *shared.CursorPaginationAutoPager[R2Bucket] {
-	return shared.NewCursorPaginationAutoPager(r.List(ctx, params, opts...))
+func (r *BucketService) ListAutoPaging(ctx context.Context, params BucketListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[R2Bucket] {
+	return pagination.NewCursorPaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing R2 bucket.

@@ -8,8 +8,8 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +32,7 @@ func NewAccessUserFailedLoginService(opts ...option.RequestOption) (r *AccessUse
 }
 
 // Get all failed login attempts for a single user.
-func (r *AccessUserFailedLoginService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *shared.SinglePage[AccessUserFailedLoginListResponse], err error) {
+func (r *AccessUserFailedLoginService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUserFailedLoginListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -50,8 +50,8 @@ func (r *AccessUserFailedLoginService) List(ctx context.Context, identifier stri
 }
 
 // Get all failed login attempts for a single user.
-func (r *AccessUserFailedLoginService) ListAutoPaging(ctx context.Context, identifier string, id string, opts ...option.RequestOption) *shared.SinglePageAutoPager[AccessUserFailedLoginListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, identifier, id, opts...))
+func (r *AccessUserFailedLoginService) ListAutoPaging(ctx context.Context, identifier string, id string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUserFailedLoginListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, id, opts...))
 }
 
 type AccessUserFailedLoginListResponse struct {

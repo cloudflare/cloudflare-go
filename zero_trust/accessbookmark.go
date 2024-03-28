@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -59,7 +59,7 @@ func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, u
 }
 
 // Lists Bookmark applications.
-func (r *AccessBookmarkService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustBookmarks], err error) {
+func (r *AccessBookmarkService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustBookmarks], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,8 +77,8 @@ func (r *AccessBookmarkService) List(ctx context.Context, identifier string, opt
 }
 
 // Lists Bookmark applications.
-func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustBookmarks] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
+func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustBookmarks] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
 }
 
 // Deletes a Bookmark application.

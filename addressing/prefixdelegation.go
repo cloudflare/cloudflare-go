@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -47,7 +47,7 @@ func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, para
 }
 
 // List all delegations for a given account IP prefix.
-func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) (res *shared.SinglePage[AddressingIpamDelegations], err error) {
+func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AddressingIpamDelegations], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -65,8 +65,8 @@ func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, que
 }
 
 // List all delegations for a given account IP prefix.
-func (r *PrefixDelegationService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AddressingIpamDelegations] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
+func (r *PrefixDelegationService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AddressingIpamDelegations] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
 // Delete an account delegation for a given IP prefix.

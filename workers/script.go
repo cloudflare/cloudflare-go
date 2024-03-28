@@ -15,9 +15,9 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -66,7 +66,7 @@ func (r *ScriptService) Update(ctx context.Context, scriptName string, params Sc
 }
 
 // Fetch a list of uploaded workers.
-func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) (res *shared.SinglePage[WorkersScript], err error) {
+func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WorkersScript], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -84,8 +84,8 @@ func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts .
 }
 
 // Fetch a list of uploaded workers.
-func (r *ScriptService) ListAutoPaging(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[WorkersScript] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *ScriptService) ListAutoPaging(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WorkersScript] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete your worker. This call has no response body on a successful delete.

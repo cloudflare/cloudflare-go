@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -40,7 +41,7 @@ func NewWAFPackageGroupService(opts ...option.RequestOption) (r *WAFPackageGroup
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WAFManagedRulesGroup], err error) {
+func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFManagedRulesGroup], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -61,8 +62,8 @@ func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, par
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WAFManagedRulesGroup] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, packageID, params, opts...))
+func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFManagedRulesGroup] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, packageID, params, opts...))
 }
 
 // Updates a WAF rule group. You can update the state (`mode` parameter) of a rule

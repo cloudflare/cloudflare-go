@@ -384,14 +384,18 @@ func (cfg *RequestConfig) Execute() (err error) {
 	}
 
 	if res.StatusCode >= 400 {
-		aerr := apierror.Error{Request: cfg.Request, Response: res, StatusCode: res.StatusCode}
 		contents, err := io.ReadAll(res.Body)
+		res.Body.Close()
 		if err != nil {
 			return err
 		}
+
 		// If there is an APIError, re-populate the response body so that debugging
 		// utilities can conveniently dump the response without issue.
 		res.Body = io.NopCloser(bytes.NewBuffer(contents))
+
+		// Load the contents into the error format if it is provided.
+		aerr := apierror.Error{Request: cfg.Request, Response: res, StatusCode: res.StatusCode}
 		err = aerr.UnmarshalJSON(contents)
 		if err != nil {
 			return err
