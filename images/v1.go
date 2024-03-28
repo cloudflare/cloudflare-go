@@ -47,7 +47,7 @@ func NewV1Service(opts ...option.RequestOption) (r *V1Service) {
 // Upload an image with up to 10 Megabytes using a single HTTP POST
 // (multipart/form-data) request. An image can be uploaded by sending an image file
 // or passing an accessible to an API url.
-func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.RequestOption) (res *ImagesImage, err error) {
+func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.RequestOption) (res *Image, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1NewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1", params.getAccountID())
@@ -100,7 +100,7 @@ func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeletePar
 
 // Update image access control. On access control change, all copies of the image
 // are purged from cache.
-func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParams, opts ...option.RequestOption) (res *ImagesImage, err error) {
+func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParams, opts ...option.RequestOption) (res *Image, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1EditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", params.AccountID, imageID)
@@ -113,7 +113,7 @@ func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParam
 }
 
 // Fetch details for a single image.
-func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, opts ...option.RequestOption) (res *ImagesImage, err error) {
+func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, opts ...option.RequestOption) (res *Image, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1GetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", query.AccountID, imageID)
@@ -125,7 +125,7 @@ func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, 
 	return
 }
 
-type ImagesImage struct {
+type Image struct {
 	// Image unique identifier.
 	ID string `json:"id"`
 	// Image file name.
@@ -139,12 +139,12 @@ type ImagesImage struct {
 	// When the media item was uploaded.
 	Uploaded time.Time `json:"uploaded" format:"date-time"`
 	// Object specifying available variants for an image.
-	Variants []ImagesImageVariant `json:"variants" format:"uri"`
-	JSON     imagesImageJSON      `json:"-"`
+	Variants []ImageVariant `json:"variants" format:"uri"`
+	JSON     imageJSON      `json:"-"`
 }
 
-// imagesImageJSON contains the JSON metadata for the struct [ImagesImage]
-type imagesImageJSON struct {
+// imageJSON contains the JSON metadata for the struct [Image]
+type imageJSON struct {
 	ID                apijson.Field
 	Filename          apijson.Field
 	Meta              apijson.Field
@@ -155,11 +155,11 @@ type imagesImageJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ImagesImage) UnmarshalJSON(data []byte) (err error) {
+func (r *Image) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r imagesImageJSON) RawJSON() string {
+func (r imageJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -167,13 +167,13 @@ func (r imagesImageJSON) RawJSON() string {
 //
 // Union satisfied by [shared.UnionString], [shared.UnionString] or
 // [shared.UnionString].
-type ImagesImageVariant interface {
-	ImplementsImagesImagesImageVariant()
+type ImageVariant interface {
+	ImplementsImagesImageVariant()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ImagesImageVariant)(nil)).Elem(),
+		reflect.TypeOf((*ImageVariant)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -264,7 +264,7 @@ func (r v1ListResponseMessageJSON) RawJSON() string {
 }
 
 type V1ListResponseResult struct {
-	Images []ImagesImage            `json:"images"`
+	Images []Image                  `json:"images"`
 	JSON   v1ListResponseResultJSON `json:"-"`
 }
 
@@ -364,7 +364,7 @@ func (V1NewParamsImagesImageUploadViaURL) ImplementsV1NewParams() {
 type V1NewResponseEnvelope struct {
 	Errors   []V1NewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []V1NewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ImagesImage                     `json:"result,required"`
+	Result   Image                           `json:"result,required"`
 	// Whether the API call was successful
 	Success V1NewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1NewResponseEnvelopeJSON    `json:"-"`
@@ -580,7 +580,7 @@ func (r V1EditParams) MarshalJSON() (data []byte, err error) {
 type V1EditResponseEnvelope struct {
 	Errors   []V1EditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []V1EditResponseEnvelopeMessages `json:"messages,required"`
-	Result   ImagesImage                      `json:"result,required"`
+	Result   Image                            `json:"result,required"`
 	// Whether the API call was successful
 	Success V1EditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1EditResponseEnvelopeJSON    `json:"-"`
@@ -674,7 +674,7 @@ type V1GetParams struct {
 type V1GetResponseEnvelope struct {
 	Errors   []V1GetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []V1GetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ImagesImage                     `json:"result,required"`
+	Result   Image                           `json:"result,required"`
 	// Whether the API call was successful
 	Success V1GetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1GetResponseEnvelopeJSON    `json:"-"`

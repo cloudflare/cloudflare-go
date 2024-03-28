@@ -37,7 +37,7 @@ func NewHistoryService(opts ...option.RequestOption) (r *HistoryService) {
 // Gets a list of history records for notifications sent to an account. The records
 // are displayed for last `x` number of days based on the zone plan (free = 30, pro
 // = 30, biz = 30, ent = 90).
-func (r *HistoryService) List(ctx context.Context, params HistoryListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AaaHistory], err error) {
+func (r *HistoryService) List(ctx context.Context, params HistoryListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AlertingHistory], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -57,11 +57,11 @@ func (r *HistoryService) List(ctx context.Context, params HistoryListParams, opt
 // Gets a list of history records for notifications sent to an account. The records
 // are displayed for last `x` number of days based on the zone plan (free = 30, pro
 // = 30, biz = 30, ent = 90).
-func (r *HistoryService) ListAutoPaging(ctx context.Context, params HistoryListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AaaHistory] {
+func (r *HistoryService) ListAutoPaging(ctx context.Context, params HistoryListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AlertingHistory] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-type AaaHistory struct {
+type AlertingHistory struct {
 	// UUID
 	ID string `json:"id"`
 	// Message body included in the notification sent.
@@ -74,18 +74,18 @@ type AaaHistory struct {
 	Mechanism string `json:"mechanism"`
 	// The type of mechanism to which the notification has been dispatched. This can be
 	// email/pagerduty/webhook based on the mechanism configured.
-	MechanismType AaaHistoryMechanismType `json:"mechanism_type"`
+	MechanismType AlertingHistoryMechanismType `json:"mechanism_type"`
 	// Name of the policy.
 	Name string `json:"name"`
 	// The unique identifier of a notification policy
 	PolicyID string `json:"policy_id"`
 	// Timestamp of when the notification was dispatched in ISO 8601 format.
-	Sent time.Time      `json:"sent" format:"date-time"`
-	JSON aaaHistoryJSON `json:"-"`
+	Sent time.Time           `json:"sent" format:"date-time"`
+	JSON alertingHistoryJSON `json:"-"`
 }
 
-// aaaHistoryJSON contains the JSON metadata for the struct [AaaHistory]
-type aaaHistoryJSON struct {
+// alertingHistoryJSON contains the JSON metadata for the struct [AlertingHistory]
+type alertingHistoryJSON struct {
 	ID            apijson.Field
 	AlertBody     apijson.Field
 	AlertType     apijson.Field
@@ -99,27 +99,27 @@ type aaaHistoryJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AaaHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aaaHistoryJSON) RawJSON() string {
+func (r alertingHistoryJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of mechanism to which the notification has been dispatched. This can be
 // email/pagerduty/webhook based on the mechanism configured.
-type AaaHistoryMechanismType string
+type AlertingHistoryMechanismType string
 
 const (
-	AaaHistoryMechanismTypeEmail     AaaHistoryMechanismType = "email"
-	AaaHistoryMechanismTypePagerduty AaaHistoryMechanismType = "pagerduty"
-	AaaHistoryMechanismTypeWebhook   AaaHistoryMechanismType = "webhook"
+	AlertingHistoryMechanismTypeEmail     AlertingHistoryMechanismType = "email"
+	AlertingHistoryMechanismTypePagerduty AlertingHistoryMechanismType = "pagerduty"
+	AlertingHistoryMechanismTypeWebhook   AlertingHistoryMechanismType = "webhook"
 )
 
-func (r AaaHistoryMechanismType) IsKnown() bool {
+func (r AlertingHistoryMechanismType) IsKnown() bool {
 	switch r {
-	case AaaHistoryMechanismTypeEmail, AaaHistoryMechanismTypePagerduty, AaaHistoryMechanismTypeWebhook:
+	case AlertingHistoryMechanismTypeEmail, AlertingHistoryMechanismTypePagerduty, AlertingHistoryMechanismTypeWebhook:
 		return true
 	}
 	return false

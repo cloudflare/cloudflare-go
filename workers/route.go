@@ -47,7 +47,7 @@ func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...o
 }
 
 // Updates the URL pattern or Worker associated with a route.
-func (r *RouteService) Update(ctx context.Context, routeID string, params RouteUpdateParams, opts ...option.RequestOption) (res *WorkersRoutes, err error) {
+func (r *RouteService) Update(ctx context.Context, routeID string, params RouteUpdateParams, opts ...option.RequestOption) (res *WorkersRoute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", params.ZoneID, routeID)
@@ -60,7 +60,7 @@ func (r *RouteService) Update(ctx context.Context, routeID string, params RouteU
 }
 
 // Returns routes for a zone.
-func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *[]WorkersRoutes, err error) {
+func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *[]WorkersRoute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes", query.ZoneID)
@@ -86,7 +86,7 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 }
 
 // Returns information about a route, including URL pattern and Worker.
-func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetParams, opts ...option.RequestOption) (res *WorkersRoutes, err error) {
+func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetParams, opts ...option.RequestOption) (res *WorkersRoute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", query.ZoneID, routeID)
@@ -98,17 +98,17 @@ func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetPa
 	return
 }
 
-type WorkersRoutes struct {
+type WorkersRoute struct {
 	// Identifier
 	ID      string `json:"id,required"`
 	Pattern string `json:"pattern,required"`
 	// Name of the script, used in URLs and route configuration.
-	Script string            `json:"script,required"`
-	JSON   workersRoutesJSON `json:"-"`
+	Script string           `json:"script,required"`
+	JSON   workersRouteJSON `json:"-"`
 }
 
-// workersRoutesJSON contains the JSON metadata for the struct [WorkersRoutes]
-type workersRoutesJSON struct {
+// workersRouteJSON contains the JSON metadata for the struct [WorkersRoute]
+type workersRouteJSON struct {
 	ID          apijson.Field
 	Pattern     apijson.Field
 	Script      apijson.Field
@@ -116,11 +116,11 @@ type workersRoutesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersRoutes) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersRoute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersRoutesJSON) RawJSON() string {
+func (r workersRouteJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -272,7 +272,7 @@ func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {
 type RouteUpdateResponseEnvelope struct {
 	Errors   []RouteUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersRoutes                         `json:"result,required"`
+	Result   WorkersRoute                          `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeUpdateResponseEnvelopeJSON    `json:"-"`
@@ -366,7 +366,7 @@ type RouteListParams struct {
 type RouteListResponseEnvelope struct {
 	Errors   []RouteListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersRoutes                     `json:"result,required"`
+	Result   []WorkersRoute                      `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeListResponseEnvelopeJSON    `json:"-"`
@@ -554,7 +554,7 @@ type RouteGetParams struct {
 type RouteGetResponseEnvelope struct {
 	Errors   []RouteGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RouteGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersRoutes                      `json:"result,required"`
+	Result   WorkersRoute                       `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeGetResponseEnvelopeJSON    `json:"-"`

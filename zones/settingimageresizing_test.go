@@ -30,9 +30,9 @@ func TestSettingImageResizingEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.ImageResizing.Edit(context.TODO(), zones.SettingImageResizingEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value: cloudflare.F(zones.ZonesImageResizingParam{
-			ID:    cloudflare.F(zones.ZonesImageResizingIDImageResizing),
-			Value: cloudflare.F(zones.ZonesImageResizingValueOn),
+		Value: cloudflare.F(zones.ZoneSettingImageResizingParam{
+			ID:    cloudflare.F(zones.ZoneSettingImageResizingIDImageResizing),
+			Value: cloudflare.F(zones.ZoneSettingImageResizingValueOn),
 		}),
 	})
 	if err != nil {

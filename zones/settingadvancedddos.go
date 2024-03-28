@@ -35,7 +35,7 @@ func NewSettingAdvancedDDOSService(opts ...option.RequestOption) (r *SettingAdva
 // Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 // website. This is an uneditable value that is 'on' in the case of Business and
 // Enterprise zones.
-func (r *SettingAdvancedDDOSService) Get(ctx context.Context, query SettingAdvancedDDOSGetParams, opts ...option.RequestOption) (res *ZonesAdvancedDDOS, err error) {
+func (r *SettingAdvancedDDOSService) Get(ctx context.Context, query SettingAdvancedDDOSGetParams, opts ...option.RequestOption) (res *ZoneSettingAdvancedDDOS, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAdvancedDDOSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/advanced_ddos", query.ZoneID)
@@ -50,22 +50,22 @@ func (r *SettingAdvancedDDOSService) Get(ctx context.Context, query SettingAdvan
 // Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 // website. This is an uneditable value that is 'on' in the case of Business and
 // Enterprise zones.
-type ZonesAdvancedDDOS struct {
+type ZoneSettingAdvancedDDOS struct {
 	// ID of the zone setting.
-	ID ZonesAdvancedDDOSID `json:"id,required"`
+	ID ZoneSettingAdvancedDDOSID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesAdvancedDDOSValue `json:"value,required"`
+	Value ZoneSettingAdvancedDDOSValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesAdvancedDDOSEditable `json:"editable"`
+	Editable ZoneSettingAdvancedDDOSEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesAdvancedDDOSJSON `json:"-"`
+	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingAdvancedDDOSJSON `json:"-"`
 }
 
-// zonesAdvancedDDOSJSON contains the JSON metadata for the struct
-// [ZonesAdvancedDDOS]
-type zonesAdvancedDDOSJSON struct {
+// zoneSettingAdvancedDDOSJSON contains the JSON metadata for the struct
+// [ZoneSettingAdvancedDDOS]
+type zoneSettingAdvancedDDOSJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -74,44 +74,44 @@ type zonesAdvancedDDOSJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesAdvancedDDOS) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingAdvancedDDOS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesAdvancedDDOSJSON) RawJSON() string {
+func (r zoneSettingAdvancedDDOSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZonesAdvancedDDOS) implementsZonesSettingEditResponse() {}
+func (r ZoneSettingAdvancedDDOS) implementsZonesSettingEditResponse() {}
 
-func (r ZonesAdvancedDDOS) implementsZonesSettingGetResponse() {}
+func (r ZoneSettingAdvancedDDOS) implementsZonesSettingGetResponse() {}
 
 // ID of the zone setting.
-type ZonesAdvancedDDOSID string
+type ZoneSettingAdvancedDDOSID string
 
 const (
-	ZonesAdvancedDDOSIDAdvancedDDOS ZonesAdvancedDDOSID = "advanced_ddos"
+	ZoneSettingAdvancedDDOSIDAdvancedDDOS ZoneSettingAdvancedDDOSID = "advanced_ddos"
 )
 
-func (r ZonesAdvancedDDOSID) IsKnown() bool {
+func (r ZoneSettingAdvancedDDOSID) IsKnown() bool {
 	switch r {
-	case ZonesAdvancedDDOSIDAdvancedDDOS:
+	case ZoneSettingAdvancedDDOSIDAdvancedDDOS:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZonesAdvancedDDOSValue string
+type ZoneSettingAdvancedDDOSValue string
 
 const (
-	ZonesAdvancedDDOSValueOn  ZonesAdvancedDDOSValue = "on"
-	ZonesAdvancedDDOSValueOff ZonesAdvancedDDOSValue = "off"
+	ZoneSettingAdvancedDDOSValueOn  ZoneSettingAdvancedDDOSValue = "on"
+	ZoneSettingAdvancedDDOSValueOff ZoneSettingAdvancedDDOSValue = "off"
 )
 
-func (r ZonesAdvancedDDOSValue) IsKnown() bool {
+func (r ZoneSettingAdvancedDDOSValue) IsKnown() bool {
 	switch r {
-	case ZonesAdvancedDDOSValueOn, ZonesAdvancedDDOSValueOff:
+	case ZoneSettingAdvancedDDOSValueOn, ZoneSettingAdvancedDDOSValueOff:
 		return true
 	}
 	return false
@@ -119,16 +119,16 @@ func (r ZonesAdvancedDDOSValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesAdvancedDDOSEditable bool
+type ZoneSettingAdvancedDDOSEditable bool
 
 const (
-	ZonesAdvancedDDOSEditableTrue  ZonesAdvancedDDOSEditable = true
-	ZonesAdvancedDDOSEditableFalse ZonesAdvancedDDOSEditable = false
+	ZoneSettingAdvancedDDOSEditableTrue  ZoneSettingAdvancedDDOSEditable = true
+	ZoneSettingAdvancedDDOSEditableFalse ZoneSettingAdvancedDDOSEditable = false
 )
 
-func (r ZonesAdvancedDDOSEditable) IsKnown() bool {
+func (r ZoneSettingAdvancedDDOSEditable) IsKnown() bool {
 	switch r {
-	case ZonesAdvancedDDOSEditableTrue, ZonesAdvancedDDOSEditableFalse:
+	case ZoneSettingAdvancedDDOSEditableTrue, ZoneSettingAdvancedDDOSEditableFalse:
 		return true
 	}
 	return false
@@ -137,18 +137,18 @@ func (r ZonesAdvancedDDOSEditable) IsKnown() bool {
 // Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 // website. This is an uneditable value that is 'on' in the case of Business and
 // Enterprise zones.
-type ZonesAdvancedDDOSParam struct {
+type ZoneSettingAdvancedDDOSParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesAdvancedDDOSID] `json:"id,required"`
+	ID param.Field[ZoneSettingAdvancedDDOSID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesAdvancedDDOSValue] `json:"value,required"`
+	Value param.Field[ZoneSettingAdvancedDDOSValue] `json:"value,required"`
 }
 
-func (r ZonesAdvancedDDOSParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingAdvancedDDOSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonesAdvancedDDOSParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingAdvancedDDOSParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingAdvancedDDOSGetParams struct {
 	// Identifier
@@ -163,7 +163,7 @@ type SettingAdvancedDDOSGetResponseEnvelope struct {
 	// Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 	// website. This is an uneditable value that is 'on' in the case of Business and
 	// Enterprise zones.
-	Result ZonesAdvancedDDOS                          `json:"result"`
+	Result ZoneSettingAdvancedDDOS                    `json:"result"`
 	JSON   settingAdvancedDDOSGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -34,7 +34,7 @@ func NewJobService(opts ...option.RequestOption) (r *JobService) {
 }
 
 // Creates a new Logpush job for an account or zone.
-func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *LogpushLogpushJob, err error) {
+func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobNewResponseEnvelope
 	var accountOrZone string
@@ -56,7 +56,7 @@ func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...optio
 }
 
 // Updates a Logpush job.
-func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *LogpushLogpushJob, err error) {
+func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobUpdateResponseEnvelope
 	var accountOrZone string
@@ -78,7 +78,7 @@ func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdatePa
 }
 
 // Lists Logpush jobs for an account or zone.
-func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *[]LogpushLogpushJob, err error) {
+func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *[]LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobListResponseEnvelope
 	var accountOrZone string
@@ -122,7 +122,7 @@ func (r *JobService) Delete(ctx context.Context, jobID int64, body JobDeletePara
 }
 
 // Gets the details of a Logpush job.
-func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *LogpushLogpushJob, err error) {
+func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobGetResponseEnvelope
 	var accountOrZone string
@@ -306,7 +306,7 @@ func (r JobNewParamsOutputOptionsTimestampFormat) IsKnown() bool {
 type JobNewResponseEnvelope struct {
 	Errors   []JobNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []JobNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogpushLogpushJob                `json:"result,required,nullable"`
+	Result   LogpushJob                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobNewResponseEnvelopeJSON    `json:"-"`
@@ -524,7 +524,7 @@ func (r JobUpdateParamsOutputOptionsTimestampFormat) IsKnown() bool {
 type JobUpdateResponseEnvelope struct {
 	Errors   []JobUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []JobUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogpushLogpushJob                   `json:"result,required,nullable"`
+	Result   LogpushJob                          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobUpdateResponseEnvelopeJSON    `json:"-"`
@@ -620,7 +620,7 @@ type JobListParams struct {
 type JobListResponseEnvelope struct {
 	Errors   []JobListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []JobListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LogpushLogpushJob               `json:"result,required"`
+	Result   []LogpushJob                      `json:"result,required"`
 	// Whether the API call was successful
 	Success JobListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobListResponseEnvelopeJSON    `json:"-"`
@@ -812,7 +812,7 @@ type JobGetParams struct {
 type JobGetResponseEnvelope struct {
 	Errors   []JobGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []JobGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogpushLogpushJob                `json:"result,required,nullable"`
+	Result   LogpushJob                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobGetResponseEnvelopeJSON    `json:"-"`

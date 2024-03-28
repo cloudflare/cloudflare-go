@@ -36,7 +36,7 @@ func NewSettingBrowserCacheTTLService(opts ...option.RequestOption) (r *SettingB
 // will remain on your visitors' computers. Cloudflare will honor any larger times
 // specified by your server.
 // (https://support.cloudflare.com/hc/en-us/articles/200168276).
-func (r *SettingBrowserCacheTTLService) Edit(ctx context.Context, params SettingBrowserCacheTTLEditParams, opts ...option.RequestOption) (res *ZonesBrowserCacheTTL, err error) {
+func (r *SettingBrowserCacheTTLService) Edit(ctx context.Context, params SettingBrowserCacheTTLEditParams, opts ...option.RequestOption) (res *ZoneSettingBrowserCacheTTL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCacheTTLEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/browser_cache_ttl", params.ZoneID)
@@ -52,7 +52,7 @@ func (r *SettingBrowserCacheTTLService) Edit(ctx context.Context, params Setting
 // will remain on your visitors' computers. Cloudflare will honor any larger times
 // specified by your server.
 // (https://support.cloudflare.com/hc/en-us/articles/200168276).
-func (r *SettingBrowserCacheTTLService) Get(ctx context.Context, query SettingBrowserCacheTTLGetParams, opts ...option.RequestOption) (res *ZonesBrowserCacheTTL, err error) {
+func (r *SettingBrowserCacheTTLService) Get(ctx context.Context, query SettingBrowserCacheTTLGetParams, opts ...option.RequestOption) (res *ZoneSettingBrowserCacheTTL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCacheTTLGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/browser_cache_ttl", query.ZoneID)
@@ -68,22 +68,22 @@ func (r *SettingBrowserCacheTTLService) Get(ctx context.Context, query SettingBr
 // will remain on your visitors' computers. Cloudflare will honor any larger times
 // specified by your server.
 // (https://support.cloudflare.com/hc/en-us/articles/200168276).
-type ZonesBrowserCacheTTL struct {
+type ZoneSettingBrowserCacheTTL struct {
 	// ID of the zone setting.
-	ID ZonesBrowserCacheTTLID `json:"id,required"`
+	ID ZoneSettingBrowserCacheTTLID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesBrowserCacheTTLValue `json:"value,required"`
+	Value ZoneSettingBrowserCacheTTLValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesBrowserCacheTTLEditable `json:"editable"`
+	Editable ZoneSettingBrowserCacheTTLEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesBrowserCacheTTLJSON `json:"-"`
+	ModifiedOn time.Time                      `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingBrowserCacheTTLJSON `json:"-"`
 }
 
-// zonesBrowserCacheTTLJSON contains the JSON metadata for the struct
-// [ZonesBrowserCacheTTL]
-type zonesBrowserCacheTTLJSON struct {
+// zoneSettingBrowserCacheTTLJSON contains the JSON metadata for the struct
+// [ZoneSettingBrowserCacheTTL]
+type zoneSettingBrowserCacheTTLJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,70 +92,70 @@ type zonesBrowserCacheTTLJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesBrowserCacheTTL) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingBrowserCacheTTL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesBrowserCacheTTLJSON) RawJSON() string {
+func (r zoneSettingBrowserCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZonesBrowserCacheTTL) implementsZonesSettingEditResponse() {}
+func (r ZoneSettingBrowserCacheTTL) implementsZonesSettingEditResponse() {}
 
-func (r ZonesBrowserCacheTTL) implementsZonesSettingGetResponse() {}
+func (r ZoneSettingBrowserCacheTTL) implementsZonesSettingGetResponse() {}
 
 // ID of the zone setting.
-type ZonesBrowserCacheTTLID string
+type ZoneSettingBrowserCacheTTLID string
 
 const (
-	ZonesBrowserCacheTTLIDBrowserCacheTTL ZonesBrowserCacheTTLID = "browser_cache_ttl"
+	ZoneSettingBrowserCacheTTLIDBrowserCacheTTL ZoneSettingBrowserCacheTTLID = "browser_cache_ttl"
 )
 
-func (r ZonesBrowserCacheTTLID) IsKnown() bool {
+func (r ZoneSettingBrowserCacheTTLID) IsKnown() bool {
 	switch r {
-	case ZonesBrowserCacheTTLIDBrowserCacheTTL:
+	case ZoneSettingBrowserCacheTTLIDBrowserCacheTTL:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZonesBrowserCacheTTLValue float64
+type ZoneSettingBrowserCacheTTLValue float64
 
 const (
-	ZonesBrowserCacheTTLValue0        ZonesBrowserCacheTTLValue = 0
-	ZonesBrowserCacheTTLValue30       ZonesBrowserCacheTTLValue = 30
-	ZonesBrowserCacheTTLValue60       ZonesBrowserCacheTTLValue = 60
-	ZonesBrowserCacheTTLValue120      ZonesBrowserCacheTTLValue = 120
-	ZonesBrowserCacheTTLValue300      ZonesBrowserCacheTTLValue = 300
-	ZonesBrowserCacheTTLValue1200     ZonesBrowserCacheTTLValue = 1200
-	ZonesBrowserCacheTTLValue1800     ZonesBrowserCacheTTLValue = 1800
-	ZonesBrowserCacheTTLValue3600     ZonesBrowserCacheTTLValue = 3600
-	ZonesBrowserCacheTTLValue7200     ZonesBrowserCacheTTLValue = 7200
-	ZonesBrowserCacheTTLValue10800    ZonesBrowserCacheTTLValue = 10800
-	ZonesBrowserCacheTTLValue14400    ZonesBrowserCacheTTLValue = 14400
-	ZonesBrowserCacheTTLValue18000    ZonesBrowserCacheTTLValue = 18000
-	ZonesBrowserCacheTTLValue28800    ZonesBrowserCacheTTLValue = 28800
-	ZonesBrowserCacheTTLValue43200    ZonesBrowserCacheTTLValue = 43200
-	ZonesBrowserCacheTTLValue57600    ZonesBrowserCacheTTLValue = 57600
-	ZonesBrowserCacheTTLValue72000    ZonesBrowserCacheTTLValue = 72000
-	ZonesBrowserCacheTTLValue86400    ZonesBrowserCacheTTLValue = 86400
-	ZonesBrowserCacheTTLValue172800   ZonesBrowserCacheTTLValue = 172800
-	ZonesBrowserCacheTTLValue259200   ZonesBrowserCacheTTLValue = 259200
-	ZonesBrowserCacheTTLValue345600   ZonesBrowserCacheTTLValue = 345600
-	ZonesBrowserCacheTTLValue432000   ZonesBrowserCacheTTLValue = 432000
-	ZonesBrowserCacheTTLValue691200   ZonesBrowserCacheTTLValue = 691200
-	ZonesBrowserCacheTTLValue1382400  ZonesBrowserCacheTTLValue = 1382400
-	ZonesBrowserCacheTTLValue2073600  ZonesBrowserCacheTTLValue = 2073600
-	ZonesBrowserCacheTTLValue2678400  ZonesBrowserCacheTTLValue = 2678400
-	ZonesBrowserCacheTTLValue5356800  ZonesBrowserCacheTTLValue = 5356800
-	ZonesBrowserCacheTTLValue16070400 ZonesBrowserCacheTTLValue = 16070400
-	ZonesBrowserCacheTTLValue31536000 ZonesBrowserCacheTTLValue = 31536000
+	ZoneSettingBrowserCacheTTLValue0        ZoneSettingBrowserCacheTTLValue = 0
+	ZoneSettingBrowserCacheTTLValue30       ZoneSettingBrowserCacheTTLValue = 30
+	ZoneSettingBrowserCacheTTLValue60       ZoneSettingBrowserCacheTTLValue = 60
+	ZoneSettingBrowserCacheTTLValue120      ZoneSettingBrowserCacheTTLValue = 120
+	ZoneSettingBrowserCacheTTLValue300      ZoneSettingBrowserCacheTTLValue = 300
+	ZoneSettingBrowserCacheTTLValue1200     ZoneSettingBrowserCacheTTLValue = 1200
+	ZoneSettingBrowserCacheTTLValue1800     ZoneSettingBrowserCacheTTLValue = 1800
+	ZoneSettingBrowserCacheTTLValue3600     ZoneSettingBrowserCacheTTLValue = 3600
+	ZoneSettingBrowserCacheTTLValue7200     ZoneSettingBrowserCacheTTLValue = 7200
+	ZoneSettingBrowserCacheTTLValue10800    ZoneSettingBrowserCacheTTLValue = 10800
+	ZoneSettingBrowserCacheTTLValue14400    ZoneSettingBrowserCacheTTLValue = 14400
+	ZoneSettingBrowserCacheTTLValue18000    ZoneSettingBrowserCacheTTLValue = 18000
+	ZoneSettingBrowserCacheTTLValue28800    ZoneSettingBrowserCacheTTLValue = 28800
+	ZoneSettingBrowserCacheTTLValue43200    ZoneSettingBrowserCacheTTLValue = 43200
+	ZoneSettingBrowserCacheTTLValue57600    ZoneSettingBrowserCacheTTLValue = 57600
+	ZoneSettingBrowserCacheTTLValue72000    ZoneSettingBrowserCacheTTLValue = 72000
+	ZoneSettingBrowserCacheTTLValue86400    ZoneSettingBrowserCacheTTLValue = 86400
+	ZoneSettingBrowserCacheTTLValue172800   ZoneSettingBrowserCacheTTLValue = 172800
+	ZoneSettingBrowserCacheTTLValue259200   ZoneSettingBrowserCacheTTLValue = 259200
+	ZoneSettingBrowserCacheTTLValue345600   ZoneSettingBrowserCacheTTLValue = 345600
+	ZoneSettingBrowserCacheTTLValue432000   ZoneSettingBrowserCacheTTLValue = 432000
+	ZoneSettingBrowserCacheTTLValue691200   ZoneSettingBrowserCacheTTLValue = 691200
+	ZoneSettingBrowserCacheTTLValue1382400  ZoneSettingBrowserCacheTTLValue = 1382400
+	ZoneSettingBrowserCacheTTLValue2073600  ZoneSettingBrowserCacheTTLValue = 2073600
+	ZoneSettingBrowserCacheTTLValue2678400  ZoneSettingBrowserCacheTTLValue = 2678400
+	ZoneSettingBrowserCacheTTLValue5356800  ZoneSettingBrowserCacheTTLValue = 5356800
+	ZoneSettingBrowserCacheTTLValue16070400 ZoneSettingBrowserCacheTTLValue = 16070400
+	ZoneSettingBrowserCacheTTLValue31536000 ZoneSettingBrowserCacheTTLValue = 31536000
 )
 
-func (r ZonesBrowserCacheTTLValue) IsKnown() bool {
+func (r ZoneSettingBrowserCacheTTLValue) IsKnown() bool {
 	switch r {
-	case ZonesBrowserCacheTTLValue0, ZonesBrowserCacheTTLValue30, ZonesBrowserCacheTTLValue60, ZonesBrowserCacheTTLValue120, ZonesBrowserCacheTTLValue300, ZonesBrowserCacheTTLValue1200, ZonesBrowserCacheTTLValue1800, ZonesBrowserCacheTTLValue3600, ZonesBrowserCacheTTLValue7200, ZonesBrowserCacheTTLValue10800, ZonesBrowserCacheTTLValue14400, ZonesBrowserCacheTTLValue18000, ZonesBrowserCacheTTLValue28800, ZonesBrowserCacheTTLValue43200, ZonesBrowserCacheTTLValue57600, ZonesBrowserCacheTTLValue72000, ZonesBrowserCacheTTLValue86400, ZonesBrowserCacheTTLValue172800, ZonesBrowserCacheTTLValue259200, ZonesBrowserCacheTTLValue345600, ZonesBrowserCacheTTLValue432000, ZonesBrowserCacheTTLValue691200, ZonesBrowserCacheTTLValue1382400, ZonesBrowserCacheTTLValue2073600, ZonesBrowserCacheTTLValue2678400, ZonesBrowserCacheTTLValue5356800, ZonesBrowserCacheTTLValue16070400, ZonesBrowserCacheTTLValue31536000:
+	case ZoneSettingBrowserCacheTTLValue0, ZoneSettingBrowserCacheTTLValue30, ZoneSettingBrowserCacheTTLValue60, ZoneSettingBrowserCacheTTLValue120, ZoneSettingBrowserCacheTTLValue300, ZoneSettingBrowserCacheTTLValue1200, ZoneSettingBrowserCacheTTLValue1800, ZoneSettingBrowserCacheTTLValue3600, ZoneSettingBrowserCacheTTLValue7200, ZoneSettingBrowserCacheTTLValue10800, ZoneSettingBrowserCacheTTLValue14400, ZoneSettingBrowserCacheTTLValue18000, ZoneSettingBrowserCacheTTLValue28800, ZoneSettingBrowserCacheTTLValue43200, ZoneSettingBrowserCacheTTLValue57600, ZoneSettingBrowserCacheTTLValue72000, ZoneSettingBrowserCacheTTLValue86400, ZoneSettingBrowserCacheTTLValue172800, ZoneSettingBrowserCacheTTLValue259200, ZoneSettingBrowserCacheTTLValue345600, ZoneSettingBrowserCacheTTLValue432000, ZoneSettingBrowserCacheTTLValue691200, ZoneSettingBrowserCacheTTLValue1382400, ZoneSettingBrowserCacheTTLValue2073600, ZoneSettingBrowserCacheTTLValue2678400, ZoneSettingBrowserCacheTTLValue5356800, ZoneSettingBrowserCacheTTLValue16070400, ZoneSettingBrowserCacheTTLValue31536000:
 		return true
 	}
 	return false
@@ -163,16 +163,16 @@ func (r ZonesBrowserCacheTTLValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesBrowserCacheTTLEditable bool
+type ZoneSettingBrowserCacheTTLEditable bool
 
 const (
-	ZonesBrowserCacheTTLEditableTrue  ZonesBrowserCacheTTLEditable = true
-	ZonesBrowserCacheTTLEditableFalse ZonesBrowserCacheTTLEditable = false
+	ZoneSettingBrowserCacheTTLEditableTrue  ZoneSettingBrowserCacheTTLEditable = true
+	ZoneSettingBrowserCacheTTLEditableFalse ZoneSettingBrowserCacheTTLEditable = false
 )
 
-func (r ZonesBrowserCacheTTLEditable) IsKnown() bool {
+func (r ZoneSettingBrowserCacheTTLEditable) IsKnown() bool {
 	switch r {
-	case ZonesBrowserCacheTTLEditableTrue, ZonesBrowserCacheTTLEditableFalse:
+	case ZoneSettingBrowserCacheTTLEditableTrue, ZoneSettingBrowserCacheTTLEditableFalse:
 		return true
 	}
 	return false
@@ -182,18 +182,18 @@ func (r ZonesBrowserCacheTTLEditable) IsKnown() bool {
 // will remain on your visitors' computers. Cloudflare will honor any larger times
 // specified by your server.
 // (https://support.cloudflare.com/hc/en-us/articles/200168276).
-type ZonesBrowserCacheTTLParam struct {
+type ZoneSettingBrowserCacheTTLParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesBrowserCacheTTLID] `json:"id,required"`
+	ID param.Field[ZoneSettingBrowserCacheTTLID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesBrowserCacheTTLValue] `json:"value,required"`
+	Value param.Field[ZoneSettingBrowserCacheTTLValue] `json:"value,required"`
 }
 
-func (r ZonesBrowserCacheTTLParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingBrowserCacheTTLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonesBrowserCacheTTLParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingBrowserCacheTTLParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingBrowserCacheTTLEditParams struct {
 	// Identifier
@@ -259,7 +259,7 @@ type SettingBrowserCacheTTLEditResponseEnvelope struct {
 	// will remain on your visitors' computers. Cloudflare will honor any larger times
 	// specified by your server.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168276).
-	Result ZonesBrowserCacheTTL                           `json:"result"`
+	Result ZoneSettingBrowserCacheTTL                     `json:"result"`
 	JSON   settingBrowserCacheTTLEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -342,7 +342,7 @@ type SettingBrowserCacheTTLGetResponseEnvelope struct {
 	// will remain on your visitors' computers. Cloudflare will honor any larger times
 	// specified by your server.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168276).
-	Result ZonesBrowserCacheTTL                          `json:"result"`
+	Result ZoneSettingBrowserCacheTTL                    `json:"result"`
 	JSON   settingBrowserCacheTTLGetResponseEnvelopeJSON `json:"-"`
 }
 

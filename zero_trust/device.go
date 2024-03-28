@@ -51,7 +51,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 }
 
 // Fetches a list of enrolled devices.
-func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDevices, err error) {
+func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *[]ZeroTrustDevices, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices", query.AccountID)
@@ -76,14 +76,14 @@ func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGe
 	return
 }
 
-type TeamsDevicesDevices struct {
+type ZeroTrustDevices struct {
 	// Device ID.
 	ID string `json:"id"`
 	// When the device was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// True if the device was deleted.
-	Deleted    bool                          `json:"deleted"`
-	DeviceType TeamsDevicesDevicesDeviceType `json:"device_type"`
+	Deleted    bool                       `json:"deleted"`
+	DeviceType ZeroTrustDevicesDeviceType `json:"device_type"`
 	// IPv4 or IPv6 address.
 	IP string `json:"ip"`
 	// The device's public key.
@@ -111,16 +111,16 @@ type TeamsDevicesDevices struct {
 	// The device serial number.
 	SerialNumber string `json:"serial_number"`
 	// When the device was updated.
-	Updated time.Time               `json:"updated" format:"date-time"`
-	User    TeamsDevicesDevicesUser `json:"user"`
+	Updated time.Time            `json:"updated" format:"date-time"`
+	User    ZeroTrustDevicesUser `json:"user"`
 	// The WARP client version.
-	Version string                  `json:"version"`
-	JSON    teamsDevicesDevicesJSON `json:"-"`
+	Version string               `json:"version"`
+	JSON    zeroTrustDevicesJSON `json:"-"`
 }
 
-// teamsDevicesDevicesJSON contains the JSON metadata for the struct
-// [TeamsDevicesDevices]
-type teamsDevicesDevicesJSON struct {
+// zeroTrustDevicesJSON contains the JSON metadata for the struct
+// [ZeroTrustDevices]
+type zeroTrustDevicesJSON struct {
 	ID               apijson.Field
 	Created          apijson.Field
 	Deleted          apijson.Field
@@ -145,45 +145,45 @@ type teamsDevicesDevicesJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDevices) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDevices) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDevicesJSON) RawJSON() string {
+func (r zeroTrustDevicesJSON) RawJSON() string {
 	return r.raw
 }
 
-type TeamsDevicesDevicesDeviceType string
+type ZeroTrustDevicesDeviceType string
 
 const (
-	TeamsDevicesDevicesDeviceTypeWindows TeamsDevicesDevicesDeviceType = "windows"
-	TeamsDevicesDevicesDeviceTypeMac     TeamsDevicesDevicesDeviceType = "mac"
-	TeamsDevicesDevicesDeviceTypeLinux   TeamsDevicesDevicesDeviceType = "linux"
-	TeamsDevicesDevicesDeviceTypeAndroid TeamsDevicesDevicesDeviceType = "android"
-	TeamsDevicesDevicesDeviceTypeIos     TeamsDevicesDevicesDeviceType = "ios"
+	ZeroTrustDevicesDeviceTypeWindows ZeroTrustDevicesDeviceType = "windows"
+	ZeroTrustDevicesDeviceTypeMac     ZeroTrustDevicesDeviceType = "mac"
+	ZeroTrustDevicesDeviceTypeLinux   ZeroTrustDevicesDeviceType = "linux"
+	ZeroTrustDevicesDeviceTypeAndroid ZeroTrustDevicesDeviceType = "android"
+	ZeroTrustDevicesDeviceTypeIos     ZeroTrustDevicesDeviceType = "ios"
 )
 
-func (r TeamsDevicesDevicesDeviceType) IsKnown() bool {
+func (r ZeroTrustDevicesDeviceType) IsKnown() bool {
 	switch r {
-	case TeamsDevicesDevicesDeviceTypeWindows, TeamsDevicesDevicesDeviceTypeMac, TeamsDevicesDevicesDeviceTypeLinux, TeamsDevicesDevicesDeviceTypeAndroid, TeamsDevicesDevicesDeviceTypeIos:
+	case ZeroTrustDevicesDeviceTypeWindows, ZeroTrustDevicesDeviceTypeMac, ZeroTrustDevicesDeviceTypeLinux, ZeroTrustDevicesDeviceTypeAndroid, ZeroTrustDevicesDeviceTypeIos:
 		return true
 	}
 	return false
 }
 
-type TeamsDevicesDevicesUser struct {
+type ZeroTrustDevicesUser struct {
 	// UUID
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
 	// The enrolled device user's name.
-	Name string                      `json:"name"`
-	JSON teamsDevicesDevicesUserJSON `json:"-"`
+	Name string                   `json:"name"`
+	JSON zeroTrustDevicesUserJSON `json:"-"`
 }
 
-// teamsDevicesDevicesUserJSON contains the JSON metadata for the struct
-// [TeamsDevicesDevicesUser]
-type teamsDevicesDevicesUserJSON struct {
+// zeroTrustDevicesUserJSON contains the JSON metadata for the struct
+// [ZeroTrustDevicesUser]
+type zeroTrustDevicesUserJSON struct {
 	ID          apijson.Field
 	Email       apijson.Field
 	Name        apijson.Field
@@ -191,11 +191,11 @@ type teamsDevicesDevicesUserJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDevicesUser) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDevicesUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDevicesUserJSON) RawJSON() string {
+func (r zeroTrustDevicesUserJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -223,7 +223,7 @@ type DeviceListParams struct {
 type DeviceListResponseEnvelope struct {
 	Errors   []DeviceListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesDevices                `json:"result,required,nullable"`
+	Result   []ZeroTrustDevices                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DeviceListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DeviceListResponseEnvelopeResultInfo `json:"result_info"`

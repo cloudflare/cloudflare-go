@@ -35,7 +35,7 @@ func NewSettingAlwaysUseHTTPSService(opts ...option.RequestOption) (r *SettingAl
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-func (r *SettingAlwaysUseHTTPSService) Edit(ctx context.Context, params SettingAlwaysUseHTTPSEditParams, opts ...option.RequestOption) (res *ZonesAlwaysUseHTTPS, err error) {
+func (r *SettingAlwaysUseHTTPSService) Edit(ctx context.Context, params SettingAlwaysUseHTTPSEditParams, opts ...option.RequestOption) (res *ZoneSettingAlwaysUseHTTPS, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysUseHTTPSEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/always_use_https", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *SettingAlwaysUseHTTPSService) Edit(ctx context.Context, params SettingA
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-func (r *SettingAlwaysUseHTTPSService) Get(ctx context.Context, query SettingAlwaysUseHTTPSGetParams, opts ...option.RequestOption) (res *ZonesAlwaysUseHTTPS, err error) {
+func (r *SettingAlwaysUseHTTPSService) Get(ctx context.Context, query SettingAlwaysUseHTTPSGetParams, opts ...option.RequestOption) (res *ZoneSettingAlwaysUseHTTPS, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysUseHTTPSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/always_use_https", query.ZoneID)
@@ -65,22 +65,22 @@ func (r *SettingAlwaysUseHTTPSService) Get(ctx context.Context, query SettingAlw
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-type ZonesAlwaysUseHTTPS struct {
+type ZoneSettingAlwaysUseHTTPS struct {
 	// ID of the zone setting.
-	ID ZonesAlwaysUseHTTPSID `json:"id,required"`
+	ID ZoneSettingAlwaysUseHTTPSID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesAlwaysUseHTTPSValue `json:"value,required"`
+	Value ZoneSettingAlwaysUseHTTPSValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesAlwaysUseHTTPSEditable `json:"editable"`
+	Editable ZoneSettingAlwaysUseHTTPSEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesAlwaysUseHTTPSJSON `json:"-"`
+	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingAlwaysUseHTTPSJSON `json:"-"`
 }
 
-// zonesAlwaysUseHTTPSJSON contains the JSON metadata for the struct
-// [ZonesAlwaysUseHTTPS]
-type zonesAlwaysUseHTTPSJSON struct {
+// zoneSettingAlwaysUseHTTPSJSON contains the JSON metadata for the struct
+// [ZoneSettingAlwaysUseHTTPS]
+type zoneSettingAlwaysUseHTTPSJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -89,44 +89,44 @@ type zonesAlwaysUseHTTPSJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesAlwaysUseHTTPS) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingAlwaysUseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesAlwaysUseHTTPSJSON) RawJSON() string {
+func (r zoneSettingAlwaysUseHTTPSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZonesAlwaysUseHTTPS) implementsZonesSettingEditResponse() {}
+func (r ZoneSettingAlwaysUseHTTPS) implementsZonesSettingEditResponse() {}
 
-func (r ZonesAlwaysUseHTTPS) implementsZonesSettingGetResponse() {}
+func (r ZoneSettingAlwaysUseHTTPS) implementsZonesSettingGetResponse() {}
 
 // ID of the zone setting.
-type ZonesAlwaysUseHTTPSID string
+type ZoneSettingAlwaysUseHTTPSID string
 
 const (
-	ZonesAlwaysUseHTTPSIDAlwaysUseHTTPS ZonesAlwaysUseHTTPSID = "always_use_https"
+	ZoneSettingAlwaysUseHTTPSIDAlwaysUseHTTPS ZoneSettingAlwaysUseHTTPSID = "always_use_https"
 )
 
-func (r ZonesAlwaysUseHTTPSID) IsKnown() bool {
+func (r ZoneSettingAlwaysUseHTTPSID) IsKnown() bool {
 	switch r {
-	case ZonesAlwaysUseHTTPSIDAlwaysUseHTTPS:
+	case ZoneSettingAlwaysUseHTTPSIDAlwaysUseHTTPS:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZonesAlwaysUseHTTPSValue string
+type ZoneSettingAlwaysUseHTTPSValue string
 
 const (
-	ZonesAlwaysUseHTTPSValueOn  ZonesAlwaysUseHTTPSValue = "on"
-	ZonesAlwaysUseHTTPSValueOff ZonesAlwaysUseHTTPSValue = "off"
+	ZoneSettingAlwaysUseHTTPSValueOn  ZoneSettingAlwaysUseHTTPSValue = "on"
+	ZoneSettingAlwaysUseHTTPSValueOff ZoneSettingAlwaysUseHTTPSValue = "off"
 )
 
-func (r ZonesAlwaysUseHTTPSValue) IsKnown() bool {
+func (r ZoneSettingAlwaysUseHTTPSValue) IsKnown() bool {
 	switch r {
-	case ZonesAlwaysUseHTTPSValueOn, ZonesAlwaysUseHTTPSValueOff:
+	case ZoneSettingAlwaysUseHTTPSValueOn, ZoneSettingAlwaysUseHTTPSValueOff:
 		return true
 	}
 	return false
@@ -134,16 +134,16 @@ func (r ZonesAlwaysUseHTTPSValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesAlwaysUseHTTPSEditable bool
+type ZoneSettingAlwaysUseHTTPSEditable bool
 
 const (
-	ZonesAlwaysUseHTTPSEditableTrue  ZonesAlwaysUseHTTPSEditable = true
-	ZonesAlwaysUseHTTPSEditableFalse ZonesAlwaysUseHTTPSEditable = false
+	ZoneSettingAlwaysUseHTTPSEditableTrue  ZoneSettingAlwaysUseHTTPSEditable = true
+	ZoneSettingAlwaysUseHTTPSEditableFalse ZoneSettingAlwaysUseHTTPSEditable = false
 )
 
-func (r ZonesAlwaysUseHTTPSEditable) IsKnown() bool {
+func (r ZoneSettingAlwaysUseHTTPSEditable) IsKnown() bool {
 	switch r {
-	case ZonesAlwaysUseHTTPSEditableTrue, ZonesAlwaysUseHTTPSEditableFalse:
+	case ZoneSettingAlwaysUseHTTPSEditableTrue, ZoneSettingAlwaysUseHTTPSEditableFalse:
 		return true
 	}
 	return false
@@ -152,18 +152,18 @@ func (r ZonesAlwaysUseHTTPSEditable) IsKnown() bool {
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-type ZonesAlwaysUseHTTPSParam struct {
+type ZoneSettingAlwaysUseHTTPSParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesAlwaysUseHTTPSID] `json:"id,required"`
+	ID param.Field[ZoneSettingAlwaysUseHTTPSID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesAlwaysUseHTTPSValue] `json:"value,required"`
+	Value param.Field[ZoneSettingAlwaysUseHTTPSValue] `json:"value,required"`
 }
 
-func (r ZonesAlwaysUseHTTPSParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingAlwaysUseHTTPSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonesAlwaysUseHTTPSParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingAlwaysUseHTTPSParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingAlwaysUseHTTPSEditParams struct {
 	// Identifier
@@ -200,7 +200,7 @@ type SettingAlwaysUseHTTPSEditResponseEnvelope struct {
 	// Reply to all requests for URLs that use "http" with a 301 redirect to the
 	// equivalent "https" URL. If you only want to redirect for a subset of requests,
 	// consider creating an "Always use HTTPS" page rule.
-	Result ZonesAlwaysUseHTTPS                           `json:"result"`
+	Result ZoneSettingAlwaysUseHTTPS                     `json:"result"`
 	JSON   settingAlwaysUseHTTPSEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -282,7 +282,7 @@ type SettingAlwaysUseHTTPSGetResponseEnvelope struct {
 	// Reply to all requests for URLs that use "http" with a 301 redirect to the
 	// equivalent "https" URL. If you only want to redirect for a subset of requests,
 	// consider creating an "Always use HTTPS" page rule.
-	Result ZonesAlwaysUseHTTPS                          `json:"result"`
+	Result ZoneSettingAlwaysUseHTTPS                    `json:"result"`
 	JSON   settingAlwaysUseHTTPSGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -34,7 +34,7 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 }
 
 // Creates one or more filters.
-func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]LegacyJhsFilter, err error) {
+func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters", zoneIdentifier)
@@ -47,7 +47,7 @@ func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body Fil
 }
 
 // Updates an existing filter.
-func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *LegacyJhsFilter, err error) {
+func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -61,7 +61,7 @@ func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id st
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
-func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[LegacyJhsFilter], err error) {
+func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallFilter], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,12 +80,12 @@ func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query F
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
-func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[LegacyJhsFilter] {
+func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallFilter] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing filter.
-func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LegacyJhsFilter, err error) {
+func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -98,7 +98,7 @@ func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a filter.
-func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LegacyJhsFilter, err error) {
+func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -110,7 +110,7 @@ func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id strin
 	return
 }
 
-type LegacyJhsFilter struct {
+type FirewallFilter struct {
 	// The unique identifier of the filter.
 	ID string `json:"id"`
 	// An informative summary of the filter.
@@ -121,12 +121,12 @@ type LegacyJhsFilter struct {
 	// When true, indicates that the filter is currently paused.
 	Paused bool `json:"paused"`
 	// A short reference tag. Allows you to select related filters.
-	Ref  string              `json:"ref"`
-	JSON legacyJhsFilterJSON `json:"-"`
+	Ref  string             `json:"ref"`
+	JSON firewallFilterJSON `json:"-"`
 }
 
-// legacyJhsFilterJSON contains the JSON metadata for the struct [LegacyJhsFilter]
-type legacyJhsFilterJSON struct {
+// firewallFilterJSON contains the JSON metadata for the struct [FirewallFilter]
+type firewallFilterJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Expression  apijson.Field
@@ -136,15 +136,15 @@ type legacyJhsFilterJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LegacyJhsFilter) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r legacyJhsFilterJSON) RawJSON() string {
+func (r firewallFilterJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LegacyJhsFilter) implementsFirewallLegacyJhsFilterRuleFilter() {}
+func (r FirewallFilter) implementsFirewallFirewallFilterRuleFilter() {}
 
 type FilterNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
@@ -157,7 +157,7 @@ func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 type FilterNewResponseEnvelope struct {
 	Errors   []FilterNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LegacyJhsFilter                   `json:"result,required,nullable"`
+	Result   []FirewallFilter                    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    FilterNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo FilterNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -287,7 +287,7 @@ func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
 type FilterUpdateResponseEnvelope struct {
 	Errors   []FilterUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   LegacyJhsFilter                        `json:"result,required,nullable"`
+	Result   FirewallFilter                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
@@ -399,7 +399,7 @@ func (r FilterListParams) URLQuery() (v url.Values) {
 type FilterDeleteResponseEnvelope struct {
 	Errors   []FilterDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   LegacyJhsFilter                        `json:"result,required,nullable"`
+	Result   FirewallFilter                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterDeleteResponseEnvelopeJSON    `json:"-"`
@@ -488,7 +488,7 @@ func (r FilterDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type FilterGetResponseEnvelope struct {
 	Errors   []FilterGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   LegacyJhsFilter                     `json:"result,required,nullable"`
+	Result   FirewallFilter                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterGetResponseEnvelopeJSON    `json:"-"`

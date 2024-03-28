@@ -53,7 +53,7 @@ type V2ListResponse struct {
 	// Continuation token to fetch next page. Passed as a query param when requesting
 	// List V2 api endpoint.
 	ContinuationToken string             `json:"continuation_token,nullable"`
-	Images            []ImagesImage      `json:"images"`
+	Images            []Image            `json:"images"`
 	JSON              v2ListResponseJSON `json:"-"`
 }
 

@@ -48,7 +48,7 @@ func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audio
 }
 
 // Adds an additional audio track to a video using the provided audio track URL.
-func (r *AudioTrackService) Copy(ctx context.Context, identifier string, params AudioTrackCopyParams, opts ...option.RequestOption) (res *StreamAdditionalAudio, err error) {
+func (r *AudioTrackService) Copy(ctx context.Context, identifier string, params AudioTrackCopyParams, opts ...option.RequestOption) (res *StreamAudio, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AudioTrackCopyResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/copy", params.AccountID, identifier)
@@ -63,7 +63,7 @@ func (r *AudioTrackService) Copy(ctx context.Context, identifier string, params 
 // Edits additional audio tracks on a video. Editing the default status of an audio
 // track to `true` will mark all other audio tracks on the video default status to
 // `false`.
-func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioIdentifier string, params AudioTrackEditParams, opts ...option.RequestOption) (res *StreamAdditionalAudio, err error) {
+func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioIdentifier string, params AudioTrackEditParams, opts ...option.RequestOption) (res *StreamAudio, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AudioTrackEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", params.AccountID, identifier, audioIdentifier)
@@ -77,7 +77,7 @@ func (r *AudioTrackService) Edit(ctx context.Context, identifier string, audioId
 
 // Lists additional audio tracks on a video. Note this API will not return
 // information for audio attached to the video upload.
-func (r *AudioTrackService) Get(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) (res *[]StreamAdditionalAudio, err error) {
+func (r *AudioTrackService) Get(ctx context.Context, identifier string, query AudioTrackGetParams, opts ...option.RequestOption) (res *[]StreamAudio, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AudioTrackGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio", query.AccountID, identifier)
@@ -89,22 +89,21 @@ func (r *AudioTrackService) Get(ctx context.Context, identifier string, query Au
 	return
 }
 
-type StreamAdditionalAudio struct {
+type StreamAudio struct {
 	// Denotes whether the audio track will be played by default in a player.
 	Default bool `json:"default"`
 	// A string to uniquely identify the track amongst other audio track labels for the
 	// specified video.
 	Label string `json:"label"`
 	// Specifies the processing status of the video.
-	Status StreamAdditionalAudioStatus `json:"status"`
+	Status StreamAudioStatus `json:"status"`
 	// A Cloudflare-generated unique identifier for a media item.
-	Uid  string                    `json:"uid"`
-	JSON streamAdditionalAudioJSON `json:"-"`
+	Uid  string          `json:"uid"`
+	JSON streamAudioJSON `json:"-"`
 }
 
-// streamAdditionalAudioJSON contains the JSON metadata for the struct
-// [StreamAdditionalAudio]
-type streamAdditionalAudioJSON struct {
+// streamAudioJSON contains the JSON metadata for the struct [StreamAudio]
+type streamAudioJSON struct {
 	Default     apijson.Field
 	Label       apijson.Field
 	Status      apijson.Field
@@ -113,26 +112,26 @@ type streamAdditionalAudioJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamAdditionalAudio) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamAudio) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamAdditionalAudioJSON) RawJSON() string {
+func (r streamAudioJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies the processing status of the video.
-type StreamAdditionalAudioStatus string
+type StreamAudioStatus string
 
 const (
-	StreamAdditionalAudioStatusQueued StreamAdditionalAudioStatus = "queued"
-	StreamAdditionalAudioStatusReady  StreamAdditionalAudioStatus = "ready"
-	StreamAdditionalAudioStatusError  StreamAdditionalAudioStatus = "error"
+	StreamAudioStatusQueued StreamAudioStatus = "queued"
+	StreamAudioStatusReady  StreamAudioStatus = "ready"
+	StreamAudioStatusError  StreamAudioStatus = "error"
 )
 
-func (r StreamAdditionalAudioStatus) IsKnown() bool {
+func (r StreamAudioStatus) IsKnown() bool {
 	switch r {
-	case StreamAdditionalAudioStatusQueued, StreamAdditionalAudioStatusReady, StreamAdditionalAudioStatusError:
+	case StreamAudioStatusQueued, StreamAudioStatusReady, StreamAudioStatusError:
 		return true
 	}
 	return false
@@ -268,7 +267,7 @@ func (r AudioTrackCopyParams) MarshalJSON() (data []byte, err error) {
 type AudioTrackCopyResponseEnvelope struct {
 	Errors   []AudioTrackCopyResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AudioTrackCopyResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamAdditionalAudio                    `json:"result,required"`
+	Result   StreamAudio                              `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackCopyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    audioTrackCopyResponseEnvelopeJSON    `json:"-"`
@@ -371,7 +370,7 @@ func (r AudioTrackEditParams) MarshalJSON() (data []byte, err error) {
 type AudioTrackEditResponseEnvelope struct {
 	Errors   []AudioTrackEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AudioTrackEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamAdditionalAudio                    `json:"result,required"`
+	Result   StreamAudio                              `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    audioTrackEditResponseEnvelopeJSON    `json:"-"`
@@ -465,7 +464,7 @@ type AudioTrackGetParams struct {
 type AudioTrackGetResponseEnvelope struct {
 	Errors   []AudioTrackGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AudioTrackGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamAdditionalAudio                 `json:"result,required"`
+	Result   []StreamAudio                           `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    audioTrackGetResponseEnvelopeJSON    `json:"-"`
