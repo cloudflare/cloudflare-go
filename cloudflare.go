@@ -447,13 +447,15 @@ type ResultInfoCursors struct {
 
 // ResultInfo contains metadata about the Response.
 type ResultInfo struct {
-	Page       int               `json:"page" url:"page,omitempty"`
-	PerPage    int               `json:"per_page" url:"per_page,omitempty"`
-	TotalPages int               `json:"total_pages" url:"-"`
-	Count      int               `json:"count" url:"-"`
-	Total      int               `json:"total_count" url:"-"`
-	Cursor     string            `json:"cursor" url:"cursor,omitempty"`
-	Cursors    ResultInfoCursors `json:"cursors" url:"cursors,omitempty"`
+	Page        int               `json:"page" url:"page,omitempty"`
+	PerPage     int               `json:"per_page" url:"per_page,omitempty"`
+	TotalPages  int               `json:"total_pages" url:"-"`
+	Count       int               `json:"count" url:"-"`
+	Total       int               `json:"total_count" url:"-"`
+	Cursor      string            `json:"cursor" url:"cursor,omitempty"`
+	Cursors     ResultInfoCursors `json:"cursors" url:"cursors,omitempty"`
+	Delimited   string            `json:"delimited" url:"delimited,omitempty"`
+	IsTruncated bool              `json:"is_truncated" url:"is_truncated,omitempty"`
 }
 
 // RawResponse keeps the result as JSON form.
