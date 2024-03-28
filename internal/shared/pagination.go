@@ -517,15 +517,15 @@ func (r *CursorLimitPaginationAutoPager[T]) Index() int {
 }
 
 type SinglePage[T any] struct {
-	Items []T            `json:"-,inline"`
-	JSON  singlePageJSON `json:"-"`
-	cfg   *requestconfig.RequestConfig
-	res   *http.Response
+	Result []T            `json:"-,inline"`
+	JSON   singlePageJSON `json:"-"`
+	cfg    *requestconfig.RequestConfig
+	res    *http.Response
 }
 
 // singlePageJSON contains the JSON metadata for the struct [SinglePage[T]]
 type singlePageJSON struct {
-	Items       apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -580,17 +580,17 @@ func NewSinglePageAutoPager[T any](page *SinglePage[T], err error) *SinglePageAu
 }
 
 func (r *SinglePageAutoPager[T]) Next() bool {
-	if r.page == nil || len(r.page.Items) == 0 {
+	if r.page == nil || len(r.page.Result) == 0 {
 		return false
 	}
-	if r.idx >= len(r.page.Items) {
+	if r.idx >= len(r.page.Result) {
 		r.idx = 0
 		r.page, r.err = r.page.GetNextPage()
-		if r.err != nil || r.page == nil || len(r.page.Items) == 0 {
+		if r.err != nil || r.page == nil || len(r.page.Result) == 0 {
 			return false
 		}
 	}
-	r.cur = r.page.Items[r.idx]
+	r.cur = r.page.Result[r.idx]
 	r.run += 1
 	r.idx += 1
 	return true
