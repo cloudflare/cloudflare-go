@@ -244,7 +244,7 @@ type AttackLayer7SummaryGetResponseSummary0 struct {
 	APIShield          string                                     `json:"API_SHIELD,required"`
 	BotManagement      string                                     `json:"BOT_MANAGEMENT,required"`
 	DataLossPrevention string                                     `json:"DATA_LOSS_PREVENTION,required"`
-	DDOS               string                                     `json:"DDOS,required"`
+	DDoS               string                                     `json:"DDOS,required"`
 	IPReputation       string                                     `json:"IP_REPUTATION,required"`
 	WAF                string                                     `json:"WAF,required"`
 	JSON               attackLayer7SummaryGetResponseSummary0JSON `json:"-"`
@@ -257,7 +257,7 @@ type attackLayer7SummaryGetResponseSummary0JSON struct {
 	APIShield          apijson.Field
 	BotManagement      apijson.Field
 	DataLossPrevention apijson.Field
-	DDOS               apijson.Field
+	DDoS               apijson.Field
 	IPReputation       apijson.Field
 	WAF                apijson.Field
 	raw                string
@@ -1032,7 +1032,7 @@ func (r attackLayer7SummaryMitigationProductResponseMetaConfidenceInfoAnnotation
 }
 
 type AttackLayer7SummaryMitigationProductResponseSummary0 struct {
-	DDOS string                                                   `json:"DDOS,required"`
+	DDoS string                                                   `json:"DDOS,required"`
 	WAF  string                                                   `json:"WAF,required"`
 	JSON attackLayer7SummaryMitigationProductResponseSummary0JSON `json:"-"`
 }
@@ -1040,7 +1040,7 @@ type AttackLayer7SummaryMitigationProductResponseSummary0 struct {
 // attackLayer7SummaryMitigationProductResponseSummary0JSON contains the JSON
 // metadata for the struct [AttackLayer7SummaryMitigationProductResponseSummary0]
 type attackLayer7SummaryMitigationProductResponseSummary0JSON struct {
-	DDOS        apijson.Field
+	DDoS        apijson.Field
 	WAF         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1277,7 +1277,7 @@ func (r AttackLayer7SummaryHTTPMethodParamsIPVersion) IsKnown() bool {
 type AttackLayer7SummaryHTTPMethodParamsMitigationProduct string
 
 const (
-	AttackLayer7SummaryHTTPMethodParamsMitigationProductDDOS               AttackLayer7SummaryHTTPMethodParamsMitigationProduct = "DDOS"
+	AttackLayer7SummaryHTTPMethodParamsMitigationProductDDoS               AttackLayer7SummaryHTTPMethodParamsMitigationProduct = "DDOS"
 	AttackLayer7SummaryHTTPMethodParamsMitigationProductWAF                AttackLayer7SummaryHTTPMethodParamsMitigationProduct = "WAF"
 	AttackLayer7SummaryHTTPMethodParamsMitigationProductBotManagement      AttackLayer7SummaryHTTPMethodParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7SummaryHTTPMethodParamsMitigationProductAccessRules        AttackLayer7SummaryHTTPMethodParamsMitigationProduct = "ACCESS_RULES"
@@ -1288,7 +1288,7 @@ const (
 
 func (r AttackLayer7SummaryHTTPMethodParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7SummaryHTTPMethodParamsMitigationProductDDOS, AttackLayer7SummaryHTTPMethodParamsMitigationProductWAF, AttackLayer7SummaryHTTPMethodParamsMitigationProductBotManagement, AttackLayer7SummaryHTTPMethodParamsMitigationProductAccessRules, AttackLayer7SummaryHTTPMethodParamsMitigationProductIPReputation, AttackLayer7SummaryHTTPMethodParamsMitigationProductAPIShield, AttackLayer7SummaryHTTPMethodParamsMitigationProductDataLossPrevention:
+	case AttackLayer7SummaryHTTPMethodParamsMitigationProductDDoS, AttackLayer7SummaryHTTPMethodParamsMitigationProductWAF, AttackLayer7SummaryHTTPMethodParamsMitigationProductBotManagement, AttackLayer7SummaryHTTPMethodParamsMitigationProductAccessRules, AttackLayer7SummaryHTTPMethodParamsMitigationProductIPReputation, AttackLayer7SummaryHTTPMethodParamsMitigationProductAPIShield, AttackLayer7SummaryHTTPMethodParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -1480,7 +1480,7 @@ func (r AttackLayer7SummaryHTTPVersionParamsIPVersion) IsKnown() bool {
 type AttackLayer7SummaryHTTPVersionParamsMitigationProduct string
 
 const (
-	AttackLayer7SummaryHTTPVersionParamsMitigationProductDDOS               AttackLayer7SummaryHTTPVersionParamsMitigationProduct = "DDOS"
+	AttackLayer7SummaryHTTPVersionParamsMitigationProductDDoS               AttackLayer7SummaryHTTPVersionParamsMitigationProduct = "DDOS"
 	AttackLayer7SummaryHTTPVersionParamsMitigationProductWAF                AttackLayer7SummaryHTTPVersionParamsMitigationProduct = "WAF"
 	AttackLayer7SummaryHTTPVersionParamsMitigationProductBotManagement      AttackLayer7SummaryHTTPVersionParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7SummaryHTTPVersionParamsMitigationProductAccessRules        AttackLayer7SummaryHTTPVersionParamsMitigationProduct = "ACCESS_RULES"
@@ -1491,7 +1491,7 @@ const (
 
 func (r AttackLayer7SummaryHTTPVersionParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7SummaryHTTPVersionParamsMitigationProductDDOS, AttackLayer7SummaryHTTPVersionParamsMitigationProductWAF, AttackLayer7SummaryHTTPVersionParamsMitigationProductBotManagement, AttackLayer7SummaryHTTPVersionParamsMitigationProductAccessRules, AttackLayer7SummaryHTTPVersionParamsMitigationProductIPReputation, AttackLayer7SummaryHTTPVersionParamsMitigationProductAPIShield, AttackLayer7SummaryHTTPVersionParamsMitigationProductDataLossPrevention:
+	case AttackLayer7SummaryHTTPVersionParamsMitigationProductDDoS, AttackLayer7SummaryHTTPVersionParamsMitigationProductWAF, AttackLayer7SummaryHTTPVersionParamsMitigationProductBotManagement, AttackLayer7SummaryHTTPVersionParamsMitigationProductAccessRules, AttackLayer7SummaryHTTPVersionParamsMitigationProductIPReputation, AttackLayer7SummaryHTTPVersionParamsMitigationProductAPIShield, AttackLayer7SummaryHTTPVersionParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -1684,7 +1684,7 @@ func (r AttackLayer7SummaryIPVersionParamsHTTPVersion) IsKnown() bool {
 type AttackLayer7SummaryIPVersionParamsMitigationProduct string
 
 const (
-	AttackLayer7SummaryIPVersionParamsMitigationProductDDOS               AttackLayer7SummaryIPVersionParamsMitigationProduct = "DDOS"
+	AttackLayer7SummaryIPVersionParamsMitigationProductDDoS               AttackLayer7SummaryIPVersionParamsMitigationProduct = "DDOS"
 	AttackLayer7SummaryIPVersionParamsMitigationProductWAF                AttackLayer7SummaryIPVersionParamsMitigationProduct = "WAF"
 	AttackLayer7SummaryIPVersionParamsMitigationProductBotManagement      AttackLayer7SummaryIPVersionParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7SummaryIPVersionParamsMitigationProductAccessRules        AttackLayer7SummaryIPVersionParamsMitigationProduct = "ACCESS_RULES"
@@ -1695,7 +1695,7 @@ const (
 
 func (r AttackLayer7SummaryIPVersionParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7SummaryIPVersionParamsMitigationProductDDOS, AttackLayer7SummaryIPVersionParamsMitigationProductWAF, AttackLayer7SummaryIPVersionParamsMitigationProductBotManagement, AttackLayer7SummaryIPVersionParamsMitigationProductAccessRules, AttackLayer7SummaryIPVersionParamsMitigationProductIPReputation, AttackLayer7SummaryIPVersionParamsMitigationProductAPIShield, AttackLayer7SummaryIPVersionParamsMitigationProductDataLossPrevention:
+	case AttackLayer7SummaryIPVersionParamsMitigationProductDDoS, AttackLayer7SummaryIPVersionParamsMitigationProductWAF, AttackLayer7SummaryIPVersionParamsMitigationProductBotManagement, AttackLayer7SummaryIPVersionParamsMitigationProductAccessRules, AttackLayer7SummaryIPVersionParamsMitigationProductIPReputation, AttackLayer7SummaryIPVersionParamsMitigationProductAPIShield, AttackLayer7SummaryIPVersionParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -1905,7 +1905,7 @@ func (r AttackLayer7SummaryManagedRulesParamsIPVersion) IsKnown() bool {
 type AttackLayer7SummaryManagedRulesParamsMitigationProduct string
 
 const (
-	AttackLayer7SummaryManagedRulesParamsMitigationProductDDOS               AttackLayer7SummaryManagedRulesParamsMitigationProduct = "DDOS"
+	AttackLayer7SummaryManagedRulesParamsMitigationProductDDoS               AttackLayer7SummaryManagedRulesParamsMitigationProduct = "DDOS"
 	AttackLayer7SummaryManagedRulesParamsMitigationProductWAF                AttackLayer7SummaryManagedRulesParamsMitigationProduct = "WAF"
 	AttackLayer7SummaryManagedRulesParamsMitigationProductBotManagement      AttackLayer7SummaryManagedRulesParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7SummaryManagedRulesParamsMitigationProductAccessRules        AttackLayer7SummaryManagedRulesParamsMitigationProduct = "ACCESS_RULES"
@@ -1916,7 +1916,7 @@ const (
 
 func (r AttackLayer7SummaryManagedRulesParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7SummaryManagedRulesParamsMitigationProductDDOS, AttackLayer7SummaryManagedRulesParamsMitigationProductWAF, AttackLayer7SummaryManagedRulesParamsMitigationProductBotManagement, AttackLayer7SummaryManagedRulesParamsMitigationProductAccessRules, AttackLayer7SummaryManagedRulesParamsMitigationProductIPReputation, AttackLayer7SummaryManagedRulesParamsMitigationProductAPIShield, AttackLayer7SummaryManagedRulesParamsMitigationProductDataLossPrevention:
+	case AttackLayer7SummaryManagedRulesParamsMitigationProductDDoS, AttackLayer7SummaryManagedRulesParamsMitigationProductWAF, AttackLayer7SummaryManagedRulesParamsMitigationProductBotManagement, AttackLayer7SummaryManagedRulesParamsMitigationProductAccessRules, AttackLayer7SummaryManagedRulesParamsMitigationProductIPReputation, AttackLayer7SummaryManagedRulesParamsMitigationProductAPIShield, AttackLayer7SummaryManagedRulesParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false

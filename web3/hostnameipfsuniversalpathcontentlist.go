@@ -35,7 +35,7 @@ func NewHostnameIPFSUniversalPathContentListService(opts ...option.RequestOption
 }
 
 // Update IPFS Universal Path Gateway Content List
-func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListUpdateParams, opts ...option.RequestOption) (res *DwebConfigContentListDetails, err error) {
+func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListUpdateParams, opts ...option.RequestOption) (res *DistributedWebConfigContentList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list", zoneIdentifier, identifier)
@@ -48,7 +48,7 @@ func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context
 }
 
 // IPFS Universal Path Gateway Content List Details
-func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *DwebConfigContentListDetails, err error) {
+func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *DistributedWebConfigContentList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list", zoneIdentifier, identifier)
@@ -60,38 +60,38 @@ func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, z
 	return
 }
 
-type DwebConfigContentListDetails struct {
+type DistributedWebConfigContentList struct {
 	// Behavior of the content list.
-	Action DwebConfigContentListDetailsAction `json:"action"`
-	JSON   dwebConfigContentListDetailsJSON   `json:"-"`
+	Action DistributedWebConfigContentListAction `json:"action"`
+	JSON   distributedWebConfigContentListJSON   `json:"-"`
 }
 
-// dwebConfigContentListDetailsJSON contains the JSON metadata for the struct
-// [DwebConfigContentListDetails]
-type dwebConfigContentListDetailsJSON struct {
+// distributedWebConfigContentListJSON contains the JSON metadata for the struct
+// [DistributedWebConfigContentList]
+type distributedWebConfigContentListJSON struct {
 	Action      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DwebConfigContentListDetails) UnmarshalJSON(data []byte) (err error) {
+func (r *DistributedWebConfigContentList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dwebConfigContentListDetailsJSON) RawJSON() string {
+func (r distributedWebConfigContentListJSON) RawJSON() string {
 	return r.raw
 }
 
 // Behavior of the content list.
-type DwebConfigContentListDetailsAction string
+type DistributedWebConfigContentListAction string
 
 const (
-	DwebConfigContentListDetailsActionBlock DwebConfigContentListDetailsAction = "block"
+	DistributedWebConfigContentListActionBlock DistributedWebConfigContentListAction = "block"
 )
 
-func (r DwebConfigContentListDetailsAction) IsKnown() bool {
+func (r DistributedWebConfigContentListAction) IsKnown() bool {
 	switch r {
-	case DwebConfigContentListDetailsActionBlock:
+	case DistributedWebConfigContentListActionBlock:
 		return true
 	}
 	return false
@@ -101,7 +101,7 @@ type HostnameIPFSUniversalPathContentListUpdateParams struct {
 	// Behavior of the content list.
 	Action param.Field[HostnameIPFSUniversalPathContentListUpdateParamsAction] `json:"action,required"`
 	// Content list entries.
-	Entries param.Field[[]DwebConfigContentListEntryParam] `json:"entries,required"`
+	Entries param.Field[[]DistributedWebConfigContentListEntryParam] `json:"entries,required"`
 }
 
 func (r HostnameIPFSUniversalPathContentListUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -126,7 +126,7 @@ func (r HostnameIPFSUniversalPathContentListUpdateParamsAction) IsKnown() bool {
 type HostnameIPFSUniversalPathContentListUpdateResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DwebConfigContentListDetails                                         `json:"result,required"`
+	Result   DistributedWebConfigContentList                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON    `json:"-"`
@@ -218,7 +218,7 @@ func (r HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess) IsKno
 type HostnameIPFSUniversalPathContentListGetResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DwebConfigContentListDetails                                      `json:"result,required"`
+	Result   DistributedWebConfigContentList                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON    `json:"-"`

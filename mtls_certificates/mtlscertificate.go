@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -35,7 +36,7 @@ func NewMTLSCertificateService(opts ...option.RequestOption) (r *MTLSCertificate
 }
 
 // Upload a certificate that you want to use with mTLS-enabled Cloudflare services.
-func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesCertificateObjectPost, err error) {
+func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateUpdate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", params.AccountID)
@@ -48,21 +49,31 @@ func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificate
 }
 
 // Lists all mTLS certificates.
-func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) (res *[]TLSCertificatesAndHostnamesComponentsSchemasCertificateObject, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MTLSCertificateListResponseEnvelope
+func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MTLSCertificate], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all mTLS certificates.
+func (r *MTLSCertificateService) ListAutoPaging(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MTLSCertificate] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes the mTLS certificate unless the certificate is in use by one or more
 // Cloudflare services.
-func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesComponentsSchemasCertificateObject, err error) {
+func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", body.AccountID, mtlsCertificateID)
@@ -75,7 +86,7 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID s
 }
 
 // Fetches a single mTLS certificate.
-func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesComponentsSchemasCertificateObject, err error) {
+func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *MTLSCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", query.AccountID, mtlsCertificateID)
@@ -87,7 +98,52 @@ func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID stri
 	return
 }
 
-type TLSCertificatesAndHostnamesCertificateObjectPost struct {
+type MTLSCertificate struct {
+	// Identifier
+	ID string `json:"id"`
+	// Indicates whether the certificate is a CA or leaf certificate.
+	CA bool `json:"ca"`
+	// The uploaded root CA certificate.
+	Certificates string `json:"certificates"`
+	// When the certificate expires.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The certificate authority that issued the certificate.
+	Issuer string `json:"issuer"`
+	// Optional unique name for the certificate. Only used for human readability.
+	Name string `json:"name"`
+	// The certificate serial number.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the certificate.
+	Signature string `json:"signature"`
+	// This is the time the certificate was uploaded.
+	UploadedOn time.Time           `json:"uploaded_on" format:"date-time"`
+	JSON       mtlsCertificateJSON `json:"-"`
+}
+
+// mtlsCertificateJSON contains the JSON metadata for the struct [MTLSCertificate]
+type mtlsCertificateJSON struct {
+	ID           apijson.Field
+	CA           apijson.Field
+	Certificates apijson.Field
+	ExpiresOn    apijson.Field
+	Issuer       apijson.Field
+	Name         apijson.Field
+	SerialNumber apijson.Field
+	Signature    apijson.Field
+	UploadedOn   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *MTLSCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+type MTLSCertificateUpdate struct {
 	// Identifier
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
@@ -107,13 +163,13 @@ type TLSCertificatesAndHostnamesCertificateObjectPost struct {
 	// This is the time the certificate was updated.
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This is the time the certificate was uploaded.
-	UploadedOn time.Time                                            `json:"uploaded_on" format:"date-time"`
-	JSON       tlsCertificatesAndHostnamesCertificateObjectPostJSON `json:"-"`
+	UploadedOn time.Time                 `json:"uploaded_on" format:"date-time"`
+	JSON       mtlsCertificateUpdateJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesCertificateObjectPostJSON contains the JSON metadata
-// for the struct [TLSCertificatesAndHostnamesCertificateObjectPost]
-type tlsCertificatesAndHostnamesCertificateObjectPostJSON struct {
+// mtlsCertificateUpdateJSON contains the JSON metadata for the struct
+// [MTLSCertificateUpdate]
+type mtlsCertificateUpdateJSON struct {
 	ID           apijson.Field
 	CA           apijson.Field
 	Certificates apijson.Field
@@ -128,58 +184,11 @@ type tlsCertificatesAndHostnamesCertificateObjectPostJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesCertificateObjectPost) UnmarshalJSON(data []byte) (err error) {
+func (r *MTLSCertificateUpdate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesCertificateObjectPostJSON) RawJSON() string {
-	return r.raw
-}
-
-type TLSCertificatesAndHostnamesComponentsSchemasCertificateObject struct {
-	// Identifier
-	ID string `json:"id"`
-	// Indicates whether the certificate is a CA or leaf certificate.
-	CA bool `json:"ca"`
-	// The uploaded root CA certificate.
-	Certificates string `json:"certificates"`
-	// When the certificate expires.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer"`
-	// Optional unique name for the certificate. Only used for human readability.
-	Name string `json:"name"`
-	// The certificate serial number.
-	SerialNumber string `json:"serial_number"`
-	// The type of hash used for the certificate.
-	Signature string `json:"signature"`
-	// This is the time the certificate was uploaded.
-	UploadedOn time.Time                                                         `json:"uploaded_on" format:"date-time"`
-	JSON       tlsCertificatesAndHostnamesComponentsSchemasCertificateObjectJSON `json:"-"`
-}
-
-// tlsCertificatesAndHostnamesComponentsSchemasCertificateObjectJSON contains the
-// JSON metadata for the struct
-// [TLSCertificatesAndHostnamesComponentsSchemasCertificateObject]
-type tlsCertificatesAndHostnamesComponentsSchemasCertificateObjectJSON struct {
-	ID           apijson.Field
-	CA           apijson.Field
-	Certificates apijson.Field
-	ExpiresOn    apijson.Field
-	Issuer       apijson.Field
-	Name         apijson.Field
-	SerialNumber apijson.Field
-	Signature    apijson.Field
-	UploadedOn   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *TLSCertificatesAndHostnamesComponentsSchemasCertificateObject) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tlsCertificatesAndHostnamesComponentsSchemasCertificateObjectJSON) RawJSON() string {
+func (r mtlsCertificateUpdateJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -201,9 +210,9 @@ func (r MTLSCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MTLSCertificateNewResponseEnvelope struct {
-	Errors   []MTLSCertificateNewResponseEnvelopeErrors       `json:"errors,required"`
-	Messages []MTLSCertificateNewResponseEnvelopeMessages     `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesCertificateObjectPost `json:"result,required"`
+	Errors   []MTLSCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MTLSCertificateNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   MTLSCertificateUpdate                        `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -294,139 +303,15 @@ type MTLSCertificateListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type MTLSCertificateListResponseEnvelope struct {
-	Errors   []MTLSCertificateListResponseEnvelopeErrors                     `json:"errors,required"`
-	Messages []MTLSCertificateListResponseEnvelopeMessages                   `json:"messages,required"`
-	Result   []TLSCertificatesAndHostnamesComponentsSchemasCertificateObject `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    MTLSCertificateListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo MTLSCertificateListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       mtlsCertificateListResponseEnvelopeJSON       `json:"-"`
-}
-
-// mtlsCertificateListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [MTLSCertificateListResponseEnvelope]
-type mtlsCertificateListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MTLSCertificateListResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    mtlsCertificateListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// mtlsCertificateListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MTLSCertificateListResponseEnvelopeErrors]
-type mtlsCertificateListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MTLSCertificateListResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    mtlsCertificateListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// mtlsCertificateListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MTLSCertificateListResponseEnvelopeMessages]
-type mtlsCertificateListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type MTLSCertificateListResponseEnvelopeSuccess bool
-
-const (
-	MTLSCertificateListResponseEnvelopeSuccessTrue MTLSCertificateListResponseEnvelopeSuccess = true
-)
-
-func (r MTLSCertificateListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case MTLSCertificateListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type MTLSCertificateListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	TotalPages float64                                           `json:"total_pages"`
-	JSON       mtlsCertificateListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// mtlsCertificateListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [MTLSCertificateListResponseEnvelopeResultInfo]
-type mtlsCertificateListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MTLSCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mtlsCertificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type MTLSCertificateDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type MTLSCertificateDeleteResponseEnvelope struct {
-	Errors   []MTLSCertificateDeleteResponseEnvelopeErrors                 `json:"errors,required"`
-	Messages []MTLSCertificateDeleteResponseEnvelopeMessages               `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesComponentsSchemasCertificateObject `json:"result,required"`
+	Errors   []MTLSCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MTLSCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   MTLSCertificate                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -518,9 +403,9 @@ type MTLSCertificateGetParams struct {
 }
 
 type MTLSCertificateGetResponseEnvelope struct {
-	Errors   []MTLSCertificateGetResponseEnvelopeErrors                    `json:"errors,required"`
-	Messages []MTLSCertificateGetResponseEnvelopeMessages                  `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesComponentsSchemasCertificateObject `json:"result,required"`
+	Errors   []MTLSCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MTLSCertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   MTLSCertificate                              `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateGetResponseEnvelopeJSON    `json:"-"`

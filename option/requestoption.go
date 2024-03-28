@@ -3,7 +3,9 @@
 package option
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -138,8 +140,17 @@ func WithQueryDel(key string) RequestOption {
 // [sjson format]: https://github.com/tidwall/sjson
 func WithJSONSet(key string, value interface{}) RequestOption {
 	return func(r *requestconfig.RequestConfig) (err error) {
-		r.Buffer, err = sjson.SetBytes(r.Buffer, key, value)
-		return err
+		if buffer, ok := r.Body.(*bytes.Buffer); ok {
+			b := buffer.Bytes()
+			b, err = sjson.SetBytes(b, key, value)
+			if err != nil {
+				return err
+			}
+			r.Body = bytes.NewBuffer(b)
+			return nil
+		}
+
+		return fmt.Errorf("cannot use WithJSONSet on a body that is not serialized as *bytes.Buffer")
 	}
 }
 
@@ -149,8 +160,17 @@ func WithJSONSet(key string, value interface{}) RequestOption {
 // [sjson format]: https://github.com/tidwall/sjson
 func WithJSONDel(key string) RequestOption {
 	return func(r *requestconfig.RequestConfig) (err error) {
-		r.Buffer, err = sjson.DeleteBytes(r.Buffer, key)
-		return err
+		if buffer, ok := r.Body.(*bytes.Buffer); ok {
+			b := buffer.Bytes()
+			b, err = sjson.DeleteBytes(b, key)
+			if err != nil {
+				return err
+			}
+			r.Body = bytes.NewBuffer(b)
+			return nil
+		}
+
+		return fmt.Errorf("cannot use WithJSONDel on a body that is not serialized as *bytes.Buffer")
 	}
 }
 
@@ -172,10 +192,19 @@ func WithResponseInto(dst **http.Response) RequestOption {
 }
 
 // WithRequestBody returns a RequestOption that provides a custom serialized body with content type.
-func WithRequestBody(contentType string, body []byte) RequestOption {
+func WithRequestBody(contentType string, body any) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
-		r.Buffer = body
-		return r.Apply(WithHeader("Content-Type", contentType))
+		if reader, ok := body.(io.Reader); ok {
+			r.Body = reader
+			return r.Apply(WithHeader("Content-Type", contentType))
+		}
+
+		if b, ok := body.([]byte); ok {
+			r.Body = bytes.NewBuffer(b)
+			return r.Apply(WithHeader("Content-Type", contentType))
+		}
+
+		return fmt.Errorf("body is must either be a byte slice or implement io.Reader")
 	}
 }
 

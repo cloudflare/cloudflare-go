@@ -33,7 +33,7 @@ func NewSettingMinTLSVersionService(opts ...option.RequestOption) (r *SettingMin
 }
 
 // Changes Minimum TLS Version setting.
-func (r *SettingMinTLSVersionService) Edit(ctx context.Context, params SettingMinTLSVersionEditParams, opts ...option.RequestOption) (res *ZonesMinTLSVersion, err error) {
+func (r *SettingMinTLSVersionService) Edit(ctx context.Context, params SettingMinTLSVersionEditParams, opts ...option.RequestOption) (res *ZoneSettingMinTLSVersion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinTLSVersionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/min_tls_version", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *SettingMinTLSVersionService) Edit(ctx context.Context, params SettingMi
 }
 
 // Gets Minimum TLS Version setting.
-func (r *SettingMinTLSVersionService) Get(ctx context.Context, query SettingMinTLSVersionGetParams, opts ...option.RequestOption) (res *ZonesMinTLSVersion, err error) {
+func (r *SettingMinTLSVersionService) Get(ctx context.Context, query SettingMinTLSVersionGetParams, opts ...option.RequestOption) (res *ZoneSettingMinTLSVersion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinTLSVersionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/min_tls_version", query.ZoneID)
@@ -61,22 +61,22 @@ func (r *SettingMinTLSVersionService) Get(ctx context.Context, query SettingMinT
 // Only accepts HTTPS requests that use at least the TLS protocol version
 // specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
 // rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
-type ZonesMinTLSVersion struct {
+type ZoneSettingMinTLSVersion struct {
 	// ID of the zone setting.
-	ID ZonesMinTLSVersionID `json:"id,required"`
+	ID ZoneSettingMinTLSVersionID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesMinTLSVersionValue `json:"value,required"`
+	Value ZoneSettingMinTLSVersionValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesMinTLSVersionEditable `json:"editable"`
+	Editable ZoneSettingMinTLSVersionEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesMinTLSVersionJSON `json:"-"`
+	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingMinTLSVersionJSON `json:"-"`
 }
 
-// zonesMinTLSVersionJSON contains the JSON metadata for the struct
-// [ZonesMinTLSVersion]
-type zonesMinTLSVersionJSON struct {
+// zoneSettingMinTLSVersionJSON contains the JSON metadata for the struct
+// [ZoneSettingMinTLSVersion]
+type zoneSettingMinTLSVersionJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -85,46 +85,46 @@ type zonesMinTLSVersionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesMinTLSVersion) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingMinTLSVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesMinTLSVersionJSON) RawJSON() string {
+func (r zoneSettingMinTLSVersionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZonesMinTLSVersion) implementsZonesSettingEditResponse() {}
+func (r ZoneSettingMinTLSVersion) implementsZonesSettingEditResponse() {}
 
-func (r ZonesMinTLSVersion) implementsZonesSettingGetResponse() {}
+func (r ZoneSettingMinTLSVersion) implementsZonesSettingGetResponse() {}
 
 // ID of the zone setting.
-type ZonesMinTLSVersionID string
+type ZoneSettingMinTLSVersionID string
 
 const (
-	ZonesMinTLSVersionIDMinTLSVersion ZonesMinTLSVersionID = "min_tls_version"
+	ZoneSettingMinTLSVersionIDMinTLSVersion ZoneSettingMinTLSVersionID = "min_tls_version"
 )
 
-func (r ZonesMinTLSVersionID) IsKnown() bool {
+func (r ZoneSettingMinTLSVersionID) IsKnown() bool {
 	switch r {
-	case ZonesMinTLSVersionIDMinTLSVersion:
+	case ZoneSettingMinTLSVersionIDMinTLSVersion:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZonesMinTLSVersionValue string
+type ZoneSettingMinTLSVersionValue string
 
 const (
-	ZonesMinTLSVersionValue1_0 ZonesMinTLSVersionValue = "1.0"
-	ZonesMinTLSVersionValue1_1 ZonesMinTLSVersionValue = "1.1"
-	ZonesMinTLSVersionValue1_2 ZonesMinTLSVersionValue = "1.2"
-	ZonesMinTLSVersionValue1_3 ZonesMinTLSVersionValue = "1.3"
+	ZoneSettingMinTLSVersionValue1_0 ZoneSettingMinTLSVersionValue = "1.0"
+	ZoneSettingMinTLSVersionValue1_1 ZoneSettingMinTLSVersionValue = "1.1"
+	ZoneSettingMinTLSVersionValue1_2 ZoneSettingMinTLSVersionValue = "1.2"
+	ZoneSettingMinTLSVersionValue1_3 ZoneSettingMinTLSVersionValue = "1.3"
 )
 
-func (r ZonesMinTLSVersionValue) IsKnown() bool {
+func (r ZoneSettingMinTLSVersionValue) IsKnown() bool {
 	switch r {
-	case ZonesMinTLSVersionValue1_0, ZonesMinTLSVersionValue1_1, ZonesMinTLSVersionValue1_2, ZonesMinTLSVersionValue1_3:
+	case ZoneSettingMinTLSVersionValue1_0, ZoneSettingMinTLSVersionValue1_1, ZoneSettingMinTLSVersionValue1_2, ZoneSettingMinTLSVersionValue1_3:
 		return true
 	}
 	return false
@@ -132,16 +132,16 @@ func (r ZonesMinTLSVersionValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesMinTLSVersionEditable bool
+type ZoneSettingMinTLSVersionEditable bool
 
 const (
-	ZonesMinTLSVersionEditableTrue  ZonesMinTLSVersionEditable = true
-	ZonesMinTLSVersionEditableFalse ZonesMinTLSVersionEditable = false
+	ZoneSettingMinTLSVersionEditableTrue  ZoneSettingMinTLSVersionEditable = true
+	ZoneSettingMinTLSVersionEditableFalse ZoneSettingMinTLSVersionEditable = false
 )
 
-func (r ZonesMinTLSVersionEditable) IsKnown() bool {
+func (r ZoneSettingMinTLSVersionEditable) IsKnown() bool {
 	switch r {
-	case ZonesMinTLSVersionEditableTrue, ZonesMinTLSVersionEditableFalse:
+	case ZoneSettingMinTLSVersionEditableTrue, ZoneSettingMinTLSVersionEditableFalse:
 		return true
 	}
 	return false
@@ -150,18 +150,18 @@ func (r ZonesMinTLSVersionEditable) IsKnown() bool {
 // Only accepts HTTPS requests that use at least the TLS protocol version
 // specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
 // rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
-type ZonesMinTLSVersionParam struct {
+type ZoneSettingMinTLSVersionParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesMinTLSVersionID] `json:"id,required"`
+	ID param.Field[ZoneSettingMinTLSVersionID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesMinTLSVersionValue] `json:"value,required"`
+	Value param.Field[ZoneSettingMinTLSVersionValue] `json:"value,required"`
 }
 
-func (r ZonesMinTLSVersionParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingMinTLSVersionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonesMinTLSVersionParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingMinTLSVersionParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingMinTLSVersionEditParams struct {
 	// Identifier
@@ -200,7 +200,7 @@ type SettingMinTLSVersionEditResponseEnvelope struct {
 	// Only accepts HTTPS requests that use at least the TLS protocol version
 	// specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
 	// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
-	Result ZonesMinTLSVersion                           `json:"result"`
+	Result ZoneSettingMinTLSVersion                     `json:"result"`
 	JSON   settingMinTLSVersionEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -282,7 +282,7 @@ type SettingMinTLSVersionGetResponseEnvelope struct {
 	// Only accepts HTTPS requests that use at least the TLS protocol version
 	// specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
 	// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
-	Result ZonesMinTLSVersion                          `json:"result"`
+	Result ZoneSettingMinTLSVersion                    `json:"result"`
 	JSON   settingMinTLSVersionGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -57,7 +58,7 @@ func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServic
 }
 
 // Updates a configured service token.
-func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
+func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ZeroTrustServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenUpdateResponseEnvelope
 	var accountOrZone string
@@ -79,9 +80,10 @@ func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, par
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *[]AccessServiceTokens, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessServiceTokenListResponseEnvelope
+func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustServiceTokens], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -92,16 +94,25 @@ func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServic
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/service_tokens", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all service tokens.
+func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustServiceTokens] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a service token.
-func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
+func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *ZeroTrustServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenDeleteResponseEnvelope
 	var accountOrZone string
@@ -123,7 +134,7 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, bod
 }
 
 // Refreshes the expiration of a service token.
-func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
+func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZeroTrustServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenRefreshResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/refresh", identifier, uuid)
@@ -148,7 +159,7 @@ func (r *AccessServiceTokenService) Rotate(ctx context.Context, identifier strin
 	return
 }
 
-type AccessServiceTokens struct {
+type ZeroTrustServiceTokens struct {
 	// The ID of the service token.
 	ID interface{} `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
@@ -160,14 +171,14 @@ type AccessServiceTokens struct {
 	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
-	Name      string                  `json:"name"`
-	UpdatedAt time.Time               `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokensJSON `json:"-"`
+	Name      string                     `json:"name"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustServiceTokensJSON `json:"-"`
 }
 
-// accessServiceTokensJSON contains the JSON metadata for the struct
-// [AccessServiceTokens]
-type accessServiceTokensJSON struct {
+// zeroTrustServiceTokensJSON contains the JSON metadata for the struct
+// [ZeroTrustServiceTokens]
+type zeroTrustServiceTokensJSON struct {
 	ID          apijson.Field
 	ClientID    apijson.Field
 	CreatedAt   apijson.Field
@@ -178,11 +189,11 @@ type accessServiceTokensJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessServiceTokens) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustServiceTokens) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessServiceTokensJSON) RawJSON() string {
+func (r zeroTrustServiceTokensJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -396,7 +407,7 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessServiceTokenUpdateResponseEnvelope struct {
 	Errors   []AccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokens                                `json:"result,required"`
+	Result   ZeroTrustServiceTokens                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
@@ -489,128 +500,6 @@ type AccessServiceTokenListParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
-type AccessServiceTokenListResponseEnvelope struct {
-	Errors   []AccessServiceTokenListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessServiceTokenListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessServiceTokens                            `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccessServiceTokenListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessServiceTokenListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessServiceTokenListResponseEnvelopeJSON       `json:"-"`
-}
-
-// accessServiceTokenListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessServiceTokenListResponseEnvelope]
-type accessServiceTokenListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessServiceTokenListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessServiceTokenListResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessServiceTokenListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessServiceTokenListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessServiceTokenListResponseEnvelopeErrors]
-type accessServiceTokenListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessServiceTokenListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessServiceTokenListResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessServiceTokenListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessServiceTokenListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessServiceTokenListResponseEnvelopeMessages]
-type accessServiceTokenListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessServiceTokenListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessServiceTokenListResponseEnvelopeSuccess bool
-
-const (
-	AccessServiceTokenListResponseEnvelopeSuccessTrue AccessServiceTokenListResponseEnvelopeSuccess = true
-)
-
-func (r AccessServiceTokenListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessServiceTokenListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AccessServiceTokenListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                              `json:"total_count"`
-	JSON       accessServiceTokenListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessServiceTokenListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [AccessServiceTokenListResponseEnvelopeResultInfo]
-type accessServiceTokenListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessServiceTokenListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type AccessServiceTokenDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -621,7 +510,7 @@ type AccessServiceTokenDeleteParams struct {
 type AccessServiceTokenDeleteResponseEnvelope struct {
 	Errors   []AccessServiceTokenDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokens                                `json:"result,required"`
+	Result   ZeroTrustServiceTokens                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
@@ -710,7 +599,7 @@ func (r AccessServiceTokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AccessServiceTokenRefreshResponseEnvelope struct {
 	Errors   []AccessServiceTokenRefreshResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenRefreshResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokens                                 `json:"result,required"`
+	Result   ZeroTrustServiceTokens                              `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenRefreshResponseEnvelopeJSON    `json:"-"`

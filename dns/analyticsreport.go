@@ -41,7 +41,7 @@ func NewAnalyticsReportService(opts ...option.RequestOption) (r *AnalyticsReport
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReport, err error) {
+func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSAnalyticsReport, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsReportGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_analytics/report", params.ZoneID)
@@ -53,9 +53,9 @@ func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReport
 	return
 }
 
-type DNSDNSAnalyticsAPIReport struct {
+type DNSAnalyticsReport struct {
 	// Array with one row per combination of dimension values.
-	Data []DNSDNSAnalyticsAPIReportData `json:"data,required"`
+	Data []DNSAnalyticsReportData `json:"data,required"`
 	// Number of seconds between current time and last processed event, in another
 	// words how many seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -64,19 +64,19 @@ type DNSDNSAnalyticsAPIReport struct {
 	Max interface{} `json:"max,required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{}                   `json:"min,required"`
-	Query DNSDNSAnalyticsAPIReportQuery `json:"query,required"`
+	Min   interface{}             `json:"min,required"`
+	Query DNSAnalyticsReportQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Total results for metrics across all data (object mapping metric names to
 	// values).
-	Totals interface{}                  `json:"totals,required"`
-	JSON   dnsdnsAnalyticsAPIReportJSON `json:"-"`
+	Totals interface{}            `json:"totals,required"`
+	JSON   dnsAnalyticsReportJSON `json:"-"`
 }
 
-// dnsdnsAnalyticsAPIReportJSON contains the JSON metadata for the struct
-// [DNSDNSAnalyticsAPIReport]
-type dnsdnsAnalyticsAPIReportJSON struct {
+// dnsAnalyticsReportJSON contains the JSON metadata for the struct
+// [DNSAnalyticsReport]
+type dnsAnalyticsReportJSON struct {
 	Data        apijson.Field
 	DataLag     apijson.Field
 	Max         apijson.Field
@@ -88,41 +88,41 @@ type dnsdnsAnalyticsAPIReportJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSDNSAnalyticsAPIReport) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSAnalyticsReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsdnsAnalyticsAPIReportJSON) RawJSON() string {
+func (r dnsAnalyticsReportJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSDNSAnalyticsAPIReportData struct {
+type DNSAnalyticsReportData struct {
 	// Array of dimension values, representing the combination of dimension values
 	// corresponding to this row.
 	Dimensions []string `json:"dimensions,required"`
 	// Array with one item per requested metric. Each item is a single value.
-	Metrics []float64                        `json:"metrics,required"`
-	JSON    dnsdnsAnalyticsAPIReportDataJSON `json:"-"`
+	Metrics []float64                  `json:"metrics,required"`
+	JSON    dnsAnalyticsReportDataJSON `json:"-"`
 }
 
-// dnsdnsAnalyticsAPIReportDataJSON contains the JSON metadata for the struct
-// [DNSDNSAnalyticsAPIReportData]
-type dnsdnsAnalyticsAPIReportDataJSON struct {
+// dnsAnalyticsReportDataJSON contains the JSON metadata for the struct
+// [DNSAnalyticsReportData]
+type dnsAnalyticsReportDataJSON struct {
 	Dimensions  apijson.Field
 	Metrics     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSDNSAnalyticsAPIReportData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSAnalyticsReportData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsdnsAnalyticsAPIReportDataJSON) RawJSON() string {
+func (r dnsAnalyticsReportDataJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSDNSAnalyticsAPIReportQuery struct {
+type DNSAnalyticsReportQuery struct {
 	// Array of dimension names.
 	Dimensions []string `json:"dimensions,required"`
 	// Limit number of returned metrics.
@@ -137,13 +137,13 @@ type DNSDNSAnalyticsAPIReportQuery struct {
 	Filters string `json:"filters"`
 	// Array of dimensions to sort by, where each dimension may be prefixed by -
 	// (descending) or + (ascending).
-	Sort []string                          `json:"sort"`
-	JSON dnsdnsAnalyticsAPIReportQueryJSON `json:"-"`
+	Sort []string                    `json:"sort"`
+	JSON dnsAnalyticsReportQueryJSON `json:"-"`
 }
 
-// dnsdnsAnalyticsAPIReportQueryJSON contains the JSON metadata for the struct
-// [DNSDNSAnalyticsAPIReportQuery]
-type dnsdnsAnalyticsAPIReportQueryJSON struct {
+// dnsAnalyticsReportQueryJSON contains the JSON metadata for the struct
+// [DNSAnalyticsReportQuery]
+type dnsAnalyticsReportQueryJSON struct {
 	Dimensions  apijson.Field
 	Limit       apijson.Field
 	Metrics     apijson.Field
@@ -155,11 +155,11 @@ type dnsdnsAnalyticsAPIReportQueryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSDNSAnalyticsAPIReportQuery) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSAnalyticsReportQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsdnsAnalyticsAPIReportQueryJSON) RawJSON() string {
+func (r dnsAnalyticsReportQueryJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -195,7 +195,7 @@ func (r AnalyticsReportGetParams) URLQuery() (v url.Values) {
 type AnalyticsReportGetResponseEnvelope struct {
 	Errors   []AnalyticsReportGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AnalyticsReportGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSDNSAnalyticsAPIReport                     `json:"result,required"`
+	Result   DNSAnalyticsReport                           `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsReportGetResponseEnvelopeJSON    `json:"-"`

@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.0.0-beta.17 (2024-03-28)
+
+Full Changelog: [v2.0.0-beta.16...v2.0.0-beta.17](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.16...v2.0.0-beta.17)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#1631](https://github.com/cloudflare/cloudflare-go/issues/1631)) ([27b4179](https://github.com/cloudflare/cloudflare-go/commit/27b4179e6e0c96dcfeafe8a2703726f4bcdcbc0a))
+* **api:** update via SDK Studio ([#1621](https://github.com/cloudflare/cloudflare-go/issues/1621)) ([b8f3a51](https://github.com/cloudflare/cloudflare-go/commit/b8f3a51803ab15f7ff16453ae04e59a77372a007))
+* **api:** update via SDK Studio ([#1623](https://github.com/cloudflare/cloudflare-go/issues/1623)) ([c4193da](https://github.com/cloudflare/cloudflare-go/commit/c4193daf8c853fd2fe48e8716c62828ef6566b9e))
+* **api:** update via SDK Studio ([#1624](https://github.com/cloudflare/cloudflare-go/issues/1624)) ([494ceb3](https://github.com/cloudflare/cloudflare-go/commit/494ceb3ed0cacdf79b36e110e0d7e621cd76af90))
+* **api:** update via SDK Studio ([#1625](https://github.com/cloudflare/cloudflare-go/issues/1625)) ([8a8fde1](https://github.com/cloudflare/cloudflare-go/commit/8a8fde1a8b9f9a6aa8ba7c34b3231b771de2a7f9))
+* **api:** update via SDK Studio ([#1626](https://github.com/cloudflare/cloudflare-go/issues/1626)) ([c8a70d6](https://github.com/cloudflare/cloudflare-go/commit/c8a70d69198c097a3944baaf4ea23d0afff80ca2))
+* **api:** update via SDK Studio ([#1627](https://github.com/cloudflare/cloudflare-go/issues/1627)) ([5582b65](https://github.com/cloudflare/cloudflare-go/commit/5582b65a72eb98d1357da2241cc7ea81bed5e3cc))
+* **api:** update via SDK Studio ([#1628](https://github.com/cloudflare/cloudflare-go/issues/1628)) ([97be28e](https://github.com/cloudflare/cloudflare-go/commit/97be28e0c7b042b8a68f950f82d6e4e5bdf61cf2))
+* **api:** update via SDK Studio ([#1629](https://github.com/cloudflare/cloudflare-go/issues/1629)) ([b8cefc2](https://github.com/cloudflare/cloudflare-go/commit/b8cefc2dfb6d19f19586ca06ba1b34ea7b308074))
+* **api:** update via SDK Studio ([#1630](https://github.com/cloudflare/cloudflare-go/issues/1630)) ([bd3a57e](https://github.com/cloudflare/cloudflare-go/commit/bd3a57e253f6fa6d85cae40d8602daf033a16c68))
+* **api:** update via SDK Studio ([#1632](https://github.com/cloudflare/cloudflare-go/issues/1632)) ([2176b4e](https://github.com/cloudflare/cloudflare-go/commit/2176b4ed3b17987953589845cb2eb792c12ddd0a))
+
 ## 2.0.0-beta.16 (2024-03-27)
 
 Full Changelog: [v2.0.0-beta.15...v2.0.0-beta.16](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.15...v2.0.0-beta.16)

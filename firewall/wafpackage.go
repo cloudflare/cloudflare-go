@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -43,7 +44,7 @@ func NewWAFPackageService(opts ...option.RequestOption) (r *WAFPackageService) {
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageService) List(ctx context.Context, zoneIdentifier string, query WAFPackageListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WAFPackageListResponse], err error) {
+func (r *WAFPackageService) List(ctx context.Context, zoneIdentifier string, query WAFPackageListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFPackageListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -64,8 +65,8 @@ func (r *WAFPackageService) List(ctx context.Context, zoneIdentifier string, que
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query WAFPackageListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WAFPackageListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+func (r *WAFPackageService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query WAFPackageListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFPackageListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Fetches the details of a WAF package.

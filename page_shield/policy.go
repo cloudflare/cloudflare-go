@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -31,7 +32,7 @@ func NewPolicyService(opts ...option.RequestOption) (r *PolicyService) {
 }
 
 // Create a Page Shield policy.
-func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ...option.RequestOption) (res *PageShieldPageshieldPolicy, err error) {
+func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ...option.RequestOption) (res *PageShieldPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
@@ -39,7 +40,7 @@ func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ..
 }
 
 // Update a Page Shield policy by ID.
-func (r *PolicyService) Update(ctx context.Context, policyID string, params PolicyUpdateParams, opts ...option.RequestOption) (res *PageShieldPageshieldPolicy, err error) {
+func (r *PolicyService) Update(ctx context.Context, policyID string, params PolicyUpdateParams, opts ...option.RequestOption) (res *PageShieldPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", params.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
@@ -47,16 +48,26 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 }
 
 // Lists all Page Shield policies.
-func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *[]PageShieldPageshieldPolicy, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PolicyListResponseEnvelope
+func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PageShieldPolicy], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all Page Shield policies.
+func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PageShieldPolicy] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a Page Shield policy by ID.
@@ -69,18 +80,18 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 }
 
 // Fetches a Page Shield policy by ID.
-func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *PageShieldPageshieldPolicy, err error) {
+func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *PageShieldPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", query.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type PageShieldPageshieldPolicy struct {
+type PageShieldPolicy struct {
 	// The ID of the policy
 	ID string `json:"id"`
 	// The action to take if the expression matches
-	Action PageShieldPageshieldPolicyAction `json:"action"`
+	Action PageShieldPolicyAction `json:"action"`
 	// A description for the policy
 	Description string `json:"description"`
 	// Whether the policy is enabled
@@ -89,13 +100,13 @@ type PageShieldPageshieldPolicy struct {
 	// Cloudflare Firewall rule expression syntax
 	Expression string `json:"expression"`
 	// The policy which will be applied
-	Value string                         `json:"value"`
-	JSON  pageShieldPageshieldPolicyJSON `json:"-"`
+	Value string               `json:"value"`
+	JSON  pageShieldPolicyJSON `json:"-"`
 }
 
-// pageShieldPageshieldPolicyJSON contains the JSON metadata for the struct
-// [PageShieldPageshieldPolicy]
-type pageShieldPageshieldPolicyJSON struct {
+// pageShieldPolicyJSON contains the JSON metadata for the struct
+// [PageShieldPolicy]
+type pageShieldPolicyJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -106,25 +117,25 @@ type pageShieldPageshieldPolicyJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldPageshieldPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageShieldPageshieldPolicyJSON) RawJSON() string {
+func (r pageShieldPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action to take if the expression matches
-type PageShieldPageshieldPolicyAction string
+type PageShieldPolicyAction string
 
 const (
-	PageShieldPageshieldPolicyActionAllow PageShieldPageshieldPolicyAction = "allow"
-	PageShieldPageshieldPolicyActionLog   PageShieldPageshieldPolicyAction = "log"
+	PageShieldPolicyActionAllow PageShieldPolicyAction = "allow"
+	PageShieldPolicyActionLog   PageShieldPolicyAction = "log"
 )
 
-func (r PageShieldPageshieldPolicyAction) IsKnown() bool {
+func (r PageShieldPolicyAction) IsKnown() bool {
 	switch r {
-	case PageShieldPageshieldPolicyActionAllow, PageShieldPageshieldPolicyActionLog:
+	case PageShieldPolicyActionAllow, PageShieldPolicyActionLog:
 		return true
 	}
 	return false
@@ -205,128 +216,6 @@ func (r PolicyUpdateParamsAction) IsKnown() bool {
 type PolicyListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type PolicyListResponseEnvelope struct {
-	Errors   []PolicyListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PolicyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PageShieldPageshieldPolicy         `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    PolicyListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PolicyListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       policyListResponseEnvelopeJSON       `json:"-"`
-}
-
-// policyListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PolicyListResponseEnvelope]
-type policyListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolicyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PolicyListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    policyListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// policyListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PolicyListResponseEnvelopeErrors]
-type policyListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolicyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PolicyListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    policyListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// policyListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PolicyListResponseEnvelopeMessages]
-type policyListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolicyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PolicyListResponseEnvelopeSuccess bool
-
-const (
-	PolicyListResponseEnvelopeSuccessTrue PolicyListResponseEnvelopeSuccess = true
-)
-
-func (r PolicyListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PolicyListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PolicyListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       policyListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// policyListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [PolicyListResponseEnvelopeResultInfo]
-type policyListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type PolicyDeleteParams struct {

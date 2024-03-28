@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -32,19 +33,29 @@ func NewSinkholeService(opts ...option.RequestOption) (r *SinkholeService) {
 }
 
 // List sinkholes owned by this account
-func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *[]IntelSinkholesSinkholeItem, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SinkholeListResponseEnvelope
+func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IntelSinkholeItem], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/intel/sinkholes", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type IntelSinkholesSinkholeItem struct {
+// List sinkholes owned by this account
+func (r *SinkholeService) ListAutoPaging(ctx context.Context, query SinkholeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IntelSinkholeItem] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+}
+
+type IntelSinkholeItem struct {
 	// The unique identifier for the sinkhole
 	ID int64 `json:"id"`
 	// The account tag that owns this sinkhole
@@ -58,13 +69,13 @@ type IntelSinkholesSinkholeItem struct {
 	// The name of the R2 bucket to store results
 	R2Bucket string `json:"r2_bucket"`
 	// The id of the R2 instance
-	R2ID string                         `json:"r2_id"`
-	JSON intelSinkholesSinkholeItemJSON `json:"-"`
+	R2ID string                `json:"r2_id"`
+	JSON intelSinkholeItemJSON `json:"-"`
 }
 
-// intelSinkholesSinkholeItemJSON contains the JSON metadata for the struct
-// [IntelSinkholesSinkholeItem]
-type intelSinkholesSinkholeItemJSON struct {
+// intelSinkholeItemJSON contains the JSON metadata for the struct
+// [IntelSinkholeItem]
+type intelSinkholeItemJSON struct {
 	ID          apijson.Field
 	AccountTag  apijson.Field
 	CreatedOn   apijson.Field
@@ -76,104 +87,15 @@ type intelSinkholesSinkholeItemJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelSinkholesSinkholeItem) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelSinkholeItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r intelSinkholesSinkholeItemJSON) RawJSON() string {
+func (r intelSinkholeItemJSON) RawJSON() string {
 	return r.raw
 }
 
 type SinkholeListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type SinkholeListResponseEnvelope struct {
-	Errors   []SinkholeListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SinkholeListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelSinkholesSinkholeItem           `json:"result,required"`
-	// Whether the API call was successful
-	Success SinkholeListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    sinkholeListResponseEnvelopeJSON    `json:"-"`
-}
-
-// sinkholeListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SinkholeListResponseEnvelope]
-type sinkholeListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SinkholeListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sinkholeListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SinkholeListResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    sinkholeListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// sinkholeListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SinkholeListResponseEnvelopeErrors]
-type sinkholeListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SinkholeListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sinkholeListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SinkholeListResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    sinkholeListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// sinkholeListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SinkholeListResponseEnvelopeMessages]
-type sinkholeListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SinkholeListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sinkholeListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SinkholeListResponseEnvelopeSuccess bool
-
-const (
-	SinkholeListResponseEnvelopeSuccessTrue SinkholeListResponseEnvelopeSuccess = true
-)
-
-func (r SinkholeListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SinkholeListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

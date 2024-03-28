@@ -9,13 +9,15 @@ import (
 	"net/http/httputil"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is
 // made and the API returns a response with a HTTP status code. Other errors are
 // not wrapped by this SDK.
 type Error struct {
-	JSON       errorJSON `json:"-"`
+	Errors     []shared.ErrorData `json:"errors,required"`
+	JSON       errorJSON          `json:"-"`
 	StatusCode int
 	Request    *http.Request
 	Response   *http.Response
@@ -23,6 +25,7 @@ type Error struct {
 
 // errorJSON contains the JSON metadata for the struct [Error]
 type errorJSON struct {
+	Errors      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

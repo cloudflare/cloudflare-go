@@ -32,7 +32,7 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 }
 
 // Get the result of a previous preview operation using the provided preview_id.
-func (r *PreviewService) Get(ctx context.Context, previewID string, query PreviewGetParams, opts ...option.RequestOption) (res *user.LoadBalancingPreviewResult, err error) {
+func (r *PreviewService) Get(ctx context.Context, previewID string, query PreviewGetParams, opts ...option.RequestOption) (res *user.LoadBalancingPreview, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%s", query.AccountID, previewID)
@@ -53,7 +53,7 @@ type PreviewGetResponseEnvelope struct {
 	Errors   []PreviewGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PreviewGetResponseEnvelopeMessages `json:"messages,required"`
 	// Resulting health data from a preview operation.
-	Result user.LoadBalancingPreviewResult `json:"result,required"`
+	Result user.LoadBalancingPreview `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`

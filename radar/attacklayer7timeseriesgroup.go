@@ -276,7 +276,7 @@ type AttackLayer7TimeseriesGroupGetResponseSerie0 struct {
 	APIShield          []string                                         `json:"API_SHIELD,required"`
 	BotManagement      []string                                         `json:"BOT_MANAGEMENT,required"`
 	DataLossPrevention []string                                         `json:"DATA_LOSS_PREVENTION,required"`
-	DDOS               []string                                         `json:"DDOS,required"`
+	DDoS               []string                                         `json:"DDOS,required"`
 	IPReputation       []string                                         `json:"IP_REPUTATION,required"`
 	Timestamps         []time.Time                                      `json:"timestamps,required" format:"date-time"`
 	WAF                []string                                         `json:"WAF,required"`
@@ -290,7 +290,7 @@ type attackLayer7TimeseriesGroupGetResponseSerie0JSON struct {
 	APIShield          apijson.Field
 	BotManagement      apijson.Field
 	DataLossPrevention apijson.Field
-	DDOS               apijson.Field
+	DDoS               apijson.Field
 	IPReputation       apijson.Field
 	Timestamps         apijson.Field
 	WAF                apijson.Field
@@ -561,7 +561,7 @@ func (r attackLayer7TimeseriesGroupMitigationProductResponseJSON) RawJSON() stri
 }
 
 type AttackLayer7TimeseriesGroupMitigationProductResponseSerie0 struct {
-	DDOS       []string                                                       `json:"DDOS,required"`
+	DDoS       []string                                                       `json:"DDOS,required"`
 	Timestamps []string                                                       `json:"timestamps,required"`
 	JSON       attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON `json:"-"`
 }
@@ -570,7 +570,7 @@ type AttackLayer7TimeseriesGroupMitigationProductResponseSerie0 struct {
 // metadata for the struct
 // [AttackLayer7TimeseriesGroupMitigationProductResponseSerie0]
 type attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON struct {
-	DDOS        apijson.Field
+	DDoS        apijson.Field
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -903,7 +903,7 @@ func (r AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion) IsKnown() bool {
 type AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct string
 
 const (
-	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDDoS               AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "DDOS"
 	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductWAF                AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "WAF"
 	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "ACCESS_RULES"
@@ -914,7 +914,7 @@ const (
 
 func (r AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductWAF, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDataLossPrevention:
+	case AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDDoS, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductWAF, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -1150,7 +1150,7 @@ func (r AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion) IsKnown() bool {
 type AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct string
 
 const (
-	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDDoS               AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "DDOS"
 	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductWAF                AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "WAF"
 	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "ACCESS_RULES"
@@ -1161,7 +1161,7 @@ const (
 
 func (r AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductWAF, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDataLossPrevention:
+	case AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDDoS, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductWAF, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -1418,7 +1418,7 @@ func (r AttackLayer7TimeseriesGroupIndustryParamsIPVersion) IsKnown() bool {
 type AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct string
 
 const (
-	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDDoS               AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "DDOS"
 	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductWAF                AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "WAF"
 	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "ACCESS_RULES"
@@ -1429,7 +1429,7 @@ const (
 
 func (r AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductWAF, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDataLossPrevention:
+	case AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDDoS, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductWAF, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -1666,7 +1666,7 @@ func (r AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion) IsKnown() bool {
 type AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct string
 
 const (
-	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDDoS               AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "DDOS"
 	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductWAF                AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "WAF"
 	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "ACCESS_RULES"
@@ -1677,7 +1677,7 @@ const (
 
 func (r AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductWAF, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDataLossPrevention:
+	case AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDDoS, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductWAF, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -1931,7 +1931,7 @@ func (r AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion) IsKnown() bool {
 type AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct string
 
 const (
-	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDDoS               AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "DDOS"
 	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductWAF                AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "WAF"
 	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "ACCESS_RULES"
@@ -1942,7 +1942,7 @@ const (
 
 func (r AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductWAF, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDataLossPrevention:
+	case AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDDoS, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductWAF, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false
@@ -2444,7 +2444,7 @@ func (r AttackLayer7TimeseriesGroupVerticalParamsIPVersion) IsKnown() bool {
 type AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct string
 
 const (
-	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDDoS               AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "DDOS"
 	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductWAF                AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "WAF"
 	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "BOT_MANAGEMENT"
 	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "ACCESS_RULES"
@@ -2455,7 +2455,7 @@ const (
 
 func (r AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDDOS, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductWAF, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDataLossPrevention:
+	case AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDDoS, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductWAF, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductBotManagement, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductAccessRules, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductIPReputation, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductAPIShield, AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false

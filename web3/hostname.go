@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -34,7 +35,7 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 }
 
 // Create Web3 Hostname
-func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body HostnameNewParams, opts ...option.RequestOption) (res *DwebConfigWeb3Hostname, err error) {
+func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body HostnameNewParams, opts ...option.RequestOption) (res *DistributedWebHostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames", zoneIdentifier)
@@ -47,16 +48,26 @@ func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body H
 }
 
 // List Web3 Hostnames
-func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]DwebConfigWeb3Hostname, err error) {
-	opts = append(r.Options[:], opts...)
-	var env HostnameListResponseEnvelope
+func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[DistributedWebHostname], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/web3/hostnames", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List Web3 Hostnames
+func (r *HostnameService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DistributedWebHostname] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
 }
 
 // Delete Web3 Hostname
@@ -73,7 +84,7 @@ func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, ide
 }
 
 // Edit Web3 Hostname
-func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, identifier string, body HostnameEditParams, opts ...option.RequestOption) (res *DwebConfigWeb3Hostname, err error) {
+func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, identifier string, body HostnameEditParams, opts ...option.RequestOption) (res *DistributedWebHostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
@@ -86,7 +97,7 @@ func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, ident
 }
 
 // Web3 Hostname Details
-func (r *HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *DwebConfigWeb3Hostname, err error) {
+func (r *HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *DistributedWebHostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
@@ -98,7 +109,7 @@ func (r *HostnameService) Get(ctx context.Context, zoneIdentifier string, identi
 	return
 }
 
-type DwebConfigWeb3Hostname struct {
+type DistributedWebHostname struct {
 	// Identifier
 	ID        string    `json:"id"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
@@ -110,15 +121,15 @@ type DwebConfigWeb3Hostname struct {
 	// The hostname that will point to the target gateway via CNAME.
 	Name string `json:"name"`
 	// Status of the hostname's activation.
-	Status DwebConfigWeb3HostnameStatus `json:"status"`
+	Status DistributedWebHostnameStatus `json:"status"`
 	// Target gateway of the hostname.
-	Target DwebConfigWeb3HostnameTarget `json:"target"`
-	JSON   dwebConfigWeb3HostnameJSON   `json:"-"`
+	Target DistributedWebHostnameTarget `json:"target"`
+	JSON   distributedWebHostnameJSON   `json:"-"`
 }
 
-// dwebConfigWeb3HostnameJSON contains the JSON metadata for the struct
-// [DwebConfigWeb3Hostname]
-type dwebConfigWeb3HostnameJSON struct {
+// distributedWebHostnameJSON contains the JSON metadata for the struct
+// [DistributedWebHostname]
+type distributedWebHostnameJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
@@ -131,44 +142,44 @@ type dwebConfigWeb3HostnameJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DwebConfigWeb3Hostname) UnmarshalJSON(data []byte) (err error) {
+func (r *DistributedWebHostname) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dwebConfigWeb3HostnameJSON) RawJSON() string {
+func (r distributedWebHostnameJSON) RawJSON() string {
 	return r.raw
 }
 
 // Status of the hostname's activation.
-type DwebConfigWeb3HostnameStatus string
+type DistributedWebHostnameStatus string
 
 const (
-	DwebConfigWeb3HostnameStatusActive   DwebConfigWeb3HostnameStatus = "active"
-	DwebConfigWeb3HostnameStatusPending  DwebConfigWeb3HostnameStatus = "pending"
-	DwebConfigWeb3HostnameStatusDeleting DwebConfigWeb3HostnameStatus = "deleting"
-	DwebConfigWeb3HostnameStatusError    DwebConfigWeb3HostnameStatus = "error"
+	DistributedWebHostnameStatusActive   DistributedWebHostnameStatus = "active"
+	DistributedWebHostnameStatusPending  DistributedWebHostnameStatus = "pending"
+	DistributedWebHostnameStatusDeleting DistributedWebHostnameStatus = "deleting"
+	DistributedWebHostnameStatusError    DistributedWebHostnameStatus = "error"
 )
 
-func (r DwebConfigWeb3HostnameStatus) IsKnown() bool {
+func (r DistributedWebHostnameStatus) IsKnown() bool {
 	switch r {
-	case DwebConfigWeb3HostnameStatusActive, DwebConfigWeb3HostnameStatusPending, DwebConfigWeb3HostnameStatusDeleting, DwebConfigWeb3HostnameStatusError:
+	case DistributedWebHostnameStatusActive, DistributedWebHostnameStatusPending, DistributedWebHostnameStatusDeleting, DistributedWebHostnameStatusError:
 		return true
 	}
 	return false
 }
 
 // Target gateway of the hostname.
-type DwebConfigWeb3HostnameTarget string
+type DistributedWebHostnameTarget string
 
 const (
-	DwebConfigWeb3HostnameTargetEthereum          DwebConfigWeb3HostnameTarget = "ethereum"
-	DwebConfigWeb3HostnameTargetIPFS              DwebConfigWeb3HostnameTarget = "ipfs"
-	DwebConfigWeb3HostnameTargetIPFSUniversalPath DwebConfigWeb3HostnameTarget = "ipfs_universal_path"
+	DistributedWebHostnameTargetEthereum          DistributedWebHostnameTarget = "ethereum"
+	DistributedWebHostnameTargetIPFS              DistributedWebHostnameTarget = "ipfs"
+	DistributedWebHostnameTargetIPFSUniversalPath DistributedWebHostnameTarget = "ipfs_universal_path"
 )
 
-func (r DwebConfigWeb3HostnameTarget) IsKnown() bool {
+func (r DistributedWebHostnameTarget) IsKnown() bool {
 	switch r {
-	case DwebConfigWeb3HostnameTargetEthereum, DwebConfigWeb3HostnameTargetIPFS, DwebConfigWeb3HostnameTargetIPFSUniversalPath:
+	case DistributedWebHostnameTargetEthereum, DistributedWebHostnameTargetIPFS, DistributedWebHostnameTargetIPFSUniversalPath:
 		return true
 	}
 	return false
@@ -229,7 +240,7 @@ func (r HostnameNewParamsTarget) IsKnown() bool {
 type HostnameNewResponseEnvelope struct {
 	Errors   []HostnameNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DwebConfigWeb3Hostname                `json:"result,required"`
+	Result   DistributedWebHostname                `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameNewResponseEnvelopeJSON    `json:"-"`
@@ -313,128 +324,6 @@ func (r HostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type HostnameListResponseEnvelope struct {
-	Errors   []HostnameListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DwebConfigWeb3Hostname               `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    HostnameListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo HostnameListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       hostnameListResponseEnvelopeJSON       `json:"-"`
-}
-
-// hostnameListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [HostnameListResponseEnvelope]
-type hostnameListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameListResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    hostnameListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [HostnameListResponseEnvelopeErrors]
-type hostnameListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameListResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    hostnameListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HostnameListResponseEnvelopeMessages]
-type hostnameListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type HostnameListResponseEnvelopeSuccess bool
-
-const (
-	HostnameListResponseEnvelopeSuccessTrue HostnameListResponseEnvelopeSuccess = true
-)
-
-func (r HostnameListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case HostnameListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type HostnameListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                    `json:"total_count"`
-	JSON       hostnameListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// hostnameListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [HostnameListResponseEnvelopeResultInfo]
-type hostnameListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type HostnameDeleteResponseEnvelope struct {
@@ -540,7 +429,7 @@ func (r HostnameEditParams) MarshalJSON() (data []byte, err error) {
 type HostnameEditResponseEnvelope struct {
 	Errors   []HostnameEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   DwebConfigWeb3Hostname                 `json:"result,required"`
+	Result   DistributedWebHostname                 `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameEditResponseEnvelopeJSON    `json:"-"`
@@ -629,7 +518,7 @@ func (r HostnameEditResponseEnvelopeSuccess) IsKnown() bool {
 type HostnameGetResponseEnvelope struct {
 	Errors   []HostnameGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DwebConfigWeb3Hostname                `json:"result,required"`
+	Result   DistributedWebHostname                `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`

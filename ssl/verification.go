@@ -50,7 +50,7 @@ func (r *VerificationService) Edit(ctx context.Context, certificatePackID string
 }
 
 // Get SSL Verification Info for a Zone.
-func (r *VerificationService) Get(ctx context.Context, params VerificationGetParams, opts ...option.RequestOption) (res *[]TLSCertificatesAndHostnamesVerification, err error) {
+func (r *VerificationService) Get(ctx context.Context, params VerificationGetParams, opts ...option.RequestOption) (res *[]TLSVerificationSetting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VerificationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/verification", params.ZoneID)
@@ -62,30 +62,30 @@ func (r *VerificationService) Get(ctx context.Context, params VerificationGetPar
 	return
 }
 
-type TLSCertificatesAndHostnamesVerification struct {
+type TLSVerificationSetting struct {
 	// Current status of certificate.
-	CertificateStatus TLSCertificatesAndHostnamesVerificationCertificateStatus `json:"certificate_status,required"`
+	CertificateStatus TLSVerificationSettingCertificateStatus `json:"certificate_status,required"`
 	// Certificate Authority is manually reviewing the order.
 	BrandCheck bool `json:"brand_check"`
 	// Certificate Pack UUID.
 	CERTPackUUID string `json:"cert_pack_uuid"`
 	// Certificate's signature algorithm.
-	Signature TLSCertificatesAndHostnamesVerificationSignature `json:"signature"`
+	Signature TLSVerificationSettingSignature `json:"signature"`
 	// Validation method in use for a certificate pack order.
-	ValidationMethod TLSCertificatesAndHostnamesVerificationValidationMethod `json:"validation_method"`
+	ValidationMethod TLSVerificationSettingValidationMethod `json:"validation_method"`
 	// Certificate's required verification information.
-	VerificationInfo TLSCertificatesAndHostnamesVerificationVerificationInfo `json:"verification_info"`
+	VerificationInfo TLSVerificationSettingVerificationInfo `json:"verification_info"`
 	// Status of the required verification information, omitted if verification status
 	// is unknown.
 	VerificationStatus bool `json:"verification_status"`
 	// Method of verification.
-	VerificationType TLSCertificatesAndHostnamesVerificationVerificationType `json:"verification_type"`
-	JSON             tlsCertificatesAndHostnamesVerificationJSON             `json:"-"`
+	VerificationType TLSVerificationSettingVerificationType `json:"verification_type"`
+	JSON             tlsVerificationSettingJSON             `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesVerificationJSON contains the JSON metadata for the
-// struct [TLSCertificatesAndHostnamesVerification]
-type tlsCertificatesAndHostnamesVerificationJSON struct {
+// tlsVerificationSettingJSON contains the JSON metadata for the struct
+// [TLSVerificationSetting]
+type tlsVerificationSettingJSON struct {
 	CertificateStatus  apijson.Field
 	BrandCheck         apijson.Field
 	CERTPackUUID       apijson.Field
@@ -98,143 +98,142 @@ type tlsCertificatesAndHostnamesVerificationJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesVerification) UnmarshalJSON(data []byte) (err error) {
+func (r *TLSVerificationSetting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesVerificationJSON) RawJSON() string {
+func (r tlsVerificationSettingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Current status of certificate.
-type TLSCertificatesAndHostnamesVerificationCertificateStatus string
+type TLSVerificationSettingCertificateStatus string
 
 const (
-	TLSCertificatesAndHostnamesVerificationCertificateStatusInitializing      TLSCertificatesAndHostnamesVerificationCertificateStatus = "initializing"
-	TLSCertificatesAndHostnamesVerificationCertificateStatusAuthorizing       TLSCertificatesAndHostnamesVerificationCertificateStatus = "authorizing"
-	TLSCertificatesAndHostnamesVerificationCertificateStatusActive            TLSCertificatesAndHostnamesVerificationCertificateStatus = "active"
-	TLSCertificatesAndHostnamesVerificationCertificateStatusExpired           TLSCertificatesAndHostnamesVerificationCertificateStatus = "expired"
-	TLSCertificatesAndHostnamesVerificationCertificateStatusIssuing           TLSCertificatesAndHostnamesVerificationCertificateStatus = "issuing"
-	TLSCertificatesAndHostnamesVerificationCertificateStatusTimingOut         TLSCertificatesAndHostnamesVerificationCertificateStatus = "timing_out"
-	TLSCertificatesAndHostnamesVerificationCertificateStatusPendingDeployment TLSCertificatesAndHostnamesVerificationCertificateStatus = "pending_deployment"
+	TLSVerificationSettingCertificateStatusInitializing      TLSVerificationSettingCertificateStatus = "initializing"
+	TLSVerificationSettingCertificateStatusAuthorizing       TLSVerificationSettingCertificateStatus = "authorizing"
+	TLSVerificationSettingCertificateStatusActive            TLSVerificationSettingCertificateStatus = "active"
+	TLSVerificationSettingCertificateStatusExpired           TLSVerificationSettingCertificateStatus = "expired"
+	TLSVerificationSettingCertificateStatusIssuing           TLSVerificationSettingCertificateStatus = "issuing"
+	TLSVerificationSettingCertificateStatusTimingOut         TLSVerificationSettingCertificateStatus = "timing_out"
+	TLSVerificationSettingCertificateStatusPendingDeployment TLSVerificationSettingCertificateStatus = "pending_deployment"
 )
 
-func (r TLSCertificatesAndHostnamesVerificationCertificateStatus) IsKnown() bool {
+func (r TLSVerificationSettingCertificateStatus) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesVerificationCertificateStatusInitializing, TLSCertificatesAndHostnamesVerificationCertificateStatusAuthorizing, TLSCertificatesAndHostnamesVerificationCertificateStatusActive, TLSCertificatesAndHostnamesVerificationCertificateStatusExpired, TLSCertificatesAndHostnamesVerificationCertificateStatusIssuing, TLSCertificatesAndHostnamesVerificationCertificateStatusTimingOut, TLSCertificatesAndHostnamesVerificationCertificateStatusPendingDeployment:
+	case TLSVerificationSettingCertificateStatusInitializing, TLSVerificationSettingCertificateStatusAuthorizing, TLSVerificationSettingCertificateStatusActive, TLSVerificationSettingCertificateStatusExpired, TLSVerificationSettingCertificateStatusIssuing, TLSVerificationSettingCertificateStatusTimingOut, TLSVerificationSettingCertificateStatusPendingDeployment:
 		return true
 	}
 	return false
 }
 
 // Certificate's signature algorithm.
-type TLSCertificatesAndHostnamesVerificationSignature string
+type TLSVerificationSettingSignature string
 
 const (
-	TLSCertificatesAndHostnamesVerificationSignatureEcdsaWithSha256 TLSCertificatesAndHostnamesVerificationSignature = "ECDSAWithSHA256"
-	TLSCertificatesAndHostnamesVerificationSignatureSha1WithRsa     TLSCertificatesAndHostnamesVerificationSignature = "SHA1WithRSA"
-	TLSCertificatesAndHostnamesVerificationSignatureSha256WithRsa   TLSCertificatesAndHostnamesVerificationSignature = "SHA256WithRSA"
+	TLSVerificationSettingSignatureEcdsaWithSha256 TLSVerificationSettingSignature = "ECDSAWithSHA256"
+	TLSVerificationSettingSignatureSha1WithRsa     TLSVerificationSettingSignature = "SHA1WithRSA"
+	TLSVerificationSettingSignatureSha256WithRsa   TLSVerificationSettingSignature = "SHA256WithRSA"
 )
 
-func (r TLSCertificatesAndHostnamesVerificationSignature) IsKnown() bool {
+func (r TLSVerificationSettingSignature) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesVerificationSignatureEcdsaWithSha256, TLSCertificatesAndHostnamesVerificationSignatureSha1WithRsa, TLSCertificatesAndHostnamesVerificationSignatureSha256WithRsa:
+	case TLSVerificationSettingSignatureEcdsaWithSha256, TLSVerificationSettingSignatureSha1WithRsa, TLSVerificationSettingSignatureSha256WithRsa:
 		return true
 	}
 	return false
 }
 
 // Validation method in use for a certificate pack order.
-type TLSCertificatesAndHostnamesVerificationValidationMethod string
+type TLSVerificationSettingValidationMethod string
 
 const (
-	TLSCertificatesAndHostnamesVerificationValidationMethodHTTP  TLSCertificatesAndHostnamesVerificationValidationMethod = "http"
-	TLSCertificatesAndHostnamesVerificationValidationMethodCNAME TLSCertificatesAndHostnamesVerificationValidationMethod = "cname"
-	TLSCertificatesAndHostnamesVerificationValidationMethodTXT   TLSCertificatesAndHostnamesVerificationValidationMethod = "txt"
+	TLSVerificationSettingValidationMethodHTTP  TLSVerificationSettingValidationMethod = "http"
+	TLSVerificationSettingValidationMethodCNAME TLSVerificationSettingValidationMethod = "cname"
+	TLSVerificationSettingValidationMethodTXT   TLSVerificationSettingValidationMethod = "txt"
 )
 
-func (r TLSCertificatesAndHostnamesVerificationValidationMethod) IsKnown() bool {
+func (r TLSVerificationSettingValidationMethod) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesVerificationValidationMethodHTTP, TLSCertificatesAndHostnamesVerificationValidationMethodCNAME, TLSCertificatesAndHostnamesVerificationValidationMethodTXT:
+	case TLSVerificationSettingValidationMethodHTTP, TLSVerificationSettingValidationMethodCNAME, TLSVerificationSettingValidationMethodTXT:
 		return true
 	}
 	return false
 }
 
 // Certificate's required verification information.
-type TLSCertificatesAndHostnamesVerificationVerificationInfo struct {
+type TLSVerificationSettingVerificationInfo struct {
 	// Name of CNAME record.
-	RecordName TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName `json:"record_name"`
+	RecordName TLSVerificationSettingVerificationInfoRecordName `json:"record_name"`
 	// Target of CNAME record.
-	RecordTarget TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget `json:"record_target"`
-	JSON         tlsCertificatesAndHostnamesVerificationVerificationInfoJSON         `json:"-"`
+	RecordTarget TLSVerificationSettingVerificationInfoRecordTarget `json:"record_target"`
+	JSON         tlsVerificationSettingVerificationInfoJSON         `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesVerificationVerificationInfoJSON contains the JSON
-// metadata for the struct
-// [TLSCertificatesAndHostnamesVerificationVerificationInfo]
-type tlsCertificatesAndHostnamesVerificationVerificationInfoJSON struct {
+// tlsVerificationSettingVerificationInfoJSON contains the JSON metadata for the
+// struct [TLSVerificationSettingVerificationInfo]
+type tlsVerificationSettingVerificationInfoJSON struct {
 	RecordName   apijson.Field
 	RecordTarget apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesVerificationVerificationInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *TLSVerificationSettingVerificationInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesVerificationVerificationInfoJSON) RawJSON() string {
+func (r tlsVerificationSettingVerificationInfoJSON) RawJSON() string {
 	return r.raw
 }
 
 // Name of CNAME record.
-type TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName string
+type TLSVerificationSettingVerificationInfoRecordName string
 
 const (
-	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameRecordName TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName = "record_name"
-	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameHTTPURL    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName = "http_url"
-	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameCNAME      TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName = "cname"
-	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameTXTName    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName = "txt_name"
+	TLSVerificationSettingVerificationInfoRecordNameRecordName TLSVerificationSettingVerificationInfoRecordName = "record_name"
+	TLSVerificationSettingVerificationInfoRecordNameHTTPURL    TLSVerificationSettingVerificationInfoRecordName = "http_url"
+	TLSVerificationSettingVerificationInfoRecordNameCNAME      TLSVerificationSettingVerificationInfoRecordName = "cname"
+	TLSVerificationSettingVerificationInfoRecordNameTXTName    TLSVerificationSettingVerificationInfoRecordName = "txt_name"
 )
 
-func (r TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName) IsKnown() bool {
+func (r TLSVerificationSettingVerificationInfoRecordName) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameRecordName, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameHTTPURL, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameCNAME, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameTXTName:
+	case TLSVerificationSettingVerificationInfoRecordNameRecordName, TLSVerificationSettingVerificationInfoRecordNameHTTPURL, TLSVerificationSettingVerificationInfoRecordNameCNAME, TLSVerificationSettingVerificationInfoRecordNameTXTName:
 		return true
 	}
 	return false
 }
 
 // Target of CNAME record.
-type TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget string
+type TLSVerificationSettingVerificationInfoRecordTarget string
 
 const (
-	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetRecordValue TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget = "record_value"
-	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetHTTPBody    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget = "http_body"
-	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetCNAMETarget TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget = "cname_target"
-	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetTXTValue    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget = "txt_value"
+	TLSVerificationSettingVerificationInfoRecordTargetRecordValue TLSVerificationSettingVerificationInfoRecordTarget = "record_value"
+	TLSVerificationSettingVerificationInfoRecordTargetHTTPBody    TLSVerificationSettingVerificationInfoRecordTarget = "http_body"
+	TLSVerificationSettingVerificationInfoRecordTargetCNAMETarget TLSVerificationSettingVerificationInfoRecordTarget = "cname_target"
+	TLSVerificationSettingVerificationInfoRecordTargetTXTValue    TLSVerificationSettingVerificationInfoRecordTarget = "txt_value"
 )
 
-func (r TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget) IsKnown() bool {
+func (r TLSVerificationSettingVerificationInfoRecordTarget) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetRecordValue, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetHTTPBody, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetCNAMETarget, TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetTXTValue:
+	case TLSVerificationSettingVerificationInfoRecordTargetRecordValue, TLSVerificationSettingVerificationInfoRecordTargetHTTPBody, TLSVerificationSettingVerificationInfoRecordTargetCNAMETarget, TLSVerificationSettingVerificationInfoRecordTargetTXTValue:
 		return true
 	}
 	return false
 }
 
 // Method of verification.
-type TLSCertificatesAndHostnamesVerificationVerificationType string
+type TLSVerificationSettingVerificationType string
 
 const (
-	TLSCertificatesAndHostnamesVerificationVerificationTypeCNAME   TLSCertificatesAndHostnamesVerificationVerificationType = "cname"
-	TLSCertificatesAndHostnamesVerificationVerificationTypeMetaTag TLSCertificatesAndHostnamesVerificationVerificationType = "meta tag"
+	TLSVerificationSettingVerificationTypeCNAME   TLSVerificationSettingVerificationType = "cname"
+	TLSVerificationSettingVerificationTypeMetaTag TLSVerificationSettingVerificationType = "meta tag"
 )
 
-func (r TLSCertificatesAndHostnamesVerificationVerificationType) IsKnown() bool {
+func (r TLSVerificationSettingVerificationType) IsKnown() bool {
 	switch r {
-	case TLSCertificatesAndHostnamesVerificationVerificationTypeCNAME, TLSCertificatesAndHostnamesVerificationVerificationTypeMetaTag:
+	case TLSVerificationSettingVerificationTypeCNAME, TLSVerificationSettingVerificationTypeMetaTag:
 		return true
 	}
 	return false
@@ -432,8 +431,8 @@ func (r VerificationGetParamsRetry) IsKnown() bool {
 }
 
 type VerificationGetResponseEnvelope struct {
-	Result []TLSCertificatesAndHostnamesVerification `json:"result"`
-	JSON   verificationGetResponseEnvelopeJSON       `json:"-"`
+	Result []TLSVerificationSetting            `json:"result"`
+	JSON   verificationGetResponseEnvelopeJSON `json:"-"`
 }
 
 // verificationGetResponseEnvelopeJSON contains the JSON metadata for the struct

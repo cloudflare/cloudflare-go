@@ -35,7 +35,7 @@ func NewSettingTLSService(opts ...option.RequestOption) (r *SettingTLSService) {
 }
 
 // Update the tls setting value for the hostname.
-func (r *SettingTLSService) Update(ctx context.Context, settingID SettingTLSUpdateParamsSettingID, hostname string, params SettingTLSUpdateParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesSettingObject, err error) {
+func (r *SettingTLSService) Update(ctx context.Context, settingID SettingTLSUpdateParamsSettingID, hostname string, params SettingTLSUpdateParams, opts ...option.RequestOption) (res *HostnameStting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", params.ZoneID, settingID, hostname)
@@ -48,7 +48,7 @@ func (r *SettingTLSService) Update(ctx context.Context, settingID SettingTLSUpda
 }
 
 // Delete the tls setting value for the hostname.
-func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDeleteParamsSettingID, hostname string, body SettingTLSDeleteParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesSettingObjectDelete, err error) {
+func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDeleteParamsSettingID, hostname string, body SettingTLSDeleteParams, opts ...option.RequestOption) (res *HostnameSettingDelete, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", body.ZoneID, settingID, hostname)
@@ -73,23 +73,21 @@ func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetPara
 	return
 }
 
-type TLSCertificatesAndHostnamesSettingObject struct {
+type HostnameSettingDelete struct {
 	// This is the time the tls setting was originally created for this hostname.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The hostname for which the tls settings are set.
 	Hostname string `json:"hostname"`
-	// Deployment status for the given tls setting.
-	Status string `json:"status"`
+	Status   string `json:"status"`
 	// This is the time the tls setting was updated.
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	// The tls setting value.
-	Value TLSCertificatesAndHostnamesSettingObjectValue `json:"value"`
-	JSON  tlsCertificatesAndHostnamesSettingObjectJSON  `json:"-"`
+	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
+	Value     string                    `json:"value"`
+	JSON      hostnameSettingDeleteJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesSettingObjectJSON contains the JSON metadata for the
-// struct [TLSCertificatesAndHostnamesSettingObject]
-type tlsCertificatesAndHostnamesSettingObjectJSON struct {
+// hostnameSettingDeleteJSON contains the JSON metadata for the struct
+// [HostnameSettingDelete]
+type hostnameSettingDeleteJSON struct {
 	CreatedAt   apijson.Field
 	Hostname    apijson.Field
 	Status      apijson.Field
@@ -99,25 +97,58 @@ type tlsCertificatesAndHostnamesSettingObjectJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesSettingObject) UnmarshalJSON(data []byte) (err error) {
+func (r *HostnameSettingDelete) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesSettingObjectJSON) RawJSON() string {
+func (r hostnameSettingDeleteJSON) RawJSON() string {
+	return r.raw
+}
+
+type HostnameStting struct {
+	// This is the time the tls setting was originally created for this hostname.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The hostname for which the tls settings are set.
+	Hostname string `json:"hostname"`
+	// Deployment status for the given tls setting.
+	Status string `json:"status"`
+	// This is the time the tls setting was updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// The tls setting value.
+	Value HostnameSttingValue `json:"value"`
+	JSON  hostnameSttingJSON  `json:"-"`
+}
+
+// hostnameSttingJSON contains the JSON metadata for the struct [HostnameStting]
+type hostnameSttingJSON struct {
+	CreatedAt   apijson.Field
+	Hostname    apijson.Field
+	Status      apijson.Field
+	UpdatedAt   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameStting) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameSttingJSON) RawJSON() string {
 	return r.raw
 }
 
 // The tls setting value.
 //
 // Union satisfied by [shared.UnionFloat], [shared.UnionString] or
-// [hostnames.TLSCertificatesAndHostnamesSettingObjectValueArray].
-type TLSCertificatesAndHostnamesSettingObjectValue interface {
-	ImplementsHostnamesTLSCertificatesAndHostnamesSettingObjectValue()
+// [hostnames.HostnameSttingValueArray].
+type HostnameSttingValue interface {
+	ImplementsHostnamesHostnameSttingValue()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TLSCertificatesAndHostnamesSettingObjectValue)(nil)).Elem(),
+		reflect.TypeOf((*HostnameSttingValue)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -129,47 +160,14 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSCertificatesAndHostnamesSettingObjectValueArray{}),
+			Type:       reflect.TypeOf(HostnameSttingValueArray{}),
 		},
 	)
 }
 
-type TLSCertificatesAndHostnamesSettingObjectValueArray []string
+type HostnameSttingValueArray []string
 
-func (r TLSCertificatesAndHostnamesSettingObjectValueArray) ImplementsHostnamesTLSCertificatesAndHostnamesSettingObjectValue() {
-}
-
-type TLSCertificatesAndHostnamesSettingObjectDelete struct {
-	// This is the time the tls setting was originally created for this hostname.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The hostname for which the tls settings are set.
-	Hostname string `json:"hostname"`
-	Status   string `json:"status"`
-	// This is the time the tls setting was updated.
-	UpdatedAt time.Time                                          `json:"updated_at" format:"date-time"`
-	Value     string                                             `json:"value"`
-	JSON      tlsCertificatesAndHostnamesSettingObjectDeleteJSON `json:"-"`
-}
-
-// tlsCertificatesAndHostnamesSettingObjectDeleteJSON contains the JSON metadata
-// for the struct [TLSCertificatesAndHostnamesSettingObjectDelete]
-type tlsCertificatesAndHostnamesSettingObjectDeleteJSON struct {
-	CreatedAt   apijson.Field
-	Hostname    apijson.Field
-	Status      apijson.Field
-	UpdatedAt   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TLSCertificatesAndHostnamesSettingObjectDelete) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tlsCertificatesAndHostnamesSettingObjectDeleteJSON) RawJSON() string {
-	return r.raw
-}
+func (r HostnameSttingValueArray) ImplementsHostnamesHostnameSttingValue() {}
 
 type SettingTLSGetResponse struct {
 	// This is the time the tls setting was originally created for this hostname.
@@ -279,7 +277,7 @@ func (r SettingTLSUpdateParamsValueArray) ImplementsHostnamesSettingTLSUpdatePar
 type SettingTLSUpdateResponseEnvelope struct {
 	Errors   []SettingTLSUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SettingTLSUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesSettingObject   `json:"result,required"`
+	Result   HostnameStting                             `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingTLSUpdateResponseEnvelopeJSON    `json:"-"`
@@ -388,9 +386,9 @@ func (r SettingTLSDeleteParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSDeleteResponseEnvelope struct {
-	Errors   []SettingTLSDeleteResponseEnvelopeErrors       `json:"errors,required"`
-	Messages []SettingTLSDeleteResponseEnvelopeMessages     `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesSettingObjectDelete `json:"result,required"`
+	Errors   []SettingTLSDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingTLSDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   HostnameSettingDelete                      `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingTLSDeleteResponseEnvelopeJSON    `json:"-"`

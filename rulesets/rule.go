@@ -32,7 +32,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Adds a new rule to an account or zone ruleset. The rule will be added to the end
 // of the existing list of rules in the ruleset by default.
-func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
+func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewParams, opts ...option.RequestOption) (res *Ruleset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	var accountOrZone string
@@ -54,7 +54,7 @@ func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewP
 }
 
 // Deletes an existing rule from an account or zone ruleset.
-func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
+func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *Ruleset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	var accountOrZone string
@@ -76,7 +76,7 @@ func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID strin
 }
 
 // Updates an existing rule in an account or zone ruleset.
-func (r *RuleService) Edit(ctx context.Context, rulesetID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
+func (r *RuleService) Edit(ctx context.Context, rulesetID string, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *Ruleset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
 	var accountOrZone string
@@ -539,8 +539,8 @@ func (r RuleNewParamsRulesetsSkipRuleActionParameters) MarshalJSON() (data []byt
 type RuleNewParamsRulesetsSkipRuleActionParametersPhase string
 
 const (
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDOSL4                         RuleNewParamsRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDOSL7                         RuleNewParamsRulesetsSkipRuleActionParametersPhase = "ddos_l7"
+	RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDoSL4                         RuleNewParamsRulesetsSkipRuleActionParametersPhase = "ddos_l4"
+	RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDoSL7                         RuleNewParamsRulesetsSkipRuleActionParametersPhase = "ddos_l7"
 	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_config_settings"
 	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
 	RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
@@ -566,7 +566,7 @@ const (
 
 func (r RuleNewParamsRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
 	switch r {
-	case RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDOSL4, RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDOSL7, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransit, RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
+	case RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDoSL4, RuleNewParamsRulesetsSkipRuleActionParametersPhaseDDoSL7, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransit, RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -626,7 +626,7 @@ type RuleNewResponseEnvelope struct {
 	// A list of warning messages.
 	Messages []RuleNewResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result RulesetsRulesetResponse `json:"result,required"`
+	Result Ruleset `json:"result,required"`
 	// Whether the API call was successful.
 	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
@@ -784,7 +784,7 @@ type RuleDeleteResponseEnvelope struct {
 	// A list of warning messages.
 	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result RulesetsRulesetResponse `json:"result,required"`
+	Result Ruleset `json:"result,required"`
 	// Whether the API call was successful.
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1370,8 +1370,8 @@ func (r RuleEditParamsRulesetsSkipRuleActionParameters) MarshalJSON() (data []by
 type RuleEditParamsRulesetsSkipRuleActionParametersPhase string
 
 const (
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDOSL4                         RuleEditParamsRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDOSL7                         RuleEditParamsRulesetsSkipRuleActionParametersPhase = "ddos_l7"
+	RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDoSL4                         RuleEditParamsRulesetsSkipRuleActionParametersPhase = "ddos_l4"
+	RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDoSL7                         RuleEditParamsRulesetsSkipRuleActionParametersPhase = "ddos_l7"
 	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_config_settings"
 	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
 	RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RuleEditParamsRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
@@ -1397,7 +1397,7 @@ const (
 
 func (r RuleEditParamsRulesetsSkipRuleActionParametersPhase) IsKnown() bool {
 	switch r {
-	case RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDOSL4, RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDOSL7, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransit, RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
+	case RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDoSL4, RuleEditParamsRulesetsSkipRuleActionParametersPhaseDDoSL7, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged, RuleEditParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform, RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransit, RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged, RuleEditParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -1457,7 +1457,7 @@ type RuleEditResponseEnvelope struct {
 	// A list of warning messages.
 	Messages []RuleEditResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result RulesetsRulesetResponse `json:"result,required"`
+	Result Ruleset `json:"result,required"`
 	// Whether the API call was successful.
 	Success RuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleEditResponseEnvelopeJSON    `json:"-"`

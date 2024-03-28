@@ -48,7 +48,7 @@ func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opt
 }
 
 // Enable or disable DNSSEC.
-func (r *DNSSECService) Edit(ctx context.Context, params DNSSECEditParams, opts ...option.RequestOption) (res *DNSSECDNSSEC, err error) {
+func (r *DNSSECService) Edit(ctx context.Context, params DNSSECEditParams, opts ...option.RequestOption) (res *DNSSEC, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSECEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", params.ZoneID)
@@ -61,7 +61,7 @@ func (r *DNSSECService) Edit(ctx context.Context, params DNSSECEditParams, opts 
 }
 
 // Details about DNSSEC status and configuration.
-func (r *DNSSECService) Get(ctx context.Context, query DNSSECGetParams, opts ...option.RequestOption) (res *DNSSECDNSSEC, err error) {
+func (r *DNSSECService) Get(ctx context.Context, query DNSSECGetParams, opts ...option.RequestOption) (res *DNSSEC, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSECGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", query.ZoneID)
@@ -73,7 +73,7 @@ func (r *DNSSECService) Get(ctx context.Context, query DNSSECGetParams, opts ...
 	return
 }
 
-type DNSSECDNSSEC struct {
+type DNSSEC struct {
 	// Algorithm key code.
 	Algorithm string `json:"algorithm,nullable"`
 	// Digest hash.
@@ -112,12 +112,12 @@ type DNSSECDNSSEC struct {
 	// Public key for DS record.
 	PublicKey string `json:"public_key,nullable"`
 	// Status of DNSSEC, based on user-desired state and presence of necessary records.
-	Status DNSSECDNSSECStatus `json:"status"`
-	JSON   dnssecdnssecJSON   `json:"-"`
+	Status DNSSECStatus `json:"status"`
+	JSON   dnssecJSON   `json:"-"`
 }
 
-// dnssecdnssecJSON contains the JSON metadata for the struct [DNSSECDNSSEC]
-type dnssecdnssecJSON struct {
+// dnssecJSON contains the JSON metadata for the struct [DNSSEC]
+type dnssecJSON struct {
 	Algorithm         apijson.Field
 	Digest            apijson.Field
 	DigestAlgorithm   apijson.Field
@@ -135,28 +135,28 @@ type dnssecdnssecJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DNSSECDNSSEC) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSSEC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnssecdnssecJSON) RawJSON() string {
+func (r dnssecJSON) RawJSON() string {
 	return r.raw
 }
 
 // Status of DNSSEC, based on user-desired state and presence of necessary records.
-type DNSSECDNSSECStatus string
+type DNSSECStatus string
 
 const (
-	DNSSECDNSSECStatusActive          DNSSECDNSSECStatus = "active"
-	DNSSECDNSSECStatusPending         DNSSECDNSSECStatus = "pending"
-	DNSSECDNSSECStatusDisabled        DNSSECDNSSECStatus = "disabled"
-	DNSSECDNSSECStatusPendingDisabled DNSSECDNSSECStatus = "pending-disabled"
-	DNSSECDNSSECStatusError           DNSSECDNSSECStatus = "error"
+	DNSSECStatusActive          DNSSECStatus = "active"
+	DNSSECStatusPending         DNSSECStatus = "pending"
+	DNSSECStatusDisabled        DNSSECStatus = "disabled"
+	DNSSECStatusPendingDisabled DNSSECStatus = "pending-disabled"
+	DNSSECStatusError           DNSSECStatus = "error"
 )
 
-func (r DNSSECDNSSECStatus) IsKnown() bool {
+func (r DNSSECStatus) IsKnown() bool {
 	switch r {
-	case DNSSECDNSSECStatusActive, DNSSECDNSSECStatusPending, DNSSECDNSSECStatusDisabled, DNSSECDNSSECStatusPendingDisabled, DNSSECDNSSECStatusError:
+	case DNSSECStatusActive, DNSSECStatusPending, DNSSECStatusDisabled, DNSSECStatusPendingDisabled, DNSSECStatusError:
 		return true
 	}
 	return false
@@ -319,7 +319,7 @@ func (r DNSSECEditParamsStatus) IsKnown() bool {
 type DNSSECEditResponseEnvelope struct {
 	Errors   []DNSSECEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DNSSECEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSSECDNSSEC                         `json:"result,required"`
+	Result   DNSSEC                               `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSECEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnssecEditResponseEnvelopeJSON    `json:"-"`
@@ -413,7 +413,7 @@ type DNSSECGetParams struct {
 type DNSSECGetResponseEnvelope struct {
 	Errors   []DNSSECGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DNSSECGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSSECDNSSEC                        `json:"result,required"`
+	Result   DNSSEC                              `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSECGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnssecGetResponseEnvelopeJSON    `json:"-"`

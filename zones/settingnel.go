@@ -34,7 +34,7 @@ func NewSettingNELService(opts ...option.RequestOption) (r *SettingNELService) {
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/nel-solving-mobile-speed)
 // for more information.
-func (r *SettingNELService) Edit(ctx context.Context, params SettingNELEditParams, opts ...option.RequestOption) (res *ZonesNEL, err error) {
+func (r *SettingNELService) Edit(ctx context.Context, params SettingNELEditParams, opts ...option.RequestOption) (res *ZoneSettingNEL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingNELEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/nel", params.ZoneID)
@@ -47,7 +47,7 @@ func (r *SettingNELService) Edit(ctx context.Context, params SettingNELEditParam
 }
 
 // Enable Network Error Logging reporting on your zone. (Beta)
-func (r *SettingNELService) Get(ctx context.Context, query SettingNELGetParams, opts ...option.RequestOption) (res *ZonesNEL, err error) {
+func (r *SettingNELService) Get(ctx context.Context, query SettingNELGetParams, opts ...option.RequestOption) (res *ZoneSettingNEL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingNELGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/nel", query.ZoneID)
@@ -60,21 +60,21 @@ func (r *SettingNELService) Get(ctx context.Context, query SettingNELGetParams, 
 }
 
 // Enable Network Error Logging reporting on your zone. (Beta)
-type ZonesNEL struct {
+type ZoneSettingNEL struct {
 	// Zone setting identifier.
-	ID ZonesNELID `json:"id,required"`
+	ID ZoneSettingNELID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesNELValue `json:"value,required"`
+	Value ZoneSettingNELValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesNELEditable `json:"editable"`
+	Editable ZoneSettingNELEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesNELJSON `json:"-"`
+	ModifiedOn time.Time          `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingNELJSON `json:"-"`
 }
 
-// zonesNELJSON contains the JSON metadata for the struct [ZonesNEL]
-type zonesNELJSON struct {
+// zoneSettingNELJSON contains the JSON metadata for the struct [ZoneSettingNEL]
+type zoneSettingNELJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,91 +83,92 @@ type zonesNELJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesNEL) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNEL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesNELJSON) RawJSON() string {
+func (r zoneSettingNELJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZonesNEL) implementsZonesSettingEditResponse() {}
+func (r ZoneSettingNEL) implementsZonesSettingEditResponse() {}
 
-func (r ZonesNEL) implementsZonesSettingGetResponse() {}
+func (r ZoneSettingNEL) implementsZonesSettingGetResponse() {}
 
 // Zone setting identifier.
-type ZonesNELID string
+type ZoneSettingNELID string
 
 const (
-	ZonesNELIDNEL ZonesNELID = "nel"
+	ZoneSettingNELIDNEL ZoneSettingNELID = "nel"
 )
 
-func (r ZonesNELID) IsKnown() bool {
+func (r ZoneSettingNELID) IsKnown() bool {
 	switch r {
-	case ZonesNELIDNEL:
+	case ZoneSettingNELIDNEL:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZonesNELValue struct {
-	Enabled bool              `json:"enabled"`
-	JSON    zonesNELValueJSON `json:"-"`
+type ZoneSettingNELValue struct {
+	Enabled bool                    `json:"enabled"`
+	JSON    zoneSettingNELValueJSON `json:"-"`
 }
 
-// zonesNELValueJSON contains the JSON metadata for the struct [ZonesNELValue]
-type zonesNELValueJSON struct {
+// zoneSettingNELValueJSON contains the JSON metadata for the struct
+// [ZoneSettingNELValue]
+type zoneSettingNELValueJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesNELValue) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesNELValueJSON) RawJSON() string {
+func (r zoneSettingNELValueJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesNELEditable bool
+type ZoneSettingNELEditable bool
 
 const (
-	ZonesNELEditableTrue  ZonesNELEditable = true
-	ZonesNELEditableFalse ZonesNELEditable = false
+	ZoneSettingNELEditableTrue  ZoneSettingNELEditable = true
+	ZoneSettingNELEditableFalse ZoneSettingNELEditable = false
 )
 
-func (r ZonesNELEditable) IsKnown() bool {
+func (r ZoneSettingNELEditable) IsKnown() bool {
 	switch r {
-	case ZonesNELEditableTrue, ZonesNELEditableFalse:
+	case ZoneSettingNELEditableTrue, ZoneSettingNELEditableFalse:
 		return true
 	}
 	return false
 }
 
 // Enable Network Error Logging reporting on your zone. (Beta)
-type ZonesNELParam struct {
+type ZoneSettingNELParam struct {
 	// Zone setting identifier.
-	ID param.Field[ZonesNELID] `json:"id,required"`
+	ID param.Field[ZoneSettingNELID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesNELValueParam] `json:"value,required"`
+	Value param.Field[ZoneSettingNELValueParam] `json:"value,required"`
 }
 
-func (r ZonesNELParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingNELParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonesNELParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingNELParam) implementsZonesSettingEditParamsItem() {}
 
 // Current value of the zone setting.
-type ZonesNELValueParam struct {
+type ZoneSettingNELValueParam struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r ZonesNELValueParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingNELValueParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -175,7 +176,7 @@ type SettingNELEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Enable Network Error Logging reporting on your zone. (Beta)
-	Value param.Field[ZonesNELParam] `json:"value,required"`
+	Value param.Field[ZoneSettingNELParam] `json:"value,required"`
 }
 
 func (r SettingNELEditParams) MarshalJSON() (data []byte, err error) {
@@ -188,7 +189,7 @@ type SettingNELEditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable Network Error Logging reporting on your zone. (Beta)
-	Result ZonesNEL                           `json:"result"`
+	Result ZoneSettingNEL                     `json:"result"`
 	JSON   settingNELEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -268,7 +269,7 @@ type SettingNELGetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable Network Error Logging reporting on your zone. (Beta)
-	Result ZonesNEL                          `json:"result"`
+	Result ZoneSettingNEL                    `json:"result"`
 	JSON   settingNELGetResponseEnvelopeJSON `json:"-"`
 }
 

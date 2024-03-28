@@ -32,7 +32,7 @@ func NewUUIDService(opts ...option.RequestOption) (r *UUIDService) {
 
 // Retrieve the account and zone specific unique identifier used as part of the
 // CNAME target for DCV Delegation.
-func (r *UUIDService) Get(ctx context.Context, query UUIDGetParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesUUIDObject, err error) {
+func (r *UUIDService) Get(ctx context.Context, query UUIDGetParams, opts ...option.RequestOption) (res *DCVDelegationUUID, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UUIDGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dcv_delegation/uuid", query.ZoneID)
@@ -44,25 +44,25 @@ func (r *UUIDService) Get(ctx context.Context, query UUIDGetParams, opts ...opti
 	return
 }
 
-type TLSCertificatesAndHostnamesUUIDObject struct {
+type DCVDelegationUUID struct {
 	// The DCV Delegation unique identifier.
-	UUID string                                    `json:"uuid"`
-	JSON tlsCertificatesAndHostnamesUUIDObjectJSON `json:"-"`
+	UUID string                `json:"uuid"`
+	JSON dcvDelegationUUIDJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesUUIDObjectJSON contains the JSON metadata for the
-// struct [TLSCertificatesAndHostnamesUUIDObject]
-type tlsCertificatesAndHostnamesUUIDObjectJSON struct {
+// dcvDelegationUUIDJSON contains the JSON metadata for the struct
+// [DCVDelegationUUID]
+type dcvDelegationUUIDJSON struct {
 	UUID        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesUUIDObject) UnmarshalJSON(data []byte) (err error) {
+func (r *DCVDelegationUUID) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsCertificatesAndHostnamesUUIDObjectJSON) RawJSON() string {
+func (r dcvDelegationUUIDJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -72,9 +72,9 @@ type UUIDGetParams struct {
 }
 
 type UUIDGetResponseEnvelope struct {
-	Errors   []UUIDGetResponseEnvelopeErrors       `json:"errors,required"`
-	Messages []UUIDGetResponseEnvelopeMessages     `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesUUIDObject `json:"result,required"`
+	Errors   []UUIDGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UUIDGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DCVDelegationUUID                 `json:"result,required"`
 	// Whether the API call was successful
 	Success UUIDGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uuidGetResponseEnvelopeJSON    `json:"-"`

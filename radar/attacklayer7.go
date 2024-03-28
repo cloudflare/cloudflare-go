@@ -276,7 +276,7 @@ func (r AttackLayer7TimeseriesParamsAggInterval) IsKnown() bool {
 type AttackLayer7TimeseriesParamsAttack string
 
 const (
-	AttackLayer7TimeseriesParamsAttackDDOS               AttackLayer7TimeseriesParamsAttack = "DDOS"
+	AttackLayer7TimeseriesParamsAttackDDoS               AttackLayer7TimeseriesParamsAttack = "DDOS"
 	AttackLayer7TimeseriesParamsAttackWAF                AttackLayer7TimeseriesParamsAttack = "WAF"
 	AttackLayer7TimeseriesParamsAttackBotManagement      AttackLayer7TimeseriesParamsAttack = "BOT_MANAGEMENT"
 	AttackLayer7TimeseriesParamsAttackAccessRules        AttackLayer7TimeseriesParamsAttack = "ACCESS_RULES"
@@ -287,7 +287,7 @@ const (
 
 func (r AttackLayer7TimeseriesParamsAttack) IsKnown() bool {
 	switch r {
-	case AttackLayer7TimeseriesParamsAttackDDOS, AttackLayer7TimeseriesParamsAttackWAF, AttackLayer7TimeseriesParamsAttackBotManagement, AttackLayer7TimeseriesParamsAttackAccessRules, AttackLayer7TimeseriesParamsAttackIPReputation, AttackLayer7TimeseriesParamsAttackAPIShield, AttackLayer7TimeseriesParamsAttackDataLossPrevention:
+	case AttackLayer7TimeseriesParamsAttackDDoS, AttackLayer7TimeseriesParamsAttackWAF, AttackLayer7TimeseriesParamsAttackBotManagement, AttackLayer7TimeseriesParamsAttackAccessRules, AttackLayer7TimeseriesParamsAttackIPReputation, AttackLayer7TimeseriesParamsAttackAPIShield, AttackLayer7TimeseriesParamsAttackDataLossPrevention:
 		return true
 	}
 	return false

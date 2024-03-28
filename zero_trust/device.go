@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -51,16 +52,26 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 }
 
 // Fetches a list of enrolled devices.
-func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDevices, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DeviceListResponseEnvelope
+func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustDevices], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/devices", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches a list of enrolled devices.
+func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustDevices] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Fetches details for a single device.
@@ -76,14 +87,14 @@ func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGe
 	return
 }
 
-type TeamsDevicesDevices struct {
+type ZeroTrustDevices struct {
 	// Device ID.
 	ID string `json:"id"`
 	// When the device was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// True if the device was deleted.
-	Deleted    bool                          `json:"deleted"`
-	DeviceType TeamsDevicesDevicesDeviceType `json:"device_type"`
+	Deleted    bool                       `json:"deleted"`
+	DeviceType ZeroTrustDevicesDeviceType `json:"device_type"`
 	// IPv4 or IPv6 address.
 	IP string `json:"ip"`
 	// The device's public key.
@@ -111,16 +122,16 @@ type TeamsDevicesDevices struct {
 	// The device serial number.
 	SerialNumber string `json:"serial_number"`
 	// When the device was updated.
-	Updated time.Time               `json:"updated" format:"date-time"`
-	User    TeamsDevicesDevicesUser `json:"user"`
+	Updated time.Time            `json:"updated" format:"date-time"`
+	User    ZeroTrustDevicesUser `json:"user"`
 	// The WARP client version.
-	Version string                  `json:"version"`
-	JSON    teamsDevicesDevicesJSON `json:"-"`
+	Version string               `json:"version"`
+	JSON    zeroTrustDevicesJSON `json:"-"`
 }
 
-// teamsDevicesDevicesJSON contains the JSON metadata for the struct
-// [TeamsDevicesDevices]
-type teamsDevicesDevicesJSON struct {
+// zeroTrustDevicesJSON contains the JSON metadata for the struct
+// [ZeroTrustDevices]
+type zeroTrustDevicesJSON struct {
 	ID               apijson.Field
 	Created          apijson.Field
 	Deleted          apijson.Field
@@ -145,45 +156,45 @@ type teamsDevicesDevicesJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDevices) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDevices) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDevicesJSON) RawJSON() string {
+func (r zeroTrustDevicesJSON) RawJSON() string {
 	return r.raw
 }
 
-type TeamsDevicesDevicesDeviceType string
+type ZeroTrustDevicesDeviceType string
 
 const (
-	TeamsDevicesDevicesDeviceTypeWindows TeamsDevicesDevicesDeviceType = "windows"
-	TeamsDevicesDevicesDeviceTypeMac     TeamsDevicesDevicesDeviceType = "mac"
-	TeamsDevicesDevicesDeviceTypeLinux   TeamsDevicesDevicesDeviceType = "linux"
-	TeamsDevicesDevicesDeviceTypeAndroid TeamsDevicesDevicesDeviceType = "android"
-	TeamsDevicesDevicesDeviceTypeIos     TeamsDevicesDevicesDeviceType = "ios"
+	ZeroTrustDevicesDeviceTypeWindows ZeroTrustDevicesDeviceType = "windows"
+	ZeroTrustDevicesDeviceTypeMac     ZeroTrustDevicesDeviceType = "mac"
+	ZeroTrustDevicesDeviceTypeLinux   ZeroTrustDevicesDeviceType = "linux"
+	ZeroTrustDevicesDeviceTypeAndroid ZeroTrustDevicesDeviceType = "android"
+	ZeroTrustDevicesDeviceTypeIos     ZeroTrustDevicesDeviceType = "ios"
 )
 
-func (r TeamsDevicesDevicesDeviceType) IsKnown() bool {
+func (r ZeroTrustDevicesDeviceType) IsKnown() bool {
 	switch r {
-	case TeamsDevicesDevicesDeviceTypeWindows, TeamsDevicesDevicesDeviceTypeMac, TeamsDevicesDevicesDeviceTypeLinux, TeamsDevicesDevicesDeviceTypeAndroid, TeamsDevicesDevicesDeviceTypeIos:
+	case ZeroTrustDevicesDeviceTypeWindows, ZeroTrustDevicesDeviceTypeMac, ZeroTrustDevicesDeviceTypeLinux, ZeroTrustDevicesDeviceTypeAndroid, ZeroTrustDevicesDeviceTypeIos:
 		return true
 	}
 	return false
 }
 
-type TeamsDevicesDevicesUser struct {
+type ZeroTrustDevicesUser struct {
 	// UUID
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
 	// The enrolled device user's name.
-	Name string                      `json:"name"`
-	JSON teamsDevicesDevicesUserJSON `json:"-"`
+	Name string                   `json:"name"`
+	JSON zeroTrustDevicesUserJSON `json:"-"`
 }
 
-// teamsDevicesDevicesUserJSON contains the JSON metadata for the struct
-// [TeamsDevicesDevicesUser]
-type teamsDevicesDevicesUserJSON struct {
+// zeroTrustDevicesUserJSON contains the JSON metadata for the struct
+// [ZeroTrustDevicesUser]
+type zeroTrustDevicesUserJSON struct {
 	ID          apijson.Field
 	Email       apijson.Field
 	Name        apijson.Field
@@ -191,11 +202,11 @@ type teamsDevicesDevicesUserJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDevicesUser) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDevicesUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDevicesUserJSON) RawJSON() string {
+func (r zeroTrustDevicesUserJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -218,128 +229,6 @@ func init() {
 
 type DeviceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DeviceListResponseEnvelope struct {
-	Errors   []DeviceListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesDevices                `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DeviceListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DeviceListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       deviceListResponseEnvelopeJSON       `json:"-"`
-}
-
-// deviceListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DeviceListResponseEnvelope]
-type deviceListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    deviceListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DeviceListResponseEnvelopeErrors]
-type deviceListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    deviceListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DeviceListResponseEnvelopeMessages]
-type deviceListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DeviceListResponseEnvelopeSuccess bool
-
-const (
-	DeviceListResponseEnvelopeSuccessTrue DeviceListResponseEnvelopeSuccess = true
-)
-
-func (r DeviceListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DeviceListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DeviceListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                  `json:"total_count"`
-	JSON       deviceListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// deviceListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DeviceListResponseEnvelopeResultInfo]
-type deviceListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type DeviceGetParams struct {

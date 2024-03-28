@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -37,7 +38,7 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 }
 
 // Lists organizations the user is associated with.
-func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[IamOrganization], err error) {
+func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Organization], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -55,8 +56,8 @@ func (r *OrganizationService) List(ctx context.Context, query OrganizationListPa
 }
 
 // Lists organizations the user is associated with.
-func (r *OrganizationService) ListAutoPaging(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[IamOrganization] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
+func (r *OrganizationService) ListAutoPaging(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Organization] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
 // Removes association to an organization.
@@ -80,7 +81,7 @@ func (r *OrganizationService) Get(ctx context.Context, organizationID string, op
 	return
 }
 
-type IamOrganization struct {
+type Organization struct {
 	// Identifier
 	ID string `json:"id"`
 	// Organization name.
@@ -90,12 +91,12 @@ type IamOrganization struct {
 	// List of roles that a user has within an organization.
 	Roles []string `json:"roles"`
 	// Whether the user is a member of the organization or has an inivitation pending.
-	Status IamOrganizationStatus `json:"status"`
-	JSON   iamOrganizationJSON   `json:"-"`
+	Status OrganizationStatus `json:"status"`
+	JSON   organizationJSON   `json:"-"`
 }
 
-// iamOrganizationJSON contains the JSON metadata for the struct [IamOrganization]
-type iamOrganizationJSON struct {
+// organizationJSON contains the JSON metadata for the struct [Organization]
+type organizationJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	Permissions apijson.Field
@@ -105,25 +106,25 @@ type iamOrganizationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IamOrganization) UnmarshalJSON(data []byte) (err error) {
+func (r *Organization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r iamOrganizationJSON) RawJSON() string {
+func (r organizationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the user is a member of the organization or has an inivitation pending.
-type IamOrganizationStatus string
+type OrganizationStatus string
 
 const (
-	IamOrganizationStatusMember  IamOrganizationStatus = "member"
-	IamOrganizationStatusInvited IamOrganizationStatus = "invited"
+	OrganizationStatusMember  OrganizationStatus = "member"
+	OrganizationStatusInvited OrganizationStatus = "invited"
 )
 
-func (r IamOrganizationStatus) IsKnown() bool {
+func (r OrganizationStatus) IsKnown() bool {
 	switch r {
-	case IamOrganizationStatusMember, IamOrganizationStatusInvited:
+	case OrganizationStatusMember, OrganizationStatusInvited:
 		return true
 	}
 	return false

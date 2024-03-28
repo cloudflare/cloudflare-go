@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -33,9 +34,10 @@ func NewPhaseVersionService(opts ...option.RequestOption) (r *PhaseVersionServic
 }
 
 // Fetches the versions of an account or zone entry point ruleset.
-func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) (res *RulesetsRulesetsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PhaseVersionListResponseEnvelope
+func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PhaseVersionListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -46,16 +48,25 @@ func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersio
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/phases/%v/entrypoint/versions", accountOrZone, accountOrZoneID, rulesetPhase)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches the versions of an account or zone entry point ruleset.
+func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PhaseVersionListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, rulesetPhase, query, opts...))
 }
 
 // Fetches a specific version of an account or zone entry point ruleset.
-func (r *PhaseVersionService) Get(ctx context.Context, rulesetPhase PhaseVersionGetParamsRulesetPhase, rulesetVersion string, query PhaseVersionGetParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
+func (r *PhaseVersionService) Get(ctx context.Context, rulesetPhase PhaseVersionGetParamsRulesetPhase, rulesetVersion string, query PhaseVersionGetParams, opts ...option.RequestOption) (res *Ruleset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PhaseVersionGetResponseEnvelope
 	var accountOrZone string
@@ -139,8 +150,8 @@ func (r PhaseVersionListResponseKind) IsKnown() bool {
 type PhaseVersionListResponsePhase string
 
 const (
-	PhaseVersionListResponsePhaseDDOSL4                         PhaseVersionListResponsePhase = "ddos_l4"
-	PhaseVersionListResponsePhaseDDOSL7                         PhaseVersionListResponsePhase = "ddos_l7"
+	PhaseVersionListResponsePhaseDDoSL4                         PhaseVersionListResponsePhase = "ddos_l4"
+	PhaseVersionListResponsePhaseDDoSL7                         PhaseVersionListResponsePhase = "ddos_l7"
 	PhaseVersionListResponsePhaseHTTPConfigSettings             PhaseVersionListResponsePhase = "http_config_settings"
 	PhaseVersionListResponsePhaseHTTPCustomErrors               PhaseVersionListResponsePhase = "http_custom_errors"
 	PhaseVersionListResponsePhaseHTTPLogCustomFields            PhaseVersionListResponsePhase = "http_log_custom_fields"
@@ -166,7 +177,7 @@ const (
 
 func (r PhaseVersionListResponsePhase) IsKnown() bool {
 	switch r {
-	case PhaseVersionListResponsePhaseDDOSL4, PhaseVersionListResponsePhaseDDOSL7, PhaseVersionListResponsePhaseHTTPConfigSettings, PhaseVersionListResponsePhaseHTTPCustomErrors, PhaseVersionListResponsePhaseHTTPLogCustomFields, PhaseVersionListResponsePhaseHTTPRatelimit, PhaseVersionListResponsePhaseHTTPRequestCacheSettings, PhaseVersionListResponsePhaseHTTPRequestDynamicRedirect, PhaseVersionListResponsePhaseHTTPRequestFirewallCustom, PhaseVersionListResponsePhaseHTTPRequestFirewallManaged, PhaseVersionListResponsePhaseHTTPRequestLateTransform, PhaseVersionListResponsePhaseHTTPRequestOrigin, PhaseVersionListResponsePhaseHTTPRequestRedirect, PhaseVersionListResponsePhaseHTTPRequestSanitize, PhaseVersionListResponsePhaseHTTPRequestSbfm, PhaseVersionListResponsePhaseHTTPRequestSelectConfiguration, PhaseVersionListResponsePhaseHTTPRequestTransform, PhaseVersionListResponsePhaseHTTPResponseCompression, PhaseVersionListResponsePhaseHTTPResponseFirewallManaged, PhaseVersionListResponsePhaseHTTPResponseHeadersTransform, PhaseVersionListResponsePhaseMagicTransit, PhaseVersionListResponsePhaseMagicTransitIDsManaged, PhaseVersionListResponsePhaseMagicTransitManaged:
+	case PhaseVersionListResponsePhaseDDoSL4, PhaseVersionListResponsePhaseDDoSL7, PhaseVersionListResponsePhaseHTTPConfigSettings, PhaseVersionListResponsePhaseHTTPCustomErrors, PhaseVersionListResponsePhaseHTTPLogCustomFields, PhaseVersionListResponsePhaseHTTPRatelimit, PhaseVersionListResponsePhaseHTTPRequestCacheSettings, PhaseVersionListResponsePhaseHTTPRequestDynamicRedirect, PhaseVersionListResponsePhaseHTTPRequestFirewallCustom, PhaseVersionListResponsePhaseHTTPRequestFirewallManaged, PhaseVersionListResponsePhaseHTTPRequestLateTransform, PhaseVersionListResponsePhaseHTTPRequestOrigin, PhaseVersionListResponsePhaseHTTPRequestRedirect, PhaseVersionListResponsePhaseHTTPRequestSanitize, PhaseVersionListResponsePhaseHTTPRequestSbfm, PhaseVersionListResponsePhaseHTTPRequestSelectConfiguration, PhaseVersionListResponsePhaseHTTPRequestTransform, PhaseVersionListResponsePhaseHTTPResponseCompression, PhaseVersionListResponsePhaseHTTPResponseFirewallManaged, PhaseVersionListResponsePhaseHTTPResponseHeadersTransform, PhaseVersionListResponsePhaseMagicTransit, PhaseVersionListResponsePhaseMagicTransitIDsManaged, PhaseVersionListResponsePhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -183,8 +194,8 @@ type PhaseVersionListParams struct {
 type PhaseVersionListParamsRulesetPhase string
 
 const (
-	PhaseVersionListParamsRulesetPhaseDDOSL4                         PhaseVersionListParamsRulesetPhase = "ddos_l4"
-	PhaseVersionListParamsRulesetPhaseDDOSL7                         PhaseVersionListParamsRulesetPhase = "ddos_l7"
+	PhaseVersionListParamsRulesetPhaseDDoSL4                         PhaseVersionListParamsRulesetPhase = "ddos_l4"
+	PhaseVersionListParamsRulesetPhaseDDoSL7                         PhaseVersionListParamsRulesetPhase = "ddos_l7"
 	PhaseVersionListParamsRulesetPhaseHTTPConfigSettings             PhaseVersionListParamsRulesetPhase = "http_config_settings"
 	PhaseVersionListParamsRulesetPhaseHTTPCustomErrors               PhaseVersionListParamsRulesetPhase = "http_custom_errors"
 	PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields            PhaseVersionListParamsRulesetPhase = "http_log_custom_fields"
@@ -210,158 +221,7 @@ const (
 
 func (r PhaseVersionListParamsRulesetPhase) IsKnown() bool {
 	switch r {
-	case PhaseVersionListParamsRulesetPhaseDDOSL4, PhaseVersionListParamsRulesetPhaseDDOSL7, PhaseVersionListParamsRulesetPhaseHTTPConfigSettings, PhaseVersionListParamsRulesetPhaseHTTPCustomErrors, PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionListParamsRulesetPhaseHTTPRatelimit, PhaseVersionListParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionListParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionListParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionListParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionListParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionListParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionListParamsRulesetPhaseHTTPRequestTransform, PhaseVersionListParamsRulesetPhaseHTTPResponseCompression, PhaseVersionListParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionListParamsRulesetPhaseMagicTransit, PhaseVersionListParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionListParamsRulesetPhaseMagicTransitManaged:
-		return true
-	}
-	return false
-}
-
-// A response object.
-type PhaseVersionListResponseEnvelope struct {
-	// A list of error messages.
-	Errors []PhaseVersionListResponseEnvelopeErrors `json:"errors,required"`
-	// A list of warning messages.
-	Messages []PhaseVersionListResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
-	Result RulesetsRulesetsResponse `json:"result,required"`
-	// Whether the API call was successful.
-	Success PhaseVersionListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    phaseVersionListResponseEnvelopeJSON    `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PhaseVersionListResponseEnvelope]
-type phaseVersionListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// A message.
-type PhaseVersionListResponseEnvelopeErrors struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source PhaseVersionListResponseEnvelopeErrorsSource `json:"source"`
-	JSON   phaseVersionListResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PhaseVersionListResponseEnvelopeErrors]
-type phaseVersionListResponseEnvelopeErrorsJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-// The source of this message.
-type PhaseVersionListResponseEnvelopeErrorsSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                           `json:"pointer,required"`
-	JSON    phaseVersionListResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
-// the struct [PhaseVersionListResponseEnvelopeErrorsSource]
-type phaseVersionListResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// A message.
-type PhaseVersionListResponseEnvelopeMessages struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source PhaseVersionListResponseEnvelopeMessagesSource `json:"source"`
-	JSON   phaseVersionListResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PhaseVersionListResponseEnvelopeMessages]
-type phaseVersionListResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The source of this message.
-type PhaseVersionListResponseEnvelopeMessagesSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                             `json:"pointer,required"`
-	JSON    phaseVersionListResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeMessagesSourceJSON contains the JSON metadata
-// for the struct [PhaseVersionListResponseEnvelopeMessagesSource]
-type phaseVersionListResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type PhaseVersionListResponseEnvelopeSuccess bool
-
-const (
-	PhaseVersionListResponseEnvelopeSuccessTrue PhaseVersionListResponseEnvelopeSuccess = true
-)
-
-func (r PhaseVersionListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PhaseVersionListResponseEnvelopeSuccessTrue:
+	case PhaseVersionListParamsRulesetPhaseDDoSL4, PhaseVersionListParamsRulesetPhaseDDoSL7, PhaseVersionListParamsRulesetPhaseHTTPConfigSettings, PhaseVersionListParamsRulesetPhaseHTTPCustomErrors, PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionListParamsRulesetPhaseHTTPRatelimit, PhaseVersionListParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionListParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionListParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionListParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionListParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionListParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionListParamsRulesetPhaseHTTPRequestTransform, PhaseVersionListParamsRulesetPhaseHTTPResponseCompression, PhaseVersionListParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionListParamsRulesetPhaseMagicTransit, PhaseVersionListParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionListParamsRulesetPhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -378,8 +238,8 @@ type PhaseVersionGetParams struct {
 type PhaseVersionGetParamsRulesetPhase string
 
 const (
-	PhaseVersionGetParamsRulesetPhaseDDOSL4                         PhaseVersionGetParamsRulesetPhase = "ddos_l4"
-	PhaseVersionGetParamsRulesetPhaseDDOSL7                         PhaseVersionGetParamsRulesetPhase = "ddos_l7"
+	PhaseVersionGetParamsRulesetPhaseDDoSL4                         PhaseVersionGetParamsRulesetPhase = "ddos_l4"
+	PhaseVersionGetParamsRulesetPhaseDDoSL7                         PhaseVersionGetParamsRulesetPhase = "ddos_l7"
 	PhaseVersionGetParamsRulesetPhaseHTTPConfigSettings             PhaseVersionGetParamsRulesetPhase = "http_config_settings"
 	PhaseVersionGetParamsRulesetPhaseHTTPCustomErrors               PhaseVersionGetParamsRulesetPhase = "http_custom_errors"
 	PhaseVersionGetParamsRulesetPhaseHTTPLogCustomFields            PhaseVersionGetParamsRulesetPhase = "http_log_custom_fields"
@@ -405,7 +265,7 @@ const (
 
 func (r PhaseVersionGetParamsRulesetPhase) IsKnown() bool {
 	switch r {
-	case PhaseVersionGetParamsRulesetPhaseDDOSL4, PhaseVersionGetParamsRulesetPhaseDDOSL7, PhaseVersionGetParamsRulesetPhaseHTTPConfigSettings, PhaseVersionGetParamsRulesetPhaseHTTPCustomErrors, PhaseVersionGetParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionGetParamsRulesetPhaseHTTPRatelimit, PhaseVersionGetParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionGetParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionGetParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionGetParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionGetParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionGetParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionGetParamsRulesetPhaseHTTPRequestTransform, PhaseVersionGetParamsRulesetPhaseHTTPResponseCompression, PhaseVersionGetParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionGetParamsRulesetPhaseMagicTransit, PhaseVersionGetParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionGetParamsRulesetPhaseMagicTransitManaged:
+	case PhaseVersionGetParamsRulesetPhaseDDoSL4, PhaseVersionGetParamsRulesetPhaseDDoSL7, PhaseVersionGetParamsRulesetPhaseHTTPConfigSettings, PhaseVersionGetParamsRulesetPhaseHTTPCustomErrors, PhaseVersionGetParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionGetParamsRulesetPhaseHTTPRatelimit, PhaseVersionGetParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionGetParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionGetParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionGetParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionGetParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionGetParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionGetParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionGetParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionGetParamsRulesetPhaseHTTPRequestTransform, PhaseVersionGetParamsRulesetPhaseHTTPResponseCompression, PhaseVersionGetParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionGetParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionGetParamsRulesetPhaseMagicTransit, PhaseVersionGetParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionGetParamsRulesetPhaseMagicTransitManaged:
 		return true
 	}
 	return false
@@ -418,7 +278,7 @@ type PhaseVersionGetResponseEnvelope struct {
 	// A list of warning messages.
 	Messages []PhaseVersionGetResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result RulesetsRulesetResponse `json:"result,required"`
+	Result Ruleset `json:"result,required"`
 	// Whether the API call was successful.
 	Success PhaseVersionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    phaseVersionGetResponseEnvelopeJSON    `json:"-"`

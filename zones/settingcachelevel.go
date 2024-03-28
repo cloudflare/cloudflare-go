@@ -37,7 +37,7 @@ func NewSettingCacheLevelService(opts ...option.RequestOption) (r *SettingCacheL
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-func (r *SettingCacheLevelService) Edit(ctx context.Context, params SettingCacheLevelEditParams, opts ...option.RequestOption) (res *ZonesCacheLevel, err error) {
+func (r *SettingCacheLevelService) Edit(ctx context.Context, params SettingCacheLevelEditParams, opts ...option.RequestOption) (res *ZoneSettingCacheLevel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingCacheLevelEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/cache_level", params.ZoneID)
@@ -54,7 +54,7 @@ func (r *SettingCacheLevelService) Edit(ctx context.Context, params SettingCache
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-func (r *SettingCacheLevelService) Get(ctx context.Context, query SettingCacheLevelGetParams, opts ...option.RequestOption) (res *ZonesCacheLevel, err error) {
+func (r *SettingCacheLevelService) Get(ctx context.Context, query SettingCacheLevelGetParams, opts ...option.RequestOption) (res *ZoneSettingCacheLevel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingCacheLevelGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/cache_level", query.ZoneID)
@@ -71,21 +71,22 @@ func (r *SettingCacheLevelService) Get(ctx context.Context, query SettingCacheLe
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-type ZonesCacheLevel struct {
+type ZoneSettingCacheLevel struct {
 	// ID of the zone setting.
-	ID ZonesCacheLevelID `json:"id,required"`
+	ID ZoneSettingCacheLevelID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesCacheLevelValue `json:"value,required"`
+	Value ZoneSettingCacheLevelValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesCacheLevelEditable `json:"editable"`
+	Editable ZoneSettingCacheLevelEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesCacheLevelJSON `json:"-"`
+	ModifiedOn time.Time                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingCacheLevelJSON `json:"-"`
 }
 
-// zonesCacheLevelJSON contains the JSON metadata for the struct [ZonesCacheLevel]
-type zonesCacheLevelJSON struct {
+// zoneSettingCacheLevelJSON contains the JSON metadata for the struct
+// [ZoneSettingCacheLevel]
+type zoneSettingCacheLevelJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -94,45 +95,45 @@ type zonesCacheLevelJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesCacheLevel) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingCacheLevel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesCacheLevelJSON) RawJSON() string {
+func (r zoneSettingCacheLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZonesCacheLevel) implementsZonesSettingEditResponse() {}
+func (r ZoneSettingCacheLevel) implementsZonesSettingEditResponse() {}
 
-func (r ZonesCacheLevel) implementsZonesSettingGetResponse() {}
+func (r ZoneSettingCacheLevel) implementsZonesSettingGetResponse() {}
 
 // ID of the zone setting.
-type ZonesCacheLevelID string
+type ZoneSettingCacheLevelID string
 
 const (
-	ZonesCacheLevelIDCacheLevel ZonesCacheLevelID = "cache_level"
+	ZoneSettingCacheLevelIDCacheLevel ZoneSettingCacheLevelID = "cache_level"
 )
 
-func (r ZonesCacheLevelID) IsKnown() bool {
+func (r ZoneSettingCacheLevelID) IsKnown() bool {
 	switch r {
-	case ZonesCacheLevelIDCacheLevel:
+	case ZoneSettingCacheLevelIDCacheLevel:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZonesCacheLevelValue string
+type ZoneSettingCacheLevelValue string
 
 const (
-	ZonesCacheLevelValueAggressive ZonesCacheLevelValue = "aggressive"
-	ZonesCacheLevelValueBasic      ZonesCacheLevelValue = "basic"
-	ZonesCacheLevelValueSimplified ZonesCacheLevelValue = "simplified"
+	ZoneSettingCacheLevelValueAggressive ZoneSettingCacheLevelValue = "aggressive"
+	ZoneSettingCacheLevelValueBasic      ZoneSettingCacheLevelValue = "basic"
+	ZoneSettingCacheLevelValueSimplified ZoneSettingCacheLevelValue = "simplified"
 )
 
-func (r ZonesCacheLevelValue) IsKnown() bool {
+func (r ZoneSettingCacheLevelValue) IsKnown() bool {
 	switch r {
-	case ZonesCacheLevelValueAggressive, ZonesCacheLevelValueBasic, ZonesCacheLevelValueSimplified:
+	case ZoneSettingCacheLevelValueAggressive, ZoneSettingCacheLevelValueBasic, ZoneSettingCacheLevelValueSimplified:
 		return true
 	}
 	return false
@@ -140,16 +141,16 @@ func (r ZonesCacheLevelValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesCacheLevelEditable bool
+type ZoneSettingCacheLevelEditable bool
 
 const (
-	ZonesCacheLevelEditableTrue  ZonesCacheLevelEditable = true
-	ZonesCacheLevelEditableFalse ZonesCacheLevelEditable = false
+	ZoneSettingCacheLevelEditableTrue  ZoneSettingCacheLevelEditable = true
+	ZoneSettingCacheLevelEditableFalse ZoneSettingCacheLevelEditable = false
 )
 
-func (r ZonesCacheLevelEditable) IsKnown() bool {
+func (r ZoneSettingCacheLevelEditable) IsKnown() bool {
 	switch r {
-	case ZonesCacheLevelEditableTrue, ZonesCacheLevelEditableFalse:
+	case ZoneSettingCacheLevelEditableTrue, ZoneSettingCacheLevelEditableFalse:
 		return true
 	}
 	return false
@@ -160,18 +161,18 @@ func (r ZonesCacheLevelEditable) IsKnown() bool {
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-type ZonesCacheLevelParam struct {
+type ZoneSettingCacheLevelParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesCacheLevelID] `json:"id,required"`
+	ID param.Field[ZoneSettingCacheLevelID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesCacheLevelValue] `json:"value,required"`
+	Value param.Field[ZoneSettingCacheLevelValue] `json:"value,required"`
 }
 
-func (r ZonesCacheLevelParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingCacheLevelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonesCacheLevelParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingCacheLevelParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingCacheLevelEditParams struct {
 	// Identifier
@@ -211,7 +212,7 @@ type SettingCacheLevelEditResponseEnvelope struct {
 	// setting will ignore the query string when delivering a cached resource. The
 	// aggressive setting will cache all static resources, including ones with a query
 	// string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-	Result ZonesCacheLevel                           `json:"result"`
+	Result ZoneSettingCacheLevel                     `json:"result"`
 	JSON   settingCacheLevelEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -295,7 +296,7 @@ type SettingCacheLevelGetResponseEnvelope struct {
 	// setting will ignore the query string when delivering a cached resource. The
 	// aggressive setting will cache all static resources, including ones with a query
 	// string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-	Result ZonesCacheLevel                          `json:"result"`
+	Result ZoneSettingCacheLevel                    `json:"result"`
 	JSON   settingCacheLevelGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -36,7 +36,7 @@ func NewDEXTestService(opts ...option.RequestOption) (r *DEXTestService) {
 }
 
 // List DEX tests
-func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) (res *shared.V4PagePagination[DEXTestListResponse], err error) {
+func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DEXTestListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -54,8 +54,8 @@ func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opt
 }
 
 // List DEX tests
-func (r *DEXTestService) ListAutoPaging(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) *shared.V4PagePaginationAutoPager[DEXTestListResponse] {
-	return shared.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
+func (r *DEXTestService) ListAutoPaging(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DEXTestListResponse] {
+	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 type DigitalExperienceMonitoringTests struct {

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -35,7 +36,7 @@ func NewHealthcheckService(opts ...option.RequestOption) (r *HealthcheckService)
 }
 
 // Create a new health check.
-func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/healthchecks", params.ZoneID)
@@ -48,7 +49,7 @@ func (r *HealthcheckService) New(ctx context.Context, params HealthcheckNewParam
 }
 
 // Update a configured health check.
-func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, params HealthcheckUpdateParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, params HealthcheckUpdateParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", params.ZoneID, healthcheckID)
@@ -61,16 +62,26 @@ func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, p
 }
 
 // List configured health checks.
-func (r *HealthcheckService) List(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) (res *[]HealthchecksHealthchecks, err error) {
-	opts = append(r.Options[:], opts...)
-	var env HealthcheckListResponseEnvelope
+func (r *HealthcheckService) List(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Healthcheck], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/healthchecks", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List configured health checks.
+func (r *HealthcheckService) ListAutoPaging(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Healthcheck] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a health check.
@@ -87,7 +98,7 @@ func (r *HealthcheckService) Delete(ctx context.Context, healthcheckID string, b
 }
 
 // Patch a configured health check.
-func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, params HealthcheckEditParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, params HealthcheckEditParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", params.ZoneID, healthcheckID)
@@ -100,7 +111,7 @@ func (r *HealthcheckService) Edit(ctx context.Context, healthcheckID string, par
 }
 
 // Fetch a single configured health check.
-func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, query HealthcheckGetParams, opts ...option.RequestOption) (res *HealthchecksHealthchecks, err error) {
+func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, query HealthcheckGetParams, opts ...option.RequestOption) (res *Healthcheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HealthcheckGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/healthchecks/%s", query.ZoneID, healthcheckID)
@@ -112,14 +123,14 @@ func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, quer
 	return
 }
 
-type HealthchecksHealthchecks struct {
+type Healthcheck struct {
 	// Identifier
 	ID string `json:"id"`
 	// The hostname or IP address of the origin server to run health checks on.
 	Address string `json:"address"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions []HealthchecksHealthchecksCheckRegion `json:"check_regions,nullable"`
+	CheckRegions []HealthcheckCheckRegion `json:"check_regions,nullable"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails int64 `json:"consecutive_fails"`
@@ -132,7 +143,7 @@ type HealthchecksHealthchecks struct {
 	// The current failure reason if status is unhealthy.
 	FailureReason string `json:"failure_reason"`
 	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig HealthchecksHealthchecksHTTPConfig `json:"http_config,nullable"`
+	HTTPConfig HealthcheckHTTPConfig `json:"http_config,nullable"`
 	// The interval between each health check. Shorter intervals may give quicker
 	// notifications if the origin status changes, but will increase load on the origin
 	// as we check from multiple locations.
@@ -145,22 +156,21 @@ type HealthchecksHealthchecks struct {
 	// as unhealthy. Retries are attempted immediately.
 	Retries int64 `json:"retries"`
 	// The current status of the origin server according to the health check.
-	Status HealthchecksHealthchecksStatus `json:"status"`
+	Status HealthcheckStatus `json:"status"`
 	// If suspended, no health checks are sent to the origin.
 	Suspended bool `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig HealthchecksHealthchecksTcpConfig `json:"tcp_config,nullable"`
+	TcpConfig HealthcheckTcpConfig `json:"tcp_config,nullable"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP', 'HTTPS' and 'TCP'.
-	Type string                       `json:"type"`
-	JSON healthchecksHealthchecksJSON `json:"-"`
+	Type string          `json:"type"`
+	JSON healthcheckJSON `json:"-"`
 }
 
-// healthchecksHealthchecksJSON contains the JSON metadata for the struct
-// [HealthchecksHealthchecks]
-type healthchecksHealthchecksJSON struct {
+// healthcheckJSON contains the JSON metadata for the struct [Healthcheck]
+type healthcheckJSON struct {
 	ID                   apijson.Field
 	Address              apijson.Field
 	CheckRegions         apijson.Field
@@ -183,11 +193,11 @@ type healthchecksHealthchecksJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *HealthchecksHealthchecks) UnmarshalJSON(data []byte) (err error) {
+func (r *Healthcheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r healthchecksHealthchecksJSON) RawJSON() string {
+func (r healthcheckJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -196,35 +206,35 @@ func (r healthchecksHealthchecksJSON) RawJSON() string {
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
 // SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
 // and ENTERPRISE customers only).
-type HealthchecksHealthchecksCheckRegion string
+type HealthcheckCheckRegion string
 
 const (
-	HealthchecksHealthchecksCheckRegionWnam       HealthchecksHealthchecksCheckRegion = "WNAM"
-	HealthchecksHealthchecksCheckRegionEnam       HealthchecksHealthchecksCheckRegion = "ENAM"
-	HealthchecksHealthchecksCheckRegionWeu        HealthchecksHealthchecksCheckRegion = "WEU"
-	HealthchecksHealthchecksCheckRegionEeu        HealthchecksHealthchecksCheckRegion = "EEU"
-	HealthchecksHealthchecksCheckRegionNsam       HealthchecksHealthchecksCheckRegion = "NSAM"
-	HealthchecksHealthchecksCheckRegionSsam       HealthchecksHealthchecksCheckRegion = "SSAM"
-	HealthchecksHealthchecksCheckRegionOc         HealthchecksHealthchecksCheckRegion = "OC"
-	HealthchecksHealthchecksCheckRegionMe         HealthchecksHealthchecksCheckRegion = "ME"
-	HealthchecksHealthchecksCheckRegionNaf        HealthchecksHealthchecksCheckRegion = "NAF"
-	HealthchecksHealthchecksCheckRegionSaf        HealthchecksHealthchecksCheckRegion = "SAF"
-	HealthchecksHealthchecksCheckRegionIn         HealthchecksHealthchecksCheckRegion = "IN"
-	HealthchecksHealthchecksCheckRegionSeas       HealthchecksHealthchecksCheckRegion = "SEAS"
-	HealthchecksHealthchecksCheckRegionNeas       HealthchecksHealthchecksCheckRegion = "NEAS"
-	HealthchecksHealthchecksCheckRegionAllRegions HealthchecksHealthchecksCheckRegion = "ALL_REGIONS"
+	HealthcheckCheckRegionWnam       HealthcheckCheckRegion = "WNAM"
+	HealthcheckCheckRegionEnam       HealthcheckCheckRegion = "ENAM"
+	HealthcheckCheckRegionWeu        HealthcheckCheckRegion = "WEU"
+	HealthcheckCheckRegionEeu        HealthcheckCheckRegion = "EEU"
+	HealthcheckCheckRegionNsam       HealthcheckCheckRegion = "NSAM"
+	HealthcheckCheckRegionSsam       HealthcheckCheckRegion = "SSAM"
+	HealthcheckCheckRegionOc         HealthcheckCheckRegion = "OC"
+	HealthcheckCheckRegionMe         HealthcheckCheckRegion = "ME"
+	HealthcheckCheckRegionNaf        HealthcheckCheckRegion = "NAF"
+	HealthcheckCheckRegionSaf        HealthcheckCheckRegion = "SAF"
+	HealthcheckCheckRegionIn         HealthcheckCheckRegion = "IN"
+	HealthcheckCheckRegionSeas       HealthcheckCheckRegion = "SEAS"
+	HealthcheckCheckRegionNeas       HealthcheckCheckRegion = "NEAS"
+	HealthcheckCheckRegionAllRegions HealthcheckCheckRegion = "ALL_REGIONS"
 )
 
-func (r HealthchecksHealthchecksCheckRegion) IsKnown() bool {
+func (r HealthcheckCheckRegion) IsKnown() bool {
 	switch r {
-	case HealthchecksHealthchecksCheckRegionWnam, HealthchecksHealthchecksCheckRegionEnam, HealthchecksHealthchecksCheckRegionWeu, HealthchecksHealthchecksCheckRegionEeu, HealthchecksHealthchecksCheckRegionNsam, HealthchecksHealthchecksCheckRegionSsam, HealthchecksHealthchecksCheckRegionOc, HealthchecksHealthchecksCheckRegionMe, HealthchecksHealthchecksCheckRegionNaf, HealthchecksHealthchecksCheckRegionSaf, HealthchecksHealthchecksCheckRegionIn, HealthchecksHealthchecksCheckRegionSeas, HealthchecksHealthchecksCheckRegionNeas, HealthchecksHealthchecksCheckRegionAllRegions:
+	case HealthcheckCheckRegionWnam, HealthcheckCheckRegionEnam, HealthcheckCheckRegionWeu, HealthcheckCheckRegionEeu, HealthcheckCheckRegionNsam, HealthcheckCheckRegionSsam, HealthcheckCheckRegionOc, HealthcheckCheckRegionMe, HealthcheckCheckRegionNaf, HealthcheckCheckRegionSaf, HealthcheckCheckRegionIn, HealthcheckCheckRegionSeas, HealthcheckCheckRegionNeas, HealthcheckCheckRegionAllRegions:
 		return true
 	}
 	return false
 }
 
 // Parameters specific to an HTTP or HTTPS health check.
-type HealthchecksHealthchecksHTTPConfig struct {
+type HealthcheckHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
 	AllowInsecure bool `json:"allow_insecure"`
 	// A case-insensitive sub-string to look for in the response body. If this string
@@ -239,18 +249,18 @@ type HealthchecksHealthchecksHTTPConfig struct {
 	// a Host header by default. The User-Agent header cannot be overridden.
 	Header interface{} `json:"header,nullable"`
 	// The HTTP method to use for the health check.
-	Method HealthchecksHealthchecksHTTPConfigMethod `json:"method"`
+	Method HealthcheckHTTPConfigMethod `json:"method"`
 	// The endpoint path to health check against.
 	Path string `json:"path"`
 	// Port number to connect to for the health check. Defaults to 80 if type is HTTP
 	// or 443 if type is HTTPS.
-	Port int64                                  `json:"port"`
-	JSON healthchecksHealthchecksHTTPConfigJSON `json:"-"`
+	Port int64                     `json:"port"`
+	JSON healthcheckHTTPConfigJSON `json:"-"`
 }
 
-// healthchecksHealthchecksHTTPConfigJSON contains the JSON metadata for the struct
-// [HealthchecksHealthchecksHTTPConfig]
-type healthchecksHealthchecksHTTPConfigJSON struct {
+// healthcheckHTTPConfigJSON contains the JSON metadata for the struct
+// [HealthcheckHTTPConfig]
+type healthcheckHTTPConfigJSON struct {
 	AllowInsecure   apijson.Field
 	ExpectedBody    apijson.Field
 	ExpectedCodes   apijson.Field
@@ -263,84 +273,84 @@ type healthchecksHealthchecksHTTPConfigJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *HealthchecksHealthchecksHTTPConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckHTTPConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r healthchecksHealthchecksHTTPConfigJSON) RawJSON() string {
+func (r healthcheckHTTPConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // The HTTP method to use for the health check.
-type HealthchecksHealthchecksHTTPConfigMethod string
+type HealthcheckHTTPConfigMethod string
 
 const (
-	HealthchecksHealthchecksHTTPConfigMethodGet  HealthchecksHealthchecksHTTPConfigMethod = "GET"
-	HealthchecksHealthchecksHTTPConfigMethodHead HealthchecksHealthchecksHTTPConfigMethod = "HEAD"
+	HealthcheckHTTPConfigMethodGet  HealthcheckHTTPConfigMethod = "GET"
+	HealthcheckHTTPConfigMethodHead HealthcheckHTTPConfigMethod = "HEAD"
 )
 
-func (r HealthchecksHealthchecksHTTPConfigMethod) IsKnown() bool {
+func (r HealthcheckHTTPConfigMethod) IsKnown() bool {
 	switch r {
-	case HealthchecksHealthchecksHTTPConfigMethodGet, HealthchecksHealthchecksHTTPConfigMethodHead:
+	case HealthcheckHTTPConfigMethodGet, HealthcheckHTTPConfigMethodHead:
 		return true
 	}
 	return false
 }
 
 // The current status of the origin server according to the health check.
-type HealthchecksHealthchecksStatus string
+type HealthcheckStatus string
 
 const (
-	HealthchecksHealthchecksStatusUnknown   HealthchecksHealthchecksStatus = "unknown"
-	HealthchecksHealthchecksStatusHealthy   HealthchecksHealthchecksStatus = "healthy"
-	HealthchecksHealthchecksStatusUnhealthy HealthchecksHealthchecksStatus = "unhealthy"
-	HealthchecksHealthchecksStatusSuspended HealthchecksHealthchecksStatus = "suspended"
+	HealthcheckStatusUnknown   HealthcheckStatus = "unknown"
+	HealthcheckStatusHealthy   HealthcheckStatus = "healthy"
+	HealthcheckStatusUnhealthy HealthcheckStatus = "unhealthy"
+	HealthcheckStatusSuspended HealthcheckStatus = "suspended"
 )
 
-func (r HealthchecksHealthchecksStatus) IsKnown() bool {
+func (r HealthcheckStatus) IsKnown() bool {
 	switch r {
-	case HealthchecksHealthchecksStatusUnknown, HealthchecksHealthchecksStatusHealthy, HealthchecksHealthchecksStatusUnhealthy, HealthchecksHealthchecksStatusSuspended:
+	case HealthcheckStatusUnknown, HealthcheckStatusHealthy, HealthcheckStatusUnhealthy, HealthcheckStatusSuspended:
 		return true
 	}
 	return false
 }
 
 // Parameters specific to TCP health check.
-type HealthchecksHealthchecksTcpConfig struct {
+type HealthcheckTcpConfig struct {
 	// The TCP connection method to use for the health check.
-	Method HealthchecksHealthchecksTcpConfigMethod `json:"method"`
+	Method HealthcheckTcpConfigMethod `json:"method"`
 	// Port number to connect to for the health check. Defaults to 80.
-	Port int64                                 `json:"port"`
-	JSON healthchecksHealthchecksTcpConfigJSON `json:"-"`
+	Port int64                    `json:"port"`
+	JSON healthcheckTcpConfigJSON `json:"-"`
 }
 
-// healthchecksHealthchecksTcpConfigJSON contains the JSON metadata for the struct
-// [HealthchecksHealthchecksTcpConfig]
-type healthchecksHealthchecksTcpConfigJSON struct {
+// healthcheckTcpConfigJSON contains the JSON metadata for the struct
+// [HealthcheckTcpConfig]
+type healthcheckTcpConfigJSON struct {
 	Method      apijson.Field
 	Port        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthchecksHealthchecksTcpConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckTcpConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r healthchecksHealthchecksTcpConfigJSON) RawJSON() string {
+func (r healthcheckTcpConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // The TCP connection method to use for the health check.
-type HealthchecksHealthchecksTcpConfigMethod string
+type HealthcheckTcpConfigMethod string
 
 const (
-	HealthchecksHealthchecksTcpConfigMethodConnectionEstablished HealthchecksHealthchecksTcpConfigMethod = "connection_established"
+	HealthcheckTcpConfigMethodConnectionEstablished HealthcheckTcpConfigMethod = "connection_established"
 )
 
-func (r HealthchecksHealthchecksTcpConfigMethod) IsKnown() bool {
+func (r HealthcheckTcpConfigMethod) IsKnown() bool {
 	switch r {
-	case HealthchecksHealthchecksTcpConfigMethodConnectionEstablished:
+	case HealthcheckTcpConfigMethodConnectionEstablished:
 		return true
 	}
 	return false
@@ -517,7 +527,7 @@ func (r HealthcheckNewParamsTcpConfigMethod) IsKnown() bool {
 type HealthcheckNewResponseEnvelope struct {
 	Errors   []HealthcheckNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HealthcheckNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   HealthchecksHealthchecks                 `json:"result,required"`
+	Result   Healthcheck                              `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckNewResponseEnvelopeJSON    `json:"-"`
@@ -752,7 +762,7 @@ func (r HealthcheckUpdateParamsTcpConfigMethod) IsKnown() bool {
 type HealthcheckUpdateResponseEnvelope struct {
 	Errors   []HealthcheckUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HealthcheckUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   HealthchecksHealthchecks                    `json:"result,required"`
+	Result   Healthcheck                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckUpdateResponseEnvelopeJSON    `json:"-"`
@@ -841,128 +851,6 @@ func (r HealthcheckUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type HealthcheckListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type HealthcheckListResponseEnvelope struct {
-	Errors   []HealthcheckListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HealthcheckListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []HealthchecksHealthchecks                `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    HealthcheckListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo HealthcheckListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       healthcheckListResponseEnvelopeJSON       `json:"-"`
-}
-
-// healthcheckListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [HealthcheckListResponseEnvelope]
-type healthcheckListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckListResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    healthcheckListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// healthcheckListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [HealthcheckListResponseEnvelopeErrors]
-type healthcheckListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckListResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    healthcheckListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// healthcheckListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HealthcheckListResponseEnvelopeMessages]
-type healthcheckListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type HealthcheckListResponseEnvelopeSuccess bool
-
-const (
-	HealthcheckListResponseEnvelopeSuccessTrue HealthcheckListResponseEnvelopeSuccess = true
-)
-
-func (r HealthcheckListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case HealthcheckListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type HealthcheckListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                       `json:"total_count"`
-	JSON       healthcheckListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// healthcheckListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [HealthcheckListResponseEnvelopeResultInfo]
-type healthcheckListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type HealthcheckDeleteParams struct {
@@ -1208,7 +1096,7 @@ func (r HealthcheckEditParamsTcpConfigMethod) IsKnown() bool {
 type HealthcheckEditResponseEnvelope struct {
 	Errors   []HealthcheckEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HealthcheckEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   HealthchecksHealthchecks                  `json:"result,required"`
+	Result   Healthcheck                               `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckEditResponseEnvelopeJSON    `json:"-"`
@@ -1302,7 +1190,7 @@ type HealthcheckGetParams struct {
 type HealthcheckGetResponseEnvelope struct {
 	Errors   []HealthcheckGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HealthcheckGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   HealthchecksHealthchecks                 `json:"result,required"`
+	Result   Healthcheck                              `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckGetResponseEnvelopeJSON    `json:"-"`

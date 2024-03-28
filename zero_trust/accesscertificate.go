@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -35,7 +36,7 @@ func NewAccessCertificateService(opts ...option.RequestOption) (r *AccessCertifi
 }
 
 // Adds a new mTLS root certificate to Access.
-func (r *AccessCertificateService) New(ctx context.Context, params AccessCertificateNewParams, opts ...option.RequestOption) (res *AccessCertificates, err error) {
+func (r *AccessCertificateService) New(ctx context.Context, params AccessCertificateNewParams, opts ...option.RequestOption) (res *ZeroTrustCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateNewResponseEnvelope
 	var accountOrZone string
@@ -57,7 +58,7 @@ func (r *AccessCertificateService) New(ctx context.Context, params AccessCertifi
 }
 
 // Updates a configured mTLS certificate.
-func (r *AccessCertificateService) Update(ctx context.Context, uuid string, params AccessCertificateUpdateParams, opts ...option.RequestOption) (res *AccessCertificates, err error) {
+func (r *AccessCertificateService) Update(ctx context.Context, uuid string, params AccessCertificateUpdateParams, opts ...option.RequestOption) (res *ZeroTrustCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateUpdateResponseEnvelope
 	var accountOrZone string
@@ -79,9 +80,10 @@ func (r *AccessCertificateService) Update(ctx context.Context, uuid string, para
 }
 
 // Lists all mTLS root certificates.
-func (r *AccessCertificateService) List(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) (res *[]AccessCertificates, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessCertificateListResponseEnvelope
+func (r *AccessCertificateService) List(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustCertificates], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -92,12 +94,21 @@ func (r *AccessCertificateService) List(ctx context.Context, query AccessCertifi
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/certificates", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all mTLS root certificates.
+func (r *AccessCertificateService) ListAutoPaging(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustCertificates] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an mTLS certificate.
@@ -123,7 +134,7 @@ func (r *AccessCertificateService) Delete(ctx context.Context, uuid string, body
 }
 
 // Fetches a single mTLS certificate.
-func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query AccessCertificateGetParams, opts ...option.RequestOption) (res *AccessCertificates, err error) {
+func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query AccessCertificateGetParams, opts ...option.RequestOption) (res *ZeroTrustCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateGetResponseEnvelope
 	var accountOrZone string
@@ -144,7 +155,7 @@ func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query A
 	return
 }
 
-type AccessCertificates struct {
+type ZeroTrustCertificates struct {
 	// The ID of the application that will use this certificate.
 	ID interface{} `json:"id"`
 	// The hostnames of the applications that will use this certificate.
@@ -154,14 +165,14 @@ type AccessCertificates struct {
 	// The MD5 fingerprint of the certificate.
 	Fingerprint string `json:"fingerprint"`
 	// The name of the certificate.
-	Name      string                 `json:"name"`
-	UpdatedAt time.Time              `json:"updated_at" format:"date-time"`
-	JSON      accessCertificatesJSON `json:"-"`
+	Name      string                    `json:"name"`
+	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustCertificatesJSON `json:"-"`
 }
 
-// accessCertificatesJSON contains the JSON metadata for the struct
-// [AccessCertificates]
-type accessCertificatesJSON struct {
+// zeroTrustCertificatesJSON contains the JSON metadata for the struct
+// [ZeroTrustCertificates]
+type zeroTrustCertificatesJSON struct {
 	ID                  apijson.Field
 	AssociatedHostnames apijson.Field
 	CreatedAt           apijson.Field
@@ -173,11 +184,11 @@ type accessCertificatesJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *AccessCertificates) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustCertificates) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessCertificatesJSON) RawJSON() string {
+func (r zeroTrustCertificatesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -223,7 +234,7 @@ func (r AccessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type AccessCertificateNewResponseEnvelope struct {
 	Errors   []AccessCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessCertificates                             `json:"result,required"`
+	Result   ZeroTrustCertificates                          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -327,7 +338,7 @@ func (r AccessCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessCertificateUpdateResponseEnvelope struct {
 	Errors   []AccessCertificateUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessCertificates                                `json:"result,required"`
+	Result   ZeroTrustCertificates                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
@@ -418,128 +429,6 @@ type AccessCertificateListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-type AccessCertificateListResponseEnvelope struct {
-	Errors   []AccessCertificateListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCertificateListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessCertificates                            `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccessCertificateListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessCertificateListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessCertificateListResponseEnvelopeJSON       `json:"-"`
-}
-
-// accessCertificateListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessCertificateListResponseEnvelope]
-type accessCertificateListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCertificateListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCertificateListResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    accessCertificateListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessCertificateListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessCertificateListResponseEnvelopeErrors]
-type accessCertificateListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCertificateListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCertificateListResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    accessCertificateListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessCertificateListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AccessCertificateListResponseEnvelopeMessages]
-type accessCertificateListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCertificateListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessCertificateListResponseEnvelopeSuccess bool
-
-const (
-	AccessCertificateListResponseEnvelopeSuccessTrue AccessCertificateListResponseEnvelopeSuccess = true
-)
-
-func (r AccessCertificateListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessCertificateListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AccessCertificateListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                             `json:"total_count"`
-	JSON       accessCertificateListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessCertificateListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [AccessCertificateListResponseEnvelopeResultInfo]
-type accessCertificateListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCertificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessCertificateDeleteParams struct {
@@ -648,7 +537,7 @@ type AccessCertificateGetParams struct {
 type AccessCertificateGetResponseEnvelope struct {
 	Errors   []AccessCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessCertificates                             `json:"result,required"`
+	Result   ZeroTrustCertificates                          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateGetResponseEnvelopeJSON    `json:"-"`

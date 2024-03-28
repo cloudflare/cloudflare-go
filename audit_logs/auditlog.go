@@ -11,9 +11,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -36,7 +36,7 @@ func NewAuditLogService(opts ...option.RequestOption) (r *AuditLogService) {
 
 // Gets a list of audit logs for an account. Can be filtered by who made the
 // change, on which zone, and the timeframe of the change.
-func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AuditLogListResponse], err error) {
+func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AuditLogListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -55,8 +55,8 @@ func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, o
 
 // Gets a list of audit logs for an account. Can be filtered by who made the
 // change, on which zone, and the timeframe of the change.
-func (r *AuditLogService) ListAutoPaging(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AuditLogListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *AuditLogService) ListAutoPaging(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AuditLogListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type AuditLogListResponse struct {

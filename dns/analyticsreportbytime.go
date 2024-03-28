@@ -39,7 +39,7 @@ func NewAnalyticsReportBytimeService(opts ...option.RequestOption) (r *Analytics
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *AnalyticsReportBytimeService) Get(ctx context.Context, params AnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReportBytime, err error) {
+func (r *AnalyticsReportBytimeService) Get(ctx context.Context, params AnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSAnalyticsReportByTime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsReportBytimeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_analytics/report/bytime", params.ZoneID)
@@ -51,9 +51,9 @@ func (r *AnalyticsReportBytimeService) Get(ctx context.Context, params Analytics
 	return
 }
 
-type DNSDNSAnalyticsAPIReportBytime struct {
+type DNSAnalyticsReportByTime struct {
 	// Array with one row per combination of dimension values.
-	Data []DNSDNSAnalyticsAPIReportBytimeData `json:"data,required"`
+	Data []DNSAnalyticsReportByTimeData `json:"data,required"`
 	// Number of seconds between current time and last processed event, in another
 	// words how many seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -62,8 +62,8 @@ type DNSDNSAnalyticsAPIReportBytime struct {
 	Max interface{} `json:"max,required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{}                         `json:"min,required"`
-	Query DNSDNSAnalyticsAPIReportBytimeQuery `json:"query,required"`
+	Min   interface{}                   `json:"min,required"`
+	Query DNSAnalyticsReportByTimeQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Array of time intervals in the response data. Each interval is represented as an
@@ -71,13 +71,13 @@ type DNSDNSAnalyticsAPIReportBytime struct {
 	TimeIntervals [][]time.Time `json:"time_intervals,required" format:"date-time"`
 	// Total results for metrics across all data (object mapping metric names to
 	// values).
-	Totals interface{}                        `json:"totals,required"`
-	JSON   dnsdnsAnalyticsAPIReportBytimeJSON `json:"-"`
+	Totals interface{}                  `json:"totals,required"`
+	JSON   dnsAnalyticsReportByTimeJSON `json:"-"`
 }
 
-// dnsdnsAnalyticsAPIReportBytimeJSON contains the JSON metadata for the struct
-// [DNSDNSAnalyticsAPIReportBytime]
-type dnsdnsAnalyticsAPIReportBytimeJSON struct {
+// dnsAnalyticsReportByTimeJSON contains the JSON metadata for the struct
+// [DNSAnalyticsReportByTime]
+type dnsAnalyticsReportByTimeJSON struct {
 	Data          apijson.Field
 	DataLag       apijson.Field
 	Max           apijson.Field
@@ -90,42 +90,42 @@ type dnsdnsAnalyticsAPIReportBytimeJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DNSDNSAnalyticsAPIReportBytime) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSAnalyticsReportByTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsdnsAnalyticsAPIReportBytimeJSON) RawJSON() string {
+func (r dnsAnalyticsReportByTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSDNSAnalyticsAPIReportBytimeData struct {
+type DNSAnalyticsReportByTimeData struct {
 	// Array of dimension values, representing the combination of dimension values
 	// corresponding to this row.
 	Dimensions []string `json:"dimensions,required"`
 	// Array with one item per requested metric. Each item is an array of values,
 	// broken down by time interval.
-	Metrics [][]interface{}                        `json:"metrics,required"`
-	JSON    dnsdnsAnalyticsAPIReportBytimeDataJSON `json:"-"`
+	Metrics [][]interface{}                  `json:"metrics,required"`
+	JSON    dnsAnalyticsReportByTimeDataJSON `json:"-"`
 }
 
-// dnsdnsAnalyticsAPIReportBytimeDataJSON contains the JSON metadata for the struct
-// [DNSDNSAnalyticsAPIReportBytimeData]
-type dnsdnsAnalyticsAPIReportBytimeDataJSON struct {
+// dnsAnalyticsReportByTimeDataJSON contains the JSON metadata for the struct
+// [DNSAnalyticsReportByTimeData]
+type dnsAnalyticsReportByTimeDataJSON struct {
 	Dimensions  apijson.Field
 	Metrics     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSDNSAnalyticsAPIReportBytimeData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSAnalyticsReportByTimeData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsdnsAnalyticsAPIReportBytimeDataJSON) RawJSON() string {
+func (r dnsAnalyticsReportByTimeDataJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSDNSAnalyticsAPIReportBytimeQuery struct {
+type DNSAnalyticsReportByTimeQuery struct {
 	// Array of dimension names.
 	Dimensions []string `json:"dimensions,required"`
 	// Limit number of returned metrics.
@@ -135,20 +135,20 @@ type DNSDNSAnalyticsAPIReportBytimeQuery struct {
 	// Start date and time of requesting data period in ISO 8601 format.
 	Since time.Time `json:"since,required" format:"date-time"`
 	// Unit of time to group data by.
-	TimeDelta DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta `json:"time_delta,required"`
+	TimeDelta DNSAnalyticsReportByTimeQueryTimeDelta `json:"time_delta,required"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until time.Time `json:"until,required" format:"date-time"`
 	// Segmentation filter in 'attribute operator value' format.
 	Filters string `json:"filters"`
 	// Array of dimensions to sort by, where each dimension may be prefixed by -
 	// (descending) or + (ascending).
-	Sort []string                                `json:"sort"`
-	JSON dnsdnsAnalyticsAPIReportBytimeQueryJSON `json:"-"`
+	Sort []string                          `json:"sort"`
+	JSON dnsAnalyticsReportByTimeQueryJSON `json:"-"`
 }
 
-// dnsdnsAnalyticsAPIReportBytimeQueryJSON contains the JSON metadata for the
-// struct [DNSDNSAnalyticsAPIReportBytimeQuery]
-type dnsdnsAnalyticsAPIReportBytimeQueryJSON struct {
+// dnsAnalyticsReportByTimeQueryJSON contains the JSON metadata for the struct
+// [DNSAnalyticsReportByTimeQuery]
+type dnsAnalyticsReportByTimeQueryJSON struct {
 	Dimensions  apijson.Field
 	Limit       apijson.Field
 	Metrics     apijson.Field
@@ -161,33 +161,33 @@ type dnsdnsAnalyticsAPIReportBytimeQueryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSDNSAnalyticsAPIReportBytimeQuery) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSAnalyticsReportByTimeQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsdnsAnalyticsAPIReportBytimeQueryJSON) RawJSON() string {
+func (r dnsAnalyticsReportByTimeQueryJSON) RawJSON() string {
 	return r.raw
 }
 
 // Unit of time to group data by.
-type DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta string
+type DNSAnalyticsReportByTimeQueryTimeDelta string
 
 const (
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaAll        DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "all"
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaAuto       DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "auto"
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaYear       DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "year"
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaQuarter    DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "quarter"
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaMonth      DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "month"
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaWeek       DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "week"
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaDay        DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "day"
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaHour       DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "hour"
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaDekaminute DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "dekaminute"
-	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaMinute     DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "minute"
+	DNSAnalyticsReportByTimeQueryTimeDeltaAll        DNSAnalyticsReportByTimeQueryTimeDelta = "all"
+	DNSAnalyticsReportByTimeQueryTimeDeltaAuto       DNSAnalyticsReportByTimeQueryTimeDelta = "auto"
+	DNSAnalyticsReportByTimeQueryTimeDeltaYear       DNSAnalyticsReportByTimeQueryTimeDelta = "year"
+	DNSAnalyticsReportByTimeQueryTimeDeltaQuarter    DNSAnalyticsReportByTimeQueryTimeDelta = "quarter"
+	DNSAnalyticsReportByTimeQueryTimeDeltaMonth      DNSAnalyticsReportByTimeQueryTimeDelta = "month"
+	DNSAnalyticsReportByTimeQueryTimeDeltaWeek       DNSAnalyticsReportByTimeQueryTimeDelta = "week"
+	DNSAnalyticsReportByTimeQueryTimeDeltaDay        DNSAnalyticsReportByTimeQueryTimeDelta = "day"
+	DNSAnalyticsReportByTimeQueryTimeDeltaHour       DNSAnalyticsReportByTimeQueryTimeDelta = "hour"
+	DNSAnalyticsReportByTimeQueryTimeDeltaDekaminute DNSAnalyticsReportByTimeQueryTimeDelta = "dekaminute"
+	DNSAnalyticsReportByTimeQueryTimeDeltaMinute     DNSAnalyticsReportByTimeQueryTimeDelta = "minute"
 )
 
-func (r DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta) IsKnown() bool {
+func (r DNSAnalyticsReportByTimeQueryTimeDelta) IsKnown() bool {
 	switch r {
-	case DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaAll, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaAuto, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaYear, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaQuarter, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaMonth, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaWeek, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaDay, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaHour, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaDekaminute, DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaMinute:
+	case DNSAnalyticsReportByTimeQueryTimeDeltaAll, DNSAnalyticsReportByTimeQueryTimeDeltaAuto, DNSAnalyticsReportByTimeQueryTimeDeltaYear, DNSAnalyticsReportByTimeQueryTimeDeltaQuarter, DNSAnalyticsReportByTimeQueryTimeDeltaMonth, DNSAnalyticsReportByTimeQueryTimeDeltaWeek, DNSAnalyticsReportByTimeQueryTimeDeltaDay, DNSAnalyticsReportByTimeQueryTimeDeltaHour, DNSAnalyticsReportByTimeQueryTimeDeltaDekaminute, DNSAnalyticsReportByTimeQueryTimeDeltaMinute:
 		return true
 	}
 	return false
@@ -251,7 +251,7 @@ func (r AnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
 type AnalyticsReportBytimeGetResponseEnvelope struct {
 	Errors   []AnalyticsReportBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AnalyticsReportBytimeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSDNSAnalyticsAPIReportBytime                     `json:"result,required"`
+	Result   DNSAnalyticsReportByTime                           `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`

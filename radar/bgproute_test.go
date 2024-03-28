@@ -122,6 +122,7 @@ func TestBGPRouteTimeseriesWithOptionalParams(t *testing.T) {
 		DateRange: cloudflare.F(radar.BGPRouteTimeseriesParamsDateRange7d),
 		DateStart: cloudflare.F(time.Now()),
 		Format:    cloudflare.F(radar.BGPRouteTimeseriesParamsFormatJson),
+		Location:  cloudflare.F("US"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

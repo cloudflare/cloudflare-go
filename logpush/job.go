@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -34,7 +35,7 @@ func NewJobService(opts ...option.RequestOption) (r *JobService) {
 }
 
 // Creates a new Logpush job for an account or zone.
-func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *LogpushLogpushJob, err error) {
+func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobNewResponseEnvelope
 	var accountOrZone string
@@ -56,7 +57,7 @@ func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...optio
 }
 
 // Updates a Logpush job.
-func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *LogpushLogpushJob, err error) {
+func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobUpdateResponseEnvelope
 	var accountOrZone string
@@ -78,9 +79,10 @@ func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdatePa
 }
 
 // Lists Logpush jobs for an account or zone.
-func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *[]LogpushLogpushJob, err error) {
-	opts = append(r.Options[:], opts...)
-	var env JobListResponseEnvelope
+func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LogpushJob], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -91,12 +93,21 @@ func (r *JobService) List(ctx context.Context, query JobListParams, opts ...opti
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists Logpush jobs for an account or zone.
+func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LogpushJob] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a Logpush job.
@@ -122,7 +133,7 @@ func (r *JobService) Delete(ctx context.Context, jobID int64, body JobDeletePara
 }
 
 // Gets the details of a Logpush job.
-func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *LogpushLogpushJob, err error) {
+func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobGetResponseEnvelope
 	var accountOrZone string
@@ -306,7 +317,7 @@ func (r JobNewParamsOutputOptionsTimestampFormat) IsKnown() bool {
 type JobNewResponseEnvelope struct {
 	Errors   []JobNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []JobNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogpushLogpushJob                `json:"result,required,nullable"`
+	Result   LogpushJob                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobNewResponseEnvelopeJSON    `json:"-"`
@@ -524,7 +535,7 @@ func (r JobUpdateParamsOutputOptionsTimestampFormat) IsKnown() bool {
 type JobUpdateResponseEnvelope struct {
 	Errors   []JobUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []JobUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogpushLogpushJob                   `json:"result,required,nullable"`
+	Result   LogpushJob                          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobUpdateResponseEnvelopeJSON    `json:"-"`
@@ -615,95 +626,6 @@ type JobListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-type JobListResponseEnvelope struct {
-	Errors   []JobListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []JobListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LogpushLogpushJob               `json:"result,required"`
-	// Whether the API call was successful
-	Success JobListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    jobListResponseEnvelopeJSON    `json:"-"`
-}
-
-// jobListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [JobListResponseEnvelope]
-type jobListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *JobListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r jobListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type JobListResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    jobListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// jobListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [JobListResponseEnvelopeErrors]
-type jobListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *JobListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r jobListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type JobListResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    jobListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// jobListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [JobListResponseEnvelopeMessages]
-type jobListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *JobListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r jobListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type JobListResponseEnvelopeSuccess bool
-
-const (
-	JobListResponseEnvelopeSuccessTrue JobListResponseEnvelopeSuccess = true
-)
-
-func (r JobListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case JobListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type JobDeleteParams struct {
@@ -812,7 +734,7 @@ type JobGetParams struct {
 type JobGetResponseEnvelope struct {
 	Errors   []JobGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []JobGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogpushLogpushJob                `json:"result,required,nullable"`
+	Result   LogpushJob                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobGetResponseEnvelopeJSON    `json:"-"`

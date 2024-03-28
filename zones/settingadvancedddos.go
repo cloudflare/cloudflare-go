@@ -14,20 +14,20 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-// SettingAdvancedDDOSService contains methods and other services that help with
+// SettingAdvancedDDoSService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewSettingAdvancedDDOSService]
+// this service directly, and instead use the [NewSettingAdvancedDDoSService]
 // method instead.
-type SettingAdvancedDDOSService struct {
+type SettingAdvancedDDoSService struct {
 	Options []option.RequestOption
 }
 
-// NewSettingAdvancedDDOSService generates a new service that applies the given
+// NewSettingAdvancedDDoSService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewSettingAdvancedDDOSService(opts ...option.RequestOption) (r *SettingAdvancedDDOSService) {
-	r = &SettingAdvancedDDOSService{}
+func NewSettingAdvancedDDoSService(opts ...option.RequestOption) (r *SettingAdvancedDDoSService) {
+	r = &SettingAdvancedDDoSService{}
 	r.Options = opts
 	return
 }
@@ -35,9 +35,9 @@ func NewSettingAdvancedDDOSService(opts ...option.RequestOption) (r *SettingAdva
 // Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 // website. This is an uneditable value that is 'on' in the case of Business and
 // Enterprise zones.
-func (r *SettingAdvancedDDOSService) Get(ctx context.Context, query SettingAdvancedDDOSGetParams, opts ...option.RequestOption) (res *ZonesAdvancedDDOS, err error) {
+func (r *SettingAdvancedDDoSService) Get(ctx context.Context, query SettingAdvancedDDoSGetParams, opts ...option.RequestOption) (res *ZoneSettingAdvancedDDoS, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingAdvancedDDOSGetResponseEnvelope
+	var env SettingAdvancedDDoSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/advanced_ddos", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -50,22 +50,22 @@ func (r *SettingAdvancedDDOSService) Get(ctx context.Context, query SettingAdvan
 // Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 // website. This is an uneditable value that is 'on' in the case of Business and
 // Enterprise zones.
-type ZonesAdvancedDDOS struct {
+type ZoneSettingAdvancedDDoS struct {
 	// ID of the zone setting.
-	ID ZonesAdvancedDDOSID `json:"id,required"`
+	ID ZoneSettingAdvancedDDoSID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesAdvancedDDOSValue `json:"value,required"`
+	Value ZoneSettingAdvancedDDoSValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesAdvancedDDOSEditable `json:"editable"`
+	Editable ZoneSettingAdvancedDDoSEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesAdvancedDDOSJSON `json:"-"`
+	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingAdvancedDDoSJSON `json:"-"`
 }
 
-// zonesAdvancedDDOSJSON contains the JSON metadata for the struct
-// [ZonesAdvancedDDOS]
-type zonesAdvancedDDOSJSON struct {
+// zoneSettingAdvancedDDoSJSON contains the JSON metadata for the struct
+// [ZoneSettingAdvancedDDoS]
+type zoneSettingAdvancedDDoSJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -74,44 +74,44 @@ type zonesAdvancedDDOSJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesAdvancedDDOS) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingAdvancedDDoS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesAdvancedDDOSJSON) RawJSON() string {
+func (r zoneSettingAdvancedDDoSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZonesAdvancedDDOS) implementsZonesSettingEditResponse() {}
+func (r ZoneSettingAdvancedDDoS) implementsZonesSettingEditResponse() {}
 
-func (r ZonesAdvancedDDOS) implementsZonesSettingGetResponse() {}
+func (r ZoneSettingAdvancedDDoS) implementsZonesSettingGetResponse() {}
 
 // ID of the zone setting.
-type ZonesAdvancedDDOSID string
+type ZoneSettingAdvancedDDoSID string
 
 const (
-	ZonesAdvancedDDOSIDAdvancedDDOS ZonesAdvancedDDOSID = "advanced_ddos"
+	ZoneSettingAdvancedDDoSIDAdvancedDDoS ZoneSettingAdvancedDDoSID = "advanced_ddos"
 )
 
-func (r ZonesAdvancedDDOSID) IsKnown() bool {
+func (r ZoneSettingAdvancedDDoSID) IsKnown() bool {
 	switch r {
-	case ZonesAdvancedDDOSIDAdvancedDDOS:
+	case ZoneSettingAdvancedDDoSIDAdvancedDDoS:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZonesAdvancedDDOSValue string
+type ZoneSettingAdvancedDDoSValue string
 
 const (
-	ZonesAdvancedDDOSValueOn  ZonesAdvancedDDOSValue = "on"
-	ZonesAdvancedDDOSValueOff ZonesAdvancedDDOSValue = "off"
+	ZoneSettingAdvancedDDoSValueOn  ZoneSettingAdvancedDDoSValue = "on"
+	ZoneSettingAdvancedDDoSValueOff ZoneSettingAdvancedDDoSValue = "off"
 )
 
-func (r ZonesAdvancedDDOSValue) IsKnown() bool {
+func (r ZoneSettingAdvancedDDoSValue) IsKnown() bool {
 	switch r {
-	case ZonesAdvancedDDOSValueOn, ZonesAdvancedDDOSValueOff:
+	case ZoneSettingAdvancedDDoSValueOn, ZoneSettingAdvancedDDoSValueOff:
 		return true
 	}
 	return false
@@ -119,16 +119,16 @@ func (r ZonesAdvancedDDOSValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesAdvancedDDOSEditable bool
+type ZoneSettingAdvancedDDoSEditable bool
 
 const (
-	ZonesAdvancedDDOSEditableTrue  ZonesAdvancedDDOSEditable = true
-	ZonesAdvancedDDOSEditableFalse ZonesAdvancedDDOSEditable = false
+	ZoneSettingAdvancedDDoSEditableTrue  ZoneSettingAdvancedDDoSEditable = true
+	ZoneSettingAdvancedDDoSEditableFalse ZoneSettingAdvancedDDoSEditable = false
 )
 
-func (r ZonesAdvancedDDOSEditable) IsKnown() bool {
+func (r ZoneSettingAdvancedDDoSEditable) IsKnown() bool {
 	switch r {
-	case ZonesAdvancedDDOSEditableTrue, ZonesAdvancedDDOSEditableFalse:
+	case ZoneSettingAdvancedDDoSEditableTrue, ZoneSettingAdvancedDDoSEditableFalse:
 		return true
 	}
 	return false
@@ -137,39 +137,39 @@ func (r ZonesAdvancedDDOSEditable) IsKnown() bool {
 // Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 // website. This is an uneditable value that is 'on' in the case of Business and
 // Enterprise zones.
-type ZonesAdvancedDDOSParam struct {
+type ZoneSettingAdvancedDDoSParam struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesAdvancedDDOSID] `json:"id,required"`
+	ID param.Field[ZoneSettingAdvancedDDoSID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesAdvancedDDOSValue] `json:"value,required"`
+	Value param.Field[ZoneSettingAdvancedDDoSValue] `json:"value,required"`
 }
 
-func (r ZonesAdvancedDDOSParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingAdvancedDDoSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZonesAdvancedDDOSParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingAdvancedDDoSParam) implementsZonesSettingEditParamsItem() {}
 
-type SettingAdvancedDDOSGetParams struct {
+type SettingAdvancedDDoSGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type SettingAdvancedDDOSGetResponseEnvelope struct {
-	Errors   []SettingAdvancedDDOSGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAdvancedDDOSGetResponseEnvelopeMessages `json:"messages,required"`
+type SettingAdvancedDDoSGetResponseEnvelope struct {
+	Errors   []SettingAdvancedDDoSGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingAdvancedDDoSGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 	// website. This is an uneditable value that is 'on' in the case of Business and
 	// Enterprise zones.
-	Result ZonesAdvancedDDOS                          `json:"result"`
-	JSON   settingAdvancedDDOSGetResponseEnvelopeJSON `json:"-"`
+	Result ZoneSettingAdvancedDDoS                    `json:"result"`
+	JSON   settingAdvancedDDoSGetResponseEnvelopeJSON `json:"-"`
 }
 
-// settingAdvancedDDOSGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingAdvancedDDOSGetResponseEnvelope]
-type settingAdvancedDDOSGetResponseEnvelopeJSON struct {
+// settingAdvancedDDoSGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingAdvancedDDoSGetResponseEnvelope]
+type settingAdvancedDDoSGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -178,56 +178,56 @@ type settingAdvancedDDOSGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAdvancedDDOSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingAdvancedDDoSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingAdvancedDDOSGetResponseEnvelopeJSON) RawJSON() string {
+func (r settingAdvancedDDoSGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingAdvancedDDOSGetResponseEnvelopeErrors struct {
+type SettingAdvancedDDoSGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
-	JSON    settingAdvancedDDOSGetResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingAdvancedDDoSGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// settingAdvancedDDOSGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingAdvancedDDOSGetResponseEnvelopeErrors]
-type settingAdvancedDDOSGetResponseEnvelopeErrorsJSON struct {
+// settingAdvancedDDoSGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingAdvancedDDoSGetResponseEnvelopeErrors]
+type settingAdvancedDDoSGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAdvancedDDOSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingAdvancedDDoSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingAdvancedDDOSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r settingAdvancedDDoSGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingAdvancedDDOSGetResponseEnvelopeMessages struct {
+type SettingAdvancedDDoSGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
-	JSON    settingAdvancedDDOSGetResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    settingAdvancedDDoSGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingAdvancedDDOSGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingAdvancedDDOSGetResponseEnvelopeMessages]
-type settingAdvancedDDOSGetResponseEnvelopeMessagesJSON struct {
+// settingAdvancedDDoSGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingAdvancedDDoSGetResponseEnvelopeMessages]
+type settingAdvancedDDoSGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAdvancedDDOSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingAdvancedDDoSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingAdvancedDDOSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r settingAdvancedDDoSGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

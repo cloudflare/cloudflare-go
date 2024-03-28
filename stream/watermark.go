@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -49,16 +50,26 @@ func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, o
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *[]StreamWatermarks, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WatermarkListResponseEnvelope
+func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[StreamWatermarks], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all watermark profiles for an account.
+func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StreamWatermarks] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a watermark profile.
@@ -320,95 +331,6 @@ func (r WatermarkNewResponseEnvelopeSuccess) IsKnown() bool {
 type WatermarkListParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type WatermarkListResponseEnvelope struct {
-	Errors   []WatermarkListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WatermarkListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamWatermarks                      `json:"result,required"`
-	// Whether the API call was successful
-	Success WatermarkListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    watermarkListResponseEnvelopeJSON    `json:"-"`
-}
-
-// watermarkListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WatermarkListResponseEnvelope]
-type watermarkListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkListResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    watermarkListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// watermarkListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WatermarkListResponseEnvelopeErrors]
-type watermarkListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WatermarkListResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    watermarkListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// watermarkListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WatermarkListResponseEnvelopeMessages]
-type watermarkListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WatermarkListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r watermarkListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type WatermarkListResponseEnvelopeSuccess bool
-
-const (
-	WatermarkListResponseEnvelopeSuccessTrue WatermarkListResponseEnvelopeSuccess = true
-)
-
-func (r WatermarkListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case WatermarkListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type WatermarkDeleteParams struct {
