@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -58,7 +58,7 @@ func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpda
 }
 
 // List TSIGs.
-func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *shared.SinglePage[SecondaryDNSTSIG], err error) {
+func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SecondaryDNSTSIG], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,8 +76,8 @@ func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...op
 }
 
 // List TSIGs.
-func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[SecondaryDNSTSIG] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SecondaryDNSTSIG] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete TSIG.

@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -66,7 +66,7 @@ func (r *EventService) Update(ctx context.Context, zoneIdentifier string, waitin
 }
 
 // Lists events for a waiting room.
-func (r *EventService) List(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *shared.SinglePage[WaitingroomEvent], err error) {
+func (r *EventService) List(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingroomEvent], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -84,8 +84,8 @@ func (r *EventService) List(ctx context.Context, zoneIdentifier string, waitingR
 }
 
 // Lists events for a waiting room.
-func (r *EventService) ListAutoPaging(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) *shared.SinglePageAutoPager[WaitingroomEvent] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, waitingRoomID, opts...))
+func (r *EventService) ListAutoPaging(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingroomEvent] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, waitingRoomID, opts...))
 }
 
 // Deletes an event for a waiting room.

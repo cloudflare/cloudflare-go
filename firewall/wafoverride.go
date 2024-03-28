@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -70,7 +70,7 @@ func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, 
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) List(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WAFOverride], err error) {
+func (r *WAFOverrideService) List(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFOverride], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -91,8 +91,8 @@ func (r *WAFOverrideService) List(ctx context.Context, zoneIdentifier string, qu
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WAFOverride] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFOverride] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing URI-based WAF override.

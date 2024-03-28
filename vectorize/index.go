@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -60,7 +61,7 @@ func (r *IndexService) Update(ctx context.Context, accountIdentifier string, ind
 }
 
 // Returns a list of Vectorize Indexes
-func (r *IndexService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[VectorizeCreateIndex], err error) {
+func (r *IndexService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[VectorizeCreateIndex], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,8 +79,8 @@ func (r *IndexService) List(ctx context.Context, accountIdentifier string, opts 
 }
 
 // Returns a list of Vectorize Indexes
-func (r *IndexService) ListAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[VectorizeCreateIndex] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, accountIdentifier, opts...))
+func (r *IndexService) ListAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[VectorizeCreateIndex] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, accountIdentifier, opts...))
 }
 
 // Deletes the specified Vectorize Index.

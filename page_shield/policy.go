@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -48,7 +48,7 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 }
 
 // Lists all Page Shield policies.
-func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *shared.SinglePage[PageShieldPolicy], err error) {
+func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PageShieldPolicy], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,8 +66,8 @@ func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts .
 }
 
 // Lists all Page Shield policies.
-func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PageShieldPolicy] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PageShieldPolicy] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a Page Shield policy by ID.

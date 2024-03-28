@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -47,7 +47,7 @@ func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, o
 }
 
 // Lists all Worker Domains for an account.
-func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *shared.SinglePage[WorkersDomain], err error) {
+func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WorkersDomain], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -65,8 +65,8 @@ func (r *DomainService) List(ctx context.Context, params DomainListParams, opts 
 }
 
 // Lists all Worker Domains for an account.
-func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[WorkersDomain] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WorkersDomain] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Detaches a Worker from a zone and hostname.

@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -58,7 +58,7 @@ func (r *FilterService) Update(ctx context.Context, filterID string, params Filt
 }
 
 // List Filters
-func (r *FilterService) List(ctx context.Context, query FilterListParams, opts ...option.RequestOption) (res *shared.SinglePage[WorkersFilter], err error) {
+func (r *FilterService) List(ctx context.Context, query FilterListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WorkersFilter], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,8 +76,8 @@ func (r *FilterService) List(ctx context.Context, query FilterListParams, opts .
 }
 
 // List Filters
-func (r *FilterService) ListAutoPaging(ctx context.Context, query FilterListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[WorkersFilter] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *FilterService) ListAutoPaging(ctx context.Context, query FilterListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WorkersFilter] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Filter

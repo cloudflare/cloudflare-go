@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -50,7 +51,7 @@ func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVi
 }
 
 // Lists and filters virtual networks in an account.
-func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *shared.SinglePage[TunnelVirtualNetwork], err error) {
+func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TunnelVirtualNetwork], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,8 +69,8 @@ func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkV
 }
 
 // Lists and filters virtual networks in an account.
-func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[TunnelVirtualNetwork] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TunnelVirtualNetwork] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing virtual network.

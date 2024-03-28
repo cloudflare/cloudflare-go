@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -65,7 +66,7 @@ func (r *AppService) Update(ctx context.Context, zone string, appID string, body
 }
 
 // Retrieves a list of currently existing Spectrum applications inside a zone.
-func (r *AppService) List(ctx context.Context, zone string, query AppListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AppListResponse], err error) {
+func (r *AppService) List(ctx context.Context, zone string, query AppListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AppListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -83,8 +84,8 @@ func (r *AppService) List(ctx context.Context, zone string, query AppListParams,
 }
 
 // Retrieves a list of currently existing Spectrum applications inside a zone.
-func (r *AppService) ListAutoPaging(ctx context.Context, zone string, query AppListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AppListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zone, query, opts...))
+func (r *AppService) ListAutoPaging(ctx context.Context, zone string, query AppListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AppListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zone, query, opts...))
 }
 
 // Deletes a previously existing application.

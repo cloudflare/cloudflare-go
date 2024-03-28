@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -56,7 +57,7 @@ func (r *CustomCertificateService) New(ctx context.Context, params CustomCertifi
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *CustomCertificateService) List(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CustomCertificate], err error) {
+func (r *CustomCertificateService) List(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CustomCertificate], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,8 +77,8 @@ func (r *CustomCertificateService) List(ctx context.Context, params CustomCertif
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[CustomCertificate] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[CustomCertificate] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Remove a SSL certificate from a zone.

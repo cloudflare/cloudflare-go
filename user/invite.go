@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/accounts"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -36,7 +37,7 @@ func NewInviteService(opts ...option.RequestOption) (r *InviteService) {
 }
 
 // Lists all invitations associated with my user.
-func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) (res *shared.SinglePage[InviteListResponse], err error) {
+func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[InviteListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -54,8 +55,8 @@ func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) 
 }
 
 // Lists all invitations associated with my user.
-func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *shared.SinglePageAutoPager[InviteListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, opts...))
+func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InviteListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
 // Responds to an invitation.

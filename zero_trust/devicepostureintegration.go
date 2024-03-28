@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -48,7 +49,7 @@ func (r *DevicePostureIntegrationService) New(ctx context.Context, params Device
 }
 
 // Fetches the list of device posture integrations for an account.
-func (r *DevicePostureIntegrationService) List(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) (res *shared.SinglePage[DevicePostureIntegrations], err error) {
+func (r *DevicePostureIntegrationService) List(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DevicePostureIntegrations], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,8 +67,8 @@ func (r *DevicePostureIntegrationService) List(ctx context.Context, query Device
 }
 
 // Fetches the list of device posture integrations for an account.
-func (r *DevicePostureIntegrationService) ListAutoPaging(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DevicePostureIntegrations] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DevicePostureIntegrationService) ListAutoPaging(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DevicePostureIntegrations] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a configured device posture integration.

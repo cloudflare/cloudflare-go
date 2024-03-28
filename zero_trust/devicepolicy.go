@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -55,7 +55,7 @@ func (r *DevicePolicyService) New(ctx context.Context, params DevicePolicyNewPar
 }
 
 // Fetches a list of the device settings profiles for an account.
-func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListParams, opts ...option.RequestOption) (res *shared.SinglePage[DevicesDeviceSettingsPolicy], err error) {
+func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DevicesDeviceSettingsPolicy], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -73,8 +73,8 @@ func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListPa
 }
 
 // Fetches a list of the device settings profiles for an account.
-func (r *DevicePolicyService) ListAutoPaging(ctx context.Context, query DevicePolicyListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DevicesDeviceSettingsPolicy] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DevicePolicyService) ListAutoPaging(ctx context.Context, query DevicePolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DevicesDeviceSettingsPolicy] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a device settings profile and fetches a list of the remaining profiles

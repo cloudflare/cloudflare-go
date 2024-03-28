@@ -11,9 +11,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,7 +61,7 @@ func (r *WidgetService) Update(ctx context.Context, sitekey string, params Widge
 }
 
 // Lists all turnstile widgets of an account.
-func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ChallengesWidgetList], err error) {
+func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ChallengesWidgetList], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,8 +79,8 @@ func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts 
 }
 
 // Lists all turnstile widgets of an account.
-func (r *WidgetService) ListAutoPaging(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ChallengesWidgetList] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *WidgetService) ListAutoPaging(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ChallengesWidgetList] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Destroy a Turnstile Widget.

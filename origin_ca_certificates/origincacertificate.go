@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -52,7 +53,7 @@ func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACerti
 // List all existing Origin CA certificates for a given zone. Use your Origin CA
 // Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) (res *shared.SinglePage[OriginCACertificate], err error) {
+func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OriginCACertificate], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -72,8 +73,8 @@ func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACer
 // List all existing Origin CA certificates for a given zone. Use your Origin CA
 // Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[OriginCACertificate] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OriginCACertificate] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Revoke an existing Origin CA certificate by its serial number. Use your Origin

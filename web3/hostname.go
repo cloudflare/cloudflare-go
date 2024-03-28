@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -48,7 +48,7 @@ func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body H
 }
 
 // List Web3 Hostnames
-func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[DistributedWebHostname], err error) {
+func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[DistributedWebHostname], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,8 +66,8 @@ func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts 
 }
 
 // List Web3 Hostnames
-func (r *HostnameService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[DistributedWebHostname] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
+func (r *HostnameService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DistributedWebHostname] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
 }
 
 // Delete Web3 Hostname

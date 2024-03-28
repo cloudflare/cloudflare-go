@@ -8,8 +8,8 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -31,7 +31,7 @@ func NewPlanService(opts ...option.RequestOption) (r *PlanService) {
 }
 
 // Lists available plans the zone can subscribe to.
-func (r *PlanService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[AvailableRatePlan], err error) {
+func (r *PlanService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[AvailableRatePlan], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -49,8 +49,8 @@ func (r *PlanService) List(ctx context.Context, zoneIdentifier string, opts ...o
 }
 
 // Lists available plans the zone can subscribe to.
-func (r *PlanService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[AvailableRatePlan] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
+func (r *PlanService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AvailableRatePlan] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
 }
 
 // Details of the available plan that the zone can subscribe to.

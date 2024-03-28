@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -49,7 +49,7 @@ func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID
 
 // Fetches a list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead.
-func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query DevicePolicyFallbackDomainListParams, opts ...option.RequestOption) (res *shared.SinglePage[DevicesFallbackDomain], err error) {
+func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query DevicePolicyFallbackDomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DevicesFallbackDomain], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,8 +68,8 @@ func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query Devi
 
 // Fetches a list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead.
-func (r *DevicePolicyFallbackDomainService) ListAutoPaging(ctx context.Context, query DevicePolicyFallbackDomainListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DevicesFallbackDomain] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DevicePolicyFallbackDomainService) ListAutoPaging(ctx context.Context, query DevicePolicyFallbackDomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DevicesFallbackDomain] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Fetches the list of domains to bypass Gateway DNS resolution from a specified

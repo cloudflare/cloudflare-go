@@ -11,9 +11,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -37,7 +37,7 @@ func NewHistoryService(opts ...option.RequestOption) (r *HistoryService) {
 // Gets a list of history records for notifications sent to an account. The records
 // are displayed for last `x` number of days based on the zone plan (free = 30, pro
 // = 30, biz = 30, ent = 90).
-func (r *HistoryService) List(ctx context.Context, params HistoryListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AlertingHistory], err error) {
+func (r *HistoryService) List(ctx context.Context, params HistoryListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AlertingHistory], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -57,8 +57,8 @@ func (r *HistoryService) List(ctx context.Context, params HistoryListParams, opt
 // Gets a list of history records for notifications sent to an account. The records
 // are displayed for last `x` number of days based on the zone plan (free = 30, pro
 // = 30, biz = 30, ent = 90).
-func (r *HistoryService) ListAutoPaging(ctx context.Context, params HistoryListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AlertingHistory] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *HistoryService) ListAutoPaging(ctx context.Context, params HistoryListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AlertingHistory] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type AlertingHistory struct {

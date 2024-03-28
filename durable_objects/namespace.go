@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +34,7 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 }
 
 // Returns the Durable Object namespaces owned by an account.
-func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) (res *shared.SinglePage[DurableObjectNamespace], err error) {
+func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DurableObjectNamespace], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,8 +52,8 @@ func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, 
 }
 
 // Returns the Durable Object namespaces owned by an account.
-func (r *NamespaceService) ListAutoPaging(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DurableObjectNamespace] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *NamespaceService) ListAutoPaging(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DurableObjectNamespace] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type DurableObjectNamespace struct {
