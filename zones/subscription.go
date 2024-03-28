@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -49,7 +50,7 @@ func (r *SubscriptionService) New(ctx context.Context, identifier string, body S
 }
 
 // Lists all of an account's subscriptions.
-func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[SubscriptionListResponse], err error) {
+func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[SubscriptionListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,8 +68,8 @@ func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string
 }
 
 // Lists all of an account's subscriptions.
-func (r *SubscriptionService) ListAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[SubscriptionListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, accountIdentifier, opts...))
+func (r *SubscriptionService) ListAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SubscriptionListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, accountIdentifier, opts...))
 }
 
 // Lists zone subscription details.

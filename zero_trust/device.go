@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -51,7 +52,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 }
 
 // Fetches a list of enrolled devices.
-func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustDevices], err error) {
+func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustDevices], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -69,8 +70,8 @@ func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts .
 }
 
 // Fetches a list of enrolled devices.
-func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustDevices] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustDevices] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Fetches details for a single device.

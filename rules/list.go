@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -62,7 +62,7 @@ func (r *ListService) Update(ctx context.Context, listID string, params ListUpda
 }
 
 // Fetches all lists in the account.
-func (r *ListService) List(ctx context.Context, query ListListParams, opts ...option.RequestOption) (res *shared.SinglePage[ListsList], err error) {
+func (r *ListService) List(ctx context.Context, query ListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ListsList], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,8 +80,8 @@ func (r *ListService) List(ctx context.Context, query ListListParams, opts ...op
 }
 
 // Fetches all lists in the account.
-func (r *ListService) ListAutoPaging(ctx context.Context, query ListListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ListsList] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *ListService) ListAutoPaging(ctx context.Context, query ListListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ListsList] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a specific list and all its items.

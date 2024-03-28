@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -80,7 +80,7 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 strin
 }
 
 // Lists Access policies configured for an application.
-func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustPolicies], err error) {
+func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustPolicies], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -107,8 +107,8 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, 
 }
 
 // Lists Access policies configured for an application.
-func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustPolicies] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, uuid, query, opts...))
+func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustPolicies] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, uuid, query, opts...))
 }
 
 // Delete an Access policy.

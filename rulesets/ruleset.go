@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -85,7 +85,7 @@ func (r *RulesetService) Update(ctx context.Context, rulesetID string, params Ru
 }
 
 // Fetches all rulesets.
-func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) (res *shared.SinglePage[RulesetListResponse], err error) {
+func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RulesetListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -112,8 +112,8 @@ func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts
 }
 
 // Fetches all rulesets.
-func (r *RulesetService) ListAutoPaging(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[RulesetListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *RulesetService) ListAutoPaging(ctx context.Context, query RulesetListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RulesetListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes all versions of an existing account or zone ruleset.

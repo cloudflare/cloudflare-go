@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -56,7 +57,7 @@ func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSCl
 }
 
 // List Certificates
-func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) (res *shared.SinglePage[OriginTLSClientAuthListResponse], err error) {
+func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OriginTLSClientAuthListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -74,8 +75,8 @@ func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSCl
 }
 
 // List Certificates
-func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[OriginTLSClientAuthListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OriginTLSClientAuthListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Certificate

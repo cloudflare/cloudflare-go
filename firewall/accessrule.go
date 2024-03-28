@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -64,7 +65,7 @@ func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams,
 // Fetches IP Access rules of an account or zone. These rules apply to all the
 // zones in the account or zone. You can filter the results using several optional
 // parameters.
-func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AccessRuleListResponse], err error) {
+func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessRuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -93,8 +94,8 @@ func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParam
 // Fetches IP Access rules of an account or zone. These rules apply to all the
 // zones in the account or zone. You can filter the results using several optional
 // parameters.
-func (r *AccessRuleService) ListAutoPaging(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AccessRuleListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *AccessRuleService) ListAutoPaging(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessRuleListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing IP Access rule defined.

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -52,7 +53,7 @@ func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts 
 }
 
 // Fetch a list of all user projects.
-func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *shared.SinglePage[PagesDeployments], err error) {
+func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PagesDeployments], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -70,8 +71,8 @@ func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts
 }
 
 // Fetch a list of all user projects.
-func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PagesDeployments] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PagesDeployments] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a project by name.

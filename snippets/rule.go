@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -45,7 +45,7 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, body Ru
 }
 
 // Rules
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[RuleListResponse], err error) {
+func (r *RuleService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[RuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -63,8 +63,8 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, opts ...o
 }
 
 // Rules
-func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[RuleListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
+func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
 }
 
 type RuleUpdateResponse struct {

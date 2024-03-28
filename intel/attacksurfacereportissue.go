@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -38,7 +39,7 @@ func NewAttackSurfaceReportIssueService(opts ...option.RequestOption) (r *Attack
 }
 
 // Get Security Center Issues
-func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) (res *shared.V4PagePagination[AttackSurfaceReportIssueListResponse], err error) {
+func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[AttackSurfaceReportIssueListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -56,8 +57,8 @@ func (r *AttackSurfaceReportIssueService) List(ctx context.Context, params Attac
 }
 
 // Get Security Center Issues
-func (r *AttackSurfaceReportIssueService) ListAutoPaging(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) *shared.V4PagePaginationAutoPager[AttackSurfaceReportIssueListResponse] {
-	return shared.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
+func (r *AttackSurfaceReportIssueService) ListAutoPaging(ctx context.Context, params AttackSurfaceReportIssueListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[AttackSurfaceReportIssueListResponse] {
+	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 // Get Security Center Issue Counts by Class

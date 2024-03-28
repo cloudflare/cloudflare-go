@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -86,7 +86,7 @@ func (r *AccessApplicationService) Update(ctx context.Context, appID AccessAppli
 }
 
 // Lists all Access applications in an account or zone.
-func (r *AccessApplicationService) List(ctx context.Context, query AccessApplicationListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustApps], err error) {
+func (r *AccessApplicationService) List(ctx context.Context, query AccessApplicationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustApps], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -113,8 +113,8 @@ func (r *AccessApplicationService) List(ctx context.Context, query AccessApplica
 }
 
 // Lists all Access applications in an account or zone.
-func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, query AccessApplicationListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustApps] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, query AccessApplicationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustApps] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an application from Access.

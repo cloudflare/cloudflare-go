@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -58,7 +58,7 @@ func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateP
 }
 
 // List ACLs.
-func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *shared.SinglePage[SecondaryDNSACL], err error) {
+func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SecondaryDNSACL], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,8 +76,8 @@ func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...opti
 }
 
 // List ACLs.
-func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[SecondaryDNSACL] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SecondaryDNSACL] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete ACL.

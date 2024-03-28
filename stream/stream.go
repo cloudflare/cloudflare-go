@@ -11,9 +11,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -74,7 +74,7 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 
 // Lists up to 1000 videos from a single request. For a specific range, refer to
 // the optional parameters.
-func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *shared.SinglePage[StreamVideos], err error) {
+func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *pagination.SinglePage[StreamVideos], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -93,8 +93,8 @@ func (r *StreamService) List(ctx context.Context, params StreamListParams, opts 
 
 // Lists up to 1000 videos from a single request. For a specific range, refer to
 // the optional parameters.
-func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[StreamVideos] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StreamVideos] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a video and its copies from Cloudflare Stream.

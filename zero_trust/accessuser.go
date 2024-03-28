@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -38,7 +38,7 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustUsers], err error) {
+func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustUsers], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -56,8 +56,8 @@ func (r *AccessUserService) List(ctx context.Context, identifier string, opts ..
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustUsers] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
+func (r *AccessUserService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustUsers] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
 }
 
 type ZeroTrustUsers struct {

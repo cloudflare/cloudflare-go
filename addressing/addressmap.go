@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -54,7 +55,7 @@ func (r *AddressMapService) New(ctx context.Context, params AddressMapNewParams,
 }
 
 // List all address maps owned by the account.
-func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) (res *shared.SinglePage[AddressingAddressMaps], err error) {
+func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AddressingAddressMaps], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -72,8 +73,8 @@ func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams
 }
 
 // List all address maps owned by the account.
-func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AddressingAddressMaps] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AddressingAddressMaps] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a particular address map owned by the account. An Address Map must be

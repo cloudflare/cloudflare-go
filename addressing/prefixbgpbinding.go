@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -56,7 +57,7 @@ func (r *PrefixBGPBindingService) New(ctx context.Context, prefixID string, para
 // `192.0.2.0/24` to Cloudflare Magic Transit and `192.0.2.1/32` to the Cloudflare
 // CDN would route traffic for `192.0.2.1` to the CDN, and traffic for all other
 // IPs in the prefix to Cloudflare Magic Transit.
-func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) (res *shared.SinglePage[AddressingServiceBinding], err error) {
+func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AddressingServiceBinding], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,8 +80,8 @@ func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, que
 // `192.0.2.0/24` to Cloudflare Magic Transit and `192.0.2.1/32` to the Cloudflare
 // CDN would route traffic for `192.0.2.1` to the CDN, and traffic for all other
 // IPs in the prefix to Cloudflare Magic Transit.
-func (r *PrefixBGPBindingService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AddressingServiceBinding] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
+func (r *PrefixBGPBindingService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AddressingServiceBinding] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
 // Delete a Service Binding

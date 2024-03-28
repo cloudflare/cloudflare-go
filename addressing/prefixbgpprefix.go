@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -37,7 +37,7 @@ func NewPrefixBGPPrefixService(opts ...option.RequestOption) (r *PrefixBGPPrefix
 // control which specific subnets are advertised to the Internet. It is possible to
 // advertise subnets more specific than an IP Prefix by creating more specific BGP
 // Prefixes.
-func (r *PrefixBGPPrefixService) List(ctx context.Context, prefixID string, query PrefixBGPPrefixListParams, opts ...option.RequestOption) (res *shared.SinglePage[AddressingIpamBGPPrefixes], err error) {
+func (r *PrefixBGPPrefixService) List(ctx context.Context, prefixID string, query PrefixBGPPrefixListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AddressingIpamBGPPrefixes], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -58,8 +58,8 @@ func (r *PrefixBGPPrefixService) List(ctx context.Context, prefixID string, quer
 // control which specific subnets are advertised to the Internet. It is possible to
 // advertise subnets more specific than an IP Prefix by creating more specific BGP
 // Prefixes.
-func (r *PrefixBGPPrefixService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixBGPPrefixListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[AddressingIpamBGPPrefixes] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
+func (r *PrefixBGPPrefixService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixBGPPrefixListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AddressingIpamBGPPrefixes] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
 // Update the properties of a BGP Prefix, such as the on demand advertisement

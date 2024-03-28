@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -51,7 +52,7 @@ func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewP
 }
 
 // Lists and filters Warp Connector Tunnels in an account.
-func (r *WARPConnectorService) List(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WARPConnectorListResponse], err error) {
+func (r *WARPConnectorService) List(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WARPConnectorListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -69,8 +70,8 @@ func (r *WARPConnectorService) List(ctx context.Context, params WARPConnectorLis
 }
 
 // Lists and filters Warp Connector Tunnels in an account.
-func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WARPConnectorListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WARPConnectorListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a Warp Connector Tunnel from an account.

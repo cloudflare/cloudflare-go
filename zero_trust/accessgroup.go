@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -80,7 +80,7 @@ func (r *AccessGroupService) Update(ctx context.Context, uuid string, params Acc
 }
 
 // Lists all Access groups.
-func (r *AccessGroupService) List(ctx context.Context, query AccessGroupListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustGroups], err error) {
+func (r *AccessGroupService) List(ctx context.Context, query AccessGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGroups], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -107,8 +107,8 @@ func (r *AccessGroupService) List(ctx context.Context, query AccessGroupListPara
 }
 
 // Lists all Access groups.
-func (r *AccessGroupService) ListAutoPaging(ctx context.Context, query AccessGroupListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustGroups] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessGroupService) ListAutoPaging(ctx context.Context, query AccessGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGroups] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an Access group.

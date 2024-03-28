@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,7 +35,7 @@ func NewServiceService(opts ...option.RequestOption) (r *ServiceService) {
 // service running on the Cloudflare network to enable a Cloudflare product on the
 // IP addresses. This endpoint can be used as a reference of available services on
 // the Cloudflare network, and their service IDs.
-func (r *ServiceService) List(ctx context.Context, query ServiceListParams, opts ...option.RequestOption) (res *shared.SinglePage[ServiceListResponse], err error) {
+func (r *ServiceService) List(ctx context.Context, query ServiceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ServiceListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -56,8 +56,8 @@ func (r *ServiceService) List(ctx context.Context, query ServiceListParams, opts
 // service running on the Cloudflare network to enable a Cloudflare product on the
 // IP addresses. This endpoint can be used as a reference of available services on
 // the Cloudflare network, and their service IDs.
-func (r *ServiceService) ListAutoPaging(ctx context.Context, query ServiceListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ServiceListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *ServiceService) ListAutoPaging(ctx context.Context, query ServiceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ServiceListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type ServiceListResponse struct {

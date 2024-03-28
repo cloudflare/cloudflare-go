@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -59,7 +59,7 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, par
 }
 
 // Fetch all DEX tests.
-func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *shared.SinglePage[DEXTestSchemasHTTP], err error) {
+func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DEXTestSchemasHTTP], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,8 +77,8 @@ func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestList
 }
 
 // Fetch all DEX tests.
-func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DEXTestSchemasHTTP] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DEXTestSchemasHTTP] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a Device DEX test. Returns the remaining device dex tests for the

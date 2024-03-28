@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -59,7 +59,7 @@ func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, par
 }
 
 // Fetches a list of managed networks for an account.
-func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *shared.SinglePage[DeviceManagedNetworks], err error) {
+func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DeviceManagedNetworks], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,8 +77,8 @@ func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkList
 }
 
 // Fetches a list of managed networks for an account.
-func (r *DeviceNetworkService) ListAutoPaging(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DeviceManagedNetworks] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DeviceNetworkService) ListAutoPaging(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DeviceManagedNetworks] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a device managed network and fetches a list of the remaining device

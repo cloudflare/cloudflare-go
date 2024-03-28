@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -78,7 +79,7 @@ func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdatePa
 }
 
 // Lists Logpush jobs for an account or zone.
-func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *shared.SinglePage[LogpushJob], err error) {
+func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LogpushJob], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -105,8 +106,8 @@ func (r *JobService) List(ctx context.Context, query JobListParams, opts ...opti
 }
 
 // Lists Logpush jobs for an account or zone.
-func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[LogpushJob] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LogpushJob] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a Logpush job.

@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -60,7 +60,7 @@ func (r *LoadBalancerMonitorService) Update(ctx context.Context, monitorID strin
 }
 
 // List configured monitors for a user.
-func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.RequestOption) (res *shared.SinglePage[LoadBalancingMonitor], err error) {
+func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancingMonitor], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,8 +78,8 @@ func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.Re
 }
 
 // List configured monitors for a user.
-func (r *LoadBalancerMonitorService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *shared.SinglePageAutoPager[LoadBalancingMonitor] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, opts...))
+func (r *LoadBalancerMonitorService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LoadBalancingMonitor] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
 // Delete a configured monitor.

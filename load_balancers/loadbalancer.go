@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -70,7 +70,7 @@ func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string,
 }
 
 // List configured load balancers.
-func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) (res *shared.SinglePage[LoadBalancer], err error) {
+func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancer], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -88,8 +88,8 @@ func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListPa
 }
 
 // List configured load balancers.
-func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[LoadBalancer] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LoadBalancer] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a configured load balancer.

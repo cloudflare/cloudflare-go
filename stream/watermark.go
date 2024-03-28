@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -49,7 +50,7 @@ func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, o
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *shared.SinglePage[StreamWatermarks], err error) {
+func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[StreamWatermarks], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,8 +68,8 @@ func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, 
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[StreamWatermarks] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StreamWatermarks] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a watermark profile.

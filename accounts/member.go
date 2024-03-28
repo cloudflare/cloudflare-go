@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -60,7 +60,7 @@ func (r *MemberService) Update(ctx context.Context, memberID string, params Memb
 }
 
 // List all members of an account.
-func (r *MemberService) List(ctx context.Context, params MemberListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[MemberListResponse], err error) {
+func (r *MemberService) List(ctx context.Context, params MemberListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[MemberListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,8 +78,8 @@ func (r *MemberService) List(ctx context.Context, params MemberListParams, opts 
 }
 
 // List all members of an account.
-func (r *MemberService) ListAutoPaging(ctx context.Context, params MemberListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[MemberListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *MemberService) ListAutoPaging(ctx context.Context, params MemberListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[MemberListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Remove a member from an account.

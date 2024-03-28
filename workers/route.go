@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -60,7 +61,7 @@ func (r *RouteService) Update(ctx context.Context, routeID string, params RouteU
 }
 
 // Returns routes for a zone.
-func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *shared.SinglePage[WorkersRoute], err error) {
+func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WorkersRoute], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,8 +79,8 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 }
 
 // Returns routes for a zone.
-func (r *RouteService) ListAutoPaging(ctx context.Context, query RouteListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[WorkersRoute] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *RouteService) ListAutoPaging(ctx context.Context, query RouteListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WorkersRoute] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a route.
