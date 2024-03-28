@@ -244,7 +244,6 @@ type RulesetRuleActionParameters struct {
 	AutoMinify               *RulesetRuleActionParametersAutoMinify            `json:"autominify,omitempty"`
 	BrowserIntegrityCheck    *bool                                             `json:"bic,omitempty"`
 	DisableApps              *bool                                             `json:"disable_apps,omitempty"`
-	DisableZaraz             *bool                                             `json:"disable_zaraz,omitempty"`
 	DisableRailgun           *bool                                             `json:"disable_railgun,omitempty"`
 	EmailObfuscation         *bool                                             `json:"email_obfuscation,omitempty"`
 	Mirage                   *bool                                             `json:"mirage,omitempty"`
