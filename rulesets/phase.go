@@ -33,7 +33,7 @@ func NewPhaseService(opts ...option.RequestOption) (r *PhaseService) {
 }
 
 // Updates an account or zone entry point ruleset, creating a new version.
-func (r *PhaseService) Update(ctx context.Context, rulesetPhase PhaseUpdateParamsRulesetPhase, params PhaseUpdateParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
+func (r *PhaseService) Update(ctx context.Context, rulesetPhase PhaseUpdateParamsRulesetPhase, params PhaseUpdateParams, opts ...option.RequestOption) (res *Ruleset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PhaseUpdateResponseEnvelope
 	var accountOrZone string
@@ -56,7 +56,7 @@ func (r *PhaseService) Update(ctx context.Context, rulesetPhase PhaseUpdateParam
 
 // Fetches the latest version of the account or zone entry point ruleset for a
 // given phase.
-func (r *PhaseService) Get(ctx context.Context, rulesetPhase PhaseGetParamsRulesetPhase, query PhaseGetParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
+func (r *PhaseService) Get(ctx context.Context, rulesetPhase PhaseGetParamsRulesetPhase, query PhaseGetParams, opts ...option.RequestOption) (res *Ruleset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PhaseGetResponseEnvelope
 	var accountOrZone string
@@ -662,7 +662,7 @@ type PhaseUpdateResponseEnvelope struct {
 	// A list of warning messages.
 	Messages []PhaseUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result RulesetsRulesetResponse `json:"result,required"`
+	Result Ruleset `json:"result,required"`
 	// Whether the API call was successful.
 	Success PhaseUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    phaseUpdateResponseEnvelopeJSON    `json:"-"`
@@ -857,7 +857,7 @@ type PhaseGetResponseEnvelope struct {
 	// A list of warning messages.
 	Messages []PhaseGetResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result RulesetsRulesetResponse `json:"result,required"`
+	Result Ruleset `json:"result,required"`
 	// Whether the API call was successful.
 	Success PhaseGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    phaseGetResponseEnvelopeJSON    `json:"-"`

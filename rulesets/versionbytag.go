@@ -32,7 +32,7 @@ func NewVersionByTagService(opts ...option.RequestOption) (r *VersionByTagServic
 }
 
 // Fetches the rules of a managed account ruleset version for a given tag.
-func (r *VersionByTagService) Get(ctx context.Context, rulesetID string, rulesetVersion string, ruleTag string, query VersionByTagGetParams, opts ...option.RequestOption) (res *RulesetsRulesetResponse, err error) {
+func (r *VersionByTagService) Get(ctx context.Context, rulesetID string, rulesetVersion string, ruleTag string, query VersionByTagGetParams, opts ...option.RequestOption) (res *Ruleset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VersionByTagGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rulesets/%s/versions/%s/by_tag/%s", query.AccountID, rulesetID, rulesetVersion, ruleTag)
@@ -56,7 +56,7 @@ type VersionByTagGetResponseEnvelope struct {
 	// A list of warning messages.
 	Messages []VersionByTagGetResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result RulesetsRulesetResponse `json:"result,required"`
+	Result Ruleset `json:"result,required"`
 	// Whether the API call was successful.
 	Success VersionByTagGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    versionByTagGetResponseEnvelopeJSON    `json:"-"`
