@@ -31,7 +31,7 @@ func NewConfigFullService(opts ...option.RequestOption) (r *ConfigFullService) {
 }
 
 // Lists default sampling, router IPs, and rules for account.
-func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigFullGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mnm/config/full", query.AccountID)
@@ -50,7 +50,7 @@ type ConfigFullGetParams struct {
 type ConfigFullGetResponseEnvelope struct {
 	Errors   []ConfigFullGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConfigFullGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicVisibilityMNMConfig                `json:"result,required"`
+	Result   MagicNetworkMonitoringConfig            `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigFullGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configFullGetResponseEnvelopeJSON    `json:"-"`

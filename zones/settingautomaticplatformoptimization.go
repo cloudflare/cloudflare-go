@@ -35,7 +35,7 @@ func NewSettingAutomaticPlatformOptimizationService(opts ...option.RequestOption
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
 // fonts.
-func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, params SettingAutomaticPlatformOptimizationEditParams, opts ...option.RequestOption) (res *ZonesAutomaticPlatformOptimization, err error) {
+func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, params SettingAutomaticPlatformOptimizationEditParams, opts ...option.RequestOption) (res *ZoneSettingAutomaticPlatformOptimization, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticPlatformOptimizationEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, 
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
 // fonts.
-func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, query SettingAutomaticPlatformOptimizationGetParams, opts ...option.RequestOption) (res *ZonesAutomaticPlatformOptimization, err error) {
+func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, query SettingAutomaticPlatformOptimizationGetParams, opts ...option.RequestOption) (res *ZoneSettingAutomaticPlatformOptimization, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticPlatformOptimizationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", query.ZoneID)
@@ -62,7 +62,7 @@ func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, q
 	return
 }
 
-type ZonesAutomaticPlatformOptimization struct {
+type ZoneSettingAutomaticPlatformOptimization struct {
 	// Indicates whether or not
 	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
 	// is enabled.
@@ -79,13 +79,13 @@ type ZonesAutomaticPlatformOptimization struct {
 	// Indicates whether or not
 	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
 	// installed.
-	WpPlugin bool                                   `json:"wp_plugin,required"`
-	JSON     zonesAutomaticPlatformOptimizationJSON `json:"-"`
+	WpPlugin bool                                         `json:"wp_plugin,required"`
+	JSON     zoneSettingAutomaticPlatformOptimizationJSON `json:"-"`
 }
 
-// zonesAutomaticPlatformOptimizationJSON contains the JSON metadata for the struct
-// [ZonesAutomaticPlatformOptimization]
-type zonesAutomaticPlatformOptimizationJSON struct {
+// zoneSettingAutomaticPlatformOptimizationJSON contains the JSON metadata for the
+// struct [ZoneSettingAutomaticPlatformOptimization]
+type zoneSettingAutomaticPlatformOptimizationJSON struct {
 	CacheByDeviceType apijson.Field
 	Cf                apijson.Field
 	Enabled           apijson.Field
@@ -96,15 +96,15 @@ type zonesAutomaticPlatformOptimizationJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ZonesAutomaticPlatformOptimization) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingAutomaticPlatformOptimization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zonesAutomaticPlatformOptimizationJSON) RawJSON() string {
+func (r zoneSettingAutomaticPlatformOptimizationJSON) RawJSON() string {
 	return r.raw
 }
 
-type ZonesAutomaticPlatformOptimizationParam struct {
+type ZoneSettingAutomaticPlatformOptimizationParam struct {
 	// Indicates whether or not
 	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
 	// is enabled.
@@ -124,14 +124,14 @@ type ZonesAutomaticPlatformOptimizationParam struct {
 	WpPlugin param.Field[bool] `json:"wp_plugin,required"`
 }
 
-func (r ZonesAutomaticPlatformOptimizationParam) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingAutomaticPlatformOptimizationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type SettingAutomaticPlatformOptimizationEditParams struct {
 	// Identifier
-	ZoneID param.Field[string]                                  `path:"zone_id,required"`
-	Value  param.Field[ZonesAutomaticPlatformOptimizationParam] `json:"value,required"`
+	ZoneID param.Field[string]                                        `path:"zone_id,required"`
+	Value  param.Field[ZoneSettingAutomaticPlatformOptimizationParam] `json:"value,required"`
 }
 
 func (r SettingAutomaticPlatformOptimizationEditParams) MarshalJSON() (data []byte, err error) {
@@ -143,7 +143,7 @@ type SettingAutomaticPlatformOptimizationEditResponseEnvelope struct {
 	Messages []SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                                                         `json:"success,required"`
-	Result  ZonesAutomaticPlatformOptimization                           `json:"result"`
+	Result  ZoneSettingAutomaticPlatformOptimization                     `json:"result"`
 	JSON    settingAutomaticPlatformOptimizationEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -225,7 +225,7 @@ type SettingAutomaticPlatformOptimizationGetResponseEnvelope struct {
 	Messages []SettingAutomaticPlatformOptimizationGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                                                        `json:"success,required"`
-	Result  ZonesAutomaticPlatformOptimization                          `json:"result"`
+	Result  ZoneSettingAutomaticPlatformOptimization                    `json:"result"`
 	JSON    settingAutomaticPlatformOptimizationGetResponseEnvelopeJSON `json:"-"`
 }
 

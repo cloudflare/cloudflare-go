@@ -35,7 +35,7 @@ func NewAccessApplicationPolicyService(opts ...option.RequestOption) (r *AccessA
 }
 
 // Create a new Access policy for an application.
-func (r *AccessApplicationPolicyService) New(ctx context.Context, uuid string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *AccessPolicies, err error) {
+func (r *AccessApplicationPolicyService) New(ctx context.Context, uuid string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *ZeroTrustPolicies, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyNewResponseEnvelope
 	var accountOrZone string
@@ -57,7 +57,7 @@ func (r *AccessApplicationPolicyService) New(ctx context.Context, uuid string, p
 }
 
 // Update a configured Access policy.
-func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 string, uuid string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *AccessPolicies, err error) {
+func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 string, uuid string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *ZeroTrustPolicies, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyUpdateResponseEnvelope
 	var accountOrZone string
@@ -79,7 +79,7 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 strin
 }
 
 // Lists Access policies configured for an application.
-func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *[]AccessPolicies, err error) {
+func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *[]ZeroTrustPolicies, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyListResponseEnvelope
 	var accountOrZone string
@@ -123,7 +123,7 @@ func (r *AccessApplicationPolicyService) Delete(ctx context.Context, uuid1 strin
 }
 
 // Fetches a single Access policy.
-func (r *AccessApplicationPolicyService) Get(ctx context.Context, uuid1 string, uuid string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *AccessPolicies, err error) {
+func (r *AccessApplicationPolicyService) Get(ctx context.Context, uuid1 string, uuid string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *ZeroTrustPolicies, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyGetResponseEnvelope
 	var accountOrZone string
@@ -144,23 +144,23 @@ func (r *AccessApplicationPolicyService) Get(ctx context.Context, uuid1 string, 
 	return
 }
 
-type AccessPolicies struct {
+type ZeroTrustPolicies struct {
 	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups []AccessPoliciesApprovalGroup `json:"approval_groups"`
+	ApprovalGroups []ZeroTrustPoliciesApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired bool      `json:"approval_required"`
 	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
-	Decision AccessPoliciesDecision `json:"decision"`
+	Decision ZeroTrustPoliciesDecision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
-	Exclude []AccessPoliciesExclude `json:"exclude"`
+	Exclude []ZeroTrustPoliciesExclude `json:"exclude"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include []AccessPoliciesInclude `json:"include"`
+	Include []ZeroTrustPoliciesInclude `json:"include"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -175,17 +175,18 @@ type AccessPolicies struct {
 	PurposeJustificationRequired bool `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
-	Require []AccessPoliciesRequire `json:"require"`
+	Require []ZeroTrustPoliciesRequire `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration string             `json:"session_duration"`
-	UpdatedAt       time.Time          `json:"updated_at" format:"date-time"`
-	JSON            accessPoliciesJSON `json:"-"`
+	SessionDuration string                `json:"session_duration"`
+	UpdatedAt       time.Time             `json:"updated_at" format:"date-time"`
+	JSON            zeroTrustPoliciesJSON `json:"-"`
 }
 
-// accessPoliciesJSON contains the JSON metadata for the struct [AccessPolicies]
-type accessPoliciesJSON struct {
+// zeroTrustPoliciesJSON contains the JSON metadata for the struct
+// [ZeroTrustPolicies]
+type zeroTrustPoliciesJSON struct {
 	ID                           apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
@@ -205,28 +206,28 @@ type accessPoliciesJSON struct {
 	ExtraFields                  map[string]apijson.Field
 }
 
-func (r *AccessPolicies) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPolicies) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesJSON) RawJSON() string {
+func (r zeroTrustPoliciesJSON) RawJSON() string {
 	return r.raw
 }
 
 // A group of email addresses that can approve a temporary authentication request.
-type AccessPoliciesApprovalGroup struct {
+type ZeroTrustPoliciesApprovalGroup struct {
 	// The number of approvals needed to obtain access.
 	ApprovalsNeeded float64 `json:"approvals_needed,required"`
 	// A list of emails that can approve the access request.
 	EmailAddresses []interface{} `json:"email_addresses"`
 	// The UUID of an re-usable email list.
-	EmailListUUID string                          `json:"email_list_uuid"`
-	JSON          accessPoliciesApprovalGroupJSON `json:"-"`
+	EmailListUUID string                             `json:"email_list_uuid"`
+	JSON          zeroTrustPoliciesApprovalGroupJSON `json:"-"`
 }
 
-// accessPoliciesApprovalGroupJSON contains the JSON metadata for the struct
-// [AccessPoliciesApprovalGroup]
-type accessPoliciesApprovalGroupJSON struct {
+// zeroTrustPoliciesApprovalGroupJSON contains the JSON metadata for the struct
+// [ZeroTrustPoliciesApprovalGroup]
+type zeroTrustPoliciesApprovalGroupJSON struct {
 	ApprovalsNeeded apijson.Field
 	EmailAddresses  apijson.Field
 	EmailListUUID   apijson.Field
@@ -234,27 +235,27 @@ type accessPoliciesApprovalGroupJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *AccessPoliciesApprovalGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesApprovalGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesApprovalGroupJSON) RawJSON() string {
+func (r zeroTrustPoliciesApprovalGroupJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action Access will take if a user matches this policy.
-type AccessPoliciesDecision string
+type ZeroTrustPoliciesDecision string
 
 const (
-	AccessPoliciesDecisionAllow       AccessPoliciesDecision = "allow"
-	AccessPoliciesDecisionDeny        AccessPoliciesDecision = "deny"
-	AccessPoliciesDecisionNonIdentity AccessPoliciesDecision = "non_identity"
-	AccessPoliciesDecisionBypass      AccessPoliciesDecision = "bypass"
+	ZeroTrustPoliciesDecisionAllow       ZeroTrustPoliciesDecision = "allow"
+	ZeroTrustPoliciesDecisionDeny        ZeroTrustPoliciesDecision = "deny"
+	ZeroTrustPoliciesDecisionNonIdentity ZeroTrustPoliciesDecision = "non_identity"
+	ZeroTrustPoliciesDecisionBypass      ZeroTrustPoliciesDecision = "bypass"
 )
 
-func (r AccessPoliciesDecision) IsKnown() bool {
+func (r ZeroTrustPoliciesDecision) IsKnown() bool {
 	switch r {
-	case AccessPoliciesDecisionAllow, AccessPoliciesDecisionDeny, AccessPoliciesDecisionNonIdentity, AccessPoliciesDecisionBypass:
+	case ZeroTrustPoliciesDecisionAllow, ZeroTrustPoliciesDecisionDeny, ZeroTrustPoliciesDecisionNonIdentity, ZeroTrustPoliciesDecisionBypass:
 		return true
 	}
 	return false
@@ -262,2842 +263,2857 @@ func (r AccessPoliciesDecision) IsKnown() bool {
 
 // Matches a specific email.
 //
-// Union satisfied by [zero_trust.AccessPoliciesExcludeAccessEmailRule],
-// [zero_trust.AccessPoliciesExcludeAccessEmailListRule],
-// [zero_trust.AccessPoliciesExcludeAccessDomainRule],
-// [zero_trust.AccessPoliciesExcludeAccessEveryoneRule],
-// [zero_trust.AccessPoliciesExcludeAccessIPRule],
-// [zero_trust.AccessPoliciesExcludeAccessIPListRule],
-// [zero_trust.AccessPoliciesExcludeAccessCertificateRule],
-// [zero_trust.AccessPoliciesExcludeAccessAccessGroupRule],
-// [zero_trust.AccessPoliciesExcludeAccessAzureGroupRule],
-// [zero_trust.AccessPoliciesExcludeAccessGitHubOrganizationRule],
-// [zero_trust.AccessPoliciesExcludeAccessGsuiteGroupRule],
-// [zero_trust.AccessPoliciesExcludeAccessOktaGroupRule],
-// [zero_trust.AccessPoliciesExcludeAccessSamlGroupRule],
-// [zero_trust.AccessPoliciesExcludeAccessServiceTokenRule],
-// [zero_trust.AccessPoliciesExcludeAccessAnyValidServiceTokenRule],
-// [zero_trust.AccessPoliciesExcludeAccessExternalEvaluationRule],
-// [zero_trust.AccessPoliciesExcludeAccessCountryRule],
-// [zero_trust.AccessPoliciesExcludeAccessAuthenticationMethodRule] or
-// [zero_trust.AccessPoliciesExcludeAccessDevicePostureRule].
-type AccessPoliciesExclude interface {
-	implementsZeroTrustAccessPoliciesExclude()
+// Union satisfied by [zero_trust.ZeroTrustPoliciesExcludeAccessEmailRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessEmailListRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessDomainRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessEveryoneRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessIPRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessIPListRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessCertificateRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessAccessGroupRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessAzureGroupRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessGitHubOrganizationRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessGsuiteGroupRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessOktaGroupRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessSamlGroupRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessServiceTokenRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessAnyValidServiceTokenRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessExternalEvaluationRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessCountryRule],
+// [zero_trust.ZeroTrustPoliciesExcludeAccessAuthenticationMethodRule] or
+// [zero_trust.ZeroTrustPoliciesExcludeAccessDevicePostureRule].
+type ZeroTrustPoliciesExclude interface {
+	implementsZeroTrustZeroTrustPoliciesExclude()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessPoliciesExclude)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustPoliciesExclude)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessEmailRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessEmailRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessEmailListRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessEmailListRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessDomainRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessDomainRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessEveryoneRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessEveryoneRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessIPRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessIPRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessIPListRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessIPListRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessCertificateRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessCertificateRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessAccessGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessAccessGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessAzureGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessAzureGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessGitHubOrganizationRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessGitHubOrganizationRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessGsuiteGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessGsuiteGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessOktaGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessOktaGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessSamlGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessSamlGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessServiceTokenRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessServiceTokenRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessAnyValidServiceTokenRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessAnyValidServiceTokenRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessExternalEvaluationRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessExternalEvaluationRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessCountryRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessCountryRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessAuthenticationMethodRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessAuthenticationMethodRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesExcludeAccessDevicePostureRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesExcludeAccessDevicePostureRule{}),
 		},
 	)
 }
 
 // Matches a specific email.
-type AccessPoliciesExcludeAccessEmailRule struct {
-	Email AccessPoliciesExcludeAccessEmailRuleEmail `json:"email,required"`
-	JSON  accessPoliciesExcludeAccessEmailRuleJSON  `json:"-"`
+type ZeroTrustPoliciesExcludeAccessEmailRule struct {
+	Email ZeroTrustPoliciesExcludeAccessEmailRuleEmail `json:"email,required"`
+	JSON  zeroTrustPoliciesExcludeAccessEmailRuleJSON  `json:"-"`
 }
 
-// accessPoliciesExcludeAccessEmailRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessEmailRule]
-type accessPoliciesExcludeAccessEmailRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessEmailRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesExcludeAccessEmailRule]
+type zeroTrustPoliciesExcludeAccessEmailRuleJSON struct {
 	Email       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessEmailRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessEmailRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessEmailRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessEmailRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
-type AccessPoliciesExcludeAccessEmailRuleEmail struct {
+type ZeroTrustPoliciesExcludeAccessEmailRuleEmail struct {
 	// The email of the user.
-	Email string                                        `json:"email,required" format:"email"`
-	JSON  accessPoliciesExcludeAccessEmailRuleEmailJSON `json:"-"`
+	Email string                                           `json:"email,required" format:"email"`
+	JSON  zeroTrustPoliciesExcludeAccessEmailRuleEmailJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessEmailRuleEmailJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessEmailRuleEmail]
-type accessPoliciesExcludeAccessEmailRuleEmailJSON struct {
+// zeroTrustPoliciesExcludeAccessEmailRuleEmailJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessEmailRuleEmail]
+type zeroTrustPoliciesExcludeAccessEmailRuleEmailJSON struct {
 	Email       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessEmailRuleEmailJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessEmailRuleEmailJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an email address from a list.
-type AccessPoliciesExcludeAccessEmailListRule struct {
-	EmailList AccessPoliciesExcludeAccessEmailListRuleEmailList `json:"email_list,required"`
-	JSON      accessPoliciesExcludeAccessEmailListRuleJSON      `json:"-"`
+type ZeroTrustPoliciesExcludeAccessEmailListRule struct {
+	EmailList ZeroTrustPoliciesExcludeAccessEmailListRuleEmailList `json:"email_list,required"`
+	JSON      zeroTrustPoliciesExcludeAccessEmailListRuleJSON      `json:"-"`
 }
 
-// accessPoliciesExcludeAccessEmailListRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessEmailListRule]
-type accessPoliciesExcludeAccessEmailListRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessEmailListRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessEmailListRule]
+type zeroTrustPoliciesExcludeAccessEmailListRuleJSON struct {
 	EmailList   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessEmailListRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessEmailListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessEmailListRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessEmailListRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
-type AccessPoliciesExcludeAccessEmailListRuleEmailList struct {
+type ZeroTrustPoliciesExcludeAccessEmailListRuleEmailList struct {
 	// The ID of a previously created email list.
-	ID   string                                                `json:"id,required"`
-	JSON accessPoliciesExcludeAccessEmailListRuleEmailListJSON `json:"-"`
+	ID   string                                                   `json:"id,required"`
+	JSON zeroTrustPoliciesExcludeAccessEmailListRuleEmailListJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessEmailListRuleEmailListJSON contains the JSON metadata
-// for the struct [AccessPoliciesExcludeAccessEmailListRuleEmailList]
-type accessPoliciesExcludeAccessEmailListRuleEmailListJSON struct {
+// zeroTrustPoliciesExcludeAccessEmailListRuleEmailListJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessEmailListRuleEmailList]
+type zeroTrustPoliciesExcludeAccessEmailListRuleEmailListJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessEmailListRuleEmailListJSON) RawJSON() string {
 	return r.raw
 }
 
 // Match an entire email domain.
-type AccessPoliciesExcludeAccessDomainRule struct {
-	EmailDomain AccessPoliciesExcludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
-	JSON        accessPoliciesExcludeAccessDomainRuleJSON        `json:"-"`
+type ZeroTrustPoliciesExcludeAccessDomainRule struct {
+	EmailDomain ZeroTrustPoliciesExcludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
+	JSON        zeroTrustPoliciesExcludeAccessDomainRuleJSON        `json:"-"`
 }
 
-// accessPoliciesExcludeAccessDomainRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessDomainRule]
-type accessPoliciesExcludeAccessDomainRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessDomainRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesExcludeAccessDomainRule]
+type zeroTrustPoliciesExcludeAccessDomainRuleJSON struct {
 	EmailDomain apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessDomainRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessDomainRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessDomainRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessDomainRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
-type AccessPoliciesExcludeAccessDomainRuleEmailDomain struct {
+type ZeroTrustPoliciesExcludeAccessDomainRuleEmailDomain struct {
 	// The email domain to match.
-	Domain string                                               `json:"domain,required"`
-	JSON   accessPoliciesExcludeAccessDomainRuleEmailDomainJSON `json:"-"`
+	Domain string                                                  `json:"domain,required"`
+	JSON   zeroTrustPoliciesExcludeAccessDomainRuleEmailDomainJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessDomainRuleEmailDomainJSON contains the JSON metadata
-// for the struct [AccessPoliciesExcludeAccessDomainRuleEmailDomain]
-type accessPoliciesExcludeAccessDomainRuleEmailDomainJSON struct {
+// zeroTrustPoliciesExcludeAccessDomainRuleEmailDomainJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessDomainRuleEmailDomain]
+type zeroTrustPoliciesExcludeAccessDomainRuleEmailDomainJSON struct {
 	Domain      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches everyone.
-type AccessPoliciesExcludeAccessEveryoneRule struct {
+type ZeroTrustPoliciesExcludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
-	Everyone interface{}                                 `json:"everyone,required"`
-	JSON     accessPoliciesExcludeAccessEveryoneRuleJSON `json:"-"`
+	Everyone interface{}                                    `json:"everyone,required"`
+	JSON     zeroTrustPoliciesExcludeAccessEveryoneRuleJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessEveryoneRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessEveryoneRule]
-type accessPoliciesExcludeAccessEveryoneRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessEveryoneRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessEveryoneRule]
+type zeroTrustPoliciesExcludeAccessEveryoneRuleJSON struct {
 	Everyone    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessEveryoneRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessEveryoneRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessEveryoneRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessEveryoneRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
 // Matches an IP address block.
-type AccessPoliciesExcludeAccessIPRule struct {
-	IP   AccessPoliciesExcludeAccessIPRuleIP   `json:"ip,required"`
-	JSON accessPoliciesExcludeAccessIPRuleJSON `json:"-"`
+type ZeroTrustPoliciesExcludeAccessIPRule struct {
+	IP   ZeroTrustPoliciesExcludeAccessIPRuleIP   `json:"ip,required"`
+	JSON zeroTrustPoliciesExcludeAccessIPRuleJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessIPRuleJSON contains the JSON metadata for the struct
-// [AccessPoliciesExcludeAccessIPRule]
-type accessPoliciesExcludeAccessIPRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessIPRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesExcludeAccessIPRule]
+type zeroTrustPoliciesExcludeAccessIPRuleJSON struct {
 	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessIPRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessIPRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessIPRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessIPRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessIPRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessIPRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
-type AccessPoliciesExcludeAccessIPRuleIP struct {
+type ZeroTrustPoliciesExcludeAccessIPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
-	IP   string                                  `json:"ip,required"`
-	JSON accessPoliciesExcludeAccessIPRuleIPJSON `json:"-"`
+	IP   string                                     `json:"ip,required"`
+	JSON zeroTrustPoliciesExcludeAccessIPRuleIPJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessIPRuleIPJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessIPRuleIP]
-type accessPoliciesExcludeAccessIPRuleIPJSON struct {
+// zeroTrustPoliciesExcludeAccessIPRuleIPJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesExcludeAccessIPRuleIP]
+type zeroTrustPoliciesExcludeAccessIPRuleIPJSON struct {
 	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessIPRuleIPJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessIPRuleIPJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an IP address from a list.
-type AccessPoliciesExcludeAccessIPListRule struct {
-	IPList AccessPoliciesExcludeAccessIPListRuleIPList `json:"ip_list,required"`
-	JSON   accessPoliciesExcludeAccessIPListRuleJSON   `json:"-"`
+type ZeroTrustPoliciesExcludeAccessIPListRule struct {
+	IPList ZeroTrustPoliciesExcludeAccessIPListRuleIPList `json:"ip_list,required"`
+	JSON   zeroTrustPoliciesExcludeAccessIPListRuleJSON   `json:"-"`
 }
 
-// accessPoliciesExcludeAccessIPListRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessIPListRule]
-type accessPoliciesExcludeAccessIPListRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessIPListRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesExcludeAccessIPListRule]
+type zeroTrustPoliciesExcludeAccessIPListRuleJSON struct {
 	IPList      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessIPListRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessIPListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessIPListRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessIPListRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
-type AccessPoliciesExcludeAccessIPListRuleIPList struct {
+type ZeroTrustPoliciesExcludeAccessIPListRuleIPList struct {
 	// The ID of a previously created IP list.
-	ID   string                                          `json:"id,required"`
-	JSON accessPoliciesExcludeAccessIPListRuleIPListJSON `json:"-"`
+	ID   string                                             `json:"id,required"`
+	JSON zeroTrustPoliciesExcludeAccessIPListRuleIPListJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessIPListRuleIPListJSON contains the JSON metadata for
-// the struct [AccessPoliciesExcludeAccessIPListRuleIPList]
-type accessPoliciesExcludeAccessIPListRuleIPListJSON struct {
+// zeroTrustPoliciesExcludeAccessIPListRuleIPListJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesExcludeAccessIPListRuleIPList]
+type zeroTrustPoliciesExcludeAccessIPListRuleIPListJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessIPListRuleIPListJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessIPListRuleIPListJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches any valid client certificate.
-type AccessPoliciesExcludeAccessCertificateRule struct {
-	Certificate interface{}                                    `json:"certificate,required"`
-	JSON        accessPoliciesExcludeAccessCertificateRuleJSON `json:"-"`
+type ZeroTrustPoliciesExcludeAccessCertificateRule struct {
+	Certificate interface{}                                       `json:"certificate,required"`
+	JSON        zeroTrustPoliciesExcludeAccessCertificateRuleJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessCertificateRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesExcludeAccessCertificateRule]
-type accessPoliciesExcludeAccessCertificateRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessCertificateRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessCertificateRule]
+type zeroTrustPoliciesExcludeAccessCertificateRuleJSON struct {
 	Certificate apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessCertificateRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessCertificateRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessCertificateRule) implementsZeroTrustAccessPoliciesExclude() {}
-
-// Matches an Access group.
-type AccessPoliciesExcludeAccessAccessGroupRule struct {
-	Group AccessPoliciesExcludeAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  accessPoliciesExcludeAccessAccessGroupRuleJSON  `json:"-"`
+func (r ZeroTrustPoliciesExcludeAccessCertificateRule) implementsZeroTrustZeroTrustPoliciesExclude() {
 }
 
-// accessPoliciesExcludeAccessAccessGroupRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesExcludeAccessAccessGroupRule]
-type accessPoliciesExcludeAccessAccessGroupRuleJSON struct {
+// Matches an Access group.
+type ZeroTrustPoliciesExcludeAccessAccessGroupRule struct {
+	Group ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON  `json:"-"`
+}
+
+// zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessAccessGroupRule]
+type zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON struct {
 	Group       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessAccessGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessAccessGroupRule) implementsZeroTrustAccessPoliciesExclude() {}
-
-type AccessPoliciesExcludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                              `json:"id,required"`
-	JSON accessPoliciesExcludeAccessAccessGroupRuleGroupJSON `json:"-"`
+func (r ZeroTrustPoliciesExcludeAccessAccessGroupRule) implementsZeroTrustZeroTrustPoliciesExclude() {
 }
 
-// accessPoliciesExcludeAccessAccessGroupRuleGroupJSON contains the JSON metadata
-// for the struct [AccessPoliciesExcludeAccessAccessGroupRuleGroup]
-type accessPoliciesExcludeAccessAccessGroupRuleGroupJSON struct {
+type ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                 `json:"id,required"`
+	JSON zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup]
+type zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
-type AccessPoliciesExcludeAccessAzureGroupRule struct {
-	AzureAd AccessPoliciesExcludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
-	JSON    accessPoliciesExcludeAccessAzureGroupRuleJSON    `json:"-"`
+type ZeroTrustPoliciesExcludeAccessAzureGroupRule struct {
+	AzureAd ZeroTrustPoliciesExcludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
+	JSON    zeroTrustPoliciesExcludeAccessAzureGroupRuleJSON    `json:"-"`
 }
 
-// accessPoliciesExcludeAccessAzureGroupRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessAzureGroupRule]
-type accessPoliciesExcludeAccessAzureGroupRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessAzureGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessAzureGroupRule]
+type zeroTrustPoliciesExcludeAccessAzureGroupRuleJSON struct {
 	AzureAd     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessAzureGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessAzureGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessAzureGroupRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessAzureGroupRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
-type AccessPoliciesExcludeAccessAzureGroupRuleAzureAd struct {
+type ZeroTrustPoliciesExcludeAccessAzureGroupRuleAzureAd struct {
 	// The ID of an Azure group.
 	ID string `json:"id,required"`
 	// The ID of your Azure identity provider.
-	ConnectionID string                                               `json:"connection_id,required"`
-	JSON         accessPoliciesExcludeAccessAzureGroupRuleAzureAdJSON `json:"-"`
+	ConnectionID string                                                  `json:"connection_id,required"`
+	JSON         zeroTrustPoliciesExcludeAccessAzureGroupRuleAzureAdJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessAzureGroupRuleAzureAdJSON contains the JSON metadata
-// for the struct [AccessPoliciesExcludeAccessAzureGroupRuleAzureAd]
-type accessPoliciesExcludeAccessAzureGroupRuleAzureAdJSON struct {
+// zeroTrustPoliciesExcludeAccessAzureGroupRuleAzureAdJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessAzureGroupRuleAzureAd]
+type zeroTrustPoliciesExcludeAccessAzureGroupRuleAzureAdJSON struct {
 	ID           apijson.Field
 	ConnectionID apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a Github organization. Requires a Github identity provider.
-type AccessPoliciesExcludeAccessGitHubOrganizationRule struct {
-	GitHubOrganization AccessPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
-	JSON               accessPoliciesExcludeAccessGitHubOrganizationRuleJSON               `json:"-"`
+type ZeroTrustPoliciesExcludeAccessGitHubOrganizationRule struct {
+	GitHubOrganization ZeroTrustPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
+	JSON               zeroTrustPoliciesExcludeAccessGitHubOrganizationRuleJSON               `json:"-"`
 }
 
-// accessPoliciesExcludeAccessGitHubOrganizationRuleJSON contains the JSON metadata
-// for the struct [AccessPoliciesExcludeAccessGitHubOrganizationRule]
-type accessPoliciesExcludeAccessGitHubOrganizationRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessGitHubOrganizationRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessGitHubOrganizationRule]
+type zeroTrustPoliciesExcludeAccessGitHubOrganizationRuleJSON struct {
 	GitHubOrganization apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessGitHubOrganizationRule) implementsZeroTrustAccessPoliciesExclude() {
+func (r ZeroTrustPoliciesExcludeAccessGitHubOrganizationRule) implementsZeroTrustZeroTrustPoliciesExclude() {
 }
 
-type AccessPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganization struct {
+type ZeroTrustPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganization struct {
 	// The ID of your Github identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The name of the organization.
-	Name string                                                                  `json:"name,required"`
-	JSON accessPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
+	Name string                                                                     `json:"name,required"`
+	JSON zeroTrustPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON contains
-// the JSON metadata for the struct
-// [AccessPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganization]
-type accessPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
+// zeroTrustPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON
+// contains the JSON metadata for the struct
+// [ZeroTrustPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganization]
+type zeroTrustPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
 	ConnectionID apijson.Field
 	Name         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
-type AccessPoliciesExcludeAccessGsuiteGroupRule struct {
-	Gsuite AccessPoliciesExcludeAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
-	JSON   accessPoliciesExcludeAccessGsuiteGroupRuleJSON   `json:"-"`
+type ZeroTrustPoliciesExcludeAccessGsuiteGroupRule struct {
+	Gsuite ZeroTrustPoliciesExcludeAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
+	JSON   zeroTrustPoliciesExcludeAccessGsuiteGroupRuleJSON   `json:"-"`
 }
 
-// accessPoliciesExcludeAccessGsuiteGroupRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesExcludeAccessGsuiteGroupRule]
-type accessPoliciesExcludeAccessGsuiteGroupRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessGsuiteGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessGsuiteGroupRule]
+type zeroTrustPoliciesExcludeAccessGsuiteGroupRuleJSON struct {
 	Gsuite      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessGsuiteGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessGsuiteGroupRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessGsuiteGroupRule) implementsZeroTrustZeroTrustPoliciesExclude() {
+}
 
-type AccessPoliciesExcludeAccessGsuiteGroupRuleGsuite struct {
+type ZeroTrustPoliciesExcludeAccessGsuiteGroupRuleGsuite struct {
 	// The ID of your Google Workspace identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The email of the Google Workspace group.
-	Email string                                               `json:"email,required"`
-	JSON  accessPoliciesExcludeAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
+	Email string                                                  `json:"email,required"`
+	JSON  zeroTrustPoliciesExcludeAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessGsuiteGroupRuleGsuiteJSON contains the JSON metadata
-// for the struct [AccessPoliciesExcludeAccessGsuiteGroupRuleGsuite]
-type accessPoliciesExcludeAccessGsuiteGroupRuleGsuiteJSON struct {
+// zeroTrustPoliciesExcludeAccessGsuiteGroupRuleGsuiteJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessGsuiteGroupRuleGsuite]
+type zeroTrustPoliciesExcludeAccessGsuiteGroupRuleGsuiteJSON struct {
 	ConnectionID apijson.Field
 	Email        apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an Okta group. Requires an Okta identity provider.
-type AccessPoliciesExcludeAccessOktaGroupRule struct {
-	Okta AccessPoliciesExcludeAccessOktaGroupRuleOkta `json:"okta,required"`
-	JSON accessPoliciesExcludeAccessOktaGroupRuleJSON `json:"-"`
+type ZeroTrustPoliciesExcludeAccessOktaGroupRule struct {
+	Okta ZeroTrustPoliciesExcludeAccessOktaGroupRuleOkta `json:"okta,required"`
+	JSON zeroTrustPoliciesExcludeAccessOktaGroupRuleJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessOktaGroupRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessOktaGroupRule]
-type accessPoliciesExcludeAccessOktaGroupRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessOktaGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessOktaGroupRule]
+type zeroTrustPoliciesExcludeAccessOktaGroupRuleJSON struct {
 	Okta        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessOktaGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessOktaGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessOktaGroupRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessOktaGroupRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
-type AccessPoliciesExcludeAccessOktaGroupRuleOkta struct {
+type ZeroTrustPoliciesExcludeAccessOktaGroupRuleOkta struct {
 	// The ID of your Okta identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The email of the Okta group.
-	Email string                                           `json:"email,required"`
-	JSON  accessPoliciesExcludeAccessOktaGroupRuleOktaJSON `json:"-"`
+	Email string                                              `json:"email,required"`
+	JSON  zeroTrustPoliciesExcludeAccessOktaGroupRuleOktaJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessOktaGroupRuleOktaJSON contains the JSON metadata for
-// the struct [AccessPoliciesExcludeAccessOktaGroupRuleOkta]
-type accessPoliciesExcludeAccessOktaGroupRuleOktaJSON struct {
+// zeroTrustPoliciesExcludeAccessOktaGroupRuleOktaJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesExcludeAccessOktaGroupRuleOkta]
+type zeroTrustPoliciesExcludeAccessOktaGroupRuleOktaJSON struct {
 	ConnectionID apijson.Field
 	Email        apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a SAML group. Requires a SAML identity provider.
-type AccessPoliciesExcludeAccessSamlGroupRule struct {
-	Saml AccessPoliciesExcludeAccessSamlGroupRuleSaml `json:"saml,required"`
-	JSON accessPoliciesExcludeAccessSamlGroupRuleJSON `json:"-"`
+type ZeroTrustPoliciesExcludeAccessSamlGroupRule struct {
+	Saml ZeroTrustPoliciesExcludeAccessSamlGroupRuleSaml `json:"saml,required"`
+	JSON zeroTrustPoliciesExcludeAccessSamlGroupRuleJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessSamlGroupRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessSamlGroupRule]
-type accessPoliciesExcludeAccessSamlGroupRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessSamlGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessSamlGroupRule]
+type zeroTrustPoliciesExcludeAccessSamlGroupRuleJSON struct {
 	Saml        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessSamlGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessSamlGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessSamlGroupRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessSamlGroupRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
-type AccessPoliciesExcludeAccessSamlGroupRuleSaml struct {
+type ZeroTrustPoliciesExcludeAccessSamlGroupRuleSaml struct {
 	// The name of the SAML attribute.
 	AttributeName string `json:"attribute_name,required"`
 	// The SAML attribute value to look for.
-	AttributeValue string                                           `json:"attribute_value,required"`
-	JSON           accessPoliciesExcludeAccessSamlGroupRuleSamlJSON `json:"-"`
+	AttributeValue string                                              `json:"attribute_value,required"`
+	JSON           zeroTrustPoliciesExcludeAccessSamlGroupRuleSamlJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessSamlGroupRuleSamlJSON contains the JSON metadata for
-// the struct [AccessPoliciesExcludeAccessSamlGroupRuleSaml]
-type accessPoliciesExcludeAccessSamlGroupRuleSamlJSON struct {
+// zeroTrustPoliciesExcludeAccessSamlGroupRuleSamlJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesExcludeAccessSamlGroupRuleSaml]
+type zeroTrustPoliciesExcludeAccessSamlGroupRuleSamlJSON struct {
 	AttributeName  apijson.Field
 	AttributeValue apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a specific Access Service Token
-type AccessPoliciesExcludeAccessServiceTokenRule struct {
-	ServiceToken AccessPoliciesExcludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
-	JSON         accessPoliciesExcludeAccessServiceTokenRuleJSON         `json:"-"`
+type ZeroTrustPoliciesExcludeAccessServiceTokenRule struct {
+	ServiceToken ZeroTrustPoliciesExcludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
+	JSON         zeroTrustPoliciesExcludeAccessServiceTokenRuleJSON         `json:"-"`
 }
 
-// accessPoliciesExcludeAccessServiceTokenRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesExcludeAccessServiceTokenRule]
-type accessPoliciesExcludeAccessServiceTokenRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessServiceTokenRuleJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesExcludeAccessServiceTokenRule]
+type zeroTrustPoliciesExcludeAccessServiceTokenRuleJSON struct {
 	ServiceToken apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessServiceTokenRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessServiceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessServiceTokenRule) implementsZeroTrustAccessPoliciesExclude() {}
-
-type AccessPoliciesExcludeAccessServiceTokenRuleServiceToken struct {
-	// The ID of a Service Token.
-	TokenID string                                                      `json:"token_id,required"`
-	JSON    accessPoliciesExcludeAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+func (r ZeroTrustPoliciesExcludeAccessServiceTokenRule) implementsZeroTrustZeroTrustPoliciesExclude() {
 }
 
-// accessPoliciesExcludeAccessServiceTokenRuleServiceTokenJSON contains the JSON
+type ZeroTrustPoliciesExcludeAccessServiceTokenRuleServiceToken struct {
+	// The ID of a Service Token.
+	TokenID string                                                         `json:"token_id,required"`
+	JSON    zeroTrustPoliciesExcludeAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+}
+
+// zeroTrustPoliciesExcludeAccessServiceTokenRuleServiceTokenJSON contains the JSON
 // metadata for the struct
-// [AccessPoliciesExcludeAccessServiceTokenRuleServiceToken]
-type accessPoliciesExcludeAccessServiceTokenRuleServiceTokenJSON struct {
+// [ZeroTrustPoliciesExcludeAccessServiceTokenRuleServiceToken]
+type zeroTrustPoliciesExcludeAccessServiceTokenRuleServiceTokenJSON struct {
 	TokenID     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches any valid Access Service Token
-type AccessPoliciesExcludeAccessAnyValidServiceTokenRule struct {
+type ZeroTrustPoliciesExcludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                                             `json:"any_valid_service_token,required"`
-	JSON                 accessPoliciesExcludeAccessAnyValidServiceTokenRuleJSON `json:"-"`
+	AnyValidServiceToken interface{}                                                `json:"any_valid_service_token,required"`
+	JSON                 zeroTrustPoliciesExcludeAccessAnyValidServiceTokenRuleJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessAnyValidServiceTokenRuleJSON contains the JSON
-// metadata for the struct [AccessPoliciesExcludeAccessAnyValidServiceTokenRule]
-type accessPoliciesExcludeAccessAnyValidServiceTokenRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessAnyValidServiceTokenRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessAnyValidServiceTokenRule]
+type zeroTrustPoliciesExcludeAccessAnyValidServiceTokenRuleJSON struct {
 	AnyValidServiceToken apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessPoliciesExclude() {
+func (r ZeroTrustPoliciesExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustZeroTrustPoliciesExclude() {
 }
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
-type AccessPoliciesExcludeAccessExternalEvaluationRule struct {
-	ExternalEvaluation AccessPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
-	JSON               accessPoliciesExcludeAccessExternalEvaluationRuleJSON               `json:"-"`
+type ZeroTrustPoliciesExcludeAccessExternalEvaluationRule struct {
+	ExternalEvaluation ZeroTrustPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
+	JSON               zeroTrustPoliciesExcludeAccessExternalEvaluationRuleJSON               `json:"-"`
 }
 
-// accessPoliciesExcludeAccessExternalEvaluationRuleJSON contains the JSON metadata
-// for the struct [AccessPoliciesExcludeAccessExternalEvaluationRule]
-type accessPoliciesExcludeAccessExternalEvaluationRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessExternalEvaluationRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessExternalEvaluationRule]
+type zeroTrustPoliciesExcludeAccessExternalEvaluationRuleJSON struct {
 	ExternalEvaluation apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessExternalEvaluationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessExternalEvaluationRule) implementsZeroTrustAccessPoliciesExclude() {
+func (r ZeroTrustPoliciesExcludeAccessExternalEvaluationRule) implementsZeroTrustZeroTrustPoliciesExclude() {
 }
 
-type AccessPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluation struct {
+type ZeroTrustPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluation struct {
 	// The API endpoint containing your business logic.
 	EvaluateURL string `json:"evaluate_url,required"`
 	// The API endpoint containing the key that Access uses to verify that the response
 	// came from your API.
-	KeysURL string                                                                  `json:"keys_url,required"`
-	JSON    accessPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
+	KeysURL string                                                                     `json:"keys_url,required"`
+	JSON    zeroTrustPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluationJSON contains
-// the JSON metadata for the struct
-// [AccessPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluation]
-type accessPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluationJSON struct {
+// zeroTrustPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluationJSON
+// contains the JSON metadata for the struct
+// [ZeroTrustPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluation]
+type zeroTrustPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluationJSON struct {
 	EvaluateURL apijson.Field
 	KeysURL     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a specific country
-type AccessPoliciesExcludeAccessCountryRule struct {
-	Geo  AccessPoliciesExcludeAccessCountryRuleGeo  `json:"geo,required"`
-	JSON accessPoliciesExcludeAccessCountryRuleJSON `json:"-"`
+type ZeroTrustPoliciesExcludeAccessCountryRule struct {
+	Geo  ZeroTrustPoliciesExcludeAccessCountryRuleGeo  `json:"geo,required"`
+	JSON zeroTrustPoliciesExcludeAccessCountryRuleJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessCountryRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessCountryRule]
-type accessPoliciesExcludeAccessCountryRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessCountryRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesExcludeAccessCountryRule]
+type zeroTrustPoliciesExcludeAccessCountryRuleJSON struct {
 	Geo         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessCountryRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessCountryRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessCountryRule) implementsZeroTrustAccessPoliciesExclude() {}
+func (r ZeroTrustPoliciesExcludeAccessCountryRule) implementsZeroTrustZeroTrustPoliciesExclude() {}
 
-type AccessPoliciesExcludeAccessCountryRuleGeo struct {
+type ZeroTrustPoliciesExcludeAccessCountryRuleGeo struct {
 	// The country code that should be matched.
-	CountryCode string                                        `json:"country_code,required"`
-	JSON        accessPoliciesExcludeAccessCountryRuleGeoJSON `json:"-"`
+	CountryCode string                                           `json:"country_code,required"`
+	JSON        zeroTrustPoliciesExcludeAccessCountryRuleGeoJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessCountryRuleGeoJSON contains the JSON metadata for the
-// struct [AccessPoliciesExcludeAccessCountryRuleGeo]
-type accessPoliciesExcludeAccessCountryRuleGeoJSON struct {
+// zeroTrustPoliciesExcludeAccessCountryRuleGeoJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesExcludeAccessCountryRuleGeo]
+type zeroTrustPoliciesExcludeAccessCountryRuleGeoJSON struct {
 	CountryCode apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessCountryRuleGeoJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessCountryRuleGeoJSON) RawJSON() string {
 	return r.raw
 }
 
 // Enforce different MFA options
-type AccessPoliciesExcludeAccessAuthenticationMethodRule struct {
-	AuthMethod AccessPoliciesExcludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
-	JSON       accessPoliciesExcludeAccessAuthenticationMethodRuleJSON       `json:"-"`
+type ZeroTrustPoliciesExcludeAccessAuthenticationMethodRule struct {
+	AuthMethod ZeroTrustPoliciesExcludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
+	JSON       zeroTrustPoliciesExcludeAccessAuthenticationMethodRuleJSON       `json:"-"`
 }
 
-// accessPoliciesExcludeAccessAuthenticationMethodRuleJSON contains the JSON
-// metadata for the struct [AccessPoliciesExcludeAccessAuthenticationMethodRule]
-type accessPoliciesExcludeAccessAuthenticationMethodRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessAuthenticationMethodRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessAuthenticationMethodRule]
+type zeroTrustPoliciesExcludeAccessAuthenticationMethodRuleJSON struct {
 	AuthMethod  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessAuthenticationMethodRule) implementsZeroTrustAccessPoliciesExclude() {
+func (r ZeroTrustPoliciesExcludeAccessAuthenticationMethodRule) implementsZeroTrustZeroTrustPoliciesExclude() {
 }
 
-type AccessPoliciesExcludeAccessAuthenticationMethodRuleAuthMethod struct {
+type ZeroTrustPoliciesExcludeAccessAuthenticationMethodRuleAuthMethod struct {
 	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
-	AuthMethod string                                                            `json:"auth_method,required"`
-	JSON       accessPoliciesExcludeAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
+	AuthMethod string                                                               `json:"auth_method,required"`
+	JSON       zeroTrustPoliciesExcludeAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
 }
 
-// accessPoliciesExcludeAccessAuthenticationMethodRuleAuthMethodJSON contains the
-// JSON metadata for the struct
-// [AccessPoliciesExcludeAccessAuthenticationMethodRuleAuthMethod]
-type accessPoliciesExcludeAccessAuthenticationMethodRuleAuthMethodJSON struct {
+// zeroTrustPoliciesExcludeAccessAuthenticationMethodRuleAuthMethodJSON contains
+// the JSON metadata for the struct
+// [ZeroTrustPoliciesExcludeAccessAuthenticationMethodRuleAuthMethod]
+type zeroTrustPoliciesExcludeAccessAuthenticationMethodRuleAuthMethodJSON struct {
 	AuthMethod  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
 	return r.raw
 }
 
 // Enforces a device posture rule has run successfully
-type AccessPoliciesExcludeAccessDevicePostureRule struct {
-	DevicePosture AccessPoliciesExcludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
-	JSON          accessPoliciesExcludeAccessDevicePostureRuleJSON          `json:"-"`
+type ZeroTrustPoliciesExcludeAccessDevicePostureRule struct {
+	DevicePosture ZeroTrustPoliciesExcludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	JSON          zeroTrustPoliciesExcludeAccessDevicePostureRuleJSON          `json:"-"`
 }
 
-// accessPoliciesExcludeAccessDevicePostureRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesExcludeAccessDevicePostureRule]
-type accessPoliciesExcludeAccessDevicePostureRuleJSON struct {
+// zeroTrustPoliciesExcludeAccessDevicePostureRuleJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesExcludeAccessDevicePostureRule]
+type zeroTrustPoliciesExcludeAccessDevicePostureRuleJSON struct {
 	DevicePosture apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessDevicePostureRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessDevicePostureRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesExcludeAccessDevicePostureRule) implementsZeroTrustAccessPoliciesExclude() {}
-
-type AccessPoliciesExcludeAccessDevicePostureRuleDevicePosture struct {
-	// The ID of a device posture integration.
-	IntegrationUid string                                                        `json:"integration_uid,required"`
-	JSON           accessPoliciesExcludeAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+func (r ZeroTrustPoliciesExcludeAccessDevicePostureRule) implementsZeroTrustZeroTrustPoliciesExclude() {
 }
 
-// accessPoliciesExcludeAccessDevicePostureRuleDevicePostureJSON contains the JSON
-// metadata for the struct
-// [AccessPoliciesExcludeAccessDevicePostureRuleDevicePosture]
-type accessPoliciesExcludeAccessDevicePostureRuleDevicePostureJSON struct {
+type ZeroTrustPoliciesExcludeAccessDevicePostureRuleDevicePosture struct {
+	// The ID of a device posture integration.
+	IntegrationUid string                                                           `json:"integration_uid,required"`
+	JSON           zeroTrustPoliciesExcludeAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+}
+
+// zeroTrustPoliciesExcludeAccessDevicePostureRuleDevicePostureJSON contains the
+// JSON metadata for the struct
+// [ZeroTrustPoliciesExcludeAccessDevicePostureRuleDevicePosture]
+type zeroTrustPoliciesExcludeAccessDevicePostureRuleDevicePostureJSON struct {
 	IntegrationUid apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *AccessPoliciesExcludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesExcludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesExcludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+func (r zeroTrustPoliciesExcludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a specific email.
 //
-// Union satisfied by [zero_trust.AccessPoliciesIncludeAccessEmailRule],
-// [zero_trust.AccessPoliciesIncludeAccessEmailListRule],
-// [zero_trust.AccessPoliciesIncludeAccessDomainRule],
-// [zero_trust.AccessPoliciesIncludeAccessEveryoneRule],
-// [zero_trust.AccessPoliciesIncludeAccessIPRule],
-// [zero_trust.AccessPoliciesIncludeAccessIPListRule],
-// [zero_trust.AccessPoliciesIncludeAccessCertificateRule],
-// [zero_trust.AccessPoliciesIncludeAccessAccessGroupRule],
-// [zero_trust.AccessPoliciesIncludeAccessAzureGroupRule],
-// [zero_trust.AccessPoliciesIncludeAccessGitHubOrganizationRule],
-// [zero_trust.AccessPoliciesIncludeAccessGsuiteGroupRule],
-// [zero_trust.AccessPoliciesIncludeAccessOktaGroupRule],
-// [zero_trust.AccessPoliciesIncludeAccessSamlGroupRule],
-// [zero_trust.AccessPoliciesIncludeAccessServiceTokenRule],
-// [zero_trust.AccessPoliciesIncludeAccessAnyValidServiceTokenRule],
-// [zero_trust.AccessPoliciesIncludeAccessExternalEvaluationRule],
-// [zero_trust.AccessPoliciesIncludeAccessCountryRule],
-// [zero_trust.AccessPoliciesIncludeAccessAuthenticationMethodRule] or
-// [zero_trust.AccessPoliciesIncludeAccessDevicePostureRule].
-type AccessPoliciesInclude interface {
-	implementsZeroTrustAccessPoliciesInclude()
+// Union satisfied by [zero_trust.ZeroTrustPoliciesIncludeAccessEmailRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessEmailListRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessDomainRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessEveryoneRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessIPRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessIPListRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessCertificateRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessAccessGroupRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessAzureGroupRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessGitHubOrganizationRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessGsuiteGroupRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessOktaGroupRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessSamlGroupRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessServiceTokenRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessAnyValidServiceTokenRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessExternalEvaluationRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessCountryRule],
+// [zero_trust.ZeroTrustPoliciesIncludeAccessAuthenticationMethodRule] or
+// [zero_trust.ZeroTrustPoliciesIncludeAccessDevicePostureRule].
+type ZeroTrustPoliciesInclude interface {
+	implementsZeroTrustZeroTrustPoliciesInclude()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessPoliciesInclude)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustPoliciesInclude)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessEmailRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessEmailRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessEmailListRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessEmailListRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessDomainRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessDomainRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessEveryoneRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessEveryoneRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessIPRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessIPRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessIPListRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessIPListRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessCertificateRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessCertificateRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessAccessGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessAccessGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessAzureGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessAzureGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessGitHubOrganizationRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessGitHubOrganizationRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessGsuiteGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessGsuiteGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessOktaGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessOktaGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessSamlGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessSamlGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessServiceTokenRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessServiceTokenRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessAnyValidServiceTokenRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessAnyValidServiceTokenRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessExternalEvaluationRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessExternalEvaluationRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessCountryRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessCountryRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessAuthenticationMethodRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessAuthenticationMethodRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesIncludeAccessDevicePostureRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesIncludeAccessDevicePostureRule{}),
 		},
 	)
 }
 
 // Matches a specific email.
-type AccessPoliciesIncludeAccessEmailRule struct {
-	Email AccessPoliciesIncludeAccessEmailRuleEmail `json:"email,required"`
-	JSON  accessPoliciesIncludeAccessEmailRuleJSON  `json:"-"`
+type ZeroTrustPoliciesIncludeAccessEmailRule struct {
+	Email ZeroTrustPoliciesIncludeAccessEmailRuleEmail `json:"email,required"`
+	JSON  zeroTrustPoliciesIncludeAccessEmailRuleJSON  `json:"-"`
 }
 
-// accessPoliciesIncludeAccessEmailRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessEmailRule]
-type accessPoliciesIncludeAccessEmailRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessEmailRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesIncludeAccessEmailRule]
+type zeroTrustPoliciesIncludeAccessEmailRuleJSON struct {
 	Email       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessEmailRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessEmailRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessEmailRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessEmailRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
-type AccessPoliciesIncludeAccessEmailRuleEmail struct {
+type ZeroTrustPoliciesIncludeAccessEmailRuleEmail struct {
 	// The email of the user.
-	Email string                                        `json:"email,required" format:"email"`
-	JSON  accessPoliciesIncludeAccessEmailRuleEmailJSON `json:"-"`
+	Email string                                           `json:"email,required" format:"email"`
+	JSON  zeroTrustPoliciesIncludeAccessEmailRuleEmailJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessEmailRuleEmailJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessEmailRuleEmail]
-type accessPoliciesIncludeAccessEmailRuleEmailJSON struct {
+// zeroTrustPoliciesIncludeAccessEmailRuleEmailJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessEmailRuleEmail]
+type zeroTrustPoliciesIncludeAccessEmailRuleEmailJSON struct {
 	Email       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessEmailRuleEmailJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessEmailRuleEmailJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an email address from a list.
-type AccessPoliciesIncludeAccessEmailListRule struct {
-	EmailList AccessPoliciesIncludeAccessEmailListRuleEmailList `json:"email_list,required"`
-	JSON      accessPoliciesIncludeAccessEmailListRuleJSON      `json:"-"`
+type ZeroTrustPoliciesIncludeAccessEmailListRule struct {
+	EmailList ZeroTrustPoliciesIncludeAccessEmailListRuleEmailList `json:"email_list,required"`
+	JSON      zeroTrustPoliciesIncludeAccessEmailListRuleJSON      `json:"-"`
 }
 
-// accessPoliciesIncludeAccessEmailListRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessEmailListRule]
-type accessPoliciesIncludeAccessEmailListRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessEmailListRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessEmailListRule]
+type zeroTrustPoliciesIncludeAccessEmailListRuleJSON struct {
 	EmailList   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessEmailListRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessEmailListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessEmailListRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessEmailListRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
-type AccessPoliciesIncludeAccessEmailListRuleEmailList struct {
+type ZeroTrustPoliciesIncludeAccessEmailListRuleEmailList struct {
 	// The ID of a previously created email list.
-	ID   string                                                `json:"id,required"`
-	JSON accessPoliciesIncludeAccessEmailListRuleEmailListJSON `json:"-"`
+	ID   string                                                   `json:"id,required"`
+	JSON zeroTrustPoliciesIncludeAccessEmailListRuleEmailListJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessEmailListRuleEmailListJSON contains the JSON metadata
-// for the struct [AccessPoliciesIncludeAccessEmailListRuleEmailList]
-type accessPoliciesIncludeAccessEmailListRuleEmailListJSON struct {
+// zeroTrustPoliciesIncludeAccessEmailListRuleEmailListJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessEmailListRuleEmailList]
+type zeroTrustPoliciesIncludeAccessEmailListRuleEmailListJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessEmailListRuleEmailListJSON) RawJSON() string {
 	return r.raw
 }
 
 // Match an entire email domain.
-type AccessPoliciesIncludeAccessDomainRule struct {
-	EmailDomain AccessPoliciesIncludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
-	JSON        accessPoliciesIncludeAccessDomainRuleJSON        `json:"-"`
+type ZeroTrustPoliciesIncludeAccessDomainRule struct {
+	EmailDomain ZeroTrustPoliciesIncludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
+	JSON        zeroTrustPoliciesIncludeAccessDomainRuleJSON        `json:"-"`
 }
 
-// accessPoliciesIncludeAccessDomainRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessDomainRule]
-type accessPoliciesIncludeAccessDomainRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessDomainRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesIncludeAccessDomainRule]
+type zeroTrustPoliciesIncludeAccessDomainRuleJSON struct {
 	EmailDomain apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessDomainRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessDomainRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessDomainRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessDomainRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
-type AccessPoliciesIncludeAccessDomainRuleEmailDomain struct {
+type ZeroTrustPoliciesIncludeAccessDomainRuleEmailDomain struct {
 	// The email domain to match.
-	Domain string                                               `json:"domain,required"`
-	JSON   accessPoliciesIncludeAccessDomainRuleEmailDomainJSON `json:"-"`
+	Domain string                                                  `json:"domain,required"`
+	JSON   zeroTrustPoliciesIncludeAccessDomainRuleEmailDomainJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessDomainRuleEmailDomainJSON contains the JSON metadata
-// for the struct [AccessPoliciesIncludeAccessDomainRuleEmailDomain]
-type accessPoliciesIncludeAccessDomainRuleEmailDomainJSON struct {
+// zeroTrustPoliciesIncludeAccessDomainRuleEmailDomainJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessDomainRuleEmailDomain]
+type zeroTrustPoliciesIncludeAccessDomainRuleEmailDomainJSON struct {
 	Domain      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches everyone.
-type AccessPoliciesIncludeAccessEveryoneRule struct {
+type ZeroTrustPoliciesIncludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
-	Everyone interface{}                                 `json:"everyone,required"`
-	JSON     accessPoliciesIncludeAccessEveryoneRuleJSON `json:"-"`
+	Everyone interface{}                                    `json:"everyone,required"`
+	JSON     zeroTrustPoliciesIncludeAccessEveryoneRuleJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessEveryoneRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessEveryoneRule]
-type accessPoliciesIncludeAccessEveryoneRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessEveryoneRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessEveryoneRule]
+type zeroTrustPoliciesIncludeAccessEveryoneRuleJSON struct {
 	Everyone    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessEveryoneRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessEveryoneRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessEveryoneRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessEveryoneRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
 // Matches an IP address block.
-type AccessPoliciesIncludeAccessIPRule struct {
-	IP   AccessPoliciesIncludeAccessIPRuleIP   `json:"ip,required"`
-	JSON accessPoliciesIncludeAccessIPRuleJSON `json:"-"`
+type ZeroTrustPoliciesIncludeAccessIPRule struct {
+	IP   ZeroTrustPoliciesIncludeAccessIPRuleIP   `json:"ip,required"`
+	JSON zeroTrustPoliciesIncludeAccessIPRuleJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessIPRuleJSON contains the JSON metadata for the struct
-// [AccessPoliciesIncludeAccessIPRule]
-type accessPoliciesIncludeAccessIPRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessIPRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesIncludeAccessIPRule]
+type zeroTrustPoliciesIncludeAccessIPRuleJSON struct {
 	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessIPRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessIPRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessIPRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessIPRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessIPRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessIPRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
-type AccessPoliciesIncludeAccessIPRuleIP struct {
+type ZeroTrustPoliciesIncludeAccessIPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
-	IP   string                                  `json:"ip,required"`
-	JSON accessPoliciesIncludeAccessIPRuleIPJSON `json:"-"`
+	IP   string                                     `json:"ip,required"`
+	JSON zeroTrustPoliciesIncludeAccessIPRuleIPJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessIPRuleIPJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessIPRuleIP]
-type accessPoliciesIncludeAccessIPRuleIPJSON struct {
+// zeroTrustPoliciesIncludeAccessIPRuleIPJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesIncludeAccessIPRuleIP]
+type zeroTrustPoliciesIncludeAccessIPRuleIPJSON struct {
 	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessIPRuleIPJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessIPRuleIPJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an IP address from a list.
-type AccessPoliciesIncludeAccessIPListRule struct {
-	IPList AccessPoliciesIncludeAccessIPListRuleIPList `json:"ip_list,required"`
-	JSON   accessPoliciesIncludeAccessIPListRuleJSON   `json:"-"`
+type ZeroTrustPoliciesIncludeAccessIPListRule struct {
+	IPList ZeroTrustPoliciesIncludeAccessIPListRuleIPList `json:"ip_list,required"`
+	JSON   zeroTrustPoliciesIncludeAccessIPListRuleJSON   `json:"-"`
 }
 
-// accessPoliciesIncludeAccessIPListRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessIPListRule]
-type accessPoliciesIncludeAccessIPListRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessIPListRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesIncludeAccessIPListRule]
+type zeroTrustPoliciesIncludeAccessIPListRuleJSON struct {
 	IPList      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessIPListRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessIPListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessIPListRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessIPListRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
-type AccessPoliciesIncludeAccessIPListRuleIPList struct {
+type ZeroTrustPoliciesIncludeAccessIPListRuleIPList struct {
 	// The ID of a previously created IP list.
-	ID   string                                          `json:"id,required"`
-	JSON accessPoliciesIncludeAccessIPListRuleIPListJSON `json:"-"`
+	ID   string                                             `json:"id,required"`
+	JSON zeroTrustPoliciesIncludeAccessIPListRuleIPListJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessIPListRuleIPListJSON contains the JSON metadata for
-// the struct [AccessPoliciesIncludeAccessIPListRuleIPList]
-type accessPoliciesIncludeAccessIPListRuleIPListJSON struct {
+// zeroTrustPoliciesIncludeAccessIPListRuleIPListJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesIncludeAccessIPListRuleIPList]
+type zeroTrustPoliciesIncludeAccessIPListRuleIPListJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessIPListRuleIPListJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessIPListRuleIPListJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches any valid client certificate.
-type AccessPoliciesIncludeAccessCertificateRule struct {
-	Certificate interface{}                                    `json:"certificate,required"`
-	JSON        accessPoliciesIncludeAccessCertificateRuleJSON `json:"-"`
+type ZeroTrustPoliciesIncludeAccessCertificateRule struct {
+	Certificate interface{}                                       `json:"certificate,required"`
+	JSON        zeroTrustPoliciesIncludeAccessCertificateRuleJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessCertificateRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesIncludeAccessCertificateRule]
-type accessPoliciesIncludeAccessCertificateRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessCertificateRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessCertificateRule]
+type zeroTrustPoliciesIncludeAccessCertificateRuleJSON struct {
 	Certificate apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessCertificateRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessCertificateRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessCertificateRule) implementsZeroTrustAccessPoliciesInclude() {}
-
-// Matches an Access group.
-type AccessPoliciesIncludeAccessAccessGroupRule struct {
-	Group AccessPoliciesIncludeAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  accessPoliciesIncludeAccessAccessGroupRuleJSON  `json:"-"`
+func (r ZeroTrustPoliciesIncludeAccessCertificateRule) implementsZeroTrustZeroTrustPoliciesInclude() {
 }
 
-// accessPoliciesIncludeAccessAccessGroupRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesIncludeAccessAccessGroupRule]
-type accessPoliciesIncludeAccessAccessGroupRuleJSON struct {
+// Matches an Access group.
+type ZeroTrustPoliciesIncludeAccessAccessGroupRule struct {
+	Group ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON  `json:"-"`
+}
+
+// zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessAccessGroupRule]
+type zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON struct {
 	Group       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessAccessGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessAccessGroupRule) implementsZeroTrustAccessPoliciesInclude() {}
-
-type AccessPoliciesIncludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                              `json:"id,required"`
-	JSON accessPoliciesIncludeAccessAccessGroupRuleGroupJSON `json:"-"`
+func (r ZeroTrustPoliciesIncludeAccessAccessGroupRule) implementsZeroTrustZeroTrustPoliciesInclude() {
 }
 
-// accessPoliciesIncludeAccessAccessGroupRuleGroupJSON contains the JSON metadata
-// for the struct [AccessPoliciesIncludeAccessAccessGroupRuleGroup]
-type accessPoliciesIncludeAccessAccessGroupRuleGroupJSON struct {
+type ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                 `json:"id,required"`
+	JSON zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup]
+type zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
-type AccessPoliciesIncludeAccessAzureGroupRule struct {
-	AzureAd AccessPoliciesIncludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
-	JSON    accessPoliciesIncludeAccessAzureGroupRuleJSON    `json:"-"`
+type ZeroTrustPoliciesIncludeAccessAzureGroupRule struct {
+	AzureAd ZeroTrustPoliciesIncludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
+	JSON    zeroTrustPoliciesIncludeAccessAzureGroupRuleJSON    `json:"-"`
 }
 
-// accessPoliciesIncludeAccessAzureGroupRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessAzureGroupRule]
-type accessPoliciesIncludeAccessAzureGroupRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessAzureGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessAzureGroupRule]
+type zeroTrustPoliciesIncludeAccessAzureGroupRuleJSON struct {
 	AzureAd     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessAzureGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessAzureGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessAzureGroupRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessAzureGroupRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
-type AccessPoliciesIncludeAccessAzureGroupRuleAzureAd struct {
+type ZeroTrustPoliciesIncludeAccessAzureGroupRuleAzureAd struct {
 	// The ID of an Azure group.
 	ID string `json:"id,required"`
 	// The ID of your Azure identity provider.
-	ConnectionID string                                               `json:"connection_id,required"`
-	JSON         accessPoliciesIncludeAccessAzureGroupRuleAzureAdJSON `json:"-"`
+	ConnectionID string                                                  `json:"connection_id,required"`
+	JSON         zeroTrustPoliciesIncludeAccessAzureGroupRuleAzureAdJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessAzureGroupRuleAzureAdJSON contains the JSON metadata
-// for the struct [AccessPoliciesIncludeAccessAzureGroupRuleAzureAd]
-type accessPoliciesIncludeAccessAzureGroupRuleAzureAdJSON struct {
+// zeroTrustPoliciesIncludeAccessAzureGroupRuleAzureAdJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessAzureGroupRuleAzureAd]
+type zeroTrustPoliciesIncludeAccessAzureGroupRuleAzureAdJSON struct {
 	ID           apijson.Field
 	ConnectionID apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a Github organization. Requires a Github identity provider.
-type AccessPoliciesIncludeAccessGitHubOrganizationRule struct {
-	GitHubOrganization AccessPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
-	JSON               accessPoliciesIncludeAccessGitHubOrganizationRuleJSON               `json:"-"`
+type ZeroTrustPoliciesIncludeAccessGitHubOrganizationRule struct {
+	GitHubOrganization ZeroTrustPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
+	JSON               zeroTrustPoliciesIncludeAccessGitHubOrganizationRuleJSON               `json:"-"`
 }
 
-// accessPoliciesIncludeAccessGitHubOrganizationRuleJSON contains the JSON metadata
-// for the struct [AccessPoliciesIncludeAccessGitHubOrganizationRule]
-type accessPoliciesIncludeAccessGitHubOrganizationRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessGitHubOrganizationRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessGitHubOrganizationRule]
+type zeroTrustPoliciesIncludeAccessGitHubOrganizationRuleJSON struct {
 	GitHubOrganization apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessGitHubOrganizationRule) implementsZeroTrustAccessPoliciesInclude() {
+func (r ZeroTrustPoliciesIncludeAccessGitHubOrganizationRule) implementsZeroTrustZeroTrustPoliciesInclude() {
 }
 
-type AccessPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganization struct {
+type ZeroTrustPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganization struct {
 	// The ID of your Github identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The name of the organization.
-	Name string                                                                  `json:"name,required"`
-	JSON accessPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
+	Name string                                                                     `json:"name,required"`
+	JSON zeroTrustPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON contains
-// the JSON metadata for the struct
-// [AccessPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganization]
-type accessPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
+// zeroTrustPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON
+// contains the JSON metadata for the struct
+// [ZeroTrustPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganization]
+type zeroTrustPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
 	ConnectionID apijson.Field
 	Name         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
-type AccessPoliciesIncludeAccessGsuiteGroupRule struct {
-	Gsuite AccessPoliciesIncludeAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
-	JSON   accessPoliciesIncludeAccessGsuiteGroupRuleJSON   `json:"-"`
+type ZeroTrustPoliciesIncludeAccessGsuiteGroupRule struct {
+	Gsuite ZeroTrustPoliciesIncludeAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
+	JSON   zeroTrustPoliciesIncludeAccessGsuiteGroupRuleJSON   `json:"-"`
 }
 
-// accessPoliciesIncludeAccessGsuiteGroupRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesIncludeAccessGsuiteGroupRule]
-type accessPoliciesIncludeAccessGsuiteGroupRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessGsuiteGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessGsuiteGroupRule]
+type zeroTrustPoliciesIncludeAccessGsuiteGroupRuleJSON struct {
 	Gsuite      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessGsuiteGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessGsuiteGroupRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessGsuiteGroupRule) implementsZeroTrustZeroTrustPoliciesInclude() {
+}
 
-type AccessPoliciesIncludeAccessGsuiteGroupRuleGsuite struct {
+type ZeroTrustPoliciesIncludeAccessGsuiteGroupRuleGsuite struct {
 	// The ID of your Google Workspace identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The email of the Google Workspace group.
-	Email string                                               `json:"email,required"`
-	JSON  accessPoliciesIncludeAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
+	Email string                                                  `json:"email,required"`
+	JSON  zeroTrustPoliciesIncludeAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessGsuiteGroupRuleGsuiteJSON contains the JSON metadata
-// for the struct [AccessPoliciesIncludeAccessGsuiteGroupRuleGsuite]
-type accessPoliciesIncludeAccessGsuiteGroupRuleGsuiteJSON struct {
+// zeroTrustPoliciesIncludeAccessGsuiteGroupRuleGsuiteJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessGsuiteGroupRuleGsuite]
+type zeroTrustPoliciesIncludeAccessGsuiteGroupRuleGsuiteJSON struct {
 	ConnectionID apijson.Field
 	Email        apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an Okta group. Requires an Okta identity provider.
-type AccessPoliciesIncludeAccessOktaGroupRule struct {
-	Okta AccessPoliciesIncludeAccessOktaGroupRuleOkta `json:"okta,required"`
-	JSON accessPoliciesIncludeAccessOktaGroupRuleJSON `json:"-"`
+type ZeroTrustPoliciesIncludeAccessOktaGroupRule struct {
+	Okta ZeroTrustPoliciesIncludeAccessOktaGroupRuleOkta `json:"okta,required"`
+	JSON zeroTrustPoliciesIncludeAccessOktaGroupRuleJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessOktaGroupRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessOktaGroupRule]
-type accessPoliciesIncludeAccessOktaGroupRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessOktaGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessOktaGroupRule]
+type zeroTrustPoliciesIncludeAccessOktaGroupRuleJSON struct {
 	Okta        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessOktaGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessOktaGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessOktaGroupRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessOktaGroupRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
-type AccessPoliciesIncludeAccessOktaGroupRuleOkta struct {
+type ZeroTrustPoliciesIncludeAccessOktaGroupRuleOkta struct {
 	// The ID of your Okta identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The email of the Okta group.
-	Email string                                           `json:"email,required"`
-	JSON  accessPoliciesIncludeAccessOktaGroupRuleOktaJSON `json:"-"`
+	Email string                                              `json:"email,required"`
+	JSON  zeroTrustPoliciesIncludeAccessOktaGroupRuleOktaJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessOktaGroupRuleOktaJSON contains the JSON metadata for
-// the struct [AccessPoliciesIncludeAccessOktaGroupRuleOkta]
-type accessPoliciesIncludeAccessOktaGroupRuleOktaJSON struct {
+// zeroTrustPoliciesIncludeAccessOktaGroupRuleOktaJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesIncludeAccessOktaGroupRuleOkta]
+type zeroTrustPoliciesIncludeAccessOktaGroupRuleOktaJSON struct {
 	ConnectionID apijson.Field
 	Email        apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a SAML group. Requires a SAML identity provider.
-type AccessPoliciesIncludeAccessSamlGroupRule struct {
-	Saml AccessPoliciesIncludeAccessSamlGroupRuleSaml `json:"saml,required"`
-	JSON accessPoliciesIncludeAccessSamlGroupRuleJSON `json:"-"`
+type ZeroTrustPoliciesIncludeAccessSamlGroupRule struct {
+	Saml ZeroTrustPoliciesIncludeAccessSamlGroupRuleSaml `json:"saml,required"`
+	JSON zeroTrustPoliciesIncludeAccessSamlGroupRuleJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessSamlGroupRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessSamlGroupRule]
-type accessPoliciesIncludeAccessSamlGroupRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessSamlGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessSamlGroupRule]
+type zeroTrustPoliciesIncludeAccessSamlGroupRuleJSON struct {
 	Saml        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessSamlGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessSamlGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessSamlGroupRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessSamlGroupRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
-type AccessPoliciesIncludeAccessSamlGroupRuleSaml struct {
+type ZeroTrustPoliciesIncludeAccessSamlGroupRuleSaml struct {
 	// The name of the SAML attribute.
 	AttributeName string `json:"attribute_name,required"`
 	// The SAML attribute value to look for.
-	AttributeValue string                                           `json:"attribute_value,required"`
-	JSON           accessPoliciesIncludeAccessSamlGroupRuleSamlJSON `json:"-"`
+	AttributeValue string                                              `json:"attribute_value,required"`
+	JSON           zeroTrustPoliciesIncludeAccessSamlGroupRuleSamlJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessSamlGroupRuleSamlJSON contains the JSON metadata for
-// the struct [AccessPoliciesIncludeAccessSamlGroupRuleSaml]
-type accessPoliciesIncludeAccessSamlGroupRuleSamlJSON struct {
+// zeroTrustPoliciesIncludeAccessSamlGroupRuleSamlJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesIncludeAccessSamlGroupRuleSaml]
+type zeroTrustPoliciesIncludeAccessSamlGroupRuleSamlJSON struct {
 	AttributeName  apijson.Field
 	AttributeValue apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a specific Access Service Token
-type AccessPoliciesIncludeAccessServiceTokenRule struct {
-	ServiceToken AccessPoliciesIncludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
-	JSON         accessPoliciesIncludeAccessServiceTokenRuleJSON         `json:"-"`
+type ZeroTrustPoliciesIncludeAccessServiceTokenRule struct {
+	ServiceToken ZeroTrustPoliciesIncludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
+	JSON         zeroTrustPoliciesIncludeAccessServiceTokenRuleJSON         `json:"-"`
 }
 
-// accessPoliciesIncludeAccessServiceTokenRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesIncludeAccessServiceTokenRule]
-type accessPoliciesIncludeAccessServiceTokenRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessServiceTokenRuleJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesIncludeAccessServiceTokenRule]
+type zeroTrustPoliciesIncludeAccessServiceTokenRuleJSON struct {
 	ServiceToken apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessServiceTokenRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessServiceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessServiceTokenRule) implementsZeroTrustAccessPoliciesInclude() {}
-
-type AccessPoliciesIncludeAccessServiceTokenRuleServiceToken struct {
-	// The ID of a Service Token.
-	TokenID string                                                      `json:"token_id,required"`
-	JSON    accessPoliciesIncludeAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+func (r ZeroTrustPoliciesIncludeAccessServiceTokenRule) implementsZeroTrustZeroTrustPoliciesInclude() {
 }
 
-// accessPoliciesIncludeAccessServiceTokenRuleServiceTokenJSON contains the JSON
+type ZeroTrustPoliciesIncludeAccessServiceTokenRuleServiceToken struct {
+	// The ID of a Service Token.
+	TokenID string                                                         `json:"token_id,required"`
+	JSON    zeroTrustPoliciesIncludeAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+}
+
+// zeroTrustPoliciesIncludeAccessServiceTokenRuleServiceTokenJSON contains the JSON
 // metadata for the struct
-// [AccessPoliciesIncludeAccessServiceTokenRuleServiceToken]
-type accessPoliciesIncludeAccessServiceTokenRuleServiceTokenJSON struct {
+// [ZeroTrustPoliciesIncludeAccessServiceTokenRuleServiceToken]
+type zeroTrustPoliciesIncludeAccessServiceTokenRuleServiceTokenJSON struct {
 	TokenID     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches any valid Access Service Token
-type AccessPoliciesIncludeAccessAnyValidServiceTokenRule struct {
+type ZeroTrustPoliciesIncludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                                             `json:"any_valid_service_token,required"`
-	JSON                 accessPoliciesIncludeAccessAnyValidServiceTokenRuleJSON `json:"-"`
+	AnyValidServiceToken interface{}                                                `json:"any_valid_service_token,required"`
+	JSON                 zeroTrustPoliciesIncludeAccessAnyValidServiceTokenRuleJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessAnyValidServiceTokenRuleJSON contains the JSON
-// metadata for the struct [AccessPoliciesIncludeAccessAnyValidServiceTokenRule]
-type accessPoliciesIncludeAccessAnyValidServiceTokenRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessAnyValidServiceTokenRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessAnyValidServiceTokenRule]
+type zeroTrustPoliciesIncludeAccessAnyValidServiceTokenRuleJSON struct {
 	AnyValidServiceToken apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessPoliciesInclude() {
+func (r ZeroTrustPoliciesIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustZeroTrustPoliciesInclude() {
 }
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
-type AccessPoliciesIncludeAccessExternalEvaluationRule struct {
-	ExternalEvaluation AccessPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
-	JSON               accessPoliciesIncludeAccessExternalEvaluationRuleJSON               `json:"-"`
+type ZeroTrustPoliciesIncludeAccessExternalEvaluationRule struct {
+	ExternalEvaluation ZeroTrustPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
+	JSON               zeroTrustPoliciesIncludeAccessExternalEvaluationRuleJSON               `json:"-"`
 }
 
-// accessPoliciesIncludeAccessExternalEvaluationRuleJSON contains the JSON metadata
-// for the struct [AccessPoliciesIncludeAccessExternalEvaluationRule]
-type accessPoliciesIncludeAccessExternalEvaluationRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessExternalEvaluationRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessExternalEvaluationRule]
+type zeroTrustPoliciesIncludeAccessExternalEvaluationRuleJSON struct {
 	ExternalEvaluation apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessExternalEvaluationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessExternalEvaluationRule) implementsZeroTrustAccessPoliciesInclude() {
+func (r ZeroTrustPoliciesIncludeAccessExternalEvaluationRule) implementsZeroTrustZeroTrustPoliciesInclude() {
 }
 
-type AccessPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluation struct {
+type ZeroTrustPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluation struct {
 	// The API endpoint containing your business logic.
 	EvaluateURL string `json:"evaluate_url,required"`
 	// The API endpoint containing the key that Access uses to verify that the response
 	// came from your API.
-	KeysURL string                                                                  `json:"keys_url,required"`
-	JSON    accessPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
+	KeysURL string                                                                     `json:"keys_url,required"`
+	JSON    zeroTrustPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluationJSON contains
-// the JSON metadata for the struct
-// [AccessPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluation]
-type accessPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluationJSON struct {
+// zeroTrustPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluationJSON
+// contains the JSON metadata for the struct
+// [ZeroTrustPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluation]
+type zeroTrustPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluationJSON struct {
 	EvaluateURL apijson.Field
 	KeysURL     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a specific country
-type AccessPoliciesIncludeAccessCountryRule struct {
-	Geo  AccessPoliciesIncludeAccessCountryRuleGeo  `json:"geo,required"`
-	JSON accessPoliciesIncludeAccessCountryRuleJSON `json:"-"`
+type ZeroTrustPoliciesIncludeAccessCountryRule struct {
+	Geo  ZeroTrustPoliciesIncludeAccessCountryRuleGeo  `json:"geo,required"`
+	JSON zeroTrustPoliciesIncludeAccessCountryRuleJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessCountryRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessCountryRule]
-type accessPoliciesIncludeAccessCountryRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessCountryRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesIncludeAccessCountryRule]
+type zeroTrustPoliciesIncludeAccessCountryRuleJSON struct {
 	Geo         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessCountryRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessCountryRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessCountryRule) implementsZeroTrustAccessPoliciesInclude() {}
+func (r ZeroTrustPoliciesIncludeAccessCountryRule) implementsZeroTrustZeroTrustPoliciesInclude() {}
 
-type AccessPoliciesIncludeAccessCountryRuleGeo struct {
+type ZeroTrustPoliciesIncludeAccessCountryRuleGeo struct {
 	// The country code that should be matched.
-	CountryCode string                                        `json:"country_code,required"`
-	JSON        accessPoliciesIncludeAccessCountryRuleGeoJSON `json:"-"`
+	CountryCode string                                           `json:"country_code,required"`
+	JSON        zeroTrustPoliciesIncludeAccessCountryRuleGeoJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessCountryRuleGeoJSON contains the JSON metadata for the
-// struct [AccessPoliciesIncludeAccessCountryRuleGeo]
-type accessPoliciesIncludeAccessCountryRuleGeoJSON struct {
+// zeroTrustPoliciesIncludeAccessCountryRuleGeoJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesIncludeAccessCountryRuleGeo]
+type zeroTrustPoliciesIncludeAccessCountryRuleGeoJSON struct {
 	CountryCode apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessCountryRuleGeoJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessCountryRuleGeoJSON) RawJSON() string {
 	return r.raw
 }
 
 // Enforce different MFA options
-type AccessPoliciesIncludeAccessAuthenticationMethodRule struct {
-	AuthMethod AccessPoliciesIncludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
-	JSON       accessPoliciesIncludeAccessAuthenticationMethodRuleJSON       `json:"-"`
+type ZeroTrustPoliciesIncludeAccessAuthenticationMethodRule struct {
+	AuthMethod ZeroTrustPoliciesIncludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
+	JSON       zeroTrustPoliciesIncludeAccessAuthenticationMethodRuleJSON       `json:"-"`
 }
 
-// accessPoliciesIncludeAccessAuthenticationMethodRuleJSON contains the JSON
-// metadata for the struct [AccessPoliciesIncludeAccessAuthenticationMethodRule]
-type accessPoliciesIncludeAccessAuthenticationMethodRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessAuthenticationMethodRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessAuthenticationMethodRule]
+type zeroTrustPoliciesIncludeAccessAuthenticationMethodRuleJSON struct {
 	AuthMethod  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessAuthenticationMethodRule) implementsZeroTrustAccessPoliciesInclude() {
+func (r ZeroTrustPoliciesIncludeAccessAuthenticationMethodRule) implementsZeroTrustZeroTrustPoliciesInclude() {
 }
 
-type AccessPoliciesIncludeAccessAuthenticationMethodRuleAuthMethod struct {
+type ZeroTrustPoliciesIncludeAccessAuthenticationMethodRuleAuthMethod struct {
 	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
-	AuthMethod string                                                            `json:"auth_method,required"`
-	JSON       accessPoliciesIncludeAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
+	AuthMethod string                                                               `json:"auth_method,required"`
+	JSON       zeroTrustPoliciesIncludeAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
 }
 
-// accessPoliciesIncludeAccessAuthenticationMethodRuleAuthMethodJSON contains the
-// JSON metadata for the struct
-// [AccessPoliciesIncludeAccessAuthenticationMethodRuleAuthMethod]
-type accessPoliciesIncludeAccessAuthenticationMethodRuleAuthMethodJSON struct {
+// zeroTrustPoliciesIncludeAccessAuthenticationMethodRuleAuthMethodJSON contains
+// the JSON metadata for the struct
+// [ZeroTrustPoliciesIncludeAccessAuthenticationMethodRuleAuthMethod]
+type zeroTrustPoliciesIncludeAccessAuthenticationMethodRuleAuthMethodJSON struct {
 	AuthMethod  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
 	return r.raw
 }
 
 // Enforces a device posture rule has run successfully
-type AccessPoliciesIncludeAccessDevicePostureRule struct {
-	DevicePosture AccessPoliciesIncludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
-	JSON          accessPoliciesIncludeAccessDevicePostureRuleJSON          `json:"-"`
+type ZeroTrustPoliciesIncludeAccessDevicePostureRule struct {
+	DevicePosture ZeroTrustPoliciesIncludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	JSON          zeroTrustPoliciesIncludeAccessDevicePostureRuleJSON          `json:"-"`
 }
 
-// accessPoliciesIncludeAccessDevicePostureRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesIncludeAccessDevicePostureRule]
-type accessPoliciesIncludeAccessDevicePostureRuleJSON struct {
+// zeroTrustPoliciesIncludeAccessDevicePostureRuleJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesIncludeAccessDevicePostureRule]
+type zeroTrustPoliciesIncludeAccessDevicePostureRuleJSON struct {
 	DevicePosture apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessDevicePostureRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessDevicePostureRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesIncludeAccessDevicePostureRule) implementsZeroTrustAccessPoliciesInclude() {}
-
-type AccessPoliciesIncludeAccessDevicePostureRuleDevicePosture struct {
-	// The ID of a device posture integration.
-	IntegrationUid string                                                        `json:"integration_uid,required"`
-	JSON           accessPoliciesIncludeAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+func (r ZeroTrustPoliciesIncludeAccessDevicePostureRule) implementsZeroTrustZeroTrustPoliciesInclude() {
 }
 
-// accessPoliciesIncludeAccessDevicePostureRuleDevicePostureJSON contains the JSON
-// metadata for the struct
-// [AccessPoliciesIncludeAccessDevicePostureRuleDevicePosture]
-type accessPoliciesIncludeAccessDevicePostureRuleDevicePostureJSON struct {
+type ZeroTrustPoliciesIncludeAccessDevicePostureRuleDevicePosture struct {
+	// The ID of a device posture integration.
+	IntegrationUid string                                                           `json:"integration_uid,required"`
+	JSON           zeroTrustPoliciesIncludeAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+}
+
+// zeroTrustPoliciesIncludeAccessDevicePostureRuleDevicePostureJSON contains the
+// JSON metadata for the struct
+// [ZeroTrustPoliciesIncludeAccessDevicePostureRuleDevicePosture]
+type zeroTrustPoliciesIncludeAccessDevicePostureRuleDevicePostureJSON struct {
 	IntegrationUid apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *AccessPoliciesIncludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesIncludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesIncludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+func (r zeroTrustPoliciesIncludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a specific email.
 //
-// Union satisfied by [zero_trust.AccessPoliciesRequireAccessEmailRule],
-// [zero_trust.AccessPoliciesRequireAccessEmailListRule],
-// [zero_trust.AccessPoliciesRequireAccessDomainRule],
-// [zero_trust.AccessPoliciesRequireAccessEveryoneRule],
-// [zero_trust.AccessPoliciesRequireAccessIPRule],
-// [zero_trust.AccessPoliciesRequireAccessIPListRule],
-// [zero_trust.AccessPoliciesRequireAccessCertificateRule],
-// [zero_trust.AccessPoliciesRequireAccessAccessGroupRule],
-// [zero_trust.AccessPoliciesRequireAccessAzureGroupRule],
-// [zero_trust.AccessPoliciesRequireAccessGitHubOrganizationRule],
-// [zero_trust.AccessPoliciesRequireAccessGsuiteGroupRule],
-// [zero_trust.AccessPoliciesRequireAccessOktaGroupRule],
-// [zero_trust.AccessPoliciesRequireAccessSamlGroupRule],
-// [zero_trust.AccessPoliciesRequireAccessServiceTokenRule],
-// [zero_trust.AccessPoliciesRequireAccessAnyValidServiceTokenRule],
-// [zero_trust.AccessPoliciesRequireAccessExternalEvaluationRule],
-// [zero_trust.AccessPoliciesRequireAccessCountryRule],
-// [zero_trust.AccessPoliciesRequireAccessAuthenticationMethodRule] or
-// [zero_trust.AccessPoliciesRequireAccessDevicePostureRule].
-type AccessPoliciesRequire interface {
-	implementsZeroTrustAccessPoliciesRequire()
+// Union satisfied by [zero_trust.ZeroTrustPoliciesRequireAccessEmailRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessEmailListRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessDomainRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessEveryoneRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessIPRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessIPListRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessCertificateRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessAccessGroupRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessAzureGroupRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessGitHubOrganizationRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessGsuiteGroupRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessOktaGroupRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessSamlGroupRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessServiceTokenRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessAnyValidServiceTokenRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessExternalEvaluationRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessCountryRule],
+// [zero_trust.ZeroTrustPoliciesRequireAccessAuthenticationMethodRule] or
+// [zero_trust.ZeroTrustPoliciesRequireAccessDevicePostureRule].
+type ZeroTrustPoliciesRequire interface {
+	implementsZeroTrustZeroTrustPoliciesRequire()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessPoliciesRequire)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustPoliciesRequire)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessEmailRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessEmailRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessEmailListRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessEmailListRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessDomainRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessDomainRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessEveryoneRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessEveryoneRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessIPRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessIPRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessIPListRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessIPListRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessCertificateRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessCertificateRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessAccessGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessAccessGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessAzureGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessAzureGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessGitHubOrganizationRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessGitHubOrganizationRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessGsuiteGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessGsuiteGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessOktaGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessOktaGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessSamlGroupRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessSamlGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessServiceTokenRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessServiceTokenRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessAnyValidServiceTokenRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessAnyValidServiceTokenRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessExternalEvaluationRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessExternalEvaluationRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessCountryRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessCountryRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessAuthenticationMethodRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessAuthenticationMethodRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessPoliciesRequireAccessDevicePostureRule{}),
+			Type:       reflect.TypeOf(ZeroTrustPoliciesRequireAccessDevicePostureRule{}),
 		},
 	)
 }
 
 // Matches a specific email.
-type AccessPoliciesRequireAccessEmailRule struct {
-	Email AccessPoliciesRequireAccessEmailRuleEmail `json:"email,required"`
-	JSON  accessPoliciesRequireAccessEmailRuleJSON  `json:"-"`
+type ZeroTrustPoliciesRequireAccessEmailRule struct {
+	Email ZeroTrustPoliciesRequireAccessEmailRuleEmail `json:"email,required"`
+	JSON  zeroTrustPoliciesRequireAccessEmailRuleJSON  `json:"-"`
 }
 
-// accessPoliciesRequireAccessEmailRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessEmailRule]
-type accessPoliciesRequireAccessEmailRuleJSON struct {
+// zeroTrustPoliciesRequireAccessEmailRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesRequireAccessEmailRule]
+type zeroTrustPoliciesRequireAccessEmailRuleJSON struct {
 	Email       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessEmailRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessEmailRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessEmailRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessEmailRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
-type AccessPoliciesRequireAccessEmailRuleEmail struct {
+type ZeroTrustPoliciesRequireAccessEmailRuleEmail struct {
 	// The email of the user.
-	Email string                                        `json:"email,required" format:"email"`
-	JSON  accessPoliciesRequireAccessEmailRuleEmailJSON `json:"-"`
+	Email string                                           `json:"email,required" format:"email"`
+	JSON  zeroTrustPoliciesRequireAccessEmailRuleEmailJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessEmailRuleEmailJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessEmailRuleEmail]
-type accessPoliciesRequireAccessEmailRuleEmailJSON struct {
+// zeroTrustPoliciesRequireAccessEmailRuleEmailJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessEmailRuleEmail]
+type zeroTrustPoliciesRequireAccessEmailRuleEmailJSON struct {
 	Email       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessEmailRuleEmailJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessEmailRuleEmailJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an email address from a list.
-type AccessPoliciesRequireAccessEmailListRule struct {
-	EmailList AccessPoliciesRequireAccessEmailListRuleEmailList `json:"email_list,required"`
-	JSON      accessPoliciesRequireAccessEmailListRuleJSON      `json:"-"`
+type ZeroTrustPoliciesRequireAccessEmailListRule struct {
+	EmailList ZeroTrustPoliciesRequireAccessEmailListRuleEmailList `json:"email_list,required"`
+	JSON      zeroTrustPoliciesRequireAccessEmailListRuleJSON      `json:"-"`
 }
 
-// accessPoliciesRequireAccessEmailListRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessEmailListRule]
-type accessPoliciesRequireAccessEmailListRuleJSON struct {
+// zeroTrustPoliciesRequireAccessEmailListRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessEmailListRule]
+type zeroTrustPoliciesRequireAccessEmailListRuleJSON struct {
 	EmailList   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessEmailListRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessEmailListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessEmailListRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessEmailListRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
-type AccessPoliciesRequireAccessEmailListRuleEmailList struct {
+type ZeroTrustPoliciesRequireAccessEmailListRuleEmailList struct {
 	// The ID of a previously created email list.
-	ID   string                                                `json:"id,required"`
-	JSON accessPoliciesRequireAccessEmailListRuleEmailListJSON `json:"-"`
+	ID   string                                                   `json:"id,required"`
+	JSON zeroTrustPoliciesRequireAccessEmailListRuleEmailListJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessEmailListRuleEmailListJSON contains the JSON metadata
-// for the struct [AccessPoliciesRequireAccessEmailListRuleEmailList]
-type accessPoliciesRequireAccessEmailListRuleEmailListJSON struct {
+// zeroTrustPoliciesRequireAccessEmailListRuleEmailListJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessEmailListRuleEmailList]
+type zeroTrustPoliciesRequireAccessEmailListRuleEmailListJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessEmailListRuleEmailListJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessEmailListRuleEmailListJSON) RawJSON() string {
 	return r.raw
 }
 
 // Match an entire email domain.
-type AccessPoliciesRequireAccessDomainRule struct {
-	EmailDomain AccessPoliciesRequireAccessDomainRuleEmailDomain `json:"email_domain,required"`
-	JSON        accessPoliciesRequireAccessDomainRuleJSON        `json:"-"`
+type ZeroTrustPoliciesRequireAccessDomainRule struct {
+	EmailDomain ZeroTrustPoliciesRequireAccessDomainRuleEmailDomain `json:"email_domain,required"`
+	JSON        zeroTrustPoliciesRequireAccessDomainRuleJSON        `json:"-"`
 }
 
-// accessPoliciesRequireAccessDomainRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessDomainRule]
-type accessPoliciesRequireAccessDomainRuleJSON struct {
+// zeroTrustPoliciesRequireAccessDomainRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesRequireAccessDomainRule]
+type zeroTrustPoliciesRequireAccessDomainRuleJSON struct {
 	EmailDomain apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessDomainRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessDomainRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessDomainRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessDomainRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
-type AccessPoliciesRequireAccessDomainRuleEmailDomain struct {
+type ZeroTrustPoliciesRequireAccessDomainRuleEmailDomain struct {
 	// The email domain to match.
-	Domain string                                               `json:"domain,required"`
-	JSON   accessPoliciesRequireAccessDomainRuleEmailDomainJSON `json:"-"`
+	Domain string                                                  `json:"domain,required"`
+	JSON   zeroTrustPoliciesRequireAccessDomainRuleEmailDomainJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessDomainRuleEmailDomainJSON contains the JSON metadata
-// for the struct [AccessPoliciesRequireAccessDomainRuleEmailDomain]
-type accessPoliciesRequireAccessDomainRuleEmailDomainJSON struct {
+// zeroTrustPoliciesRequireAccessDomainRuleEmailDomainJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessDomainRuleEmailDomain]
+type zeroTrustPoliciesRequireAccessDomainRuleEmailDomainJSON struct {
 	Domain      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessDomainRuleEmailDomainJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessDomainRuleEmailDomainJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches everyone.
-type AccessPoliciesRequireAccessEveryoneRule struct {
+type ZeroTrustPoliciesRequireAccessEveryoneRule struct {
 	// An empty object which matches on all users.
-	Everyone interface{}                                 `json:"everyone,required"`
-	JSON     accessPoliciesRequireAccessEveryoneRuleJSON `json:"-"`
+	Everyone interface{}                                    `json:"everyone,required"`
+	JSON     zeroTrustPoliciesRequireAccessEveryoneRuleJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessEveryoneRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessEveryoneRule]
-type accessPoliciesRequireAccessEveryoneRuleJSON struct {
+// zeroTrustPoliciesRequireAccessEveryoneRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessEveryoneRule]
+type zeroTrustPoliciesRequireAccessEveryoneRuleJSON struct {
 	Everyone    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessEveryoneRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessEveryoneRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessEveryoneRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessEveryoneRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
 // Matches an IP address block.
-type AccessPoliciesRequireAccessIPRule struct {
-	IP   AccessPoliciesRequireAccessIPRuleIP   `json:"ip,required"`
-	JSON accessPoliciesRequireAccessIPRuleJSON `json:"-"`
+type ZeroTrustPoliciesRequireAccessIPRule struct {
+	IP   ZeroTrustPoliciesRequireAccessIPRuleIP   `json:"ip,required"`
+	JSON zeroTrustPoliciesRequireAccessIPRuleJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessIPRuleJSON contains the JSON metadata for the struct
-// [AccessPoliciesRequireAccessIPRule]
-type accessPoliciesRequireAccessIPRuleJSON struct {
+// zeroTrustPoliciesRequireAccessIPRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesRequireAccessIPRule]
+type zeroTrustPoliciesRequireAccessIPRuleJSON struct {
 	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessIPRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessIPRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessIPRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessIPRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessIPRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessIPRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
-type AccessPoliciesRequireAccessIPRuleIP struct {
+type ZeroTrustPoliciesRequireAccessIPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
-	IP   string                                  `json:"ip,required"`
-	JSON accessPoliciesRequireAccessIPRuleIPJSON `json:"-"`
+	IP   string                                     `json:"ip,required"`
+	JSON zeroTrustPoliciesRequireAccessIPRuleIPJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessIPRuleIPJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessIPRuleIP]
-type accessPoliciesRequireAccessIPRuleIPJSON struct {
+// zeroTrustPoliciesRequireAccessIPRuleIPJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesRequireAccessIPRuleIP]
+type zeroTrustPoliciesRequireAccessIPRuleIPJSON struct {
 	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessIPRuleIPJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessIPRuleIPJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an IP address from a list.
-type AccessPoliciesRequireAccessIPListRule struct {
-	IPList AccessPoliciesRequireAccessIPListRuleIPList `json:"ip_list,required"`
-	JSON   accessPoliciesRequireAccessIPListRuleJSON   `json:"-"`
+type ZeroTrustPoliciesRequireAccessIPListRule struct {
+	IPList ZeroTrustPoliciesRequireAccessIPListRuleIPList `json:"ip_list,required"`
+	JSON   zeroTrustPoliciesRequireAccessIPListRuleJSON   `json:"-"`
 }
 
-// accessPoliciesRequireAccessIPListRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessIPListRule]
-type accessPoliciesRequireAccessIPListRuleJSON struct {
+// zeroTrustPoliciesRequireAccessIPListRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesRequireAccessIPListRule]
+type zeroTrustPoliciesRequireAccessIPListRuleJSON struct {
 	IPList      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessIPListRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessIPListRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessIPListRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessIPListRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
-type AccessPoliciesRequireAccessIPListRuleIPList struct {
+type ZeroTrustPoliciesRequireAccessIPListRuleIPList struct {
 	// The ID of a previously created IP list.
-	ID   string                                          `json:"id,required"`
-	JSON accessPoliciesRequireAccessIPListRuleIPListJSON `json:"-"`
+	ID   string                                             `json:"id,required"`
+	JSON zeroTrustPoliciesRequireAccessIPListRuleIPListJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessIPListRuleIPListJSON contains the JSON metadata for
-// the struct [AccessPoliciesRequireAccessIPListRuleIPList]
-type accessPoliciesRequireAccessIPListRuleIPListJSON struct {
+// zeroTrustPoliciesRequireAccessIPListRuleIPListJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesRequireAccessIPListRuleIPList]
+type zeroTrustPoliciesRequireAccessIPListRuleIPListJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessIPListRuleIPListJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessIPListRuleIPListJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches any valid client certificate.
-type AccessPoliciesRequireAccessCertificateRule struct {
-	Certificate interface{}                                    `json:"certificate,required"`
-	JSON        accessPoliciesRequireAccessCertificateRuleJSON `json:"-"`
+type ZeroTrustPoliciesRequireAccessCertificateRule struct {
+	Certificate interface{}                                       `json:"certificate,required"`
+	JSON        zeroTrustPoliciesRequireAccessCertificateRuleJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessCertificateRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesRequireAccessCertificateRule]
-type accessPoliciesRequireAccessCertificateRuleJSON struct {
+// zeroTrustPoliciesRequireAccessCertificateRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessCertificateRule]
+type zeroTrustPoliciesRequireAccessCertificateRuleJSON struct {
 	Certificate apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessCertificateRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessCertificateRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessCertificateRule) implementsZeroTrustAccessPoliciesRequire() {}
-
-// Matches an Access group.
-type AccessPoliciesRequireAccessAccessGroupRule struct {
-	Group AccessPoliciesRequireAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  accessPoliciesRequireAccessAccessGroupRuleJSON  `json:"-"`
+func (r ZeroTrustPoliciesRequireAccessCertificateRule) implementsZeroTrustZeroTrustPoliciesRequire() {
 }
 
-// accessPoliciesRequireAccessAccessGroupRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesRequireAccessAccessGroupRule]
-type accessPoliciesRequireAccessAccessGroupRuleJSON struct {
+// Matches an Access group.
+type ZeroTrustPoliciesRequireAccessAccessGroupRule struct {
+	Group ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  zeroTrustPoliciesRequireAccessAccessGroupRuleJSON  `json:"-"`
+}
+
+// zeroTrustPoliciesRequireAccessAccessGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessAccessGroupRule]
+type zeroTrustPoliciesRequireAccessAccessGroupRuleJSON struct {
 	Group       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessAccessGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessAccessGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessAccessGroupRule) implementsZeroTrustAccessPoliciesRequire() {}
-
-type AccessPoliciesRequireAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                              `json:"id,required"`
-	JSON accessPoliciesRequireAccessAccessGroupRuleGroupJSON `json:"-"`
+func (r ZeroTrustPoliciesRequireAccessAccessGroupRule) implementsZeroTrustZeroTrustPoliciesRequire() {
 }
 
-// accessPoliciesRequireAccessAccessGroupRuleGroupJSON contains the JSON metadata
-// for the struct [AccessPoliciesRequireAccessAccessGroupRuleGroup]
-type accessPoliciesRequireAccessAccessGroupRuleGroupJSON struct {
+type ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                 `json:"id,required"`
+	JSON zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup]
+type zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessAccessGroupRuleGroupJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
-type AccessPoliciesRequireAccessAzureGroupRule struct {
-	AzureAd AccessPoliciesRequireAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
-	JSON    accessPoliciesRequireAccessAzureGroupRuleJSON    `json:"-"`
+type ZeroTrustPoliciesRequireAccessAzureGroupRule struct {
+	AzureAd ZeroTrustPoliciesRequireAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
+	JSON    zeroTrustPoliciesRequireAccessAzureGroupRuleJSON    `json:"-"`
 }
 
-// accessPoliciesRequireAccessAzureGroupRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessAzureGroupRule]
-type accessPoliciesRequireAccessAzureGroupRuleJSON struct {
+// zeroTrustPoliciesRequireAccessAzureGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessAzureGroupRule]
+type zeroTrustPoliciesRequireAccessAzureGroupRuleJSON struct {
 	AzureAd     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessAzureGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessAzureGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessAzureGroupRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessAzureGroupRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
-type AccessPoliciesRequireAccessAzureGroupRuleAzureAd struct {
+type ZeroTrustPoliciesRequireAccessAzureGroupRuleAzureAd struct {
 	// The ID of an Azure group.
 	ID string `json:"id,required"`
 	// The ID of your Azure identity provider.
-	ConnectionID string                                               `json:"connection_id,required"`
-	JSON         accessPoliciesRequireAccessAzureGroupRuleAzureAdJSON `json:"-"`
+	ConnectionID string                                                  `json:"connection_id,required"`
+	JSON         zeroTrustPoliciesRequireAccessAzureGroupRuleAzureAdJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessAzureGroupRuleAzureAdJSON contains the JSON metadata
-// for the struct [AccessPoliciesRequireAccessAzureGroupRuleAzureAd]
-type accessPoliciesRequireAccessAzureGroupRuleAzureAdJSON struct {
+// zeroTrustPoliciesRequireAccessAzureGroupRuleAzureAdJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessAzureGroupRuleAzureAd]
+type zeroTrustPoliciesRequireAccessAzureGroupRuleAzureAdJSON struct {
 	ID           apijson.Field
 	ConnectionID apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a Github organization. Requires a Github identity provider.
-type AccessPoliciesRequireAccessGitHubOrganizationRule struct {
-	GitHubOrganization AccessPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
-	JSON               accessPoliciesRequireAccessGitHubOrganizationRuleJSON               `json:"-"`
+type ZeroTrustPoliciesRequireAccessGitHubOrganizationRule struct {
+	GitHubOrganization ZeroTrustPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
+	JSON               zeroTrustPoliciesRequireAccessGitHubOrganizationRuleJSON               `json:"-"`
 }
 
-// accessPoliciesRequireAccessGitHubOrganizationRuleJSON contains the JSON metadata
-// for the struct [AccessPoliciesRequireAccessGitHubOrganizationRule]
-type accessPoliciesRequireAccessGitHubOrganizationRuleJSON struct {
+// zeroTrustPoliciesRequireAccessGitHubOrganizationRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessGitHubOrganizationRule]
+type zeroTrustPoliciesRequireAccessGitHubOrganizationRuleJSON struct {
 	GitHubOrganization apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessGitHubOrganizationRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessGitHubOrganizationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessGitHubOrganizationRule) implementsZeroTrustAccessPoliciesRequire() {
+func (r ZeroTrustPoliciesRequireAccessGitHubOrganizationRule) implementsZeroTrustZeroTrustPoliciesRequire() {
 }
 
-type AccessPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganization struct {
+type ZeroTrustPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganization struct {
 	// The ID of your Github identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The name of the organization.
-	Name string                                                                  `json:"name,required"`
-	JSON accessPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
+	Name string                                                                     `json:"name,required"`
+	JSON zeroTrustPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON contains
-// the JSON metadata for the struct
-// [AccessPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganization]
-type accessPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
+// zeroTrustPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON
+// contains the JSON metadata for the struct
+// [ZeroTrustPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganization]
+type zeroTrustPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
 	ConnectionID apijson.Field
 	Name         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
-type AccessPoliciesRequireAccessGsuiteGroupRule struct {
-	Gsuite AccessPoliciesRequireAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
-	JSON   accessPoliciesRequireAccessGsuiteGroupRuleJSON   `json:"-"`
+type ZeroTrustPoliciesRequireAccessGsuiteGroupRule struct {
+	Gsuite ZeroTrustPoliciesRequireAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
+	JSON   zeroTrustPoliciesRequireAccessGsuiteGroupRuleJSON   `json:"-"`
 }
 
-// accessPoliciesRequireAccessGsuiteGroupRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesRequireAccessGsuiteGroupRule]
-type accessPoliciesRequireAccessGsuiteGroupRuleJSON struct {
+// zeroTrustPoliciesRequireAccessGsuiteGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessGsuiteGroupRule]
+type zeroTrustPoliciesRequireAccessGsuiteGroupRuleJSON struct {
 	Gsuite      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessGsuiteGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessGsuiteGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessGsuiteGroupRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessGsuiteGroupRule) implementsZeroTrustZeroTrustPoliciesRequire() {
+}
 
-type AccessPoliciesRequireAccessGsuiteGroupRuleGsuite struct {
+type ZeroTrustPoliciesRequireAccessGsuiteGroupRuleGsuite struct {
 	// The ID of your Google Workspace identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The email of the Google Workspace group.
-	Email string                                               `json:"email,required"`
-	JSON  accessPoliciesRequireAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
+	Email string                                                  `json:"email,required"`
+	JSON  zeroTrustPoliciesRequireAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessGsuiteGroupRuleGsuiteJSON contains the JSON metadata
-// for the struct [AccessPoliciesRequireAccessGsuiteGroupRuleGsuite]
-type accessPoliciesRequireAccessGsuiteGroupRuleGsuiteJSON struct {
+// zeroTrustPoliciesRequireAccessGsuiteGroupRuleGsuiteJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessGsuiteGroupRuleGsuite]
+type zeroTrustPoliciesRequireAccessGsuiteGroupRuleGsuiteJSON struct {
 	ConnectionID apijson.Field
 	Email        apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches an Okta group. Requires an Okta identity provider.
-type AccessPoliciesRequireAccessOktaGroupRule struct {
-	Okta AccessPoliciesRequireAccessOktaGroupRuleOkta `json:"okta,required"`
-	JSON accessPoliciesRequireAccessOktaGroupRuleJSON `json:"-"`
+type ZeroTrustPoliciesRequireAccessOktaGroupRule struct {
+	Okta ZeroTrustPoliciesRequireAccessOktaGroupRuleOkta `json:"okta,required"`
+	JSON zeroTrustPoliciesRequireAccessOktaGroupRuleJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessOktaGroupRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessOktaGroupRule]
-type accessPoliciesRequireAccessOktaGroupRuleJSON struct {
+// zeroTrustPoliciesRequireAccessOktaGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessOktaGroupRule]
+type zeroTrustPoliciesRequireAccessOktaGroupRuleJSON struct {
 	Okta        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessOktaGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessOktaGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessOktaGroupRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessOktaGroupRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
-type AccessPoliciesRequireAccessOktaGroupRuleOkta struct {
+type ZeroTrustPoliciesRequireAccessOktaGroupRuleOkta struct {
 	// The ID of your Okta identity provider.
 	ConnectionID string `json:"connection_id,required"`
 	// The email of the Okta group.
-	Email string                                           `json:"email,required"`
-	JSON  accessPoliciesRequireAccessOktaGroupRuleOktaJSON `json:"-"`
+	Email string                                              `json:"email,required"`
+	JSON  zeroTrustPoliciesRequireAccessOktaGroupRuleOktaJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessOktaGroupRuleOktaJSON contains the JSON metadata for
-// the struct [AccessPoliciesRequireAccessOktaGroupRuleOkta]
-type accessPoliciesRequireAccessOktaGroupRuleOktaJSON struct {
+// zeroTrustPoliciesRequireAccessOktaGroupRuleOktaJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesRequireAccessOktaGroupRuleOkta]
+type zeroTrustPoliciesRequireAccessOktaGroupRuleOktaJSON struct {
 	ConnectionID apijson.Field
 	Email        apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessOktaGroupRuleOktaJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessOktaGroupRuleOktaJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a SAML group. Requires a SAML identity provider.
-type AccessPoliciesRequireAccessSamlGroupRule struct {
-	Saml AccessPoliciesRequireAccessSamlGroupRuleSaml `json:"saml,required"`
-	JSON accessPoliciesRequireAccessSamlGroupRuleJSON `json:"-"`
+type ZeroTrustPoliciesRequireAccessSamlGroupRule struct {
+	Saml ZeroTrustPoliciesRequireAccessSamlGroupRuleSaml `json:"saml,required"`
+	JSON zeroTrustPoliciesRequireAccessSamlGroupRuleJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessSamlGroupRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessSamlGroupRule]
-type accessPoliciesRequireAccessSamlGroupRuleJSON struct {
+// zeroTrustPoliciesRequireAccessSamlGroupRuleJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessSamlGroupRule]
+type zeroTrustPoliciesRequireAccessSamlGroupRuleJSON struct {
 	Saml        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessSamlGroupRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessSamlGroupRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessSamlGroupRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessSamlGroupRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
-type AccessPoliciesRequireAccessSamlGroupRuleSaml struct {
+type ZeroTrustPoliciesRequireAccessSamlGroupRuleSaml struct {
 	// The name of the SAML attribute.
 	AttributeName string `json:"attribute_name,required"`
 	// The SAML attribute value to look for.
-	AttributeValue string                                           `json:"attribute_value,required"`
-	JSON           accessPoliciesRequireAccessSamlGroupRuleSamlJSON `json:"-"`
+	AttributeValue string                                              `json:"attribute_value,required"`
+	JSON           zeroTrustPoliciesRequireAccessSamlGroupRuleSamlJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessSamlGroupRuleSamlJSON contains the JSON metadata for
-// the struct [AccessPoliciesRequireAccessSamlGroupRuleSaml]
-type accessPoliciesRequireAccessSamlGroupRuleSamlJSON struct {
+// zeroTrustPoliciesRequireAccessSamlGroupRuleSamlJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesRequireAccessSamlGroupRuleSaml]
+type zeroTrustPoliciesRequireAccessSamlGroupRuleSamlJSON struct {
 	AttributeName  apijson.Field
 	AttributeValue apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessSamlGroupRuleSamlJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessSamlGroupRuleSamlJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a specific Access Service Token
-type AccessPoliciesRequireAccessServiceTokenRule struct {
-	ServiceToken AccessPoliciesRequireAccessServiceTokenRuleServiceToken `json:"service_token,required"`
-	JSON         accessPoliciesRequireAccessServiceTokenRuleJSON         `json:"-"`
+type ZeroTrustPoliciesRequireAccessServiceTokenRule struct {
+	ServiceToken ZeroTrustPoliciesRequireAccessServiceTokenRuleServiceToken `json:"service_token,required"`
+	JSON         zeroTrustPoliciesRequireAccessServiceTokenRuleJSON         `json:"-"`
 }
 
-// accessPoliciesRequireAccessServiceTokenRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesRequireAccessServiceTokenRule]
-type accessPoliciesRequireAccessServiceTokenRuleJSON struct {
+// zeroTrustPoliciesRequireAccessServiceTokenRuleJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesRequireAccessServiceTokenRule]
+type zeroTrustPoliciesRequireAccessServiceTokenRuleJSON struct {
 	ServiceToken apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessServiceTokenRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessServiceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessServiceTokenRule) implementsZeroTrustAccessPoliciesRequire() {}
-
-type AccessPoliciesRequireAccessServiceTokenRuleServiceToken struct {
-	// The ID of a Service Token.
-	TokenID string                                                      `json:"token_id,required"`
-	JSON    accessPoliciesRequireAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+func (r ZeroTrustPoliciesRequireAccessServiceTokenRule) implementsZeroTrustZeroTrustPoliciesRequire() {
 }
 
-// accessPoliciesRequireAccessServiceTokenRuleServiceTokenJSON contains the JSON
+type ZeroTrustPoliciesRequireAccessServiceTokenRuleServiceToken struct {
+	// The ID of a Service Token.
+	TokenID string                                                         `json:"token_id,required"`
+	JSON    zeroTrustPoliciesRequireAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+}
+
+// zeroTrustPoliciesRequireAccessServiceTokenRuleServiceTokenJSON contains the JSON
 // metadata for the struct
-// [AccessPoliciesRequireAccessServiceTokenRuleServiceToken]
-type accessPoliciesRequireAccessServiceTokenRuleServiceTokenJSON struct {
+// [ZeroTrustPoliciesRequireAccessServiceTokenRuleServiceToken]
+type zeroTrustPoliciesRequireAccessServiceTokenRuleServiceTokenJSON struct {
 	TokenID     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches any valid Access Service Token
-type AccessPoliciesRequireAccessAnyValidServiceTokenRule struct {
+type ZeroTrustPoliciesRequireAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                                             `json:"any_valid_service_token,required"`
-	JSON                 accessPoliciesRequireAccessAnyValidServiceTokenRuleJSON `json:"-"`
+	AnyValidServiceToken interface{}                                                `json:"any_valid_service_token,required"`
+	JSON                 zeroTrustPoliciesRequireAccessAnyValidServiceTokenRuleJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessAnyValidServiceTokenRuleJSON contains the JSON
-// metadata for the struct [AccessPoliciesRequireAccessAnyValidServiceTokenRule]
-type accessPoliciesRequireAccessAnyValidServiceTokenRuleJSON struct {
+// zeroTrustPoliciesRequireAccessAnyValidServiceTokenRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessAnyValidServiceTokenRule]
+type zeroTrustPoliciesRequireAccessAnyValidServiceTokenRuleJSON struct {
 	AnyValidServiceToken apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessAnyValidServiceTokenRule) implementsZeroTrustAccessPoliciesRequire() {
+func (r ZeroTrustPoliciesRequireAccessAnyValidServiceTokenRule) implementsZeroTrustZeroTrustPoliciesRequire() {
 }
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
-type AccessPoliciesRequireAccessExternalEvaluationRule struct {
-	ExternalEvaluation AccessPoliciesRequireAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
-	JSON               accessPoliciesRequireAccessExternalEvaluationRuleJSON               `json:"-"`
+type ZeroTrustPoliciesRequireAccessExternalEvaluationRule struct {
+	ExternalEvaluation ZeroTrustPoliciesRequireAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
+	JSON               zeroTrustPoliciesRequireAccessExternalEvaluationRuleJSON               `json:"-"`
 }
 
-// accessPoliciesRequireAccessExternalEvaluationRuleJSON contains the JSON metadata
-// for the struct [AccessPoliciesRequireAccessExternalEvaluationRule]
-type accessPoliciesRequireAccessExternalEvaluationRuleJSON struct {
+// zeroTrustPoliciesRequireAccessExternalEvaluationRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessExternalEvaluationRule]
+type zeroTrustPoliciesRequireAccessExternalEvaluationRuleJSON struct {
 	ExternalEvaluation apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessExternalEvaluationRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessExternalEvaluationRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessExternalEvaluationRule) implementsZeroTrustAccessPoliciesRequire() {
+func (r ZeroTrustPoliciesRequireAccessExternalEvaluationRule) implementsZeroTrustZeroTrustPoliciesRequire() {
 }
 
-type AccessPoliciesRequireAccessExternalEvaluationRuleExternalEvaluation struct {
+type ZeroTrustPoliciesRequireAccessExternalEvaluationRuleExternalEvaluation struct {
 	// The API endpoint containing your business logic.
 	EvaluateURL string `json:"evaluate_url,required"`
 	// The API endpoint containing the key that Access uses to verify that the response
 	// came from your API.
-	KeysURL string                                                                  `json:"keys_url,required"`
-	JSON    accessPoliciesRequireAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
+	KeysURL string                                                                     `json:"keys_url,required"`
+	JSON    zeroTrustPoliciesRequireAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessExternalEvaluationRuleExternalEvaluationJSON contains
-// the JSON metadata for the struct
-// [AccessPoliciesRequireAccessExternalEvaluationRuleExternalEvaluation]
-type accessPoliciesRequireAccessExternalEvaluationRuleExternalEvaluationJSON struct {
+// zeroTrustPoliciesRequireAccessExternalEvaluationRuleExternalEvaluationJSON
+// contains the JSON metadata for the struct
+// [ZeroTrustPoliciesRequireAccessExternalEvaluationRuleExternalEvaluation]
+type zeroTrustPoliciesRequireAccessExternalEvaluationRuleExternalEvaluationJSON struct {
 	EvaluateURL apijson.Field
 	KeysURL     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Matches a specific country
-type AccessPoliciesRequireAccessCountryRule struct {
-	Geo  AccessPoliciesRequireAccessCountryRuleGeo  `json:"geo,required"`
-	JSON accessPoliciesRequireAccessCountryRuleJSON `json:"-"`
+type ZeroTrustPoliciesRequireAccessCountryRule struct {
+	Geo  ZeroTrustPoliciesRequireAccessCountryRuleGeo  `json:"geo,required"`
+	JSON zeroTrustPoliciesRequireAccessCountryRuleJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessCountryRuleJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessCountryRule]
-type accessPoliciesRequireAccessCountryRuleJSON struct {
+// zeroTrustPoliciesRequireAccessCountryRuleJSON contains the JSON metadata for the
+// struct [ZeroTrustPoliciesRequireAccessCountryRule]
+type zeroTrustPoliciesRequireAccessCountryRuleJSON struct {
 	Geo         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessCountryRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessCountryRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessCountryRule) implementsZeroTrustAccessPoliciesRequire() {}
+func (r ZeroTrustPoliciesRequireAccessCountryRule) implementsZeroTrustZeroTrustPoliciesRequire() {}
 
-type AccessPoliciesRequireAccessCountryRuleGeo struct {
+type ZeroTrustPoliciesRequireAccessCountryRuleGeo struct {
 	// The country code that should be matched.
-	CountryCode string                                        `json:"country_code,required"`
-	JSON        accessPoliciesRequireAccessCountryRuleGeoJSON `json:"-"`
+	CountryCode string                                           `json:"country_code,required"`
+	JSON        zeroTrustPoliciesRequireAccessCountryRuleGeoJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessCountryRuleGeoJSON contains the JSON metadata for the
-// struct [AccessPoliciesRequireAccessCountryRuleGeo]
-type accessPoliciesRequireAccessCountryRuleGeoJSON struct {
+// zeroTrustPoliciesRequireAccessCountryRuleGeoJSON contains the JSON metadata for
+// the struct [ZeroTrustPoliciesRequireAccessCountryRuleGeo]
+type zeroTrustPoliciesRequireAccessCountryRuleGeoJSON struct {
 	CountryCode apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessCountryRuleGeoJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessCountryRuleGeoJSON) RawJSON() string {
 	return r.raw
 }
 
 // Enforce different MFA options
-type AccessPoliciesRequireAccessAuthenticationMethodRule struct {
-	AuthMethod AccessPoliciesRequireAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
-	JSON       accessPoliciesRequireAccessAuthenticationMethodRuleJSON       `json:"-"`
+type ZeroTrustPoliciesRequireAccessAuthenticationMethodRule struct {
+	AuthMethod ZeroTrustPoliciesRequireAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
+	JSON       zeroTrustPoliciesRequireAccessAuthenticationMethodRuleJSON       `json:"-"`
 }
 
-// accessPoliciesRequireAccessAuthenticationMethodRuleJSON contains the JSON
-// metadata for the struct [AccessPoliciesRequireAccessAuthenticationMethodRule]
-type accessPoliciesRequireAccessAuthenticationMethodRuleJSON struct {
+// zeroTrustPoliciesRequireAccessAuthenticationMethodRuleJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessAuthenticationMethodRule]
+type zeroTrustPoliciesRequireAccessAuthenticationMethodRuleJSON struct {
 	AuthMethod  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessAuthenticationMethodRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessAuthenticationMethodRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessAuthenticationMethodRule) implementsZeroTrustAccessPoliciesRequire() {
+func (r ZeroTrustPoliciesRequireAccessAuthenticationMethodRule) implementsZeroTrustZeroTrustPoliciesRequire() {
 }
 
-type AccessPoliciesRequireAccessAuthenticationMethodRuleAuthMethod struct {
+type ZeroTrustPoliciesRequireAccessAuthenticationMethodRuleAuthMethod struct {
 	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
-	AuthMethod string                                                            `json:"auth_method,required"`
-	JSON       accessPoliciesRequireAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
+	AuthMethod string                                                               `json:"auth_method,required"`
+	JSON       zeroTrustPoliciesRequireAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
 }
 
-// accessPoliciesRequireAccessAuthenticationMethodRuleAuthMethodJSON contains the
-// JSON metadata for the struct
-// [AccessPoliciesRequireAccessAuthenticationMethodRuleAuthMethod]
-type accessPoliciesRequireAccessAuthenticationMethodRuleAuthMethodJSON struct {
+// zeroTrustPoliciesRequireAccessAuthenticationMethodRuleAuthMethodJSON contains
+// the JSON metadata for the struct
+// [ZeroTrustPoliciesRequireAccessAuthenticationMethodRuleAuthMethod]
+type zeroTrustPoliciesRequireAccessAuthenticationMethodRuleAuthMethodJSON struct {
 	AuthMethod  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
 	return r.raw
 }
 
 // Enforces a device posture rule has run successfully
-type AccessPoliciesRequireAccessDevicePostureRule struct {
-	DevicePosture AccessPoliciesRequireAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
-	JSON          accessPoliciesRequireAccessDevicePostureRuleJSON          `json:"-"`
+type ZeroTrustPoliciesRequireAccessDevicePostureRule struct {
+	DevicePosture ZeroTrustPoliciesRequireAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	JSON          zeroTrustPoliciesRequireAccessDevicePostureRuleJSON          `json:"-"`
 }
 
-// accessPoliciesRequireAccessDevicePostureRuleJSON contains the JSON metadata for
-// the struct [AccessPoliciesRequireAccessDevicePostureRule]
-type accessPoliciesRequireAccessDevicePostureRuleJSON struct {
+// zeroTrustPoliciesRequireAccessDevicePostureRuleJSON contains the JSON metadata
+// for the struct [ZeroTrustPoliciesRequireAccessDevicePostureRule]
+type zeroTrustPoliciesRequireAccessDevicePostureRuleJSON struct {
 	DevicePosture apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessDevicePostureRuleJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessDevicePostureRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessPoliciesRequireAccessDevicePostureRule) implementsZeroTrustAccessPoliciesRequire() {}
-
-type AccessPoliciesRequireAccessDevicePostureRuleDevicePosture struct {
-	// The ID of a device posture integration.
-	IntegrationUid string                                                        `json:"integration_uid,required"`
-	JSON           accessPoliciesRequireAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+func (r ZeroTrustPoliciesRequireAccessDevicePostureRule) implementsZeroTrustZeroTrustPoliciesRequire() {
 }
 
-// accessPoliciesRequireAccessDevicePostureRuleDevicePostureJSON contains the JSON
-// metadata for the struct
-// [AccessPoliciesRequireAccessDevicePostureRuleDevicePosture]
-type accessPoliciesRequireAccessDevicePostureRuleDevicePostureJSON struct {
+type ZeroTrustPoliciesRequireAccessDevicePostureRuleDevicePosture struct {
+	// The ID of a device posture integration.
+	IntegrationUid string                                                           `json:"integration_uid,required"`
+	JSON           zeroTrustPoliciesRequireAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+}
+
+// zeroTrustPoliciesRequireAccessDevicePostureRuleDevicePostureJSON contains the
+// JSON metadata for the struct
+// [ZeroTrustPoliciesRequireAccessDevicePostureRuleDevicePosture]
+type zeroTrustPoliciesRequireAccessDevicePostureRuleDevicePostureJSON struct {
 	IntegrationUid apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *AccessPoliciesRequireAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustPoliciesRequireAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessPoliciesRequireAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+func (r zeroTrustPoliciesRequireAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4443,7 +4459,7 @@ func (r AccessApplicationPolicyNewParamsRequireAccessDevicePostureRuleDevicePost
 type AccessApplicationPolicyNewResponseEnvelope struct {
 	Errors   []AccessApplicationPolicyNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationPolicyNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessPolicies                                       `json:"result,required"`
+	Result   ZeroTrustPolicies                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyNewResponseEnvelopeJSON    `json:"-"`
@@ -5849,7 +5865,7 @@ func (r AccessApplicationPolicyUpdateParamsRequireAccessDevicePostureRuleDeviceP
 type AccessApplicationPolicyUpdateResponseEnvelope struct {
 	Errors   []AccessApplicationPolicyUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationPolicyUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessPolicies                                          `json:"result,required"`
+	Result   ZeroTrustPolicies                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -5945,7 +5961,7 @@ type AccessApplicationPolicyListParams struct {
 type AccessApplicationPolicyListResponseEnvelope struct {
 	Errors   []AccessApplicationPolicyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationPolicyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessPolicies                                      `json:"result,required,nullable"`
+	Result   []ZeroTrustPolicies                                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessApplicationPolicyListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessApplicationPolicyListResponseEnvelopeResultInfo `json:"result_info"`
@@ -6170,7 +6186,7 @@ type AccessApplicationPolicyGetParams struct {
 type AccessApplicationPolicyGetResponseEnvelope struct {
 	Errors   []AccessApplicationPolicyGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationPolicyGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessPolicies                                       `json:"result,required"`
+	Result   ZeroTrustPolicies                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyGetResponseEnvelopeJSON    `json:"-"`

@@ -38,7 +38,7 @@ func NewWAFOverrideService(opts ...option.RequestOption) (r *WAFOverrideService)
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) New(ctx context.Context, zoneIdentifier string, body WAFOverrideNewParams, opts ...option.RequestOption) (res *LegacyJhsOverride, err error) {
+func (r *WAFOverrideService) New(ctx context.Context, zoneIdentifier string, body WAFOverrideNewParams, opts ...option.RequestOption) (res *WAFOverride, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides", zoneIdentifier)
@@ -54,7 +54,7 @@ func (r *WAFOverrideService) New(ctx context.Context, zoneIdentifier string, bod
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, id string, body WAFOverrideUpdateParams, opts ...option.RequestOption) (res *LegacyJhsOverride, err error) {
+func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, id string, body WAFOverrideUpdateParams, opts ...option.RequestOption) (res *WAFOverride, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
@@ -70,7 +70,7 @@ func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, 
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) List(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[LegacyJhsOverride], err error) {
+func (r *WAFOverrideService) List(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WAFOverride], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -91,7 +91,7 @@ func (r *WAFOverrideService) List(ctx context.Context, zoneIdentifier string, qu
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[LegacyJhsOverride] {
+func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WAFOverride] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
@@ -115,7 +115,7 @@ func (r *WAFOverrideService) Delete(ctx context.Context, zoneIdentifier string, 
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LegacyJhsOverride, err error) {
+func (r *WAFOverrideService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *WAFOverride, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
@@ -127,7 +127,7 @@ func (r *WAFOverrideService) Get(ctx context.Context, zoneIdentifier string, id 
 	return
 }
 
-type LegacyJhsOverride struct {
+type WAFOverride struct {
 	// The unique identifier of the WAF override.
 	ID string `json:"id"`
 	// An informative summary of the current URI-based WAF override.
@@ -146,23 +146,22 @@ type LegacyJhsOverride struct {
 	Priority float64 `json:"priority"`
 	// Specifies that, when a WAF rule matches, its configured action will be replaced
 	// by the action configured in this object.
-	RewriteAction LegacyJhsOverrideRewriteAction `json:"rewrite_action"`
+	RewriteAction WAFOverrideRewriteAction `json:"rewrite_action"`
 	// An object that allows you to override the action of specific WAF rules. Each key
 	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
 	// action. Unless you are disabling a rule, ensure that you also enable the rule
 	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
 	// you must provide a `groups` object or a `rules` object.
-	Rules map[string]LegacyJhsOverrideRule `json:"rules"`
+	Rules map[string]WAFOverrideRule `json:"rules"`
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
-	URLs []string              `json:"urls"`
-	JSON legacyJhsOverrideJSON `json:"-"`
+	URLs []string        `json:"urls"`
+	JSON wafOverrideJSON `json:"-"`
 }
 
-// legacyJhsOverrideJSON contains the JSON metadata for the struct
-// [LegacyJhsOverride]
-type legacyJhsOverrideJSON struct {
+// wafOverrideJSON contains the JSON metadata for the struct [WAFOverride]
+type wafOverrideJSON struct {
 	ID            apijson.Field
 	Description   apijson.Field
 	Groups        apijson.Field
@@ -175,30 +174,30 @@ type legacyJhsOverrideJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *LegacyJhsOverride) UnmarshalJSON(data []byte) (err error) {
+func (r *WAFOverride) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r legacyJhsOverrideJSON) RawJSON() string {
+func (r wafOverrideJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
-type LegacyJhsOverrideRewriteAction struct {
+type WAFOverrideRewriteAction struct {
 	// The WAF rule action to apply.
-	Block     LegacyJhsOverrideRewriteActionBlock `json:"block"`
-	Challenge string                              `json:"challenge"`
-	Default   string                              `json:"default"`
+	Block     WAFOverrideRewriteActionBlock `json:"block"`
+	Challenge string                        `json:"challenge"`
+	Default   string                        `json:"default"`
 	// The WAF rule action to apply.
-	Disable  LegacyJhsOverrideRewriteActionDisable `json:"disable"`
-	Simulate string                                `json:"simulate"`
-	JSON     legacyJhsOverrideRewriteActionJSON    `json:"-"`
+	Disable  WAFOverrideRewriteActionDisable `json:"disable"`
+	Simulate string                          `json:"simulate"`
+	JSON     wafOverrideRewriteActionJSON    `json:"-"`
 }
 
-// legacyJhsOverrideRewriteActionJSON contains the JSON metadata for the struct
-// [LegacyJhsOverrideRewriteAction]
-type legacyJhsOverrideRewriteActionJSON struct {
+// wafOverrideRewriteActionJSON contains the JSON metadata for the struct
+// [WAFOverrideRewriteAction]
+type wafOverrideRewriteActionJSON struct {
 	Block       apijson.Field
 	Challenge   apijson.Field
 	Default     apijson.Field
@@ -208,66 +207,66 @@ type legacyJhsOverrideRewriteActionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LegacyJhsOverrideRewriteAction) UnmarshalJSON(data []byte) (err error) {
+func (r *WAFOverrideRewriteAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r legacyJhsOverrideRewriteActionJSON) RawJSON() string {
+func (r wafOverrideRewriteActionJSON) RawJSON() string {
 	return r.raw
 }
 
 // The WAF rule action to apply.
-type LegacyJhsOverrideRewriteActionBlock string
+type WAFOverrideRewriteActionBlock string
 
 const (
-	LegacyJhsOverrideRewriteActionBlockChallenge LegacyJhsOverrideRewriteActionBlock = "challenge"
-	LegacyJhsOverrideRewriteActionBlockBlock     LegacyJhsOverrideRewriteActionBlock = "block"
-	LegacyJhsOverrideRewriteActionBlockSimulate  LegacyJhsOverrideRewriteActionBlock = "simulate"
-	LegacyJhsOverrideRewriteActionBlockDisable   LegacyJhsOverrideRewriteActionBlock = "disable"
-	LegacyJhsOverrideRewriteActionBlockDefault   LegacyJhsOverrideRewriteActionBlock = "default"
+	WAFOverrideRewriteActionBlockChallenge WAFOverrideRewriteActionBlock = "challenge"
+	WAFOverrideRewriteActionBlockBlock     WAFOverrideRewriteActionBlock = "block"
+	WAFOverrideRewriteActionBlockSimulate  WAFOverrideRewriteActionBlock = "simulate"
+	WAFOverrideRewriteActionBlockDisable   WAFOverrideRewriteActionBlock = "disable"
+	WAFOverrideRewriteActionBlockDefault   WAFOverrideRewriteActionBlock = "default"
 )
 
-func (r LegacyJhsOverrideRewriteActionBlock) IsKnown() bool {
+func (r WAFOverrideRewriteActionBlock) IsKnown() bool {
 	switch r {
-	case LegacyJhsOverrideRewriteActionBlockChallenge, LegacyJhsOverrideRewriteActionBlockBlock, LegacyJhsOverrideRewriteActionBlockSimulate, LegacyJhsOverrideRewriteActionBlockDisable, LegacyJhsOverrideRewriteActionBlockDefault:
+	case WAFOverrideRewriteActionBlockChallenge, WAFOverrideRewriteActionBlockBlock, WAFOverrideRewriteActionBlockSimulate, WAFOverrideRewriteActionBlockDisable, WAFOverrideRewriteActionBlockDefault:
 		return true
 	}
 	return false
 }
 
 // The WAF rule action to apply.
-type LegacyJhsOverrideRewriteActionDisable string
+type WAFOverrideRewriteActionDisable string
 
 const (
-	LegacyJhsOverrideRewriteActionDisableChallenge LegacyJhsOverrideRewriteActionDisable = "challenge"
-	LegacyJhsOverrideRewriteActionDisableBlock     LegacyJhsOverrideRewriteActionDisable = "block"
-	LegacyJhsOverrideRewriteActionDisableSimulate  LegacyJhsOverrideRewriteActionDisable = "simulate"
-	LegacyJhsOverrideRewriteActionDisableDisable   LegacyJhsOverrideRewriteActionDisable = "disable"
-	LegacyJhsOverrideRewriteActionDisableDefault   LegacyJhsOverrideRewriteActionDisable = "default"
+	WAFOverrideRewriteActionDisableChallenge WAFOverrideRewriteActionDisable = "challenge"
+	WAFOverrideRewriteActionDisableBlock     WAFOverrideRewriteActionDisable = "block"
+	WAFOverrideRewriteActionDisableSimulate  WAFOverrideRewriteActionDisable = "simulate"
+	WAFOverrideRewriteActionDisableDisable   WAFOverrideRewriteActionDisable = "disable"
+	WAFOverrideRewriteActionDisableDefault   WAFOverrideRewriteActionDisable = "default"
 )
 
-func (r LegacyJhsOverrideRewriteActionDisable) IsKnown() bool {
+func (r WAFOverrideRewriteActionDisable) IsKnown() bool {
 	switch r {
-	case LegacyJhsOverrideRewriteActionDisableChallenge, LegacyJhsOverrideRewriteActionDisableBlock, LegacyJhsOverrideRewriteActionDisableSimulate, LegacyJhsOverrideRewriteActionDisableDisable, LegacyJhsOverrideRewriteActionDisableDefault:
+	case WAFOverrideRewriteActionDisableChallenge, WAFOverrideRewriteActionDisableBlock, WAFOverrideRewriteActionDisableSimulate, WAFOverrideRewriteActionDisableDisable, WAFOverrideRewriteActionDisableDefault:
 		return true
 	}
 	return false
 }
 
 // The WAF rule action to apply.
-type LegacyJhsOverrideRule string
+type WAFOverrideRule string
 
 const (
-	LegacyJhsOverrideRuleChallenge LegacyJhsOverrideRule = "challenge"
-	LegacyJhsOverrideRuleBlock     LegacyJhsOverrideRule = "block"
-	LegacyJhsOverrideRuleSimulate  LegacyJhsOverrideRule = "simulate"
-	LegacyJhsOverrideRuleDisable   LegacyJhsOverrideRule = "disable"
-	LegacyJhsOverrideRuleDefault   LegacyJhsOverrideRule = "default"
+	WAFOverrideRuleChallenge WAFOverrideRule = "challenge"
+	WAFOverrideRuleBlock     WAFOverrideRule = "block"
+	WAFOverrideRuleSimulate  WAFOverrideRule = "simulate"
+	WAFOverrideRuleDisable   WAFOverrideRule = "disable"
+	WAFOverrideRuleDefault   WAFOverrideRule = "default"
 )
 
-func (r LegacyJhsOverrideRule) IsKnown() bool {
+func (r WAFOverrideRule) IsKnown() bool {
 	switch r {
-	case LegacyJhsOverrideRuleChallenge, LegacyJhsOverrideRuleBlock, LegacyJhsOverrideRuleSimulate, LegacyJhsOverrideRuleDisable, LegacyJhsOverrideRuleDefault:
+	case WAFOverrideRuleChallenge, WAFOverrideRuleBlock, WAFOverrideRuleSimulate, WAFOverrideRuleDisable, WAFOverrideRuleDefault:
 		return true
 	}
 	return false
@@ -306,7 +305,7 @@ func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
 type WAFOverrideNewResponseEnvelope struct {
 	Errors   []WAFOverrideNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WAFOverrideNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LegacyJhsOverride                        `json:"result,required,nullable"`
+	Result   WAFOverride                              `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFOverrideNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideNewResponseEnvelopeJSON    `json:"-"`
@@ -403,7 +402,7 @@ func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
 type WAFOverrideUpdateResponseEnvelope struct {
 	Errors   []WAFOverrideUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WAFOverrideUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   LegacyJhsOverride                           `json:"result,required,nullable"`
+	Result   WAFOverride                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFOverrideUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideUpdateResponseEnvelopeJSON    `json:"-"`
@@ -528,7 +527,7 @@ func (r wafOverrideDeleteResponseEnvelopeJSON) RawJSON() string {
 type WAFOverrideGetResponseEnvelope struct {
 	Errors   []WAFOverrideGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WAFOverrideGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   LegacyJhsOverride                        `json:"result,required,nullable"`
+	Result   WAFOverride                              `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFOverrideGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideGetResponseEnvelopeJSON    `json:"-"`

@@ -32,7 +32,7 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 }
 
 // Create a new Bookmark application.
-func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
+func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZeroTrustBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -45,7 +45,7 @@ func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid
 }
 
 // Updates a configured Bookmark application.
-func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
+func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZeroTrustBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -58,7 +58,7 @@ func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, u
 }
 
 // Lists Bookmark applications.
-func (r *AccessBookmarkService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessBookmarks, err error) {
+func (r *AccessBookmarkService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]ZeroTrustBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks", identifier)
@@ -84,7 +84,7 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, u
 }
 
 // Fetches a single Bookmark application.
-func (r *AccessBookmarkService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
+func (r *AccessBookmarkService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZeroTrustBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -96,7 +96,7 @@ func (r *AccessBookmarkService) Get(ctx context.Context, identifier string, uuid
 	return
 }
 
-type AccessBookmarks struct {
+type ZeroTrustBookmarks struct {
 	// The unique identifier for the Bookmark application.
 	ID interface{} `json:"id"`
 	// Displays the application in the App Launcher.
@@ -107,13 +107,14 @@ type AccessBookmarks struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the Bookmark application.
-	Name      string              `json:"name"`
-	UpdatedAt time.Time           `json:"updated_at" format:"date-time"`
-	JSON      accessBookmarksJSON `json:"-"`
+	Name      string                 `json:"name"`
+	UpdatedAt time.Time              `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustBookmarksJSON `json:"-"`
 }
 
-// accessBookmarksJSON contains the JSON metadata for the struct [AccessBookmarks]
-type accessBookmarksJSON struct {
+// zeroTrustBookmarksJSON contains the JSON metadata for the struct
+// [ZeroTrustBookmarks]
+type zeroTrustBookmarksJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
 	CreatedAt          apijson.Field
@@ -125,11 +126,11 @@ type accessBookmarksJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessBookmarks) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustBookmarks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessBookmarksJSON) RawJSON() string {
+func (r zeroTrustBookmarksJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -158,7 +159,7 @@ func (r accessBookmarkDeleteResponseJSON) RawJSON() string {
 type AccessBookmarkNewResponseEnvelope struct {
 	Errors   []AccessBookmarkNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessBookmarks                             `json:"result,required"`
+	Result   ZeroTrustBookmarks                          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkNewResponseEnvelopeJSON    `json:"-"`
@@ -247,7 +248,7 @@ func (r AccessBookmarkNewResponseEnvelopeSuccess) IsKnown() bool {
 type AccessBookmarkUpdateResponseEnvelope struct {
 	Errors   []AccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessBookmarks                                `json:"result,required"`
+	Result   ZeroTrustBookmarks                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -336,7 +337,7 @@ func (r AccessBookmarkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type AccessBookmarkListResponseEnvelope struct {
 	Errors   []AccessBookmarkListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessBookmarks                            `json:"result,required,nullable"`
+	Result   []ZeroTrustBookmarks                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessBookmarkListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessBookmarkListResponseEnvelopeResultInfo `json:"result_info"`
@@ -547,7 +548,7 @@ func (r AccessBookmarkDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AccessBookmarkGetResponseEnvelope struct {
 	Errors   []AccessBookmarkGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessBookmarks                             `json:"result,required"`
+	Result   ZeroTrustBookmarks                          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkGetResponseEnvelopeJSON    `json:"-"`

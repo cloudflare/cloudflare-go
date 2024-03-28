@@ -32,7 +32,7 @@ func NewDeviceNetworkService(opts ...option.RequestOption) (r *DeviceNetworkServ
 }
 
 // Creates a new device managed network.
-func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceManagedNetworks, err error) {
+func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewParams, opts ...option.RequestOption) (res *DeviceManagedNetworks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/networks", params.AccountID)
@@ -45,7 +45,7 @@ func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewP
 }
 
 // Updates a configured device managed network.
-func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, params DeviceNetworkUpdateParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceManagedNetworks, err error) {
+func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, params DeviceNetworkUpdateParams, opts ...option.RequestOption) (res *DeviceManagedNetworks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", params.AccountID, networkID)
@@ -58,7 +58,7 @@ func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, par
 }
 
 // Fetches a list of managed networks for an account.
-func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceManagedNetworks, err error) {
+func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *[]DeviceManagedNetworks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/networks", query.AccountID)
@@ -72,7 +72,7 @@ func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkList
 
 // Deletes a device managed network and fetches a list of the remaining device
 // managed networks for an account.
-func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, body DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceManagedNetworks, err error) {
+func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, body DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]DeviceManagedNetworks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", body.AccountID, networkID)
@@ -85,7 +85,7 @@ func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, bod
 }
 
 // Fetches details for a single managed network.
-func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query DeviceNetworkGetParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceManagedNetworks, err error) {
+func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query DeviceNetworkGetParams, opts ...option.RequestOption) (res *DeviceManagedNetworks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/networks/%s", query.AccountID, networkID)
@@ -97,22 +97,22 @@ func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query 
 	return
 }
 
-type TeamsDevicesDeviceManagedNetworks struct {
+type DeviceManagedNetworks struct {
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
-	Config TeamsDevicesDeviceManagedNetworksConfig `json:"config"`
+	Config DeviceManagedNetworksConfig `json:"config"`
 	// The name of the device managed network. This name must be unique.
 	Name string `json:"name"`
 	// API UUID.
 	NetworkID string `json:"network_id"`
 	// The type of device managed network.
-	Type TeamsDevicesDeviceManagedNetworksType `json:"type"`
-	JSON teamsDevicesDeviceManagedNetworksJSON `json:"-"`
+	Type DeviceManagedNetworksType `json:"type"`
+	JSON deviceManagedNetworksJSON `json:"-"`
 }
 
-// teamsDevicesDeviceManagedNetworksJSON contains the JSON metadata for the struct
-// [TeamsDevicesDeviceManagedNetworks]
-type teamsDevicesDeviceManagedNetworksJSON struct {
+// deviceManagedNetworksJSON contains the JSON metadata for the struct
+// [DeviceManagedNetworks]
+type deviceManagedNetworksJSON struct {
 	Config      apijson.Field
 	Name        apijson.Field
 	NetworkID   apijson.Field
@@ -121,54 +121,54 @@ type teamsDevicesDeviceManagedNetworksJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDeviceManagedNetworks) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceManagedNetworks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDeviceManagedNetworksJSON) RawJSON() string {
+func (r deviceManagedNetworksJSON) RawJSON() string {
 	return r.raw
 }
 
 // The configuration object containing information for the WARP client to detect
 // the managed network.
-type TeamsDevicesDeviceManagedNetworksConfig struct {
+type DeviceManagedNetworksConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
 	TLSSockaddr string `json:"tls_sockaddr,required"`
 	// The SHA-256 hash of the TLS certificate presented by the host found at
 	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
 	// timestamp, etc) will be used to validate the certificate.
-	Sha256 string                                      `json:"sha256"`
-	JSON   teamsDevicesDeviceManagedNetworksConfigJSON `json:"-"`
+	Sha256 string                          `json:"sha256"`
+	JSON   deviceManagedNetworksConfigJSON `json:"-"`
 }
 
-// teamsDevicesDeviceManagedNetworksConfigJSON contains the JSON metadata for the
-// struct [TeamsDevicesDeviceManagedNetworksConfig]
-type teamsDevicesDeviceManagedNetworksConfigJSON struct {
+// deviceManagedNetworksConfigJSON contains the JSON metadata for the struct
+// [DeviceManagedNetworksConfig]
+type deviceManagedNetworksConfigJSON struct {
 	TLSSockaddr apijson.Field
 	Sha256      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesDeviceManagedNetworksConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceManagedNetworksConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r teamsDevicesDeviceManagedNetworksConfigJSON) RawJSON() string {
+func (r deviceManagedNetworksConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of device managed network.
-type TeamsDevicesDeviceManagedNetworksType string
+type DeviceManagedNetworksType string
 
 const (
-	TeamsDevicesDeviceManagedNetworksTypeTLS TeamsDevicesDeviceManagedNetworksType = "tls"
+	DeviceManagedNetworksTypeTLS DeviceManagedNetworksType = "tls"
 )
 
-func (r TeamsDevicesDeviceManagedNetworksType) IsKnown() bool {
+func (r DeviceManagedNetworksType) IsKnown() bool {
 	switch r {
-	case TeamsDevicesDeviceManagedNetworksTypeTLS:
+	case DeviceManagedNetworksTypeTLS:
 		return true
 	}
 	return false
@@ -223,7 +223,7 @@ func (r DeviceNetworkNewParamsType) IsKnown() bool {
 type DeviceNetworkNewResponseEnvelope struct {
 	Errors   []DeviceNetworkNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceNetworkNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesDeviceManagedNetworks          `json:"result,required,nullable"`
+	Result   DeviceManagedNetworks                      `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -358,7 +358,7 @@ func (r DeviceNetworkUpdateParamsType) IsKnown() bool {
 type DeviceNetworkUpdateResponseEnvelope struct {
 	Errors   []DeviceNetworkUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceNetworkUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesDeviceManagedNetworks             `json:"result,required,nullable"`
+	Result   DeviceManagedNetworks                         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -451,7 +451,7 @@ type DeviceNetworkListParams struct {
 type DeviceNetworkListResponseEnvelope struct {
 	Errors   []DeviceNetworkListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceNetworkListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesDeviceManagedNetworks         `json:"result,required,nullable"`
+	Result   []DeviceManagedNetworks                     `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DeviceNetworkListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DeviceNetworkListResponseEnvelopeResultInfo `json:"result_info"`
@@ -577,7 +577,7 @@ type DeviceNetworkDeleteParams struct {
 type DeviceNetworkDeleteResponseEnvelope struct {
 	Errors   []DeviceNetworkDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceNetworkDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesDeviceManagedNetworks           `json:"result,required,nullable"`
+	Result   []DeviceManagedNetworks                       `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DeviceNetworkDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DeviceNetworkDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -703,7 +703,7 @@ type DeviceNetworkGetParams struct {
 type DeviceNetworkGetResponseEnvelope struct {
 	Errors   []DeviceNetworkGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceNetworkGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesDeviceManagedNetworks          `json:"result,required,nullable"`
+	Result   DeviceManagedNetworks                      `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkGetResponseEnvelopeJSON    `json:"-"`

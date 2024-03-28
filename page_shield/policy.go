@@ -31,7 +31,7 @@ func NewPolicyService(opts ...option.RequestOption) (r *PolicyService) {
 }
 
 // Create a Page Shield policy.
-func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ...option.RequestOption) (res *PageShieldPageshieldPolicy, err error) {
+func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ...option.RequestOption) (res *PageShieldPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
@@ -39,7 +39,7 @@ func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ..
 }
 
 // Update a Page Shield policy by ID.
-func (r *PolicyService) Update(ctx context.Context, policyID string, params PolicyUpdateParams, opts ...option.RequestOption) (res *PageShieldPageshieldPolicy, err error) {
+func (r *PolicyService) Update(ctx context.Context, policyID string, params PolicyUpdateParams, opts ...option.RequestOption) (res *PageShieldPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", params.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
@@ -47,7 +47,7 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 }
 
 // Lists all Page Shield policies.
-func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *[]PageShieldPageshieldPolicy, err error) {
+func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *[]PageShieldPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PolicyListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield/policies", query.ZoneID)
@@ -69,18 +69,18 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 }
 
 // Fetches a Page Shield policy by ID.
-func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *PageShieldPageshieldPolicy, err error) {
+func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *PageShieldPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", query.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type PageShieldPageshieldPolicy struct {
+type PageShieldPolicy struct {
 	// The ID of the policy
 	ID string `json:"id"`
 	// The action to take if the expression matches
-	Action PageShieldPageshieldPolicyAction `json:"action"`
+	Action PageShieldPolicyAction `json:"action"`
 	// A description for the policy
 	Description string `json:"description"`
 	// Whether the policy is enabled
@@ -89,13 +89,13 @@ type PageShieldPageshieldPolicy struct {
 	// Cloudflare Firewall rule expression syntax
 	Expression string `json:"expression"`
 	// The policy which will be applied
-	Value string                         `json:"value"`
-	JSON  pageShieldPageshieldPolicyJSON `json:"-"`
+	Value string               `json:"value"`
+	JSON  pageShieldPolicyJSON `json:"-"`
 }
 
-// pageShieldPageshieldPolicyJSON contains the JSON metadata for the struct
-// [PageShieldPageshieldPolicy]
-type pageShieldPageshieldPolicyJSON struct {
+// pageShieldPolicyJSON contains the JSON metadata for the struct
+// [PageShieldPolicy]
+type pageShieldPolicyJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -106,25 +106,25 @@ type pageShieldPageshieldPolicyJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldPageshieldPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldPolicy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageShieldPageshieldPolicyJSON) RawJSON() string {
+func (r pageShieldPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action to take if the expression matches
-type PageShieldPageshieldPolicyAction string
+type PageShieldPolicyAction string
 
 const (
-	PageShieldPageshieldPolicyActionAllow PageShieldPageshieldPolicyAction = "allow"
-	PageShieldPageshieldPolicyActionLog   PageShieldPageshieldPolicyAction = "log"
+	PageShieldPolicyActionAllow PageShieldPolicyAction = "allow"
+	PageShieldPolicyActionLog   PageShieldPolicyAction = "log"
 )
 
-func (r PageShieldPageshieldPolicyAction) IsKnown() bool {
+func (r PageShieldPolicyAction) IsKnown() bool {
 	switch r {
-	case PageShieldPageshieldPolicyActionAllow, PageShieldPageshieldPolicyActionLog:
+	case PageShieldPolicyActionAllow, PageShieldPolicyActionLog:
 		return true
 	}
 	return false
@@ -210,7 +210,7 @@ type PolicyListParams struct {
 type PolicyListResponseEnvelope struct {
 	Errors   []PolicyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PolicyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PageShieldPageshieldPolicy         `json:"result,required,nullable"`
+	Result   []PageShieldPolicy                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PolicyListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PolicyListResponseEnvelopeResultInfo `json:"result_info"`

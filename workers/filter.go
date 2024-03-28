@@ -44,7 +44,7 @@ func (r *FilterService) New(ctx context.Context, params FilterNewParams, opts ..
 }
 
 // Update Filter
-func (r *FilterService) Update(ctx context.Context, filterID string, params FilterUpdateParams, opts ...option.RequestOption) (res *WorkersFilters, err error) {
+func (r *FilterService) Update(ctx context.Context, filterID string, params FilterUpdateParams, opts ...option.RequestOption) (res *WorkersFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/filters/%s", params.ZoneID, filterID)
@@ -57,7 +57,7 @@ func (r *FilterService) Update(ctx context.Context, filterID string, params Filt
 }
 
 // List Filters
-func (r *FilterService) List(ctx context.Context, query FilterListParams, opts ...option.RequestOption) (res *[]WorkersFilters, err error) {
+func (r *FilterService) List(ctx context.Context, query FilterListParams, opts ...option.RequestOption) (res *[]WorkersFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/filters", query.ZoneID)
@@ -82,16 +82,16 @@ func (r *FilterService) Delete(ctx context.Context, filterID string, body Filter
 	return
 }
 
-type WorkersFilters struct {
+type WorkersFilter struct {
 	// Identifier
-	ID      string             `json:"id,required"`
-	Enabled bool               `json:"enabled,required"`
-	Pattern string             `json:"pattern,required"`
-	JSON    workersFiltersJSON `json:"-"`
+	ID      string            `json:"id,required"`
+	Enabled bool              `json:"enabled,required"`
+	Pattern string            `json:"pattern,required"`
+	JSON    workersFilterJSON `json:"-"`
 }
 
-// workersFiltersJSON contains the JSON metadata for the struct [WorkersFilters]
-type workersFiltersJSON struct {
+// workersFilterJSON contains the JSON metadata for the struct [WorkersFilter]
+type workersFilterJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	Pattern     apijson.Field
@@ -99,11 +99,11 @@ type workersFiltersJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersFilters) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersFiltersJSON) RawJSON() string {
+func (r workersFilterJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -265,7 +265,7 @@ func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
 type FilterUpdateResponseEnvelope struct {
 	Errors   []FilterUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersFilters                         `json:"result,required"`
+	Result   WorkersFilter                          `json:"result,required"`
 	// Whether the API call was successful
 	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
@@ -359,7 +359,7 @@ type FilterListParams struct {
 type FilterListResponseEnvelope struct {
 	Errors   []FilterListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersFilters                     `json:"result,required"`
+	Result   []WorkersFilter                      `json:"result,required"`
 	// Whether the API call was successful
 	Success FilterListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterListResponseEnvelopeJSON    `json:"-"`
