@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,7 +33,7 @@ func NewGatewayCategoryService(opts ...option.RequestOption) (r *GatewayCategory
 }
 
 // Fetches a list of all categories.
-func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustGatewayCategories], err error) {
+func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGatewayCategories], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -51,8 +51,8 @@ func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategory
 }
 
 // Fetches a list of all categories.
-func (r *GatewayCategoryService) ListAutoPaging(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustGatewayCategories] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *GatewayCategoryService) ListAutoPaging(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGatewayCategories] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type ZeroTrustGatewayCategories struct {

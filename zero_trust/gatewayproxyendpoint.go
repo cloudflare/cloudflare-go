@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -49,7 +50,7 @@ func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayPro
 }
 
 // Fetches a single Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustGatewayProxyEndpoints], err error) {
+func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGatewayProxyEndpoints], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,8 +68,8 @@ func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayPro
 }
 
 // Fetches a single Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustGatewayProxyEndpoints] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGatewayProxyEndpoints] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a configured Zero Trust Gateway proxy endpoint.

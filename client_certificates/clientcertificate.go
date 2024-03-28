@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -49,7 +49,7 @@ func (r *ClientCertificateService) New(ctx context.Context, params ClientCertifi
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
 // using Pagination
-func (r *ClientCertificateService) List(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ClientCertificate], err error) {
+func (r *ClientCertificateService) List(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ClientCertificate], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,8 +68,8 @@ func (r *ClientCertificateService) List(ctx context.Context, params ClientCertif
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
 // using Pagination
-func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ClientCertificate] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ClientCertificate] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Set a API Shield mTLS Client Certificate to pending_revocation status for

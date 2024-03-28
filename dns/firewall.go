@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -52,7 +53,7 @@ func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opt
 }
 
 // List configured DNS Firewall clusters for an account.
-func (r *FirewallService) List(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DNSFirewall], err error) {
+func (r *FirewallService) List(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DNSFirewall], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -70,8 +71,8 @@ func (r *FirewallService) List(ctx context.Context, params FirewallListParams, o
 }
 
 // List configured DNS Firewall clusters for an account.
-func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DNSFirewall] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DNSFirewall] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a configured DNS Firewall Cluster.

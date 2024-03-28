@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -80,7 +80,7 @@ func (r *AccessCertificateService) Update(ctx context.Context, uuid string, para
 }
 
 // Lists all mTLS root certificates.
-func (r *AccessCertificateService) List(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustCertificates], err error) {
+func (r *AccessCertificateService) List(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustCertificates], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -107,8 +107,8 @@ func (r *AccessCertificateService) List(ctx context.Context, query AccessCertifi
 }
 
 // Lists all mTLS root certificates.
-func (r *AccessCertificateService) ListAutoPaging(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustCertificates] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessCertificateService) ListAutoPaging(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustCertificates] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an mTLS certificate.

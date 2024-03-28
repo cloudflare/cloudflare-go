@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -61,7 +62,7 @@ func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.
 
 // List up to 100 images with one request. Use the optional parameters below to get
 // a specific range of images.
-func (r *V1Service) List(ctx context.Context, params V1ListParams, opts ...option.RequestOption) (res *shared.V4PagePagination[V1ListResponse], err error) {
+func (r *V1Service) List(ctx context.Context, params V1ListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[V1ListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,8 +81,8 @@ func (r *V1Service) List(ctx context.Context, params V1ListParams, opts ...optio
 
 // List up to 100 images with one request. Use the optional parameters below to get
 // a specific range of images.
-func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opts ...option.RequestOption) *shared.V4PagePaginationAutoPager[V1ListResponse] {
-	return shared.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
+func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[V1ListResponse] {
+	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete an image on Cloudflare Images. On success, all copies of the image are

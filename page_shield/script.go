@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,7 +34,7 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 }
 
 // Lists all scripts detected by Page Shield.
-func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *shared.SinglePage[PageShieldScript], err error) {
+func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PageShieldScript], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,8 +52,8 @@ func (r *ScriptService) List(ctx context.Context, params ScriptListParams, opts 
 }
 
 // Lists all scripts detected by Page Shield.
-func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PageShieldScript] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *ScriptService) ListAutoPaging(ctx context.Context, params ScriptListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PageShieldScript] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Fetches a script detected by Page Shield by script ID.

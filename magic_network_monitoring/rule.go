@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,7 +61,7 @@ func (r *RuleService) Update(ctx context.Context, body RuleUpdateParams, opts ..
 }
 
 // Lists network monitoring rules for account.
-func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *shared.SinglePage[MagicNetworkMonitoringRule], err error) {
+func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MagicNetworkMonitoringRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,8 +79,8 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 }
 
 // Lists network monitoring rules for account.
-func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[MagicNetworkMonitoringRule] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MagicNetworkMonitoringRule] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a network monitoring rule for account.

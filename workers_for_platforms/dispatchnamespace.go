@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -49,7 +49,7 @@ func (r *DispatchNamespaceService) New(ctx context.Context, params DispatchNames
 }
 
 // Fetch a list of Workers for Platforms namespaces.
-func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) (res *shared.SinglePage[DispatchNamespaceListResponse], err error) {
+func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,8 +67,8 @@ func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNames
 }
 
 // Fetch a list of Workers for Platforms namespaces.
-func (r *DispatchNamespaceService) ListAutoPaging(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DispatchNamespaceListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DispatchNamespaceService) ListAutoPaging(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DispatchNamespaceListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a Workers for Platforms namespace.

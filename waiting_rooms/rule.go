@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,7 +61,7 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waiting
 }
 
 // Lists rules for a waiting room.
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *shared.SinglePage[WaitingroomRule], err error) {
+func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingroomRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,8 +79,8 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRo
 }
 
 // Lists rules for a waiting room.
-func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) *shared.SinglePageAutoPager[WaitingroomRule] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, waitingRoomID, opts...))
+func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, waitingRoomID string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingroomRule] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, waitingRoomID, opts...))
 }
 
 // Deletes a rule for a waiting room.

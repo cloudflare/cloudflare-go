@@ -8,8 +8,8 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +32,7 @@ func NewAccessUserActiveSessionService(opts ...option.RequestOption) (r *AccessU
 }
 
 // Get active sessions for a single user.
-func (r *AccessUserActiveSessionService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *shared.SinglePage[AccessUserActiveSessionListResponse], err error) {
+func (r *AccessUserActiveSessionService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUserActiveSessionListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -50,8 +50,8 @@ func (r *AccessUserActiveSessionService) List(ctx context.Context, identifier st
 }
 
 // Get active sessions for a single user.
-func (r *AccessUserActiveSessionService) ListAutoPaging(ctx context.Context, identifier string, id string, opts ...option.RequestOption) *shared.SinglePageAutoPager[AccessUserActiveSessionListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, identifier, id, opts...))
+func (r *AccessUserActiveSessionService) ListAutoPaging(ctx context.Context, identifier string, id string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUserActiveSessionListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, id, opts...))
 }
 
 // Get an active session for a single user.

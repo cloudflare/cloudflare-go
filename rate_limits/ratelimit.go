@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -50,7 +51,7 @@ func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body 
 }
 
 // Fetches the rate limits for a zone.
-func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[RateLimitListResponse], err error) {
+func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RateLimitListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,8 +69,8 @@ func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, quer
 }
 
 // Fetches the rate limits for a zone.
-func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[RateLimitListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RateLimitListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing rate limit.

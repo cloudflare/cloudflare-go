@@ -6,8 +6,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -30,7 +30,7 @@ func NewTokenPermissionGroupService(opts ...option.RequestOption) (r *TokenPermi
 }
 
 // Find all available permission groups.
-func (r *TokenPermissionGroupService) List(ctx context.Context, opts ...option.RequestOption) (res *shared.SinglePage[TokenPermissionGroupListResponse], err error) {
+func (r *TokenPermissionGroupService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[TokenPermissionGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -48,8 +48,8 @@ func (r *TokenPermissionGroupService) List(ctx context.Context, opts ...option.R
 }
 
 // Find all available permission groups.
-func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *shared.SinglePageAutoPager[TokenPermissionGroupListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, opts...))
+func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenPermissionGroupListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
 type TokenPermissionGroupListResponse = interface{}

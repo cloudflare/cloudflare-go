@@ -9,9 +9,9 @@ import (
 	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,7 +35,7 @@ func NewDEXColoService(opts ...option.RequestOption) (r *DEXColoService) {
 // List Cloudflare colos that account's devices were connected to during a time
 // period, sorted by usage starting from the most used colo. Colos without traffic
 // are also returned and sorted alphabetically.
-func (r *DEXColoService) List(ctx context.Context, params DEXColoListParams, opts ...option.RequestOption) (res *shared.SinglePage[DEXColoListResponse], err error) {
+func (r *DEXColoService) List(ctx context.Context, params DEXColoListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DEXColoListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -55,8 +55,8 @@ func (r *DEXColoService) List(ctx context.Context, params DEXColoListParams, opt
 // List Cloudflare colos that account's devices were connected to during a time
 // period, sorted by usage starting from the most used colo. Colos without traffic
 // are also returned and sorted alphabetically.
-func (r *DEXColoService) ListAutoPaging(ctx context.Context, params DEXColoListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DEXColoListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *DEXColoService) ListAutoPaging(ctx context.Context, params DEXColoListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DEXColoListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 type DEXColoListResponse = interface{}

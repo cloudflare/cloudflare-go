@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -60,7 +60,7 @@ func (r *AccessCustomPageService) Update(ctx context.Context, identifier string,
 }
 
 // List custom pages
-func (r *AccessCustomPageService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustCustomPageWithoutHTML], err error) {
+func (r *AccessCustomPageService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustCustomPageWithoutHTML], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,8 +78,8 @@ func (r *AccessCustomPageService) List(ctx context.Context, identifier string, o
 }
 
 // List custom pages
-func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustCustomPageWithoutHTML] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
+func (r *AccessCustomPageService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustCustomPageWithoutHTML] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
 }
 
 // Delete a custom page

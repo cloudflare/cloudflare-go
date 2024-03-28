@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/user"
 )
@@ -65,7 +65,7 @@ func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpda
 }
 
 // List configured pools.
-func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *shared.SinglePage[user.LoadBalancingPool], err error) {
+func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.LoadBalancingPool], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -83,8 +83,8 @@ func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...o
 }
 
 // List configured pools.
-func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[user.LoadBalancingPool] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.LoadBalancingPool] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a configured pool.

@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -36,7 +36,7 @@ func NewGatewayAppTypeService(opts ...option.RequestOption) (r *GatewayAppTypeSe
 }
 
 // Fetches all application and application type mappings.
-func (r *GatewayAppTypeService) List(ctx context.Context, query GatewayAppTypeListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustGatewayAppTypes], err error) {
+func (r *GatewayAppTypeService) List(ctx context.Context, query GatewayAppTypeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGatewayAppTypes], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -54,8 +54,8 @@ func (r *GatewayAppTypeService) List(ctx context.Context, query GatewayAppTypeLi
 }
 
 // Fetches all application and application type mappings.
-func (r *GatewayAppTypeService) ListAutoPaging(ctx context.Context, query GatewayAppTypeListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustGatewayAppTypes] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *GatewayAppTypeService) ListAutoPaging(ctx context.Context, query GatewayAppTypeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGatewayAppTypes] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Union satisfied by

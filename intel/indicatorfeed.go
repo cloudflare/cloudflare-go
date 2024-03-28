@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -62,7 +62,7 @@ func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params 
 }
 
 // Get indicator feeds owned by this account
-func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) (res *shared.SinglePage[IndicatorFeedListResponse], err error) {
+func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IndicatorFeedListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,8 +80,8 @@ func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedList
 }
 
 // Get indicator feeds owned by this account
-func (r *IndicatorFeedService) ListAutoPaging(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[IndicatorFeedListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *IndicatorFeedService) ListAutoPaging(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IndicatorFeedListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Get indicator feed data

@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,7 +61,7 @@ func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) (res *shared.SinglePage[StreamOutput], err error) {
+func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) (res *pagination.SinglePage[StreamOutput], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,8 +79,8 @@ func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier s
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *LiveInputOutputService) ListAutoPaging(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[StreamOutput] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, liveInputIdentifier, query, opts...))
+func (r *LiveInputOutputService) ListAutoPaging(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StreamOutput] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, liveInputIdentifier, query, opts...))
 }
 
 // Deletes an output and removes it from the associated live input.

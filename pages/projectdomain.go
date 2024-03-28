@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -48,7 +49,7 @@ func (r *ProjectDomainService) New(ctx context.Context, projectName string, para
 }
 
 // Fetch a list of all domains associated with a Pages project.
-func (r *ProjectDomainService) List(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) (res *shared.SinglePage[ProjectDomainListResponse], err error) {
+func (r *ProjectDomainService) List(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ProjectDomainListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,8 +67,8 @@ func (r *ProjectDomainService) List(ctx context.Context, projectName string, que
 }
 
 // Fetch a list of all domains associated with a Pages project.
-func (r *ProjectDomainService) ListAutoPaging(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ProjectDomainListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, projectName, query, opts...))
+func (r *ProjectDomainService) ListAutoPaging(ctx context.Context, projectName string, query ProjectDomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ProjectDomainListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, projectName, query, opts...))
 }
 
 // Delete a Pages project's domain.

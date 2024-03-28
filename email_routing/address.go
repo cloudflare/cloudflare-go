@@ -11,9 +11,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -49,7 +49,7 @@ func (r *AddressService) New(ctx context.Context, accountIdentifier string, body
 }
 
 // Lists existing destination addresses.
-func (r *AddressService) List(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AddressListResponse], err error) {
+func (r *AddressService) List(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AddressListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,8 +67,8 @@ func (r *AddressService) List(ctx context.Context, accountIdentifier string, que
 }
 
 // Lists existing destination addresses.
-func (r *AddressService) ListAutoPaging(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AddressListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, query, opts...))
+func (r *AddressService) ListAutoPaging(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AddressListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, query, opts...))
 }
 
 // Deletes a specific destination address.

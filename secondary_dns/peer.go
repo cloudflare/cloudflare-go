@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -58,7 +58,7 @@ func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpda
 }
 
 // List Peers.
-func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *shared.SinglePage[SecondaryDNSPeer], err error) {
+func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SecondaryDNSPeer], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,8 +76,8 @@ func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...op
 }
 
 // List Peers.
-func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[SecondaryDNSPeer] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SecondaryDNSPeer] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Peer.

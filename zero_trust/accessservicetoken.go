@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -80,7 +80,7 @@ func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, par
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustServiceTokens], err error) {
+func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustServiceTokens], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -107,8 +107,8 @@ func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServic
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustServiceTokens] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessServiceTokenService) ListAutoPaging(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustServiceTokens] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a service token.

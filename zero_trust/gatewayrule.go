@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -62,7 +63,7 @@ func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params G
 }
 
 // Fetches the Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustGatewayRules], err error) {
+func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGatewayRules], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,8 +81,8 @@ func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListPara
 }
 
 // Fetches the Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustGatewayRules] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGatewayRules] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a Zero Trust Gateway rule.

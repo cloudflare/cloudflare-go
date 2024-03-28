@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -46,7 +46,7 @@ func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePo
 }
 
 // Fetches the list of routes excluded from the WARP client's tunnel.
-func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolicyExcludeListParams, opts ...option.RequestOption) (res *shared.SinglePage[DevicesSplitTunnel], err error) {
+func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolicyExcludeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DevicesSplitTunnel], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -64,8 +64,8 @@ func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolic
 }
 
 // Fetches the list of routes excluded from the WARP client's tunnel.
-func (r *DevicePolicyExcludeService) ListAutoPaging(ctx context.Context, query DevicePolicyExcludeListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DevicesSplitTunnel] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DevicePolicyExcludeService) ListAutoPaging(ctx context.Context, query DevicePolicyExcludeListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DevicesSplitTunnel] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Fetches the list of routes excluded from the WARP client's tunnel for a specific

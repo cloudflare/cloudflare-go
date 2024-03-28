@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -63,7 +64,7 @@ func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id st
 
 // Fetches User Agent Blocking rules in a zone. You can filter the results using
 // several optional parameters.
-func (r *UARuleService) List(ctx context.Context, zoneIdentifier string, query UARuleListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[UARuleListResponse], err error) {
+func (r *UARuleService) List(ctx context.Context, zoneIdentifier string, query UARuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UARuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -82,8 +83,8 @@ func (r *UARuleService) List(ctx context.Context, zoneIdentifier string, query U
 
 // Fetches User Agent Blocking rules in a zone. You can filter the results using
 // several optional parameters.
-func (r *UARuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query UARuleListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[UARuleListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+func (r *UARuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query UARuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[UARuleListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing User Agent Blocking rule.

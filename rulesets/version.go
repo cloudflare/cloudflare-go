@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,7 +35,7 @@ func NewVersionService(opts ...option.RequestOption) (r *VersionService) {
 }
 
 // Fetches the versions of an account or zone ruleset.
-func (r *VersionService) List(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) (res *shared.SinglePage[VersionListResponse], err error) {
+func (r *VersionService) List(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[VersionListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -62,8 +62,8 @@ func (r *VersionService) List(ctx context.Context, rulesetID string, query Versi
 }
 
 // Fetches the versions of an account or zone ruleset.
-func (r *VersionService) ListAutoPaging(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[VersionListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, rulesetID, query, opts...))
+func (r *VersionService) ListAutoPaging(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[VersionListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, rulesetID, query, opts...))
 }
 
 // Deletes an existing version of an account or zone ruleset.

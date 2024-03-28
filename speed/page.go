@@ -8,9 +8,9 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -32,7 +32,7 @@ func NewPageService(opts ...option.RequestOption) (r *PageService) {
 }
 
 // Lists all webpages which have been tested.
-func (r *PageService) List(ctx context.Context, query PageListParams, opts ...option.RequestOption) (res *shared.SinglePage[PageListResponse], err error) {
+func (r *PageService) List(ctx context.Context, query PageListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PageListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -50,8 +50,8 @@ func (r *PageService) List(ctx context.Context, query PageListParams, opts ...op
 }
 
 // Lists all webpages which have been tested.
-func (r *PageService) ListAutoPaging(ctx context.Context, query PageListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PageListResponse] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *PageService) ListAutoPaging(ctx context.Context, query PageListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PageListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type PageListResponse struct {

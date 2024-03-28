@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -62,7 +62,7 @@ func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, p
 }
 
 // List configured health checks.
-func (r *HealthcheckService) List(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) (res *shared.SinglePage[Healthcheck], err error) {
+func (r *HealthcheckService) List(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Healthcheck], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,8 +80,8 @@ func (r *HealthcheckService) List(ctx context.Context, query HealthcheckListPara
 }
 
 // List configured health checks.
-func (r *HealthcheckService) ListAutoPaging(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[Healthcheck] {
-	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *HealthcheckService) ListAutoPaging(ctx context.Context, query HealthcheckListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Healthcheck] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a health check.
