@@ -517,7 +517,7 @@ func (r *CursorLimitPaginationAutoPager[T]) Index() int {
 }
 
 type SinglePage[T any] struct {
-	Items []T            `json:"-,inline"`
+	Items []T            `json:"items"`
 	JSON  singlePageJSON `json:"-"`
 	cfg   *requestconfig.RequestConfig
 	res   *http.Response
