@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -79,9 +80,10 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 strin
 }
 
 // Lists Access policies configured for an application.
-func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *[]ZeroTrustPolicies, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessApplicationPolicyListResponseEnvelope
+func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustPolicies], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -92,12 +94,21 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, 
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists Access policies configured for an application.
+func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustPolicies] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, uuid, query, opts...))
 }
 
 // Delete an Access policy.
@@ -5956,128 +5967,6 @@ type AccessApplicationPolicyListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-type AccessApplicationPolicyListResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustPolicies                                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccessApplicationPolicyListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessApplicationPolicyListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessApplicationPolicyListResponseEnvelopeJSON       `json:"-"`
-}
-
-// accessApplicationPolicyListResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AccessApplicationPolicyListResponseEnvelope]
-type accessApplicationPolicyListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyListResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    accessApplicationPolicyListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationPolicyListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessApplicationPolicyListResponseEnvelopeErrors]
-type accessApplicationPolicyListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyListResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    accessApplicationPolicyListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationPolicyListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyListResponseEnvelopeMessages]
-type accessApplicationPolicyListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessApplicationPolicyListResponseEnvelopeSuccess bool
-
-const (
-	AccessApplicationPolicyListResponseEnvelopeSuccessTrue AccessApplicationPolicyListResponseEnvelopeSuccess = true
-)
-
-func (r AccessApplicationPolicyListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessApplicationPolicyListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationPolicyListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                   `json:"total_count"`
-	JSON       accessApplicationPolicyListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessApplicationPolicyListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyListResponseEnvelopeResultInfo]
-type accessApplicationPolicyListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationPolicyDeleteParams struct {

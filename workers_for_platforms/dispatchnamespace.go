@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -48,16 +49,26 @@ func (r *DispatchNamespaceService) New(ctx context.Context, params DispatchNames
 }
 
 // Fetch a list of Workers for Platforms namespaces.
-func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) (res *[]DispatchNamespaceListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DispatchNamespaceListResponseEnvelope
+func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) (res *shared.SinglePage[DispatchNamespaceListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetch a list of Workers for Platforms namespaces.
+func (r *DispatchNamespaceService) ListAutoPaging(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DispatchNamespaceListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a Workers for Platforms namespace.
@@ -311,95 +322,6 @@ func (r DispatchNamespaceNewResponseEnvelopeSuccess) IsKnown() bool {
 type DispatchNamespaceListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DispatchNamespaceListResponseEnvelope struct {
-	Errors   []DispatchNamespaceListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatchNamespaceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DispatchNamespaceListResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success DispatchNamespaceListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dispatchNamespaceListResponseEnvelopeJSON    `json:"-"`
-}
-
-// dispatchNamespaceListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DispatchNamespaceListResponseEnvelope]
-type dispatchNamespaceListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DispatchNamespaceListResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    dispatchNamespaceListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dispatchNamespaceListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DispatchNamespaceListResponseEnvelopeErrors]
-type dispatchNamespaceListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DispatchNamespaceListResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    dispatchNamespaceListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dispatchNamespaceListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DispatchNamespaceListResponseEnvelopeMessages]
-type dispatchNamespaceListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DispatchNamespaceListResponseEnvelopeSuccess bool
-
-const (
-	DispatchNamespaceListResponseEnvelopeSuccessTrue DispatchNamespaceListResponseEnvelopeSuccess = true
-)
-
-func (r DispatchNamespaceListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type DispatchNamespaceDeleteParams struct {

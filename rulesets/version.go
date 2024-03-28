@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,9 +35,10 @@ func NewVersionService(opts ...option.RequestOption) (r *VersionService) {
 }
 
 // Fetches the versions of an account or zone ruleset.
-func (r *VersionService) List(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) (res *RulesetsRulesetsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env VersionListResponseEnvelope
+func (r *VersionService) List(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) (res *shared.SinglePage[VersionListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -47,12 +49,21 @@ func (r *VersionService) List(ctx context.Context, rulesetID string, query Versi
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions", accountOrZone, accountOrZoneID, rulesetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches the versions of an account or zone ruleset.
+func (r *VersionService) ListAutoPaging(ctx context.Context, rulesetID string, query VersionListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[VersionListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, rulesetID, query, opts...))
 }
 
 // Deletes an existing version of an account or zone ruleset.
@@ -196,157 +207,6 @@ type VersionListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-// A response object.
-type VersionListResponseEnvelope struct {
-	// A list of error messages.
-	Errors []VersionListResponseEnvelopeErrors `json:"errors,required"`
-	// A list of warning messages.
-	Messages []VersionListResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
-	Result RulesetsRulesetsResponse `json:"result,required"`
-	// Whether the API call was successful.
-	Success VersionListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    versionListResponseEnvelopeJSON    `json:"-"`
-}
-
-// versionListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [VersionListResponseEnvelope]
-type versionListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// A message.
-type VersionListResponseEnvelopeErrors struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source VersionListResponseEnvelopeErrorsSource `json:"source"`
-	JSON   versionListResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// versionListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [VersionListResponseEnvelopeErrors]
-type versionListResponseEnvelopeErrorsJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-// The source of this message.
-type VersionListResponseEnvelopeErrorsSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                      `json:"pointer,required"`
-	JSON    versionListResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// versionListResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
-// struct [VersionListResponseEnvelopeErrorsSource]
-type versionListResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// A message.
-type VersionListResponseEnvelopeMessages struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source VersionListResponseEnvelopeMessagesSource `json:"source"`
-	JSON   versionListResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// versionListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [VersionListResponseEnvelopeMessages]
-type versionListResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The source of this message.
-type VersionListResponseEnvelopeMessagesSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                        `json:"pointer,required"`
-	JSON    versionListResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// versionListResponseEnvelopeMessagesSourceJSON contains the JSON metadata for the
-// struct [VersionListResponseEnvelopeMessagesSource]
-type versionListResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type VersionListResponseEnvelopeSuccess bool
-
-const (
-	VersionListResponseEnvelopeSuccessTrue VersionListResponseEnvelopeSuccess = true
-)
-
-func (r VersionListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case VersionListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type VersionDeleteParams struct {

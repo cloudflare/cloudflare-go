@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -50,16 +51,26 @@ func (r *PCAPService) New(ctx context.Context, params PCAPNewParams, opts ...opt
 }
 
 // Lists all packet capture requests for an account.
-func (r *PCAPService) List(ctx context.Context, query PCAPListParams, opts ...option.RequestOption) (res *[]PCAPListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PCAPListResponseEnvelope
+func (r *PCAPService) List(ctx context.Context, query PCAPListParams, opts ...option.RequestOption) (res *shared.SinglePage[PCAPListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/pcaps", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all packet capture requests for an account.
+func (r *PCAPService) ListAutoPaging(ctx context.Context, query PCAPListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PCAPListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Get information for a PCAP request by id.
@@ -1250,128 +1261,6 @@ func (r PCAPNewResponseEnvelopeSuccess) IsKnown() bool {
 type PCAPListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type PCAPListResponseEnvelope struct {
-	Errors   []PCAPListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PCAPListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PCAPListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    PCAPListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PCAPListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       pcapListResponseEnvelopeJSON       `json:"-"`
-}
-
-// pcapListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PCAPListResponseEnvelope]
-type pcapListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    pcapListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pcapListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PCAPListResponseEnvelopeErrors]
-type pcapListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PCAPListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    pcapListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pcapListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PCAPListResponseEnvelopeMessages]
-type pcapListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PCAPListResponseEnvelopeSuccess bool
-
-const (
-	PCAPListResponseEnvelopeSuccessTrue PCAPListResponseEnvelopeSuccess = true
-)
-
-func (r PCAPListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PCAPListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PCAPListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       pcapListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// pcapListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [PCAPListResponseEnvelopeResultInfo]
-type pcapListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PCAPListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pcapListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type PCAPGetParams struct {

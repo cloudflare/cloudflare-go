@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,16 +34,26 @@ func NewGatewayListItemService(opts ...option.RequestOption) (r *GatewayListItem
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *[][]GatewayListItemListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env GatewayListItemListResponseEnvelope
+func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *shared.SinglePage[[]GatewayListItemListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s/items", query.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches all items in a single Zero Trust list.
+func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[[]GatewayListItemListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, listID, query, opts...))
 }
 
 type GatewayListItemListResponse struct {
@@ -71,126 +82,4 @@ func (r gatewayListItemListResponseJSON) RawJSON() string {
 
 type GatewayListItemListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type GatewayListItemListResponseEnvelope struct {
-	Errors   []GatewayListItemListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayListItemListResponseEnvelopeMessages `json:"messages,required"`
-	Result   [][]GatewayListItemListResponse               `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    GatewayListItemListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo GatewayListItemListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       gatewayListItemListResponseEnvelopeJSON       `json:"-"`
-}
-
-// gatewayListItemListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [GatewayListItemListResponseEnvelope]
-type gatewayListItemListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListItemListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayListItemListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayListItemListResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    gatewayListItemListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayListItemListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayListItemListResponseEnvelopeErrors]
-type gatewayListItemListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListItemListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayListItemListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayListItemListResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    gatewayListItemListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayListItemListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [GatewayListItemListResponseEnvelopeMessages]
-type gatewayListItemListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListItemListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayListItemListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type GatewayListItemListResponseEnvelopeSuccess bool
-
-const (
-	GatewayListItemListResponseEnvelopeSuccessTrue GatewayListItemListResponseEnvelopeSuccess = true
-)
-
-func (r GatewayListItemListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case GatewayListItemListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type GatewayListItemListResponseEnvelopeResultInfo struct {
-	// Total results returned based on your search parameters.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64                                           `json:"total_count"`
-	JSON       gatewayListItemListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// gatewayListItemListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [GatewayListItemListResponseEnvelopeResultInfo]
-type gatewayListItemListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListItemListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayListItemListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

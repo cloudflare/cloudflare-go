@@ -51,16 +51,26 @@ func (r *SnippetService) Update(ctx context.Context, zoneIdentifier string, snip
 }
 
 // All Snippets
-func (r *SnippetService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]Snippet, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SnippetListResponseEnvelope
+func (r *SnippetService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[Snippet], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/snippets", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// All Snippets
+func (r *SnippetService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[Snippet] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
 }
 
 // Delete Snippet
@@ -246,96 +256,6 @@ const (
 func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SnippetUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type SnippetListResponseEnvelope struct {
-	Errors   []SnippetListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SnippetListResponseEnvelopeMessages `json:"messages,required"`
-	// List of all zone snippets
-	Result []Snippet `json:"result,required"`
-	// Whether the API call was successful
-	Success SnippetListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    snippetListResponseEnvelopeJSON    `json:"-"`
-}
-
-// snippetListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SnippetListResponseEnvelope]
-type snippetListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SnippetListResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    snippetListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// snippetListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SnippetListResponseEnvelopeErrors]
-type snippetListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SnippetListResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    snippetListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// snippetListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SnippetListResponseEnvelopeMessages]
-type snippetListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SnippetListResponseEnvelopeSuccess bool
-
-const (
-	SnippetListResponseEnvelopeSuccessTrue SnippetListResponseEnvelopeSuccess = true
-)
-
-func (r SnippetListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SnippetListResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

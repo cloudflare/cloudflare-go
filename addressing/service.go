@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,16 +35,29 @@ func NewServiceService(opts ...option.RequestOption) (r *ServiceService) {
 // service running on the Cloudflare network to enable a Cloudflare product on the
 // IP addresses. This endpoint can be used as a reference of available services on
 // the Cloudflare network, and their service IDs.
-func (r *ServiceService) List(ctx context.Context, query ServiceListParams, opts ...option.RequestOption) (res *[]ServiceListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ServiceListResponseEnvelope
+func (r *ServiceService) List(ctx context.Context, query ServiceListParams, opts ...option.RequestOption) (res *shared.SinglePage[ServiceListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/services", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Bring-Your-Own IP (BYOIP) prefixes onboarded to Cloudflare must be bound to a
+// service running on the Cloudflare network to enable a Cloudflare product on the
+// IP addresses. This endpoint can be used as a reference of available services on
+// the Cloudflare network, and their service IDs.
+func (r *ServiceService) ListAutoPaging(ctx context.Context, query ServiceListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ServiceListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 type ServiceListResponse struct {
@@ -74,93 +88,4 @@ func (r serviceListResponseJSON) RawJSON() string {
 type ServiceListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ServiceListResponseEnvelope struct {
-	Errors   []ServiceListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ServiceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ServiceListResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success ServiceListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    serviceListResponseEnvelopeJSON    `json:"-"`
-}
-
-// serviceListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ServiceListResponseEnvelope]
-type serviceListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ServiceListResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    serviceListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// serviceListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ServiceListResponseEnvelopeErrors]
-type serviceListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ServiceListResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    serviceListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// serviceListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ServiceListResponseEnvelopeMessages]
-type serviceListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ServiceListResponseEnvelopeSuccess bool
-
-const (
-	ServiceListResponseEnvelopeSuccessTrue ServiceListResponseEnvelopeSuccess = true
-)
-
-func (r ServiceListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ServiceListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

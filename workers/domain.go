@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -46,16 +47,26 @@ func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, o
 }
 
 // Lists all Worker Domains for an account.
-func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *[]WorkersDomain, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DomainListResponseEnvelope
+func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *shared.SinglePage[WorkersDomain], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/workers/domains", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all Worker Domains for an account.
+func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[WorkersDomain] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Detaches a Worker from a zone and hostname.
@@ -241,95 +252,6 @@ func (r DomainListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type DomainListResponseEnvelope struct {
-	Errors   []DomainListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersDomain                      `json:"result,required"`
-	// Whether the API call was successful
-	Success DomainListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    domainListResponseEnvelopeJSON    `json:"-"`
-}
-
-// domainListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DomainListResponseEnvelope]
-type domainListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    domainListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// domainListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DomainListResponseEnvelopeErrors]
-type domainListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainListResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    domainListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// domainListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DomainListResponseEnvelopeMessages]
-type domainListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DomainListResponseEnvelopeSuccess bool
-
-const (
-	DomainListResponseEnvelopeSuccessTrue DomainListResponseEnvelopeSuccess = true
-)
-
-func (r DomainListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DomainListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type DomainDeleteParams struct {

@@ -49,16 +49,26 @@ func (r *SubscriptionService) New(ctx context.Context, identifier string, body S
 }
 
 // Lists all of an account's subscriptions.
-func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]SubscriptionListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SubscriptionListResponseEnvelope
+func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[SubscriptionListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/subscriptions", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all of an account's subscriptions.
+func (r *SubscriptionService) ListAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[SubscriptionListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, accountIdentifier, opts...))
 }
 
 // Lists zone subscription details.
@@ -496,128 +506,6 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type SubscriptionListResponseEnvelope struct {
-	Errors   []SubscriptionListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SubscriptionListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []SubscriptionListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    SubscriptionListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo SubscriptionListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       subscriptionListResponseEnvelopeJSON       `json:"-"`
-}
-
-// subscriptionListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SubscriptionListResponseEnvelope]
-type subscriptionListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SubscriptionListResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    subscriptionListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// subscriptionListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SubscriptionListResponseEnvelopeErrors]
-type subscriptionListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SubscriptionListResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    subscriptionListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// subscriptionListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SubscriptionListResponseEnvelopeMessages]
-type subscriptionListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SubscriptionListResponseEnvelopeSuccess bool
-
-const (
-	SubscriptionListResponseEnvelopeSuccessTrue SubscriptionListResponseEnvelopeSuccess = true
-)
-
-func (r SubscriptionListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SubscriptionListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type SubscriptionListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       subscriptionListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// subscriptionListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [SubscriptionListResponseEnvelopeResultInfo]
-type subscriptionListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type SubscriptionGetResponseEnvelope struct {

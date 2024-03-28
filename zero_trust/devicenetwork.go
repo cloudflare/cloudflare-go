@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -58,16 +59,26 @@ func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, par
 }
 
 // Fetches a list of managed networks for an account.
-func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *[]DeviceManagedNetworks, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DeviceNetworkListResponseEnvelope
+func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *shared.SinglePage[DeviceManagedNetworks], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/devices/networks", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches a list of managed networks for an account.
+func (r *DeviceNetworkService) ListAutoPaging(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[DeviceManagedNetworks] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a device managed network and fetches a list of the remaining device
@@ -446,128 +457,6 @@ func (r DeviceNetworkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type DeviceNetworkListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type DeviceNetworkListResponseEnvelope struct {
-	Errors   []DeviceNetworkListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceNetworkListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DeviceManagedNetworks                     `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DeviceNetworkListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DeviceNetworkListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       deviceNetworkListResponseEnvelopeJSON       `json:"-"`
-}
-
-// deviceNetworkListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DeviceNetworkListResponseEnvelope]
-type deviceNetworkListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceNetworkListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    deviceNetworkListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceNetworkListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceNetworkListResponseEnvelopeErrors]
-type deviceNetworkListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceNetworkListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    deviceNetworkListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceNetworkListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DeviceNetworkListResponseEnvelopeMessages]
-type deviceNetworkListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type DeviceNetworkListResponseEnvelopeSuccess bool
-
-const (
-	DeviceNetworkListResponseEnvelopeSuccessTrue DeviceNetworkListResponseEnvelopeSuccess = true
-)
-
-func (r DeviceNetworkListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DeviceNetworkListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DeviceNetworkListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                         `json:"total_count"`
-	JSON       deviceNetworkListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// deviceNetworkListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [DeviceNetworkListResponseEnvelopeResultInfo]
-type deviceNetworkListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceNetworkListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type DeviceNetworkDeleteParams struct {

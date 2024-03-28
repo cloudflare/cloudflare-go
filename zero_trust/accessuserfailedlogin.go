@@ -9,6 +9,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -31,16 +32,26 @@ func NewAccessUserFailedLoginService(opts ...option.RequestOption) (r *AccessUse
 }
 
 // Get all failed login attempts for a single user.
-func (r *AccessUserFailedLoginService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *[]AccessUserFailedLoginListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessUserFailedLoginListResponseEnvelope
+func (r *AccessUserFailedLoginService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *shared.SinglePage[AccessUserFailedLoginListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/access/users/%s/failed_logins", identifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get all failed login attempts for a single user.
+func (r *AccessUserFailedLoginService) ListAutoPaging(ctx context.Context, identifier string, id string, opts ...option.RequestOption) *shared.SinglePageAutoPager[AccessUserFailedLoginListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, identifier, id, opts...))
 }
 
 type AccessUserFailedLoginListResponse struct {
@@ -63,127 +74,5 @@ func (r *AccessUserFailedLoginListResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r accessUserFailedLoginListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessUserFailedLoginListResponseEnvelope struct {
-	Errors   []AccessUserFailedLoginListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessUserFailedLoginListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessUserFailedLoginListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccessUserFailedLoginListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessUserFailedLoginListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessUserFailedLoginListResponseEnvelopeJSON       `json:"-"`
-}
-
-// accessUserFailedLoginListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessUserFailedLoginListResponseEnvelope]
-type accessUserFailedLoginListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserFailedLoginListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessUserFailedLoginListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessUserFailedLoginListResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    accessUserFailedLoginListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessUserFailedLoginListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessUserFailedLoginListResponseEnvelopeErrors]
-type accessUserFailedLoginListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserFailedLoginListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessUserFailedLoginListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessUserFailedLoginListResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    accessUserFailedLoginListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessUserFailedLoginListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessUserFailedLoginListResponseEnvelopeMessages]
-type accessUserFailedLoginListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserFailedLoginListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessUserFailedLoginListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessUserFailedLoginListResponseEnvelopeSuccess bool
-
-const (
-	AccessUserFailedLoginListResponseEnvelopeSuccessTrue AccessUserFailedLoginListResponseEnvelopeSuccess = true
-)
-
-func (r AccessUserFailedLoginListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessUserFailedLoginListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AccessUserFailedLoginListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                 `json:"total_count"`
-	JSON       accessUserFailedLoginListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessUserFailedLoginListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [AccessUserFailedLoginListResponseEnvelopeResultInfo]
-type accessUserFailedLoginListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserFailedLoginListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessUserFailedLoginListResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
 }

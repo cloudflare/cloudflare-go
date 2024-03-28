@@ -62,16 +62,26 @@ func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params G
 }
 
 // Fetches the Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayRules, err error) {
-	opts = append(r.Options[:], opts...)
-	var env GatewayRuleListResponseEnvelope
+func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *shared.SinglePage[ZeroTrustGatewayRules], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/gateway/rules", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches the Zero Trust Gateway rules for an account.
+func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[ZeroTrustGatewayRules] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a Zero Trust Gateway rule.
@@ -1609,128 +1619,6 @@ func (r GatewayRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayRuleListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type GatewayRuleListResponseEnvelope struct {
-	Errors   []GatewayRuleListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayRuleListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustGatewayRules                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    GatewayRuleListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo GatewayRuleListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       gatewayRuleListResponseEnvelopeJSON       `json:"-"`
-}
-
-// gatewayRuleListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [GatewayRuleListResponseEnvelope]
-type gatewayRuleListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayRuleListResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    gatewayRuleListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayRuleListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayRuleListResponseEnvelopeErrors]
-type gatewayRuleListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayRuleListResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    gatewayRuleListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayRuleListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GatewayRuleListResponseEnvelopeMessages]
-type gatewayRuleListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type GatewayRuleListResponseEnvelopeSuccess bool
-
-const (
-	GatewayRuleListResponseEnvelopeSuccessTrue GatewayRuleListResponseEnvelopeSuccess = true
-)
-
-func (r GatewayRuleListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case GatewayRuleListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type GatewayRuleListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                       `json:"total_count"`
-	JSON       gatewayRuleListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// gatewayRuleListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [GatewayRuleListResponseEnvelopeResultInfo]
-type gatewayRuleListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type GatewayRuleDeleteParams struct {

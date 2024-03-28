@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -69,16 +70,26 @@ func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string,
 }
 
 // List configured load balancers.
-func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) (res *[]LoadBalancer, err error) {
-	opts = append(r.Options[:], opts...)
-	var env LoadBalancerListResponseEnvelope
+func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) (res *shared.SinglePage[LoadBalancer], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/load_balancers", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List configured load balancers.
+func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[LoadBalancer] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a configured load balancer.
@@ -3261,128 +3272,6 @@ func (r LoadBalancerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type LoadBalancerListParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type LoadBalancerListResponseEnvelope struct {
-	Errors   []LoadBalancerListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LoadBalancer                             `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    LoadBalancerListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo LoadBalancerListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       loadBalancerListResponseEnvelopeJSON       `json:"-"`
-}
-
-// loadBalancerListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [LoadBalancerListResponseEnvelope]
-type loadBalancerListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerListResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    loadBalancerListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [LoadBalancerListResponseEnvelopeErrors]
-type loadBalancerListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerListResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    loadBalancerListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [LoadBalancerListResponseEnvelopeMessages]
-type loadBalancerListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type LoadBalancerListResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerListResponseEnvelopeSuccessTrue LoadBalancerListResponseEnvelopeSuccess = true
-)
-
-func (r LoadBalancerListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case LoadBalancerListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       loadBalancerListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// loadBalancerListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [LoadBalancerListResponseEnvelopeResultInfo]
-type loadBalancerListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type LoadBalancerDeleteParams struct {

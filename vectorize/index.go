@@ -60,16 +60,26 @@ func (r *IndexService) Update(ctx context.Context, accountIdentifier string, ind
 }
 
 // Returns a list of Vectorize Indexes
-func (r *IndexService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]VectorizeCreateIndex, err error) {
-	opts = append(r.Options[:], opts...)
-	var env IndexListResponseEnvelope
+func (r *IndexService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *shared.SinglePage[VectorizeCreateIndex], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns a list of Vectorize Indexes
+func (r *IndexService) ListAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *shared.SinglePageAutoPager[VectorizeCreateIndex] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, accountIdentifier, opts...))
 }
 
 // Deletes the specified Vectorize Index.
@@ -652,95 +662,6 @@ const (
 func (r IndexUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case IndexUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type IndexListResponseEnvelope struct {
-	Errors   []IndexListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndexListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []VectorizeCreateIndex              `json:"result,required"`
-	// Whether the API call was successful
-	Success IndexListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    indexListResponseEnvelopeJSON    `json:"-"`
-}
-
-// indexListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IndexListResponseEnvelope]
-type indexListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexListResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    indexListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indexListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IndexListResponseEnvelopeErrors]
-type indexListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndexListResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    indexListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indexListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [IndexListResponseEnvelopeMessages]
-type indexListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndexListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indexListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type IndexListResponseEnvelopeSuccess bool
-
-const (
-	IndexListResponseEnvelopeSuccessTrue IndexListResponseEnvelopeSuccess = true
-)
-
-func (r IndexListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case IndexListResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

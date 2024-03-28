@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,16 +62,26 @@ func (r *IndicatorFeedService) Update(ctx context.Context, feedID int64, params 
 }
 
 // Get indicator feeds owned by this account
-func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) (res *[]IndicatorFeedListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env IndicatorFeedListResponseEnvelope
+func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) (res *shared.SinglePage[IndicatorFeedListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get indicator feeds owned by this account
+func (r *IndicatorFeedService) ListAutoPaging(ctx context.Context, query IndicatorFeedListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[IndicatorFeedListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Get indicator feed data
@@ -453,95 +464,6 @@ func (r IndicatorFeedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type IndicatorFeedListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type IndicatorFeedListResponseEnvelope struct {
-	Errors   []IndicatorFeedListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IndicatorFeedListResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success IndicatorFeedListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    indicatorFeedListResponseEnvelopeJSON    `json:"-"`
-}
-
-// indicatorFeedListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IndicatorFeedListResponseEnvelope]
-type indicatorFeedListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    indicatorFeedListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indicatorFeedListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IndicatorFeedListResponseEnvelopeErrors]
-type indicatorFeedListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    indicatorFeedListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indicatorFeedListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IndicatorFeedListResponseEnvelopeMessages]
-type indicatorFeedListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type IndicatorFeedListResponseEnvelopeSuccess bool
-
-const (
-	IndicatorFeedListResponseEnvelopeSuccessTrue IndicatorFeedListResponseEnvelopeSuccess = true
-)
-
-func (r IndicatorFeedListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case IndicatorFeedListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type IndicatorFeedDataParams struct {

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -33,9 +34,10 @@ func NewPhaseVersionService(opts ...option.RequestOption) (r *PhaseVersionServic
 }
 
 // Fetches the versions of an account or zone entry point ruleset.
-func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) (res *RulesetsRulesetsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PhaseVersionListResponseEnvelope
+func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) (res *shared.SinglePage[PhaseVersionListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -46,12 +48,21 @@ func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase PhaseVersio
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/phases/%v/entrypoint/versions", accountOrZone, accountOrZoneID, rulesetPhase)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches the versions of an account or zone entry point ruleset.
+func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase PhaseVersionListParamsRulesetPhase, query PhaseVersionListParams, opts ...option.RequestOption) *shared.SinglePageAutoPager[PhaseVersionListResponse] {
+	return shared.NewSinglePageAutoPager(r.List(ctx, rulesetPhase, query, opts...))
 }
 
 // Fetches a specific version of an account or zone entry point ruleset.
@@ -211,157 +222,6 @@ const (
 func (r PhaseVersionListParamsRulesetPhase) IsKnown() bool {
 	switch r {
 	case PhaseVersionListParamsRulesetPhaseDDoSL4, PhaseVersionListParamsRulesetPhaseDDoSL7, PhaseVersionListParamsRulesetPhaseHTTPConfigSettings, PhaseVersionListParamsRulesetPhaseHTTPCustomErrors, PhaseVersionListParamsRulesetPhaseHTTPLogCustomFields, PhaseVersionListParamsRulesetPhaseHTTPRatelimit, PhaseVersionListParamsRulesetPhaseHTTPRequestCacheSettings, PhaseVersionListParamsRulesetPhaseHTTPRequestDynamicRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom, PhaseVersionListParamsRulesetPhaseHTTPRequestFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPRequestLateTransform, PhaseVersionListParamsRulesetPhaseHTTPRequestOrigin, PhaseVersionListParamsRulesetPhaseHTTPRequestRedirect, PhaseVersionListParamsRulesetPhaseHTTPRequestSanitize, PhaseVersionListParamsRulesetPhaseHTTPRequestSbfm, PhaseVersionListParamsRulesetPhaseHTTPRequestSelectConfiguration, PhaseVersionListParamsRulesetPhaseHTTPRequestTransform, PhaseVersionListParamsRulesetPhaseHTTPResponseCompression, PhaseVersionListParamsRulesetPhaseHTTPResponseFirewallManaged, PhaseVersionListParamsRulesetPhaseHTTPResponseHeadersTransform, PhaseVersionListParamsRulesetPhaseMagicTransit, PhaseVersionListParamsRulesetPhaseMagicTransitIDsManaged, PhaseVersionListParamsRulesetPhaseMagicTransitManaged:
-		return true
-	}
-	return false
-}
-
-// A response object.
-type PhaseVersionListResponseEnvelope struct {
-	// A list of error messages.
-	Errors []PhaseVersionListResponseEnvelopeErrors `json:"errors,required"`
-	// A list of warning messages.
-	Messages []PhaseVersionListResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
-	Result RulesetsRulesetsResponse `json:"result,required"`
-	// Whether the API call was successful.
-	Success PhaseVersionListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    phaseVersionListResponseEnvelopeJSON    `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PhaseVersionListResponseEnvelope]
-type phaseVersionListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// A message.
-type PhaseVersionListResponseEnvelopeErrors struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source PhaseVersionListResponseEnvelopeErrorsSource `json:"source"`
-	JSON   phaseVersionListResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PhaseVersionListResponseEnvelopeErrors]
-type phaseVersionListResponseEnvelopeErrorsJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-// The source of this message.
-type PhaseVersionListResponseEnvelopeErrorsSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                           `json:"pointer,required"`
-	JSON    phaseVersionListResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
-// the struct [PhaseVersionListResponseEnvelopeErrorsSource]
-type phaseVersionListResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// A message.
-type PhaseVersionListResponseEnvelopeMessages struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source PhaseVersionListResponseEnvelopeMessagesSource `json:"source"`
-	JSON   phaseVersionListResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PhaseVersionListResponseEnvelopeMessages]
-type phaseVersionListResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The source of this message.
-type PhaseVersionListResponseEnvelopeMessagesSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                             `json:"pointer,required"`
-	JSON    phaseVersionListResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// phaseVersionListResponseEnvelopeMessagesSourceJSON contains the JSON metadata
-// for the struct [PhaseVersionListResponseEnvelopeMessagesSource]
-type phaseVersionListResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type PhaseVersionListResponseEnvelopeSuccess bool
-
-const (
-	PhaseVersionListResponseEnvelopeSuccessTrue PhaseVersionListResponseEnvelopeSuccess = true
-)
-
-func (r PhaseVersionListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PhaseVersionListResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
