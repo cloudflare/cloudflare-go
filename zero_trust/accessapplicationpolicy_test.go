@@ -51,11 +51,11 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 			ZoneID:    cloudflare.F("string"),
 			ApprovalGroups: cloudflare.F([]zero_trust.AccessApplicationPolicyNewParamsApprovalGroup{{
 				ApprovalsNeeded: cloudflare.F(1.000000),
-				EmailAddresses:  cloudflare.F([]interface{}{"test1@cloudflare.com", "test2@cloudflare.com"}),
+				EmailAddresses:  cloudflare.F([]string{"test1@cloudflare.com", "test2@cloudflare.com"}),
 				EmailListUUID:   cloudflare.F("string"),
 			}, {
 				ApprovalsNeeded: cloudflare.F(3.000000),
-				EmailAddresses:  cloudflare.F([]interface{}{"test@cloudflare.com", "test2@cloudflare.com"}),
+				EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),
 				EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
 			}}),
 			ApprovalRequired: cloudflare.F(true),
@@ -139,11 +139,11 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 			ZoneID:    cloudflare.F("string"),
 			ApprovalGroups: cloudflare.F([]zero_trust.AccessApplicationPolicyUpdateParamsApprovalGroup{{
 				ApprovalsNeeded: cloudflare.F(1.000000),
-				EmailAddresses:  cloudflare.F([]interface{}{"test1@cloudflare.com", "test2@cloudflare.com"}),
+				EmailAddresses:  cloudflare.F([]string{"test1@cloudflare.com", "test2@cloudflare.com"}),
 				EmailListUUID:   cloudflare.F("string"),
 			}, {
 				ApprovalsNeeded: cloudflare.F(3.000000),
-				EmailAddresses:  cloudflare.F([]interface{}{"test@cloudflare.com", "test2@cloudflare.com"}),
+				EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),
 				EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
 			}}),
 			ApprovalRequired: cloudflare.F(true),

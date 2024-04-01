@@ -199,7 +199,7 @@ func (r zeroTrustServiceTokensJSON) RawJSON() string {
 
 type AccessServiceTokenNewResponse struct {
 	// The ID of the service token.
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
 	// `CF-Access-Client-ID` request header.
 	ClientID string `json:"client_id"`
@@ -241,7 +241,7 @@ func (r accessServiceTokenNewResponseJSON) RawJSON() string {
 
 type AccessServiceTokenRotateResponse struct {
 	// The ID of the service token.
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
 	// `CF-Access-Client-ID` request header.
 	ClientID string `json:"client_id"`
