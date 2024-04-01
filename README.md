@@ -257,7 +257,7 @@ file returned by `os.Open` will be sent with the file name on disk.
 We also provide a helper `cloudflare.FileParam(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
 
-## Retries
+### Retries
 
 Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
 We retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,
@@ -280,6 +280,55 @@ client.Zones.Get(
 	option.WithMaxRetries(5),
 )
 ```
+
+### Making custom/undocumented requests
+
+This library is typed for convenient access to the documented API. If you need to access undocumented
+endpoints, params, or response properties, the library can still be used.
+
+#### Undocumented endpoints
+
+To make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.
+`RequestOptions` on the client, such as retries, will be respected when making these requests.
+
+```go
+var (
+    // params can be an io.Reader, a []byte, an encoding/json serializable object,
+    // or a "…Params" struct defined in this library.
+    params map[string]interface{}
+
+    // result can be an []byte, *http.Response, a encoding/json deserializable object,
+    // or a model defined in this library.
+    result *http.Response
+)
+err := client.Post(context.Background(), "/unspecified", params, &result)
+if err != nil {
+    …
+}
+```
+
+#### Undocumented request params
+
+To make requests using undocumented parameters, you may use either the `option.WithQuerySet()`
+or the `option.WithJSONSet()` methods.
+
+```go
+params := FooNewParams{
+    ID:   cloudflare.F("id_xxxx"),
+    Data: cloudflare.F(FooNewParamsData{
+        FirstName: cloudflare.F("John"),
+    }),
+}
+client.Foo.New(context.Background(), params, option.WithJSONSet("data.last_name", "Doe"))
+```
+
+#### Undocumented response properties
+
+To access undocumented response properties, you may either access the raw JSON of the response as a string
+with `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with
+`result.JSON.Foo.Raw()`.
+
+Any fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.
 
 ### Middleware
 
