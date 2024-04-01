@@ -157,7 +157,7 @@ func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query A
 
 type ZeroTrustCertificates struct {
 	// The ID of the application that will use this certificate.
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// The hostnames of the applications that will use this certificate.
 	AssociatedHostnames []string  `json:"associated_hostnames"`
 	CreatedAt           time.Time `json:"created_at" format:"date-time"`
