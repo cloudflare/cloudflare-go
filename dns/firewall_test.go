@@ -35,7 +35,6 @@ func TestFirewallNewWithOptionalParams(t *testing.T) {
 		UpstreamIPs: cloudflare.F([]dns.FirewallNewParamsUpstreamIP{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
 		AttackMitigation: cloudflare.F(dns.FirewallNewParamsAttackMitigation{
 			Enabled:                   cloudflare.F(true),
-			OnlyWhenOriginUnhealthy:   cloudflare.F[any](map[string]interface{}{}),
 			OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
 		}),
 		DeprecateAnyRequests: cloudflare.F(true),
@@ -43,7 +42,6 @@ func TestFirewallNewWithOptionalParams(t *testing.T) {
 		MaximumCacheTTL:      cloudflare.F(900.000000),
 		MinimumCacheTTL:      cloudflare.F(60.000000),
 		NegativeCacheTTL:     cloudflare.F(900.000000),
-		OriginIPs:            cloudflare.F[any](map[string]interface{}{}),
 		Ratelimit:            cloudflare.F(600.000000),
 		Retries:              cloudflare.F(2.000000),
 	})
@@ -142,11 +140,9 @@ func TestFirewallEditWithOptionalParams(t *testing.T) {
 			UpstreamIPs:          cloudflare.F([]dns.FirewallEditParamsUpstreamIP{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
 			AttackMitigation: cloudflare.F(dns.FirewallEditParamsAttackMitigation{
 				Enabled:                   cloudflare.F(true),
-				OnlyWhenOriginUnhealthy:   cloudflare.F[any](map[string]interface{}{}),
 				OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
 			}),
 			NegativeCacheTTL: cloudflare.F(900.000000),
-			OriginIPs:        cloudflare.F[any](map[string]interface{}{}),
 			Ratelimit:        cloudflare.F(600.000000),
 			Retries:          cloudflare.F(2.000000),
 		},

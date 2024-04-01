@@ -135,8 +135,6 @@ type DNSFirewall struct {
 	AttackMitigation DNSFirewallAttackMitigation `json:"attack_mitigation,nullable"`
 	// Negative DNS Cache TTL.
 	NegativeCacheTTL float64 `json:"negative_cache_ttl,nullable"`
-	// Deprecated alias for "upstream_ips".
-	OriginIPs interface{} `json:"origin_ips"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster).
 	Ratelimit float64 `json:"ratelimit,nullable"`
@@ -159,7 +157,6 @@ type dnsFirewallJSON struct {
 	UpstreamIPs          apijson.Field
 	AttackMitigation     apijson.Field
 	NegativeCacheTTL     apijson.Field
-	OriginIPs            apijson.Field
 	Ratelimit            apijson.Field
 	Retries              apijson.Field
 	raw                  string
@@ -223,8 +220,6 @@ type DNSFirewallAttackMitigation struct {
 	// When enabled, random-prefix attacks are automatically mitigated and the upstream
 	// DNS servers protected.
 	Enabled bool `json:"enabled"`
-	// Deprecated alias for "only_when_upstream_unhealthy".
-	OnlyWhenOriginUnhealthy interface{} `json:"only_when_origin_unhealthy"`
 	// Only mitigate attacks when upstream servers seem unhealthy.
 	OnlyWhenUpstreamUnhealthy bool                            `json:"only_when_upstream_unhealthy"`
 	JSON                      dnsFirewallAttackMitigationJSON `json:"-"`
@@ -234,7 +229,6 @@ type DNSFirewallAttackMitigation struct {
 // [DNSFirewallAttackMitigation]
 type dnsFirewallAttackMitigationJSON struct {
 	Enabled                   apijson.Field
-	OnlyWhenOriginUnhealthy   apijson.Field
 	OnlyWhenUpstreamUnhealthy apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -288,8 +282,6 @@ type FirewallNewParams struct {
 	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl"`
 	// Negative DNS Cache TTL.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
-	// Deprecated alias for "upstream_ips".
-	OriginIPs param.Field[interface{}] `json:"origin_ips"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster).
 	Ratelimit param.Field[float64] `json:"ratelimit"`
@@ -314,8 +306,6 @@ type FirewallNewParamsAttackMitigation struct {
 	// When enabled, random-prefix attacks are automatically mitigated and the upstream
 	// DNS servers protected.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Deprecated alias for "only_when_upstream_unhealthy".
-	OnlyWhenOriginUnhealthy param.Field[interface{}] `json:"only_when_origin_unhealthy"`
 	// Only mitigate attacks when upstream servers seem unhealthy.
 	OnlyWhenUpstreamUnhealthy param.Field[bool] `json:"only_when_upstream_unhealthy"`
 }
@@ -543,8 +533,6 @@ type FirewallEditParams struct {
 	AttackMitigation param.Field[FirewallEditParamsAttackMitigation] `json:"attack_mitigation"`
 	// Negative DNS Cache TTL.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
-	// Deprecated alias for "upstream_ips".
-	OriginIPs param.Field[interface{}] `json:"origin_ips"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster).
 	Ratelimit param.Field[float64] `json:"ratelimit"`
@@ -576,8 +564,6 @@ type FirewallEditParamsAttackMitigation struct {
 	// When enabled, random-prefix attacks are automatically mitigated and the upstream
 	// DNS servers protected.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Deprecated alias for "only_when_upstream_unhealthy".
-	OnlyWhenOriginUnhealthy param.Field[interface{}] `json:"only_when_origin_unhealthy"`
 	// Only mitigate attacks when upstream servers seem unhealthy.
 	OnlyWhenUpstreamUnhealthy param.Field[bool] `json:"only_when_upstream_unhealthy"`
 }
