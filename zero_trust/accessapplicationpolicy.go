@@ -230,7 +230,7 @@ type ZeroTrustPoliciesApprovalGroup struct {
 	// The number of approvals needed to obtain access.
 	ApprovalsNeeded float64 `json:"approvals_needed,required"`
 	// A list of emails that can approve the access request.
-	EmailAddresses []interface{} `json:"email_addresses"`
+	EmailAddresses []string `json:"email_addresses"`
 	// The UUID of an re-usable email list.
 	EmailListUUID string                             `json:"email_list_uuid"`
 	JSON          zeroTrustPoliciesApprovalGroupJSON `json:"-"`
@@ -3630,7 +3630,7 @@ type AccessApplicationPolicyNewParamsApprovalGroup struct {
 	// The number of approvals needed to obtain access.
 	ApprovalsNeeded param.Field[float64] `json:"approvals_needed,required"`
 	// A list of emails that can approve the access request.
-	EmailAddresses param.Field[[]interface{}] `json:"email_addresses"`
+	EmailAddresses param.Field[[]string] `json:"email_addresses"`
 	// The UUID of an re-usable email list.
 	EmailListUUID param.Field[string] `json:"email_list_uuid"`
 }
@@ -5036,7 +5036,7 @@ type AccessApplicationPolicyUpdateParamsApprovalGroup struct {
 	// The number of approvals needed to obtain access.
 	ApprovalsNeeded param.Field[float64] `json:"approvals_needed,required"`
 	// A list of emails that can approve the access request.
-	EmailAddresses param.Field[[]interface{}] `json:"email_addresses"`
+	EmailAddresses param.Field[[]string] `json:"email_addresses"`
 	// The UUID of an re-usable email list.
 	EmailListUUID param.Field[string] `json:"email_list_uuid"`
 }

@@ -109,7 +109,7 @@ func (r *AccessBookmarkService) Get(ctx context.Context, identifier string, uuid
 
 type ZeroTrustBookmarks struct {
 	// The unique identifier for the Bookmark application.
-	ID interface{} `json:"id"`
+	ID string `json:"id"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool      `json:"app_launcher_visible"`
 	CreatedAt          time.Time `json:"created_at" format:"date-time"`

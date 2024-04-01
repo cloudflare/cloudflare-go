@@ -357,11 +357,11 @@ type ZeroTrustAppsSelfHostedApplicationCorsHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials bool `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders []interface{} `json:"allowed_headers"`
+	AllowedHeaders []string `json:"allowed_headers"`
 	// Allowed HTTP request methods.
 	AllowedMethods []ZeroTrustAppsSelfHostedApplicationCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins []interface{} `json:"allowed_origins"`
+	AllowedOrigins []string `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge float64                                           `json:"max_age"`
 	JSON   zeroTrustAppsSelfHostedApplicationCorsHeadersJSON `json:"-"`
@@ -890,11 +890,11 @@ type ZeroTrustAppsBrowserSSHApplicationCorsHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials bool `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders []interface{} `json:"allowed_headers"`
+	AllowedHeaders []string `json:"allowed_headers"`
 	// Allowed HTTP request methods.
 	AllowedMethods []ZeroTrustAppsBrowserSSHApplicationCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins []interface{} `json:"allowed_origins"`
+	AllowedOrigins []string `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge float64                                           `json:"max_age"`
 	JSON   zeroTrustAppsBrowserSSHApplicationCorsHeadersJSON `json:"-"`
@@ -1068,11 +1068,11 @@ type ZeroTrustAppsBrowserVncApplicationCorsHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials bool `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders []interface{} `json:"allowed_headers"`
+	AllowedHeaders []string `json:"allowed_headers"`
 	// Allowed HTTP request methods.
 	AllowedMethods []ZeroTrustAppsBrowserVncApplicationCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins []interface{} `json:"allowed_origins"`
+	AllowedOrigins []string `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge float64                                           `json:"max_age"`
 	JSON   zeroTrustAppsBrowserVncApplicationCorsHeadersJSON `json:"-"`
@@ -1356,8 +1356,9 @@ func (r ZeroTrustAppsBrowserIsolationPermissionsApplicationType) IsKnown() bool 
 
 type ZeroTrustAppsBookmarkApplication struct {
 	// UUID
-	ID                 string      `json:"id"`
-	AppLauncherVisible interface{} `json:"app_launcher_visible"`
+	ID string `json:"id"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// Audience tag.
 	Aud       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -1537,11 +1538,11 @@ type AccessApplicationNewParamsSelfHostedApplicationCorsHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials param.Field[bool] `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
+	AllowedHeaders param.Field[[]string] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
 	AllowedMethods param.Field[[]AccessApplicationNewParamsSelfHostedApplicationCorsHeadersAllowedMethod] `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
+	AllowedOrigins param.Field[[]string] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge param.Field[float64] `json:"max_age"`
 }
@@ -1906,11 +1907,11 @@ type AccessApplicationNewParamsBrowserSSHApplicationCorsHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials param.Field[bool] `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
+	AllowedHeaders param.Field[[]string] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
 	AllowedMethods param.Field[[]AccessApplicationNewParamsBrowserSSHApplicationCorsHeadersAllowedMethod] `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
+	AllowedOrigins param.Field[[]string] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge param.Field[float64] `json:"max_age"`
 }
@@ -2034,11 +2035,11 @@ type AccessApplicationNewParamsBrowserVncApplicationCorsHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials param.Field[bool] `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
+	AllowedHeaders param.Field[[]string] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
 	AllowedMethods param.Field[[]AccessApplicationNewParamsBrowserVncApplicationCorsHeadersAllowedMethod] `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
+	AllowedOrigins param.Field[[]string] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge param.Field[float64] `json:"max_age"`
 }
@@ -2247,8 +2248,9 @@ type AccessApplicationNewParamsBookmarkApplication struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID             param.Field[string]      `path:"zone_id"`
-	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
+	ZoneID param.Field[string] `path:"zone_id"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
 	Domain param.Field[string] `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.
@@ -2484,11 +2486,11 @@ type AccessApplicationUpdateParamsSelfHostedApplicationCorsHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials param.Field[bool] `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
+	AllowedHeaders param.Field[[]string] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
 	AllowedMethods param.Field[[]AccessApplicationUpdateParamsSelfHostedApplicationCorsHeadersAllowedMethod] `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
+	AllowedOrigins param.Field[[]string] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge param.Field[float64] `json:"max_age"`
 }
@@ -2867,11 +2869,11 @@ type AccessApplicationUpdateParamsBrowserSSHApplicationCorsHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials param.Field[bool] `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
+	AllowedHeaders param.Field[[]string] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
 	AllowedMethods param.Field[[]AccessApplicationUpdateParamsBrowserSSHApplicationCorsHeadersAllowedMethod] `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
+	AllowedOrigins param.Field[[]string] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge param.Field[float64] `json:"max_age"`
 }
@@ -3002,11 +3004,11 @@ type AccessApplicationUpdateParamsBrowserVncApplicationCorsHeaders struct {
 	// client certificates) with requests.
 	AllowCredentials param.Field[bool] `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
+	AllowedHeaders param.Field[[]string] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
 	AllowedMethods param.Field[[]AccessApplicationUpdateParamsBrowserVncApplicationCorsHeadersAllowedMethod] `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
+	AllowedOrigins param.Field[[]string] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge param.Field[float64] `json:"max_age"`
 }
@@ -3236,8 +3238,9 @@ type AccessApplicationUpdateParamsBookmarkApplication struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID             param.Field[string]      `path:"zone_id"`
-	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
+	ZoneID param.Field[string] `path:"zone_id"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// The URL or domain of the bookmark.
 	Domain param.Field[string] `json:"domain"`
 	// The image URL for the logo shown in the App Launcher dashboard.

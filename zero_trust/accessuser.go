@@ -77,9 +77,9 @@ type ZeroTrustUsers struct {
 	// The name of the user.
 	Name string `json:"name"`
 	// The unique API identifier for the Zero Trust seat.
-	SeatUid interface{} `json:"seat_uid"`
+	SeatUid string `json:"seat_uid"`
 	// The unique API identifier for the user.
-	Uid       interface{}        `json:"uid"`
+	Uid       string             `json:"uid"`
 	UpdatedAt time.Time          `json:"updated_at" format:"date-time"`
 	JSON      zeroTrustUsersJSON `json:"-"`
 }
