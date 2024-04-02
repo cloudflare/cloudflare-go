@@ -140,19 +140,19 @@ func (r membershipJSON) RawJSON() string {
 
 // All access permissions for the user at the account.
 type MembershipPermissions struct {
-	Analytics    accounts.RolePermissionGrants `json:"analytics"`
-	Billing      accounts.RolePermissionGrants `json:"billing"`
-	CachePurge   accounts.RolePermissionGrants `json:"cache_purge"`
-	DNS          accounts.RolePermissionGrants `json:"dns"`
-	DNSRecords   accounts.RolePermissionGrants `json:"dns_records"`
-	Lb           accounts.RolePermissionGrants `json:"lb"`
-	Logs         accounts.RolePermissionGrants `json:"logs"`
-	Organization accounts.RolePermissionGrants `json:"organization"`
-	SSL          accounts.RolePermissionGrants `json:"ssl"`
-	WAF          accounts.RolePermissionGrants `json:"waf"`
-	ZoneSettings accounts.RolePermissionGrants `json:"zone_settings"`
-	Zones        accounts.RolePermissionGrants `json:"zones"`
-	JSON         membershipPermissionsJSON     `json:"-"`
+	Analytics    accounts.RolePermissionGrant `json:"analytics"`
+	Billing      accounts.RolePermissionGrant `json:"billing"`
+	CachePurge   accounts.RolePermissionGrant `json:"cache_purge"`
+	DNS          accounts.RolePermissionGrant `json:"dns"`
+	DNSRecords   accounts.RolePermissionGrant `json:"dns_records"`
+	Lb           accounts.RolePermissionGrant `json:"lb"`
+	Logs         accounts.RolePermissionGrant `json:"logs"`
+	Organization accounts.RolePermissionGrant `json:"organization"`
+	SSL          accounts.RolePermissionGrant `json:"ssl"`
+	WAF          accounts.RolePermissionGrant `json:"waf"`
+	ZoneSettings accounts.RolePermissionGrant `json:"zone_settings"`
+	Zones        accounts.RolePermissionGrant `json:"zones"`
+	JSON         membershipPermissionsJSON    `json:"-"`
 }
 
 // membershipPermissionsJSON contains the JSON metadata for the struct
