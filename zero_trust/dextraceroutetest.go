@@ -82,8 +82,6 @@ type DigitalExperienceMonitoringTracerouteDetails struct {
 	Kind     DigitalExperienceMonitoringTracerouteDetailsKind `json:"kind,required"`
 	// The name of the Traceroute synthetic application test
 	Name                  string                                                              `json:"name,required"`
-	TargetPolicies        []DigitalExperienceMonitoringTracerouteDetailsTargetPolicy          `json:"target_policies"`
-	Targeted              bool                                                                `json:"targeted"`
 	TracerouteStats       DigitalExperienceMonitoringTracerouteDetailsTracerouteStats         `json:"tracerouteStats,nullable"`
 	TracerouteStatsByColo []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColo `json:"tracerouteStatsByColo"`
 	JSON                  digitalExperienceMonitoringTracerouteDetailsJSON                    `json:"-"`
@@ -96,8 +94,6 @@ type digitalExperienceMonitoringTracerouteDetailsJSON struct {
 	Interval              apijson.Field
 	Kind                  apijson.Field
 	Name                  apijson.Field
-	TargetPolicies        apijson.Field
-	Targeted              apijson.Field
 	TracerouteStats       apijson.Field
 	TracerouteStatsByColo apijson.Field
 	raw                   string
@@ -124,33 +120,6 @@ func (r DigitalExperienceMonitoringTracerouteDetailsKind) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type DigitalExperienceMonitoringTracerouteDetailsTargetPolicy struct {
-	ID string `json:"id,required"`
-	// Whether the policy is the default for the account
-	Default bool                                                         `json:"default,required"`
-	Name    string                                                       `json:"name,required"`
-	JSON    digitalExperienceMonitoringTracerouteDetailsTargetPolicyJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringTracerouteDetailsTargetPolicyJSON contains the JSON
-// metadata for the struct
-// [DigitalExperienceMonitoringTracerouteDetailsTargetPolicy]
-type digitalExperienceMonitoringTracerouteDetailsTargetPolicyJSON struct {
-	ID          apijson.Field
-	Default     apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTracerouteDetailsTargetPolicy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTracerouteDetailsTargetPolicyJSON) RawJSON() string {
-	return r.raw
 }
 
 type DigitalExperienceMonitoringTracerouteDetailsTracerouteStats struct {
