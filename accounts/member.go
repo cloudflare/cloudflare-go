@@ -167,18 +167,18 @@ func (r accountMemberRoleJSON) RawJSON() string {
 }
 
 type AccountMemberRolesPermissions struct {
-	Analytics    RolePermissionGrants              `json:"analytics"`
-	Billing      RolePermissionGrants              `json:"billing"`
-	CachePurge   RolePermissionGrants              `json:"cache_purge"`
-	DNS          RolePermissionGrants              `json:"dns"`
-	DNSRecords   RolePermissionGrants              `json:"dns_records"`
-	Lb           RolePermissionGrants              `json:"lb"`
-	Logs         RolePermissionGrants              `json:"logs"`
-	Organization RolePermissionGrants              `json:"organization"`
-	SSL          RolePermissionGrants              `json:"ssl"`
-	WAF          RolePermissionGrants              `json:"waf"`
-	ZoneSettings RolePermissionGrants              `json:"zone_settings"`
-	Zones        RolePermissionGrants              `json:"zones"`
+	Analytics    RolePermissionGrant               `json:"analytics"`
+	Billing      RolePermissionGrant               `json:"billing"`
+	CachePurge   RolePermissionGrant               `json:"cache_purge"`
+	DNS          RolePermissionGrant               `json:"dns"`
+	DNSRecords   RolePermissionGrant               `json:"dns_records"`
+	Lb           RolePermissionGrant               `json:"lb"`
+	Logs         RolePermissionGrant               `json:"logs"`
+	Organization RolePermissionGrant               `json:"organization"`
+	SSL          RolePermissionGrant               `json:"ssl"`
+	WAF          RolePermissionGrant               `json:"waf"`
+	ZoneSettings RolePermissionGrant               `json:"zone_settings"`
+	Zones        RolePermissionGrant               `json:"zones"`
 	JSON         accountMemberRolesPermissionsJSON `json:"-"`
 }
 
@@ -307,18 +307,18 @@ func (r accountMemberWithIDRoleJSON) RawJSON() string {
 }
 
 type AccountMemberWithIDRolesPermissions struct {
-	Analytics    RolePermissionGrants                    `json:"analytics"`
-	Billing      RolePermissionGrants                    `json:"billing"`
-	CachePurge   RolePermissionGrants                    `json:"cache_purge"`
-	DNS          RolePermissionGrants                    `json:"dns"`
-	DNSRecords   RolePermissionGrants                    `json:"dns_records"`
-	Lb           RolePermissionGrants                    `json:"lb"`
-	Logs         RolePermissionGrants                    `json:"logs"`
-	Organization RolePermissionGrants                    `json:"organization"`
-	SSL          RolePermissionGrants                    `json:"ssl"`
-	WAF          RolePermissionGrants                    `json:"waf"`
-	ZoneSettings RolePermissionGrants                    `json:"zone_settings"`
-	Zones        RolePermissionGrants                    `json:"zones"`
+	Analytics    RolePermissionGrant                     `json:"analytics"`
+	Billing      RolePermissionGrant                     `json:"billing"`
+	CachePurge   RolePermissionGrant                     `json:"cache_purge"`
+	DNS          RolePermissionGrant                     `json:"dns"`
+	DNSRecords   RolePermissionGrant                     `json:"dns_records"`
+	Lb           RolePermissionGrant                     `json:"lb"`
+	Logs         RolePermissionGrant                     `json:"logs"`
+	Organization RolePermissionGrant                     `json:"organization"`
+	SSL          RolePermissionGrant                     `json:"ssl"`
+	WAF          RolePermissionGrant                     `json:"waf"`
+	ZoneSettings RolePermissionGrant                     `json:"zone_settings"`
+	Zones        RolePermissionGrant                     `json:"zones"`
 	JSON         accountMemberWithIDRolesPermissionsJSON `json:"-"`
 }
 
@@ -384,35 +384,35 @@ func (r accountMemberWithIDUserJSON) RawJSON() string {
 	return r.raw
 }
 
-type RolePermissionGrants struct {
-	Read  bool                     `json:"read"`
-	Write bool                     `json:"write"`
-	JSON  rolePermissionGrantsJSON `json:"-"`
+type RolePermissionGrant struct {
+	Read  bool                    `json:"read"`
+	Write bool                    `json:"write"`
+	JSON  rolePermissionGrantJSON `json:"-"`
 }
 
-// rolePermissionGrantsJSON contains the JSON metadata for the struct
-// [RolePermissionGrants]
-type rolePermissionGrantsJSON struct {
+// rolePermissionGrantJSON contains the JSON metadata for the struct
+// [RolePermissionGrant]
+type rolePermissionGrantJSON struct {
 	Read        apijson.Field
 	Write       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RolePermissionGrants) UnmarshalJSON(data []byte) (err error) {
+func (r *RolePermissionGrant) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r rolePermissionGrantsJSON) RawJSON() string {
+func (r rolePermissionGrantJSON) RawJSON() string {
 	return r.raw
 }
 
-type RolePermissionGrantsParam struct {
+type RolePermissionGrantParam struct {
 	Read  param.Field[bool] `json:"read"`
 	Write param.Field[bool] `json:"write"`
 }
 
-func (r RolePermissionGrantsParam) MarshalJSON() (data []byte, err error) {
+func (r RolePermissionGrantParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -625,18 +625,18 @@ func (r MemberUpdateParamsRole) MarshalJSON() (data []byte, err error) {
 }
 
 type MemberUpdateParamsRolesPermissions struct {
-	Analytics    param.Field[RolePermissionGrantsParam] `json:"analytics"`
-	Billing      param.Field[RolePermissionGrantsParam] `json:"billing"`
-	CachePurge   param.Field[RolePermissionGrantsParam] `json:"cache_purge"`
-	DNS          param.Field[RolePermissionGrantsParam] `json:"dns"`
-	DNSRecords   param.Field[RolePermissionGrantsParam] `json:"dns_records"`
-	Lb           param.Field[RolePermissionGrantsParam] `json:"lb"`
-	Logs         param.Field[RolePermissionGrantsParam] `json:"logs"`
-	Organization param.Field[RolePermissionGrantsParam] `json:"organization"`
-	SSL          param.Field[RolePermissionGrantsParam] `json:"ssl"`
-	WAF          param.Field[RolePermissionGrantsParam] `json:"waf"`
-	ZoneSettings param.Field[RolePermissionGrantsParam] `json:"zone_settings"`
-	Zones        param.Field[RolePermissionGrantsParam] `json:"zones"`
+	Analytics    param.Field[RolePermissionGrantParam] `json:"analytics"`
+	Billing      param.Field[RolePermissionGrantParam] `json:"billing"`
+	CachePurge   param.Field[RolePermissionGrantParam] `json:"cache_purge"`
+	DNS          param.Field[RolePermissionGrantParam] `json:"dns"`
+	DNSRecords   param.Field[RolePermissionGrantParam] `json:"dns_records"`
+	Lb           param.Field[RolePermissionGrantParam] `json:"lb"`
+	Logs         param.Field[RolePermissionGrantParam] `json:"logs"`
+	Organization param.Field[RolePermissionGrantParam] `json:"organization"`
+	SSL          param.Field[RolePermissionGrantParam] `json:"ssl"`
+	WAF          param.Field[RolePermissionGrantParam] `json:"waf"`
+	ZoneSettings param.Field[RolePermissionGrantParam] `json:"zone_settings"`
+	Zones        param.Field[RolePermissionGrantParam] `json:"zones"`
 }
 
 func (r MemberUpdateParamsRolesPermissions) MarshalJSON() (data []byte, err error) {
