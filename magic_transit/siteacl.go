@@ -119,14 +119,19 @@ func (r siteACLNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Bidirectional ACL policy for local network traffic within a site.
+// Bidirectional ACL policy for network traffic within a site.
 type SiteACLNewResponseACL struct {
 	// Identifier
 	ID string `json:"id"`
 	// Description for the ACL.
-	Description string                     `json:"description"`
-	LAN1        SiteACLNewResponseACLsLAN1 `json:"lan_1"`
-	LAN2        SiteACLNewResponseACLsLAN2 `json:"lan_2"`
+	Description string `json:"description"`
+	// The desired forwarding action for this ACL policy. If set to "false", the policy
+	// will forward traffic to Cloudflare. If set to "true", the policy will forward
+	// traffic locally on the Magic WAN Connector. If not included in request, will
+	// default to false.
+	ForwardLocally bool                       `json:"forward_locally"`
+	LAN1           SiteACLNewResponseACLsLAN1 `json:"lan_1"`
+	LAN2           SiteACLNewResponseACLsLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                           `json:"name"`
 	Protocols []SiteACLNewResponseACLsProtocol `json:"protocols"`
@@ -136,14 +141,15 @@ type SiteACLNewResponseACL struct {
 // siteACLNewResponseACLJSON contains the JSON metadata for the struct
 // [SiteACLNewResponseACL]
 type siteACLNewResponseACLJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	LAN1        apijson.Field
-	LAN2        apijson.Field
-	Name        apijson.Field
-	Protocols   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	Description    apijson.Field
+	ForwardLocally apijson.Field
+	LAN1           apijson.Field
+	LAN2           apijson.Field
+	Name           apijson.Field
+	Protocols      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *SiteACLNewResponseACL) UnmarshalJSON(data []byte) (err error) {
@@ -283,7 +289,7 @@ func (r SiteACLNewResponseACLsProtocol) IsKnown() bool {
 }
 
 type SiteACLUpdateResponse struct {
-	// Bidirectional ACL policy for local network traffic within a site.
+	// Bidirectional ACL policy for network traffic within a site.
 	ACL  SiteACLUpdateResponseACL  `json:"acl"`
 	JSON siteACLUpdateResponseJSON `json:"-"`
 }
@@ -304,14 +310,19 @@ func (r siteACLUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Bidirectional ACL policy for local network traffic within a site.
+// Bidirectional ACL policy for network traffic within a site.
 type SiteACLUpdateResponseACL struct {
 	// Identifier
 	ID string `json:"id"`
 	// Description for the ACL.
-	Description string                       `json:"description"`
-	LAN1        SiteACLUpdateResponseACLLAN1 `json:"lan_1"`
-	LAN2        SiteACLUpdateResponseACLLAN2 `json:"lan_2"`
+	Description string `json:"description"`
+	// The desired forwarding action for this ACL policy. If set to "false", the policy
+	// will forward traffic to Cloudflare. If set to "true", the policy will forward
+	// traffic locally on the Magic WAN Connector. If not included in request, will
+	// default to false.
+	ForwardLocally bool                         `json:"forward_locally"`
+	LAN1           SiteACLUpdateResponseACLLAN1 `json:"lan_1"`
+	LAN2           SiteACLUpdateResponseACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                             `json:"name"`
 	Protocols []SiteACLUpdateResponseACLProtocol `json:"protocols"`
@@ -321,14 +332,15 @@ type SiteACLUpdateResponseACL struct {
 // siteACLUpdateResponseACLJSON contains the JSON metadata for the struct
 // [SiteACLUpdateResponseACL]
 type siteACLUpdateResponseACLJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	LAN1        apijson.Field
-	LAN2        apijson.Field
-	Name        apijson.Field
-	Protocols   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	Description    apijson.Field
+	ForwardLocally apijson.Field
+	LAN1           apijson.Field
+	LAN2           apijson.Field
+	Name           apijson.Field
+	Protocols      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *SiteACLUpdateResponseACL) UnmarshalJSON(data []byte) (err error) {
@@ -488,14 +500,19 @@ func (r siteACLListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Bidirectional ACL policy for local network traffic within a site.
+// Bidirectional ACL policy for network traffic within a site.
 type SiteACLListResponseACL struct {
 	// Identifier
 	ID string `json:"id"`
 	// Description for the ACL.
-	Description string                      `json:"description"`
-	LAN1        SiteACLListResponseACLsLAN1 `json:"lan_1"`
-	LAN2        SiteACLListResponseACLsLAN2 `json:"lan_2"`
+	Description string `json:"description"`
+	// The desired forwarding action for this ACL policy. If set to "false", the policy
+	// will forward traffic to Cloudflare. If set to "true", the policy will forward
+	// traffic locally on the Magic WAN Connector. If not included in request, will
+	// default to false.
+	ForwardLocally bool                        `json:"forward_locally"`
+	LAN1           SiteACLListResponseACLsLAN1 `json:"lan_1"`
+	LAN2           SiteACLListResponseACLsLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                            `json:"name"`
 	Protocols []SiteACLListResponseACLsProtocol `json:"protocols"`
@@ -505,14 +522,15 @@ type SiteACLListResponseACL struct {
 // siteACLListResponseACLJSON contains the JSON metadata for the struct
 // [SiteACLListResponseACL]
 type siteACLListResponseACLJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	LAN1        apijson.Field
-	LAN2        apijson.Field
-	Name        apijson.Field
-	Protocols   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	Description    apijson.Field
+	ForwardLocally apijson.Field
+	LAN1           apijson.Field
+	LAN2           apijson.Field
+	Name           apijson.Field
+	Protocols      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *SiteACLListResponseACL) UnmarshalJSON(data []byte) (err error) {
@@ -653,7 +671,7 @@ func (r SiteACLListResponseACLsProtocol) IsKnown() bool {
 
 type SiteACLDeleteResponse struct {
 	Deleted bool `json:"deleted"`
-	// Bidirectional ACL policy for local network traffic within a site.
+	// Bidirectional ACL policy for network traffic within a site.
 	DeletedACL SiteACLDeleteResponseDeletedACL `json:"deleted_acl"`
 	JSON       siteACLDeleteResponseJSON       `json:"-"`
 }
@@ -675,14 +693,19 @@ func (r siteACLDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Bidirectional ACL policy for local network traffic within a site.
+// Bidirectional ACL policy for network traffic within a site.
 type SiteACLDeleteResponseDeletedACL struct {
 	// Identifier
 	ID string `json:"id"`
 	// Description for the ACL.
-	Description string                              `json:"description"`
-	LAN1        SiteACLDeleteResponseDeletedACLLAN1 `json:"lan_1"`
-	LAN2        SiteACLDeleteResponseDeletedACLLAN2 `json:"lan_2"`
+	Description string `json:"description"`
+	// The desired forwarding action for this ACL policy. If set to "false", the policy
+	// will forward traffic to Cloudflare. If set to "true", the policy will forward
+	// traffic locally on the Magic WAN Connector. If not included in request, will
+	// default to false.
+	ForwardLocally bool                                `json:"forward_locally"`
+	LAN1           SiteACLDeleteResponseDeletedACLLAN1 `json:"lan_1"`
+	LAN2           SiteACLDeleteResponseDeletedACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                                    `json:"name"`
 	Protocols []SiteACLDeleteResponseDeletedACLProtocol `json:"protocols"`
@@ -692,14 +715,15 @@ type SiteACLDeleteResponseDeletedACL struct {
 // siteACLDeleteResponseDeletedACLJSON contains the JSON metadata for the struct
 // [SiteACLDeleteResponseDeletedACL]
 type siteACLDeleteResponseDeletedACLJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	LAN1        apijson.Field
-	LAN2        apijson.Field
-	Name        apijson.Field
-	Protocols   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	Description    apijson.Field
+	ForwardLocally apijson.Field
+	LAN1           apijson.Field
+	LAN2           apijson.Field
+	Name           apijson.Field
+	Protocols      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *SiteACLDeleteResponseDeletedACL) UnmarshalJSON(data []byte) (err error) {
@@ -839,7 +863,7 @@ func (r SiteACLDeleteResponseDeletedACLProtocol) IsKnown() bool {
 }
 
 type SiteACLGetResponse struct {
-	// Bidirectional ACL policy for local network traffic within a site.
+	// Bidirectional ACL policy for network traffic within a site.
 	ACL  SiteACLGetResponseACL  `json:"acl"`
 	JSON siteACLGetResponseJSON `json:"-"`
 }
@@ -860,14 +884,19 @@ func (r siteACLGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Bidirectional ACL policy for local network traffic within a site.
+// Bidirectional ACL policy for network traffic within a site.
 type SiteACLGetResponseACL struct {
 	// Identifier
 	ID string `json:"id"`
 	// Description for the ACL.
-	Description string                    `json:"description"`
-	LAN1        SiteACLGetResponseACLLAN1 `json:"lan_1"`
-	LAN2        SiteACLGetResponseACLLAN2 `json:"lan_2"`
+	Description string `json:"description"`
+	// The desired forwarding action for this ACL policy. If set to "false", the policy
+	// will forward traffic to Cloudflare. If set to "true", the policy will forward
+	// traffic locally on the Magic WAN Connector. If not included in request, will
+	// default to false.
+	ForwardLocally bool                      `json:"forward_locally"`
+	LAN1           SiteACLGetResponseACLLAN1 `json:"lan_1"`
+	LAN2           SiteACLGetResponseACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
 	Name      string                          `json:"name"`
 	Protocols []SiteACLGetResponseACLProtocol `json:"protocols"`
@@ -877,14 +906,15 @@ type SiteACLGetResponseACL struct {
 // siteACLGetResponseACLJSON contains the JSON metadata for the struct
 // [SiteACLGetResponseACL]
 type siteACLGetResponseACLJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	LAN1        apijson.Field
-	LAN2        apijson.Field
-	Name        apijson.Field
-	Protocols   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID             apijson.Field
+	Description    apijson.Field
+	ForwardLocally apijson.Field
+	LAN1           apijson.Field
+	LAN2           apijson.Field
+	Name           apijson.Field
+	Protocols      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *SiteACLGetResponseACL) UnmarshalJSON(data []byte) (err error) {
@@ -1039,8 +1069,13 @@ type SiteACLNewParamsACL struct {
 	// The name of the ACL.
 	Name param.Field[string] `json:"name,required"`
 	// Description for the ACL.
-	Description param.Field[string]                        `json:"description"`
-	Protocols   param.Field[[]SiteACLNewParamsACLProtocol] `json:"protocols"`
+	Description param.Field[string] `json:"description"`
+	// The desired forwarding action for this ACL policy. If set to "false", the policy
+	// will forward traffic to Cloudflare. If set to "true", the policy will forward
+	// traffic locally on the Magic WAN Connector. If not included in request, will
+	// default to false.
+	ForwardLocally param.Field[bool]                          `json:"forward_locally"`
+	Protocols      param.Field[[]SiteACLNewParamsACLProtocol] `json:"protocols"`
 }
 
 func (r SiteACLNewParamsACL) MarshalJSON() (data []byte, err error) {
@@ -1214,9 +1249,14 @@ func (r SiteACLUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type SiteACLUpdateParamsACL struct {
 	// Description for the ACL.
-	Description param.Field[string]                     `json:"description"`
-	LAN1        param.Field[SiteACLUpdateParamsACLLAN1] `json:"lan_1"`
-	LAN2        param.Field[SiteACLUpdateParamsACLLAN2] `json:"lan_2"`
+	Description param.Field[string] `json:"description"`
+	// The desired forwarding action for this ACL policy. If set to "false", the policy
+	// will forward traffic to Cloudflare. If set to "true", the policy will forward
+	// traffic locally on the Magic WAN Connector. If not included in request, will
+	// default to false.
+	ForwardLocally param.Field[bool]                       `json:"forward_locally"`
+	LAN1           param.Field[SiteACLUpdateParamsACLLAN1] `json:"lan_1"`
+	LAN2           param.Field[SiteACLUpdateParamsACLLAN2] `json:"lan_2"`
 	// The name of the ACL.
 	Name      param.Field[string]                           `json:"name"`
 	Protocols param.Field[[]SiteACLUpdateParamsACLProtocol] `json:"protocols"`

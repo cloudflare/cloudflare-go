@@ -35,7 +35,8 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 		magic_transit.SiteACLNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ACL: cloudflare.F(magic_transit.SiteACLNewParamsACL{
-				Description: cloudflare.F("Allows local traffic between PIN pads and cash register."),
+				Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
+				ForwardLocally: cloudflare.F(true),
 				LAN1: cloudflare.F(magic_transit.SiteACLNewParamsACLLAN1{
 					LANID:   cloudflare.F("string"),
 					LANName: cloudflare.F("string"),
@@ -83,7 +84,8 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 		magic_transit.SiteACLUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ACL: cloudflare.F(magic_transit.SiteACLUpdateParamsACL{
-				Description: cloudflare.F("Allows local traffic between PIN pads and cash register."),
+				Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
+				ForwardLocally: cloudflare.F(true),
 				LAN1: cloudflare.F(magic_transit.SiteACLUpdateParamsACLLAN1{
 					LANID:   cloudflare.F("string"),
 					LANName: cloudflare.F("string"),
