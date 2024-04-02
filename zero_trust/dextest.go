@@ -85,6 +85,8 @@ func (r digitalExperienceMonitoringTestsJSON) RawJSON() string {
 type DigitalExperienceMonitoringTestsOverviewMetrics struct {
 	// number of tests.
 	TestsTotal int64 `json:"testsTotal,required"`
+	// percentage availability for all HTTP test results in response
+	AvgHTTPAvailabilityPct float64 `json:"avgHttpAvailabilityPct,nullable"`
 	// percentage availability for all traceroutes results in response
 	AvgTracerouteAvailabilityPct float64                                             `json:"avgTracerouteAvailabilityPct,nullable"`
 	JSON                         digitalExperienceMonitoringTestsOverviewMetricsJSON `json:"-"`
@@ -94,6 +96,7 @@ type DigitalExperienceMonitoringTestsOverviewMetrics struct {
 // for the struct [DigitalExperienceMonitoringTestsOverviewMetrics]
 type digitalExperienceMonitoringTestsOverviewMetricsJSON struct {
 	TestsTotal                   apijson.Field
+	AvgHTTPAvailabilityPct       apijson.Field
 	AvgTracerouteAvailabilityPct apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
@@ -129,6 +132,8 @@ type DigitalExperienceMonitoringTestsTest struct {
 	HTTPResultsByColo []DigitalExperienceMonitoringTestsTestsHTTPResultsByColo `json:"httpResultsByColo"`
 	// for HTTP, the method to use when running the test
 	Method                  string                                                         `json:"method"`
+	TargetPolicies          []DigitalExperienceMonitoringTestsTestsTargetPolicy            `json:"target_policies"`
+	Targeted                bool                                                           `json:"targeted"`
 	TracerouteResults       DigitalExperienceMonitoringTestsTestsTracerouteResults         `json:"tracerouteResults,nullable"`
 	TracerouteResultsByColo []DigitalExperienceMonitoringTestsTestsTracerouteResultsByColo `json:"tracerouteResultsByColo"`
 	JSON                    digitalExperienceMonitoringTestsTestJSON                       `json:"-"`
@@ -149,6 +154,8 @@ type digitalExperienceMonitoringTestsTestJSON struct {
 	HTTPResults             apijson.Field
 	HTTPResultsByColo       apijson.Field
 	Method                  apijson.Field
+	TargetPolicies          apijson.Field
+	Targeted                apijson.Field
 	TracerouteResults       apijson.Field
 	TracerouteResultsByColo apijson.Field
 	raw                     string
@@ -581,6 +588,32 @@ func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTime
 }
 
 func (r digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON) RawJSON() string {
+	return r.raw
+}
+
+type DigitalExperienceMonitoringTestsTestsTargetPolicy struct {
+	ID string `json:"id,required"`
+	// Whether the policy is the default for the account
+	Default bool                                                  `json:"default,required"`
+	Name    string                                                `json:"name,required"`
+	JSON    digitalExperienceMonitoringTestsTestsTargetPolicyJSON `json:"-"`
+}
+
+// digitalExperienceMonitoringTestsTestsTargetPolicyJSON contains the JSON metadata
+// for the struct [DigitalExperienceMonitoringTestsTestsTargetPolicy]
+type digitalExperienceMonitoringTestsTestsTargetPolicyJSON struct {
+	ID          apijson.Field
+	Default     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DigitalExperienceMonitoringTestsTestsTargetPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r digitalExperienceMonitoringTestsTestsTargetPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
