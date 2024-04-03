@@ -234,7 +234,7 @@ type AttackLayer7TopAseOriginParams struct {
 // `url.Values`.
 func (r AttackLayer7TopAseOriginParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

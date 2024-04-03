@@ -230,7 +230,7 @@ type DomainGetParams struct {
 // URLQuery serializes [DomainGetParams]'s query parameters as `url.Values`.
 func (r DomainGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

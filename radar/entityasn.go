@@ -530,7 +530,7 @@ type EntityASNListParams struct {
 // URLQuery serializes [EntityASNListParams]'s query parameters as `url.Values`.
 func (r EntityASNListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -598,7 +598,7 @@ type EntityASNGetParams struct {
 // URLQuery serializes [EntityASNGetParams]'s query parameters as `url.Values`.
 func (r EntityASNGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -652,7 +652,7 @@ type EntityASNIPParams struct {
 // URLQuery serializes [EntityASNIPParams]'s query parameters as `url.Values`.
 func (r EntityASNIPParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -706,7 +706,7 @@ type EntityASNRelParams struct {
 // URLQuery serializes [EntityASNRelParams]'s query parameters as `url.Values`.
 func (r EntityASNRelParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

@@ -558,7 +558,7 @@ type AccessRuleListParams struct {
 // URLQuery serializes [AccessRuleListParams]'s query parameters as `url.Values`.
 func (r AccessRuleListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -587,7 +587,7 @@ type AccessRuleListParamsEgsPagination struct {
 // `url.Values`.
 func (r AccessRuleListParamsEgsPagination) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -604,7 +604,7 @@ type AccessRuleListParamsEgsPaginationJson struct {
 // as `url.Values`.
 func (r AccessRuleListParamsEgsPaginationJson) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -632,7 +632,7 @@ type AccessRuleListParamsFilters struct {
 // `url.Values`.
 func (r AccessRuleListParamsFilters) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

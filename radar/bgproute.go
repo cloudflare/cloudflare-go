@@ -490,7 +490,7 @@ type BGPRouteMoasParams struct {
 // URLQuery serializes [BGPRouteMoasParams]'s query parameters as `url.Values`.
 func (r BGPRouteMoasParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -551,7 +551,7 @@ type BGPRoutePfx2asParams struct {
 // URLQuery serializes [BGPRoutePfx2asParams]'s query parameters as `url.Values`.
 func (r BGPRoutePfx2asParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -624,7 +624,7 @@ type BGPRouteStatsParams struct {
 // URLQuery serializes [BGPRouteStatsParams]'s query parameters as `url.Values`.
 func (r BGPRouteStatsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -688,7 +688,7 @@ type BGPRouteTimeseriesParams struct {
 // `url.Values`.
 func (r BGPRouteTimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

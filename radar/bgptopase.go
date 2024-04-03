@@ -260,7 +260,7 @@ type BGPTopAseGetParams struct {
 // URLQuery serializes [BGPTopAseGetParams]'s query parameters as `url.Values`.
 func (r BGPTopAseGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -360,7 +360,7 @@ type BGPTopAsePrefixesParams struct {
 // `url.Values`.
 func (r BGPTopAsePrefixesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

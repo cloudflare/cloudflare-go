@@ -408,7 +408,7 @@ type AttackLayer7TopLocationOriginParams struct {
 // `url.Values`.
 func (r AttackLayer7TopLocationOriginParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -505,7 +505,7 @@ type AttackLayer7TopLocationTargetParams struct {
 // `url.Values`.
 func (r AttackLayer7TopLocationTargetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

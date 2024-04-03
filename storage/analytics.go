@@ -307,7 +307,7 @@ type AnalyticsListParams struct {
 // URLQuery serializes [AnalyticsListParams]'s query parameters as `url.Values`.
 func (r AnalyticsListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -349,7 +349,7 @@ type AnalyticsListParamsQuery struct {
 // `url.Values`.
 func (r AnalyticsListParamsQuery) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -488,7 +488,7 @@ type AnalyticsStoredParams struct {
 // URLQuery serializes [AnalyticsStoredParams]'s query parameters as `url.Values`.
 func (r AnalyticsStoredParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -530,7 +530,7 @@ type AnalyticsStoredParamsQuery struct {
 // `url.Values`.
 func (r AnalyticsStoredParamsQuery) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

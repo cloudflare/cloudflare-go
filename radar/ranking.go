@@ -299,7 +299,7 @@ type RankingTimeseriesGroupsParams struct {
 // `url.Values`.
 func (r RankingTimeseriesGroupsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -406,7 +406,7 @@ type RankingTopParams struct {
 // URLQuery serializes [RankingTopParams]'s query parameters as `url.Values`.
 func (r RankingTopParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

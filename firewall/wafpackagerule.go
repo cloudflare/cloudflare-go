@@ -873,8 +873,8 @@ func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode) IsKno
 	return false
 }
 
-// Union satisfied by [firewall.WAFPackageRuleGetResponseUnknown],
-// [firewall.WAFPackageRuleGetResponseArray] or [shared.UnionString].
+// Union satisfied by [firewall.WAFPackageRuleGetResponseUnknown] or
+// [shared.UnionString].
 type WAFPackageRuleGetResponse interface {
 	ImplementsFirewallWAFPackageRuleGetResponse()
 }
@@ -884,19 +884,11 @@ func init() {
 		reflect.TypeOf((*WAFPackageRuleGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageRuleGetResponseArray{}),
-		},
-		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
-
-type WAFPackageRuleGetResponseArray []interface{}
-
-func (r WAFPackageRuleGetResponseArray) ImplementsFirewallWAFPackageRuleGetResponse() {}
 
 type WAFPackageRuleListParams struct {
 	// Identifier
@@ -926,7 +918,7 @@ type WAFPackageRuleListParams struct {
 // `url.Values`.
 func (r WAFPackageRuleListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
