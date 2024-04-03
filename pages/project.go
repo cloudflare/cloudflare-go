@@ -76,9 +76,9 @@ func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListPa
 }
 
 // Delete a project by name.
-func (r *ProjectService) Delete(ctx context.Context, projectName string, body ProjectDeleteParams, opts ...option.RequestOption) (res *ProjectDeleteResponse, err error) {
+func (r *ProjectService) Delete(ctx context.Context, projectName string, params ProjectDeleteParams, opts ...option.RequestOption) (res *ProjectDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s", body.AccountID, projectName)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s", params.AccountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
@@ -2659,7 +2659,12 @@ type ProjectListParams struct {
 
 type ProjectDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ProjectDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ProjectEditParams struct {

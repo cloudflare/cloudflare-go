@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/email_routing"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -27,7 +28,13 @@ func TestEmailRoutingDisable(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Disable(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.EmailRouting.Disable(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		email_routing.EmailRoutingDisableParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -51,7 +58,13 @@ func TestEmailRoutingEnable(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Enable(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.EmailRouting.Enable(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		email_routing.EmailRoutingEnableParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

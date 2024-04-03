@@ -74,10 +74,10 @@ func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, param
 }
 
 // Deletes an existing virtual network.
-func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, body NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkDeleteResponse, err error) {
+func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, params NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkVirtualNetworkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", body.AccountID, virtualNetworkID)
+	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", params.AccountID, virtualNetworkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -330,6 +330,8 @@ type NetworkVirtualNetworkListParams struct {
 	IsDeleted param.Field[interface{}] `query:"is_deleted"`
 	// A user-friendly name for the virtual network.
 	Name param.Field[string] `query:"name"`
+	// UUID of the virtual network.
+	VnetID param.Field[string] `query:"vnet_id"`
 	// A user-friendly name for the virtual network.
 	VnetName param.Field[string] `query:"vnet_name"`
 }
@@ -345,7 +347,12 @@ func (r NetworkVirtualNetworkListParams) URLQuery() (v url.Values) {
 
 type NetworkVirtualNetworkDeleteParams struct {
 	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r NetworkVirtualNetworkDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type NetworkVirtualNetworkDeleteResponseEnvelope struct {

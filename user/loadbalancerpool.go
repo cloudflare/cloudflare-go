@@ -88,7 +88,7 @@ func (r *LoadBalancerPoolService) ListAutoPaging(ctx context.Context, query Load
 }
 
 // Delete a configured pool.
-func (r *LoadBalancerPoolService) Delete(ctx context.Context, poolID string, opts ...option.RequestOption) (res *LoadBalancerPoolDeleteResponse, err error) {
+func (r *LoadBalancerPoolService) Delete(ctx context.Context, poolID string, body LoadBalancerPoolDeleteParams, opts ...option.RequestOption) (res *LoadBalancerPoolDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolDeleteResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s", poolID)
@@ -1443,6 +1443,14 @@ func (r LoadBalancerPoolListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type LoadBalancerPoolDeleteParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r LoadBalancerPoolDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type LoadBalancerPoolDeleteResponseEnvelope struct {

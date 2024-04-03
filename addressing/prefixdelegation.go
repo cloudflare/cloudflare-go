@@ -70,10 +70,10 @@ func (r *PrefixDelegationService) ListAutoPaging(ctx context.Context, prefixID s
 }
 
 // Delete an account delegation for a given IP prefix.
-func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, delegationID string, body PrefixDelegationDeleteParams, opts ...option.RequestOption) (res *PrefixDelegationDeleteResponse, err error) {
+func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, delegationID string, params PrefixDelegationDeleteParams, opts ...option.RequestOption) (res *PrefixDelegationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDelegationDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations/%s", body.AccountID, prefixID, delegationID)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations/%s", params.AccountID, prefixID, delegationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -248,7 +248,12 @@ type PrefixDelegationListParams struct {
 
 type PrefixDelegationDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r PrefixDelegationDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type PrefixDelegationDeleteResponseEnvelope struct {

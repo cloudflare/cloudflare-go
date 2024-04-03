@@ -33,10 +33,10 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 }
 
 // Create a new network monitoring configuration.
-func (r *ConfigService) New(ctx context.Context, body ConfigNewParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfig, err error) {
+func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -47,10 +47,10 @@ func (r *ConfigService) New(ctx context.Context, body ConfigNewParams, opts ...o
 
 // Update an existing network monitoring configuration, requires the entire
 // configuration to be updated at once.
-func (r *ConfigService) Update(ctx context.Context, body ConfigUpdateParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfig, err error) {
+func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -60,10 +60,10 @@ func (r *ConfigService) Update(ctx context.Context, body ConfigUpdateParams, opt
 }
 
 // Delete an existing network monitoring configuration.
-func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfig, err error) {
+func (r *ConfigService) Delete(ctx context.Context, params ConfigDeleteParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -73,10 +73,10 @@ func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opt
 }
 
 // Update fields in an existing network monitoring configuration.
-func (r *ConfigService) Edit(ctx context.Context, body ConfigEditParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfig, err error) {
+func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/config", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/config", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -127,7 +127,12 @@ func (r magicNetworkMonitoringConfigJSON) RawJSON() string {
 }
 
 type ConfigNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ConfigNewResponseEnvelope struct {
@@ -220,7 +225,12 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ConfigUpdateResponseEnvelope struct {
@@ -313,7 +323,12 @@ func (r ConfigUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ConfigDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ConfigDeleteResponseEnvelope struct {
@@ -406,7 +421,12 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConfigEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ConfigEditResponseEnvelope struct {

@@ -59,10 +59,10 @@ func (r *OutgoingService) Update(ctx context.Context, params OutgoingUpdateParam
 }
 
 // Delete primary zone configuration for outgoing zone transfers.
-func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
+func (r *OutgoingService) Delete(ctx context.Context, params OutgoingDeleteParams, opts ...option.RequestOption) (res *OutgoingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -73,10 +73,10 @@ func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams,
 
 // Disable outgoing zone transfers for primary zone and clears IXFR backlog of
 // primary zone.
-func (r *OutgoingService) Disable(ctx context.Context, body OutgoingDisableParams, opts ...option.RequestOption) (res *SecondaryDNSDisableTransfer, err error) {
+func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisableParams, opts ...option.RequestOption) (res *SecondaryDNSDisableTransfer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
-	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/disable", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/disable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -86,10 +86,10 @@ func (r *OutgoingService) Disable(ctx context.Context, body OutgoingDisableParam
 }
 
 // Enable outgoing zone transfers for primary zone.
-func (r *OutgoingService) Enable(ctx context.Context, body OutgoingEnableParams, opts ...option.RequestOption) (res *SecondaryDNSEnableTransfer, err error) {
+func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParams, opts ...option.RequestOption) (res *SecondaryDNSEnableTransfer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
-	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/enable", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/enable", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -99,10 +99,10 @@ func (r *OutgoingService) Enable(ctx context.Context, body OutgoingEnableParams,
 }
 
 // Notifies the secondary nameserver(s) and clears IXFR backlog of primary zone.
-func (r *OutgoingService) ForceNotify(ctx context.Context, body OutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *OutgoingService) ForceNotify(ctx context.Context, params OutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
-	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/force_notify", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/force_notify", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -469,7 +469,12 @@ func (r OutgoingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingDeleteParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r OutgoingDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type OutgoingDeleteResponseEnvelope struct {
@@ -562,7 +567,12 @@ func (r OutgoingDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingDisableParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r OutgoingDisableParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type OutgoingDisableResponseEnvelope struct {
@@ -656,7 +666,12 @@ func (r OutgoingDisableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingEnableParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r OutgoingEnableParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type OutgoingEnableResponseEnvelope struct {
@@ -750,7 +765,12 @@ func (r OutgoingEnableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OutgoingForceNotifyParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r OutgoingForceNotifyParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type OutgoingForceNotifyResponseEnvelope struct {

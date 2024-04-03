@@ -36,10 +36,10 @@ func NewCacheReserveService(opts ...option.RequestOption) (r *CacheReserveServic
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
-func (r *CacheReserveService) Clear(ctx context.Context, body CacheReserveClearParams, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
+func (r *CacheReserveService) Clear(ctx context.Context, params CacheReserveClearParams, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveClearResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -370,7 +370,12 @@ func (r CacheReserveStatusResponseState) IsKnown() bool {
 
 type CacheReserveClearParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CacheReserveClearResponseEnvelope struct {

@@ -556,6 +556,7 @@ func (r scriptSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutbound
 }
 
 type ScriptSettingEditResponseBindingsWorkersMTLSCERTBinding struct {
+	Certificate interface{} `json:"certificate,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
@@ -569,6 +570,7 @@ type ScriptSettingEditResponseBindingsWorkersMTLSCERTBinding struct {
 // metadata for the struct
 // [ScriptSettingEditResponseBindingsWorkersMTLSCERTBinding]
 type scriptSettingEditResponseBindingsWorkersMtlscertBindingJSON struct {
+	Certificate   apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -1403,6 +1405,7 @@ func (r scriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundW
 }
 
 type ScriptSettingGetResponseBindingsWorkersMTLSCERTBinding struct {
+	Certificate interface{} `json:"certificate,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
@@ -1415,6 +1418,7 @@ type ScriptSettingGetResponseBindingsWorkersMTLSCERTBinding struct {
 // scriptSettingGetResponseBindingsWorkersMtlscertBindingJSON contains the JSON
 // metadata for the struct [ScriptSettingGetResponseBindingsWorkersMTLSCERTBinding]
 type scriptSettingGetResponseBindingsWorkersMtlscertBindingJSON struct {
+	Certificate   apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -2068,6 +2072,7 @@ func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBin
 }
 
 type ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBinding struct {
+	Certificate param.Field[interface{}] `json:"certificate,required"`
 	// The class of resource that the binding provides.
 	Type param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBindingType] `json:"type,required"`
 	// ID of the certificate to bind to

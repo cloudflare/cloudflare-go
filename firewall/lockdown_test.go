@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/firewall"
@@ -93,11 +94,13 @@ func TestLockdownListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.LockdownListParams{
+			CreatedOn:         cloudflare.F(time.Now()),
 			Description:       cloudflare.F("endpoints"),
 			DescriptionSearch: cloudflare.F("endpoints"),
 			IP:                cloudflare.F("1.2.3.4"),
 			IPRangeSearch:     cloudflare.F("1.2.3.0/16"),
 			IPSearch:          cloudflare.F("1.2.3.4"),
+			ModifiedOn:        cloudflare.F(time.Now()),
 			Page:              cloudflare.F(1.000000),
 			PerPage:           cloudflare.F(1.000000),
 			Priority:          cloudflare.F(5.000000),
@@ -131,6 +134,9 @@ func TestLockdownDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
+		firewall.LockdownDeleteParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

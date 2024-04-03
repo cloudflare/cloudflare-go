@@ -65,10 +65,10 @@ func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params Cert
 }
 
 // For a given zone, delete an advanced certificate pack.
-func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, body CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
+func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, params CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -80,10 +80,10 @@ func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID s
 // For a given zone, restart validation for an advanced certificate pack. This is
 // only a validation operation for a Certificate Pack in a validation_timed_out
 // status.
-func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID string, body CertificatePackEditParams, opts ...option.RequestOption) (res *CertificatePackEditResponse, err error) {
+func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID string, params CertificatePackEditParams, opts ...option.RequestOption) (res *CertificatePackEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -329,7 +329,12 @@ func (r CertificatePackListParamsStatus) IsKnown() bool {
 
 type CertificatePackDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r CertificatePackDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CertificatePackDeleteResponseEnvelope struct {
@@ -423,7 +428,12 @@ func (r CertificatePackDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type CertificatePackEditParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r CertificatePackEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CertificatePackEditResponseEnvelope struct {

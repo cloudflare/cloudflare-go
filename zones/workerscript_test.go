@@ -34,6 +34,7 @@ func TestWorkerScriptUpdate(t *testing.T) {
 	)
 	_, err := client.Zones.Workers.Script.Update(context.TODO(), zones.WorkerScriptUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body:   cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -60,6 +61,7 @@ func TestWorkerScriptDelete(t *testing.T) {
 	)
 	err := client.Zones.Workers.Script.Delete(context.TODO(), zones.WorkerScriptDeleteParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body:   cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

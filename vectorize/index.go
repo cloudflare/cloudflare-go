@@ -137,11 +137,11 @@ func (r *IndexService) GetByIDs(ctx context.Context, accountIdentifier string, i
 
 // Inserts vectors into the specified index and returns the count of the vectors
 // successfully inserted.
-func (r *IndexService) Insert(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *VectorizeIndexInsert, err error) {
+func (r *IndexService) Insert(ctx context.Context, accountIdentifier string, indexName string, body IndexInsertParams, opts ...option.RequestOption) (res *VectorizeIndexInsert, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexInsertResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/insert", accountIdentifier, indexName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -164,11 +164,11 @@ func (r *IndexService) Query(ctx context.Context, accountIdentifier string, inde
 
 // Upserts vectors into the specified index, creating them if they do not exist and
 // returns the count of values and ids successfully inserted.
-func (r *IndexService) Upsert(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *VectorizeIndexUpsert, err error) {
+func (r *IndexService) Upsert(ctx context.Context, accountIdentifier string, indexName string, body IndexUpsertParams, opts ...option.RequestOption) (res *VectorizeIndexUpsert, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexUpsertResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/upsert", accountIdentifier, indexName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1043,6 +1043,14 @@ func (r IndexGetByIDsResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type IndexInsertParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r IndexInsertParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
 type IndexInsertResponseEnvelope struct {
 	Errors   []IndexInsertResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IndexInsertResponseEnvelopeMessages `json:"messages,required"`
@@ -1234,6 +1242,14 @@ func (r IndexQueryResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type IndexUpsertParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r IndexUpsertParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type IndexUpsertResponseEnvelope struct {

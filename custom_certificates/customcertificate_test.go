@@ -67,6 +67,7 @@ func TestCustomCertificateListWithOptionalParams(t *testing.T) {
 		Match:   cloudflare.F(custom_certificates.CustomCertificateListParamsMatchAny),
 		Page:    cloudflare.F(1.000000),
 		PerPage: cloudflare.F(5.000000),
+		Status:  cloudflare.F(custom_certificates.CustomCertificateListParamsStatusActive),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -96,6 +97,7 @@ func TestCustomCertificateDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		custom_certificates.CustomCertificateDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:   cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

@@ -6,10 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -80,7 +82,7 @@ func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query O
 // Revoke an existing Origin CA certificate by its serial number. Use your Origin
 // CA Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateDeleteResponse, err error) {
+func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, body OriginCACertificateDeleteParams, opts ...option.RequestOption) (res *OriginCACertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("certificates/%s", certificateID)
@@ -392,6 +394,25 @@ func (r OriginCACertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OriginCACertificateListParams struct {
+	// Identifier
+	Identifier param.Field[string] `query:"identifier"`
+}
+
+// URLQuery serializes [OriginCACertificateListParams]'s query parameters as
+// `url.Values`.
+func (r OriginCACertificateListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type OriginCACertificateDeleteParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r OriginCACertificateDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type OriginCACertificateDeleteResponseEnvelope struct {

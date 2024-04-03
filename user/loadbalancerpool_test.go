@@ -220,7 +220,13 @@ func TestLoadBalancerPoolDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.Delete(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
+	_, err := client.User.LoadBalancers.Pools.Delete(
+		context.TODO(),
+		"17b5962d775c646f3f9725cbc7a53df4",
+		user.LoadBalancerPoolDeleteParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

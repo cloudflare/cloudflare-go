@@ -93,10 +93,10 @@ func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, query WaitingRo
 }
 
 // Deletes a waiting room.
-func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, body WaitingRoomDeleteParams, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
+func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, params WaitingRoomDeleteParams, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", body.ZoneID, waitingRoomID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s", params.ZoneID, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1088,14 +1088,20 @@ func (r WaitingRoomNewParamsQueueingStatusCode) IsKnown() bool {
 }
 
 type WaitingRoomNewResponseEnvelope struct {
-	Result WaitingRoom                        `json:"result,required"`
-	JSON   waitingRoomNewResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                        `json:"errors,required"`
+	Messages interface{}                        `json:"messages,required"`
+	Result   WaitingRoom                        `json:"result,required"`
+	Success  interface{}                        `json:"success,required"`
+	JSON     waitingRoomNewResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomNewResponseEnvelope]
 type waitingRoomNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1543,14 +1549,20 @@ func (r WaitingRoomUpdateParamsQueueingStatusCode) IsKnown() bool {
 }
 
 type WaitingRoomUpdateResponseEnvelope struct {
-	Result WaitingRoom                           `json:"result,required"`
-	JSON   waitingRoomUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                           `json:"errors,required"`
+	Messages interface{}                           `json:"messages,required"`
+	Result   WaitingRoom                           `json:"result,required"`
+	Success  interface{}                           `json:"success,required"`
+	JSON     waitingRoomUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomUpdateResponseEnvelope]
 type waitingRoomUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1570,18 +1582,29 @@ type WaitingRoomListParams struct {
 
 type WaitingRoomDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r WaitingRoomDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type WaitingRoomDeleteResponseEnvelope struct {
-	Result WaitingRoomDeleteResponse             `json:"result,required"`
-	JSON   waitingRoomDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                           `json:"errors,required"`
+	Messages interface{}                           `json:"messages,required"`
+	Result   WaitingRoomDeleteResponse             `json:"result,required"`
+	Success  interface{}                           `json:"success,required"`
+	JSON     waitingRoomDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomDeleteResponseEnvelope]
 type waitingRoomDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2029,14 +2052,20 @@ func (r WaitingRoomEditParamsQueueingStatusCode) IsKnown() bool {
 }
 
 type WaitingRoomEditResponseEnvelope struct {
-	Result WaitingRoom                         `json:"result,required"`
-	JSON   waitingRoomEditResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                         `json:"errors,required"`
+	Messages interface{}                         `json:"messages,required"`
+	Result   WaitingRoom                         `json:"result,required"`
+	Success  interface{}                         `json:"success,required"`
+	JSON     waitingRoomEditResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomEditResponseEnvelope]
 type waitingRoomEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2055,14 +2084,20 @@ type WaitingRoomGetParams struct {
 }
 
 type WaitingRoomGetResponseEnvelope struct {
-	Result WaitingRoom                        `json:"result,required"`
-	JSON   waitingRoomGetResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                        `json:"errors,required"`
+	Messages interface{}                        `json:"messages,required"`
+	Result   WaitingRoom                        `json:"result,required"`
+	Success  interface{}                        `json:"success,required"`
+	JSON     waitingRoomGetResponseEnvelopeJSON `json:"-"`
 }
 
 // waitingRoomGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [WaitingRoomGetResponseEnvelope]
 type waitingRoomGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

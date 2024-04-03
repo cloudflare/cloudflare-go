@@ -67,6 +67,7 @@ func TestTunnelListWithOptionalParams(t *testing.T) {
 		Page:          cloudflare.F(1.000000),
 		PerPage:       cloudflare.F(1.000000),
 		TunTypes:      cloudflare.F("cfd_tunnel,warp_connector"),
+		UUID:          cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		WasActiveAt:   cloudflare.F(time.Now()),
 		WasInactiveAt: cloudflare.F(time.Now()),
 	})

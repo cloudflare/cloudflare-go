@@ -81,10 +81,10 @@ func (r *FilterService) ListAutoPaging(ctx context.Context, query FilterListPara
 }
 
 // Delete Filter
-func (r *FilterService) Delete(ctx context.Context, filterID string, body FilterDeleteParams, opts ...option.RequestOption) (res *FilterDeleteResponse, err error) {
+func (r *FilterService) Delete(ctx context.Context, filterID string, params FilterDeleteParams, opts ...option.RequestOption) (res *FilterDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/filters/%s", body.ZoneID, filterID)
+	path := fmt.Sprintf("zones/%s/workers/filters/%s", params.ZoneID, filterID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -369,7 +369,12 @@ type FilterListParams struct {
 
 type FilterDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r FilterDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type FilterDeleteResponseEnvelope struct {

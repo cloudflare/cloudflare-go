@@ -71,10 +71,10 @@ func (r *SiteLANService) List(ctx context.Context, siteID string, query SiteLANL
 }
 
 // Remove a specific LAN.
-func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string, body SiteLANDeleteParams, opts ...option.RequestOption) (res *SiteLANDeleteResponse, err error) {
+func (r *SiteLANService) Delete(ctx context.Context, siteID string, lanID string, params SiteLANDeleteParams, opts ...option.RequestOption) (res *SiteLANDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteLANDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", body.AccountID, siteID, lanID)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/lans/%s", params.AccountID, siteID, lanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1700,7 +1700,12 @@ func (r SiteLANListResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteLANDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r SiteLANDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type SiteLANDeleteResponseEnvelope struct {

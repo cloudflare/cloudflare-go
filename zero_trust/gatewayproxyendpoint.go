@@ -73,10 +73,10 @@ func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query 
 }
 
 // Deletes a configured Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, body GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponse, err error) {
+func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", body.AccountID, proxyEndpointID)
+	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", params.AccountID, proxyEndpointID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -168,8 +168,6 @@ type GatewayProxyEndpointNewParams struct {
 	IPs param.Field[[]string] `json:"ips,required"`
 	// The name of the proxy endpoint.
 	Name param.Field[string] `json:"name,required"`
-	// The subdomain to be used as the destination in the proxy client.
-	Subdomain param.Field[string] `json:"subdomain"`
 }
 
 func (r GatewayProxyEndpointNewParams) MarshalJSON() (data []byte, err error) {
@@ -270,7 +268,12 @@ type GatewayProxyEndpointListParams struct {
 }
 
 type GatewayProxyEndpointDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r GatewayProxyEndpointDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type GatewayProxyEndpointDeleteResponseEnvelope struct {
@@ -368,8 +371,6 @@ type GatewayProxyEndpointEditParams struct {
 	IPs param.Field[[]string] `json:"ips"`
 	// The name of the proxy endpoint.
 	Name param.Field[string] `json:"name"`
-	// The subdomain to be used as the destination in the proxy client.
-	Subdomain param.Field[string] `json:"subdomain"`
 }
 
 func (r GatewayProxyEndpointEditParams) MarshalJSON() (data []byte, err error) {

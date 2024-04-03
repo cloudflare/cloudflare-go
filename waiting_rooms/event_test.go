@@ -151,6 +151,7 @@ func TestEventDelete(t *testing.T) {
 		"25756b2dfe6e378a06b033b670413757",
 		waiting_rooms.EventDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:   cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

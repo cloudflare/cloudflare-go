@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
@@ -29,9 +30,13 @@ func TestBillingHistoryGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Billing.History.Get(context.TODO(), user.BillingHistoryGetParams{
-		Order:   cloudflare.F(user.BillingHistoryGetParamsOrderOccuredAt),
-		Page:    cloudflare.F(1.000000),
-		PerPage: cloudflare.F(5.000000),
+		Action:     cloudflare.F("subscription"),
+		OccuredAt:  cloudflare.F(time.Now()),
+		OccurredAt: cloudflare.F(time.Now()),
+		Order:      cloudflare.F(user.BillingHistoryGetParamsOrderOccuredAt),
+		Page:       cloudflare.F(1.000000),
+		PerPage:    cloudflare.F(5.000000),
+		Type:       cloudflare.F("charge"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

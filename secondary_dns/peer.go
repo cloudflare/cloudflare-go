@@ -81,10 +81,10 @@ func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, 
 }
 
 // Delete Peer.
-func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
+func (r *PeerService) Delete(ctx context.Context, peerID string, params PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", body.AccountID, peerID)
+	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", params.AccountID, peerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -385,7 +385,12 @@ type PeerListParams struct {
 }
 
 type PeerDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r PeerDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type PeerDeleteResponseEnvelope struct {

@@ -68,33 +68,33 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			}),
 			DNSResolvers: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsDNSResolvers{
 				IPV4: cloudflare.F([]zero_trust.GatewayRuleNewParamsRuleSettingsDNSResolversIPV4{{
-					IP:                         cloudflare.F("2001:DB8::/64"),
+					IP:                         cloudflare.F("2.2.2.2"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				}, {
-					IP:                         cloudflare.F("2001:DB8::/64"),
+					IP:                         cloudflare.F("2.2.2.2"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				}, {
-					IP:                         cloudflare.F("2001:DB8::/64"),
+					IP:                         cloudflare.F("2.2.2.2"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				}}),
 				IPV6: cloudflare.F([]zero_trust.GatewayRuleNewParamsRuleSettingsDNSResolversIPV6{{
-					IP:                         cloudflare.F("2001:DB8::/64"),
+					IP:                         cloudflare.F("2001:DB8::"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				}, {
-					IP:                         cloudflare.F("2001:DB8::/64"),
+					IP:                         cloudflare.F("2001:DB8::"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				}, {
-					IP:                         cloudflare.F("2001:DB8::/64"),
+					IP:                         cloudflare.F("2001:DB8::"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
@@ -205,33 +205,33 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				}),
 				DNSResolvers: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsDNSResolvers{
 					IPV4: cloudflare.F([]zero_trust.GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV4{{
-						IP:                         cloudflare.F("2001:DB8::/64"),
+						IP:                         cloudflare.F("2.2.2.2"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					}, {
-						IP:                         cloudflare.F("2001:DB8::/64"),
+						IP:                         cloudflare.F("2.2.2.2"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					}, {
-						IP:                         cloudflare.F("2001:DB8::/64"),
+						IP:                         cloudflare.F("2.2.2.2"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					}}),
 					IPV6: cloudflare.F([]zero_trust.GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV6{{
-						IP:                         cloudflare.F("2001:DB8::/64"),
+						IP:                         cloudflare.F("2001:DB8::"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					}, {
-						IP:                         cloudflare.F("2001:DB8::/64"),
+						IP:                         cloudflare.F("2001:DB8::"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					}, {
-						IP:                         cloudflare.F("2001:DB8::/64"),
+						IP:                         cloudflare.F("2001:DB8::"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
@@ -331,6 +331,7 @@ func TestGatewayRuleDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayRuleDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

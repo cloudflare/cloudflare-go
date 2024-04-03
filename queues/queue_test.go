@@ -121,6 +121,7 @@ func TestQueueDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.QueueDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

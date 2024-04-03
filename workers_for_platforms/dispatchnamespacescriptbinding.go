@@ -500,6 +500,7 @@ func (r dispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBinding
 }
 
 type DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding struct {
+	Certificate interface{} `json:"certificate,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
@@ -513,6 +514,7 @@ type DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding struct {
 // JSON metadata for the struct
 // [DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding]
 type dispatchNamespaceScriptBindingGetResponseWorkersMtlscertBindingJSON struct {
+	Certificate   apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field

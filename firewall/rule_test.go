@@ -93,6 +93,7 @@ func TestRuleListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.RuleListParams{
+			ID:          cloudflare.F("372e67954025e0ba6aaa6d586b9e0b60"),
 			Action:      cloudflare.F("block"),
 			Description: cloudflare.F("mir"),
 			Page:        cloudflare.F(1.000000),
@@ -171,7 +172,7 @@ func TestRuleEdit(t *testing.T) {
 	}
 }
 
-func TestRuleGet(t *testing.T) {
+func TestRuleGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -188,8 +189,10 @@ func TestRuleGet(t *testing.T) {
 	_, err := client.Firewall.Rules.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"372e67954025e0ba6aaa6d586b9e0b60",
-		firewall.RuleGetParams{},
+		firewall.RuleGetParams{
+			PathID:  cloudflare.F("372e67954025e0ba6aaa6d586b9e0b60"),
+			QueryID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b60"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

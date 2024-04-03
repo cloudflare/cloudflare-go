@@ -866,7 +866,9 @@ type TunnelListParams struct {
 	// Number of results to display.
 	PerPage param.Field[float64] `query:"per_page"`
 	// The types of tunnels to filter separated by a comma.
-	TunTypes      param.Field[string]    `query:"tun_types"`
+	TunTypes param.Field[string] `query:"tun_types"`
+	// UUID of the tunnel.
+	UUID          param.Field[string]    `query:"uuid"`
 	WasActiveAt   param.Field[time.Time] `query:"was_active_at" format:"date-time"`
 	WasInactiveAt param.Field[time.Time] `query:"was_inactive_at" format:"date-time"`
 }

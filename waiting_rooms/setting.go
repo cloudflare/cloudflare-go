@@ -155,14 +155,20 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingUpdateResponseEnvelope struct {
-	Result SettingUpdateResponse             `json:"result,required"`
-	JSON   settingUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                       `json:"errors,required"`
+	Messages interface{}                       `json:"messages,required"`
+	Result   SettingUpdateResponse             `json:"result,required"`
+	Success  interface{}                       `json:"success,required"`
+	JSON     settingUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // settingUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SettingUpdateResponseEnvelope]
 type settingUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -189,14 +195,20 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingEditResponseEnvelope struct {
-	Result SettingEditResponse             `json:"result,required"`
-	JSON   settingEditResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                     `json:"errors,required"`
+	Messages interface{}                     `json:"messages,required"`
+	Result   SettingEditResponse             `json:"result,required"`
+	Success  interface{}                     `json:"success,required"`
+	JSON     settingEditResponseEnvelopeJSON `json:"-"`
 }
 
 // settingEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SettingEditResponseEnvelope]
 type settingEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -215,14 +227,20 @@ type SettingGetParams struct {
 }
 
 type SettingGetResponseEnvelope struct {
-	Result SettingGetResponse             `json:"result,required"`
-	JSON   settingGetResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                    `json:"errors,required"`
+	Messages interface{}                    `json:"messages,required"`
+	Result   SettingGetResponse             `json:"result,required"`
+	Success  interface{}                    `json:"success,required"`
+	JSON     settingGetResponseEnvelopeJSON `json:"-"`
 }
 
 // settingGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SettingGetResponseEnvelope]
 type settingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

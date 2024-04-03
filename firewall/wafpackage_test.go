@@ -34,6 +34,7 @@ func TestWAFPackageListWithOptionalParams(t *testing.T) {
 		firewall.WAFPackageListParams{
 			Direction: cloudflare.F(firewall.WAFPackageListParamsDirectionDesc),
 			Match:     cloudflare.F(firewall.WAFPackageListParamsMatchAny),
+			Name:      cloudflare.F("USER"),
 			Order:     cloudflare.F(firewall.WAFPackageListParamsOrderName),
 			Page:      cloudflare.F(1.000000),
 			PerPage:   cloudflare.F(5.000000),
