@@ -70,6 +70,37 @@ func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGet
 	return
 }
 
+type PermissionGrant struct {
+	Read  bool                `json:"read"`
+	Write bool                `json:"write"`
+	JSON  permissionGrantJSON `json:"-"`
+}
+
+// permissionGrantJSON contains the JSON metadata for the struct [PermissionGrant]
+type permissionGrantJSON struct {
+	Read        apijson.Field
+	Write       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PermissionGrant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionGrantJSON) RawJSON() string {
+	return r.raw
+}
+
+type PermissionGrantParam struct {
+	Read  param.Field[bool] `json:"read"`
+	Write param.Field[bool] `json:"write"`
+}
+
+func (r PermissionGrantParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type Role struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
