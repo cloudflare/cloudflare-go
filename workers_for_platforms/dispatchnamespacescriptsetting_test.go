@@ -55,49 +55,7 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				Message: cloudflare.F("string"),
 			}}),
 			Result: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResult{
-				Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBinding{workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKVNamespaceBinding(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKVNamespaceBinding{
-					Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				}), workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKVNamespaceBinding(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKVNamespaceBinding{
-					Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				}), workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKVNamespaceBinding(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKVNamespaceBinding{
-					Type: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				})}),
-				CompatibilityDate:  cloudflare.F("2022-04-05"),
-				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
-				Logpush:            cloudflare.F(false),
-				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultMigrations](workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultMigrationsWorkersSingleStepMigrations(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultMigrationsWorkersSingleStepMigrations{
-					NewTag:         cloudflare.F("v2"),
-					OldTag:         cloudflare.F("v1"),
-					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
-					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass{{
-						From: cloudflare.F("string"),
-						To:   cloudflare.F("string"),
-					}, {
-						From: cloudflare.F("string"),
-						To:   cloudflare.F("string"),
-					}, {
-						From: cloudflare.F("string"),
-						To:   cloudflare.F("string"),
-					}}),
-					TransferredClasses: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass{{
-						From:       cloudflare.F("string"),
-						FromScript: cloudflare.F("string"),
-						To:         cloudflare.F("string"),
-					}, {
-						From:       cloudflare.F("string"),
-						FromScript: cloudflare.F("string"),
-						To:         cloudflare.F("string"),
-					}, {
-						From:       cloudflare.F("string"),
-						FromScript: cloudflare.F("string"),
-						To:         cloudflare.F("string"),
-					}}),
-				})),
-				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultPlacement{
-					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultPlacementModeSmart),
-				}),
-				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
+				Logpush: cloudflare.F(false),
 				TailConsumers: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultTailConsumer{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
@@ -111,7 +69,6 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
 				}}),
-				UsageModel: cloudflare.F("unbound"),
 			}),
 			Success: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSuccessTrue),
 		},
