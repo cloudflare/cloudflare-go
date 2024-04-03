@@ -115,7 +115,6 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetUpdateParams{
-			ID: cloudflare.F("2f2feab2026849078ba485f918791bdc"),
 			Rules: cloudflare.F([]rulesets.RulesetUpdateParamsRule{rulesets.RulesetUpdateParamsRulesRulesetsBlockRule(rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters{

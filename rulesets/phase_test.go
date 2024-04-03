@@ -32,7 +32,6 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		rulesets.PhaseUpdateParamsRulesetPhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseUpdateParams{
-			ID: cloudflare.F("2f2feab2026849078ba485f918791bdc"),
 			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRule{rulesets.PhaseUpdateParamsRulesRulesetsBlockRule(rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
