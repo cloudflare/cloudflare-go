@@ -35,11 +35,11 @@ func NewWorkerScriptService(opts ...option.RequestOption) (r *WorkerScriptServic
 }
 
 // Upload a worker, or a new version of a worker.
-func (r *WorkerScriptService) Update(ctx context.Context, body WorkerScriptUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUpdateResponse, err error) {
+func (r *WorkerScriptService) Update(ctx context.Context, params WorkerScriptUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/script", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/script", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,10 +48,10 @@ func (r *WorkerScriptService) Update(ctx context.Context, body WorkerScriptUpdat
 }
 
 // Delete your Worker. This call has no response body on a successful delete.
-func (r *WorkerScriptService) Delete(ctx context.Context, body WorkerScriptDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *WorkerScriptService) Delete(ctx context.Context, params WorkerScriptDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("zones/%s/workers/script", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/workers/script", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
@@ -85,7 +85,12 @@ func init() {
 
 type WorkerScriptUpdateParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r WorkerScriptUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type WorkerScriptUpdateResponseEnvelope struct {
@@ -179,7 +184,12 @@ func (r WorkerScriptUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type WorkerScriptDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r WorkerScriptDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type WorkerScriptGetParams struct {

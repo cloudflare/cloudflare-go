@@ -86,10 +86,10 @@ func (r *DevicePostureService) ListAutoPaging(ctx context.Context, query DeviceP
 }
 
 // Deletes a device posture rule.
-func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, body DevicePostureDeleteParams, opts ...option.RequestOption) (res *DevicePostureDeleteResponse, err error) {
+func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, params DevicePostureDeleteParams, opts ...option.RequestOption) (res *DevicePostureDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/devices/posture/%s", body.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/devices/posture/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -2915,7 +2915,12 @@ type DevicePostureListParams struct {
 }
 
 type DevicePostureDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r DevicePostureDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type DevicePostureDeleteResponseEnvelope struct {

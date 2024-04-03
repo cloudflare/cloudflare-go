@@ -71,7 +71,7 @@ func (r *HostnameService) ListAutoPaging(ctx context.Context, zoneIdentifier str
 }
 
 // Delete Web3 Hostname
-func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HostnameDeleteResponse, err error) {
+func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, identifier string, body HostnameDeleteParams, opts ...option.RequestOption) (res *HostnameDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
@@ -324,6 +324,14 @@ func (r HostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type HostnameDeleteParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r HostnameDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type HostnameDeleteResponseEnvelope struct {

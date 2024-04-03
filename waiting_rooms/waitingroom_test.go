@@ -175,6 +175,7 @@ func TestWaitingRoomDelete(t *testing.T) {
 		"699d98642c564d2e855e9661899b7252",
 		waiting_rooms.WaitingRoomDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:   cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

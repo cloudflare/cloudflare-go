@@ -32,10 +32,10 @@ func NewRuleAdvertisementService(opts ...option.RequestOption) (r *RuleAdvertise
 }
 
 // Update advertisement for rule.
-func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, body RuleAdvertisementEditParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRuleAdvertisable, err error) {
+func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, params RuleAdvertisementEditParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRuleAdvertisable, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleAdvertisementEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/rules/%s/advertisement", body.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules/%s/advertisement", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -69,7 +69,12 @@ func (r magicNetworkMonitoringRuleAdvertisableJSON) RawJSON() string {
 }
 
 type RuleAdvertisementEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RuleAdvertisementEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RuleAdvertisementEditResponseEnvelope struct {

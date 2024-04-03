@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
@@ -76,7 +77,7 @@ func TestSpeedScheduleGetWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSpeedTrendsList(t *testing.T) {
+func TestSpeedTrendsListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -98,7 +99,9 @@ func TestSpeedTrendsList(t *testing.T) {
 			DeviceType: cloudflare.F(speed.SpeedTrendsListParamsDeviceTypeDesktop),
 			Metrics:    cloudflare.F("performanceScore,ttfb,fcp,si,lcp,tti,tbt,cls"),
 			Region:     cloudflare.F(speed.SpeedTrendsListParamsRegionUsCentral1),
+			Start:      cloudflare.F(time.Now()),
 			Tz:         cloudflare.F("string"),
+			End:        cloudflare.F(time.Now()),
 		},
 	)
 	if err != nil {

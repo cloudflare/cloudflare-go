@@ -114,11 +114,11 @@ func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string
 }
 
 // Fetches the details of a firewall rule.
-func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, id string, query RuleGetParams, opts ...option.RequestOption) (res *FirewallFilterRule, err error) {
+func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params RuleGetParams, opts ...option.RequestOption) (res *FirewallFilterRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, params.PathID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -490,6 +490,8 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleListParams struct {
+	// The unique identifier of the firewall rule.
+	ID param.Field[string] `query:"id"`
 	// The action to search for. Must be an exact match.
 	Action param.Field[string] `query:"action"`
 	// A case-insensitive string to find in the description.
@@ -740,6 +742,18 @@ func (r ruleEditResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type RuleGetParams struct {
+	// The unique identifier of the firewall rule.
+	PathID param.Field[string] `path:"id,required"`
+	// The unique identifier of the firewall rule.
+	QueryID param.Field[string] `query:"id"`
+}
+
+// URLQuery serializes [RuleGetParams]'s query parameters as `url.Values`.
+func (r RuleGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type RuleGetResponseEnvelope struct {

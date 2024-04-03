@@ -35,10 +35,10 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Create network monitoring rules for account. Currently only supports creating a
 // single rule per API request.
-func (r *RuleService) New(ctx context.Context, body RuleNewParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/rules", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -48,10 +48,10 @@ func (r *RuleService) New(ctx context.Context, body RuleNewParams, opts ...optio
 }
 
 // Update network monitoring rules for account.
-func (r *RuleService) Update(ctx context.Context, body RuleUpdateParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/rules", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -84,10 +84,10 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, 
 }
 
 // Delete a network monitoring rule for account.
-func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, ruleID string, params RuleDeleteParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", body.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -97,10 +97,10 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 }
 
 // Update a network monitoring rule for account.
-func (r *RuleService) Edit(ctx context.Context, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", body.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -171,7 +171,12 @@ func (r magicNetworkMonitoringRuleJSON) RawJSON() string {
 }
 
 type RuleNewParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RuleNewResponseEnvelope struct {
@@ -264,7 +269,12 @@ func (r RuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RuleUpdateResponseEnvelope struct {
@@ -361,7 +371,12 @@ type RuleListParams struct {
 }
 
 type RuleDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RuleDeleteResponseEnvelope struct {
@@ -454,7 +469,12 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RuleEditResponseEnvelope struct {

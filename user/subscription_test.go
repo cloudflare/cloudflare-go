@@ -87,7 +87,13 @@ func TestSubscriptionDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Subscriptions.Delete(context.TODO(), "506e3185e9c882d175a2d0cb0093d9f2")
+	_, err := client.User.Subscriptions.Delete(
+		context.TODO(),
+		"506e3185e9c882d175a2d0cb0093d9f2",
+		user.SubscriptionDeleteParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

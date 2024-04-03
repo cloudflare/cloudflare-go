@@ -64,8 +64,10 @@ func TestNetworkRouteNetworkDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"172.16.0.0%2F16",
 		zero_trust.NetworkRouteNetworkDeleteParams{
-			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			TunType:   cloudflare.F(zero_trust.NetworkRouteNetworkDeleteParamsTunTypeCfdTunnel),
+			AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			TunType:          cloudflare.F(zero_trust.NetworkRouteNetworkDeleteParamsTunTypeCfdTunnel),
+			TunnelID:         cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
+			VirtualNetworkID: cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		},
 	)
 	if err != nil {

@@ -101,7 +101,13 @@ func TestFirewallAccessRuleDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Firewall.AccessRules.Delete(context.TODO(), "92f17202ed8bd63d69a66b86a49a8f6b")
+	_, err := client.User.Firewall.AccessRules.Delete(
+		context.TODO(),
+		"92f17202ed8bd63d69a66b86a49a8f6b",
+		user.FirewallAccessRuleDeleteParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

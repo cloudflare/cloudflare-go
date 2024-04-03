@@ -64,6 +64,7 @@ func TestDLPDatasetUploadEdit(t *testing.T) {
 		int64(0),
 		zero_trust.DLPDatasetUploadEditParams{
 			AccountID: cloudflare.F("string"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

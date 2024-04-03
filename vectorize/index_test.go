@@ -239,6 +239,9 @@ func TestIndexInsert(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-index",
+		vectorize.IndexInsertParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -301,6 +304,9 @@ func TestIndexUpsert(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-index",
+		vectorize.IndexUpsertParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

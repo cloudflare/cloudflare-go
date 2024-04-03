@@ -562,6 +562,7 @@ func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersDispatchNamespa
 }
 
 type DispatchNamespaceScriptSettingEditResponseBindingsWorkersMTLSCERTBinding struct {
+	Certificate interface{} `json:"certificate,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
@@ -575,6 +576,7 @@ type DispatchNamespaceScriptSettingEditResponseBindingsWorkersMTLSCERTBinding st
 // contains the JSON metadata for the struct
 // [DispatchNamespaceScriptSettingEditResponseBindingsWorkersMTLSCERTBinding]
 type dispatchNamespaceScriptSettingEditResponseBindingsWorkersMtlscertBindingJSON struct {
+	Certificate   apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -1416,6 +1418,7 @@ func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersDispatchNamespac
 }
 
 type DispatchNamespaceScriptSettingGetResponseBindingsWorkersMTLSCERTBinding struct {
+	Certificate interface{} `json:"certificate,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
@@ -1429,6 +1432,7 @@ type DispatchNamespaceScriptSettingGetResponseBindingsWorkersMTLSCERTBinding str
 // contains the JSON metadata for the struct
 // [DispatchNamespaceScriptSettingGetResponseBindingsWorkersMTLSCERTBinding]
 type dispatchNamespaceScriptSettingGetResponseBindingsWorkersMtlscertBindingJSON struct {
+	Certificate   apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -2075,6 +2079,7 @@ func (r DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersDispatchNam
 }
 
 type DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersMTLSCERTBinding struct {
+	Certificate param.Field[interface{}] `json:"certificate,required"`
 	// The class of resource that the binding provides.
 	Type param.Field[DispatchNamespaceScriptSettingEditParamsResultBindingsWorkersMTLSCERTBindingType] `json:"type,required"`
 	// ID of the certificate to bind to

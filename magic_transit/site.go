@@ -6,8 +6,10 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -65,11 +67,11 @@ func (r *SiteService) Update(ctx context.Context, siteID string, params SiteUpda
 // Lists Sites associated with an account. Use connector_identifier query param to
 // return sites where connector_identifier matches either site.ConnectorID or
 // site.SecondaryConnectorID.
-func (r *SiteService) List(ctx context.Context, query SiteListParams, opts ...option.RequestOption) (res *SiteListResponse, err error) {
+func (r *SiteService) List(ctx context.Context, params SiteListParams, opts ...option.RequestOption) (res *SiteListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/magic/sites", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,10 +80,10 @@ func (r *SiteService) List(ctx context.Context, query SiteListParams, opts ...op
 }
 
 // Remove a specific Site.
-func (r *SiteService) Delete(ctx context.Context, siteID string, body SiteDeleteParams, opts ...option.RequestOption) (res *SiteDeleteResponse, err error) {
+func (r *SiteService) Delete(ctx context.Context, siteID string, params SiteDeleteParams, opts ...option.RequestOption) (res *SiteDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s", body.AccountID, siteID)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -798,6 +800,16 @@ func (r SiteUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type SiteListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Identifier
+	ConnectorIdentifier param.Field[string] `query:"connector_identifier"`
+}
+
+// URLQuery serializes [SiteListParams]'s query parameters as `url.Values`.
+func (r SiteListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type SiteListResponseEnvelope struct {
@@ -891,7 +903,12 @@ func (r SiteListResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r SiteDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type SiteDeleteResponseEnvelope struct {

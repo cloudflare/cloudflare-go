@@ -79,10 +79,10 @@ func (r *DevicePolicyService) ListAutoPaging(ctx context.Context, query DevicePo
 
 // Deletes a device settings profile and fetches a list of the remaining profiles
 // for an account.
-func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body DevicePolicyDeleteParams, opts ...option.RequestOption) (res *[]DevicesDeviceSettingsPolicy, err error) {
+func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, params DevicePolicyDeleteParams, opts ...option.RequestOption) (res *[]DevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/devices/policy/%s", body.AccountID, policyID)
+	path := fmt.Sprintf("accounts/%s/devices/policy/%s", params.AccountID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -426,7 +426,12 @@ type DevicePolicyListParams struct {
 }
 
 type DevicePolicyDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r DevicePolicyDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type DevicePolicyDeleteResponseEnvelope struct {

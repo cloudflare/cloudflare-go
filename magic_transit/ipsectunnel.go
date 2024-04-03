@@ -78,10 +78,10 @@ func (r *IPSECTunnelService) List(ctx context.Context, query IPSECTunnelListPara
 // Disables and removes a specific static IPsec Tunnel associated with an account.
 // Use `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string, body IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
+func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string, params IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", body.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -108,10 +108,10 @@ func (r *IPSECTunnelService) Get(ctx context.Context, tunnelIdentifier string, q
 // without persisting changes. After a PSK is generated, the PSK is immediately
 // persisted to Cloudflare's edge and cannot be retrieved later. Note the PSK in a
 // safe place.
-func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, tunnelIdentifier string, body IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
+func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, tunnelIdentifier string, params IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelPSKGenerateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", body.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", params.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1062,7 +1062,12 @@ func (r IPSECTunnelListResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r IPSECTunnelDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type IPSECTunnelDeleteResponseEnvelope struct {
@@ -1250,7 +1255,12 @@ func (r IPSECTunnelGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type IPSECTunnelPSKGenerateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r IPSECTunnelPSKGenerateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type IPSECTunnelPSKGenerateResponseEnvelope struct {

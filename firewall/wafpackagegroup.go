@@ -239,12 +239,16 @@ type WAFPackageGroupListParams struct {
 	// The state of the rules contained in the rule group. When `on`, the rules in the
 	// group are configurable/usable.
 	Mode param.Field[WAFPackageGroupListParamsMode] `query:"mode"`
+	// The name of the rule group.
+	Name param.Field[string] `query:"name"`
 	// The field used to sort returned rule groups.
 	Order param.Field[WAFPackageGroupListParamsOrder] `query:"order"`
 	// The page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// The number of rule groups per page.
 	PerPage param.Field[float64] `query:"per_page"`
+	// The number of rules in the current rule group.
+	RulesCount param.Field[float64] `query:"rules_count"`
 }
 
 // URLQuery serializes [WAFPackageGroupListParams]'s query parameters as

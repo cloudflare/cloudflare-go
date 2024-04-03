@@ -74,7 +74,7 @@ func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier st
 }
 
 // Deletes an existing rate limit.
-func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
+func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, body RateLimitDeleteParams, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RateLimitDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
@@ -625,6 +625,14 @@ func (r RateLimitListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type RateLimitDeleteParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RateLimitDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RateLimitDeleteResponseEnvelope struct {

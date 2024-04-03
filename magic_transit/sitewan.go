@@ -70,10 +70,10 @@ func (r *SiteWANService) List(ctx context.Context, siteID string, query SiteWANL
 }
 
 // Remove a specific WAN.
-func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string, body SiteWANDeleteParams, opts ...option.RequestOption) (res *SiteWANDeleteResponse, err error) {
+func (r *SiteWANService) Delete(ctx context.Context, siteID string, wanID string, params SiteWANDeleteParams, opts ...option.RequestOption) (res *SiteWANDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteWANDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", body.AccountID, siteID, wanID)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s/wans/%s", params.AccountID, siteID, wanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -901,7 +901,12 @@ func (r SiteWANListResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteWANDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r SiteWANDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type SiteWANDeleteResponseEnvelope struct {

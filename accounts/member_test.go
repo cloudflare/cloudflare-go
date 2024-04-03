@@ -130,6 +130,7 @@ func TestMemberDelete(t *testing.T) {
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberDeleteParams{
 			AccountID: cloudflare.F[any](map[string]interface{}{}),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

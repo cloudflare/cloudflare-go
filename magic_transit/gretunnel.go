@@ -74,10 +74,10 @@ func (r *GRETunnelService) List(ctx context.Context, query GRETunnelListParams, 
 
 // Disables and removes a specific static GRE tunnel. Use `?validate_only=true` as
 // an optional query parameter to only run validation without persisting changes.
-func (r *GRETunnelService) Delete(ctx context.Context, tunnelIdentifier string, body GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
+func (r *GRETunnelService) Delete(ctx context.Context, tunnelIdentifier string, params GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GRETunnelDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", body.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", params.AccountID, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -904,7 +904,12 @@ func (r GRETunnelListResponseEnvelopeSuccess) IsKnown() bool {
 
 type GRETunnelDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r GRETunnelDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type GRETunnelDeleteResponseEnvelope struct {

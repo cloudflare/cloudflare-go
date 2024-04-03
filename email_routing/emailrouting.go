@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -39,7 +40,7 @@ func NewEmailRoutingService(opts ...option.RequestOption) (r *EmailRoutingServic
 
 // Disable your Email Routing zone. Also removes additional MX records previously
 // required for Email Routing to work.
-func (r *EmailRoutingService) Disable(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *EmailRoutingDisableResponse, err error) {
+func (r *EmailRoutingService) Disable(ctx context.Context, zoneIdentifier string, body EmailRoutingDisableParams, opts ...option.RequestOption) (res *EmailRoutingDisableResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EmailRoutingDisableResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/disable", zoneIdentifier)
@@ -52,7 +53,7 @@ func (r *EmailRoutingService) Disable(ctx context.Context, zoneIdentifier string
 }
 
 // Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
-func (r *EmailRoutingService) Enable(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *EmailRoutingEnableResponse, err error) {
+func (r *EmailRoutingService) Enable(ctx context.Context, zoneIdentifier string, body EmailRoutingEnableParams, opts ...option.RequestOption) (res *EmailRoutingEnableResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EmailRoutingEnableResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/enable", zoneIdentifier)
@@ -362,6 +363,14 @@ func (r EmailRoutingGetResponseStatus) IsKnown() bool {
 	return false
 }
 
+type EmailRoutingDisableParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r EmailRoutingDisableParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
 type EmailRoutingDisableResponseEnvelope struct {
 	Errors   []EmailRoutingDisableResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []EmailRoutingDisableResponseEnvelopeMessages `json:"messages,required"`
@@ -449,6 +458,14 @@ func (r EmailRoutingDisableResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type EmailRoutingEnableParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r EmailRoutingEnableParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type EmailRoutingEnableResponseEnvelope struct {

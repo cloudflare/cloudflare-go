@@ -79,10 +79,10 @@ func (r *PageruleService) List(ctx context.Context, params PageruleListParams, o
 }
 
 // Deletes an existing Page Rule.
-func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
+func (r *PageruleService) Delete(ctx context.Context, pageruleID string, params PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/pagerules/%s", body.ZoneID, pageruleID)
+	path := fmt.Sprintf("zones/%s/pagerules/%s", params.ZoneID, pageruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1094,7 +1094,12 @@ func (r PageruleListResponseEnvelopeSuccess) IsKnown() bool {
 
 type PageruleDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r PageruleDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type PageruleDeleteResponseEnvelope struct {

@@ -86,10 +86,10 @@ func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query Gatew
 }
 
 // Deletes a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, body GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponse, err error) {
+func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, params GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", body.AccountID, locationID)
+	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", params.AccountID, locationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -429,7 +429,12 @@ type GatewayLocationListParams struct {
 }
 
 type GatewayLocationDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r GatewayLocationDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type GatewayLocationDeleteResponseEnvelope struct {

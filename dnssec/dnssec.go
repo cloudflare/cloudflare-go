@@ -35,10 +35,10 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 }
 
 // Delete DNSSEC.
-func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opts ...option.RequestOption) (res *DNSSECDeleteResponse, err error) {
+func (r *DNSSECService) Delete(ctx context.Context, params DNSSECDeleteParams, opts ...option.RequestOption) (res *DNSSECDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSECDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dnssec", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/dnssec", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -180,7 +180,12 @@ func init() {
 
 type DNSSECDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r DNSSECDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type DNSSECDeleteResponseEnvelope struct {

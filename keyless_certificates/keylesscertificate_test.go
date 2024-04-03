@@ -94,6 +94,7 @@ func TestKeylessCertificateDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		keyless_certificates.KeylessCertificateDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:   cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

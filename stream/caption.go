@@ -48,10 +48,10 @@ func (r *CaptionService) Update(ctx context.Context, identifier string, language
 }
 
 // Removes the captions or subtitles from a video.
-func (r *CaptionService) Delete(ctx context.Context, identifier string, language string, body CaptionDeleteParams, opts ...option.RequestOption) (res *CaptionDeleteResponse, err error) {
+func (r *CaptionService) Delete(ctx context.Context, identifier string, language string, params CaptionDeleteParams, opts ...option.RequestOption) (res *CaptionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", body.AccountID, identifier, language)
+	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -241,7 +241,12 @@ func (r CaptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type CaptionDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r CaptionDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CaptionDeleteResponseEnvelope struct {

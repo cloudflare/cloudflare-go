@@ -85,7 +85,7 @@ func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier strin
 }
 
 // Deletes an existing filter.
-func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallFilter, err error) {
+func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, body FilterDeleteParams, opts ...option.RequestOption) (res *FirewallFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -374,6 +374,8 @@ func (r FilterUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type FilterListParams struct {
+	// The unique identifier of the filter.
+	ID param.Field[string] `query:"id"`
 	// A case-insensitive string to find in the description.
 	Description param.Field[string] `query:"description"`
 	// A case-insensitive string to find in the expression.
@@ -394,6 +396,14 @@ func (r FilterListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type FilterDeleteParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r FilterDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type FilterDeleteResponseEnvelope struct {

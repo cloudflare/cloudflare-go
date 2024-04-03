@@ -35,10 +35,10 @@ func NewAddressMapIPService(opts ...option.RequestOption) (r *AddressMapIPServic
 }
 
 // Add an IP from a prefix owned by the account to a particular address map.
-func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, body AddressMapIPUpdateParams, opts ...option.RequestOption) (res *AddressMapIPUpdateResponse, err error) {
+func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPUpdateParams, opts ...option.RequestOption) (res *AddressMapIPUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -48,10 +48,10 @@ func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, i
 }
 
 // Remove an IP from a particular address map.
-func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, body AddressMapIPDeleteParams, opts ...option.RequestOption) (res *AddressMapIPDeleteResponse, err error) {
+func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPDeleteParams, opts ...option.RequestOption) (res *AddressMapIPDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -112,7 +112,12 @@ func (r AddressMapIPDeleteResponseArray) ImplementsAddressingAddressMapIPDeleteR
 
 type AddressMapIPUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r AddressMapIPUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapIPUpdateResponseEnvelope struct {
@@ -239,7 +244,12 @@ func (r addressMapIPUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type AddressMapIPDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r AddressMapIPDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapIPDeleteResponseEnvelope struct {

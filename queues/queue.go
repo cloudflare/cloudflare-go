@@ -77,10 +77,10 @@ func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...
 }
 
 // Deletes a queue.
-func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponse, err error) {
+func (r *QueueService) Delete(ctx context.Context, queueID string, params QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/queues/%s", body.AccountID, queueID)
+	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -262,9 +262,13 @@ func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueNewResponseEnvelope struct {
-	Errors   []QueueNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []QueueNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueNewResponse                   `json:"result,required,nullable"`
+	CreatedOn  interface{}                        `json:"created_on,required"`
+	Errors     []QueueNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []QueueNewResponseEnvelopeMessages `json:"messages,required"`
+	ModifiedOn interface{}                        `json:"modified_on,required"`
+	QueueID    interface{}                        `json:"queue_id,required"`
+	QueueName  interface{}                        `json:"queue_name,required"`
+	Result     QueueNewResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -274,8 +278,12 @@ type QueueNewResponseEnvelope struct {
 // queueNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueNewResponseEnvelope]
 type queueNewResponseEnvelopeJSON struct {
+	CreatedOn   apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	ResultInfo  apijson.Field
@@ -394,9 +402,13 @@ func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueUpdateResponseEnvelope struct {
-	Errors   []QueueUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []QueueUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueUpdateResponse                   `json:"result,required,nullable"`
+	CreatedOn  interface{}                           `json:"created_on,required"`
+	Errors     []QueueUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []QueueUpdateResponseEnvelopeMessages `json:"messages,required"`
+	ModifiedOn interface{}                           `json:"modified_on,required"`
+	QueueID    interface{}                           `json:"queue_id,required"`
+	QueueName  interface{}                           `json:"queue_name,required"`
+	Result     QueueUpdateResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -406,8 +418,12 @@ type QueueUpdateResponseEnvelope struct {
 // queueUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueUpdateResponseEnvelope]
 type queueUpdateResponseEnvelopeJSON struct {
+	CreatedOn   apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	ResultInfo  apijson.Field
@@ -521,9 +537,17 @@ type QueueListParams struct {
 }
 
 type QueueListResponseEnvelope struct {
-	Errors   []QueueListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []QueueListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []QueueListResponse                 `json:"result,required,nullable"`
+	Consumers           interface{}                         `json:"consumers,required"`
+	ConsumersTotalCount interface{}                         `json:"consumers_total_count,required"`
+	CreatedOn           interface{}                         `json:"created_on,required"`
+	Errors              []QueueListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages            []QueueListResponseEnvelopeMessages `json:"messages,required"`
+	ModifiedOn          interface{}                         `json:"modified_on,required"`
+	Producers           interface{}                         `json:"producers,required"`
+	ProducersTotalCount interface{}                         `json:"producers_total_count,required"`
+	QueueID             interface{}                         `json:"queue_id,required"`
+	QueueName           interface{}                         `json:"queue_name,required"`
+	Result              []QueueListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueListResponseEnvelopeResultInfo `json:"result_info"`
@@ -533,13 +557,21 @@ type QueueListResponseEnvelope struct {
 // queueListResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueListResponseEnvelope]
 type queueListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Consumers           apijson.Field
+	ConsumersTotalCount apijson.Field
+	CreatedOn           apijson.Field
+	Errors              apijson.Field
+	Messages            apijson.Field
+	ModifiedOn          apijson.Field
+	Producers           apijson.Field
+	ProducersTotalCount apijson.Field
+	QueueID             apijson.Field
+	QueueName           apijson.Field
+	Result              apijson.Field
+	Success             apijson.Field
+	ResultInfo          apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *QueueListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
@@ -646,7 +678,12 @@ func (r queueListResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type QueueDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r QueueDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type QueueDeleteResponseEnvelope struct {
@@ -777,9 +814,13 @@ type QueueGetParams struct {
 }
 
 type QueueGetResponseEnvelope struct {
-	Errors   []QueueGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []QueueGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueGetResponse                   `json:"result,required,nullable"`
+	CreatedOn  interface{}                        `json:"created_on,required"`
+	Errors     []QueueGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []QueueGetResponseEnvelopeMessages `json:"messages,required"`
+	ModifiedOn interface{}                        `json:"modified_on,required"`
+	QueueID    interface{}                        `json:"queue_id,required"`
+	QueueName  interface{}                        `json:"queue_name,required"`
+	Result     QueueGetResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -789,8 +830,12 @@ type QueueGetResponseEnvelope struct {
 // queueGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [QueueGetResponseEnvelope]
 type queueGetResponseEnvelopeJSON struct {
+	CreatedOn   apijson.Field
 	Errors      apijson.Field
 	Messages    apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	ResultInfo  apijson.Field

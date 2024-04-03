@@ -48,10 +48,10 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 }
 
 // Delete Account Custom Nameserver
-func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponse, err error) {
+func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, params CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns/%s", body.AccountID, customNSID)
+	path := fmt.Sprintf("accounts/%s/custom_ns/%s", params.AccountID, customNSID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -87,10 +87,10 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 }
 
 // Verify Account Custom Nameserver Glue Records
-func (r *CustomNameserverService) Verify(ctx context.Context, body CustomNameserverVerifyParams, opts ...option.RequestOption) (res *[]CustomNameserver, err error) {
+func (r *CustomNameserverService) Verify(ctx context.Context, params CustomNameserverVerifyParams, opts ...option.RequestOption) (res *[]CustomNameserver, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverVerifyResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns/verify", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/custom_ns/verify", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -324,7 +324,12 @@ func (r CustomNameserverNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type CustomNameserverDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r CustomNameserverDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomNameserverDeleteResponseEnvelope struct {
@@ -705,7 +710,12 @@ func (r customNameserverGetResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type CustomNameserverVerifyParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r CustomNameserverVerifyParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomNameserverVerifyResponseEnvelope struct {

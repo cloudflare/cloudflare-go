@@ -339,6 +339,8 @@ type NetworkRouteListParams struct {
 	Page param.Field[float64] `query:"page"`
 	// Number of results to display.
 	PerPage param.Field[float64] `query:"per_page"`
+	// UUID of the route.
+	RouteID param.Field[string] `query:"route_id"`
 	// The types of tunnels to filter separated by a comma.
 	TunTypes param.Field[string] `query:"tun_types"`
 	// UUID of the Cloudflare Tunnel serving the route.

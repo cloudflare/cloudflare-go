@@ -73,10 +73,10 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 }
 
 // Disable and remove a specific Magic static route.
-func (r *RouteService) Delete(ctx context.Context, routeIdentifier string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
+func (r *RouteService) Delete(ctx context.Context, routeIdentifier string, params RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/routes/%s", body.AccountID, routeIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/routes/%s", params.AccountID, routeIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -704,7 +704,12 @@ func (r RouteListResponseEnvelopeSuccess) IsKnown() bool {
 
 type RouteDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RouteDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RouteDeleteResponseEnvelope struct {

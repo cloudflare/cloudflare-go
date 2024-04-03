@@ -671,6 +671,8 @@ type WAFPackageListParams struct {
 	// When set to `all`, all the search requirements must match. When set to `any`,
 	// only one of the search requirements has to match.
 	Match param.Field[WAFPackageListParamsMatch] `query:"match"`
+	// The name of the WAF package.
+	Name param.Field[string] `query:"name"`
 	// The field used to sort returned packages.
 	Order param.Field[WAFPackageListParamsOrder] `query:"order"`
 	// The page number of paginated results.

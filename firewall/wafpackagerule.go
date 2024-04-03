@@ -381,6 +381,7 @@ type WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRule struct {
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule.
 	AllowedModes []WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
+	DefaultMode  interface{}                                                         `json:"default_mode,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
@@ -400,6 +401,7 @@ type WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRule struct {
 type wafManagedRulesRuleWAFManagedRulesTraditionalAllowRuleJSON struct {
 	ID           apijson.Field
 	AllowedModes apijson.Field
+	DefaultMode  apijson.Field
 	Description  apijson.Field
 	Group        apijson.Field
 	Mode         apijson.Field
@@ -768,6 +770,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule struct {
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule.
 	AllowedModes []WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
+	DefaultMode  interface{}                                                                `json:"default_mode,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
@@ -788,6 +791,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule struct {
 type wafPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleJSON struct {
 	ID           apijson.Field
 	AllowedModes apijson.Field
+	DefaultMode  apijson.Field
 	Description  apijson.Field
 	Group        apijson.Field
 	Mode         apijson.Field
@@ -897,8 +901,12 @@ func (r WAFPackageRuleGetResponseArray) ImplementsFirewallWAFPackageRuleGetRespo
 type WAFPackageRuleListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// The public description of the WAF rule.
+	Description param.Field[string] `query:"description"`
 	// The direction used to sort returned rules.
 	Direction param.Field[WAFPackageRuleListParamsDirection] `query:"direction"`
+	// The unique identifier of the rule group.
+	GroupID param.Field[string] `query:"group_id"`
 	// When set to `all`, all the search requirements must match. When set to `any`,
 	// only one of the search requirements has to match.
 	Match param.Field[WAFPackageRuleListParamsMatch] `query:"match"`
@@ -910,6 +918,8 @@ type WAFPackageRuleListParams struct {
 	Page param.Field[float64] `query:"page"`
 	// The number of rules per page.
 	PerPage param.Field[float64] `query:"per_page"`
+	// The order in which the individual WAF rule is executed within its rule group.
+	Priority param.Field[string] `query:"priority"`
 }
 
 // URLQuery serializes [WAFPackageRuleListParams]'s query parameters as
