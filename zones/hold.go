@@ -160,7 +160,7 @@ type HoldNewParams struct {
 // URLQuery serializes [HoldNewParams]'s query parameters as `url.Values`.
 func (r HoldNewParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -266,7 +266,7 @@ type HoldDeleteParams struct {
 // URLQuery serializes [HoldDeleteParams]'s query parameters as `url.Values`.
 func (r HoldDeleteParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

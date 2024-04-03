@@ -79,7 +79,7 @@ type ScheduleNewParams struct {
 // URLQuery serializes [ScheduleNewParams]'s query parameters as `url.Values`.
 func (r ScheduleNewParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

@@ -425,7 +425,7 @@ type BrandProtectionURLInfoParams struct {
 // `url.Values`.
 func (r BrandProtectionURLInfoParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -439,7 +439,7 @@ type BrandProtectionURLInfoParamsURLIDParam struct {
 // as `url.Values`.
 func (r BrandProtectionURLInfoParamsURLIDParam) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

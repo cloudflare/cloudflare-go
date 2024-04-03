@@ -239,7 +239,7 @@ type AS112TimeseriesParams struct {
 // URLQuery serializes [AS112TimeseriesParams]'s query parameters as `url.Values`.
 func (r AS112TimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

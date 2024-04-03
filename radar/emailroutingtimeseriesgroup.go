@@ -428,7 +428,7 @@ type EmailRoutingTimeseriesGroupARCParams struct {
 // `url.Values`.
 func (r EmailRoutingTimeseriesGroupARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -631,7 +631,7 @@ type EmailRoutingTimeseriesGroupDKIMParams struct {
 // as `url.Values`.
 func (r EmailRoutingTimeseriesGroupDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -834,7 +834,7 @@ type EmailRoutingTimeseriesGroupDMARCParams struct {
 // as `url.Values`.
 func (r EmailRoutingTimeseriesGroupDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1037,7 +1037,7 @@ type EmailRoutingTimeseriesGroupEncryptedParams struct {
 // parameters as `url.Values`.
 func (r EmailRoutingTimeseriesGroupEncryptedParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1241,7 +1241,7 @@ type EmailRoutingTimeseriesGroupIPVersionParams struct {
 // parameters as `url.Values`.
 func (r EmailRoutingTimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1445,7 +1445,7 @@ type EmailRoutingTimeseriesGroupSPFParams struct {
 // `url.Values`.
 func (r EmailRoutingTimeseriesGroupSPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

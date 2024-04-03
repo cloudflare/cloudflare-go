@@ -734,7 +734,7 @@ type AS112TopDNSSECParams struct {
 // URLQuery serializes [AS112TopDNSSECParams]'s query parameters as `url.Values`.
 func (r AS112TopDNSSECParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -854,7 +854,7 @@ type AS112TopEdnsParams struct {
 // URLQuery serializes [AS112TopEdnsParams]'s query parameters as `url.Values`.
 func (r AS112TopEdnsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -975,7 +975,7 @@ type AS112TopIPVersionParams struct {
 // `url.Values`.
 func (r AS112TopIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1096,7 +1096,7 @@ type AS112TopLocationsParams struct {
 // `url.Values`.
 func (r AS112TopLocationsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

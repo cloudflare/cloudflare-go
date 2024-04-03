@@ -178,8 +178,8 @@ func (r WAFManagedRulesGroupAllowedMode) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [firewall.WAFPackageGroupEditResponseUnknown],
-// [firewall.WAFPackageGroupEditResponseArray] or [shared.UnionString].
+// Union satisfied by [firewall.WAFPackageGroupEditResponseUnknown] or
+// [shared.UnionString].
 type WAFPackageGroupEditResponse interface {
 	ImplementsFirewallWAFPackageGroupEditResponse()
 }
@@ -189,22 +189,14 @@ func init() {
 		reflect.TypeOf((*WAFPackageGroupEditResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageGroupEditResponseArray{}),
-		},
-		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
 
-type WAFPackageGroupEditResponseArray []interface{}
-
-func (r WAFPackageGroupEditResponseArray) ImplementsFirewallWAFPackageGroupEditResponse() {}
-
-// Union satisfied by [firewall.WAFPackageGroupGetResponseUnknown],
-// [firewall.WAFPackageGroupGetResponseArray] or [shared.UnionString].
+// Union satisfied by [firewall.WAFPackageGroupGetResponseUnknown] or
+// [shared.UnionString].
 type WAFPackageGroupGetResponse interface {
 	ImplementsFirewallWAFPackageGroupGetResponse()
 }
@@ -214,19 +206,11 @@ func init() {
 		reflect.TypeOf((*WAFPackageGroupGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageGroupGetResponseArray{}),
-		},
-		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
-
-type WAFPackageGroupGetResponseArray []interface{}
-
-func (r WAFPackageGroupGetResponseArray) ImplementsFirewallWAFPackageGroupGetResponse() {}
 
 type WAFPackageGroupListParams struct {
 	// Identifier
@@ -255,7 +239,7 @@ type WAFPackageGroupListParams struct {
 // `url.Values`.
 func (r WAFPackageGroupListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

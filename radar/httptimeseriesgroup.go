@@ -639,7 +639,7 @@ type HTTPTimeseriesGroupBotClassParams struct {
 // `url.Values`.
 func (r HTTPTimeseriesGroupBotClassParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -884,7 +884,7 @@ type HTTPTimeseriesGroupBrowserParams struct {
 // `url.Values`.
 func (r HTTPTimeseriesGroupBrowserParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1141,7 +1141,7 @@ type HTTPTimeseriesGroupBrowserFamilyParams struct {
 // as `url.Values`.
 func (r HTTPTimeseriesGroupBrowserFamilyParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1396,7 +1396,7 @@ type HTTPTimeseriesGroupDeviceTypeParams struct {
 // `url.Values`.
 func (r HTTPTimeseriesGroupDeviceTypeParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1635,7 +1635,7 @@ type HTTPTimeseriesGroupHTTPProtocolParams struct {
 // as `url.Values`.
 func (r HTTPTimeseriesGroupHTTPProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1875,7 +1875,7 @@ type HTTPTimeseriesGroupHTTPVersionParams struct {
 // `url.Values`.
 func (r HTTPTimeseriesGroupHTTPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2114,7 +2114,7 @@ type HTTPTimeseriesGroupIPVersionParams struct {
 // `url.Values`.
 func (r HTTPTimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2354,7 +2354,7 @@ type HTTPTimeseriesGroupOSParams struct {
 // `url.Values`.
 func (r HTTPTimeseriesGroupOSParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2589,7 +2589,7 @@ type HTTPTimeseriesGroupTLSVersionParams struct {
 // `url.Values`.
 func (r HTTPTimeseriesGroupTLSVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

@@ -413,7 +413,7 @@ type HTTPTopBrowserFamiliesParams struct {
 // `url.Values`.
 func (r HTTPTopBrowserFamiliesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -647,7 +647,7 @@ type HTTPTopBrowsersParams struct {
 // URLQuery serializes [HTTPTopBrowsersParams]'s query parameters as `url.Values`.
 func (r HTTPTopBrowsersParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

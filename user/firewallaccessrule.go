@@ -780,7 +780,7 @@ type FirewallAccessRuleListParams struct {
 // `url.Values`.
 func (r FirewallAccessRuleListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -809,7 +809,7 @@ type FirewallAccessRuleListParamsEgsPagination struct {
 // parameters as `url.Values`.
 func (r FirewallAccessRuleListParamsEgsPagination) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -826,7 +826,7 @@ type FirewallAccessRuleListParamsEgsPaginationJson struct {
 // parameters as `url.Values`.
 func (r FirewallAccessRuleListParamsEgsPaginationJson) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -854,7 +854,7 @@ type FirewallAccessRuleListParamsFilters struct {
 // `url.Values`.
 func (r FirewallAccessRuleListParamsFilters) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

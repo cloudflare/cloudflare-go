@@ -1164,7 +1164,7 @@ type DEXTestListParams struct {
 // URLQuery serializes [DEXTestListParams]'s query parameters as `url.Values`.
 func (r DEXTestListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

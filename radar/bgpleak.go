@@ -169,7 +169,7 @@ type BGPLeakEventsParams struct {
 // URLQuery serializes [BGPLeakEventsParams]'s query parameters as `url.Values`.
 func (r BGPLeakEventsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

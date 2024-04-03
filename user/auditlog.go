@@ -252,7 +252,7 @@ type AuditLogListParams struct {
 // URLQuery serializes [AuditLogListParams]'s query parameters as `url.Values`.
 func (r AuditLogListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -266,7 +266,7 @@ type AuditLogListParamsAction struct {
 // `url.Values`.
 func (r AuditLogListParamsAction) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -283,7 +283,7 @@ type AuditLogListParamsActor struct {
 // `url.Values`.
 func (r AuditLogListParamsActor) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -312,7 +312,7 @@ type AuditLogListParamsZone struct {
 // URLQuery serializes [AuditLogListParamsZone]'s query parameters as `url.Values`.
 func (r AuditLogListParamsZone) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

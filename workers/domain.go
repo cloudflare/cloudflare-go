@@ -249,7 +249,7 @@ type DomainListParams struct {
 // URLQuery serializes [DomainListParams]'s query parameters as `url.Values`.
 func (r DomainListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
