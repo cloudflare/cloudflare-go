@@ -33,7 +33,7 @@ func NewScriptSettingService(opts ...option.RequestOption) (r *ScriptSettingServ
 	return
 }
 
-// Patch script metadata or config, such as bindings or usage model
+// Patch metadata or config, such as bindings or usage model
 func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, params ScriptSettingEditParams, opts ...option.RequestOption) (res *ScriptSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptSettingEditResponseEnvelope
@@ -46,7 +46,7 @@ func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, para
 	return
 }
 
-// Get script metadata and config, such as bindings or usage model
+// Get metadata and config, such as bindings or usage model
 func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query ScriptSettingGetParams, opts ...option.RequestOption) (res *ScriptSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptSettingGetResponseEnvelope
@@ -1767,38 +1767,8 @@ func (r ScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptSettingEditParamsSettings struct {
-	Errors   param.Field[[]ScriptSettingEditParamsSettingsError]   `json:"errors,required"`
-	Messages param.Field[[]ScriptSettingEditParamsSettingsMessage] `json:"messages,required"`
-	Result   param.Field[ScriptSettingEditParamsSettingsResult]    `json:"result,required"`
-	// Whether the API call was successful
-	Success param.Field[ScriptSettingEditParamsSettingsSuccess] `json:"success,required"`
-}
-
-func (r ScriptSettingEditParamsSettings) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ScriptSettingEditParamsSettingsError struct {
-	Code    param.Field[int64]  `json:"code,required"`
-	Message param.Field[string] `json:"message,required"`
-}
-
-func (r ScriptSettingEditParamsSettingsError) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ScriptSettingEditParamsSettingsMessage struct {
-	Code    param.Field[int64]  `json:"code,required"`
-	Message param.Field[string] `json:"message,required"`
-}
-
-func (r ScriptSettingEditParamsSettingsMessage) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ScriptSettingEditParamsSettingsResult struct {
 	// List of bindings attached to this Worker
-	Bindings param.Field[[]ScriptSettingEditParamsSettingsResultBinding] `json:"bindings"`
+	Bindings param.Field[[]ScriptSettingEditParamsSettingsBinding] `json:"bindings"`
 	// Opt your Worker into changes after this date
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Opt your Worker into specific changes
@@ -1806,296 +1776,296 @@ type ScriptSettingEditParamsSettingsResult struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[ScriptSettingEditParamsSettingsResultMigrations] `json:"migrations"`
-	Placement  param.Field[ScriptSettingEditParamsSettingsResultPlacement]  `json:"placement"`
+	Migrations param.Field[ScriptSettingEditParamsSettingsMigrations] `json:"migrations"`
+	Placement  param.Field[ScriptSettingEditParamsSettingsPlacement]  `json:"placement"`
 	// Tags to help you manage your Workers
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]ScriptSettingEditParamsSettingsResultTailConsumer] `json:"tail_consumers"`
+	TailConsumers param.Field[[]ScriptSettingEditParamsSettingsTailConsumer] `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
 	UsageModel param.Field[string] `json:"usage_model"`
 }
 
-func (r ScriptSettingEditParamsSettingsResult) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A binding to allow the Worker to communicate with resources
 //
 // Satisfied by
-// [workers.ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding],
-// [workers.ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBinding],
-// [workers.ScriptSettingEditParamsSettingsResultBindingsWorkersDoBinding],
-// [workers.ScriptSettingEditParamsSettingsResultBindingsWorkersR2Binding],
-// [workers.ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBinding],
-// [workers.ScriptSettingEditParamsSettingsResultBindingsWorkersD1Binding],
-// [workers.ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBinding],
-// [workers.ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBinding].
-type ScriptSettingEditParamsSettingsResultBinding interface {
-	implementsWorkersScriptSettingEditParamsSettingsResultBinding()
+// [workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding],
+// [workers.ScriptSettingEditParamsSettingsBindingsWorkersServiceBinding],
+// [workers.ScriptSettingEditParamsSettingsBindingsWorkersDoBinding],
+// [workers.ScriptSettingEditParamsSettingsBindingsWorkersR2Binding],
+// [workers.ScriptSettingEditParamsSettingsBindingsWorkersQueueBinding],
+// [workers.ScriptSettingEditParamsSettingsBindingsWorkersD1Binding],
+// [workers.ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBinding],
+// [workers.ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBinding].
+type ScriptSettingEditParamsSettingsBinding interface {
+	implementsWorkersScriptSettingEditParamsSettingsBinding()
 }
 
-type ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding struct {
 	// The class of resource that the binding provides.
-	Type param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingType] `json:"type,required"`
+	Type param.Field[ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingType] `json:"type,required"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding) implementsWorkersScriptSettingEditParamsSettingsResultBinding() {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding) implementsWorkersScriptSettingEditParamsSettingsBinding() {
 }
 
 // The class of resource that the binding provides.
-type ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingType string
+type ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingType string
 
 const (
-	ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingType = "kv_namespace"
+	ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingType) IsKnown() bool {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingType) IsKnown() bool {
 	switch r {
-	case ScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace:
+	case ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace:
 		return true
 	}
 	return false
 }
 
-type ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBinding struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment,required"`
 	// Name of Worker to bind to
 	Service param.Field[string] `json:"service,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingType] `json:"type,required"`
+	Type param.Field[ScriptSettingEditParamsSettingsBindingsWorkersServiceBindingType] `json:"type,required"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBinding) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersServiceBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBinding) implementsWorkersScriptSettingEditParamsSettingsResultBinding() {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersServiceBinding) implementsWorkersScriptSettingEditParamsSettingsBinding() {
 }
 
 // The class of resource that the binding provides.
-type ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingType string
+type ScriptSettingEditParamsSettingsBindingsWorkersServiceBindingType string
 
 const (
-	ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingTypeService ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingType = "service"
+	ScriptSettingEditParamsSettingsBindingsWorkersServiceBindingTypeService ScriptSettingEditParamsSettingsBindingsWorkersServiceBindingType = "service"
 )
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingType) IsKnown() bool {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersServiceBindingType) IsKnown() bool {
 	switch r {
-	case ScriptSettingEditParamsSettingsResultBindingsWorkersServiceBindingTypeService:
+	case ScriptSettingEditParamsSettingsBindingsWorkersServiceBindingTypeService:
 		return true
 	}
 	return false
 }
 
-type ScriptSettingEditParamsSettingsResultBindingsWorkersDoBinding struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersDoBinding struct {
 	// The exported class name of the Durable Object
 	ClassName param.Field[string] `json:"class_name,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingType] `json:"type,required"`
+	Type param.Field[ScriptSettingEditParamsSettingsBindingsWorkersDoBindingType] `json:"type,required"`
 	// The environment of the script_name to bind to
 	Environment param.Field[string] `json:"environment"`
 	// The script where the Durable Object is defined, if it is external to this Worker
 	ScriptName param.Field[string] `json:"script_name"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDoBinding) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersDoBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDoBinding) implementsWorkersScriptSettingEditParamsSettingsResultBinding() {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersDoBinding) implementsWorkersScriptSettingEditParamsSettingsBinding() {
 }
 
 // The class of resource that the binding provides.
-type ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingType string
+type ScriptSettingEditParamsSettingsBindingsWorkersDoBindingType string
 
 const (
-	ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingTypeDurableObjectNamespace ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingType = "durable_object_namespace"
+	ScriptSettingEditParamsSettingsBindingsWorkersDoBindingTypeDurableObjectNamespace ScriptSettingEditParamsSettingsBindingsWorkersDoBindingType = "durable_object_namespace"
 )
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingType) IsKnown() bool {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersDoBindingType) IsKnown() bool {
 	switch r {
-	case ScriptSettingEditParamsSettingsResultBindingsWorkersDoBindingTypeDurableObjectNamespace:
+	case ScriptSettingEditParamsSettingsBindingsWorkersDoBindingTypeDurableObjectNamespace:
 		return true
 	}
 	return false
 }
 
-type ScriptSettingEditParamsSettingsResultBindingsWorkersR2Binding struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName param.Field[string] `json:"bucket_name,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingType] `json:"type,required"`
+	Type param.Field[ScriptSettingEditParamsSettingsBindingsWorkersR2BindingType] `json:"type,required"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersR2Binding) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersR2Binding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersR2Binding) implementsWorkersScriptSettingEditParamsSettingsResultBinding() {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersR2Binding) implementsWorkersScriptSettingEditParamsSettingsBinding() {
 }
 
 // The class of resource that the binding provides.
-type ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingType string
+type ScriptSettingEditParamsSettingsBindingsWorkersR2BindingType string
 
 const (
-	ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingTypeR2Bucket ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingType = "r2_bucket"
+	ScriptSettingEditParamsSettingsBindingsWorkersR2BindingTypeR2Bucket ScriptSettingEditParamsSettingsBindingsWorkersR2BindingType = "r2_bucket"
 )
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingType) IsKnown() bool {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersR2BindingType) IsKnown() bool {
 	switch r {
-	case ScriptSettingEditParamsSettingsResultBindingsWorkersR2BindingTypeR2Bucket:
+	case ScriptSettingEditParamsSettingsBindingsWorkersR2BindingTypeR2Bucket:
 		return true
 	}
 	return false
 }
 
-type ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBinding struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersQueueBinding struct {
 	// Name of the Queue to bind to
 	QueueName param.Field[string] `json:"queue_name,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingType] `json:"type,required"`
+	Type param.Field[ScriptSettingEditParamsSettingsBindingsWorkersQueueBindingType] `json:"type,required"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBinding) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersQueueBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBinding) implementsWorkersScriptSettingEditParamsSettingsResultBinding() {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersQueueBinding) implementsWorkersScriptSettingEditParamsSettingsBinding() {
 }
 
 // The class of resource that the binding provides.
-type ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingType string
+type ScriptSettingEditParamsSettingsBindingsWorkersQueueBindingType string
 
 const (
-	ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingTypeQueue ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingType = "queue"
+	ScriptSettingEditParamsSettingsBindingsWorkersQueueBindingTypeQueue ScriptSettingEditParamsSettingsBindingsWorkersQueueBindingType = "queue"
 )
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingType) IsKnown() bool {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersQueueBindingType) IsKnown() bool {
 	switch r {
-	case ScriptSettingEditParamsSettingsResultBindingsWorkersQueueBindingTypeQueue:
+	case ScriptSettingEditParamsSettingsBindingsWorkersQueueBindingTypeQueue:
 		return true
 	}
 	return false
 }
 
-type ScriptSettingEditParamsSettingsResultBindingsWorkersD1Binding struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersD1Binding struct {
 	// ID of the D1 database to bind to
 	ID param.Field[string] `json:"id,required"`
 	// The name of the D1 database associated with the 'id' provided.
 	Name param.Field[string] `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingType] `json:"type,required"`
+	Type param.Field[ScriptSettingEditParamsSettingsBindingsWorkersD1BindingType] `json:"type,required"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersD1Binding) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersD1Binding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersD1Binding) implementsWorkersScriptSettingEditParamsSettingsResultBinding() {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersD1Binding) implementsWorkersScriptSettingEditParamsSettingsBinding() {
 }
 
 // The class of resource that the binding provides.
-type ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingType string
+type ScriptSettingEditParamsSettingsBindingsWorkersD1BindingType string
 
 const (
-	ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingTypeD1 ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingType = "d1"
+	ScriptSettingEditParamsSettingsBindingsWorkersD1BindingTypeD1 ScriptSettingEditParamsSettingsBindingsWorkersD1BindingType = "d1"
 )
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingType) IsKnown() bool {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersD1BindingType) IsKnown() bool {
 	switch r {
-	case ScriptSettingEditParamsSettingsResultBindingsWorkersD1BindingTypeD1:
+	case ScriptSettingEditParamsSettingsBindingsWorkersD1BindingTypeD1:
 		return true
 	}
 	return false
 }
 
-type ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBinding struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBinding struct {
 	// Namespace to bind to
 	Namespace param.Field[string] `json:"namespace,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingType] `json:"type,required"`
+	Type param.Field[ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingType] `json:"type,required"`
 	// Outbound worker
-	Outbound param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingOutbound] `json:"outbound"`
+	Outbound param.Field[ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingOutbound] `json:"outbound"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBinding) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBinding) implementsWorkersScriptSettingEditParamsSettingsResultBinding() {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBinding) implementsWorkersScriptSettingEditParamsSettingsBinding() {
 }
 
 // The class of resource that the binding provides.
-type ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingType string
+type ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingType string
 
 const (
-	ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
+	ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingType) IsKnown() bool {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingType) IsKnown() bool {
 	switch r {
-	case ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace:
+	case ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace:
 		return true
 	}
 	return false
 }
 
 // Outbound worker
-type ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingOutbound struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingOutbound struct {
 	// Pass information from the Dispatch Worker to the Outbound Worker through the
 	// parameters
 	Params param.Field[[]string] `json:"params"`
 	// Outbound worker
-	Worker param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingOutboundWorker] `json:"worker"`
+	Worker param.Field[ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingOutboundWorker] `json:"worker"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingOutbound) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingOutbound) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Outbound worker
-type ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
 	// Environment of the outbound worker
 	Environment param.Field[string] `json:"environment"`
 	// Name of the outbound worker
 	Service param.Field[string] `json:"service"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersDispatchNamespaceBindingOutboundWorker) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBindingOutboundWorker) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBinding struct {
+type ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBinding struct {
 	Certificate param.Field[interface{}] `json:"certificate,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBindingType] `json:"type,required"`
+	Type param.Field[ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBindingType] `json:"type,required"`
 	// ID of the certificate to bind to
 	CertificateID param.Field[string] `json:"certificate_id"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBinding) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBinding) implementsWorkersScriptSettingEditParamsSettingsResultBinding() {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBinding) implementsWorkersScriptSettingEditParamsSettingsBinding() {
 }
 
 // The class of resource that the binding provides.
-type ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBindingType string
+type ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBindingType string
 
 const (
-	ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBindingTypeMTLSCertificate ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBindingType = "mtls_certificate"
+	ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBindingTypeMTLSCertificate ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBindingType = "mtls_certificate"
 )
 
-func (r ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBindingType) IsKnown() bool {
+func (r ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBindingType) IsKnown() bool {
 	switch r {
-	case ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBindingTypeMTLSCertificate:
+	case ScriptSettingEditParamsSettingsBindingsWorkersMTLSCERTBindingTypeMTLSCertificate:
 		return true
 	}
 	return false
@@ -2104,14 +2074,14 @@ func (r ScriptSettingEditParamsSettingsResultBindingsWorkersMTLSCERTBindingType)
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by
-// [workers.ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrations],
-// [workers.ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrations].
-type ScriptSettingEditParamsSettingsResultMigrations interface {
-	implementsWorkersScriptSettingEditParamsSettingsResultMigrations()
+// [workers.ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations],
+// [workers.ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrations].
+type ScriptSettingEditParamsSettingsMigrations interface {
+	implementsWorkersScriptSettingEditParamsSettingsMigrations()
 }
 
 // A single set of migrations to apply.
-type ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrations struct {
+type ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations struct {
 	// A list of classes to delete Durable Object namespaces from.
 	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
@@ -2122,120 +2092,120 @@ type ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrations 
 	// don't match, the upload is rejected.
 	OldTag param.Field[string] `json:"old_tag"`
 	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses param.Field[[]ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrationsRenamedClass] `json:"renamed_classes"`
+	RenamedClasses param.Field[[]ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsRenamedClass] `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
 	// class to a class defined in this Worker.
-	TransferredClasses param.Field[[]ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrationsTransferredClass] `json:"transferred_classes"`
+	TransferredClasses param.Field[[]ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsTransferredClass] `json:"transferred_classes"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrations) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrations) implementsWorkersScriptSettingEditParamsSettingsResultMigrations() {
+func (r ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations) implementsWorkersScriptSettingEditParamsSettingsMigrations() {
 }
 
-type ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrationsRenamedClass struct {
+type ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsRenamedClass struct {
 	From param.Field[string] `json:"from"`
 	To   param.Field[string] `json:"to"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrationsRenamedClass) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsRenamedClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrationsTransferredClass struct {
+type ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsTransferredClass struct {
 	From       param.Field[string] `json:"from"`
 	FromScript param.Field[string] `json:"from_script"`
 	To         param.Field[string] `json:"to"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultMigrationsWorkersSingleStepMigrationsTransferredClass) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsTransferredClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrations struct {
+type ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrations struct {
 	// Tag to set as the latest migration tag.
 	NewTag param.Field[string] `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
 	OldTag param.Field[string] `json:"old_tag"`
 	// Migrations to apply in order.
-	Steps param.Field[[]ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrationsStep] `json:"steps"`
+	Steps param.Field[[]ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStep] `json:"steps"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrations) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrations) implementsWorkersScriptSettingEditParamsSettingsResultMigrations() {
+func (r ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrations) implementsWorkersScriptSettingEditParamsSettingsMigrations() {
 }
 
-type ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrationsStep struct {
+type ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStep struct {
 	// A list of classes to delete Durable Object namespaces from.
 	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
 	NewClasses param.Field[[]string] `json:"new_classes"`
 	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses param.Field[[]ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrationsStepsRenamedClass] `json:"renamed_classes"`
+	RenamedClasses param.Field[[]ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStepsRenamedClass] `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
 	// class to a class defined in this Worker.
-	TransferredClasses param.Field[[]ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrationsStepsTransferredClass] `json:"transferred_classes"`
+	TransferredClasses param.Field[[]ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStepsTransferredClass] `json:"transferred_classes"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrationsStep) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStep) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
+type ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
 	From param.Field[string] `json:"from"`
 	To   param.Field[string] `json:"to"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrationsStepsRenamedClass) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStepsRenamedClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
+type ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
 	From       param.Field[string] `json:"from"`
 	FromScript param.Field[string] `json:"from_script"`
 	To         param.Field[string] `json:"to"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultMigrationsWorkersSteppedMigrationsStepsTransferredClass) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStepsTransferredClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptSettingEditParamsSettingsResultPlacement struct {
+type ScriptSettingEditParamsSettingsPlacement struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	// Only `"smart"` is currently supported
-	Mode param.Field[ScriptSettingEditParamsSettingsResultPlacementMode] `json:"mode"`
+	Mode param.Field[ScriptSettingEditParamsSettingsPlacementMode] `json:"mode"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultPlacement) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsPlacement) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Enables
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 // Only `"smart"` is currently supported
-type ScriptSettingEditParamsSettingsResultPlacementMode string
+type ScriptSettingEditParamsSettingsPlacementMode string
 
 const (
-	ScriptSettingEditParamsSettingsResultPlacementModeSmart ScriptSettingEditParamsSettingsResultPlacementMode = "smart"
+	ScriptSettingEditParamsSettingsPlacementModeSmart ScriptSettingEditParamsSettingsPlacementMode = "smart"
 )
 
-func (r ScriptSettingEditParamsSettingsResultPlacementMode) IsKnown() bool {
+func (r ScriptSettingEditParamsSettingsPlacementMode) IsKnown() bool {
 	switch r {
-	case ScriptSettingEditParamsSettingsResultPlacementModeSmart:
+	case ScriptSettingEditParamsSettingsPlacementModeSmart:
 		return true
 	}
 	return false
 }
 
 // A reference to a script that will consume logs from the attached Worker.
-type ScriptSettingEditParamsSettingsResultTailConsumer struct {
+type ScriptSettingEditParamsSettingsTailConsumer struct {
 	// Name of Worker that is to be the consumer.
 	Service param.Field[string] `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
@@ -2244,23 +2214,8 @@ type ScriptSettingEditParamsSettingsResultTailConsumer struct {
 	Namespace param.Field[string] `json:"namespace"`
 }
 
-func (r ScriptSettingEditParamsSettingsResultTailConsumer) MarshalJSON() (data []byte, err error) {
+func (r ScriptSettingEditParamsSettingsTailConsumer) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Whether the API call was successful
-type ScriptSettingEditParamsSettingsSuccess bool
-
-const (
-	ScriptSettingEditParamsSettingsSuccessTrue ScriptSettingEditParamsSettingsSuccess = true
-)
-
-func (r ScriptSettingEditParamsSettingsSuccess) IsKnown() bool {
-	switch r {
-	case ScriptSettingEditParamsSettingsSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type ScriptSettingEditResponseEnvelope struct {
