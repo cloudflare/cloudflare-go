@@ -154,9 +154,10 @@ func (r DNSSettingEditParamsNameserversType) IsKnown() bool {
 }
 
 type DNSSettingEditResponseEnvelope struct {
-	Errors   []DNSSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSSettingEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSSetting                               `json:"result,required"`
+	Errors      []DNSSettingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages    []DNSSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Nameservers interface{}                              `json:"nameservers,required"`
+	Result      DNSSetting                               `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -167,6 +168,7 @@ type DNSSettingEditResponseEnvelope struct {
 type dnsSettingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Nameservers apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
@@ -248,9 +250,10 @@ type DNSSettingGetParams struct {
 }
 
 type DNSSettingGetResponseEnvelope struct {
-	Errors   []DNSSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSSetting                              `json:"result,required"`
+	Errors      []DNSSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages    []DNSSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Nameservers interface{}                             `json:"nameservers,required"`
+	Result      DNSSetting                              `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsSettingGetResponseEnvelopeJSON    `json:"-"`
@@ -261,6 +264,7 @@ type DNSSettingGetResponseEnvelope struct {
 type dnsSettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Nameservers apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string

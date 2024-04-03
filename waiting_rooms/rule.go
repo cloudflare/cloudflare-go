@@ -84,10 +84,10 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, waitingRoomID string, 
 }
 
 // Deletes a rule for a waiting room.
-func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *[]WaitingroomRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, waitingRoomID string, ruleID string, params RuleDeleteParams, opts ...option.RequestOption) (res *[]WaitingroomRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", body.ZoneID, waitingRoomID, ruleID)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/rules/%s", params.ZoneID, waitingRoomID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -485,7 +485,12 @@ type RuleListParams struct {
 
 type RuleDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RuleDeleteResponseEnvelope struct {

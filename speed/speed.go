@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -275,13 +276,19 @@ func (r SpeedDeleteParamsRegion) IsKnown() bool {
 }
 
 type SpeedDeleteResponseEnvelope struct {
-	Result SpeedDeleteResponse             `json:"result"`
-	JSON   speedDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                     `json:"errors,required"`
+	Messages interface{}                     `json:"messages,required"`
+	Success  interface{}                     `json:"success,required"`
+	Result   SpeedDeleteResponse             `json:"result"`
+	JSON     speedDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // speedDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SpeedDeleteResponseEnvelope]
 type speedDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -346,6 +353,9 @@ func (r SpeedScheduleGetParamsRegion) IsKnown() bool {
 }
 
 type SpeedScheduleGetResponseEnvelope struct {
+	Errors   interface{} `json:"errors,required"`
+	Messages interface{} `json:"messages,required"`
+	Success  interface{} `json:"success,required"`
 	// The test schedule.
 	Result ObservatorySchedule                  `json:"result"`
 	JSON   speedScheduleGetResponseEnvelopeJSON `json:"-"`
@@ -354,6 +364,9 @@ type SpeedScheduleGetResponseEnvelope struct {
 // speedScheduleGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SpeedScheduleGetResponseEnvelope]
 type speedScheduleGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -376,8 +389,10 @@ type SpeedTrendsListParams struct {
 	Metrics param.Field[string] `query:"metrics,required"`
 	// A test region.
 	Region param.Field[SpeedTrendsListParamsRegion] `query:"region,required"`
+	Start  param.Field[time.Time]                   `query:"start,required" format:"date-time"`
 	// The timezone of the start and end timestamps.
-	Tz param.Field[string] `query:"tz,required"`
+	Tz  param.Field[string]    `query:"tz,required"`
+	End param.Field[time.Time] `query:"end" format:"date-time"`
 }
 
 // URLQuery serializes [SpeedTrendsListParams]'s query parameters as `url.Values`.
@@ -440,13 +455,19 @@ func (r SpeedTrendsListParamsRegion) IsKnown() bool {
 }
 
 type SpeedTrendsListResponseEnvelope struct {
-	Result ObservatoryTrend                    `json:"result"`
-	JSON   speedTrendsListResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                         `json:"errors,required"`
+	Messages interface{}                         `json:"messages,required"`
+	Success  interface{}                         `json:"success,required"`
+	Result   ObservatoryTrend                    `json:"result"`
+	JSON     speedTrendsListResponseEnvelopeJSON `json:"-"`
 }
 
 // speedTrendsListResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SpeedTrendsListResponseEnvelope]
 type speedTrendsListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

@@ -37,10 +37,10 @@ func NewKeyService(opts ...option.RequestOption) (r *KeyService) {
 // Creates an RSA private key in PEM and JWK formats. Key files are only displayed
 // once after creation. Keys are created, used, and deleted independently of
 // videos, and every key can sign any video.
-func (r *KeyService) New(ctx context.Context, body KeyNewParams, opts ...option.RequestOption) (res *StreamKeys, err error) {
+func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...option.RequestOption) (res *StreamKeys, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys", body.AccountID)
+	path := fmt.Sprintf("accounts/%s/stream/keys", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -50,10 +50,10 @@ func (r *KeyService) New(ctx context.Context, body KeyNewParams, opts ...option.
 }
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
-func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponse, err error) {
+func (r *KeyService) Delete(ctx context.Context, identifier string, params KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys/%s", body.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/keys/%s", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -147,7 +147,12 @@ func (r keyGetResponseJSON) RawJSON() string {
 
 type KeyNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type KeyNewResponseEnvelope struct {
@@ -241,7 +246,12 @@ func (r KeyNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type KeyDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r KeyDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type KeyDeleteResponseEnvelope struct {

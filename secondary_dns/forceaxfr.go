@@ -31,10 +31,10 @@ func NewForceAXFRService(opts ...option.RequestOption) (r *ForceAXFRService) {
 }
 
 // Sends AXFR zone transfer request to primary nameserver(s).
-func (r *ForceAXFRService) New(ctx context.Context, body ForceAXFRNewParams, opts ...option.RequestOption) (res *SecondaryDNSForce, err error) {
+func (r *ForceAXFRService) New(ctx context.Context, params ForceAXFRNewParams, opts ...option.RequestOption) (res *SecondaryDNSForce, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ForceAXFRNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/secondary_dns/force_axfr", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/secondary_dns/force_axfr", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -46,7 +46,12 @@ func (r *ForceAXFRService) New(ctx context.Context, body ForceAXFRNewParams, opt
 type SecondaryDNSForce = string
 
 type ForceAXFRNewParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ForceAXFRNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ForceAXFRNewResponseEnvelope struct {

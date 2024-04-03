@@ -83,7 +83,7 @@ func (r *LoadBalancerMonitorService) ListAutoPaging(ctx context.Context, opts ..
 }
 
 // Delete a configured monitor.
-func (r *LoadBalancerMonitorService) Delete(ctx context.Context, monitorID string, opts ...option.RequestOption) (res *LoadBalancerMonitorDeleteResponse, err error) {
+func (r *LoadBalancerMonitorService) Delete(ctx context.Context, monitorID string, body LoadBalancerMonitorDeleteParams, opts ...option.RequestOption) (res *LoadBalancerMonitorDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorDeleteResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s", monitorID)
@@ -677,6 +677,14 @@ func (r LoadBalancerMonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type LoadBalancerMonitorDeleteParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r LoadBalancerMonitorDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type LoadBalancerMonitorDeleteResponseEnvelope struct {

@@ -81,7 +81,7 @@ func (r *FirewallAccessRuleService) ListAutoPaging(ctx context.Context, query Fi
 // Deletes an IP Access rule at the user level.
 //
 // Note: Deleting a user-level rule will affect all zones owned by the user.
-func (r *FirewallAccessRuleService) Delete(ctx context.Context, identifier string, opts ...option.RequestOption) (res *FirewallAccessRuleDeleteResponse, err error) {
+func (r *FirewallAccessRuleService) Delete(ctx context.Context, identifier string, body FirewallAccessRuleDeleteParams, opts ...option.RequestOption) (res *FirewallAccessRuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAccessRuleDeleteResponseEnvelope
 	path := fmt.Sprintf("user/firewall/access_rules/rules/%s", identifier)
@@ -928,6 +928,14 @@ func (r FirewallAccessRuleListParamsOrder) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type FirewallAccessRuleDeleteParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r FirewallAccessRuleDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type FirewallAccessRuleDeleteResponseEnvelope struct {

@@ -34,10 +34,10 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 }
 
 // Creates a download for a video when a video is ready to view.
-func (r *DownloadService) New(ctx context.Context, identifier string, body DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponse, err error) {
+func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DownloadNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -123,7 +123,12 @@ func init() {
 
 type DownloadNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r DownloadNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type DownloadNewResponseEnvelope struct {

@@ -84,10 +84,10 @@ func (r *RouteService) ListAutoPaging(ctx context.Context, query RouteListParams
 }
 
 // Deletes a route.
-func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
+func (r *RouteService) Delete(ctx context.Context, routeID string, params RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/routes/%s", body.ZoneID, routeID)
+	path := fmt.Sprintf("zones/%s/workers/routes/%s", params.ZoneID, routeID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -376,7 +376,12 @@ type RouteListParams struct {
 
 type RouteDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RouteDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RouteDeleteResponseEnvelope struct {

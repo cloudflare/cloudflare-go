@@ -83,10 +83,10 @@ func (r *MemberService) ListAutoPaging(ctx context.Context, params MemberListPar
 }
 
 // Remove a member from an account.
-func (r *MemberService) Delete(ctx context.Context, memberID string, body MemberDeleteParams, opts ...option.RequestOption) (res *MemberDeleteResponse, err error) {
+func (r *MemberService) Delete(ctx context.Context, memberID string, params MemberDeleteParams, opts ...option.RequestOption) (res *MemberDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/members/%s", body.AccountID, memberID)
+	path := fmt.Sprintf("accounts/%v/members/%s", params.AccountID, memberID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -692,6 +692,11 @@ func (r MemberListParamsStatus) IsKnown() bool {
 
 type MemberDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r MemberDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type MemberDeleteResponseEnvelope struct {

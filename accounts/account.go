@@ -379,6 +379,8 @@ func (r AccountUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type AccountListParams struct {
 	// Direction to order results.
 	Direction param.Field[AccountListParamsDirection] `query:"direction"`
+	// Name of the account.
+	Name param.Field[string] `query:"name"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page.

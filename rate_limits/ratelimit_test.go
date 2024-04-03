@@ -93,6 +93,9 @@ func TestRateLimitDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
+		rate_limits.RateLimitDeleteParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

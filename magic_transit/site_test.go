@@ -91,7 +91,7 @@ func TestSiteUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSiteList(t *testing.T) {
+func TestSiteListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -106,7 +106,8 @@ func TestSiteList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.Sites.List(context.TODO(), magic_transit.SiteListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ConnectorIdentifier: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -136,6 +137,7 @@ func TestSiteDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

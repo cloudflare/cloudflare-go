@@ -45,11 +45,11 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 }
 
 // Upload a new version of a dataset.
-func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, body DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *DLPDataset, err error) {
+func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *DLPDataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUploadEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", body.AccountID, datasetID, version)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", params.AccountID, datasetID, version)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -193,7 +193,12 @@ func (r dlpDatasetUploadNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type DLPDatasetUploadEditParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r DLPDatasetUploadEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type DLPDatasetUploadEditResponseEnvelope struct {

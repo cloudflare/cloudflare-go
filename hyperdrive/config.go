@@ -253,6 +253,7 @@ func (r configGetResponseJSON) RawJSON() string {
 type ConfigNewParams struct {
 	// Identifier
 	AccountID param.Field[string]                `path:"account_id,required"`
+	Name      param.Field[interface{}]           `json:"name,required"`
 	Origin    param.Field[ConfigNewParamsOrigin] `json:"origin,required"`
 }
 
@@ -362,6 +363,7 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 type ConfigUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string]                   `path:"account_id,required"`
+	Name      param.Field[interface{}]              `json:"name,required"`
 	Origin    param.Field[ConfigUpdateParamsOrigin] `json:"origin,required"`
 }
 

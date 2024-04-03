@@ -86,10 +86,10 @@ func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRu
 }
 
 // Deletes a Zero Trust Gateway rule.
-func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponse, err error) {
+func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, params GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", body.AccountID, ruleID)
+	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", params.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -197,11 +197,12 @@ const (
 	ZeroTrustGatewayRulesActionL4Override   ZeroTrustGatewayRulesAction = "l4_override"
 	ZeroTrustGatewayRulesActionEgress       ZeroTrustGatewayRulesAction = "egress"
 	ZeroTrustGatewayRulesActionAuditSSH     ZeroTrustGatewayRulesAction = "audit_ssh"
+	ZeroTrustGatewayRulesActionResolve      ZeroTrustGatewayRulesAction = "resolve"
 )
 
 func (r ZeroTrustGatewayRulesAction) IsKnown() bool {
 	switch r {
-	case ZeroTrustGatewayRulesActionOn, ZeroTrustGatewayRulesActionOff, ZeroTrustGatewayRulesActionAllow, ZeroTrustGatewayRulesActionBlock, ZeroTrustGatewayRulesActionScan, ZeroTrustGatewayRulesActionNoscan, ZeroTrustGatewayRulesActionSafesearch, ZeroTrustGatewayRulesActionYtrestricted, ZeroTrustGatewayRulesActionIsolate, ZeroTrustGatewayRulesActionNoisolate, ZeroTrustGatewayRulesActionOverride, ZeroTrustGatewayRulesActionL4Override, ZeroTrustGatewayRulesActionEgress, ZeroTrustGatewayRulesActionAuditSSH:
+	case ZeroTrustGatewayRulesActionOn, ZeroTrustGatewayRulesActionOff, ZeroTrustGatewayRulesActionAllow, ZeroTrustGatewayRulesActionBlock, ZeroTrustGatewayRulesActionScan, ZeroTrustGatewayRulesActionNoscan, ZeroTrustGatewayRulesActionSafesearch, ZeroTrustGatewayRulesActionYtrestricted, ZeroTrustGatewayRulesActionIsolate, ZeroTrustGatewayRulesActionNoisolate, ZeroTrustGatewayRulesActionOverride, ZeroTrustGatewayRulesActionL4Override, ZeroTrustGatewayRulesActionEgress, ZeroTrustGatewayRulesActionAuditSSH, ZeroTrustGatewayRulesActionResolve:
 		return true
 	}
 	return false
@@ -247,7 +248,8 @@ type ZeroTrustGatewayRulesRuleSettings struct {
 	CheckSession ZeroTrustGatewayRulesRuleSettingsCheckSession `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-	// route to the address closest to their origin.
+	// route to the address closest to their origin. Only valid when a rule's action is
+	// set to 'resolve'.
 	DNSResolvers ZeroTrustGatewayRulesRuleSettingsDNSResolvers `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
@@ -273,7 +275,8 @@ type ZeroTrustGatewayRulesRuleSettings struct {
 	// Configure DLP payload logging.
 	PayloadLog ZeroTrustGatewayRulesRuleSettingsPayloadLog `json:"payload_log"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
-	// resolver. Cannot be set when dns_resolvers are specified.
+	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
+	// rule's action is set to 'resolve'.
 	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
 	UntrustedCERT ZeroTrustGatewayRulesRuleSettingsUntrustedCERT `json:"untrusted_cert"`
@@ -401,7 +404,8 @@ func (r zeroTrustGatewayRulesRuleSettingsCheckSessionJSON) RawJSON() string {
 
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-// route to the address closest to their origin.
+// route to the address closest to their origin. Only valid when a rule's action is
+// set to 'resolve'.
 type ZeroTrustGatewayRulesRuleSettingsDNSResolvers struct {
 	IPV4 []ZeroTrustGatewayRulesRuleSettingsDNSResolversIPV4 `json:"ipv4"`
 	IPV6 []ZeroTrustGatewayRulesRuleSettingsDNSResolversIPV6 `json:"ipv6"`
@@ -426,9 +430,9 @@ func (r zeroTrustGatewayRulesRuleSettingsDNSResolversJSON) RawJSON() string {
 }
 
 type ZeroTrustGatewayRulesRuleSettingsDNSResolversIPV4 struct {
-	// IP address of upstream resolver.
+	// IPv4 address of upstream resolver.
 	IP string `json:"ip,required"`
-	// A port number to use for upstream resolver.
+	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
 	Port int64 `json:"port"`
 	// Whether to connect to this resolver over a private network. Must be set when
 	// vnet_id is set.
@@ -459,9 +463,9 @@ func (r zeroTrustGatewayRulesRuleSettingsDNSResolversIPV4JSON) RawJSON() string 
 }
 
 type ZeroTrustGatewayRulesRuleSettingsDNSResolversIPV6 struct {
-	// IP address of upstream resolver.
+	// IPv6 address of upstream resolver.
 	IP string `json:"ip,required"`
-	// A port number to use for upstream resolver.
+	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
 	Port int64 `json:"port"`
 	// Whether to connect to this resolver over a private network. Must be set when
 	// vnet_id is set.
@@ -782,11 +786,12 @@ const (
 	GatewayRuleNewParamsActionL4Override   GatewayRuleNewParamsAction = "l4_override"
 	GatewayRuleNewParamsActionEgress       GatewayRuleNewParamsAction = "egress"
 	GatewayRuleNewParamsActionAuditSSH     GatewayRuleNewParamsAction = "audit_ssh"
+	GatewayRuleNewParamsActionResolve      GatewayRuleNewParamsAction = "resolve"
 )
 
 func (r GatewayRuleNewParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionAuditSSH:
+	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionAuditSSH, GatewayRuleNewParamsActionResolve:
 		return true
 	}
 	return false
@@ -832,7 +837,8 @@ type GatewayRuleNewParamsRuleSettings struct {
 	CheckSession param.Field[GatewayRuleNewParamsRuleSettingsCheckSession] `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-	// route to the address closest to their origin.
+	// route to the address closest to their origin. Only valid when a rule's action is
+	// set to 'resolve'.
 	DNSResolvers param.Field[GatewayRuleNewParamsRuleSettingsDNSResolvers] `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
@@ -858,7 +864,8 @@ type GatewayRuleNewParamsRuleSettings struct {
 	// Configure DLP payload logging.
 	PayloadLog param.Field[GatewayRuleNewParamsRuleSettingsPayloadLog] `json:"payload_log"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
-	// resolver. Cannot be set when dns_resolvers are specified.
+	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
+	// rule's action is set to 'resolve'.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
 	UntrustedCERT param.Field[GatewayRuleNewParamsRuleSettingsUntrustedCERT] `json:"untrusted_cert"`
@@ -910,7 +917,8 @@ func (r GatewayRuleNewParamsRuleSettingsCheckSession) MarshalJSON() (data []byte
 
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-// route to the address closest to their origin.
+// route to the address closest to their origin. Only valid when a rule's action is
+// set to 'resolve'.
 type GatewayRuleNewParamsRuleSettingsDNSResolvers struct {
 	IPV4 param.Field[[]GatewayRuleNewParamsRuleSettingsDNSResolversIPV4] `json:"ipv4"`
 	IPV6 param.Field[[]GatewayRuleNewParamsRuleSettingsDNSResolversIPV6] `json:"ipv6"`
@@ -921,9 +929,9 @@ func (r GatewayRuleNewParamsRuleSettingsDNSResolvers) MarshalJSON() (data []byte
 }
 
 type GatewayRuleNewParamsRuleSettingsDNSResolversIPV4 struct {
-	// IP address of upstream resolver.
+	// IPv4 address of upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
-	// A port number to use for upstream resolver.
+	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
 	Port param.Field[int64] `json:"port"`
 	// Whether to connect to this resolver over a private network. Must be set when
 	// vnet_id is set.
@@ -938,9 +946,9 @@ func (r GatewayRuleNewParamsRuleSettingsDNSResolversIPV4) MarshalJSON() (data []
 }
 
 type GatewayRuleNewParamsRuleSettingsDNSResolversIPV6 struct {
-	// IP address of upstream resolver.
+	// IPv6 address of upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
-	// A port number to use for upstream resolver.
+	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
 	Port param.Field[int64] `json:"port"`
 	// Whether to connect to this resolver over a private network. Must be set when
 	// vnet_id is set.
@@ -1227,11 +1235,12 @@ const (
 	GatewayRuleUpdateParamsActionL4Override   GatewayRuleUpdateParamsAction = "l4_override"
 	GatewayRuleUpdateParamsActionEgress       GatewayRuleUpdateParamsAction = "egress"
 	GatewayRuleUpdateParamsActionAuditSSH     GatewayRuleUpdateParamsAction = "audit_ssh"
+	GatewayRuleUpdateParamsActionResolve      GatewayRuleUpdateParamsAction = "resolve"
 )
 
 func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionAuditSSH:
+	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionAuditSSH, GatewayRuleUpdateParamsActionResolve:
 		return true
 	}
 	return false
@@ -1277,7 +1286,8 @@ type GatewayRuleUpdateParamsRuleSettings struct {
 	CheckSession param.Field[GatewayRuleUpdateParamsRuleSettingsCheckSession] `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-	// route to the address closest to their origin.
+	// route to the address closest to their origin. Only valid when a rule's action is
+	// set to 'resolve'.
 	DNSResolvers param.Field[GatewayRuleUpdateParamsRuleSettingsDNSResolvers] `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
@@ -1303,7 +1313,8 @@ type GatewayRuleUpdateParamsRuleSettings struct {
 	// Configure DLP payload logging.
 	PayloadLog param.Field[GatewayRuleUpdateParamsRuleSettingsPayloadLog] `json:"payload_log"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
-	// resolver. Cannot be set when dns_resolvers are specified.
+	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
+	// rule's action is set to 'resolve'.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
 	UntrustedCERT param.Field[GatewayRuleUpdateParamsRuleSettingsUntrustedCERT] `json:"untrusted_cert"`
@@ -1355,7 +1366,8 @@ func (r GatewayRuleUpdateParamsRuleSettingsCheckSession) MarshalJSON() (data []b
 
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-// route to the address closest to their origin.
+// route to the address closest to their origin. Only valid when a rule's action is
+// set to 'resolve'.
 type GatewayRuleUpdateParamsRuleSettingsDNSResolvers struct {
 	IPV4 param.Field[[]GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV4] `json:"ipv4"`
 	IPV6 param.Field[[]GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV6] `json:"ipv6"`
@@ -1366,9 +1378,9 @@ func (r GatewayRuleUpdateParamsRuleSettingsDNSResolvers) MarshalJSON() (data []b
 }
 
 type GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV4 struct {
-	// IP address of upstream resolver.
+	// IPv4 address of upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
-	// A port number to use for upstream resolver.
+	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
 	Port param.Field[int64] `json:"port"`
 	// Whether to connect to this resolver over a private network. Must be set when
 	// vnet_id is set.
@@ -1383,9 +1395,9 @@ func (r GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV4) MarshalJSON() (data
 }
 
 type GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV6 struct {
-	// IP address of upstream resolver.
+	// IPv6 address of upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
-	// A port number to use for upstream resolver.
+	// A port number to use for upstream resolver. Defaults to 53 if unspecified.
 	Port param.Field[int64] `json:"port"`
 	// Whether to connect to this resolver over a private network. Must be set when
 	// vnet_id is set.
@@ -1623,7 +1635,12 @@ type GatewayRuleListParams struct {
 }
 
 type GatewayRuleDeleteParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r GatewayRuleDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type GatewayRuleDeleteResponseEnvelope struct {

@@ -33,6 +33,7 @@ func TestDownloadNew(t *testing.T) {
 		"ea95132c15732412d22c1476fa83f27a",
 		stream.DownloadNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

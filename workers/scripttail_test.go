@@ -33,6 +33,7 @@ func TestScriptTailNew(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptTailNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -64,6 +65,7 @@ func TestScriptTailDelete(t *testing.T) {
 		"03dc9f77817b488fb26c5861ec18f791",
 		workers.ScriptTailDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

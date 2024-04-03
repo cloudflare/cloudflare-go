@@ -82,10 +82,10 @@ func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params Cu
 }
 
 // Remove a SSL certificate from a zone.
-func (r *CustomCertificateService) Delete(ctx context.Context, customCertificateID string, body CustomCertificateDeleteParams, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
+func (r *CustomCertificateService) Delete(ctx context.Context, customCertificateID string, params CustomCertificateDeleteParams, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_certificates/%s", body.ZoneID, customCertificateID)
+	path := fmt.Sprintf("zones/%s/custom_certificates/%s", params.ZoneID, customCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -562,6 +562,8 @@ type CustomCertificateListParams struct {
 	Page param.Field[float64] `query:"page"`
 	// Number of zones per page.
 	PerPage param.Field[float64] `query:"per_page"`
+	// Status of the zone's custom SSL.
+	Status param.Field[CustomCertificateListParamsStatus] `query:"status"`
 }
 
 // URLQuery serializes [CustomCertificateListParams]'s query parameters as
@@ -589,9 +591,33 @@ func (r CustomCertificateListParamsMatch) IsKnown() bool {
 	return false
 }
 
+// Status of the zone's custom SSL.
+type CustomCertificateListParamsStatus string
+
+const (
+	CustomCertificateListParamsStatusActive       CustomCertificateListParamsStatus = "active"
+	CustomCertificateListParamsStatusExpired      CustomCertificateListParamsStatus = "expired"
+	CustomCertificateListParamsStatusDeleted      CustomCertificateListParamsStatus = "deleted"
+	CustomCertificateListParamsStatusPending      CustomCertificateListParamsStatus = "pending"
+	CustomCertificateListParamsStatusInitializing CustomCertificateListParamsStatus = "initializing"
+)
+
+func (r CustomCertificateListParamsStatus) IsKnown() bool {
+	switch r {
+	case CustomCertificateListParamsStatusActive, CustomCertificateListParamsStatusExpired, CustomCertificateListParamsStatusDeleted, CustomCertificateListParamsStatusPending, CustomCertificateListParamsStatusInitializing:
+		return true
+	}
+	return false
+}
+
 type CustomCertificateDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r CustomCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type CustomCertificateDeleteResponseEnvelope struct {

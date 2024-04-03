@@ -61,11 +61,13 @@ type DigitalExperienceMonitoringDevice struct {
 	// Cloudflare colo
 	Colo string `json:"colo,required"`
 	// Device identifier (UUID v4)
-	DeviceID string `json:"deviceId,required"`
+	DeviceID string      `json:"deviceId,required"`
+	Mode     interface{} `json:"mode,required"`
 	// Operating system
 	Platform string `json:"platform,required"`
 	// Network status
-	Status string `json:"status,required"`
+	Status    string      `json:"status,required"`
+	Timestamp interface{} `json:"timestamp,required"`
 	// WARP client version
 	Version string `json:"version,required"`
 	// Device identifier (human readable)
@@ -80,8 +82,10 @@ type DigitalExperienceMonitoringDevice struct {
 type digitalExperienceMonitoringDeviceJSON struct {
 	Colo        apijson.Field
 	DeviceID    apijson.Field
+	Mode        apijson.Field
 	Platform    apijson.Field
 	Status      apijson.Field
+	Timestamp   apijson.Field
 	Version     apijson.Field
 	DeviceName  apijson.Field
 	PersonEmail apijson.Field

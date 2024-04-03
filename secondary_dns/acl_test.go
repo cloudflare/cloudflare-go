@@ -118,6 +118,7 @@ func TestACLDelete(t *testing.T) {
 		"23ff594956f20c2a721606e94745a8aa",
 		secondary_dns.ACLDeleteParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

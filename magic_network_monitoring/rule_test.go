@@ -30,6 +30,7 @@ func TestRuleNew(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.New(context.TODO(), magic_network_monitoring.RuleNewParams{
 		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+		Body:      cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -56,6 +57,7 @@ func TestRuleUpdate(t *testing.T) {
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.Update(context.TODO(), magic_network_monitoring.RuleUpdateParams{
 		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+		Body:      cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -111,6 +113,7 @@ func TestRuleDelete(t *testing.T) {
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
 		magic_network_monitoring.RuleDeleteParams{
 			AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -141,6 +144,7 @@ func TestRuleEdit(t *testing.T) {
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
 		magic_network_monitoring.RuleEditParams{
 			AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

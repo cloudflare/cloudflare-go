@@ -99,10 +99,10 @@ func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListPar
 }
 
 // Delete DNS Record
-func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
+func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, params RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/%s", body.ZoneID, dnsRecordID)
+	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -179,10 +179,10 @@ func (r *RecordService) Import(ctx context.Context, params RecordImportParams, o
 
 // Scan for common DNS records on your domain and automatically add them to your
 // zone. Useful if you haven't updated your nameservers yet.
-func (r *RecordService) Scan(ctx context.Context, body RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
+func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RecordScanResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/scan", body.ZoneID)
+	path := fmt.Sprintf("zones/%s/dns_records/scan", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -7663,7 +7663,12 @@ func (r RecordListParamsType) IsKnown() bool {
 
 type RecordDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RecordDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RecordDeleteResponseEnvelope struct {
@@ -9731,7 +9736,12 @@ func (r recordImportResponseEnvelopeTimingJSON) RawJSON() string {
 
 type RecordScanParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type RecordScanResponseEnvelope struct {

@@ -73,10 +73,10 @@ func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkLi
 }
 
 // Deletes a watermark profile.
-func (r *WatermarkService) Delete(ctx context.Context, identifier string, body WatermarkDeleteParams, opts ...option.RequestOption) (res *WatermarkDeleteResponse, err error) {
+func (r *WatermarkService) Delete(ctx context.Context, identifier string, params WatermarkDeleteParams, opts ...option.RequestOption) (res *WatermarkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", body.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -335,7 +335,12 @@ type WatermarkListParams struct {
 
 type WatermarkDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r WatermarkDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type WatermarkDeleteResponseEnvelope struct {

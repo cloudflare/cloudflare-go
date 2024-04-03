@@ -109,12 +109,20 @@ func (r billingHistoryZoneJSON) RawJSON() string {
 }
 
 type BillingHistoryGetParams struct {
+	// The billing item action.
+	Action param.Field[string] `query:"action"`
+	// When the billing item was created.
+	OccuredAt param.Field[time.Time] `query:"occured_at" format:"date-time"`
+	// When the billing item was created.
+	OccurredAt param.Field[time.Time] `query:"occurred_at" format:"date-time"`
 	// Field to order billing history by.
 	Order param.Field[BillingHistoryGetParamsOrder] `query:"order"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of items per page.
 	PerPage param.Field[float64] `query:"per_page"`
+	// The billing item type.
+	Type param.Field[string] `query:"type"`
 }
 
 // URLQuery serializes [BillingHistoryGetParams]'s query parameters as

@@ -62,6 +62,7 @@ func TestAccountListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Accounts.List(context.TODO(), accounts.AccountListParams{
 		Direction: cloudflare.F(accounts.AccountListParamsDirectionDesc),
+		Name:      cloudflare.F("example.com"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 	})

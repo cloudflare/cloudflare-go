@@ -1677,7 +1677,9 @@ type WARPConnectorListParams struct {
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of results to display.
-	PerPage       param.Field[float64]   `query:"per_page"`
+	PerPage param.Field[float64] `query:"per_page"`
+	// UUID of the tunnel.
+	UUID          param.Field[string]    `query:"uuid"`
 	WasActiveAt   param.Field[time.Time] `query:"was_active_at" format:"date-time"`
 	WasInactiveAt param.Field[time.Time] `query:"was_inactive_at" format:"date-time"`
 }

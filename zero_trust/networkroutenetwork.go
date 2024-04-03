@@ -189,6 +189,10 @@ type NetworkRouteNetworkDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The type of tunnel.
 	TunType param.Field[NetworkRouteNetworkDeleteParamsTunType] `query:"tun_type"`
+	// UUID of the tunnel.
+	TunnelID param.Field[string] `query:"tunnel_id"`
+	// UUID of the virtual network.
+	VirtualNetworkID param.Field[string] `query:"virtual_network_id"`
 }
 
 // URLQuery serializes [NetworkRouteNetworkDeleteParams]'s query parameters as

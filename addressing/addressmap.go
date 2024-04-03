@@ -79,10 +79,10 @@ func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMap
 
 // Delete a particular address map owned by the account. An Address Map must be
 // disabled before it can be deleted.
-func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, body AddressMapDeleteParams, opts ...option.RequestOption) (res *AddressMapDeleteResponse, err error) {
+func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, params AddressMapDeleteParams, opts ...option.RequestOption) (res *AddressMapDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", body.AccountID, addressMapID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -554,7 +554,12 @@ type AddressMapListParams struct {
 
 type AddressMapDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r AddressMapDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapDeleteResponseEnvelope struct {

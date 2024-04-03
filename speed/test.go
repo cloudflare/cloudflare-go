@@ -636,13 +636,19 @@ func (r TestNewParamsRegion) IsKnown() bool {
 }
 
 type TestNewResponseEnvelope struct {
-	Result ObservatoryPageTest         `json:"result"`
-	JSON   testNewResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                 `json:"errors,required"`
+	Messages interface{}                 `json:"messages,required"`
+	Success  interface{}                 `json:"success,required"`
+	Result   ObservatoryPageTest         `json:"result"`
+	JSON     testNewResponseEnvelopeJSON `json:"-"`
 }
 
 // testNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TestNewResponseEnvelope]
 type testNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -759,13 +765,19 @@ func (r TestDeleteParamsRegion) IsKnown() bool {
 }
 
 type TestDeleteResponseEnvelope struct {
-	Result TestDeleteResponse             `json:"result"`
-	JSON   testDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                    `json:"errors,required"`
+	Messages interface{}                    `json:"messages,required"`
+	Success  interface{}                    `json:"success,required"`
+	Result   TestDeleteResponse             `json:"result"`
+	JSON     testDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // testDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TestDeleteResponseEnvelope]
 type testDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -785,13 +797,19 @@ type TestGetParams struct {
 }
 
 type TestGetResponseEnvelope struct {
-	Result ObservatoryPageTest         `json:"result"`
-	JSON   testGetResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                 `json:"errors,required"`
+	Messages interface{}                 `json:"messages,required"`
+	Success  interface{}                 `json:"success,required"`
+	Result   ObservatoryPageTest         `json:"result"`
+	JSON     testGetResponseEnvelopeJSON `json:"-"`
 }
 
 // testGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TestGetResponseEnvelope]
 type testGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

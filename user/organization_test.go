@@ -60,7 +60,13 @@ func TestOrganizationDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Organizations.Delete(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.User.Organizations.Delete(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		user.OrganizationDeleteParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

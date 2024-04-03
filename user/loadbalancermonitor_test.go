@@ -152,7 +152,13 @@ func TestLoadBalancerMonitorDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Monitors.Delete(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
+	_, err := client.User.LoadBalancers.Monitors.Delete(
+		context.TODO(),
+		"f1aba936b94213e5b8dca0c0dbf1f9cc",
+		user.LoadBalancerMonitorDeleteParams{
+			Body: cloudflare.F[any](map[string]interface{}{}),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

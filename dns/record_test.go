@@ -157,6 +157,7 @@ func TestRecordDelete(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		dns.RecordDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:   cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -305,6 +306,7 @@ func TestRecordScan(t *testing.T) {
 	)
 	_, err := client.DNS.Records.Scan(context.TODO(), dns.RecordScanParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body:   cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

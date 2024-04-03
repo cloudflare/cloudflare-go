@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -33,7 +34,7 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 }
 
 // Create a new Bookmark application.
-func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZeroTrustBookmarks, err error) {
+func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid string, body AccessBookmarkNewParams, opts ...option.RequestOption) (res *ZeroTrustBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -46,7 +47,7 @@ func (r *AccessBookmarkService) New(ctx context.Context, identifier string, uuid
 }
 
 // Updates a configured Bookmark application.
-func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZeroTrustBookmarks, err error) {
+func (r *AccessBookmarkService) Update(ctx context.Context, identifier string, uuid string, body AccessBookmarkUpdateParams, opts ...option.RequestOption) (res *ZeroTrustBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -82,7 +83,7 @@ func (r *AccessBookmarkService) ListAutoPaging(ctx context.Context, identifier s
 }
 
 // Deletes a Bookmark application.
-func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
+func (r *AccessBookmarkService) Delete(ctx context.Context, identifier string, uuid string, body AccessBookmarkDeleteParams, opts ...option.RequestOption) (res *AccessBookmarkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", identifier, uuid)
@@ -165,6 +166,14 @@ func (r *AccessBookmarkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessBookmarkDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type AccessBookmarkNewParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r AccessBookmarkNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AccessBookmarkNewResponseEnvelope struct {
@@ -256,6 +265,14 @@ func (r AccessBookmarkNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type AccessBookmarkUpdateParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r AccessBookmarkUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
 type AccessBookmarkUpdateResponseEnvelope struct {
 	Errors   []AccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkUpdateResponseEnvelopeMessages `json:"messages,required"`
@@ -343,6 +360,14 @@ func (r AccessBookmarkUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AccessBookmarkDeleteParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r AccessBookmarkDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AccessBookmarkDeleteResponseEnvelope struct {

@@ -98,10 +98,10 @@ func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListPar
 }
 
 // Deletes a video and its copies from Cloudflare Stream.
-func (r *StreamService) Delete(ctx context.Context, identifier string, body StreamDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *StreamService) Delete(ctx context.Context, identifier string, params StreamDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream/%s", body.AccountID, identifier)
+	path := fmt.Sprintf("accounts/%s/stream/%s", params.AccountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
@@ -338,7 +338,8 @@ func (r StreamVideosStatusState) IsKnown() bool {
 
 type StreamNewParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 	// Specifies the TUS protocol version. This value must be included in every upload
 	// request. Notes: The only supported version of TUS protocol is 1.0.0.
 	TusResumable param.Field[StreamNewParamsTusResumable] `header:"Tus-Resumable,required"`
@@ -351,6 +352,10 @@ type StreamNewParams struct {
 	// are Base-64 encoded. Supported keys: `name`, `requiresignedurls`,
 	// `allowedorigins`, `thumbnailtimestamppct`, `watermark`, `scheduleddeletion`.
 	UploadMetadata param.Field[string] `header:"Upload-Metadata"`
+}
+
+func (r StreamNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 // Specifies the TUS protocol version. This value must be included in every upload
@@ -422,7 +427,12 @@ func (r StreamListParamsStatus) IsKnown() bool {
 
 type StreamDeleteParams struct {
 	// The account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r StreamDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type StreamGetParams struct {

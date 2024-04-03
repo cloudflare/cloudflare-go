@@ -34,10 +34,10 @@ func NewScriptTailService(opts ...option.RequestOption) (r *ScriptTailService) {
 }
 
 // Starts a tail that receives logs and exception from a Worker.
-func (r *ScriptTailService) New(ctx context.Context, scriptName string, body ScriptTailNewParams, opts ...option.RequestOption) (res *ScriptTailNewResponse, err error) {
+func (r *ScriptTailService) New(ctx context.Context, scriptName string, params ScriptTailNewParams, opts ...option.RequestOption) (res *ScriptTailNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptTailNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", body.AccountID, scriptName)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -47,10 +47,10 @@ func (r *ScriptTailService) New(ctx context.Context, scriptName string, body Scr
 }
 
 // Deletes a tail from a Worker.
-func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, body ScriptTailDeleteParams, opts ...option.RequestOption) (res *ScriptTailDeleteResponse, err error) {
+func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, params ScriptTailDeleteParams, opts ...option.RequestOption) (res *ScriptTailDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptTailDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", body.AccountID, scriptName, id)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", params.AccountID, scriptName, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -149,7 +149,12 @@ func (r scriptTailGetResponseJSON) RawJSON() string {
 
 type ScriptTailNewParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ScriptTailNewResponseEnvelope struct {
@@ -243,7 +248,12 @@ func (r ScriptTailNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ScriptTailDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r ScriptTailDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ScriptTailDeleteResponseEnvelope struct {

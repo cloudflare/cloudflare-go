@@ -35,10 +35,10 @@ func NewAddressMapAccountService(opts ...option.RequestOption) (r *AddressMapAcc
 }
 
 // Add an account as a member of a particular address map.
-func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, body AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressMapAccountUpdateResponse, err error) {
+func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, params AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressMapAccountUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapAccountUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, body.AccountID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", params.AccountID, addressMapID, params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -48,10 +48,10 @@ func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID stri
 }
 
 // Remove an account as a member of a particular address map.
-func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, body AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressMapAccountDeleteResponse, err error) {
+func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, params AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressMapAccountDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapAccountDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, body.AccountID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", params.AccountID, addressMapID, params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -112,7 +112,12 @@ func (r AddressMapAccountDeleteResponseArray) ImplementsAddressingAddressMapAcco
 
 type AddressMapAccountUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r AddressMapAccountUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapAccountUpdateResponseEnvelope struct {
@@ -239,7 +244,12 @@ func (r addressMapAccountUpdateResponseEnvelopeResultInfoJSON) RawJSON() string 
 
 type AddressMapAccountDeleteParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r AddressMapAccountDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AddressMapAccountDeleteResponseEnvelope struct {

@@ -120,13 +120,19 @@ func (r ScheduleNewParamsRegion) IsKnown() bool {
 }
 
 type ScheduleNewResponseEnvelope struct {
-	Result ScheduleNewResponse             `json:"result"`
-	JSON   scheduleNewResponseEnvelopeJSON `json:"-"`
+	Errors   interface{}                     `json:"errors,required"`
+	Messages interface{}                     `json:"messages,required"`
+	Success  interface{}                     `json:"success,required"`
+	Result   ScheduleNewResponse             `json:"result"`
+	JSON     scheduleNewResponseEnvelopeJSON `json:"-"`
 }
 
 // scheduleNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [ScheduleNewResponseEnvelope]
 type scheduleNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

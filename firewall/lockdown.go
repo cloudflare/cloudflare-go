@@ -88,7 +88,7 @@ func (r *LockdownService) ListAutoPaging(ctx context.Context, zoneIdentifier str
 }
 
 // Deletes an existing Zone Lockdown rule.
-func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
+func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id string, body LockdownDeleteParams, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LockdownDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
@@ -493,6 +493,8 @@ func (r LockdownUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LockdownListParams struct {
+	// The timestamp of when the rule was created.
+	CreatedOn param.Field[time.Time] `query:"created_on" format:"date-time"`
 	// A string to search for in the description of existing rules.
 	Description param.Field[string] `query:"description"`
 	// A string to search for in the description of existing rules.
@@ -503,6 +505,8 @@ type LockdownListParams struct {
 	IPRangeSearch param.Field[string] `query:"ip_range_search"`
 	// A single IP address to search for in existing rules.
 	IPSearch param.Field[string] `query:"ip_search"`
+	// The timestamp of when the rule was last modified.
+	ModifiedOn param.Field[time.Time] `query:"modified_on" format:"date-time"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// The maximum number of results per page. You can only set the value to `1` or to
@@ -522,6 +526,14 @@ func (r LockdownListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type LockdownDeleteParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r LockdownDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type LockdownDeleteResponseEnvelope struct {

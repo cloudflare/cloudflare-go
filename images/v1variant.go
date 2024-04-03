@@ -60,10 +60,10 @@ func (r *V1VariantService) List(ctx context.Context, query V1VariantListParams, 
 }
 
 // Deleting a variant purges the cache for all images associated with the variant.
-func (r *V1VariantService) Delete(ctx context.Context, variantID string, body V1VariantDeleteParams, opts ...option.RequestOption) (res *V1VariantDeleteResponse, err error) {
+func (r *V1VariantService) Delete(ctx context.Context, variantID string, params V1VariantDeleteParams, opts ...option.RequestOption) (res *V1VariantDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1VariantDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/variants/%s", body.AccountID, variantID)
+	path := fmt.Sprintf("accounts/%s/images/v1/variants/%s", params.AccountID, variantID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -626,7 +626,12 @@ func (r V1VariantListResponseEnvelopeSuccess) IsKnown() bool {
 
 type V1VariantDeleteParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
+}
+
+func (r V1VariantDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type V1VariantDeleteResponseEnvelope struct {

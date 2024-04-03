@@ -93,10 +93,10 @@ func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBala
 }
 
 // Delete a configured load balancer.
-func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
+func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, params LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", body.ZoneID, loadBalancerID)
+	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -3275,7 +3275,12 @@ type LoadBalancerListParams struct {
 }
 
 type LoadBalancerDeleteParams struct {
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   param.Field[interface{}] `json:"body,required"`
+}
+
+func (r LoadBalancerDeleteParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type LoadBalancerDeleteResponseEnvelope struct {

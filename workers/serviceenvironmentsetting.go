@@ -562,6 +562,7 @@ func (r serviceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBin
 }
 
 type ServiceEnvironmentSettingEditResponseBindingsWorkersMTLSCERTBinding struct {
+	Certificate interface{} `json:"certificate,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
@@ -575,6 +576,7 @@ type ServiceEnvironmentSettingEditResponseBindingsWorkersMTLSCERTBinding struct 
 // the JSON metadata for the struct
 // [ServiceEnvironmentSettingEditResponseBindingsWorkersMTLSCERTBinding]
 type serviceEnvironmentSettingEditResponseBindingsWorkersMtlscertBindingJSON struct {
+	Certificate   apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -1415,6 +1417,7 @@ func (r serviceEnvironmentSettingGetResponseBindingsWorkersDispatchNamespaceBind
 }
 
 type ServiceEnvironmentSettingGetResponseBindingsWorkersMTLSCERTBinding struct {
+	Certificate interface{} `json:"certificate,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
@@ -1428,6 +1431,7 @@ type ServiceEnvironmentSettingGetResponseBindingsWorkersMTLSCERTBinding struct {
 // the JSON metadata for the struct
 // [ServiceEnvironmentSettingGetResponseBindingsWorkersMTLSCERTBinding]
 type serviceEnvironmentSettingGetResponseBindingsWorkersMtlscertBindingJSON struct {
+	Certificate   apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -2074,6 +2078,7 @@ func (r ServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespac
 }
 
 type ServiceEnvironmentSettingEditParamsResultBindingsWorkersMTLSCERTBinding struct {
+	Certificate param.Field[interface{}] `json:"certificate,required"`
 	// The class of resource that the binding provides.
 	Type param.Field[ServiceEnvironmentSettingEditParamsResultBindingsWorkersMTLSCERTBindingType] `json:"type,required"`
 	// ID of the certificate to bind to
