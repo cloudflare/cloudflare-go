@@ -51,7 +51,7 @@ func (r *MembershipService) Update(ctx context.Context, membershipID string, bod
 }
 
 // List memberships of accounts the user can access.
-func (r *MembershipService) List(ctx context.Context, query MembershipListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Membership], err error) {
+func (r *MembershipService) List(ctx context.Context, query MembershipListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[accounts.MemberRole], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -69,7 +69,7 @@ func (r *MembershipService) List(ctx context.Context, query MembershipListParams
 }
 
 // List memberships of accounts the user can access.
-func (r *MembershipService) ListAutoPaging(ctx context.Context, query MembershipListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Membership] {
+func (r *MembershipService) ListAutoPaging(ctx context.Context, query MembershipListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[accounts.MemberRole] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -97,106 +97,6 @@ func (r *MembershipService) Get(ctx context.Context, membershipID string, opts .
 	}
 	res = &env.Result
 	return
-}
-
-type Membership struct {
-	// Membership identifier tag.
-	ID      string           `json:"id"`
-	Account accounts.Account `json:"account"`
-	// Enterprise only. Indicates whether or not API access is enabled specifically for
-	// this user on a given account.
-	APIAccessEnabled bool `json:"api_access_enabled,nullable"`
-	// The unique activation code for the account membership.
-	Code string `json:"code"`
-	// All access permissions for the user at the account.
-	Permissions MembershipPermissions `json:"permissions"`
-	// List of role names for the user at the account.
-	Roles []string `json:"roles"`
-	// Status of this membership.
-	Status MembershipStatus `json:"status"`
-	JSON   membershipJSON   `json:"-"`
-}
-
-// membershipJSON contains the JSON metadata for the struct [Membership]
-type membershipJSON struct {
-	ID               apijson.Field
-	Account          apijson.Field
-	APIAccessEnabled apijson.Field
-	Code             apijson.Field
-	Permissions      apijson.Field
-	Roles            apijson.Field
-	Status           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *Membership) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r membershipJSON) RawJSON() string {
-	return r.raw
-}
-
-// All access permissions for the user at the account.
-type MembershipPermissions struct {
-	Analytics    accounts.RolePermissionGrant `json:"analytics"`
-	Billing      accounts.RolePermissionGrant `json:"billing"`
-	CachePurge   accounts.RolePermissionGrant `json:"cache_purge"`
-	DNS          accounts.RolePermissionGrant `json:"dns"`
-	DNSRecords   accounts.RolePermissionGrant `json:"dns_records"`
-	Lb           accounts.RolePermissionGrant `json:"lb"`
-	Logs         accounts.RolePermissionGrant `json:"logs"`
-	Organization accounts.RolePermissionGrant `json:"organization"`
-	SSL          accounts.RolePermissionGrant `json:"ssl"`
-	WAF          accounts.RolePermissionGrant `json:"waf"`
-	ZoneSettings accounts.RolePermissionGrant `json:"zone_settings"`
-	Zones        accounts.RolePermissionGrant `json:"zones"`
-	JSON         membershipPermissionsJSON    `json:"-"`
-}
-
-// membershipPermissionsJSON contains the JSON metadata for the struct
-// [MembershipPermissions]
-type membershipPermissionsJSON struct {
-	Analytics    apijson.Field
-	Billing      apijson.Field
-	CachePurge   apijson.Field
-	DNS          apijson.Field
-	DNSRecords   apijson.Field
-	Lb           apijson.Field
-	Logs         apijson.Field
-	Organization apijson.Field
-	SSL          apijson.Field
-	WAF          apijson.Field
-	ZoneSettings apijson.Field
-	Zones        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *MembershipPermissions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r membershipPermissionsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Status of this membership.
-type MembershipStatus string
-
-const (
-	MembershipStatusAccepted MembershipStatus = "accepted"
-	MembershipStatusPending  MembershipStatus = "pending"
-	MembershipStatusRejected MembershipStatus = "rejected"
-)
-
-func (r MembershipStatus) IsKnown() bool {
-	switch r {
-	case MembershipStatusAccepted, MembershipStatusPending, MembershipStatusRejected:
-		return true
-	}
-	return false
 }
 
 // Union satisfied by [memberships.MembershipUpdateResponseUnknown] or
