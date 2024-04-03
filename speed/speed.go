@@ -235,7 +235,7 @@ type SpeedDeleteParams struct {
 // URLQuery serializes [SpeedDeleteParams]'s query parameters as `url.Values`.
 func (r SpeedDeleteParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -312,7 +312,7 @@ type SpeedScheduleGetParams struct {
 // URLQuery serializes [SpeedScheduleGetParams]'s query parameters as `url.Values`.
 func (r SpeedScheduleGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -398,7 +398,7 @@ type SpeedTrendsListParams struct {
 // URLQuery serializes [SpeedTrendsListParams]'s query parameters as `url.Values`.
 func (r SpeedTrendsListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

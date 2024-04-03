@@ -498,7 +498,7 @@ type WAFOverrideListParams struct {
 // URLQuery serializes [WAFOverrideListParams]'s query parameters as `url.Values`.
 func (r WAFOverrideListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

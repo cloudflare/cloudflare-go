@@ -7492,7 +7492,7 @@ type RecordListParams struct {
 // URLQuery serializes [RecordListParams]'s query parameters as `url.Values`.
 func (r RecordListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -7516,7 +7516,7 @@ type RecordListParamsComment struct {
 // `url.Values`.
 func (r RecordListParamsComment) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -7603,7 +7603,7 @@ type RecordListParamsTag struct {
 // URLQuery serializes [RecordListParamsTag]'s query parameters as `url.Values`.
 func (r RecordListParamsTag) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

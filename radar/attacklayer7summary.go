@@ -1085,7 +1085,7 @@ type AttackLayer7SummaryGetParams struct {
 // `url.Values`.
 func (r AttackLayer7SummaryGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1194,7 +1194,7 @@ type AttackLayer7SummaryHTTPMethodParams struct {
 // `url.Values`.
 func (r AttackLayer7SummaryHTTPMethodParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1354,7 +1354,7 @@ type AttackLayer7SummaryHTTPVersionParams struct {
 // `url.Values`.
 func (r AttackLayer7SummaryHTTPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1557,7 +1557,7 @@ type AttackLayer7SummaryIPVersionParams struct {
 // `url.Values`.
 func (r AttackLayer7SummaryIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1763,7 +1763,7 @@ type AttackLayer7SummaryManagedRulesParams struct {
 // as `url.Values`.
 func (r AttackLayer7SummaryManagedRulesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1982,7 +1982,7 @@ type AttackLayer7SummaryMitigationProductParams struct {
 // parameters as `url.Values`.
 func (r AttackLayer7SummaryMitigationProductParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

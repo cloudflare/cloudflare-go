@@ -612,7 +612,7 @@ type EmailSecurityTimeseriesGroupARCParams struct {
 // as `url.Values`.
 func (r EmailSecurityTimeseriesGroupARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -800,7 +800,7 @@ type EmailSecurityTimeseriesGroupDKIMParams struct {
 // as `url.Values`.
 func (r EmailSecurityTimeseriesGroupDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -988,7 +988,7 @@ type EmailSecurityTimeseriesGroupDMARCParams struct {
 // as `url.Values`.
 func (r EmailSecurityTimeseriesGroupDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1178,7 +1178,7 @@ type EmailSecurityTimeseriesGroupMaliciousParams struct {
 // parameters as `url.Values`.
 func (r EmailSecurityTimeseriesGroupMaliciousParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1384,7 +1384,7 @@ type EmailSecurityTimeseriesGroupSpamParams struct {
 // as `url.Values`.
 func (r EmailSecurityTimeseriesGroupSpamParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1588,7 +1588,7 @@ type EmailSecurityTimeseriesGroupSPFParams struct {
 // as `url.Values`.
 func (r EmailSecurityTimeseriesGroupSPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1778,7 +1778,7 @@ type EmailSecurityTimeseriesGroupSpoofParams struct {
 // as `url.Values`.
 func (r EmailSecurityTimeseriesGroupSpoofParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1984,7 +1984,7 @@ type EmailSecurityTimeseriesGroupThreatCategoryParams struct {
 // parameters as `url.Values`.
 func (r EmailSecurityTimeseriesGroupThreatCategoryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -2189,7 +2189,7 @@ type EmailSecurityTimeseriesGroupTLSVersionParams struct {
 // parameters as `url.Values`.
 func (r EmailSecurityTimeseriesGroupTLSVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

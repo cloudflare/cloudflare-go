@@ -686,7 +686,7 @@ type AttackLayer3TimeseriesGroupBitrateParams struct {
 // parameters as `url.Values`.
 func (r AttackLayer3TimeseriesGroupBitrateParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -885,7 +885,7 @@ type AttackLayer3TimeseriesGroupDurationParams struct {
 // parameters as `url.Values`.
 func (r AttackLayer3TimeseriesGroupDurationParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1078,7 +1078,7 @@ type AttackLayer3TimeseriesGroupGetParams struct {
 // `url.Values`.
 func (r AttackLayer3TimeseriesGroupGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1212,7 +1212,7 @@ type AttackLayer3TimeseriesGroupIndustryParams struct {
 // parameters as `url.Values`.
 func (r AttackLayer3TimeseriesGroupIndustryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1392,7 +1392,7 @@ type AttackLayer3TimeseriesGroupIPVersionParams struct {
 // parameters as `url.Values`.
 func (r AttackLayer3TimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1574,7 +1574,7 @@ type AttackLayer3TimeseriesGroupProtocolParams struct {
 // parameters as `url.Values`.
 func (r AttackLayer3TimeseriesGroupProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1759,7 +1759,7 @@ type AttackLayer3TimeseriesGroupVectorParams struct {
 // as `url.Values`.
 func (r AttackLayer3TimeseriesGroupVectorParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -1959,7 +1959,7 @@ type AttackLayer3TimeseriesGroupVerticalParams struct {
 // parameters as `url.Values`.
 func (r AttackLayer3TimeseriesGroupVerticalParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

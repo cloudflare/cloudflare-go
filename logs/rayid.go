@@ -84,7 +84,7 @@ type RayIDGetParams struct {
 // URLQuery serializes [RayIDGetParams]'s query parameters as `url.Values`.
 func (r RayIDGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

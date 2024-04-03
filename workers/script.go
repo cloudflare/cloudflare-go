@@ -223,7 +223,7 @@ func (r ScriptUpdateParamsVariant0) MarshalMultipart() (data []byte, contentType
 // `url.Values`.
 func (r ScriptUpdateParamsVariant0) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -458,7 +458,7 @@ func (r ScriptUpdateParamsVariant1) MarshalJSON() (data []byte, err error) {
 // `url.Values`.
 func (r ScriptUpdateParamsVariant1) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -582,7 +582,7 @@ func (r ScriptDeleteParams) MarshalJSON() (data []byte, err error) {
 // URLQuery serializes [ScriptDeleteParams]'s query parameters as `url.Values`.
 func (r ScriptDeleteParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

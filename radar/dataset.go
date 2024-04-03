@@ -177,7 +177,7 @@ type DatasetListParams struct {
 // URLQuery serializes [DatasetListParams]'s query parameters as `url.Values`.
 func (r DatasetListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -250,7 +250,7 @@ func (r DatasetDownloadParams) MarshalJSON() (data []byte, err error) {
 // URLQuery serializes [DatasetDownloadParams]'s query parameters as `url.Values`.
 func (r DatasetDownloadParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -302,7 +302,7 @@ type DatasetGetParams struct {
 // URLQuery serializes [DatasetGetParams]'s query parameters as `url.Values`.
 func (r DatasetGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

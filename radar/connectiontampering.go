@@ -432,7 +432,7 @@ type ConnectionTamperingSummaryParams struct {
 // `url.Values`.
 func (r ConnectionTamperingSummaryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
@@ -539,7 +539,7 @@ type ConnectionTamperingTimeseriesGroupsParams struct {
 // parameters as `url.Values`.
 func (r ConnectionTamperingTimeseriesGroupsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
