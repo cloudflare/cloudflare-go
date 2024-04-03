@@ -112,10 +112,10 @@ type Member struct {
 	// Membership identifier tag.
 	ID string `json:"id,required"`
 	// Roles assigned to this member.
-	Roles  []MemberRole `json:"roles,required"`
-	Status interface{}  `json:"status,required"`
-	User   MemberUser   `json:"user,required"`
-	JSON   memberJSON   `json:"-"`
+	Roles  []Role      `json:"roles,required"`
+	Status interface{} `json:"status,required"`
+	User   MemberUser  `json:"user,required"`
+	JSON   memberJSON  `json:"-"`
 }
 
 // memberJSON contains the JSON metadata for the struct [Member]
@@ -133,35 +133,6 @@ func (r *Member) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r memberJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberRole struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role name.
-	Name        string           `json:"name,required"`
-	Permissions MemberPermission `json:"permissions,required"`
-	JSON        memberRoleJSON   `json:"-"`
-}
-
-// memberRoleJSON contains the JSON metadata for the struct [MemberRole]
-type memberRoleJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MemberRole) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberRoleJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -265,9 +236,9 @@ type MemberWithCode struct {
 	// Membership identifier tag.
 	ID string `json:"id,required"`
 	// Roles assigned to this member.
-	Roles  []MemberWithCodeRole `json:"roles,required"`
-	Status interface{}          `json:"status,required"`
-	User   MemberWithCodeUser   `json:"user,required"`
+	Roles  []Role             `json:"roles,required"`
+	Status interface{}        `json:"status,required"`
+	User   MemberWithCodeUser `json:"user,required"`
 	// The unique activation code for the account membership.
 	Code string             `json:"code"`
 	JSON memberWithCodeJSON `json:"-"`
@@ -289,36 +260,6 @@ func (r *MemberWithCode) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r memberWithCodeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MemberWithCodeRole struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role name.
-	Name        string                 `json:"name,required"`
-	Permissions MemberPermission       `json:"permissions,required"`
-	JSON        memberWithCodeRoleJSON `json:"-"`
-}
-
-// memberWithCodeRoleJSON contains the JSON metadata for the struct
-// [MemberWithCodeRole]
-type memberWithCodeRoleJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MemberWithCodeRole) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r memberWithCodeRoleJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -365,7 +306,7 @@ type MemberListResponse struct {
 	// Member Name.
 	Name string `json:"name,required,nullable"`
 	// Roles assigned to this Member.
-	Roles []Role `json:"roles,required"`
+	Roles []MemberListResponseRole `json:"roles,required"`
 	// A member's status in the organization.
 	Status MemberListResponseStatus `json:"status,required"`
 	JSON   memberListResponseJSON   `json:"-"`
@@ -388,6 +329,37 @@ func (r *MemberListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r memberListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type MemberListResponseRole struct {
+	// Role identifier tag.
+	ID string `json:"id,required"`
+	// Description of role's permissions.
+	Description string `json:"description,required"`
+	// Role Name.
+	Name string `json:"name,required"`
+	// Access permissions for this User.
+	Permissions []string                   `json:"permissions,required"`
+	JSON        memberListResponseRoleJSON `json:"-"`
+}
+
+// memberListResponseRoleJSON contains the JSON metadata for the struct
+// [MemberListResponseRole]
+type memberListResponseRoleJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MemberListResponseRole) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r memberListResponseRoleJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -549,19 +521,10 @@ func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
 type MemberUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Roles assigned to this member.
-	Roles param.Field[[]MemberUpdateParamsRole] `json:"roles,required"`
+	Roles param.Field[[]RoleParam] `json:"roles,required"`
 }
 
 func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MemberUpdateParamsRole struct {
-	// Role identifier tag.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r MemberUpdateParamsRole) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
