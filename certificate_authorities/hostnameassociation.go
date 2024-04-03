@@ -34,7 +34,7 @@ func NewHostnameAssociationService(opts ...option.RequestOption) (r *HostnameAss
 }
 
 // Replace Hostname Associations
-func (r *HostnameAssociationService) Update(ctx context.Context, params HostnameAssociationUpdateParams, opts ...option.RequestOption) (res *TLSHostnameAssociation, err error) {
+func (r *HostnameAssociationService) Update(ctx context.Context, params HostnameAssociationUpdateParams, opts ...option.RequestOption) (res *HostnameAssociationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameAssociationUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
@@ -47,7 +47,7 @@ func (r *HostnameAssociationService) Update(ctx context.Context, params Hostname
 }
 
 // List Hostname Associations
-func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAssociationGetParams, opts ...option.RequestOption) (res *TLSHostnameAssociation, err error) {
+func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAssociationGetParams, opts ...option.RequestOption) (res *HostnameAssociationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameAssociationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
@@ -59,29 +59,45 @@ func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAss
 	return
 }
 
-type TLSHostnameAssociation struct {
-	Hostnames []string `json:"hostnames"`
-	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
-	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
-	// to your active Cloudflare Managed CA.
-	MTLSCertificateID string                     `json:"mtls_certificate_id"`
-	JSON              tlsHostnameAssociationJSON `json:"-"`
+type HostnameAssociationUpdateResponse struct {
+	Hostnames []string                              `json:"hostnames"`
+	JSON      hostnameAssociationUpdateResponseJSON `json:"-"`
 }
 
-// tlsHostnameAssociationJSON contains the JSON metadata for the struct
-// [TLSHostnameAssociation]
-type tlsHostnameAssociationJSON struct {
-	Hostnames         apijson.Field
-	MTLSCertificateID apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+// hostnameAssociationUpdateResponseJSON contains the JSON metadata for the struct
+// [HostnameAssociationUpdateResponse]
+type hostnameAssociationUpdateResponseJSON struct {
+	Hostnames   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r *TLSHostnameAssociation) UnmarshalJSON(data []byte) (err error) {
+func (r *HostnameAssociationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tlsHostnameAssociationJSON) RawJSON() string {
+func (r hostnameAssociationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type HostnameAssociationGetResponse struct {
+	Hostnames []string                           `json:"hostnames"`
+	JSON      hostnameAssociationGetResponseJSON `json:"-"`
+}
+
+// hostnameAssociationGetResponseJSON contains the JSON metadata for the struct
+// [HostnameAssociationGetResponse]
+type hostnameAssociationGetResponseJSON struct {
+	Hostnames   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameAssociationGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameAssociationGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -102,7 +118,7 @@ func (r HostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) 
 type HostnameAssociationUpdateResponseEnvelope struct {
 	Errors   []HostnameAssociationUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameAssociationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSHostnameAssociation                              `json:"result,required"`
+	Result   HostnameAssociationUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameAssociationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -209,7 +225,7 @@ func (r HostnameAssociationGetParams) URLQuery() (v url.Values) {
 type HostnameAssociationGetResponseEnvelope struct {
 	Errors   []HostnameAssociationGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameAssociationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSHostnameAssociation                           `json:"result,required"`
+	Result   HostnameAssociationGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameAssociationGetResponseEnvelopeJSON    `json:"-"`
