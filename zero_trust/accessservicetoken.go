@@ -300,8 +300,8 @@ func (r AccessServiceTokenNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessServiceTokenNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   AccessServiceTokenNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenNewResponseEnvelopeSuccess `json:"success,required"`
@@ -360,9 +360,9 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessServiceTokenUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustServiceTokens       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   ZeroTrustServiceTokens `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
@@ -417,9 +417,9 @@ type AccessServiceTokenDeleteParams struct {
 }
 
 type AccessServiceTokenDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustServiceTokens       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   ZeroTrustServiceTokens `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
@@ -460,9 +460,9 @@ func (r AccessServiceTokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessServiceTokenRefreshResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustServiceTokens       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   ZeroTrustServiceTokens `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenRefreshResponseEnvelopeJSON    `json:"-"`
@@ -503,8 +503,8 @@ func (r AccessServiceTokenRefreshResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessServiceTokenRotateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
 	Result   AccessServiceTokenRotateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRotateResponseEnvelopeSuccess `json:"success,required"`

@@ -88,9 +88,9 @@ func (r RecommendationGetResponseValue) IsKnown() bool {
 }
 
 type RecommendationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   RecommendationGetResponse    `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   RecommendationGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RecommendationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recommendationGetResponseEnvelopeJSON    `json:"-"`

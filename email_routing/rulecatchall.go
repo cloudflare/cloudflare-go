@@ -277,9 +277,9 @@ func (r RuleCatchAllUpdateParamsEnabled) IsKnown() bool {
 }
 
 type RuleCatchAllUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   EmailCatchAllRule            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   EmailCatchAllRule     `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleCatchAllUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleCatchAllUpdateResponseEnvelopeJSON    `json:"-"`
@@ -320,9 +320,9 @@ func (r RuleCatchAllUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleCatchAllGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   EmailCatchAllRule            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   EmailCatchAllRule     `json:"result,required"`
 	// Whether the API call was successful
 	Success RuleCatchAllGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleCatchAllGetResponseEnvelopeJSON    `json:"-"`

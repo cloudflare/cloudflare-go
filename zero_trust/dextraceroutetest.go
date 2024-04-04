@@ -977,8 +977,8 @@ func (r DEXTracerouteTestGetParamsInterval) IsKnown() bool {
 }
 
 type DEXTracerouteTestGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172                 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172                 `json:"messages,required"`
+	Errors   []shared.ResponseInfo                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                        `json:"messages,required"`
 	Result   DigitalExperienceMonitoringTracerouteDetails `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestGetResponseEnvelopeSuccess `json:"success,required"`
@@ -1057,8 +1057,8 @@ func (r DEXTracerouteTestNetworkPathParamsInterval) IsKnown() bool {
 }
 
 type DEXTracerouteTestNetworkPathResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172                         `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172                         `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                `json:"errors,required"`
+	Messages []shared.ResponseInfo                                `json:"messages,required"`
 	Result   DigitalExperienceMonitoringTracerouteTestNetworkPath `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success,required"`
@@ -1123,8 +1123,8 @@ func (r DEXTracerouteTestPercentilesParams) URLQuery() (v url.Values) {
 }
 
 type DEXTracerouteTestPercentilesResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172                            `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172                            `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                   `json:"errors,required"`
+	Messages []shared.ResponseInfo                                   `json:"messages,required"`
 	Result   DigitalExperienceMonitoringTracerouteDetailsPercentiles `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success,required"`

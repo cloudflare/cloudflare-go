@@ -240,9 +240,9 @@ func (r InviteEditParamsStatus) IsKnown() bool {
 }
 
 type InviteEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   InviteEditResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   InviteEditResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success InviteEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    inviteEditResponseEnvelopeJSON    `json:"-"`
@@ -283,9 +283,9 @@ func (r InviteEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type InviteGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   InviteGetResponse            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   InviteGetResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success InviteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    inviteGetResponseEnvelopeJSON    `json:"-"`

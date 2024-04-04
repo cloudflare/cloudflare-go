@@ -305,8 +305,8 @@ func (r OriginCACertificateNewParamsRequestedValidity) IsKnown() bool {
 }
 
 type OriginCACertificateNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   OriginCACertificateNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success,required"`
@@ -370,8 +370,8 @@ func (r OriginCACertificateDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type OriginCACertificateDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172      `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172      `json:"messages,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
 	Result   OriginCACertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -413,8 +413,8 @@ func (r OriginCACertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OriginCACertificateGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   OriginCACertificateGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success,required"`

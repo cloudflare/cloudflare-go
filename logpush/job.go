@@ -288,9 +288,9 @@ func (r JobNewParamsOutputOptionsTimestampFormat) IsKnown() bool {
 }
 
 type JobNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   LogpushJob                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobNewResponseEnvelopeJSON    `json:"-"`
@@ -460,9 +460,9 @@ func (r JobUpdateParamsOutputOptionsTimestampFormat) IsKnown() bool {
 }
 
 type JobUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   LogpushJob                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobUpdateResponseEnvelopeJSON    `json:"-"`
@@ -522,9 +522,9 @@ func (r JobDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type JobDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef161   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef161 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobDeleteResponseEnvelopeJSON    `json:"-"`
@@ -572,9 +572,9 @@ type JobGetParams struct {
 }
 
 type JobGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   LogpushJob                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobGetResponseEnvelopeJSON    `json:"-"`

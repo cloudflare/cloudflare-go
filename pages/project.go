@@ -2564,9 +2564,9 @@ func (r ProjectNewParamsDeploymentConfigsProductionVectorizeBindingsVectorize) M
 }
 
 type ProjectNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ProjectNewResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ProjectNewResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectNewResponseEnvelopeJSON    `json:"-"`
@@ -2632,9 +2632,9 @@ func (r ProjectEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ProjectEditResponse          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ProjectEditResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectEditResponseEnvelopeJSON    `json:"-"`
@@ -2680,9 +2680,9 @@ type ProjectGetParams struct {
 }
 
 type ProjectGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   PagesProjects                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PagesProjects         `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectGetResponseEnvelopeJSON    `json:"-"`

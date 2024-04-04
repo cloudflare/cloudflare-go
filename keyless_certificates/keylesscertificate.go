@@ -263,9 +263,9 @@ func (r KeylessCertificateNewParamsTunnel) MarshalJSON() (data []byte, err error
 }
 
 type KeylessCertificateNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   KeylessCertificateHostname   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   KeylessCertificateHostname `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keylessCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -321,8 +321,8 @@ func (r KeylessCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeylessCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
 	Result   KeylessCertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -396,9 +396,9 @@ func (r KeylessCertificateEditParamsTunnel) MarshalJSON() (data []byte, err erro
 }
 
 type KeylessCertificateEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   KeylessCertificateHostname   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   KeylessCertificateHostname `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keylessCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -444,9 +444,9 @@ type KeylessCertificateGetParams struct {
 }
 
 type KeylessCertificateGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   KeylessCertificateHostname   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   KeylessCertificateHostname `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keylessCertificateGetResponseEnvelopeJSON    `json:"-"`

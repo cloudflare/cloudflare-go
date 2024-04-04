@@ -185,8 +185,8 @@ func (r SettingNELEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingNELEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable Network Error Logging reporting on your zone. (Beta)
@@ -219,8 +219,8 @@ type SettingNELGetParams struct {
 }
 
 type SettingNELGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable Network Error Logging reporting on your zone. (Beta)

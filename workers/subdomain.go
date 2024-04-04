@@ -110,9 +110,9 @@ func (r SubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubdomainUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SubdomainUpdateResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   SubdomainUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SubdomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subdomainUpdateResponseEnvelopeJSON    `json:"-"`
@@ -158,9 +158,9 @@ type SubdomainGetParams struct {
 }
 
 type SubdomainGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SubdomainGetResponse         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SubdomainGetResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success SubdomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subdomainGetResponseEnvelopeJSON    `json:"-"`

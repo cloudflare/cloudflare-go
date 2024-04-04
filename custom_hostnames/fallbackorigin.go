@@ -136,8 +136,8 @@ func (r FallbackOriginUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FallbackOriginUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   FallbackOriginUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success FallbackOriginUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -189,8 +189,8 @@ func (r FallbackOriginDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FallbackOriginDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   FallbackOriginDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success FallbackOriginDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -237,9 +237,9 @@ type FallbackOriginGetParams struct {
 }
 
 type FallbackOriginGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   FallbackOriginGetResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   FallbackOriginGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success FallbackOriginGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    fallbackOriginGetResponseEnvelopeJSON    `json:"-"`

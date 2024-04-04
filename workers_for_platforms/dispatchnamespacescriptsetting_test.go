@@ -35,7 +35,7 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Errors: cloudflare.F([]shared.UnnamedSchemaRef172Param{{
+			Errors: cloudflare.F([]shared.ResponseInfoParam{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {
@@ -45,7 +45,7 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Messages: cloudflare.F([]shared.UnnamedSchemaRef172Param{{
+			Messages: cloudflare.F([]shared.ResponseInfoParam{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {

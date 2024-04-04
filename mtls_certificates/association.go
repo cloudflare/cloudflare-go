@@ -76,8 +76,8 @@ type AssociationGetParams struct {
 }
 
 type AssociationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   []MTLSCertificateAsssociation `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AssociationGetResponseEnvelopeSuccess    `json:"success,required"`

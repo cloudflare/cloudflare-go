@@ -247,9 +247,9 @@ func (r DEXFleetStatusLiveParams) URLQuery() (v url.Values) {
 }
 
 type DEXFleetStatusLiveResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DEXFleetStatusLiveResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   DEXFleetStatusLiveResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXFleetStatusLiveResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexFleetStatusLiveResponseEnvelopeJSON    `json:"-"`

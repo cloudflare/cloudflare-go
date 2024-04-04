@@ -245,9 +245,9 @@ func (r ClientCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ClientCertificateNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ClientCertificate            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -336,9 +336,9 @@ type ClientCertificateDeleteParams struct {
 }
 
 type ClientCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ClientCertificate            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -384,9 +384,9 @@ type ClientCertificateEditParams struct {
 }
 
 type ClientCertificateEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ClientCertificate            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -432,9 +432,9 @@ type ClientCertificateGetParams struct {
 }
 
 type ClientCertificateGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ClientCertificate            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ClientCertificate     `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateGetResponseEnvelopeJSON    `json:"-"`

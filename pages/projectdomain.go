@@ -195,9 +195,9 @@ func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDomainNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ProjectDomainNewResponse     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   ProjectDomainNewResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainNewResponseEnvelopeJSON    `json:"-"`
@@ -263,9 +263,9 @@ func (r ProjectDomainEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDomainEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ProjectDomainEditResponse    `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   ProjectDomainEditResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainEditResponseEnvelopeJSON    `json:"-"`
@@ -311,9 +311,9 @@ type ProjectDomainGetParams struct {
 }
 
 type ProjectDomainGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ProjectDomainGetResponse     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   ProjectDomainGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainGetResponseEnvelopeJSON    `json:"-"`

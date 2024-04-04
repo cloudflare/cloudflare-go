@@ -180,9 +180,9 @@ func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   RouteNewResponse             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RouteNewResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
@@ -235,9 +235,9 @@ func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WorkersRoute                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WorkersRoute          `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeUpdateResponseEnvelopeJSON    `json:"-"`
@@ -293,9 +293,9 @@ func (r RouteDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   RouteDeleteResponse          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RouteDeleteResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeDeleteResponseEnvelopeJSON    `json:"-"`
@@ -341,9 +341,9 @@ type RouteGetParams struct {
 }
 
 type RouteGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WorkersRoute                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WorkersRoute          `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeGetResponseEnvelopeJSON    `json:"-"`

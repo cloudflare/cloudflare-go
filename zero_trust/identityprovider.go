@@ -3337,9 +3337,9 @@ func (IdentityProviderNewParamsAccessOnetimepin) ImplementsIdentityProviderNewPa
 }
 
 type IdentityProviderNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustIdentityProviders   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   ZeroTrustIdentityProviders `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderNewResponseEnvelopeJSON    `json:"-"`
@@ -4206,9 +4206,9 @@ func (IdentityProviderUpdateParamsAccessOnetimepin) ImplementsIdentityProviderUp
 }
 
 type IdentityProviderUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustIdentityProviders   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   ZeroTrustIdentityProviders `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderUpdateResponseEnvelopeJSON    `json:"-"`
@@ -4263,8 +4263,8 @@ type IdentityProviderDeleteParams struct {
 }
 
 type IdentityProviderDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   IdentityProviderDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -4313,9 +4313,9 @@ type IdentityProviderGetParams struct {
 }
 
 type IdentityProviderGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustIdentityProviders   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   ZeroTrustIdentityProviders `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderGetResponseEnvelopeJSON    `json:"-"`

@@ -192,9 +192,9 @@ func init() {
 }
 
 type V1ListResponse struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   V1ListResponseResult         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V1ListResponseResult  `json:"result,required"`
 	// Whether the API call was successful
 	Success V1ListResponseSuccess `json:"success,required"`
 	JSON    v1ListResponseJSON    `json:"-"`
@@ -317,9 +317,9 @@ func (V1NewParamsImagesImageUploadViaURL) ImplementsV1NewParams() {
 }
 
 type V1NewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   Image                        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Image                 `json:"result,required"`
 	// Whether the API call was successful
 	Success V1NewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1NewResponseEnvelopeJSON    `json:"-"`
@@ -387,9 +387,9 @@ func (r V1DeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1DeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   V1DeleteResponse             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V1DeleteResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success V1DeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1DeleteResponseEnvelopeJSON    `json:"-"`
@@ -446,9 +446,9 @@ func (r V1EditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1EditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   Image                        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Image                 `json:"result,required"`
 	// Whether the API call was successful
 	Success V1EditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1EditResponseEnvelopeJSON    `json:"-"`
@@ -494,9 +494,9 @@ type V1GetParams struct {
 }
 
 type V1GetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   Image                        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Image                 `json:"result,required"`
 	// Whether the API call was successful
 	Success V1GetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1GetResponseEnvelopeJSON    `json:"-"`

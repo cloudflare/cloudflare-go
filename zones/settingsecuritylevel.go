@@ -206,8 +206,8 @@ func (r SettingSecurityLevelEditParamsValue) IsKnown() bool {
 }
 
 type SettingSecurityLevelEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Choose the appropriate security profile for your website, which will
@@ -243,8 +243,8 @@ type SettingSecurityLevelGetParams struct {
 }
 
 type SettingSecurityLevelGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Choose the appropriate security profile for your website, which will

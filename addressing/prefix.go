@@ -188,9 +188,9 @@ func (r PrefixNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressingIpamPrefixes       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   AddressingIpamPrefixes `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixNewResponseEnvelopeJSON    `json:"-"`
@@ -246,9 +246,9 @@ func (r PrefixDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PrefixDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PrefixDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -333,9 +333,9 @@ func (r PrefixEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressingIpamPrefixes       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   AddressingIpamPrefixes `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixEditResponseEnvelopeJSON    `json:"-"`
@@ -381,9 +381,9 @@ type PrefixGetParams struct {
 }
 
 type PrefixGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressingIpamPrefixes       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   AddressingIpamPrefixes `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixGetResponseEnvelopeJSON    `json:"-"`

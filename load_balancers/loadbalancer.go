@@ -2184,9 +2184,9 @@ func (r LoadBalancerNewParamsSteeringPolicy) IsKnown() bool {
 }
 
 type LoadBalancerNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   LoadBalancer                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoadBalancer          `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerNewResponseEnvelopeJSON    `json:"-"`
@@ -3137,9 +3137,9 @@ func (r LoadBalancerUpdateParamsSteeringPolicy) IsKnown() bool {
 }
 
 type LoadBalancerUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   LoadBalancer                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoadBalancer          `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerUpdateResponseEnvelopeJSON    `json:"-"`
@@ -3193,9 +3193,9 @@ func (r LoadBalancerDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LoadBalancerDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   LoadBalancerDeleteResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   LoadBalancerDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerDeleteResponseEnvelopeJSON    `json:"-"`
@@ -4146,9 +4146,9 @@ func (r LoadBalancerEditParamsSteeringPolicy) IsKnown() bool {
 }
 
 type LoadBalancerEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   LoadBalancer                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoadBalancer          `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerEditResponseEnvelopeJSON    `json:"-"`
@@ -4193,9 +4193,9 @@ type LoadBalancerGetParams struct {
 }
 
 type LoadBalancerGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   LoadBalancer                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoadBalancer          `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerGetResponseEnvelopeJSON    `json:"-"`

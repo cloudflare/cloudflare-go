@@ -145,8 +145,8 @@ func (r OwnershipNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   MagicVisibilityPCAPsOwnership `json:"result,required"`
 	// Whether the API call was successful
 	Success OwnershipNewResponseEnvelopeSuccess `json:"success,required"`
@@ -198,8 +198,8 @@ type OwnershipGetParams struct {
 }
 
 type OwnershipGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   []MagicVisibilityPCAPsOwnership `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    OwnershipGetResponseEnvelopeSuccess    `json:"success,required"`
@@ -287,8 +287,8 @@ func (r OwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipValidateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   MagicVisibilityPCAPsOwnership `json:"result,required"`
 	// Whether the API call was successful
 	Success OwnershipValidateResponseEnvelopeSuccess `json:"success,required"`

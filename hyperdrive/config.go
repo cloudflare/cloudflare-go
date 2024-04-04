@@ -253,9 +253,9 @@ func (r ConfigNewParamsOrigin) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ConfigNewResponse            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ConfigNewResponse     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
@@ -317,9 +317,9 @@ func (r ConfigUpdateParamsOrigin) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ConfigUpdateResponse         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ConfigUpdateResponse  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
@@ -370,9 +370,9 @@ type ConfigDeleteParams struct {
 }
 
 type ConfigDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configDeleteResponseEnvelopeJSON    `json:"-"`
@@ -433,9 +433,9 @@ func (r ConfigEditParamsOrigin) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ConfigEditResponse           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ConfigEditResponse    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
@@ -481,9 +481,9 @@ type ConfigGetParams struct {
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ConfigGetResponse            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ConfigGetResponse     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`

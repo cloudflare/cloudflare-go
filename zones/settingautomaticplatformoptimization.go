@@ -140,8 +140,8 @@ func (r SettingAutomaticPlatformOptimizationEditParams) MarshalJSON() (data []by
 }
 
 type SettingAutomaticPlatformOptimizationEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                                                         `json:"success,required"`
 	Result  ZoneSettingAutomaticPlatformOptimization                     `json:"result"`
@@ -174,8 +174,8 @@ type SettingAutomaticPlatformOptimizationGetParams struct {
 }
 
 type SettingAutomaticPlatformOptimizationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                                                        `json:"success,required"`
 	Result  ZoneSettingAutomaticPlatformOptimization                    `json:"result"`

@@ -136,9 +136,9 @@ func (r AccessCertificateSettingUpdateParams) MarshalJSON() (data []byte, err er
 }
 
 type AccessCertificateSettingUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []ZeroTrustSettings          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []ZeroTrustSettings   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessCertificateSettingUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -220,9 +220,9 @@ type AccessCertificateSettingGetParams struct {
 }
 
 type AccessCertificateSettingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []ZeroTrustSettings          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []ZeroTrustSettings   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessCertificateSettingGetResponseEnvelopeResultInfo `json:"result_info"`

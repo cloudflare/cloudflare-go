@@ -189,8 +189,8 @@ type AccessApplicationUserPolicyCheckListParamsAppID interface {
 }
 
 type AccessApplicationUserPolicyCheckListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172                 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172                 `json:"messages,required"`
+	Errors   []shared.ResponseInfo                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                        `json:"messages,required"`
 	Result   AccessApplicationUserPolicyCheckListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess `json:"success,required"`

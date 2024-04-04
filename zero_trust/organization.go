@@ -316,9 +316,9 @@ func (r OrganizationNewParamsLoginDesign) MarshalJSON() (data []byte, err error)
 }
 
 type OrganizationNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustOrganizations       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   ZeroTrustOrganizations `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationNewResponseEnvelopeJSON    `json:"-"`
@@ -428,9 +428,9 @@ func (r OrganizationUpdateParamsLoginDesign) MarshalJSON() (data []byte, err err
 }
 
 type OrganizationUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustOrganizations       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   ZeroTrustOrganizations `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -478,9 +478,9 @@ type OrganizationListParams struct {
 }
 
 type OrganizationListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustOrganizations       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   ZeroTrustOrganizations `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationListResponseEnvelopeJSON    `json:"-"`

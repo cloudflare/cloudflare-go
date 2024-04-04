@@ -1041,9 +1041,9 @@ type SiteACLNewParamsACLLAN2Subnet interface {
 }
 
 type SiteACLNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteACLNewResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteACLNewResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLNewResponseEnvelopeJSON    `json:"-"`
@@ -1161,9 +1161,9 @@ type SiteACLUpdateParamsACLLAN2Subnet interface {
 }
 
 type SiteACLUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteACLUpdateResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteACLUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1209,9 +1209,9 @@ type SiteACLListParams struct {
 }
 
 type SiteACLListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteACLListResponse          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteACLListResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLListResponseEnvelopeJSON    `json:"-"`
@@ -1262,9 +1262,9 @@ func (r SiteACLDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteACLDeleteResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteACLDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1310,9 +1310,9 @@ type SiteACLGetParams struct {
 }
 
 type SiteACLGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteACLGetResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteACLGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLGetResponseEnvelopeJSON    `json:"-"`

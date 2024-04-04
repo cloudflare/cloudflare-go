@@ -73,9 +73,9 @@ type UUIDGetParams struct {
 }
 
 type UUIDGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DCVDelegationUUID            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DCVDelegationUUID     `json:"result,required"`
 	// Whether the API call was successful
 	Success UUIDGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uuidGetResponseEnvelopeJSON    `json:"-"`

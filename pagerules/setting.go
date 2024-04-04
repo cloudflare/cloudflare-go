@@ -55,8 +55,8 @@ type SettingListParams struct {
 }
 
 type SettingListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Settings available for the zone.
 	Result ZonePageruleSettings `json:"result,required"`
 	// Whether the API call was successful

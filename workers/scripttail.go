@@ -131,9 +131,9 @@ func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ScriptTailNewResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ScriptTailNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptTailNewResponseEnvelopeJSON    `json:"-"`
@@ -184,9 +184,9 @@ func (r ScriptTailDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptTailDeleteResponseEnvelopeJSON    `json:"-"`
@@ -232,9 +232,9 @@ type ScriptTailGetParams struct {
 }
 
 type ScriptTailGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ScriptTailGetResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ScriptTailGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptTailGetResponseEnvelopeJSON    `json:"-"`

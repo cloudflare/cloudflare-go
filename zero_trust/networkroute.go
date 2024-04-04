@@ -233,9 +233,9 @@ func (r NetworkRouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkRouteNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TunnelRoute                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TunnelRoute           `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNewResponseEnvelopeJSON    `json:"-"`
@@ -320,9 +320,9 @@ type NetworkRouteDeleteParams struct {
 }
 
 type NetworkRouteDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TunnelRoute                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TunnelRoute           `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteDeleteResponseEnvelopeJSON    `json:"-"`
@@ -403,9 +403,9 @@ func (r NetworkRouteEditParamsTunType) IsKnown() bool {
 }
 
 type NetworkRouteEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TunnelRoute                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TunnelRoute           `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteEditResponseEnvelopeJSON    `json:"-"`

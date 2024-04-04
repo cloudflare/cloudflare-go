@@ -185,8 +185,8 @@ func (r SettingZeroRTTEditParamsValue) IsKnown() bool {
 }
 
 type SettingZeroRTTEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.
@@ -219,8 +219,8 @@ type SettingZeroRTTGetParams struct {
 }
 
 type SettingZeroRTTGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.

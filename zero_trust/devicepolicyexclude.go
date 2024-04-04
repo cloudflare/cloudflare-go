@@ -138,9 +138,9 @@ func (r DevicePolicyExcludeUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type DevicePolicyExcludeUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []DevicesSplitTunnel         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []DevicesSplitTunnel  `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyExcludeUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyExcludeUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -222,9 +222,9 @@ type DevicePolicyExcludeGetParams struct {
 }
 
 type DevicePolicyExcludeGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []DevicesSplitTunnel         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []DevicesSplitTunnel  `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyExcludeGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyExcludeGetResponseEnvelopeResultInfo `json:"result_info"`

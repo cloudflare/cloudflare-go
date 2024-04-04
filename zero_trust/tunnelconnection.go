@@ -187,8 +187,8 @@ func (r TunnelConnectionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelConnectionDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   TunnelConnectionDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -235,9 +235,9 @@ type TunnelConnectionGetParams struct {
 }
 
 type TunnelConnectionGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []TunnelTunnelClient         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []TunnelTunnelClient  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    TunnelConnectionGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo TunnelConnectionGetResponseEnvelopeResultInfo `json:"result_info"`

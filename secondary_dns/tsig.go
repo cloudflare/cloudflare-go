@@ -173,9 +173,9 @@ func (r TSIGNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TSIGNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SecondaryDNSTSIG             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SecondaryDNSTSIG      `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigNewResponseEnvelopeJSON    `json:"-"`
@@ -230,9 +230,9 @@ func (r TSIGUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TSIGUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SecondaryDNSTSIG             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SecondaryDNSTSIG      `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigUpdateResponseEnvelopeJSON    `json:"-"`
@@ -286,9 +286,9 @@ func (r TSIGDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TSIGDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TSIGDeleteResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TSIGDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigDeleteResponseEnvelopeJSON    `json:"-"`
@@ -333,9 +333,9 @@ type TSIGGetParams struct {
 }
 
 type TSIGGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SecondaryDNSTSIG             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SecondaryDNSTSIG      `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigGetResponseEnvelopeJSON    `json:"-"`

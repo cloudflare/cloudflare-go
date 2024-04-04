@@ -137,8 +137,8 @@ func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   MagicNetworkMonitoringConfig `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
@@ -189,8 +189,8 @@ func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   MagicNetworkMonitoringConfig `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -241,8 +241,8 @@ func (r ConfigDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   MagicNetworkMonitoringConfig `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -293,8 +293,8 @@ func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   MagicNetworkMonitoringConfig `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
@@ -340,8 +340,8 @@ type ConfigGetParams struct {
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   MagicNetworkMonitoringConfig `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`

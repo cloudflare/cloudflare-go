@@ -146,8 +146,8 @@ func (r SnippetUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type SnippetUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Snippet Information
 	Result Snippet `json:"result,required"`
 	// Whether the API call was successful
@@ -190,9 +190,9 @@ func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetDeleteResponseEnvelopeJSON    `json:"-"`
@@ -233,8 +233,8 @@ func (r SnippetDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Snippet Information
 	Result Snippet `json:"result,required"`
 	// Whether the API call was successful

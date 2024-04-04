@@ -153,9 +153,9 @@ func (r BillingHistoryGetParamsOrder) IsKnown() bool {
 }
 
 type BillingHistoryGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []BillingHistory             `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []BillingHistory      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    BillingHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo BillingHistoryGetResponseEnvelopeResultInfo `json:"result_info"`

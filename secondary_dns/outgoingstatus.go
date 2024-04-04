@@ -50,8 +50,8 @@ type OutgoingStatusGetParams struct {
 }
 
 type OutgoingStatusGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// The zone transfer status of a primary zone
 	Result SecondaryDNSEnableTransfer `json:"result,required"`
 	// Whether the API call was successful

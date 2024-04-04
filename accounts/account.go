@@ -288,9 +288,9 @@ func (r AccountUpdateParamsSettingsDefaultNameservers) IsKnown() bool {
 }
 
 type AccountUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AccountUpdateResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AccountUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
@@ -370,9 +370,9 @@ type AccountGetParams struct {
 }
 
 type AccountGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AccountGetResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AccountGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountGetResponseEnvelopeJSON    `json:"-"`

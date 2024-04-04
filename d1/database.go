@@ -238,9 +238,9 @@ func (r DatabaseNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DatabaseNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   D1CreateDatabase             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   D1CreateDatabase      `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseNewResponseEnvelopeJSON    `json:"-"`
@@ -300,9 +300,9 @@ func (r DatabaseListParams) URLQuery() (v url.Values) {
 }
 
 type DatabaseDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DatabaseDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseDeleteResponseEnvelopeJSON    `json:"-"`
@@ -343,9 +343,9 @@ func (r DatabaseDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DatabaseGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   D1DatabaseDetails            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   D1DatabaseDetails     `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseGetResponseEnvelopeJSON    `json:"-"`
@@ -395,9 +395,9 @@ func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DatabaseQueryResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []D1QueryResult              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []D1QueryResult       `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseQueryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseQueryResponseEnvelopeJSON    `json:"-"`

@@ -66,6 +66,37 @@ func (r LoggingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type ResponseInfo struct {
+	Code    int64            `json:"code,required"`
+	Message string           `json:"message,required"`
+	JSON    responseInfoJSON `json:"-"`
+}
+
+// responseInfoJSON contains the JSON metadata for the struct [ResponseInfo]
+type responseInfoJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResponseInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r responseInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResponseInfoParam struct {
+	Code    param.Field[int64]  `json:"code,required"`
+	Message param.Field[string] `json:"message,required"`
+}
+
+func (r ResponseInfoParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type UnnamedSchemaRef10 struct {
 	// URL that was excluded.
 	URL  string                 `json:"url"`
@@ -1615,38 +1646,6 @@ func init() {
 type UnnamedSchemaRef171Array []interface{}
 
 func (r UnnamedSchemaRef171Array) ImplementsSharedUnnamedSchemaRef171() {}
-
-type UnnamedSchemaRef172 struct {
-	Code    int64                   `json:"code,required"`
-	Message string                  `json:"message,required"`
-	JSON    unnamedSchemaRef172JSON `json:"-"`
-}
-
-// unnamedSchemaRef172JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef172]
-type unnamedSchemaRef172JSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef172) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef172JSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRef172Param struct {
-	Code    param.Field[int64]  `json:"code,required"`
-	Message param.Field[string] `json:"message,required"`
-}
-
-func (r UnnamedSchemaRef172Param) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 // Union satisfied by [shared.UnnamedSchemaRef173Unknown] or [shared.UnionString].
 type UnnamedSchemaRef173 interface {

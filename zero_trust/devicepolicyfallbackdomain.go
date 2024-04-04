@@ -139,9 +139,9 @@ func (r DevicePolicyFallbackDomainUpdateParams) MarshalJSON() (data []byte, err 
 }
 
 type DevicePolicyFallbackDomainUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []DevicesFallbackDomain      `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   []DevicesFallbackDomain `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyFallbackDomainUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyFallbackDomainUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -224,9 +224,9 @@ type DevicePolicyFallbackDomainGetParams struct {
 }
 
 type DevicePolicyFallbackDomainGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []DevicesFallbackDomain      `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   []DevicesFallbackDomain `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyFallbackDomainGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyFallbackDomainGetResponseEnvelopeResultInfo `json:"result_info"`

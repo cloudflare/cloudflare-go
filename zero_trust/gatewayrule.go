@@ -1093,9 +1093,9 @@ func (r GatewayRuleNewParamsSchedule) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGatewayRules        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustGatewayRules `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -1496,9 +1496,9 @@ func (r GatewayRuleUpdateParamsSchedule) MarshalJSON() (data []byte, err error) 
 }
 
 type GatewayRuleUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGatewayRules        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustGatewayRules `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1552,9 +1552,9 @@ func (r GatewayRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   GatewayRuleDeleteResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   GatewayRuleDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1599,9 +1599,9 @@ type GatewayRuleGetParams struct {
 }
 
 type GatewayRuleGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGatewayRules        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustGatewayRules `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleGetResponseEnvelopeJSON    `json:"-"`

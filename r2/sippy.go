@@ -361,9 +361,9 @@ func (r SippyUpdateParamsR2EnableSippyGcsSourceProvider) IsKnown() bool {
 }
 
 type SippyUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []string                     `json:"messages,required"`
-	Result   R2Sippy                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   R2Sippy               `json:"result,required"`
 	// Whether the API call was successful
 	Success SippyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sippyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -409,9 +409,9 @@ type SippyDeleteParams struct {
 }
 
 type SippyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []string                     `json:"messages,required"`
-	Result   SippyDeleteResponse          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   SippyDeleteResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success SippyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sippyDeleteResponseEnvelopeJSON    `json:"-"`
@@ -457,9 +457,9 @@ type SippyGetParams struct {
 }
 
 type SippyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []string                     `json:"messages,required"`
-	Result   R2Sippy                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   R2Sippy               `json:"result,required"`
 	// Whether the API call was successful
 	Success SippyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sippyGetResponseEnvelopeJSON    `json:"-"`

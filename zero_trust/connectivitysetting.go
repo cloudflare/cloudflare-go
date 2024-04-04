@@ -122,8 +122,8 @@ func (r ConnectivitySettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConnectivitySettingEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   ConnectivitySettingEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ConnectivitySettingEditResponseEnvelopeSuccess `json:"success,required"`
@@ -170,8 +170,8 @@ type ConnectivitySettingGetParams struct {
 }
 
 type ConnectivitySettingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ConnectivitySettingGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ConnectivitySettingGetResponseEnvelopeSuccess `json:"success,required"`

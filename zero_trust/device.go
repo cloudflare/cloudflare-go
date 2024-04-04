@@ -217,9 +217,9 @@ type DeviceGetParams struct {
 }
 
 type DeviceGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceGetResponseEnvelopeJSON    `json:"-"`

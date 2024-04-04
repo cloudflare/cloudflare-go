@@ -232,8 +232,8 @@ func (r DispatchNamespaceNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DispatchNamespaceNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   DispatchNamespaceNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceNewResponseEnvelopeSuccess `json:"success,required"`
@@ -285,8 +285,8 @@ type DispatchNamespaceDeleteParams struct {
 }
 
 type DispatchNamespaceDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   DispatchNamespaceDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DispatchNamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -333,8 +333,8 @@ type DispatchNamespaceGetParams struct {
 }
 
 type DispatchNamespaceGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   DispatchNamespaceGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceGetResponseEnvelopeSuccess `json:"success,required"`

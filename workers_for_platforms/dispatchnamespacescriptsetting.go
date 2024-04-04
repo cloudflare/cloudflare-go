@@ -169,8 +169,8 @@ func (r dispatchNamespaceScriptSettingGetResponseTailConsumerJSON) RawJSON() str
 type DispatchNamespaceScriptSettingEditParams struct {
 	// Identifier
 	AccountID param.Field[string]                                         `path:"account_id,required"`
-	Errors    param.Field[[]shared.UnnamedSchemaRef172Param]              `json:"errors,required"`
-	Messages  param.Field[[]shared.UnnamedSchemaRef172Param]              `json:"messages,required"`
+	Errors    param.Field[[]shared.ResponseInfoParam]                     `json:"errors,required"`
+	Messages  param.Field[[]shared.ResponseInfoParam]                     `json:"messages,required"`
 	Result    param.Field[DispatchNamespaceScriptSettingEditParamsResult] `json:"result,required"`
 	// Whether the API call was successful
 	Success param.Field[DispatchNamespaceScriptSettingEditParamsSuccess] `json:"success,required"`
@@ -221,8 +221,8 @@ func (r DispatchNamespaceScriptSettingEditParamsSuccess) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172               `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172               `json:"messages,required"`
+	Errors   []shared.ResponseInfo                      `json:"errors,required"`
+	Messages []shared.ResponseInfo                      `json:"messages,required"`
 	Result   DispatchNamespaceScriptSettingEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
@@ -269,8 +269,8 @@ type DispatchNamespaceScriptSettingGetParams struct {
 }
 
 type DispatchNamespaceScriptSettingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172              `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172              `json:"messages,required"`
+	Errors   []shared.ResponseInfo                     `json:"errors,required"`
+	Messages []shared.ResponseInfo                     `json:"messages,required"`
 	Result   DispatchNamespaceScriptSettingGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`

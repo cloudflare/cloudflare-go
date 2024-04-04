@@ -313,9 +313,9 @@ func (r VerificationEditParamsValidationMethod) IsKnown() bool {
 }
 
 type VerificationEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   VerificationEditResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   VerificationEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success VerificationEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    verificationEditResponseEnvelopeJSON    `json:"-"`

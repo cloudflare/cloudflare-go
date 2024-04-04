@@ -155,10 +155,10 @@ func (r DNSSettingEditParamsNameserversType) IsKnown() bool {
 }
 
 type DNSSettingEditResponseEnvelope struct {
-	Errors      []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages    []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Nameservers interface{}                  `json:"nameservers,required"`
-	Result      DNSSetting                   `json:"result,required"`
+	Errors      []shared.ResponseInfo `json:"errors,required"`
+	Messages    []shared.ResponseInfo `json:"messages,required"`
+	Nameservers interface{}           `json:"nameservers,required"`
+	Result      DNSSetting            `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -205,10 +205,10 @@ type DNSSettingGetParams struct {
 }
 
 type DNSSettingGetResponseEnvelope struct {
-	Errors      []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages    []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Nameservers interface{}                  `json:"nameservers,required"`
-	Result      DNSSetting                   `json:"result,required"`
+	Errors      []shared.ResponseInfo `json:"errors,required"`
+	Messages    []shared.ResponseInfo `json:"messages,required"`
+	Nameservers interface{}           `json:"nameservers,required"`
+	Result      DNSSetting            `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsSettingGetResponseEnvelopeJSON    `json:"-"`

@@ -124,9 +124,9 @@ func (r UserEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UserEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   UserEditResponse             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   UserEditResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success UserEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userEditResponseEnvelopeJSON    `json:"-"`
@@ -167,9 +167,9 @@ func (r UserEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UserGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   UserGetResponse              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   UserGetResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success UserGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userGetResponseEnvelopeJSON    `json:"-"`

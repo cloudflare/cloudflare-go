@@ -442,9 +442,9 @@ type StreamGetParams struct {
 }
 
 type StreamGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   StreamVideos                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   StreamVideos          `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamGetResponseEnvelopeJSON    `json:"-"`
