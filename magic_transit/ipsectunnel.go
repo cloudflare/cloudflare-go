@@ -158,7 +158,8 @@ type IPSECTunnelNewResponseIPSECTunnel struct {
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// The IP address assigned to the customer side of the IPsec tunnel.
+	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
+	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
 	Description string `json:"description"`
@@ -316,7 +317,8 @@ type IPSECTunnelListResponseIPSECTunnel struct {
 	AllowNullCipher bool `json:"allow_null_cipher"`
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// The IP address assigned to the customer side of the IPsec tunnel.
+	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
+	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint string `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
 	Description string `json:"description"`
@@ -520,7 +522,8 @@ type IPSECTunnelNewParams struct {
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name param.Field[string] `json:"name,required"`
-	// The IP address assigned to the customer side of the IPsec tunnel.
+	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
+	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
 	Description param.Field[string]                          `json:"description"`
@@ -637,7 +640,8 @@ type IPSECTunnelUpdateParams struct {
 	InterfaceAddress param.Field[string] `json:"interface_address,required"`
 	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
 	Name param.Field[string] `json:"name,required"`
-	// The IP address assigned to the customer side of the IPsec tunnel.
+	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
+	// but must be set for proactive traceroutes to work.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
 	Description param.Field[string]                             `json:"description"`
