@@ -12,16 +12,6 @@ type Error = apierror.Error
 // This is an alias to an internal type.
 type ErrorData = shared.ErrorData
 
-// An object configuring the rule's logging behavior.
-//
-// This is an alias to an internal type.
-type Logging = shared.Logging
-
-// An object configuring the rule's logging behavior.
-//
-// This is an alias to an internal type.
-type LoggingParam = shared.LoggingParam
-
 // This is an alias to an internal type.
 type ResponseInfo = shared.ResponseInfo
 
@@ -412,12 +402,6 @@ const UnnamedSchemaRef163Pingone = shared.UnnamedSchemaRef163Pingone
 
 // This is an alias to an internal value.
 const UnnamedSchemaRef163Yandex = shared.UnnamedSchemaRef163Yandex
-
-// This is an alias to an internal type.
-type UnnamedSchemaRef167 = shared.UnnamedSchemaRef167
-
-// This is an alias to an internal type.
-type UnnamedSchemaRef167Array = shared.UnnamedSchemaRef167Array
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef169 = shared.UnnamedSchemaRef169

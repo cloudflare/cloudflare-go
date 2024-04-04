@@ -38,7 +38,7 @@ func NewMonitorService(opts ...option.RequestOption) (r *MonitorService) {
 }
 
 // Create a configured monitor.
-func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts ...option.RequestOption) (res *user.LoadBalancingMonitor, err error) {
+func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts ...option.RequestOption) (res *user.Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", params.AccountID)
@@ -51,7 +51,7 @@ func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts 
 }
 
 // Modify a configured monitor.
-func (r *MonitorService) Update(ctx context.Context, monitorID string, params MonitorUpdateParams, opts ...option.RequestOption) (res *user.LoadBalancingMonitor, err error) {
+func (r *MonitorService) Update(ctx context.Context, monitorID string, params MonitorUpdateParams, opts ...option.RequestOption) (res *user.Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
@@ -64,7 +64,7 @@ func (r *MonitorService) Update(ctx context.Context, monitorID string, params Mo
 }
 
 // List configured monitors for an account.
-func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.LoadBalancingMonitor], err error) {
+func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.Monitor], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -82,7 +82,7 @@ func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts
 }
 
 // List configured monitors for an account.
-func (r *MonitorService) ListAutoPaging(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.LoadBalancingMonitor] {
+func (r *MonitorService) ListAutoPaging(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Monitor] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -100,7 +100,7 @@ func (r *MonitorService) Delete(ctx context.Context, monitorID string, params Mo
 }
 
 // Apply changes to an existing monitor, overwriting the supplied properties.
-func (r *MonitorService) Edit(ctx context.Context, monitorID string, params MonitorEditParams, opts ...option.RequestOption) (res *user.LoadBalancingMonitor, err error) {
+func (r *MonitorService) Edit(ctx context.Context, monitorID string, params MonitorEditParams, opts ...option.RequestOption) (res *user.Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
@@ -113,7 +113,7 @@ func (r *MonitorService) Edit(ctx context.Context, monitorID string, params Moni
 }
 
 // List a single configured monitor for an account.
-func (r *MonitorService) Get(ctx context.Context, monitorID string, query MonitorGetParams, opts ...option.RequestOption) (res *user.LoadBalancingMonitor, err error) {
+func (r *MonitorService) Get(ctx context.Context, monitorID string, query MonitorGetParams, opts ...option.RequestOption) (res *user.Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MonitorGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", query.AccountID, monitorID)
@@ -226,9 +226,9 @@ func (r MonitorNewParamsType) IsKnown() bool {
 }
 
 type MonitorNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   user.LoadBalancingMonitor `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Monitor          `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorNewResponseEnvelopeJSON    `json:"-"`
@@ -348,9 +348,9 @@ func (r MonitorUpdateParamsType) IsKnown() bool {
 }
 
 type MonitorUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   user.LoadBalancingMonitor `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Monitor          `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorUpdateResponseEnvelopeJSON    `json:"-"`
@@ -528,9 +528,9 @@ func (r MonitorEditParamsType) IsKnown() bool {
 }
 
 type MonitorEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   user.LoadBalancingMonitor `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Monitor          `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorEditResponseEnvelopeJSON    `json:"-"`
@@ -576,9 +576,9 @@ type MonitorGetParams struct {
 }
 
 type MonitorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   user.LoadBalancingMonitor `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Monitor          `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorGetResponseEnvelopeJSON    `json:"-"`

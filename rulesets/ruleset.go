@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -155,6 +154,38 @@ func (r *RulesetService) Get(ctx context.Context, rulesetID string, query Rulese
 	}
 	res = &env.Result
 	return
+}
+
+// An object configuring the rule's logging behavior.
+type Logging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool        `json:"enabled,required"`
+	JSON    loggingJSON `json:"-"`
+}
+
+// loggingJSON contains the JSON metadata for the struct [Logging]
+type loggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Logging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loggingJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's logging behavior.
+type LoggingParam struct {
+	// Whether to generate a log when the rule matches.
+	Enabled param.Field[bool] `json:"enabled,required"`
+}
+
+func (r LoggingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A ruleset object.
@@ -311,7 +342,7 @@ type RulesetNewResponseRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                       `json:"ref"`
 	JSON rulesetNewResponseRulesRulesetsBlockRuleJSON `json:"-"`
@@ -434,7 +465,7 @@ type RulesetNewResponseRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                         `json:"ref"`
 	JSON rulesetNewResponseRulesRulesetsExecuteRuleJSON `json:"-"`
@@ -721,7 +752,7 @@ type RulesetNewResponseRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                     `json:"ref"`
 	JSON rulesetNewResponseRulesRulesetsLogRuleJSON `json:"-"`
@@ -790,7 +821,7 @@ type RulesetNewResponseRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                      `json:"ref"`
 	JSON rulesetNewResponseRulesRulesetsSkipRuleJSON `json:"-"`
@@ -1107,7 +1138,7 @@ type RulesetUpdateResponseRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                          `json:"ref"`
 	JSON rulesetUpdateResponseRulesRulesetsBlockRuleJSON `json:"-"`
@@ -1230,7 +1261,7 @@ type RulesetUpdateResponseRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                            `json:"ref"`
 	JSON rulesetUpdateResponseRulesRulesetsExecuteRuleJSON `json:"-"`
@@ -1518,7 +1549,7 @@ type RulesetUpdateResponseRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                        `json:"ref"`
 	JSON rulesetUpdateResponseRulesRulesetsLogRuleJSON `json:"-"`
@@ -1587,7 +1618,7 @@ type RulesetUpdateResponseRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                         `json:"ref"`
 	JSON rulesetUpdateResponseRulesRulesetsSkipRuleJSON `json:"-"`
@@ -2000,7 +2031,7 @@ type RulesetGetResponseRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                       `json:"ref"`
 	JSON rulesetGetResponseRulesRulesetsBlockRuleJSON `json:"-"`
@@ -2123,7 +2154,7 @@ type RulesetGetResponseRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                         `json:"ref"`
 	JSON rulesetGetResponseRulesRulesetsExecuteRuleJSON `json:"-"`
@@ -2410,7 +2441,7 @@ type RulesetGetResponseRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                     `json:"ref"`
 	JSON rulesetGetResponseRulesRulesetsLogRuleJSON `json:"-"`
@@ -2479,7 +2510,7 @@ type RulesetGetResponseRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                      `json:"ref"`
 	JSON rulesetGetResponseRulesRulesetsSkipRuleJSON `json:"-"`
@@ -2740,7 +2771,7 @@ type RulesetNewParamsRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[shared.LoggingParam] `json:"logging"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -2804,7 +2835,7 @@ type RulesetNewParamsRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[shared.LoggingParam] `json:"logging"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -2979,7 +3010,7 @@ type RulesetNewParamsRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[shared.LoggingParam] `json:"logging"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -3019,7 +3050,7 @@ type RulesetNewParamsRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[shared.LoggingParam] `json:"logging"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -3335,7 +3366,7 @@ type RulesetUpdateParamsRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[shared.LoggingParam] `json:"logging"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -3399,7 +3430,7 @@ type RulesetUpdateParamsRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[shared.LoggingParam] `json:"logging"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -3574,7 +3605,7 @@ type RulesetUpdateParamsRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[shared.LoggingParam] `json:"logging"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -3614,7 +3645,7 @@ type RulesetUpdateParamsRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[shared.LoggingParam] `json:"logging"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }

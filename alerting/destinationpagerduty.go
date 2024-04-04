@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // DestinationPagerdutyService contains methods and other services that help with
@@ -46,7 +48,7 @@ func (r *DestinationPagerdutyService) New(ctx context.Context, body DestinationP
 }
 
 // Deletes all the PagerDuty Services connected to the account.
-func (r *DestinationPagerdutyService) Delete(ctx context.Context, body DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
+func (r *DestinationPagerdutyService) Delete(ctx context.Context, body DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *DestinationPagerdutyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationPagerdutyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", body.AccountID)
@@ -131,6 +133,32 @@ func (r destinationPagerdutyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [alerting.DestinationPagerdutyDeleteResponseUnknown],
+// [alerting.DestinationPagerdutyDeleteResponseArray] or [shared.UnionString].
+type DestinationPagerdutyDeleteResponse interface {
+	ImplementsAlertingDestinationPagerdutyDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DestinationPagerdutyDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DestinationPagerdutyDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DestinationPagerdutyDeleteResponseArray []interface{}
+
+func (r DestinationPagerdutyDeleteResponseArray) ImplementsAlertingDestinationPagerdutyDeleteResponse() {
+}
+
 type DestinationPagerdutyLinkResponse struct {
 	// UUID
 	ID   string                               `json:"id"`
@@ -207,9 +235,9 @@ type DestinationPagerdutyDeleteParams struct {
 }
 
 type DestinationPagerdutyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   DestinationPagerdutyDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationPagerdutyDeleteResponseEnvelopeResultInfo `json:"result_info"`

@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // QueueService contains methods and other services that help with interacting with
@@ -75,7 +77,7 @@ func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...
 }
 
 // Deletes a queue.
-func (r *QueueService) Delete(ctx context.Context, queueID string, params QueueDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
+func (r *QueueService) Delete(ctx context.Context, queueID string, params QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
@@ -188,6 +190,31 @@ func (r *QueueListResponse) UnmarshalJSON(data []byte) (err error) {
 func (r queueListResponseJSON) RawJSON() string {
 	return r.raw
 }
+
+// Union satisfied by [queues.QueueDeleteResponseUnknown],
+// [queues.QueueDeleteResponseArray] or [shared.UnionString].
+type QueueDeleteResponse interface {
+	ImplementsQueuesQueueDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*QueueDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(QueueDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type QueueDeleteResponseArray []interface{}
+
+func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponse() {}
 
 type QueueGetResponse struct {
 	Consumers           interface{}          `json:"consumers"`
@@ -522,9 +549,9 @@ func (r QueueDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   QueueDeleteResponse   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueDeleteResponseEnvelopeResultInfo `json:"result_info"`

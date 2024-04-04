@@ -85,7 +85,7 @@ func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListPara
 }
 
 // Delete a Notification policy.
-func (r *PolicyService) Delete(ctx context.Context, policyID string, body PolicyDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
+func (r *PolicyService) Delete(ctx context.Context, policyID string, body PolicyDeleteParams, opts ...option.RequestOption) (res *PolicyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PolicyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", body.AccountID, policyID)
@@ -507,6 +507,31 @@ func (r *PolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 func (r policyUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
+
+// Union satisfied by [alerting.PolicyDeleteResponseUnknown],
+// [alerting.PolicyDeleteResponseArray] or [shared.UnionString].
+type PolicyDeleteResponse interface {
+	ImplementsAlertingPolicyDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*PolicyDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PolicyDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type PolicyDeleteResponseArray []interface{}
+
+func (r PolicyDeleteResponseArray) ImplementsAlertingPolicyDeleteResponse() {}
 
 type PolicyNewParams struct {
 	// The account id
@@ -1107,9 +1132,9 @@ type PolicyDeleteParams struct {
 }
 
 type PolicyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PolicyDeleteResponse  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PolicyDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PolicyDeleteResponseEnvelopeResultInfo `json:"result_info"`

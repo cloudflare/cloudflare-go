@@ -52,7 +52,7 @@ func (r *CustomNameserverService) Update(ctx context.Context, params CustomNames
 }
 
 // Get metadata for account-level custom nameservers on a zone.
-func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
+func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *CustomNameserverGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_ns", query.ZoneID)
@@ -88,6 +88,31 @@ func init() {
 type CustomNameserverUpdateResponseArray []interface{}
 
 func (r CustomNameserverUpdateResponseArray) ImplementsZonesCustomNameserverUpdateResponse() {}
+
+// Union satisfied by [zones.CustomNameserverGetResponseUnknown],
+// [zones.CustomNameserverGetResponseArray] or [shared.UnionString].
+type CustomNameserverGetResponse interface {
+	ImplementsZonesCustomNameserverGetResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CustomNameserverGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CustomNameserverGetResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type CustomNameserverGetResponseArray []interface{}
+
+func (r CustomNameserverGetResponseArray) ImplementsZonesCustomNameserverGetResponse() {}
 
 type CustomNameserverUpdateParams struct {
 	// Identifier
@@ -184,9 +209,9 @@ type CustomNameserverGetParams struct {
 }
 
 type CustomNameserverGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   CustomNameserverGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success CustomNameserverGetResponseEnvelopeSuccess `json:"success,required"`
 	// Whether zone uses account-level custom nameservers.

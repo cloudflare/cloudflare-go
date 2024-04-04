@@ -103,9 +103,9 @@ func init() {
 }
 
 type WAFPackageListResponseLegacyJhsAPIResponseCollection struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                                      `json:"errors,required"`
+	Messages []shared.ResponseInfo                                      `json:"messages,required"`
+	Result   WAFPackageListResponseLegacyJhsAPIResponseCollectionResult `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccess    `json:"success,required"`
 	ResultInfo WAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo `json:"result_info"`
@@ -133,6 +133,34 @@ func (r wafPackageListResponseLegacyJhsAPIResponseCollectionJSON) RawJSON() stri
 }
 
 func (r WAFPackageListResponseLegacyJhsAPIResponseCollection) implementsFirewallWAFPackageListResponse() {
+}
+
+// Union satisfied by
+// [firewall.WAFPackageListResponseLegacyJhsAPIResponseCollectionResultUnknown],
+// [firewall.WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray] or
+// [shared.UnionString].
+type WAFPackageListResponseLegacyJhsAPIResponseCollectionResult interface {
+	ImplementsFirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResult()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WAFPackageListResponseLegacyJhsAPIResponseCollectionResult)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray []interface{}
+
+func (r WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray) ImplementsFirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResult() {
 }
 
 // Whether the API call was successful
