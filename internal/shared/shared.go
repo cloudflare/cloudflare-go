@@ -34,38 +34,6 @@ func (r errorDataJSON) RawJSON() string {
 	return r.raw
 }
 
-// An object configuring the rule's logging behavior.
-type Logging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool        `json:"enabled,required"`
-	JSON    loggingJSON `json:"-"`
-}
-
-// loggingJSON contains the JSON metadata for the struct [Logging]
-type loggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Logging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loggingJSON) RawJSON() string {
-	return r.raw
-}
-
-// An object configuring the rule's logging behavior.
-type LoggingParam struct {
-	// Whether to generate a log when the rule matches.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r LoggingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ResponseInfo struct {
 	Code    int64            `json:"code,required"`
 	Message string           `json:"message,required"`
@@ -1580,31 +1548,6 @@ func (r UnnamedSchemaRef163) IsKnown() bool {
 	}
 	return false
 }
-
-// Union satisfied by [shared.UnnamedSchemaRef167Unknown],
-// [shared.UnnamedSchemaRef167Array] or [shared.UnionString].
-type UnnamedSchemaRef167 interface {
-	ImplementsSharedUnnamedSchemaRef167()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef167)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(UnnamedSchemaRef167Array{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(UnionString("")),
-		},
-	)
-}
-
-type UnnamedSchemaRef167Array []interface{}
-
-func (r UnnamedSchemaRef167Array) ImplementsSharedUnnamedSchemaRef167() {}
 
 // Union satisfied by [shared.UnnamedSchemaRef169Unknown] or [shared.UnionString].
 type UnnamedSchemaRef169 interface {

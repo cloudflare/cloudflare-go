@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -340,7 +339,7 @@ type PhaseVersionGetResponseRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                            `json:"ref"`
 	JSON phaseVersionGetResponseRulesRulesetsBlockRuleJSON `json:"-"`
@@ -464,7 +463,7 @@ type PhaseVersionGetResponseRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                              `json:"ref"`
 	JSON phaseVersionGetResponseRulesRulesetsExecuteRuleJSON `json:"-"`
@@ -752,7 +751,7 @@ type PhaseVersionGetResponseRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                          `json:"ref"`
 	JSON phaseVersionGetResponseRulesRulesetsLogRuleJSON `json:"-"`
@@ -822,7 +821,7 @@ type PhaseVersionGetResponseRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging shared.Logging `json:"logging"`
+	Logging Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                           `json:"ref"`
 	JSON phaseVersionGetResponseRulesRulesetsSkipRuleJSON `json:"-"`
