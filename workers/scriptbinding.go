@@ -47,15 +47,51 @@ func (r *ScriptBindingService) Get(ctx context.Context, query ScriptBindingGetPa
 	return
 }
 
+type WorkersBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id"`
+	// The class of resource that the binding provides.
+	Type  WorkersBindingType `json:"type,required"`
+	JSON  workersBindingJSON `json:"-"`
+	union WorkersBindingUnion
+}
+
+// workersBindingJSON contains the JSON metadata for the struct [WorkersBinding]
+type workersBindingJSON struct {
+	Name        apijson.Field
+	NamespaceID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r workersBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *WorkersBinding) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r WorkersBinding) AsUnion() WorkersBindingUnion {
+	return r.union
+}
+
 // Union satisfied by [workers.WorkersBindingWorkersKVNamespaceBinding] or
 // [workers.WorkersBindingWorkersWasmModuleBinding].
-type WorkersBinding interface {
+type WorkersBindingUnion interface {
 	implementsWorkersWorkersBinding()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WorkersBinding)(nil)).Elem(),
+		reflect.TypeOf((*WorkersBindingUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -150,6 +186,22 @@ const (
 func (r WorkersBindingWorkersWasmModuleBindingType) IsKnown() bool {
 	switch r {
 	case WorkersBindingWorkersWasmModuleBindingTypeWasmModule:
+		return true
+	}
+	return false
+}
+
+// The class of resource that the binding provides.
+type WorkersBindingType string
+
+const (
+	WorkersBindingTypeKVNamespace WorkersBindingType = "kv_namespace"
+	WorkersBindingTypeWasmModule  WorkersBindingType = "wasm_module"
+)
+
+func (r WorkersBindingType) IsKnown() bool {
+	switch r {
+	case WorkersBindingTypeKVNamespace, WorkersBindingTypeWasmModule:
 		return true
 	}
 	return false

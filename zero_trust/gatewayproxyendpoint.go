@@ -73,7 +73,7 @@ func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query 
 }
 
 // Deletes a configured Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponse, err error) {
+func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", params.AccountID, proxyEndpointID)
@@ -147,13 +147,13 @@ func (r zeroTrustGatewayProxyEndpointsJSON) RawJSON() string {
 
 // Union satisfied by [zero_trust.GatewayProxyEndpointDeleteResponseUnknown] or
 // [shared.UnionString].
-type GatewayProxyEndpointDeleteResponse interface {
-	ImplementsZeroTrustGatewayProxyEndpointDeleteResponse()
+type GatewayProxyEndpointDeleteResponseUnion interface {
+	ImplementsZeroTrustGatewayProxyEndpointDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayProxyEndpointDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*GatewayProxyEndpointDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -231,9 +231,9 @@ func (r GatewayProxyEndpointDeleteParams) MarshalJSON() (data []byte, err error)
 }
 
 type GatewayProxyEndpointDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   GatewayProxyEndpointDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo                   `json:"errors,required"`
+	Messages []shared.ResponseInfo                   `json:"messages,required"`
+	Result   GatewayProxyEndpointDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayProxyEndpointDeleteResponseEnvelopeJSON    `json:"-"`

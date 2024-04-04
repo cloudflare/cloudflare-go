@@ -35,7 +35,7 @@ func NewTunnelTokenService(opts ...option.RequestOption) (r *TunnelTokenService)
 }
 
 // Gets the token used to associate cloudflared with a specific tunnel.
-func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query TunnelTokenGetParams, opts ...option.RequestOption) (res *TunnelTokenGetResponse, err error) {
+func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query TunnelTokenGetParams, opts ...option.RequestOption) (res *TunnelTokenGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelTokenGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", query.AccountID, tunnelID)
@@ -49,13 +49,13 @@ func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query Tun
 
 // Union satisfied by [zero_trust.TunnelTokenGetResponseUnknown],
 // [zero_trust.TunnelTokenGetResponseArray] or [shared.UnionString].
-type TunnelTokenGetResponse interface {
-	ImplementsZeroTrustTunnelTokenGetResponse()
+type TunnelTokenGetResponseUnion interface {
+	ImplementsZeroTrustTunnelTokenGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelTokenGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*TunnelTokenGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -70,7 +70,7 @@ func init() {
 
 type TunnelTokenGetResponseArray []interface{}
 
-func (r TunnelTokenGetResponseArray) ImplementsZeroTrustTunnelTokenGetResponse() {}
+func (r TunnelTokenGetResponseArray) ImplementsZeroTrustTunnelTokenGetResponseUnion() {}
 
 type TunnelTokenGetParams struct {
 	// Cloudflare account ID
@@ -78,9 +78,9 @@ type TunnelTokenGetParams struct {
 }
 
 type TunnelTokenGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   TunnelTokenGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   TunnelTokenGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelTokenGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelTokenGetResponseEnvelopeJSON    `json:"-"`

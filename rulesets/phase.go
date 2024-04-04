@@ -179,17 +179,76 @@ func (r PhaseUpdateResponsePhase) IsKnown() bool {
 	return false
 }
 
+type PhaseUpdateResponseRule struct {
+	// The action to perform when the rule matches.
+	Action           PhaseUpdateResponseRulesAction `json:"action"`
+	ActionParameters interface{}                    `json:"action_parameters,required"`
+	Categories       interface{}                    `json:"categories,required"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref string `json:"ref"`
+	// The version of the rule.
+	Version string                      `json:"version,required"`
+	JSON    phaseUpdateResponseRuleJSON `json:"-"`
+	union   PhaseUpdateResponseRulesUnion
+}
+
+// phaseUpdateResponseRuleJSON contains the JSON metadata for the struct
+// [PhaseUpdateResponseRule]
+type phaseUpdateResponseRuleJSON struct {
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	ID               apijson.Field
+	LastUpdated      apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	Version          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r phaseUpdateResponseRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *PhaseUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
+	return r.union
+}
+
 // Union satisfied by [rulesets.PhaseUpdateResponseRulesRulesetsBlockRule],
 // [rulesets.PhaseUpdateResponseRulesRulesetsExecuteRule],
 // [rulesets.PhaseUpdateResponseRulesRulesetsLogRule] or
 // [rulesets.PhaseUpdateResponseRulesRulesetsSkipRule].
-type PhaseUpdateResponseRule interface {
+type PhaseUpdateResponseRulesUnion interface {
 	implementsRulesetsPhaseUpdateResponseRule()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PhaseUpdateResponseRule)(nil)).Elem(),
+		reflect.TypeOf((*PhaseUpdateResponseRulesUnion)(nil)).Elem(),
 		"action",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -876,6 +935,24 @@ func (r PhaseUpdateResponseRulesRulesetsSkipRuleActionParametersRuleset) IsKnown
 	return false
 }
 
+// The action to perform when the rule matches.
+type PhaseUpdateResponseRulesAction string
+
+const (
+	PhaseUpdateResponseRulesActionBlock   PhaseUpdateResponseRulesAction = "block"
+	PhaseUpdateResponseRulesActionExecute PhaseUpdateResponseRulesAction = "execute"
+	PhaseUpdateResponseRulesActionLog     PhaseUpdateResponseRulesAction = "log"
+	PhaseUpdateResponseRulesActionSkip    PhaseUpdateResponseRulesAction = "skip"
+)
+
+func (r PhaseUpdateResponseRulesAction) IsKnown() bool {
+	switch r {
+	case PhaseUpdateResponseRulesActionBlock, PhaseUpdateResponseRulesActionExecute, PhaseUpdateResponseRulesActionLog, PhaseUpdateResponseRulesActionSkip:
+		return true
+	}
+	return false
+}
+
 // A ruleset object.
 type PhaseGetResponse struct {
 	// The unique ID of the ruleset.
@@ -975,17 +1052,76 @@ func (r PhaseGetResponsePhase) IsKnown() bool {
 	return false
 }
 
+type PhaseGetResponseRule struct {
+	// The action to perform when the rule matches.
+	Action           PhaseGetResponseRulesAction `json:"action"`
+	ActionParameters interface{}                 `json:"action_parameters,required"`
+	Categories       interface{}                 `json:"categories,required"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref string `json:"ref"`
+	// The version of the rule.
+	Version string                   `json:"version,required"`
+	JSON    phaseGetResponseRuleJSON `json:"-"`
+	union   PhaseGetResponseRulesUnion
+}
+
+// phaseGetResponseRuleJSON contains the JSON metadata for the struct
+// [PhaseGetResponseRule]
+type phaseGetResponseRuleJSON struct {
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	ID               apijson.Field
+	LastUpdated      apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	Version          apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r phaseGetResponseRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *PhaseGetResponseRule) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
+	return r.union
+}
+
 // Union satisfied by [rulesets.PhaseGetResponseRulesRulesetsBlockRule],
 // [rulesets.PhaseGetResponseRulesRulesetsExecuteRule],
 // [rulesets.PhaseGetResponseRulesRulesetsLogRule] or
 // [rulesets.PhaseGetResponseRulesRulesetsSkipRule].
-type PhaseGetResponseRule interface {
+type PhaseGetResponseRulesUnion interface {
 	implementsRulesetsPhaseGetResponseRule()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PhaseGetResponseRule)(nil)).Elem(),
+		reflect.TypeOf((*PhaseGetResponseRulesUnion)(nil)).Elem(),
 		"action",
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -1670,9 +1806,27 @@ func (r PhaseGetResponseRulesRulesetsSkipRuleActionParametersRuleset) IsKnown() 
 	return false
 }
 
+// The action to perform when the rule matches.
+type PhaseGetResponseRulesAction string
+
+const (
+	PhaseGetResponseRulesActionBlock   PhaseGetResponseRulesAction = "block"
+	PhaseGetResponseRulesActionExecute PhaseGetResponseRulesAction = "execute"
+	PhaseGetResponseRulesActionLog     PhaseGetResponseRulesAction = "log"
+	PhaseGetResponseRulesActionSkip    PhaseGetResponseRulesAction = "skip"
+)
+
+func (r PhaseGetResponseRulesAction) IsKnown() bool {
+	switch r {
+	case PhaseGetResponseRulesActionBlock, PhaseGetResponseRulesActionExecute, PhaseGetResponseRulesActionLog, PhaseGetResponseRulesActionSkip:
+		return true
+	}
+	return false
+}
+
 type PhaseUpdateParams struct {
 	// The list of rules in the ruleset.
-	Rules param.Field[[]PhaseUpdateParamsRule] `json:"rules,required"`
+	Rules param.Field[[]PhaseUpdateParamsRuleUnion] `json:"rules,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -1728,12 +1882,37 @@ func (r PhaseUpdateParamsRulesetPhase) IsKnown() bool {
 	return false
 }
 
+type PhaseUpdateParamsRule struct {
+	// The action to perform when the rule matches.
+	Action           param.Field[PhaseUpdateParamsRulesAction] `json:"action"`
+	ActionParameters param.Field[interface{}]                  `json:"action_parameters,required"`
+	Categories       param.Field[interface{}]                  `json:"categories,required"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r PhaseUpdateParamsRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r PhaseUpdateParamsRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+
 // Satisfied by [rulesets.PhaseUpdateParamsRulesRulesetsBlockRule],
 // [rulesets.PhaseUpdateParamsRulesRulesetsExecuteRule],
 // [rulesets.PhaseUpdateParamsRulesRulesetsLogRule],
-// [rulesets.PhaseUpdateParamsRulesRulesetsSkipRule].
-type PhaseUpdateParamsRule interface {
-	implementsRulesetsPhaseUpdateParamsRule()
+// [rulesets.PhaseUpdateParamsRulesRulesetsSkipRule], [PhaseUpdateParamsRule].
+type PhaseUpdateParamsRuleUnion interface {
+	implementsRulesetsPhaseUpdateParamsRuleUnion()
 }
 
 type PhaseUpdateParamsRulesRulesetsBlockRule struct {
@@ -1759,7 +1938,7 @@ func (r PhaseUpdateParamsRulesRulesetsBlockRule) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r PhaseUpdateParamsRulesRulesetsBlockRule) implementsRulesetsPhaseUpdateParamsRule() {}
+func (r PhaseUpdateParamsRulesRulesetsBlockRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type PhaseUpdateParamsRulesRulesetsBlockRuleAction string
@@ -1823,7 +2002,7 @@ func (r PhaseUpdateParamsRulesRulesetsExecuteRule) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PhaseUpdateParamsRulesRulesetsExecuteRule) implementsRulesetsPhaseUpdateParamsRule() {}
+func (r PhaseUpdateParamsRulesRulesetsExecuteRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type PhaseUpdateParamsRulesRulesetsExecuteRuleAction string
@@ -1998,7 +2177,7 @@ func (r PhaseUpdateParamsRulesRulesetsLogRule) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r PhaseUpdateParamsRulesRulesetsLogRule) implementsRulesetsPhaseUpdateParamsRule() {}
+func (r PhaseUpdateParamsRulesRulesetsLogRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type PhaseUpdateParamsRulesRulesetsLogRuleAction string
@@ -2038,7 +2217,7 @@ func (r PhaseUpdateParamsRulesRulesetsSkipRule) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r PhaseUpdateParamsRulesRulesetsSkipRule) implementsRulesetsPhaseUpdateParamsRule() {}
+func (r PhaseUpdateParamsRulesRulesetsSkipRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 // The action to perform when the rule matches.
 type PhaseUpdateParamsRulesRulesetsSkipRuleAction string
@@ -2146,6 +2325,24 @@ const (
 func (r PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset) IsKnown() bool {
 	switch r {
 	case PhaseUpdateParamsRulesRulesetsSkipRuleActionParametersRulesetCurrent:
+		return true
+	}
+	return false
+}
+
+// The action to perform when the rule matches.
+type PhaseUpdateParamsRulesAction string
+
+const (
+	PhaseUpdateParamsRulesActionBlock   PhaseUpdateParamsRulesAction = "block"
+	PhaseUpdateParamsRulesActionExecute PhaseUpdateParamsRulesAction = "execute"
+	PhaseUpdateParamsRulesActionLog     PhaseUpdateParamsRulesAction = "log"
+	PhaseUpdateParamsRulesActionSkip    PhaseUpdateParamsRulesAction = "skip"
+)
+
+func (r PhaseUpdateParamsRulesAction) IsKnown() bool {
+	switch r {
+	case PhaseUpdateParamsRulesActionBlock, PhaseUpdateParamsRulesActionExecute, PhaseUpdateParamsRulesActionLog, PhaseUpdateParamsRulesActionSkip:
 		return true
 	}
 	return false

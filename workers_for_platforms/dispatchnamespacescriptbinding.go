@@ -43,6 +43,78 @@ func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatc
 }
 
 // A binding to allow the Worker to communicate with resources
+type DispatchNamespaceScriptBindingGetResponse struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id"`
+	// The class of resource that the binding provides.
+	Type DispatchNamespaceScriptBindingGetResponseType `json:"type,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment"`
+	// Name of Worker to bind to
+	Service string `json:"service"`
+	// The exported class name of the Durable Object
+	ClassName string `json:"class_name"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName string `json:"script_name"`
+	// R2 bucket to bind to
+	BucketName string `json:"bucket_name"`
+	// Name of the Queue to bind to
+	QueueName string `json:"queue_name"`
+	// A JavaScript variable name for the binding.
+	Binding string `json:"binding"`
+	// ID of the D1 database to bind to
+	ID string `json:"id"`
+	// Namespace to bind to
+	Namespace string      `json:"namespace"`
+	Outbound  interface{} `json:"outbound,required"`
+	// ID of the certificate to bind to
+	CertificateID string                                        `json:"certificate_id"`
+	Certificate   interface{}                                   `json:"certificate,required"`
+	JSON          dispatchNamespaceScriptBindingGetResponseJSON `json:"-"`
+	union         DispatchNamespaceScriptBindingGetResponseUnion
+}
+
+// dispatchNamespaceScriptBindingGetResponseJSON contains the JSON metadata for the
+// struct [DispatchNamespaceScriptBindingGetResponse]
+type dispatchNamespaceScriptBindingGetResponseJSON struct {
+	Name          apijson.Field
+	NamespaceID   apijson.Field
+	Type          apijson.Field
+	Environment   apijson.Field
+	Service       apijson.Field
+	ClassName     apijson.Field
+	ScriptName    apijson.Field
+	BucketName    apijson.Field
+	QueueName     apijson.Field
+	Binding       apijson.Field
+	ID            apijson.Field
+	Namespace     apijson.Field
+	Outbound      apijson.Field
+	CertificateID apijson.Field
+	Certificate   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r dispatchNamespaceScriptBindingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *DispatchNamespaceScriptBindingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r DispatchNamespaceScriptBindingGetResponse) AsUnion() DispatchNamespaceScriptBindingGetResponseUnion {
+	return r.union
+}
+
+// A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersKVNamespaceBinding],
@@ -54,13 +126,13 @@ func (r *DispatchNamespaceScriptBindingService) Get(ctx context.Context, dispatc
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersDispatchNamespaceBinding]
 // or
 // [workers_for_platforms.DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBinding].
-type DispatchNamespaceScriptBindingGetResponse interface {
+type DispatchNamespaceScriptBindingGetResponseUnion interface {
 	implementsWorkersForPlatformsDispatchNamespaceScriptBindingGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DispatchNamespaceScriptBindingGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*DispatchNamespaceScriptBindingGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -543,6 +615,28 @@ const (
 func (r DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBindingType) IsKnown() bool {
 	switch r {
 	case DispatchNamespaceScriptBindingGetResponseWorkersMTLSCERTBindingTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
+
+// The class of resource that the binding provides.
+type DispatchNamespaceScriptBindingGetResponseType string
+
+const (
+	DispatchNamespaceScriptBindingGetResponseTypeKVNamespace            DispatchNamespaceScriptBindingGetResponseType = "kv_namespace"
+	DispatchNamespaceScriptBindingGetResponseTypeService                DispatchNamespaceScriptBindingGetResponseType = "service"
+	DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace DispatchNamespaceScriptBindingGetResponseType = "durable_object_namespace"
+	DispatchNamespaceScriptBindingGetResponseTypeR2Bucket               DispatchNamespaceScriptBindingGetResponseType = "r2_bucket"
+	DispatchNamespaceScriptBindingGetResponseTypeQueue                  DispatchNamespaceScriptBindingGetResponseType = "queue"
+	DispatchNamespaceScriptBindingGetResponseTypeD1                     DispatchNamespaceScriptBindingGetResponseType = "d1"
+	DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace      DispatchNamespaceScriptBindingGetResponseType = "dispatch_namespace"
+	DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate        DispatchNamespaceScriptBindingGetResponseType = "mtls_certificate"
+)
+
+func (r DispatchNamespaceScriptBindingGetResponseType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptBindingGetResponseTypeKVNamespace, DispatchNamespaceScriptBindingGetResponseTypeService, DispatchNamespaceScriptBindingGetResponseTypeDurableObjectNamespace, DispatchNamespaceScriptBindingGetResponseTypeR2Bucket, DispatchNamespaceScriptBindingGetResponseTypeQueue, DispatchNamespaceScriptBindingGetResponseTypeD1, DispatchNamespaceScriptBindingGetResponseTypeDispatchNamespace, DispatchNamespaceScriptBindingGetResponseTypeMTLSCertificate:
 		return true
 	}
 	return false

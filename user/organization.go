@@ -69,7 +69,7 @@ func (r *OrganizationService) Delete(ctx context.Context, organizationID string,
 }
 
 // Gets a specific organization the user is associated with.
-func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationGetResponse, err error) {
+func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationGetResponseEnvelope
 	path := fmt.Sprintf("user/organizations/%s", organizationID)
@@ -154,13 +154,13 @@ func (r organizationDeleteResponseJSON) RawJSON() string {
 
 // Union satisfied by [user.OrganizationGetResponseUnknown] or
 // [shared.UnionString].
-type OrganizationGetResponse interface {
-	ImplementsUserOrganizationGetResponse()
+type OrganizationGetResponseUnion interface {
+	ImplementsUserOrganizationGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*OrganizationGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*OrganizationGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -268,9 +268,9 @@ func (r OrganizationDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OrganizationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   OrganizationGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   OrganizationGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationGetResponseEnvelopeJSON    `json:"-"`

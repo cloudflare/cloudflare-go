@@ -40,7 +40,7 @@ func NewProjectService(opts ...option.RequestOption) (r *ProjectService) {
 }
 
 // Create a new project.
-func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts ...option.RequestOption) (res *ProjectNewResponse, err error) {
+func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts ...option.RequestOption) (res *ProjectNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects", params.AccountID)
@@ -85,7 +85,7 @@ func (r *ProjectService) Delete(ctx context.Context, projectName string, params 
 
 // Set new attributes for an existing project. Modify environment variables. To
 // delete an environment variable, set the key to null.
-func (r *ProjectService) Edit(ctx context.Context, projectName string, params ProjectEditParams, opts ...option.RequestOption) (res *ProjectEditResponse, err error) {
+func (r *ProjectService) Edit(ctx context.Context, projectName string, params ProjectEditParams, opts ...option.RequestOption) (res *ProjectEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", params.AccountID, projectName)
@@ -1824,13 +1824,13 @@ func (r pagesProjectsDeploymentConfigsProductionVectorizeBindingsVectorizeJSON) 
 
 // Union satisfied by [pages.ProjectNewResponseUnknown],
 // [pages.ProjectNewResponseArray] or [shared.UnionString].
-type ProjectNewResponse interface {
-	ImplementsPagesProjectNewResponse()
+type ProjectNewResponseUnion interface {
+	ImplementsPagesProjectNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProjectNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1845,19 +1845,19 @@ func init() {
 
 type ProjectNewResponseArray []interface{}
 
-func (r ProjectNewResponseArray) ImplementsPagesProjectNewResponse() {}
+func (r ProjectNewResponseArray) ImplementsPagesProjectNewResponseUnion() {}
 
 type ProjectDeleteResponse = interface{}
 
 // Union satisfied by [pages.ProjectEditResponseUnknown],
 // [pages.ProjectEditResponseArray] or [shared.UnionString].
-type ProjectEditResponse interface {
-	ImplementsPagesProjectEditResponse()
+type ProjectEditResponseUnion interface {
+	ImplementsPagesProjectEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProjectEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1872,7 +1872,7 @@ func init() {
 
 type ProjectEditResponseArray []interface{}
 
-func (r ProjectEditResponseArray) ImplementsPagesProjectEditResponse() {}
+func (r ProjectEditResponseArray) ImplementsPagesProjectEditResponseUnion() {}
 
 type ProjectPurgeBuildCacheResponse = interface{}
 
@@ -2564,9 +2564,9 @@ func (r ProjectNewParamsDeploymentConfigsProductionVectorizeBindingsVectorize) M
 }
 
 type ProjectNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ProjectNewResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   ProjectNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectNewResponseEnvelopeJSON    `json:"-"`
@@ -2632,9 +2632,9 @@ func (r ProjectEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ProjectEditResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   ProjectEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectEditResponseEnvelopeJSON    `json:"-"`

@@ -32,9 +32,9 @@ func TestIndexNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		vectorize.IndexNewParams{
-			Config: cloudflare.F[vectorize.IndexNewParamsConfig](vectorize.IndexNewParamsConfigVectorizeIndexPresetConfiguration(vectorize.IndexNewParamsConfigVectorizeIndexPresetConfiguration{
+			Config: cloudflare.F[vectorize.IndexNewParamsConfigUnion](vectorize.IndexNewParamsConfigVectorizeIndexPresetConfiguration{
 				Preset: cloudflare.F(vectorize.IndexNewParamsConfigVectorizeIndexPresetConfigurationPresetCfBaaiBgeSmallEnV1_5),
-			})),
+			}),
 			Name:        cloudflare.F("example-index"),
 			Description: cloudflare.F("This is my example index."),
 		},

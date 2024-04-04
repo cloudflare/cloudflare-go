@@ -179,8 +179,8 @@ type DispatchNamespaceScriptUpdateParamsVariant0Metadata struct {
 	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations] `json:"migrations"`
-	Placement  param.Field[DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacement]  `json:"placement"`
+	Migrations param.Field[DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion] `json:"migrations"`
+	Placement  param.Field[DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacement]       `json:"placement"`
 	// List of strings to use as tags for this Worker
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -196,12 +196,34 @@ func (r DispatchNamespaceScriptUpdateParamsVariant0Metadata) MarshalJSON() (data
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
+type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag             param.Field[string]      `json:"old_tag"`
+	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
+	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
+	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
+	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
+	Steps              param.Field[interface{}] `json:"steps,required"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion() {
+}
+
+// Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations],
-// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations].
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations interface {
-	implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations()
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations],
+// [DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations].
+type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion interface {
+	implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion()
 }
 
 // A single set of migrations to apply.
@@ -226,7 +248,7 @@ func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSing
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations() {
+func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion() {
 }
 
 type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass struct {
@@ -262,7 +284,7 @@ func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersStep
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations() {
+func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion() {
 }
 
 type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep struct {

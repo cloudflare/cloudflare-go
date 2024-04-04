@@ -115,7 +115,7 @@ func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query W
 
 // Gets the token used to associate warp device with a specific Warp Connector
 // tunnel.
-func (r *WARPConnectorService) Token(ctx context.Context, tunnelID string, query WARPConnectorTokenParams, opts ...option.RequestOption) (res *WARPConnectorTokenResponse, err error) {
+func (r *WARPConnectorService) Token(ctx context.Context, tunnelID string, query WARPConnectorTokenParams, opts ...option.RequestOption) (res *WARPConnectorTokenResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorTokenResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s/token", query.AccountID, tunnelID)
@@ -129,13 +129,13 @@ func (r *WARPConnectorService) Token(ctx context.Context, tunnelID string, query
 
 // Union satisfied by [warp_connector.WARPConnectorTokenResponseUnknown],
 // [warp_connector.WARPConnectorTokenResponseArray] or [shared.UnionString].
-type WARPConnectorTokenResponse interface {
-	ImplementsWARPConnectorWARPConnectorTokenResponse()
+type WARPConnectorTokenResponseUnion interface {
+	ImplementsWARPConnectorWARPConnectorTokenResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WARPConnectorTokenResponse)(nil)).Elem(),
+		reflect.TypeOf((*WARPConnectorTokenResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -150,7 +150,7 @@ func init() {
 
 type WARPConnectorTokenResponseArray []interface{}
 
-func (r WARPConnectorTokenResponseArray) ImplementsWARPConnectorWARPConnectorTokenResponse() {}
+func (r WARPConnectorTokenResponseArray) ImplementsWARPConnectorWARPConnectorTokenResponseUnion() {}
 
 type WARPConnectorNewParams struct {
 	// Cloudflare account ID
@@ -406,9 +406,9 @@ type WARPConnectorTokenParams struct {
 }
 
 type WARPConnectorTokenResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   WARPConnectorTokenResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   WARPConnectorTokenResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WARPConnectorTokenResponseEnvelopeSuccess `json:"success,required"`
 	JSON    warpConnectorTokenResponseEnvelopeJSON    `json:"-"`

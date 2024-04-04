@@ -190,7 +190,7 @@ func (r ZoneSettingWAFParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingWAFParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingWAFParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingWAFEditParams struct {
 	// Identifier

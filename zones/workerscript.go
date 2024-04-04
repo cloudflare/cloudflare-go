@@ -35,7 +35,7 @@ func NewWorkerScriptService(opts ...option.RequestOption) (r *WorkerScriptServic
 }
 
 // Upload a worker, or a new version of a worker.
-func (r *WorkerScriptService) Update(ctx context.Context, params WorkerScriptUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUpdateResponse, err error) {
+func (r *WorkerScriptService) Update(ctx context.Context, params WorkerScriptUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/script", params.ZoneID)
@@ -68,13 +68,13 @@ func (r *WorkerScriptService) Get(ctx context.Context, query WorkerScriptGetPara
 
 // Union satisfied by [zones.WorkerScriptUpdateResponseUnknown] or
 // [shared.UnionString].
-type WorkerScriptUpdateResponse interface {
-	ImplementsZonesWorkerScriptUpdateResponse()
+type WorkerScriptUpdateResponseUnion interface {
+	ImplementsZonesWorkerScriptUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WorkerScriptUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*WorkerScriptUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -94,9 +94,9 @@ func (r WorkerScriptUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WorkerScriptUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   WorkerScriptUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   WorkerScriptUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptUpdateResponseEnvelopeJSON    `json:"-"`

@@ -60,7 +60,7 @@ func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, o
 }
 
 // Modifies a namespace's title.
-func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponse, err error) {
+func (r *NamespaceService) Update(ctx context.Context, namespaceID string, params NamespaceUpdateParams, opts ...option.RequestOption) (res *NamespaceUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", params.AccountID, namespaceID)
@@ -96,7 +96,7 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceL
 }
 
 // Deletes the namespace corresponding to the given ID.
-func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, params NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponse, err error) {
+func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, params NamespaceDeleteParams, opts ...option.RequestOption) (res *NamespaceDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", params.AccountID, namespaceID)
@@ -138,13 +138,13 @@ func (r workersKVNamespaceJSON) RawJSON() string {
 }
 
 // Union satisfied by [kv.NamespaceUpdateResponseUnknown] or [shared.UnionString].
-type NamespaceUpdateResponse interface {
-	ImplementsKVNamespaceUpdateResponse()
+type NamespaceUpdateResponseUnion interface {
+	ImplementsKVNamespaceUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*NamespaceUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -154,13 +154,13 @@ func init() {
 }
 
 // Union satisfied by [kv.NamespaceDeleteResponseUnknown] or [shared.UnionString].
-type NamespaceDeleteResponse interface {
-	ImplementsKVNamespaceDeleteResponse()
+type NamespaceDeleteResponseUnion interface {
+	ImplementsKVNamespaceDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*NamespaceDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -235,9 +235,9 @@ func (r NamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   NamespaceUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   NamespaceUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceUpdateResponseEnvelopeJSON    `json:"-"`
@@ -341,9 +341,9 @@ func (r NamespaceDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   NamespaceDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   NamespaceDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceDeleteResponseEnvelopeJSON    `json:"-"`

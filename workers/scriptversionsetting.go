@@ -106,6 +106,78 @@ func (r scriptVersionSettingEditResponseJSON) RawJSON() string {
 }
 
 // A binding to allow the Worker to communicate with resources
+type ScriptVersionSettingEditResponseBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id"`
+	// The class of resource that the binding provides.
+	Type ScriptVersionSettingEditResponseBindingsType `json:"type,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment"`
+	// Name of Worker to bind to
+	Service string `json:"service"`
+	// The exported class name of the Durable Object
+	ClassName string `json:"class_name"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName string `json:"script_name"`
+	// R2 bucket to bind to
+	BucketName string `json:"bucket_name"`
+	// Name of the Queue to bind to
+	QueueName string `json:"queue_name"`
+	// A JavaScript variable name for the binding.
+	Binding string `json:"binding"`
+	// ID of the D1 database to bind to
+	ID string `json:"id"`
+	// Namespace to bind to
+	Namespace string      `json:"namespace"`
+	Outbound  interface{} `json:"outbound,required"`
+	// ID of the certificate to bind to
+	CertificateID string                                      `json:"certificate_id"`
+	Certificate   interface{}                                 `json:"certificate,required"`
+	JSON          scriptVersionSettingEditResponseBindingJSON `json:"-"`
+	union         ScriptVersionSettingEditResponseBindingsUnion
+}
+
+// scriptVersionSettingEditResponseBindingJSON contains the JSON metadata for the
+// struct [ScriptVersionSettingEditResponseBinding]
+type scriptVersionSettingEditResponseBindingJSON struct {
+	Name          apijson.Field
+	NamespaceID   apijson.Field
+	Type          apijson.Field
+	Environment   apijson.Field
+	Service       apijson.Field
+	ClassName     apijson.Field
+	ScriptName    apijson.Field
+	BucketName    apijson.Field
+	QueueName     apijson.Field
+	Binding       apijson.Field
+	ID            apijson.Field
+	Namespace     apijson.Field
+	Outbound      apijson.Field
+	CertificateID apijson.Field
+	Certificate   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r scriptVersionSettingEditResponseBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ScriptVersionSettingEditResponseBinding) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ScriptVersionSettingEditResponseBinding) AsUnion() ScriptVersionSettingEditResponseBindingsUnion {
+	return r.union
+}
+
+// A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
 // [workers.ScriptVersionSettingEditResponseBindingsWorkersKVNamespaceBinding],
@@ -116,13 +188,13 @@ func (r scriptVersionSettingEditResponseJSON) RawJSON() string {
 // [workers.ScriptVersionSettingEditResponseBindingsWorkersD1Binding],
 // [workers.ScriptVersionSettingEditResponseBindingsWorkersDispatchNamespaceBinding]
 // or [workers.ScriptVersionSettingEditResponseBindingsWorkersMTLSCERTBinding].
-type ScriptVersionSettingEditResponseBinding interface {
+type ScriptVersionSettingEditResponseBindingsUnion interface {
 	implementsWorkersScriptVersionSettingEditResponseBinding()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ScriptVersionSettingEditResponseBinding)(nil)).Elem(),
+		reflect.TypeOf((*ScriptVersionSettingEditResponseBindingsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -610,18 +682,86 @@ func (r ScriptVersionSettingEditResponseBindingsWorkersMTLSCERTBindingType) IsKn
 	return false
 }
 
+// The class of resource that the binding provides.
+type ScriptVersionSettingEditResponseBindingsType string
+
+const (
+	ScriptVersionSettingEditResponseBindingsTypeKVNamespace            ScriptVersionSettingEditResponseBindingsType = "kv_namespace"
+	ScriptVersionSettingEditResponseBindingsTypeService                ScriptVersionSettingEditResponseBindingsType = "service"
+	ScriptVersionSettingEditResponseBindingsTypeDurableObjectNamespace ScriptVersionSettingEditResponseBindingsType = "durable_object_namespace"
+	ScriptVersionSettingEditResponseBindingsTypeR2Bucket               ScriptVersionSettingEditResponseBindingsType = "r2_bucket"
+	ScriptVersionSettingEditResponseBindingsTypeQueue                  ScriptVersionSettingEditResponseBindingsType = "queue"
+	ScriptVersionSettingEditResponseBindingsTypeD1                     ScriptVersionSettingEditResponseBindingsType = "d1"
+	ScriptVersionSettingEditResponseBindingsTypeDispatchNamespace      ScriptVersionSettingEditResponseBindingsType = "dispatch_namespace"
+	ScriptVersionSettingEditResponseBindingsTypeMTLSCertificate        ScriptVersionSettingEditResponseBindingsType = "mtls_certificate"
+)
+
+func (r ScriptVersionSettingEditResponseBindingsType) IsKnown() bool {
+	switch r {
+	case ScriptVersionSettingEditResponseBindingsTypeKVNamespace, ScriptVersionSettingEditResponseBindingsTypeService, ScriptVersionSettingEditResponseBindingsTypeDurableObjectNamespace, ScriptVersionSettingEditResponseBindingsTypeR2Bucket, ScriptVersionSettingEditResponseBindingsTypeQueue, ScriptVersionSettingEditResponseBindingsTypeD1, ScriptVersionSettingEditResponseBindingsTypeDispatchNamespace, ScriptVersionSettingEditResponseBindingsTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
+
+// Migrations to apply for Durable Objects associated with this Worker.
+type ScriptVersionSettingEditResponseMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag             string                                         `json:"old_tag"`
+	DeletedClasses     interface{}                                    `json:"deleted_classes,required"`
+	NewClasses         interface{}                                    `json:"new_classes,required"`
+	RenamedClasses     interface{}                                    `json:"renamed_classes,required"`
+	TransferredClasses interface{}                                    `json:"transferred_classes,required"`
+	Steps              interface{}                                    `json:"steps,required"`
+	JSON               scriptVersionSettingEditResponseMigrationsJSON `json:"-"`
+	union              ScriptVersionSettingEditResponseMigrationsUnion
+}
+
+// scriptVersionSettingEditResponseMigrationsJSON contains the JSON metadata for
+// the struct [ScriptVersionSettingEditResponseMigrations]
+type scriptVersionSettingEditResponseMigrationsJSON struct {
+	NewTag             apijson.Field
+	OldTag             apijson.Field
+	DeletedClasses     apijson.Field
+	NewClasses         apijson.Field
+	RenamedClasses     apijson.Field
+	TransferredClasses apijson.Field
+	Steps              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r scriptVersionSettingEditResponseMigrationsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ScriptVersionSettingEditResponseMigrations) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ScriptVersionSettingEditResponseMigrations) AsUnion() ScriptVersionSettingEditResponseMigrationsUnion {
+	return r.union
+}
+
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Union satisfied by
 // [workers.ScriptVersionSettingEditResponseMigrationsWorkersSingleStepMigrations]
 // or [workers.ScriptVersionSettingEditResponseMigrationsWorkersSteppedMigrations].
-type ScriptVersionSettingEditResponseMigrations interface {
+type ScriptVersionSettingEditResponseMigrationsUnion interface {
 	implementsWorkersScriptVersionSettingEditResponseMigrations()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ScriptVersionSettingEditResponseMigrations)(nil)).Elem(),
+		reflect.TypeOf((*ScriptVersionSettingEditResponseMigrationsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -960,6 +1100,78 @@ func (r scriptVersionSettingGetResponseJSON) RawJSON() string {
 }
 
 // A binding to allow the Worker to communicate with resources
+type ScriptVersionSettingGetResponseBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id"`
+	// The class of resource that the binding provides.
+	Type ScriptVersionSettingGetResponseBindingsType `json:"type,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment"`
+	// Name of Worker to bind to
+	Service string `json:"service"`
+	// The exported class name of the Durable Object
+	ClassName string `json:"class_name"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName string `json:"script_name"`
+	// R2 bucket to bind to
+	BucketName string `json:"bucket_name"`
+	// Name of the Queue to bind to
+	QueueName string `json:"queue_name"`
+	// A JavaScript variable name for the binding.
+	Binding string `json:"binding"`
+	// ID of the D1 database to bind to
+	ID string `json:"id"`
+	// Namespace to bind to
+	Namespace string      `json:"namespace"`
+	Outbound  interface{} `json:"outbound,required"`
+	// ID of the certificate to bind to
+	CertificateID string                                     `json:"certificate_id"`
+	Certificate   interface{}                                `json:"certificate,required"`
+	JSON          scriptVersionSettingGetResponseBindingJSON `json:"-"`
+	union         ScriptVersionSettingGetResponseBindingsUnion
+}
+
+// scriptVersionSettingGetResponseBindingJSON contains the JSON metadata for the
+// struct [ScriptVersionSettingGetResponseBinding]
+type scriptVersionSettingGetResponseBindingJSON struct {
+	Name          apijson.Field
+	NamespaceID   apijson.Field
+	Type          apijson.Field
+	Environment   apijson.Field
+	Service       apijson.Field
+	ClassName     apijson.Field
+	ScriptName    apijson.Field
+	BucketName    apijson.Field
+	QueueName     apijson.Field
+	Binding       apijson.Field
+	ID            apijson.Field
+	Namespace     apijson.Field
+	Outbound      apijson.Field
+	CertificateID apijson.Field
+	Certificate   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r scriptVersionSettingGetResponseBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ScriptVersionSettingGetResponseBinding) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ScriptVersionSettingGetResponseBinding) AsUnion() ScriptVersionSettingGetResponseBindingsUnion {
+	return r.union
+}
+
+// A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
 // [workers.ScriptVersionSettingGetResponseBindingsWorkersKVNamespaceBinding],
@@ -970,13 +1182,13 @@ func (r scriptVersionSettingGetResponseJSON) RawJSON() string {
 // [workers.ScriptVersionSettingGetResponseBindingsWorkersD1Binding],
 // [workers.ScriptVersionSettingGetResponseBindingsWorkersDispatchNamespaceBinding]
 // or [workers.ScriptVersionSettingGetResponseBindingsWorkersMTLSCERTBinding].
-type ScriptVersionSettingGetResponseBinding interface {
+type ScriptVersionSettingGetResponseBindingsUnion interface {
 	implementsWorkersScriptVersionSettingGetResponseBinding()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ScriptVersionSettingGetResponseBinding)(nil)).Elem(),
+		reflect.TypeOf((*ScriptVersionSettingGetResponseBindingsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1464,18 +1676,86 @@ func (r ScriptVersionSettingGetResponseBindingsWorkersMTLSCERTBindingType) IsKno
 	return false
 }
 
+// The class of resource that the binding provides.
+type ScriptVersionSettingGetResponseBindingsType string
+
+const (
+	ScriptVersionSettingGetResponseBindingsTypeKVNamespace            ScriptVersionSettingGetResponseBindingsType = "kv_namespace"
+	ScriptVersionSettingGetResponseBindingsTypeService                ScriptVersionSettingGetResponseBindingsType = "service"
+	ScriptVersionSettingGetResponseBindingsTypeDurableObjectNamespace ScriptVersionSettingGetResponseBindingsType = "durable_object_namespace"
+	ScriptVersionSettingGetResponseBindingsTypeR2Bucket               ScriptVersionSettingGetResponseBindingsType = "r2_bucket"
+	ScriptVersionSettingGetResponseBindingsTypeQueue                  ScriptVersionSettingGetResponseBindingsType = "queue"
+	ScriptVersionSettingGetResponseBindingsTypeD1                     ScriptVersionSettingGetResponseBindingsType = "d1"
+	ScriptVersionSettingGetResponseBindingsTypeDispatchNamespace      ScriptVersionSettingGetResponseBindingsType = "dispatch_namespace"
+	ScriptVersionSettingGetResponseBindingsTypeMTLSCertificate        ScriptVersionSettingGetResponseBindingsType = "mtls_certificate"
+)
+
+func (r ScriptVersionSettingGetResponseBindingsType) IsKnown() bool {
+	switch r {
+	case ScriptVersionSettingGetResponseBindingsTypeKVNamespace, ScriptVersionSettingGetResponseBindingsTypeService, ScriptVersionSettingGetResponseBindingsTypeDurableObjectNamespace, ScriptVersionSettingGetResponseBindingsTypeR2Bucket, ScriptVersionSettingGetResponseBindingsTypeQueue, ScriptVersionSettingGetResponseBindingsTypeD1, ScriptVersionSettingGetResponseBindingsTypeDispatchNamespace, ScriptVersionSettingGetResponseBindingsTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
+
+// Migrations to apply for Durable Objects associated with this Worker.
+type ScriptVersionSettingGetResponseMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag             string                                        `json:"old_tag"`
+	DeletedClasses     interface{}                                   `json:"deleted_classes,required"`
+	NewClasses         interface{}                                   `json:"new_classes,required"`
+	RenamedClasses     interface{}                                   `json:"renamed_classes,required"`
+	TransferredClasses interface{}                                   `json:"transferred_classes,required"`
+	Steps              interface{}                                   `json:"steps,required"`
+	JSON               scriptVersionSettingGetResponseMigrationsJSON `json:"-"`
+	union              ScriptVersionSettingGetResponseMigrationsUnion
+}
+
+// scriptVersionSettingGetResponseMigrationsJSON contains the JSON metadata for the
+// struct [ScriptVersionSettingGetResponseMigrations]
+type scriptVersionSettingGetResponseMigrationsJSON struct {
+	NewTag             apijson.Field
+	OldTag             apijson.Field
+	DeletedClasses     apijson.Field
+	NewClasses         apijson.Field
+	RenamedClasses     apijson.Field
+	TransferredClasses apijson.Field
+	Steps              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r scriptVersionSettingGetResponseMigrationsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ScriptVersionSettingGetResponseMigrations) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ScriptVersionSettingGetResponseMigrations) AsUnion() ScriptVersionSettingGetResponseMigrationsUnion {
+	return r.union
+}
+
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Union satisfied by
 // [workers.ScriptVersionSettingGetResponseMigrationsWorkersSingleStepMigrations]
 // or [workers.ScriptVersionSettingGetResponseMigrationsWorkersSteppedMigrations].
-type ScriptVersionSettingGetResponseMigrations interface {
+type ScriptVersionSettingGetResponseMigrationsUnion interface {
 	implementsWorkersScriptVersionSettingGetResponseMigrations()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ScriptVersionSettingGetResponseMigrations)(nil)).Elem(),
+		reflect.TypeOf((*ScriptVersionSettingGetResponseMigrationsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1780,7 +2060,7 @@ func (r ScriptVersionSettingEditParams) MarshalJSON() (data []byte, err error) {
 
 type ScriptVersionSettingEditParamsSettings struct {
 	// List of bindings attached to this Worker
-	Bindings param.Field[[]ScriptVersionSettingEditParamsSettingsBinding] `json:"bindings"`
+	Bindings param.Field[[]ScriptVersionSettingEditParamsSettingsBindingUnion] `json:"bindings"`
 	// Opt your Worker into changes after this date
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Opt your Worker into specific changes
@@ -1788,8 +2068,8 @@ type ScriptVersionSettingEditParamsSettings struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[ScriptVersionSettingEditParamsSettingsMigrations] `json:"migrations"`
-	Placement  param.Field[ScriptVersionSettingEditParamsSettingsPlacement]  `json:"placement"`
+	Migrations param.Field[ScriptVersionSettingEditParamsSettingsMigrationsUnion] `json:"migrations"`
+	Placement  param.Field[ScriptVersionSettingEditParamsSettingsPlacement]       `json:"placement"`
 	// Tags to help you manage your Workers
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -1803,6 +2083,39 @@ func (r ScriptVersionSettingEditParamsSettings) MarshalJSON() (data []byte, err 
 }
 
 // A binding to allow the Worker to communicate with resources
+type ScriptVersionSettingEditParamsSettingsBinding struct {
+	// The class of resource that the binding provides.
+	Type param.Field[ScriptVersionSettingEditParamsSettingsBindingsType] `json:"type,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment param.Field[string] `json:"environment"`
+	// Name of Worker to bind to
+	Service param.Field[string] `json:"service"`
+	// The exported class name of the Durable Object
+	ClassName param.Field[string] `json:"class_name"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName param.Field[string] `json:"script_name"`
+	// R2 bucket to bind to
+	BucketName param.Field[string] `json:"bucket_name"`
+	// Name of the Queue to bind to
+	QueueName param.Field[string] `json:"queue_name"`
+	// ID of the D1 database to bind to
+	ID param.Field[string] `json:"id"`
+	// Namespace to bind to
+	Namespace param.Field[string]      `json:"namespace"`
+	Outbound  param.Field[interface{}] `json:"outbound,required"`
+	// ID of the certificate to bind to
+	CertificateID param.Field[string]      `json:"certificate_id"`
+	Certificate   param.Field[interface{}] `json:"certificate,required"`
+}
+
+func (r ScriptVersionSettingEditParamsSettingsBinding) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptVersionSettingEditParamsSettingsBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion() {
+}
+
+// A binding to allow the Worker to communicate with resources
 //
 // Satisfied by
 // [workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding],
@@ -1812,9 +2125,10 @@ func (r ScriptVersionSettingEditParamsSettings) MarshalJSON() (data []byte, err 
 // [workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersQueueBinding],
 // [workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersD1Binding],
 // [workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBinding],
-// [workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersMTLSCERTBinding].
-type ScriptVersionSettingEditParamsSettingsBinding interface {
-	implementsWorkersScriptVersionSettingEditParamsSettingsBinding()
+// [workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersMTLSCERTBinding],
+// [ScriptVersionSettingEditParamsSettingsBinding].
+type ScriptVersionSettingEditParamsSettingsBindingUnion interface {
+	implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion()
 }
 
 type ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding struct {
@@ -1826,7 +2140,7 @@ func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding)
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBinding() {
+func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion() {
 }
 
 // The class of resource that the binding provides.
@@ -1857,7 +2171,7 @@ func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersServiceBinding) Mar
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersServiceBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBinding() {
+func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersServiceBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion() {
 }
 
 // The class of resource that the binding provides.
@@ -1890,7 +2204,7 @@ func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersDoBinding) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersDoBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBinding() {
+func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersDoBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion() {
 }
 
 // The class of resource that the binding provides.
@@ -1919,7 +2233,7 @@ func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersR2Binding) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersR2Binding) implementsWorkersScriptVersionSettingEditParamsSettingsBinding() {
+func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersR2Binding) implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion() {
 }
 
 // The class of resource that the binding provides.
@@ -1948,7 +2262,7 @@ func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersQueueBinding) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersQueueBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBinding() {
+func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersQueueBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion() {
 }
 
 // The class of resource that the binding provides.
@@ -1979,7 +2293,7 @@ func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersD1Binding) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersD1Binding) implementsWorkersScriptVersionSettingEditParamsSettingsBinding() {
+func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersD1Binding) implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion() {
 }
 
 // The class of resource that the binding provides.
@@ -2010,7 +2324,7 @@ func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBi
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBinding() {
+func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersDispatchNamespaceBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion() {
 }
 
 // The class of resource that the binding provides.
@@ -2065,7 +2379,7 @@ func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersMTLSCERTBinding) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersMTLSCERTBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBinding() {
+func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersMTLSCERTBinding) implementsWorkersScriptVersionSettingEditParamsSettingsBindingUnion() {
 }
 
 // The class of resource that the binding provides.
@@ -2083,13 +2397,57 @@ func (r ScriptVersionSettingEditParamsSettingsBindingsWorkersMTLSCERTBindingType
 	return false
 }
 
+// The class of resource that the binding provides.
+type ScriptVersionSettingEditParamsSettingsBindingsType string
+
+const (
+	ScriptVersionSettingEditParamsSettingsBindingsTypeKVNamespace            ScriptVersionSettingEditParamsSettingsBindingsType = "kv_namespace"
+	ScriptVersionSettingEditParamsSettingsBindingsTypeService                ScriptVersionSettingEditParamsSettingsBindingsType = "service"
+	ScriptVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace ScriptVersionSettingEditParamsSettingsBindingsType = "durable_object_namespace"
+	ScriptVersionSettingEditParamsSettingsBindingsTypeR2Bucket               ScriptVersionSettingEditParamsSettingsBindingsType = "r2_bucket"
+	ScriptVersionSettingEditParamsSettingsBindingsTypeQueue                  ScriptVersionSettingEditParamsSettingsBindingsType = "queue"
+	ScriptVersionSettingEditParamsSettingsBindingsTypeD1                     ScriptVersionSettingEditParamsSettingsBindingsType = "d1"
+	ScriptVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace      ScriptVersionSettingEditParamsSettingsBindingsType = "dispatch_namespace"
+	ScriptVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate        ScriptVersionSettingEditParamsSettingsBindingsType = "mtls_certificate"
+)
+
+func (r ScriptVersionSettingEditParamsSettingsBindingsType) IsKnown() bool {
+	switch r {
+	case ScriptVersionSettingEditParamsSettingsBindingsTypeKVNamespace, ScriptVersionSettingEditParamsSettingsBindingsTypeService, ScriptVersionSettingEditParamsSettingsBindingsTypeDurableObjectNamespace, ScriptVersionSettingEditParamsSettingsBindingsTypeR2Bucket, ScriptVersionSettingEditParamsSettingsBindingsTypeQueue, ScriptVersionSettingEditParamsSettingsBindingsTypeD1, ScriptVersionSettingEditParamsSettingsBindingsTypeDispatchNamespace, ScriptVersionSettingEditParamsSettingsBindingsTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
+
+// Migrations to apply for Durable Objects associated with this Worker.
+type ScriptVersionSettingEditParamsSettingsMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag             param.Field[string]      `json:"old_tag"`
+	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
+	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
+	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
+	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
+	Steps              param.Field[interface{}] `json:"steps,required"`
+}
+
+func (r ScriptVersionSettingEditParamsSettingsMigrations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptVersionSettingEditParamsSettingsMigrations) implementsWorkersScriptVersionSettingEditParamsSettingsMigrationsUnion() {
+}
+
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by
 // [workers.ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations],
-// [workers.ScriptVersionSettingEditParamsSettingsMigrationsWorkersSteppedMigrations].
-type ScriptVersionSettingEditParamsSettingsMigrations interface {
-	implementsWorkersScriptVersionSettingEditParamsSettingsMigrations()
+// [workers.ScriptVersionSettingEditParamsSettingsMigrationsWorkersSteppedMigrations],
+// [ScriptVersionSettingEditParamsSettingsMigrations].
+type ScriptVersionSettingEditParamsSettingsMigrationsUnion interface {
+	implementsWorkersScriptVersionSettingEditParamsSettingsMigrationsUnion()
 }
 
 // A single set of migrations to apply.
@@ -2114,7 +2472,7 @@ func (r ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrati
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations) implementsWorkersScriptVersionSettingEditParamsSettingsMigrations() {
+func (r ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations) implementsWorkersScriptVersionSettingEditParamsSettingsMigrationsUnion() {
 }
 
 type ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsRenamedClass struct {
@@ -2150,7 +2508,7 @@ func (r ScriptVersionSettingEditParamsSettingsMigrationsWorkersSteppedMigrations
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionSettingEditParamsSettingsMigrationsWorkersSteppedMigrations) implementsWorkersScriptVersionSettingEditParamsSettingsMigrations() {
+func (r ScriptVersionSettingEditParamsSettingsMigrationsWorkersSteppedMigrations) implementsWorkersScriptVersionSettingEditParamsSettingsMigrationsUnion() {
 }
 
 type ScriptVersionSettingEditParamsSettingsMigrationsWorkersSteppedMigrationsStep struct {

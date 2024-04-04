@@ -36,7 +36,7 @@ func NewAccessApplicationCAService(opts ...option.RequestOption) (r *AccessAppli
 }
 
 // Generates a new short-lived certificate CA and public key.
-func (r *AccessApplicationCAService) New(ctx context.Context, uuid string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponse, err error) {
+func (r *AccessApplicationCAService) New(ctx context.Context, uuid string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCANewResponseEnvelope
 	var accountOrZone string
@@ -112,7 +112,7 @@ func (r *AccessApplicationCAService) Delete(ctx context.Context, uuid string, bo
 }
 
 // Fetches a short-lived certificate CA and its public key.
-func (r *AccessApplicationCAService) Get(ctx context.Context, uuid string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponse, err error) {
+func (r *AccessApplicationCAService) Get(ctx context.Context, uuid string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCAGetResponseEnvelope
 	var accountOrZone string
@@ -163,13 +163,13 @@ func (r zeroTrustCAJSON) RawJSON() string {
 
 // Union satisfied by [zero_trust.AccessApplicationCANewResponseUnknown] or
 // [shared.UnionString].
-type AccessApplicationCANewResponse interface {
-	ImplementsZeroTrustAccessApplicationCANewResponse()
+type AccessApplicationCANewResponseUnion interface {
+	ImplementsZeroTrustAccessApplicationCANewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationCANewResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccessApplicationCANewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -202,13 +202,13 @@ func (r accessApplicationCADeleteResponseJSON) RawJSON() string {
 
 // Union satisfied by [zero_trust.AccessApplicationCAGetResponseUnknown] or
 // [shared.UnionString].
-type AccessApplicationCAGetResponse interface {
-	ImplementsZeroTrustAccessApplicationCAGetResponse()
+type AccessApplicationCAGetResponseUnion interface {
+	ImplementsZeroTrustAccessApplicationCAGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationCAGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccessApplicationCAGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -225,9 +225,9 @@ type AccessApplicationCANewParams struct {
 }
 
 type AccessApplicationCANewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   AccessApplicationCANewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   AccessApplicationCANewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCANewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationCANewResponseEnvelopeJSON    `json:"-"`
@@ -332,9 +332,9 @@ type AccessApplicationCAGetParams struct {
 }
 
 type AccessApplicationCAGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   AccessApplicationCAGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   AccessApplicationCAGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCAGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationCAGetResponseEnvelopeJSON    `json:"-"`

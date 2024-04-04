@@ -155,6 +155,51 @@ func (r *IdentityProviderService) Get(ctx context.Context, uuid string, query Id
 	return
 }
 
+type ZeroTrustIdentityProviders struct {
+	Config interface{} `json:"config"`
+	// UUID
+	ID string `json:"id"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig shared.UnnamedSchemaRef158 `json:"scim_config"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type  shared.UnnamedSchemaRef163     `json:"type,required"`
+	JSON  zeroTrustIdentityProvidersJSON `json:"-"`
+	union ZeroTrustIdentityProvidersUnion
+}
+
+// zeroTrustIdentityProvidersJSON contains the JSON metadata for the struct
+// [ZeroTrustIdentityProviders]
+type zeroTrustIdentityProvidersJSON struct {
+	Config      apijson.Field
+	ID          apijson.Field
+	Name        apijson.Field
+	ScimConfig  apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r zeroTrustIdentityProvidersJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ZeroTrustIdentityProviders) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ZeroTrustIdentityProviders) AsUnion() ZeroTrustIdentityProvidersUnion {
+	return r.union
+}
+
 // Union satisfied by [zero_trust.ZeroTrustIdentityProvidersAccessAzureAd],
 // [zero_trust.ZeroTrustIdentityProvidersAccessCentrify],
 // [zero_trust.ZeroTrustIdentityProvidersAccessFacebook],
@@ -169,13 +214,13 @@ func (r *IdentityProviderService) Get(ctx context.Context, uuid string, query Id
 // [zero_trust.ZeroTrustIdentityProvidersAccessSaml],
 // [zero_trust.ZeroTrustIdentityProvidersAccessYandex] or
 // [zero_trust.ZeroTrustIdentityProvidersAccessOnetimepin].
-type ZeroTrustIdentityProviders interface {
+type ZeroTrustIdentityProvidersUnion interface {
 	implementsZeroTrustZeroTrustIdentityProviders()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZeroTrustIdentityProviders)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustIdentityProvidersUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1342,6 +1387,51 @@ func (r zeroTrustIdentityProvidersAccessOnetimepinJSON) RawJSON() string {
 
 func (r ZeroTrustIdentityProvidersAccessOnetimepin) implementsZeroTrustZeroTrustIdentityProviders() {}
 
+type IdentityProviderListResponse struct {
+	Config interface{} `json:"config"`
+	// UUID
+	ID string `json:"id"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig shared.UnnamedSchemaRef158 `json:"scim_config"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type  shared.UnnamedSchemaRef163       `json:"type,required"`
+	JSON  identityProviderListResponseJSON `json:"-"`
+	union IdentityProviderListResponseUnion
+}
+
+// identityProviderListResponseJSON contains the JSON metadata for the struct
+// [IdentityProviderListResponse]
+type identityProviderListResponseJSON struct {
+	Config      apijson.Field
+	ID          apijson.Field
+	Name        apijson.Field
+	ScimConfig  apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r identityProviderListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *IdentityProviderListResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r IdentityProviderListResponse) AsUnion() IdentityProviderListResponseUnion {
+	return r.union
+}
+
 // Union satisfied by [zero_trust.IdentityProviderListResponseAccessAzureAd],
 // [zero_trust.IdentityProviderListResponseAccessCentrify],
 // [zero_trust.IdentityProviderListResponseAccessFacebook],
@@ -1355,13 +1445,13 @@ func (r ZeroTrustIdentityProvidersAccessOnetimepin) implementsZeroTrustZeroTrust
 // [zero_trust.IdentityProviderListResponseAccessPingone],
 // [zero_trust.IdentityProviderListResponseAccessSaml] or
 // [zero_trust.IdentityProviderListResponseAccessYandex].
-type IdentityProviderListResponse interface {
+type IdentityProviderListResponseUnion interface {
 	implementsZeroTrustIdentityProviderListResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*IdentityProviderListResponse)(nil)).Elem(),
+		reflect.TypeOf((*IdentityProviderListResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,

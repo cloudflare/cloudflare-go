@@ -160,7 +160,7 @@ func (r ZoneSettingTrueClientIPHeaderParam) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingTrueClientIPHeaderParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingTrueClientIPHeaderParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingTrueClientIPHeaderEditParams struct {
 	// Identifier

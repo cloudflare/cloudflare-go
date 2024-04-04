@@ -160,7 +160,7 @@ func (r ZoneSettingOpportunisticOnionParam) MarshalJSON() (data []byte, err erro
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingOpportunisticOnionParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingOpportunisticOnionParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingOpportunisticOnionEditParams struct {
 	// Identifier

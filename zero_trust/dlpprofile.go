@@ -75,15 +75,68 @@ func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLP
 	return
 }
 
+type DLPProfiles struct {
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount float64     `json:"allowed_match_count"`
+	ContextAwareness  interface{} `json:"context_awareness,required"`
+	Entries           interface{} `json:"entries,required"`
+	// The ID for this profile
+	ID string `json:"id"`
+	// The name of the profile.
+	Name string `json:"name"`
+	// If true, scan images via OCR to determine if any text present matches filters.
+	OCREnabled bool `json:"ocr_enabled"`
+	// The type of the profile.
+	Type      shared.UnnamedSchemaRef97 `json:"type"`
+	CreatedAt time.Time                 `json:"created_at" format:"date-time"`
+	// The description of the profile.
+	Description string          `json:"description"`
+	UpdatedAt   time.Time       `json:"updated_at" format:"date-time"`
+	JSON        dlpProfilesJSON `json:"-"`
+	union       DLPProfilesUnion
+}
+
+// dlpProfilesJSON contains the JSON metadata for the struct [DLPProfiles]
+type dlpProfilesJSON struct {
+	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
+	Entries           apijson.Field
+	ID                apijson.Field
+	Name              apijson.Field
+	OCREnabled        apijson.Field
+	Type              apijson.Field
+	CreatedAt         apijson.Field
+	Description       apijson.Field
+	UpdatedAt         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r dlpProfilesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *DLPProfiles) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r DLPProfiles) AsUnion() DLPProfilesUnion {
+	return r.union
+}
+
 // Union satisfied by [zero_trust.DLPPredefinedProfile],
 // [zero_trust.DLPCustomProfile] or [zero_trust.DLPProfilesDLPIntegrationProfile].
-type DLPProfiles interface {
+type DLPProfilesUnion interface {
 	implementsZeroTrustDLPProfiles()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfiles)(nil)).Elem(),
+		reflect.TypeOf((*DLPProfilesUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -191,16 +244,70 @@ func (r DLPProfilesDLPIntegrationProfileType) IsKnown() bool {
 	return false
 }
 
+type DLPProfileGetResponse struct {
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount float64     `json:"allowed_match_count"`
+	ContextAwareness  interface{} `json:"context_awareness,required"`
+	Entries           interface{} `json:"entries,required"`
+	// The ID for this profile
+	ID string `json:"id"`
+	// The name of the profile.
+	Name string `json:"name"`
+	// If true, scan images via OCR to determine if any text present matches filters.
+	OCREnabled bool `json:"ocr_enabled"`
+	// The type of the profile.
+	Type      shared.UnnamedSchemaRef97 `json:"type"`
+	CreatedAt time.Time                 `json:"created_at" format:"date-time"`
+	// The description of the profile.
+	Description string                    `json:"description"`
+	UpdatedAt   time.Time                 `json:"updated_at" format:"date-time"`
+	JSON        dlpProfileGetResponseJSON `json:"-"`
+	union       DLPProfileGetResponseUnion
+}
+
+// dlpProfileGetResponseJSON contains the JSON metadata for the struct
+// [DLPProfileGetResponse]
+type dlpProfileGetResponseJSON struct {
+	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
+	Entries           apijson.Field
+	ID                apijson.Field
+	Name              apijson.Field
+	OCREnabled        apijson.Field
+	Type              apijson.Field
+	CreatedAt         apijson.Field
+	Description       apijson.Field
+	UpdatedAt         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r dlpProfileGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *DLPProfileGetResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r DLPProfileGetResponse) AsUnion() DLPProfileGetResponseUnion {
+	return r.union
+}
+
 // Union satisfied by [zero_trust.DLPPredefinedProfile],
 // [zero_trust.DLPCustomProfile] or
 // [zero_trust.DLPProfileGetResponseDLPIntegrationProfile].
-type DLPProfileGetResponse interface {
+type DLPProfileGetResponseUnion interface {
 	implementsZeroTrustDLPProfileGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*DLPProfileGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,

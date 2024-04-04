@@ -6,13 +6,16 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // RankingService contains methods and other services that help with interacting
@@ -108,9 +111,9 @@ func (r rankingTimeseriesGroupsResponseMetaJSON) RawJSON() string {
 }
 
 type RankingTimeseriesGroupsResponseSerie0 struct {
-	Timestamps  []string                                           `json:"timestamps,required"`
-	ExtraFields map[string][]RankingTimeseriesGroupsResponseSerie0 `json:"-,extras"`
-	JSON        rankingTimeseriesGroupsResponseSerie0JSON          `json:"-"`
+	Timestamps  []string                                                `json:"timestamps,required"`
+	ExtraFields map[string][]RankingTimeseriesGroupsResponseSerie0Union `json:"-,extras"`
+	JSON        rankingTimeseriesGroupsResponseSerie0JSON               `json:"-"`
 }
 
 // rankingTimeseriesGroupsResponseSerie0JSON contains the JSON metadata for the
@@ -127,6 +130,26 @@ func (r *RankingTimeseriesGroupsResponseSerie0) UnmarshalJSON(data []byte) (err 
 
 func (r rankingTimeseriesGroupsResponseSerie0JSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [shared.UnionString] or [shared.UnionFloat].
+type RankingTimeseriesGroupsResponseSerie0Union interface {
+	ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RankingTimeseriesGroupsResponseSerie0Union)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+	)
 }
 
 type RankingTopResponse struct {

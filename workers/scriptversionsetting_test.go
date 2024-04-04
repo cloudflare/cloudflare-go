@@ -34,17 +34,17 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 		workers.ScriptVersionSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Settings: cloudflare.F(workers.ScriptVersionSettingEditParamsSettings{
-				Bindings: cloudflare.F([]workers.ScriptVersionSettingEditParamsSettingsBinding{workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding(workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
+				Bindings: cloudflare.F([]workers.ScriptVersionSettingEditParamsSettingsBindingUnion{workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
 					Type: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				}), workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding(workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
+				}, workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
 					Type: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				}), workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding(workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
+				}, workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
 					Type: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				})}),
+				}}),
 				CompatibilityDate:  cloudflare.F("2022-04-05"),
 				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
 				Logpush:            cloudflare.F(false),
-				Migrations: cloudflare.F[workers.ScriptVersionSettingEditParamsSettingsMigrations](workers.ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations(workers.ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[workers.ScriptVersionSettingEditParamsSettingsMigrationsUnion](workers.ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
@@ -72,7 +72,7 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
 					}}),
-				})),
+				}),
 				Placement: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsPlacement{
 					Mode: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsPlacementModeSmart),
 				}),

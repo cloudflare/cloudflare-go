@@ -59,9 +59,9 @@ const (
 	// Some values had to fudged a bit, for example by converting a string to an
 	// int, or an enum with extra values.
 	loose exactness = iota
-	// There are some extra arguments
+	// There are some extra arguments, but other wise it matches the union.
 	extras
-	// Exactly right
+	// Exactly right.
 	exact
 )
 

@@ -52,7 +52,7 @@ type IntelSchemasIP struct {
 	// Specifies a reference to the autonomous systems (AS) that the IP address belongs
 	// to.
 	BelongsToRef IntelSchemasIPBelongsToRef `json:"belongs_to_ref"`
-	IP           IntelSchemasIPIP           `json:"ip" format:"ipv4"`
+	IP           IntelSchemasIPIPUnion      `json:"ip" format:"ipv4"`
 	RiskTypes    []interface{}              `json:"risk_types"`
 	JSON         intelSchemasIPJSON         `json:"-"`
 }
@@ -124,13 +124,13 @@ func (r IntelSchemasIPBelongsToRefType) IsKnown() bool {
 }
 
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type IntelSchemasIPIP interface {
-	ImplementsIntelIntelSchemasIpip()
+type IntelSchemasIPIPUnion interface {
+	ImplementsIntelIntelSchemasIpipUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*IntelSchemasIPIP)(nil)).Elem(),
+		reflect.TypeOf((*IntelSchemasIPIPUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,

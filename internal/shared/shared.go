@@ -112,15 +112,62 @@ func (r unnamedSchemaRef102JSON) RawJSON() string {
 	return r.raw
 }
 
+type UnnamedSchemaRef107 struct {
+	// An informative summary of the filter.
+	Description string `json:"description"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression string `json:"expression"`
+	// The unique identifier of the filter.
+	ID string `json:"id"`
+	// When true, indicates that the filter is currently paused.
+	Paused bool `json:"paused"`
+	// A short reference tag. Allows you to select related filters.
+	Ref string `json:"ref"`
+	// When true, indicates that the firewall rule was deleted.
+	Deleted bool                    `json:"deleted"`
+	JSON    unnamedSchemaRef107JSON `json:"-"`
+	union   UnnamedSchemaRef107Union
+}
+
+// unnamedSchemaRef107JSON contains the JSON metadata for the struct
+// [UnnamedSchemaRef107]
+type unnamedSchemaRef107JSON struct {
+	Description apijson.Field
+	Expression  apijson.Field
+	ID          apijson.Field
+	Paused      apijson.Field
+	Ref         apijson.Field
+	Deleted     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r unnamedSchemaRef107JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *UnnamedSchemaRef107) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r UnnamedSchemaRef107) AsUnion() UnnamedSchemaRef107Union {
+	return r.union
+}
+
 // Union satisfied by [filters.FirewallFilter] or
 // [shared.UnnamedSchemaRef107LegacyJhsDeletedFilter].
-type UnnamedSchemaRef107 interface {
+type UnnamedSchemaRef107Union interface {
 	implementsSharedUnnamedSchemaRef107()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef107)(nil)).Elem(),
+		reflect.TypeOf((*UnnamedSchemaRef107Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -187,13 +234,13 @@ func (r unnamedSchemaRef11JSON) RawJSON() string {
 
 // Union satisfied by [shared.UnnamedSchemaRef116Unknown],
 // [shared.UnnamedSchemaRef116Array] or [shared.UnionString].
-type UnnamedSchemaRef116 interface {
-	ImplementsSharedUnnamedSchemaRef116()
+type UnnamedSchemaRef116Union interface {
+	ImplementsSharedUnnamedSchemaRef116Union()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef116)(nil)).Elem(),
+		reflect.TypeOf((*UnnamedSchemaRef116Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -208,7 +255,7 @@ func init() {
 
 type UnnamedSchemaRef116Array []interface{}
 
-func (r UnnamedSchemaRef116Array) ImplementsSharedUnnamedSchemaRef116() {}
+func (r UnnamedSchemaRef116Array) ImplementsSharedUnnamedSchemaRef116Union() {}
 
 // Operating system
 type UnnamedSchemaRef119 string
@@ -279,25 +326,95 @@ func (r unnamedSchemaRef120JSON) RawJSON() string {
 }
 
 // Satisfied by [shared.UnionString], [shared.UnnamedSchemaRef121ArrayParam].
-type UnnamedSchemaRef121Param interface {
-	ImplementsSharedUnnamedSchemaRef121Param()
+type UnnamedSchemaRef121UnionParam interface {
+	ImplementsSharedUnnamedSchemaRef121UnionParam()
 }
 
 type UnnamedSchemaRef121ArrayParam []string
 
-func (r UnnamedSchemaRef121ArrayParam) ImplementsSharedUnnamedSchemaRef121() {}
+func (r UnnamedSchemaRef121ArrayParam) ImplementsSharedUnnamedSchemaRef121UnionParam() {}
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+type UnnamedSchemaRef123 struct {
+	// Cloudflare account ID
+	AccountTag  string      `json:"account_tag"`
+	Connections interface{} `json:"connections,required"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// UUID of the tunnel.
+	ID       string      `json:"id"`
+	Metadata interface{} `json:"metadata,required"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
+	// If `false`, the tunnel must be configured locally on the origin machine.
+	RemoteConfig bool `json:"remote_config"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType UnnamedSchemaRef123TunType `json:"tun_type"`
+	JSON    unnamedSchemaRef123JSON    `json:"-"`
+	union   UnnamedSchemaRef123Union
+}
+
+// unnamedSchemaRef123JSON contains the JSON metadata for the struct
+// [UnnamedSchemaRef123]
+type unnamedSchemaRef123JSON struct {
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	ID              apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	RemoteConfig    apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r unnamedSchemaRef123JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *UnnamedSchemaRef123) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r UnnamedSchemaRef123) AsUnion() UnnamedSchemaRef123Union {
+	return r.union
+}
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // Union satisfied by [shared.UnnamedSchemaRef123TunnelCfdTunnel] or
 // [shared.UnnamedSchemaRef123TunnelWARPConnectorTunnel].
-type UnnamedSchemaRef123 interface {
+type UnnamedSchemaRef123Union interface {
 	implementsSharedUnnamedSchemaRef123()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef123)(nil)).Elem(),
+		reflect.TypeOf((*UnnamedSchemaRef123Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -561,6 +678,25 @@ const (
 func (r UnnamedSchemaRef123TunnelWARPConnectorTunnelTunType) IsKnown() bool {
 	switch r {
 	case UnnamedSchemaRef123TunnelWARPConnectorTunnelTunTypeCfdTunnel, UnnamedSchemaRef123TunnelWARPConnectorTunnelTunTypeWARPConnector, UnnamedSchemaRef123TunnelWARPConnectorTunnelTunTypeIPSec, UnnamedSchemaRef123TunnelWARPConnectorTunnelTunTypeGRE, UnnamedSchemaRef123TunnelWARPConnectorTunnelTunTypeCni:
+		return true
+	}
+	return false
+}
+
+// The type of tunnel.
+type UnnamedSchemaRef123TunType string
+
+const (
+	UnnamedSchemaRef123TunTypeCfdTunnel     UnnamedSchemaRef123TunType = "cfd_tunnel"
+	UnnamedSchemaRef123TunTypeWARPConnector UnnamedSchemaRef123TunType = "warp_connector"
+	UnnamedSchemaRef123TunTypeIPSec         UnnamedSchemaRef123TunType = "ip_sec"
+	UnnamedSchemaRef123TunTypeGRE           UnnamedSchemaRef123TunType = "gre"
+	UnnamedSchemaRef123TunTypeCni           UnnamedSchemaRef123TunType = "cni"
+)
+
+func (r UnnamedSchemaRef123TunType) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef123TunTypeCfdTunnel, UnnamedSchemaRef123TunTypeWARPConnector, UnnamedSchemaRef123TunTypeIPSec, UnnamedSchemaRef123TunTypeGRE, UnnamedSchemaRef123TunTypeCni:
 		return true
 	}
 	return false
@@ -1469,13 +1605,13 @@ func (r unnamedSchemaRef16JSON) RawJSON() string {
 
 // Union satisfied by [shared.UnnamedSchemaRef161Unknown],
 // [shared.UnnamedSchemaRef161Array] or [shared.UnionString].
-type UnnamedSchemaRef161 interface {
-	ImplementsSharedUnnamedSchemaRef161()
+type UnnamedSchemaRef161Union interface {
+	ImplementsSharedUnnamedSchemaRef161Union()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef161)(nil)).Elem(),
+		reflect.TypeOf((*UnnamedSchemaRef161Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1490,7 +1626,7 @@ func init() {
 
 type UnnamedSchemaRef161Array []interface{}
 
-func (r UnnamedSchemaRef161Array) ImplementsSharedUnnamedSchemaRef161() {}
+func (r UnnamedSchemaRef161Array) ImplementsSharedUnnamedSchemaRef161Union() {}
 
 // Extra Cloudflare-specific information about the record.
 type UnnamedSchemaRef162 struct {
@@ -1550,13 +1686,13 @@ func (r UnnamedSchemaRef163) IsKnown() bool {
 }
 
 // Union satisfied by [shared.UnnamedSchemaRef169Unknown] or [shared.UnionString].
-type UnnamedSchemaRef169 interface {
-	ImplementsSharedUnnamedSchemaRef169()
+type UnnamedSchemaRef169Union interface {
+	ImplementsSharedUnnamedSchemaRef169Union()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef169)(nil)).Elem(),
+		reflect.TypeOf((*UnnamedSchemaRef169Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -1567,13 +1703,13 @@ func init() {
 
 // Union satisfied by [shared.UnnamedSchemaRef171Unknown],
 // [shared.UnnamedSchemaRef171Array] or [shared.UnionString].
-type UnnamedSchemaRef171 interface {
-	ImplementsSharedUnnamedSchemaRef171()
+type UnnamedSchemaRef171Union interface {
+	ImplementsSharedUnnamedSchemaRef171Union()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef171)(nil)).Elem(),
+		reflect.TypeOf((*UnnamedSchemaRef171Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1588,16 +1724,16 @@ func init() {
 
 type UnnamedSchemaRef171Array []interface{}
 
-func (r UnnamedSchemaRef171Array) ImplementsSharedUnnamedSchemaRef171() {}
+func (r UnnamedSchemaRef171Array) ImplementsSharedUnnamedSchemaRef171Union() {}
 
 // Union satisfied by [shared.UnnamedSchemaRef173Unknown] or [shared.UnionString].
-type UnnamedSchemaRef173 interface {
-	ImplementsSharedUnnamedSchemaRef173()
+type UnnamedSchemaRef173Union interface {
+	ImplementsSharedUnnamedSchemaRef173Union()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef173)(nil)).Elem(),
+		reflect.TypeOf((*UnnamedSchemaRef173Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -1845,13 +1981,13 @@ func (r unnamedSchemaRef44JSON) RawJSON() string {
 }
 
 // Union satisfied by [shared.UnnamedSchemaRef49Unknown] or [shared.UnionString].
-type UnnamedSchemaRef49 interface {
-	ImplementsSharedUnnamedSchemaRef49()
+type UnnamedSchemaRef49Union interface {
+	ImplementsSharedUnnamedSchemaRef49Union()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef49)(nil)).Elem(),
+		reflect.TypeOf((*UnnamedSchemaRef49Union)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -1913,8 +2049,8 @@ type UnnamedSchemaRef65 struct {
 	// This is the time the tls setting was updated.
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// The tls setting value.
-	Value UnnamedSchemaRef65Value `json:"value"`
-	JSON  unnamedSchemaRef65JSON  `json:"-"`
+	Value UnnamedSchemaRef65ValueUnion `json:"value"`
+	JSON  unnamedSchemaRef65JSON       `json:"-"`
 }
 
 // unnamedSchemaRef65JSON contains the JSON metadata for the struct
@@ -1941,13 +2077,13 @@ func (r unnamedSchemaRef65JSON) RawJSON() string {
 //
 // Union satisfied by [shared.UnionFloat], [shared.UnionString] or
 // [shared.UnnamedSchemaRef65ValueArray].
-type UnnamedSchemaRef65Value interface {
-	ImplementsSharedUnnamedSchemaRef65Value()
+type UnnamedSchemaRef65ValueUnion interface {
+	ImplementsSharedUnnamedSchemaRef65ValueUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UnnamedSchemaRef65Value)(nil)).Elem(),
+		reflect.TypeOf((*UnnamedSchemaRef65ValueUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -1966,7 +2102,7 @@ func init() {
 
 type UnnamedSchemaRef65ValueArray []string
 
-func (r UnnamedSchemaRef65ValueArray) ImplementsSharedUnnamedSchemaRef65Value() {}
+func (r UnnamedSchemaRef65ValueArray) ImplementsSharedUnnamedSchemaRef65ValueUnion() {}
 
 // A globally unique name for an identity or service provider.
 type UnnamedSchemaRef75 string

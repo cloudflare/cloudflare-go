@@ -86,7 +86,7 @@ func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query Gatew
 }
 
 // Deletes a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, params GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponse, err error) {
+func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, params GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", params.AccountID, locationID)
@@ -181,13 +181,13 @@ func (r zeroTrustGatewayLocationsNetworkJSON) RawJSON() string {
 
 // Union satisfied by [zero_trust.GatewayLocationDeleteResponseUnknown] or
 // [shared.UnionString].
-type GatewayLocationDeleteResponse interface {
-	ImplementsZeroTrustGatewayLocationDeleteResponse()
+type GatewayLocationDeleteResponseUnion interface {
+	ImplementsZeroTrustGatewayLocationDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayLocationDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*GatewayLocationDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -346,9 +346,9 @@ func (r GatewayLocationDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLocationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   GatewayLocationDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   GatewayLocationDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationDeleteResponseEnvelopeJSON    `json:"-"`

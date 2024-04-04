@@ -35,7 +35,7 @@ func NewTunnelConfigurationService(opts ...option.RequestOption) (r *TunnelConfi
 }
 
 // Adds or updates the configuration for a remotely-managed tunnel.
-func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponse, err error) {
+func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, tunnelID)
@@ -48,7 +48,7 @@ func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string
 }
 
 // Gets the configuration for a remotely-managed tunnel
-func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelConfigurationGetParams, opts ...option.RequestOption) (res *TunnelConfigurationGetResponse, err error) {
+func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelConfigurationGetParams, opts ...option.RequestOption) (res *TunnelConfigurationGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", query.AccountID, tunnelID)
@@ -62,13 +62,13 @@ func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, q
 
 // Union satisfied by [zero_trust.TunnelConfigurationUpdateResponseUnknown],
 // [zero_trust.TunnelConfigurationUpdateResponseArray] or [shared.UnionString].
-type TunnelConfigurationUpdateResponse interface {
-	ImplementsZeroTrustTunnelConfigurationUpdateResponse()
+type TunnelConfigurationUpdateResponseUnion interface {
+	ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelConfigurationUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*TunnelConfigurationUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -83,18 +83,18 @@ func init() {
 
 type TunnelConfigurationUpdateResponseArray []interface{}
 
-func (r TunnelConfigurationUpdateResponseArray) ImplementsZeroTrustTunnelConfigurationUpdateResponse() {
+func (r TunnelConfigurationUpdateResponseArray) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion() {
 }
 
 // Union satisfied by [zero_trust.TunnelConfigurationGetResponseUnknown],
 // [zero_trust.TunnelConfigurationGetResponseArray] or [shared.UnionString].
-type TunnelConfigurationGetResponse interface {
-	ImplementsZeroTrustTunnelConfigurationGetResponse()
+type TunnelConfigurationGetResponseUnion interface {
+	ImplementsZeroTrustTunnelConfigurationGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelConfigurationGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*TunnelConfigurationGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -109,7 +109,8 @@ func init() {
 
 type TunnelConfigurationGetResponseArray []interface{}
 
-func (r TunnelConfigurationGetResponseArray) ImplementsZeroTrustTunnelConfigurationGetResponse() {}
+func (r TunnelConfigurationGetResponseArray) ImplementsZeroTrustTunnelConfigurationGetResponseUnion() {
+}
 
 type TunnelConfigurationUpdateParams struct {
 	// Identifier
@@ -290,9 +291,9 @@ func (r TunnelConfigurationUpdateParamsConfigWARPRouting) MarshalJSON() (data []
 }
 
 type TunnelConfigurationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   TunnelConfigurationUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
+	Result   TunnelConfigurationUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConfigurationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -338,9 +339,9 @@ type TunnelConfigurationGetParams struct {
 }
 
 type TunnelConfigurationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   TunnelConfigurationGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   TunnelConfigurationGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConfigurationGetResponseEnvelopeJSON    `json:"-"`

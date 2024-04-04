@@ -38,7 +38,7 @@ func NewAnalyticsEventSummaryService(opts ...option.RequestOption) (r *Analytics
 }
 
 // Retrieves a list of summarised aggregate metrics over a given time period.
-func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, query AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *AnalyticsEventSummaryGetResponse, err error) {
+func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, query AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *AnalyticsEventSummaryGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsEventSummaryGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/summary", zone)
@@ -52,13 +52,13 @@ func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, que
 
 // Union satisfied by [spectrum.AnalyticsEventSummaryGetResponseUnknown] or
 // [shared.UnionString].
-type AnalyticsEventSummaryGetResponse interface {
-	ImplementsSpectrumAnalyticsEventSummaryGetResponse()
+type AnalyticsEventSummaryGetResponseUnion interface {
+	ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AnalyticsEventSummaryGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*AnalyticsEventSummaryGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -163,9 +163,9 @@ func (r AnalyticsEventSummaryGetParamsMetric) IsKnown() bool {
 }
 
 type AnalyticsEventSummaryGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   AnalyticsEventSummaryGetResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Result   AnalyticsEventSummaryGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AnalyticsEventSummaryGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsEventSummaryGetResponseEnvelopeJSON    `json:"-"`

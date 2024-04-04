@@ -195,7 +195,7 @@ func (r ZoneSettingSecurityHeaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingSecurityHeaderParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingSecurityHeaderParam) implementsZonesSettingEditParamsItemUnion() {}
 
 // Current value of the zone setting.
 type ZoneSettingSecurityHeaderValueParam struct {

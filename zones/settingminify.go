@@ -209,7 +209,7 @@ func (r ZoneSettingMinifyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingMinifyParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingMinifyParam) implementsZonesSettingEditParamsItemUnion() {}
 
 // Current value of the zone setting.
 type ZoneSettingMinifyValueParam struct {

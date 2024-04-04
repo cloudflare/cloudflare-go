@@ -55,7 +55,7 @@ func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, 
 }
 
 // Deletes a DLP custom profile.
-func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, params DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef169, err error) {
+func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, params DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef169Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", params.AccountID, profileID)
@@ -458,7 +458,7 @@ type DLPProfileCustomUpdateParams struct {
 	OCREnabled param.Field[bool] `json:"ocr_enabled"`
 	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
 	// Microsoft Information Protection profiles).
-	SharedEntries param.Field[[]DLPProfileCustomUpdateParamsSharedEntry] `json:"shared_entries"`
+	SharedEntries param.Field[[]DLPProfileCustomUpdateParamsSharedEntryUnion] `json:"shared_entries"`
 }
 
 func (r DLPProfileCustomUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -535,12 +535,26 @@ func (r DLPProfileCustomUpdateParamsEntriesPatternValidation) IsKnown() bool {
 }
 
 // Properties of a predefined entry in a custom profile
+type DLPProfileCustomUpdateParamsSharedEntry struct {
+	// Whether the entry is enabled or not.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r DLPProfileCustomUpdateParamsSharedEntry) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DLPProfileCustomUpdateParamsSharedEntry) implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntryUnion() {
+}
+
+// Properties of a predefined entry in a custom profile
 //
 // Satisfied by
 // [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined],
-// [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration].
-type DLPProfileCustomUpdateParamsSharedEntry interface {
-	implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntry()
+// [zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration],
+// [DLPProfileCustomUpdateParamsSharedEntry].
+type DLPProfileCustomUpdateParamsSharedEntryUnion interface {
+	implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntryUnion()
 }
 
 // Properties of a predefined entry in a custom profile
@@ -553,7 +567,7 @@ func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined)
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined) implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntry() {
+func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined) implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntryUnion() {
 }
 
 // Properties of an integration entry in a custom profile
@@ -566,7 +580,7 @@ func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration
 	return apijson.MarshalRoot(r)
 }
 
-func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration) implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntry() {
+func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration) implementsZeroTrustDLPProfileCustomUpdateParamsSharedEntryUnion() {
 }
 
 type DLPProfileCustomDeleteParams struct {
@@ -580,9 +594,9 @@ func (r DLPProfileCustomDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileCustomDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef169 `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef169Union `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileCustomDeleteResponseEnvelopeJSON    `json:"-"`

@@ -77,7 +77,7 @@ func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...
 }
 
 // Deletes a queue.
-func (r *QueueService) Delete(ctx context.Context, queueID string, params QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponse, err error) {
+func (r *QueueService) Delete(ctx context.Context, queueID string, params QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
@@ -193,13 +193,13 @@ func (r queueListResponseJSON) RawJSON() string {
 
 // Union satisfied by [queues.QueueDeleteResponseUnknown],
 // [queues.QueueDeleteResponseArray] or [shared.UnionString].
-type QueueDeleteResponse interface {
-	ImplementsQueuesQueueDeleteResponse()
+type QueueDeleteResponseUnion interface {
+	ImplementsQueuesQueueDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*QueueDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*QueueDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -214,7 +214,7 @@ func init() {
 
 type QueueDeleteResponseArray []interface{}
 
-func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponse() {}
+func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponseUnion() {}
 
 type QueueGetResponse struct {
 	Consumers           interface{}          `json:"consumers"`
@@ -549,9 +549,9 @@ func (r QueueDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   QueueDeleteResponse   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   QueueDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueDeleteResponseEnvelopeResultInfo `json:"result_info"`

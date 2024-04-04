@@ -159,7 +159,7 @@ func (r ZoneSettingIPV6Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingIPV6Param) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingIPV6Param) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingIPV6EditParams struct {
 	// Identifier

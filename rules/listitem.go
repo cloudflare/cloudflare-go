@@ -112,7 +112,7 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, params List
 }
 
 // Fetches a list item in the list.
-func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, listID string, itemID string, opts ...option.RequestOption) (res *ListItemGetResponse, err error) {
+func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, listID string, itemID string, opts ...option.RequestOption) (res *ListItemGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ListItemGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items/%s", accountIdentifier, listID, itemID)
@@ -198,13 +198,13 @@ func (r listItemDeleteResponseJSON) RawJSON() string {
 // Union satisfied by [shared.UnionString],
 // [rules.ListItemGetResponseListsItemRedirect],
 // [rules.ListItemGetResponseListsItemHostname] or [shared.UnionInt].
-type ListItemGetResponse interface {
-	ImplementsRulesListItemGetResponse()
+type ListItemGetResponseUnion interface {
+	ImplementsRulesListItemGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ListItemGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*ListItemGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -259,7 +259,7 @@ func (r listItemGetResponseListsItemRedirectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ListItemGetResponseListsItemRedirect) ImplementsRulesListItemGetResponse() {}
+func (r ListItemGetResponseListsItemRedirect) ImplementsRulesListItemGetResponseUnion() {}
 
 type ListItemGetResponseListsItemRedirectStatusCode int64
 
@@ -301,7 +301,7 @@ func (r listItemGetResponseListsItemHostnameJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ListItemGetResponseListsItemHostname) ImplementsRulesListItemGetResponse() {}
+func (r ListItemGetResponseListsItemHostname) ImplementsRulesListItemGetResponseUnion() {}
 
 type ListItemNewParams struct {
 	// Identifier
@@ -623,7 +623,7 @@ type ListItemGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 	// maximum of /64.
-	Result ListItemGetResponse `json:"result,required,nullable"`
+	Result ListItemGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListItemGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemGetResponseEnvelopeJSON    `json:"-"`

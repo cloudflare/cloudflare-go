@@ -38,7 +38,7 @@ func NewMembershipService(opts ...option.RequestOption) (r *MembershipService) {
 }
 
 // Accept or reject this account invitation.
-func (r *MembershipService) Update(ctx context.Context, membershipID string, body MembershipUpdateParams, opts ...option.RequestOption) (res *MembershipUpdateResponse, err error) {
+func (r *MembershipService) Update(ctx context.Context, membershipID string, body MembershipUpdateParams, opts ...option.RequestOption) (res *MembershipUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MembershipUpdateResponseEnvelope
 	path := fmt.Sprintf("memberships/%s", membershipID)
@@ -87,7 +87,7 @@ func (r *MembershipService) Delete(ctx context.Context, membershipID string, bod
 }
 
 // Get a specific membership.
-func (r *MembershipService) Get(ctx context.Context, membershipID string, opts ...option.RequestOption) (res *MembershipGetResponse, err error) {
+func (r *MembershipService) Get(ctx context.Context, membershipID string, opts ...option.RequestOption) (res *MembershipGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MembershipGetResponseEnvelope
 	path := fmt.Sprintf("memberships/%s", membershipID)
@@ -157,13 +157,13 @@ func (r MembershipStatus) IsKnown() bool {
 
 // Union satisfied by [memberships.MembershipUpdateResponseUnknown] or
 // [shared.UnionString].
-type MembershipUpdateResponse interface {
-	ImplementsMembershipsMembershipUpdateResponse()
+type MembershipUpdateResponseUnion interface {
+	ImplementsMembershipsMembershipUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*MembershipUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*MembershipUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -196,13 +196,13 @@ func (r membershipDeleteResponseJSON) RawJSON() string {
 
 // Union satisfied by [memberships.MembershipGetResponseUnknown] or
 // [shared.UnionString].
-type MembershipGetResponse interface {
-	ImplementsMembershipsMembershipGetResponse()
+type MembershipGetResponseUnion interface {
+	ImplementsMembershipsMembershipGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*MembershipGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*MembershipGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -237,9 +237,9 @@ func (r MembershipUpdateParamsStatus) IsKnown() bool {
 }
 
 type MembershipUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   MembershipUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   MembershipUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success MembershipUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    membershipUpdateResponseEnvelopeJSON    `json:"-"`
@@ -419,9 +419,9 @@ func (r MembershipDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MembershipGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MembershipGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   MembershipGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success MembershipGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    membershipGetResponseEnvelopeJSON    `json:"-"`

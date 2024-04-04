@@ -58,16 +58,59 @@ func (r *GatewayAppTypeService) ListAutoPaging(ctx context.Context, query Gatewa
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
+type ZeroTrustGatewayAppTypes struct {
+	// The identifier for the type of this application. There can be many applications
+	// with the same type. This refers to the `id` of a returned application type.
+	ApplicationTypeID int64     `json:"application_type_id"`
+	CreatedAt         time.Time `json:"created_at" format:"date-time"`
+	// The identifier for this application. There is only one application per ID.
+	ID int64 `json:"id"`
+	// The name of the application or application type.
+	Name string `json:"name"`
+	// A short summary of applications with this type.
+	Description string                       `json:"description"`
+	JSON        zeroTrustGatewayAppTypesJSON `json:"-"`
+	union       ZeroTrustGatewayAppTypesUnion
+}
+
+// zeroTrustGatewayAppTypesJSON contains the JSON metadata for the struct
+// [ZeroTrustGatewayAppTypes]
+type zeroTrustGatewayAppTypesJSON struct {
+	ApplicationTypeID apijson.Field
+	CreatedAt         apijson.Field
+	ID                apijson.Field
+	Name              apijson.Field
+	Description       apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r zeroTrustGatewayAppTypesJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ZeroTrustGatewayAppTypes) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ZeroTrustGatewayAppTypes) AsUnion() ZeroTrustGatewayAppTypesUnion {
+	return r.union
+}
+
 // Union satisfied by
 // [zero_trust.ZeroTrustGatewayAppTypesZeroTrustGatewayApplication] or
 // [zero_trust.ZeroTrustGatewayAppTypesZeroTrustGatewayApplicationType].
-type ZeroTrustGatewayAppTypes interface {
+type ZeroTrustGatewayAppTypesUnion interface {
 	implementsZeroTrustZeroTrustGatewayAppTypes()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZeroTrustGatewayAppTypes)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustGatewayAppTypesUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,

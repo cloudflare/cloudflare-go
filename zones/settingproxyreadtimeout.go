@@ -140,7 +140,7 @@ func (r ZoneSettingProxyReadTimeoutParam) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingProxyReadTimeoutParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingProxyReadTimeoutParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingProxyReadTimeoutEditParams struct {
 	// Identifier

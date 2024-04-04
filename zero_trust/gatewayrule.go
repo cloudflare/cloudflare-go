@@ -86,7 +86,7 @@ func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRu
 }
 
 // Deletes a Zero Trust Gateway rule.
-func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, params GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponse, err error) {
+func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, params GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", params.AccountID, ruleID)
@@ -717,13 +717,13 @@ func (r zeroTrustGatewayRulesScheduleJSON) RawJSON() string {
 
 // Union satisfied by [zero_trust.GatewayRuleDeleteResponseUnknown] or
 // [shared.UnionString].
-type GatewayRuleDeleteResponse interface {
-	ImplementsZeroTrustGatewayRuleDeleteResponse()
+type GatewayRuleDeleteResponseUnion interface {
+	ImplementsZeroTrustGatewayRuleDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayRuleDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*GatewayRuleDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -1552,9 +1552,9 @@ func (r GatewayRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   GatewayRuleDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   GatewayRuleDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`

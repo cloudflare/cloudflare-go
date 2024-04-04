@@ -49,7 +49,7 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 }
 
 // Edit part of your user details.
-func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...option.RequestOption) (res *UserEditResponse, err error) {
+func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...option.RequestOption) (res *UserEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UserEditResponseEnvelope
 	path := "user"
@@ -62,7 +62,7 @@ func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...opt
 }
 
 // User Details
-func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (res *UserGetResponse, err error) {
+func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (res *UserGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UserGetResponseEnvelope
 	path := "user"
@@ -75,13 +75,13 @@ func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (re
 }
 
 // Union satisfied by [user.UserEditResponseUnknown] or [shared.UnionString].
-type UserEditResponse interface {
-	ImplementsUserUserEditResponse()
+type UserEditResponseUnion interface {
+	ImplementsUserUserEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UserEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*UserEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -91,13 +91,13 @@ func init() {
 }
 
 // Union satisfied by [user.UserGetResponseUnknown] or [shared.UnionString].
-type UserGetResponse interface {
-	ImplementsUserUserGetResponse()
+type UserGetResponseUnion interface {
+	ImplementsUserUserGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UserGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*UserGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -126,7 +126,7 @@ func (r UserEditParams) MarshalJSON() (data []byte, err error) {
 type UserEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UserEditResponse      `json:"result,required"`
+	Result   UserEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success UserEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userEditResponseEnvelopeJSON    `json:"-"`
@@ -169,7 +169,7 @@ func (r UserEditResponseEnvelopeSuccess) IsKnown() bool {
 type UserGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UserGetResponse       `json:"result,required"`
+	Result   UserGetResponseUnion  `json:"result,required"`
 	// Whether the API call was successful
 	Success UserGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    userGetResponseEnvelopeJSON    `json:"-"`

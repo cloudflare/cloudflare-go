@@ -35,13 +35,13 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 		Enabled:   cloudflare.F(true),
 		Mechanisms: cloudflare.F(map[string][]alerting.PolicyNewParamsMechanisms{
 			"email": {{
-				ID: cloudflare.F[alerting.PolicyNewParamsMechanismsID](shared.UnionString("test@example.com")),
+				ID: cloudflare.F[alerting.PolicyNewParamsMechanismsIDUnion](shared.UnionString("test@example.com")),
 			}},
 			"pagerduty": {{
-				ID: cloudflare.F[alerting.PolicyNewParamsMechanismsID](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+				ID: cloudflare.F[alerting.PolicyNewParamsMechanismsIDUnion](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
 			}},
 			"webhooks": {{
-				ID: cloudflare.F[alerting.PolicyNewParamsMechanismsID](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+				ID: cloudflare.F[alerting.PolicyNewParamsMechanismsIDUnion](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 			}},
 		}),
 		Name:        cloudflare.F("SSL Notification Event Policy"),
@@ -164,13 +164,13 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Mechanisms: cloudflare.F(map[string][]alerting.PolicyUpdateParamsMechanisms{
 				"email": {{
-					ID: cloudflare.F[alerting.PolicyUpdateParamsMechanismsID](shared.UnionString("test@example.com")),
+					ID: cloudflare.F[alerting.PolicyUpdateParamsMechanismsIDUnion](shared.UnionString("test@example.com")),
 				}},
 				"pagerduty": {{
-					ID: cloudflare.F[alerting.PolicyUpdateParamsMechanismsID](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+					ID: cloudflare.F[alerting.PolicyUpdateParamsMechanismsIDUnion](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
 				}},
 				"webhooks": {{
-					ID: cloudflare.F[alerting.PolicyUpdateParamsMechanismsID](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+					ID: cloudflare.F[alerting.PolicyUpdateParamsMechanismsIDUnion](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 				}},
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),

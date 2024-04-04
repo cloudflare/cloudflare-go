@@ -35,13 +35,13 @@ func TestDevicePostureNewWithOptionalParams(t *testing.T) {
 		Type:        cloudflare.F(zero_trust.DevicePostureNewParamsTypeFile),
 		Description: cloudflare.F("The rule for admin serial numbers"),
 		Expiration:  cloudflare.F("1h"),
-		Input: cloudflare.F[zero_trust.DevicePostureNewParamsInput](zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequest(zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequest{
+		Input: cloudflare.F[zero_trust.DevicePostureNewParamsInputUnion](zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequest{
 			Exists:          cloudflare.F(true),
 			OperatingSystem: cloudflare.F(shared.UnnamedSchemaRef119Linux),
 			Path:            cloudflare.F("/bin/cat"),
 			Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 			Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
-		})),
+		}),
 		Match: cloudflare.F([]zero_trust.DevicePostureNewParamsMatch{{
 			Platform: cloudflare.F(zero_trust.DevicePostureNewParamsMatchPlatformWindows),
 		}, {
@@ -83,13 +83,13 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 			Type:        cloudflare.F(zero_trust.DevicePostureUpdateParamsTypeFile),
 			Description: cloudflare.F("The rule for admin serial numbers"),
 			Expiration:  cloudflare.F("1h"),
-			Input: cloudflare.F[zero_trust.DevicePostureUpdateParamsInput](zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest(zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest{
+			Input: cloudflare.F[zero_trust.DevicePostureUpdateParamsInputUnion](zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest{
 				Exists:          cloudflare.F(true),
 				OperatingSystem: cloudflare.F(shared.UnnamedSchemaRef119Linux),
 				Path:            cloudflare.F("/bin/cat"),
 				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
-			})),
+			}),
 			Match: cloudflare.F([]zero_trust.DevicePostureUpdateParamsMatch{{
 				Platform: cloudflare.F(zero_trust.DevicePostureUpdateParamsMatchPlatformWindows),
 			}, {

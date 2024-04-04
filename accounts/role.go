@@ -58,7 +58,7 @@ func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, 
 }
 
 // Get information about a specific role for an account.
-func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponse, err error) {
+func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RoleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/roles/%v", query.AccountID, roleID)
@@ -171,13 +171,13 @@ func (r roleListResponseJSON) RawJSON() string {
 }
 
 // Union satisfied by [accounts.RoleGetResponseUnknown] or [shared.UnionString].
-type RoleGetResponse interface {
-	ImplementsAccountsRoleGetResponse()
+type RoleGetResponseUnion interface {
+	ImplementsAccountsRoleGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RoleGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*RoleGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -197,7 +197,7 @@ type RoleGetParams struct {
 type RoleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RoleGetResponse       `json:"result,required"`
+	Result   RoleGetResponseUnion  `json:"result,required"`
 	// Whether the API call was successful
 	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    roleGetResponseEnvelopeJSON    `json:"-"`

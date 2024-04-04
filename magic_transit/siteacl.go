@@ -170,8 +170,8 @@ type SiteACLNewResponseACLsLAN1 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLNewResponseACLsLAN1Subnet `json:"subnets"`
-	JSON    siteACLNewResponseACLsLan1JSON     `json:"-"`
+	Subnets []SiteACLNewResponseACLsLAN1SubnetsUnion `json:"subnets"`
+	JSON    siteACLNewResponseACLsLan1JSON           `json:"-"`
 }
 
 // siteACLNewResponseACLsLan1JSON contains the JSON metadata for the struct
@@ -196,13 +196,13 @@ func (r siteACLNewResponseACLsLan1JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLNewResponseACLsLAN1Subnet interface {
-	ImplementsMagicTransitSiteACLNewResponseACLsLan1Subnet()
+type SiteACLNewResponseACLsLAN1SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLNewResponseACLsLan1SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLNewResponseACLsLAN1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLNewResponseACLsLAN1SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -225,8 +225,8 @@ type SiteACLNewResponseACLsLAN2 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLNewResponseACLsLAN2Subnet `json:"subnets"`
-	JSON    siteACLNewResponseACLsLan2JSON     `json:"-"`
+	Subnets []SiteACLNewResponseACLsLAN2SubnetsUnion `json:"subnets"`
+	JSON    siteACLNewResponseACLsLan2JSON           `json:"-"`
 }
 
 // siteACLNewResponseACLsLan2JSON contains the JSON metadata for the struct
@@ -251,13 +251,13 @@ func (r siteACLNewResponseACLsLan2JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLNewResponseACLsLAN2Subnet interface {
-	ImplementsMagicTransitSiteACLNewResponseACLsLan2Subnet()
+type SiteACLNewResponseACLsLAN2SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLNewResponseACLsLan2SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLNewResponseACLsLAN2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLNewResponseACLsLAN2SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -343,8 +343,8 @@ type SiteACLUpdateResponseACLLAN1 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLUpdateResponseACLLAN1Subnet `json:"subnets"`
-	JSON    siteACLUpdateResponseAcllan1JSON     `json:"-"`
+	Subnets []SiteACLUpdateResponseACLLAN1SubnetsUnion `json:"subnets"`
+	JSON    siteACLUpdateResponseAcllan1JSON           `json:"-"`
 }
 
 // siteACLUpdateResponseAcllan1JSON contains the JSON metadata for the struct
@@ -369,13 +369,13 @@ func (r siteACLUpdateResponseAcllan1JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLUpdateResponseACLLAN1Subnet interface {
-	ImplementsMagicTransitSiteACLUpdateResponseAcllan1Subnet()
+type SiteACLUpdateResponseACLLAN1SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLUpdateResponseAcllan1SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLUpdateResponseACLLAN1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLUpdateResponseACLLAN1SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -398,8 +398,8 @@ type SiteACLUpdateResponseACLLAN2 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLUpdateResponseACLLAN2Subnet `json:"subnets"`
-	JSON    siteACLUpdateResponseAcllan2JSON     `json:"-"`
+	Subnets []SiteACLUpdateResponseACLLAN2SubnetsUnion `json:"subnets"`
+	JSON    siteACLUpdateResponseAcllan2JSON           `json:"-"`
 }
 
 // siteACLUpdateResponseAcllan2JSON contains the JSON metadata for the struct
@@ -424,13 +424,13 @@ func (r siteACLUpdateResponseAcllan2JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLUpdateResponseACLLAN2Subnet interface {
-	ImplementsMagicTransitSiteACLUpdateResponseAcllan2Subnet()
+type SiteACLUpdateResponseACLLAN2SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLUpdateResponseAcllan2SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLUpdateResponseACLLAN2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLUpdateResponseACLLAN2SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -515,8 +515,8 @@ type SiteACLListResponseACLsLAN1 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLListResponseACLsLAN1Subnet `json:"subnets"`
-	JSON    siteACLListResponseACLsLan1JSON     `json:"-"`
+	Subnets []SiteACLListResponseACLsLAN1SubnetsUnion `json:"subnets"`
+	JSON    siteACLListResponseACLsLan1JSON           `json:"-"`
 }
 
 // siteACLListResponseACLsLan1JSON contains the JSON metadata for the struct
@@ -541,13 +541,13 @@ func (r siteACLListResponseACLsLan1JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLListResponseACLsLAN1Subnet interface {
-	ImplementsMagicTransitSiteACLListResponseACLsLan1Subnet()
+type SiteACLListResponseACLsLAN1SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLListResponseACLsLan1SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLListResponseACLsLAN1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLListResponseACLsLAN1SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -570,8 +570,8 @@ type SiteACLListResponseACLsLAN2 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLListResponseACLsLAN2Subnet `json:"subnets"`
-	JSON    siteACLListResponseACLsLan2JSON     `json:"-"`
+	Subnets []SiteACLListResponseACLsLAN2SubnetsUnion `json:"subnets"`
+	JSON    siteACLListResponseACLsLan2JSON           `json:"-"`
 }
 
 // siteACLListResponseACLsLan2JSON contains the JSON metadata for the struct
@@ -596,13 +596,13 @@ func (r siteACLListResponseACLsLan2JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLListResponseACLsLAN2Subnet interface {
-	ImplementsMagicTransitSiteACLListResponseACLsLan2Subnet()
+type SiteACLListResponseACLsLAN2SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLListResponseACLsLan2SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLListResponseACLsLAN2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLListResponseACLsLAN2SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -690,8 +690,8 @@ type SiteACLDeleteResponseDeletedACLLAN1 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLDeleteResponseDeletedACLLAN1Subnet `json:"subnets"`
-	JSON    siteACLDeleteResponseDeletedAcllan1JSON     `json:"-"`
+	Subnets []SiteACLDeleteResponseDeletedACLLAN1SubnetsUnion `json:"subnets"`
+	JSON    siteACLDeleteResponseDeletedAcllan1JSON           `json:"-"`
 }
 
 // siteACLDeleteResponseDeletedAcllan1JSON contains the JSON metadata for the
@@ -716,13 +716,13 @@ func (r siteACLDeleteResponseDeletedAcllan1JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLDeleteResponseDeletedACLLAN1Subnet interface {
-	ImplementsMagicTransitSiteACLDeleteResponseDeletedAcllan1Subnet()
+type SiteACLDeleteResponseDeletedACLLAN1SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLDeleteResponseDeletedAcllan1SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLDeleteResponseDeletedACLLAN1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLDeleteResponseDeletedACLLAN1SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -745,8 +745,8 @@ type SiteACLDeleteResponseDeletedACLLAN2 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLDeleteResponseDeletedACLLAN2Subnet `json:"subnets"`
-	JSON    siteACLDeleteResponseDeletedAcllan2JSON     `json:"-"`
+	Subnets []SiteACLDeleteResponseDeletedACLLAN2SubnetsUnion `json:"subnets"`
+	JSON    siteACLDeleteResponseDeletedAcllan2JSON           `json:"-"`
 }
 
 // siteACLDeleteResponseDeletedAcllan2JSON contains the JSON metadata for the
@@ -771,13 +771,13 @@ func (r siteACLDeleteResponseDeletedAcllan2JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLDeleteResponseDeletedACLLAN2Subnet interface {
-	ImplementsMagicTransitSiteACLDeleteResponseDeletedAcllan2Subnet()
+type SiteACLDeleteResponseDeletedACLLAN2SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLDeleteResponseDeletedAcllan2SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLDeleteResponseDeletedACLLAN2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLDeleteResponseDeletedACLLAN2SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -863,8 +863,8 @@ type SiteACLGetResponseACLLAN1 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLGetResponseACLLAN1Subnet `json:"subnets"`
-	JSON    siteACLGetResponseAcllan1JSON     `json:"-"`
+	Subnets []SiteACLGetResponseACLLAN1SubnetsUnion `json:"subnets"`
+	JSON    siteACLGetResponseAcllan1JSON           `json:"-"`
 }
 
 // siteACLGetResponseAcllan1JSON contains the JSON metadata for the struct
@@ -889,13 +889,13 @@ func (r siteACLGetResponseAcllan1JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLGetResponseACLLAN1Subnet interface {
-	ImplementsMagicTransitSiteACLGetResponseAcllan1Subnet()
+type SiteACLGetResponseACLLAN1SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLGetResponseAcllan1SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLGetResponseACLLAN1Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLGetResponseACLLAN1SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -918,8 +918,8 @@ type SiteACLGetResponseACLLAN2 struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SiteACLGetResponseACLLAN2Subnet `json:"subnets"`
-	JSON    siteACLGetResponseAcllan2JSON     `json:"-"`
+	Subnets []SiteACLGetResponseACLLAN2SubnetsUnion `json:"subnets"`
+	JSON    siteACLGetResponseAcllan2JSON           `json:"-"`
 }
 
 // siteACLGetResponseAcllan2JSON contains the JSON metadata for the struct
@@ -944,13 +944,13 @@ func (r siteACLGetResponseAcllan2JSON) RawJSON() string {
 // A valid IPv4 address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SiteACLGetResponseACLLAN2Subnet interface {
-	ImplementsMagicTransitSiteACLGetResponseAcllan2Subnet()
+type SiteACLGetResponseACLLAN2SubnetsUnion interface {
+	ImplementsMagicTransitSiteACLGetResponseAcllan2SubnetsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SiteACLGetResponseACLLAN2Subnet)(nil)).Elem(),
+		reflect.TypeOf((*SiteACLGetResponseACLLAN2SubnetsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -1002,7 +1002,7 @@ type SiteACLNewParamsACLLAN1 struct {
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets param.Field[[]SiteACLNewParamsACLLAN1Subnet] `json:"subnets"`
+	Subnets param.Field[[]SiteACLNewParamsACLLAN1SubnetUnion] `json:"subnets"`
 }
 
 func (r SiteACLNewParamsACLLAN1) MarshalJSON() (data []byte, err error) {
@@ -1012,8 +1012,8 @@ func (r SiteACLNewParamsACLLAN1) MarshalJSON() (data []byte, err error) {
 // A valid IPv4 address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type SiteACLNewParamsACLLAN1Subnet interface {
-	ImplementsMagicTransitSiteACLNewParamsAcllan1Subnet()
+type SiteACLNewParamsACLLAN1SubnetUnion interface {
+	ImplementsMagicTransitSiteACLNewParamsAcllan1SubnetUnion()
 }
 
 type SiteACLNewParamsACLLAN2 struct {
@@ -1026,7 +1026,7 @@ type SiteACLNewParamsACLLAN2 struct {
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets param.Field[[]SiteACLNewParamsACLLAN2Subnet] `json:"subnets"`
+	Subnets param.Field[[]SiteACLNewParamsACLLAN2SubnetUnion] `json:"subnets"`
 }
 
 func (r SiteACLNewParamsACLLAN2) MarshalJSON() (data []byte, err error) {
@@ -1036,8 +1036,8 @@ func (r SiteACLNewParamsACLLAN2) MarshalJSON() (data []byte, err error) {
 // A valid IPv4 address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type SiteACLNewParamsACLLAN2Subnet interface {
-	ImplementsMagicTransitSiteACLNewParamsAcllan2Subnet()
+type SiteACLNewParamsACLLAN2SubnetUnion interface {
+	ImplementsMagicTransitSiteACLNewParamsAcllan2SubnetUnion()
 }
 
 type SiteACLNewResponseEnvelope struct {
@@ -1122,7 +1122,7 @@ type SiteACLUpdateParamsACLLAN1 struct {
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets param.Field[[]SiteACLUpdateParamsACLLAN1Subnet] `json:"subnets"`
+	Subnets param.Field[[]SiteACLUpdateParamsACLLAN1SubnetUnion] `json:"subnets"`
 }
 
 func (r SiteACLUpdateParamsACLLAN1) MarshalJSON() (data []byte, err error) {
@@ -1132,8 +1132,8 @@ func (r SiteACLUpdateParamsACLLAN1) MarshalJSON() (data []byte, err error) {
 // A valid IPv4 address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type SiteACLUpdateParamsACLLAN1Subnet interface {
-	ImplementsMagicTransitSiteACLUpdateParamsAcllan1Subnet()
+type SiteACLUpdateParamsACLLAN1SubnetUnion interface {
+	ImplementsMagicTransitSiteACLUpdateParamsAcllan1SubnetUnion()
 }
 
 type SiteACLUpdateParamsACLLAN2 struct {
@@ -1146,7 +1146,7 @@ type SiteACLUpdateParamsACLLAN2 struct {
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets param.Field[[]SiteACLUpdateParamsACLLAN2Subnet] `json:"subnets"`
+	Subnets param.Field[[]SiteACLUpdateParamsACLLAN2SubnetUnion] `json:"subnets"`
 }
 
 func (r SiteACLUpdateParamsACLLAN2) MarshalJSON() (data []byte, err error) {
@@ -1156,8 +1156,8 @@ func (r SiteACLUpdateParamsACLLAN2) MarshalJSON() (data []byte, err error) {
 // A valid IPv4 address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type SiteACLUpdateParamsACLLAN2Subnet interface {
-	ImplementsMagicTransitSiteACLUpdateParamsAcllan2Subnet()
+type SiteACLUpdateParamsACLLAN2SubnetUnion interface {
+	ImplementsMagicTransitSiteACLUpdateParamsAcllan2SubnetUnion()
 }
 
 type SiteACLUpdateResponseEnvelope struct {
