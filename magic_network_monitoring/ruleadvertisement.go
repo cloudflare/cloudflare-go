@@ -79,8 +79,8 @@ func (r RuleAdvertisementEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleAdvertisementEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172           `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172           `json:"messages,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
 	Result   MagicNetworkMonitoringRuleAdvertisable `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleAdvertisementEditResponseEnvelopeSuccess `json:"success,required"`

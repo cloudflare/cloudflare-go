@@ -96,9 +96,9 @@ func (r CopyNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type CopyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   StreamVideos                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   StreamVideos          `json:"result,required"`
 	// Whether the API call was successful
 	Success CopyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    copyNewResponseEnvelopeJSON    `json:"-"`

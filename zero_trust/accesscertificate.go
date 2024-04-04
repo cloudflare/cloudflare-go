@@ -233,9 +233,9 @@ func (r AccessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCertificateNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustCertificates        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustCertificates `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -291,9 +291,9 @@ func (r AccessCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCertificateUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustCertificates        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustCertificates `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
@@ -348,8 +348,8 @@ type AccessCertificateDeleteParams struct {
 }
 
 type AccessCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   AccessCertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -398,9 +398,9 @@ type AccessCertificateGetParams struct {
 }
 
 type AccessCertificateGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustCertificates        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustCertificates `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateGetResponseEnvelopeJSON    `json:"-"`

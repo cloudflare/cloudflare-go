@@ -760,9 +760,9 @@ func (r PolicyNewParamsFiltersTrafficExclusion) IsKnown() bool {
 }
 
 type PolicyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   PolicyNewResponse            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PolicyNewResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success PolicyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    policyNewResponseEnvelopeJSON    `json:"-"`
@@ -1054,9 +1054,9 @@ type PolicyUpdateParamsMechanismsID interface {
 }
 
 type PolicyUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   PolicyUpdateResponse         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PolicyUpdateResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success PolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    policyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1107,9 +1107,9 @@ type PolicyDeleteParams struct {
 }
 
 type PolicyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PolicyDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PolicyDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -1188,9 +1188,9 @@ type PolicyGetParams struct {
 }
 
 type PolicyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AlertingPolicies             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AlertingPolicies      `json:"result,required"`
 	// Whether the API call was successful
 	Success PolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    policyGetResponseEnvelopeJSON    `json:"-"`

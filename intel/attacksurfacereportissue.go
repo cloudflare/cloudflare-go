@@ -114,8 +114,8 @@ func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params Attac
 }
 
 type AttackSurfaceReportIssueListResponse struct {
-	Errors   []shared.UnnamedSchemaRef172               `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172               `json:"messages,required"`
+	Errors   []shared.ResponseInfo                      `json:"errors,required"`
+	Messages []shared.ResponseInfo                      `json:"messages,required"`
 	Result   AttackSurfaceReportIssueListResponseResult `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueListResponseSuccess `json:"success,required"`
@@ -538,8 +538,8 @@ func (r AttackSurfaceReportIssueClassParamsSeverityNeq) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueClassResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172            `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172            `json:"messages,required"`
+	Errors   []shared.ResponseInfo                   `json:"errors,required"`
+	Messages []shared.ResponseInfo                   `json:"messages,required"`
 	Result   []AttackSurfaceReportIssueClassResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueClassResponseEnvelopeSuccess `json:"success,required"`
@@ -591,8 +591,8 @@ func (r AttackSurfaceReportIssueDismissParams) MarshalJSON() (data []byte, err e
 }
 
 type AttackSurfaceReportIssueDismissResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172            `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172            `json:"messages,required"`
+	Errors   []shared.ResponseInfo                   `json:"errors,required"`
+	Messages []shared.ResponseInfo                   `json:"messages,required"`
 	Result   AttackSurfaceReportIssueDismissResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueDismissResponseEnvelopeSuccess `json:"success,required"`
@@ -727,8 +727,8 @@ func (r AttackSurfaceReportIssueSeverityParamsSeverityNeq) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueSeverityResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172               `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172               `json:"messages,required"`
+	Errors   []shared.ResponseInfo                      `json:"errors,required"`
+	Messages []shared.ResponseInfo                      `json:"messages,required"`
 	Result   []AttackSurfaceReportIssueSeverityResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess `json:"success,required"`
@@ -863,8 +863,8 @@ func (r AttackSurfaceReportIssueTypeParamsSeverityNeq) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueTypeResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172           `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172           `json:"messages,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
 	Result   []AttackSurfaceReportIssueTypeResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueTypeResponseEnvelopeSuccess `json:"success,required"`

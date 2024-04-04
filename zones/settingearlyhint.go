@@ -198,8 +198,8 @@ func (r SettingEarlyHintEditParamsValue) IsKnown() bool {
 }
 
 type SettingEarlyHintEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, Cloudflare will attempt to speed up overall page loads by serving
@@ -235,8 +235,8 @@ type SettingEarlyHintGetParams struct {
 }
 
 type SettingEarlyHintGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, Cloudflare will attempt to speed up overall page loads by serving

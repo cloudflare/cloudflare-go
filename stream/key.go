@@ -156,9 +156,9 @@ func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   StreamKeys                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   StreamKeys            `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyNewResponseEnvelopeJSON    `json:"-"`
@@ -209,9 +209,9 @@ func (r KeyDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   KeyDeleteResponse            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   KeyDeleteResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyDeleteResponseEnvelopeJSON    `json:"-"`
@@ -257,9 +257,9 @@ type KeyGetParams struct {
 }
 
 type KeyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []KeyGetResponse             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []KeyGetResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyGetResponseEnvelopeJSON    `json:"-"`

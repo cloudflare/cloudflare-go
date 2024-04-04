@@ -253,9 +253,9 @@ type DatasetJobGetParams struct {
 }
 
 type DatasetJobGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []LogpushJob                 `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []LogpushJob          `json:"result,required"`
 	// Whether the API call was successful
 	Success DatasetJobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    datasetJobGetResponseEnvelopeJSON    `json:"-"`

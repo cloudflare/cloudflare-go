@@ -181,9 +181,9 @@ func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WorkersKVNamespace           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WorkersKVNamespace    `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceNewResponseEnvelopeJSON    `json:"-"`
@@ -235,9 +235,9 @@ func (r NamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   NamespaceUpdateResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   NamespaceUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceUpdateResponseEnvelopeJSON    `json:"-"`
@@ -341,9 +341,9 @@ func (r NamespaceDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   NamespaceDeleteResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   NamespaceDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceDeleteResponseEnvelopeJSON    `json:"-"`

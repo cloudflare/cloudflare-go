@@ -79,8 +79,8 @@ type ProjectDeploymentHistoryLogGetParams struct {
 }
 
 type ProjectDeploymentHistoryLogGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172           `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172           `json:"messages,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
 	Result   ProjectDeploymentHistoryLogGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess `json:"success,required"`

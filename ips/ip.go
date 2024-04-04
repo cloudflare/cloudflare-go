@@ -145,9 +145,9 @@ func (r IPListParams) URLQuery() (v url.Values) {
 }
 
 type IPListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IPListResponse               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IPListResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success IPListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipListResponseEnvelopeJSON    `json:"-"`

@@ -154,9 +154,9 @@ func (r PrefixDelegationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDelegationNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressingIpamDelegations    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   AddressingIpamDelegations `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixDelegationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixDelegationNewResponseEnvelopeJSON    `json:"-"`
@@ -212,8 +212,8 @@ func (r PrefixDelegationDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDelegationDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   PrefixDelegationDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixDelegationDeleteResponseEnvelopeSuccess `json:"success,required"`

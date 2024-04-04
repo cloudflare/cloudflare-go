@@ -135,9 +135,9 @@ func (r AvailableRatePlanFrequency) IsKnown() bool {
 }
 
 type PlanGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AvailableRatePlan            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AvailableRatePlan     `json:"result,required"`
 	// Whether the API call was successful
 	Success PlanGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    planGetResponseEnvelopeJSON    `json:"-"`

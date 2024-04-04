@@ -338,8 +338,8 @@ func (r CertificatePackDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CertificatePackDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   CertificatePackDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -391,9 +391,9 @@ func (r CertificatePackEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CertificatePackEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CertificatePackEditResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   CertificatePackEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackEditResponseEnvelopeJSON    `json:"-"`
@@ -439,9 +439,9 @@ type CertificatePackGetParams struct {
 }
 
 type CertificatePackGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CertificatePackGetResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   CertificatePackGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackGetResponseEnvelopeJSON    `json:"-"`

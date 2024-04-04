@@ -865,8 +865,8 @@ func (r WAFPackageRuleEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageRuleEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// When triggered, anomaly detection WAF rules contribute to an overall threat
 	// score that will determine if a request is considered malicious. You can
 	// configure the total scoring threshold through the 'sensitivity' property of the
@@ -917,9 +917,9 @@ type WAFPackageRuleGetParams struct {
 }
 
 type WAFPackageRuleGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WAFPackageRuleGetResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   WAFPackageRuleGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageRuleGetResponseEnvelopeJSON    `json:"-"`

@@ -346,8 +346,8 @@ func (r AnalyticsListParamsQueryMetric) IsKnown() bool {
 }
 
 type AnalyticsListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Metrics on Workers KV requests.
 	Result WorkersKVSchemasResult `json:"result,required"`
 	// Whether the API call was successful
@@ -478,8 +478,8 @@ func (r AnalyticsStoredParamsQueryMetric) IsKnown() bool {
 }
 
 type AnalyticsStoredResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Metrics on Workers KV requests.
 	Result WorkersKVComponentsSchemasResult `json:"result,required"`
 	// Whether the API call was successful

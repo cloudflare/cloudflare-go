@@ -134,9 +134,9 @@ func (r AccessKeyUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessKeyUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AccessKeyUpdateResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   AccessKeyUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -186,9 +186,9 @@ func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AccessKeyGetResponse         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AccessKeyGetResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyGetResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -238,9 +238,9 @@ func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyRotateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AccessKeyRotateResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   AccessKeyRotateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyRotateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.

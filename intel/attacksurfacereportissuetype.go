@@ -51,9 +51,9 @@ type AttackSurfaceReportIssueTypeGetParams struct {
 }
 
 type AttackSurfaceReportIssueTypeGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []string                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []string              `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    attackSurfaceReportIssueTypeGetResponseEnvelopeJSON    `json:"-"`

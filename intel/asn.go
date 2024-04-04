@@ -56,9 +56,9 @@ type ASNGetParams struct {
 }
 
 type ASNGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IntelASN                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IntelASN              `json:"result,required"`
 	// Whether the API call was successful
 	Success ASNGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    asnGetResponseEnvelopeJSON    `json:"-"`

@@ -106,8 +106,8 @@ func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ZeroTrustAccountDeviceSettings `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -153,8 +153,8 @@ type DeviceSettingListParams struct {
 }
 
 type DeviceSettingListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ZeroTrustAccountDeviceSettings `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingListResponseEnvelopeSuccess `json:"success,required"`

@@ -470,9 +470,9 @@ func (r RateLimitNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RateLimitNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RateLimitNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitNewResponseEnvelopeJSON    `json:"-"`
@@ -537,9 +537,9 @@ func (r RateLimitDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RateLimitDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   RateLimitDeleteResponse      `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   RateLimitDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RateLimitDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitDeleteResponseEnvelopeJSON    `json:"-"`
@@ -588,9 +588,9 @@ func (r RateLimitEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RateLimitEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RateLimitEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitEditResponseEnvelopeJSON    `json:"-"`
@@ -631,9 +631,9 @@ func (r RateLimitEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RateLimitGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RateLimitGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    rateLimitGetResponseEnvelopeJSON    `json:"-"`

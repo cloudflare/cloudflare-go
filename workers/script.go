@@ -27,14 +27,16 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewScriptService] method instead.
 type ScriptService struct {
-	Options    []option.RequestOption
-	Bindings   *ScriptBindingService
-	Schedules  *ScriptScheduleService
-	Tail       *ScriptTailService
-	UsageModel *ScriptUsageModelService
-	Content    *ScriptContentService
-	ContentV2  *ScriptContentV2Service
-	Settings   *ScriptSettingService
+	Options     []option.RequestOption
+	Bindings    *ScriptBindingService
+	Schedules   *ScriptScheduleService
+	Tail        *ScriptTailService
+	UsageModel  *ScriptUsageModelService
+	Content     *ScriptContentService
+	ContentV2   *ScriptContentV2Service
+	Settings    *ScriptSettingService
+	Deployments *ScriptDeploymentService
+	Versions    *ScriptVersionService
 }
 
 // NewScriptService generates a new service that applies the given options to each
@@ -50,6 +52,8 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	r.Content = NewScriptContentService(opts...)
 	r.ContentV2 = NewScriptContentV2Service(opts...)
 	r.Settings = NewScriptSettingService(opts...)
+	r.Deployments = NewScriptDeploymentService(opts...)
+	r.Versions = NewScriptVersionService(opts...)
 	return
 }
 
@@ -473,9 +477,9 @@ func (ScriptUpdateParamsVariant1) ImplementsScriptUpdateParams() {
 }
 
 type ScriptUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WorkersScript                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WorkersScript         `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptUpdateResponseEnvelopeJSON    `json:"-"`

@@ -304,9 +304,9 @@ func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WAFOverrideNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WAFOverride                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WAFOverride           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFOverrideNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideNewResponseEnvelopeJSON    `json:"-"`
@@ -355,9 +355,9 @@ func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WAFOverrideUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WAFOverride                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WAFOverride           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFOverrideUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideUpdateResponseEnvelopeJSON    `json:"-"`
@@ -442,9 +442,9 @@ func (r wafOverrideDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type WAFOverrideGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WAFOverride                  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WAFOverride           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFOverrideGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideGetResponseEnvelopeJSON    `json:"-"`

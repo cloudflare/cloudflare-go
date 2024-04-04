@@ -464,9 +464,9 @@ func (r SubscriptionNewParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SubscriptionNewResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   SubscriptionNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
@@ -596,9 +596,9 @@ func (r SubscriptionUpdateParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SubscriptionUpdateResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   SubscriptionUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -647,9 +647,9 @@ func (r SubscriptionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef3     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef3 `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionDeleteResponseEnvelopeJSON    `json:"-"`
@@ -690,9 +690,9 @@ func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SubscriptionGetResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   SubscriptionGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionGetResponseEnvelopeJSON    `json:"-"`

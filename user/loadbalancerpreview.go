@@ -98,8 +98,8 @@ func (r loadBalancingPreviewOriginJSON) RawJSON() string {
 }
 
 type LoadBalancerPreviewGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Resulting health data from a preview operation.
 	Result LoadBalancingPreview `json:"result,required"`
 	// Whether the API call was successful

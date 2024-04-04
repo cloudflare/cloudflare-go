@@ -194,8 +194,8 @@ func (r SettingMinTLSVersionEditParamsValue) IsKnown() bool {
 }
 
 type SettingMinTLSVersionEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Only accepts HTTPS requests that use at least the TLS protocol version
@@ -230,8 +230,8 @@ type SettingMinTLSVersionGetParams struct {
 }
 
 type SettingMinTLSVersionGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Only accepts HTTPS requests that use at least the TLS protocol version

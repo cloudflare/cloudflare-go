@@ -210,14 +210,14 @@ func (r ConsumerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerNewResponseEnvelope struct {
-	CreatedOn       interface{}                  `json:"created_on,required"`
-	DeadLetterQueue interface{}                  `json:"dead_letter_queue,required"`
-	Errors          []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages        []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	QueueName       interface{}                  `json:"queue_name,required"`
-	Result          ConsumerNewResponse          `json:"result,required,nullable"`
-	ScriptName      interface{}                  `json:"script_name,required"`
-	Settings        interface{}                  `json:"settings,required"`
+	CreatedOn       interface{}           `json:"created_on,required"`
+	DeadLetterQueue interface{}           `json:"dead_letter_queue,required"`
+	Errors          []shared.ResponseInfo `json:"errors,required"`
+	Messages        []shared.ResponseInfo `json:"messages,required"`
+	QueueName       interface{}           `json:"queue_name,required"`
+	Result          ConsumerNewResponse   `json:"result,required,nullable"`
+	ScriptName      interface{}           `json:"script_name,required"`
+	Settings        interface{}           `json:"settings,required"`
 	// Whether the API call was successful
 	Success    ConsumerNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -306,14 +306,14 @@ func (r ConsumerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerUpdateResponseEnvelope struct {
-	CreatedOn       interface{}                  `json:"created_on,required"`
-	DeadLetterQueue interface{}                  `json:"dead_letter_queue,required"`
-	Errors          []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages        []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	QueueName       interface{}                  `json:"queue_name,required"`
-	Result          ConsumerUpdateResponse       `json:"result,required,nullable"`
-	ScriptName      interface{}                  `json:"script_name,required"`
-	Settings        interface{}                  `json:"settings,required"`
+	CreatedOn       interface{}            `json:"created_on,required"`
+	DeadLetterQueue interface{}            `json:"dead_letter_queue,required"`
+	Errors          []shared.ResponseInfo  `json:"errors,required"`
+	Messages        []shared.ResponseInfo  `json:"messages,required"`
+	QueueName       interface{}            `json:"queue_name,required"`
+	Result          ConsumerUpdateResponse `json:"result,required,nullable"`
+	ScriptName      interface{}            `json:"script_name,required"`
+	Settings        interface{}            `json:"settings,required"`
 	// Whether the API call was successful
 	Success    ConsumerUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -402,9 +402,9 @@ func (r ConsumerDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ConsumerDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -483,12 +483,12 @@ type ConsumerGetParams struct {
 }
 
 type ConsumerGetResponseEnvelope struct {
-	CreatedOn interface{}                  `json:"created_on,required"`
-	Errors    []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages  []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	QueueName interface{}                  `json:"queue_name,required"`
-	Result    []ConsumerGetResponse        `json:"result,required,nullable"`
-	Settings  interface{}                  `json:"settings,required"`
+	CreatedOn interface{}           `json:"created_on,required"`
+	Errors    []shared.ResponseInfo `json:"errors,required"`
+	Messages  []shared.ResponseInfo `json:"messages,required"`
+	QueueName interface{}           `json:"queue_name,required"`
+	Result    []ConsumerGetResponse `json:"result,required,nullable"`
+	Settings  interface{}           `json:"settings,required"`
 	// Whether the API call was successful
 	Success    ConsumerGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerGetResponseEnvelopeResultInfo `json:"result_info"`

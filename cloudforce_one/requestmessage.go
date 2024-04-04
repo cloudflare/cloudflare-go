@@ -134,8 +134,8 @@ func (r RequestMessageNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestMessageNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   CloudforceOneRequestMessageItem `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageNewResponseEnvelopeSuccess `json:"success,required"`
@@ -213,8 +213,8 @@ func (r RequestMessageUpdateParamsTlp) IsKnown() bool {
 }
 
 type RequestMessageUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   CloudforceOneRequestMessageItem `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -256,9 +256,9 @@ func (r RequestMessageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestMessageDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageDeleteResponseEnvelopeJSON    `json:"-"`
@@ -334,8 +334,8 @@ func (r RequestMessageGetParamsSortOrder) IsKnown() bool {
 }
 
 type RequestMessageGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172      `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172      `json:"messages,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
 	Result   []CloudforceOneRequestMessageItem `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageGetResponseEnvelopeSuccess `json:"success,required"`

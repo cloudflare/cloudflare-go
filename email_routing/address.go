@@ -264,9 +264,9 @@ func (r AddressNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressNewResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AddressNewResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressNewResponseEnvelopeJSON    `json:"-"`
@@ -358,9 +358,9 @@ func (r AddressListParamsVerified) IsKnown() bool {
 }
 
 type AddressDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressDeleteResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AddressDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressDeleteResponseEnvelopeJSON    `json:"-"`
@@ -401,9 +401,9 @@ func (r AddressDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AddressGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressGetResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AddressGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressGetResponseEnvelopeJSON    `json:"-"`

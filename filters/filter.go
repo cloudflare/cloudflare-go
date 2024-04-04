@@ -156,9 +156,9 @@ func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []FirewallFilter             `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []FirewallFilter      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    FilterNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo FilterNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -240,9 +240,9 @@ func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   FirewallFilter               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallFilter        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
@@ -316,9 +316,9 @@ func (r FilterDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   FirewallFilter               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallFilter        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterDeleteResponseEnvelopeJSON    `json:"-"`
@@ -359,9 +359,9 @@ func (r FilterDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type FilterGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   FirewallFilter               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallFilter        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterGetResponseEnvelopeJSON    `json:"-"`

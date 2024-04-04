@@ -80,9 +80,9 @@ func (r AnalyzeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AnalyzeNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AnalyzeNewResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AnalyzeNewResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyzeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyzeNewResponseEnvelopeJSON    `json:"-"`

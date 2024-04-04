@@ -134,9 +134,9 @@ func (r WebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WebhookUpdateResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WebhookUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookUpdateResponseEnvelopeJSON    `json:"-"`
@@ -187,9 +187,9 @@ func (r WebhookDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WebhookDeleteResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WebhookDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookDeleteResponseEnvelopeJSON    `json:"-"`
@@ -235,9 +235,9 @@ type WebhookGetParams struct {
 }
 
 type WebhookGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WebhookGetResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WebhookGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookGetResponseEnvelopeJSON    `json:"-"`

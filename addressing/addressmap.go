@@ -432,9 +432,9 @@ func (r AddressMapNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressMapNewResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AddressMapNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressMapNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressMapNewResponseEnvelopeJSON    `json:"-"`
@@ -490,9 +490,9 @@ func (r AddressMapDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -587,9 +587,9 @@ func (r AddressMapEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressingAddressMaps        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AddressingAddressMaps `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressMapEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressMapEditResponseEnvelopeJSON    `json:"-"`
@@ -635,9 +635,9 @@ type AddressMapGetParams struct {
 }
 
 type AddressMapGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressMapGetResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AddressMapGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressMapGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressMapGetResponseEnvelopeJSON    `json:"-"`

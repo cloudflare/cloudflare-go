@@ -276,9 +276,9 @@ func (r TracerouteNewParamsOptionsPacketType) IsKnown() bool {
 }
 
 type TracerouteNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []MagicTransitTargetResult   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   []MagicTransitTargetResult `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    TracerouteNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo TracerouteNewResponseEnvelopeResultInfo `json:"result_info"`

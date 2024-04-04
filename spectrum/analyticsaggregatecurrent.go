@@ -71,8 +71,8 @@ func (r AnalyticsAggregateCurrentGetParams) URLQuery() (v url.Values) {
 }
 
 type AnalyticsAggregateCurrentGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172           `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172           `json:"messages,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
 	Result   []AnalyticsAggregateCurrentGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsAggregateCurrentGetResponseEnvelopeSuccess `json:"success,required"`

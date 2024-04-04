@@ -194,8 +194,8 @@ func (r SettingOriginErrorPagePassThruEditParamsValue) IsKnown() bool {
 }
 
 type SettingOriginErrorPagePassThruEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will proxy customer error pages on any 502,504 errors on origin
@@ -230,8 +230,8 @@ type SettingOriginErrorPagePassThruGetParams struct {
 }
 
 type SettingOriginErrorPagePassThruGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will proxy customer error pages on any 502,504 errors on origin

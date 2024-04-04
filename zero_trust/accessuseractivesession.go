@@ -361,8 +361,8 @@ func (r accessUserActiveSessionGetResponseMTLSAuthJSON) RawJSON() string {
 }
 
 type AccessUserActiveSessionGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172       `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172       `json:"messages,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
 	Result   AccessUserActiveSessionGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessUserActiveSessionGetResponseEnvelopeSuccess `json:"success,required"`

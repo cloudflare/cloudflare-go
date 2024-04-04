@@ -168,9 +168,9 @@ func (r AnalyticsReportGetParams) URLQuery() (v url.Values) {
 }
 
 type AnalyticsReportGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DNSAnalyticsReport           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DNSAnalyticsReport    `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsReportGetResponseEnvelopeJSON    `json:"-"`

@@ -201,9 +201,9 @@ func (r TunnelNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TunnelArgoTunnel             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TunnelArgoTunnel      `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -287,9 +287,9 @@ func (r TunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TunnelArgoTunnel             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TunnelArgoTunnel      `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -344,8 +344,8 @@ func (r TunnelEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result shared.UnnamedSchemaRef123 `json:"result,required"`
 	// Whether the API call was successful
@@ -393,9 +393,9 @@ type TunnelGetParams struct {
 }
 
 type TunnelGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TunnelArgoTunnel             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TunnelArgoTunnel      `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelGetResponseEnvelopeJSON    `json:"-"`

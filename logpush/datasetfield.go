@@ -65,9 +65,9 @@ type DatasetFieldGetParams struct {
 }
 
 type DatasetFieldGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DatasetFieldGetResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   DatasetFieldGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DatasetFieldGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    datasetFieldGetResponseEnvelopeJSON    `json:"-"`

@@ -2184,9 +2184,9 @@ func (AccessApplicationNewParamsBookmarkApplication) ImplementsAccessApplication
 }
 
 type AccessApplicationNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustApps                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustApps         `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationNewResponseEnvelopeJSON    `json:"-"`
@@ -3093,9 +3093,9 @@ type AccessApplicationUpdateParamsBookmarkApplicationAppID interface {
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustApps                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustApps         `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -3157,8 +3157,8 @@ type AccessApplicationDeleteParamsAppID interface {
 }
 
 type AccessApplicationDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   AccessApplicationDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -3214,9 +3214,9 @@ type AccessApplicationGetParamsAppID interface {
 }
 
 type AccessApplicationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustApps                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustApps         `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationGetResponseEnvelopeJSON    `json:"-"`

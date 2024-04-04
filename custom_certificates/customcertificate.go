@@ -425,8 +425,8 @@ func (r CustomCertificateNewParamsType) IsKnown() bool {
 }
 
 type CustomCertificateNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   CustomCertificateNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
@@ -535,8 +535,8 @@ func (r CustomCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   CustomCertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -645,8 +645,8 @@ func (r CustomCertificateEditParamsGeoRestrictionsLabel) IsKnown() bool {
 }
 
 type CustomCertificateEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   CustomCertificateEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
@@ -693,8 +693,8 @@ type CustomCertificateGetParams struct {
 }
 
 type CustomCertificateGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   CustomCertificateGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`

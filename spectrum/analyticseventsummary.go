@@ -163,8 +163,8 @@ func (r AnalyticsEventSummaryGetParamsMetric) IsKnown() bool {
 }
 
 type AnalyticsEventSummaryGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
 	Result   AnalyticsEventSummaryGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AnalyticsEventSummaryGetResponseEnvelopeSuccess `json:"success,required"`

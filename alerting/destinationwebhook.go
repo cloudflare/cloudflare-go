@@ -237,8 +237,8 @@ func (r DestinationWebhookNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   DestinationWebhookNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationWebhookNewResponseEnvelopeSuccess `json:"success,required"`
@@ -298,8 +298,8 @@ func (r DestinationWebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
 	Result   DestinationWebhookUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationWebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -351,9 +351,9 @@ type DestinationWebhookDeleteParams struct {
 }
 
 type DestinationWebhookDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationWebhookDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationWebhookDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -432,9 +432,9 @@ type DestinationWebhookGetParams struct {
 }
 
 type DestinationWebhookGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AlertingWebhooks             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AlertingWebhooks      `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationWebhookGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationWebhookGetResponseEnvelopeJSON    `json:"-"`

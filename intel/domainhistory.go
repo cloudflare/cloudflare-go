@@ -111,9 +111,9 @@ func (r DomainHistoryGetParams) URLQuery() (v url.Values) {
 }
 
 type DomainHistoryGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []IntelDomainHistory         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []IntelDomainHistory  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DomainHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DomainHistoryGetResponseEnvelopeResultInfo `json:"result_info"`

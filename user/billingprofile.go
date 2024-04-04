@@ -63,9 +63,9 @@ func init() {
 }
 
 type BillingProfileGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   BillingProfileGetResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   BillingProfileGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BillingProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    billingProfileGetResponseEnvelopeJSON    `json:"-"`

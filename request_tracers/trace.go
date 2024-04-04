@@ -189,8 +189,8 @@ func (r TraceNewParamsContextGeoloc) MarshalJSON() (data []byte, err error) {
 }
 
 type TraceNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Trace result with an origin status code
 	Result TraceNewResponse `json:"result,required"`
 	// Whether the API call was successful

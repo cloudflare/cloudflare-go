@@ -55,8 +55,8 @@ type NamespaceMetadataGetParams struct {
 }
 
 type NamespaceMetadataGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Arbitrary JSON that is associated with a key.
 	Result NamespaceMetadataGetResponse `json:"result,required"`
 	// Whether the API call was successful

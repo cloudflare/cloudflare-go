@@ -104,9 +104,9 @@ func (r ControlCmbConfigNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlCmbConfigNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CmbConfig                    `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CmbConfig             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigNewResponseEnvelopeJSON    `json:"-"`
@@ -157,9 +157,9 @@ func (r ControlCmbConfigDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlCmbConfigDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef161   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef161 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigDeleteResponseEnvelopeJSON    `json:"-"`
@@ -205,9 +205,9 @@ type ControlCmbConfigGetParams struct {
 }
 
 type ControlCmbConfigGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CmbConfig                    `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CmbConfig             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigGetResponseEnvelopeJSON    `json:"-"`

@@ -159,8 +159,8 @@ type DestinationPagerdutyNewParams struct {
 }
 
 type DestinationPagerdutyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   DestinationPagerdutyNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationPagerdutyNewResponseEnvelopeSuccess `json:"success,required"`
@@ -207,9 +207,9 @@ type DestinationPagerdutyDeleteParams struct {
 }
 
 type DestinationPagerdutyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationPagerdutyDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -288,9 +288,9 @@ type DestinationPagerdutyGetParams struct {
 }
 
 type DestinationPagerdutyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []AlertingPagerduty          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []AlertingPagerduty   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationPagerdutyGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -369,8 +369,8 @@ type DestinationPagerdutyLinkParams struct {
 }
 
 type DestinationPagerdutyLinkResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
 	Result   DestinationPagerdutyLinkResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationPagerdutyLinkResponseEnvelopeSuccess `json:"success,required"`

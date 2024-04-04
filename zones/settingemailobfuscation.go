@@ -190,8 +190,8 @@ func (r SettingEmailObfuscationEditParamsValue) IsKnown() bool {
 }
 
 type SettingEmailObfuscationEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Encrypt email adresses on your web page from bots, while keeping them visible to
@@ -225,8 +225,8 @@ type SettingEmailObfuscationGetParams struct {
 }
 
 type SettingEmailObfuscationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Encrypt email adresses on your web page from bots, while keeping them visible to

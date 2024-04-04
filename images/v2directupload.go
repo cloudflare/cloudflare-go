@@ -96,9 +96,9 @@ func (r V2DirectUploadNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V2DirectUploadNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   V2DirectUploadNewResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   V2DirectUploadNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V2DirectUploadNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v2DirectUploadNewResponseEnvelopeJSON    `json:"-"`

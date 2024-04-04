@@ -223,9 +223,9 @@ func (r WatermarkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WatermarkNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WatermarkNewResponse         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WatermarkNewResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkNewResponseEnvelopeJSON    `json:"-"`
@@ -281,9 +281,9 @@ func (r WatermarkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WatermarkDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef49    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef49 `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -329,9 +329,9 @@ type WatermarkGetParams struct {
 }
 
 type WatermarkGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WatermarkGetResponse         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WatermarkGetResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkGetResponseEnvelopeJSON    `json:"-"`

@@ -676,9 +676,9 @@ func (r FirewallAccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type FirewallAccessRuleNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   FirewallRule                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallRule          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallAccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAccessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -894,8 +894,8 @@ func (r FirewallAccessRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FirewallAccessRuleDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
 	Result   FirewallAccessRuleDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallAccessRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -967,9 +967,9 @@ func (r FirewallAccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type FirewallAccessRuleEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   FirewallRule                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallRule          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallAccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAccessRuleEditResponseEnvelopeJSON    `json:"-"`

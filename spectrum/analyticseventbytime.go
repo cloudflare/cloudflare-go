@@ -187,8 +187,8 @@ func (r AnalyticsEventBytimeGetParamsTimeDelta) IsKnown() bool {
 }
 
 type AnalyticsEventBytimeGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   AnalyticsEventBytimeGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AnalyticsEventBytimeGetResponseEnvelopeSuccess `json:"success,required"`

@@ -213,8 +213,8 @@ func (r RegionalTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type RegionalTieredCacheEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.
@@ -264,8 +264,8 @@ type RegionalTieredCacheGetParams struct {
 }
 
 type RegionalTieredCacheGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.

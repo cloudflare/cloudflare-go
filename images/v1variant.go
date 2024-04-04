@@ -442,9 +442,9 @@ func (r V1VariantNewParamsOptionsMetadata) IsKnown() bool {
 }
 
 type V1VariantNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   V1ImageVariant               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V1ImageVariant        `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantNewResponseEnvelopeJSON    `json:"-"`
@@ -490,9 +490,9 @@ type V1VariantListParams struct {
 }
 
 type V1VariantListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   V1ImageVariants              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V1ImageVariants       `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantListResponseEnvelopeJSON    `json:"-"`
@@ -543,9 +543,9 @@ func (r V1VariantDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1VariantDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   V1VariantDeleteResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   V1VariantDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantDeleteResponseEnvelopeJSON    `json:"-"`
@@ -654,9 +654,9 @@ func (r V1VariantEditParamsOptionsMetadata) IsKnown() bool {
 }
 
 type V1VariantEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   V1ImageVariant               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V1ImageVariant        `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantEditResponseEnvelopeJSON    `json:"-"`
@@ -702,9 +702,9 @@ type V1VariantGetParams struct {
 }
 
 type V1VariantGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   V1ImageVariant               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V1ImageVariant        `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantGetResponseEnvelopeJSON    `json:"-"`

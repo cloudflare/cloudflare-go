@@ -222,9 +222,9 @@ func (r UARuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UARuleNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -273,9 +273,9 @@ func (r UARuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UARuleUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -346,9 +346,9 @@ func (r UARuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UARuleDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   UARuleDeleteResponse         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   UARuleDeleteResponse  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -389,9 +389,9 @@ func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleGetResponseEnvelopeJSON    `json:"-"`

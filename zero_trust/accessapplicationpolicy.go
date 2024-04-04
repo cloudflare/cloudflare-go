@@ -4376,9 +4376,9 @@ func (r AccessApplicationPolicyNewParamsRequireAccessDevicePostureRuleDevicePost
 }
 
 type AccessApplicationPolicyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustPolicies            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustPolicies     `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyNewResponseEnvelopeJSON    `json:"-"`
@@ -5709,9 +5709,9 @@ func (r AccessApplicationPolicyUpdateParamsRequireAccessDevicePostureRuleDeviceP
 }
 
 type AccessApplicationPolicyUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustPolicies            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustPolicies     `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -5766,8 +5766,8 @@ type AccessApplicationPolicyDeleteParams struct {
 }
 
 type AccessApplicationPolicyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172          `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172          `json:"messages,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                 `json:"messages,required"`
 	Result   AccessApplicationPolicyDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -5816,9 +5816,9 @@ type AccessApplicationPolicyGetParams struct {
 }
 
 type AccessApplicationPolicyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustPolicies            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustPolicies     `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyGetResponseEnvelopeJSON    `json:"-"`

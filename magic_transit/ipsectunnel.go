@@ -584,9 +584,9 @@ func (r IPSECTunnelNewParamsHealthCheckDirection) IsKnown() bool {
 }
 
 type IPSECTunnelNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IPSECTunnelNewResponse       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   IPSECTunnelNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -701,9 +701,9 @@ func (r IPSECTunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
 }
 
 type IPSECTunnelUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IPSECTunnelUpdateResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   IPSECTunnelUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelUpdateResponseEnvelopeJSON    `json:"-"`
@@ -749,9 +749,9 @@ type IPSECTunnelListParams struct {
 }
 
 type IPSECTunnelListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IPSECTunnelListResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   IPSECTunnelListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelListResponseEnvelopeJSON    `json:"-"`
@@ -802,9 +802,9 @@ func (r IPSECTunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IPSECTunnelDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IPSECTunnelDeleteResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   IPSECTunnelDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -850,9 +850,9 @@ type IPSECTunnelGetParams struct {
 }
 
 type IPSECTunnelGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IPSECTunnelGetResponse       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   IPSECTunnelGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelGetResponseEnvelopeJSON    `json:"-"`
@@ -903,8 +903,8 @@ func (r IPSECTunnelPSKGenerateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IPSECTunnelPSKGenerateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   IPSECTunnelPSKGenerateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelPSKGenerateResponseEnvelopeSuccess `json:"success,required"`

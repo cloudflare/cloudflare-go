@@ -168,8 +168,8 @@ func (r GatewayConfigurationUpdateParams) MarshalJSON() (data []byte, err error)
 }
 
 type GatewayConfigurationUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// account settings.
 	Result GatewayConfigurationUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -222,8 +222,8 @@ func (r GatewayConfigurationEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayConfigurationEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// account settings.
 	Result GatewayConfigurationEditResponse `json:"result,required"`
 	// Whether the API call was successful
@@ -270,8 +270,8 @@ type GatewayConfigurationGetParams struct {
 }
 
 type GatewayConfigurationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// account settings.
 	Result GatewayConfigurationGetResponse `json:"result,required"`
 	// Whether the API call was successful

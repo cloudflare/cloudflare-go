@@ -838,9 +838,9 @@ func (BotManagementUpdateParamsBotManagementBmSubscriptionConfig) ImplementsBotM
 }
 
 type BotManagementUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   BotManagementUpdateResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   BotManagementUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BotManagementUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    botManagementUpdateResponseEnvelopeJSON    `json:"-"`
@@ -886,9 +886,9 @@ type BotManagementGetParams struct {
 }
 
 type BotManagementGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   BotManagementGetResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   BotManagementGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success BotManagementGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    botManagementGetResponseEnvelopeJSON    `json:"-"`

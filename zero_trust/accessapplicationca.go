@@ -225,8 +225,8 @@ type AccessApplicationCANewParams struct {
 }
 
 type AccessApplicationCANewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   AccessApplicationCANewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCANewResponseEnvelopeSuccess `json:"success,required"`
@@ -282,8 +282,8 @@ type AccessApplicationCADeleteParams struct {
 }
 
 type AccessApplicationCADeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172      `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172      `json:"messages,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
 	Result   AccessApplicationCADeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCADeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -332,8 +332,8 @@ type AccessApplicationCAGetParams struct {
 }
 
 type AccessApplicationCAGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   AccessApplicationCAGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCAGetResponseEnvelopeSuccess `json:"success,required"`

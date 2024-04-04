@@ -164,8 +164,8 @@ func (r WARPConnectorNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WARPConnectorNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result shared.UnnamedSchemaRef123 `json:"result,required"`
 	// Whether the API call was successful
@@ -250,8 +250,8 @@ func (r WARPConnectorDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WARPConnectorDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result shared.UnnamedSchemaRef123 `json:"result,required"`
 	// Whether the API call was successful
@@ -308,8 +308,8 @@ func (r WARPConnectorEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WARPConnectorEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result shared.UnnamedSchemaRef123 `json:"result,required"`
 	// Whether the API call was successful
@@ -357,8 +357,8 @@ type WARPConnectorGetParams struct {
 }
 
 type WARPConnectorGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 	Result shared.UnnamedSchemaRef123 `json:"result,required"`
 	// Whether the API call was successful
@@ -406,9 +406,9 @@ type WARPConnectorTokenParams struct {
 }
 
 type WARPConnectorTokenResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WARPConnectorTokenResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   WARPConnectorTokenResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success WARPConnectorTokenResponseEnvelopeSuccess `json:"success,required"`
 	JSON    warpConnectorTokenResponseEnvelopeJSON    `json:"-"`

@@ -738,8 +738,8 @@ func (r DexhttpTestGetParamsInterval) IsKnown() bool {
 }
 
 type DexhttpTestGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172           `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172           `json:"messages,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
 	Result   DigitalExperienceMonitoringHTTPDetails `json:"result,required"`
 	// Whether the API call was successful
 	Success DexhttpTestGetResponseEnvelopeSuccess `json:"success,required"`

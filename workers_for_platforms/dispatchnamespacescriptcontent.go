@@ -91,9 +91,9 @@ func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []b
 }
 
 type DispatchNamespaceScriptContentUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   workers.WorkersScript        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   workers.WorkersScript `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptContentUpdateResponseEnvelopeJSON    `json:"-"`

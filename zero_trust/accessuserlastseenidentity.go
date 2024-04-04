@@ -254,9 +254,9 @@ func (r zeroTrustIdentityMTLSAuthJSON) RawJSON() string {
 }
 
 type AccessUserLastSeenIdentityGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustIdentity            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustIdentity     `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessUserLastSeenIdentityGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessUserLastSeenIdentityGetResponseEnvelopeJSON    `json:"-"`

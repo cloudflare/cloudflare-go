@@ -125,8 +125,8 @@ func (r HostnameIPFSUniversalPathContentListUpdateParamsAction) IsKnown() bool {
 }
 
 type HostnameIPFSUniversalPathContentListUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   DistributedWebConfigContentList `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -169,8 +169,8 @@ func (r HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess) IsKno
 }
 
 type HostnameIPFSUniversalPathContentListGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
 	Result   DistributedWebConfigContentList `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess `json:"success,required"`

@@ -1779,9 +1779,9 @@ func (r DevicePostureNewParamsMatchPlatform) IsKnown() bool {
 }
 
 type DevicePostureNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DevicePostureRules           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DevicePostureRules    `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureNewResponseEnvelopeJSON    `json:"-"`
@@ -2459,9 +2459,9 @@ func (r DevicePostureUpdateParamsMatchPlatform) IsKnown() bool {
 }
 
 type DevicePostureUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DevicePostureRules           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DevicePostureRules    `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureUpdateResponseEnvelopeJSON    `json:"-"`
@@ -2515,9 +2515,9 @@ func (r DevicePostureDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DevicePostureDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DevicePostureDeleteResponse  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   DevicePostureDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureDeleteResponseEnvelopeJSON    `json:"-"`
@@ -2562,9 +2562,9 @@ type DevicePostureGetParams struct {
 }
 
 type DevicePostureGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DevicePostureRules           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DevicePostureRules    `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureGetResponseEnvelopeJSON    `json:"-"`

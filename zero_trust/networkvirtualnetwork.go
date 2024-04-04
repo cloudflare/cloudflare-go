@@ -231,8 +231,8 @@ func (r NetworkVirtualNetworkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkVirtualNetworkNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
 	Result   NetworkVirtualNetworkNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkNewResponseEnvelopeSuccess `json:"success,required"`
@@ -310,8 +310,8 @@ func (r NetworkVirtualNetworkDeleteParams) MarshalJSON() (data []byte, err error
 }
 
 type NetworkVirtualNetworkDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172        `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172        `json:"messages,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
 	Result   NetworkVirtualNetworkDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -368,8 +368,8 @@ func (r NetworkVirtualNetworkEditParams) MarshalJSON() (data []byte, err error) 
 }
 
 type NetworkVirtualNetworkEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172      `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172      `json:"messages,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
 	Result   NetworkVirtualNetworkEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkEditResponseEnvelopeSuccess `json:"success,required"`
