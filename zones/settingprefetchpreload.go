@@ -95,10 +95,6 @@ func (r zoneSettingPrefetchPreloadJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingPrefetchPreload) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingPrefetchPreload) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingPrefetchPreloadID string
 
@@ -146,21 +142,6 @@ func (r ZoneSettingPrefetchPreloadEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Cloudflare will prefetch any URLs that are included in the response headers.
-// This is limited to Enterprise Zones.
-type ZoneSettingPrefetchPreloadParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingPrefetchPreloadID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingPrefetchPreloadValue] `json:"value,required"`
-}
-
-func (r ZoneSettingPrefetchPreloadParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingPrefetchPreloadParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingPrefetchPreloadEditParams struct {
 	// Identifier

@@ -94,10 +94,6 @@ func (r zoneSettingMinTLSVersionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingMinTLSVersion) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingMinTLSVersion) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingMinTLSVersionID string
 
@@ -147,22 +143,6 @@ func (r ZoneSettingMinTLSVersionEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Only accepts HTTPS requests that use at least the TLS protocol version
-// specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
-// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
-type ZoneSettingMinTLSVersionParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingMinTLSVersionID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingMinTLSVersionValue] `json:"value,required"`
-}
-
-func (r ZoneSettingMinTLSVersionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingMinTLSVersionParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingMinTLSVersionEditParams struct {
 	// Identifier

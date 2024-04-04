@@ -101,10 +101,6 @@ func (r zoneSettingSecurityLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingSecurityLevel) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingSecurityLevel) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingSecurityLevelID string
 
@@ -156,23 +152,6 @@ func (r ZoneSettingSecurityLevelEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Choose the appropriate security profile for your website, which will
-// automatically adjust each of the security settings. If you choose to customize
-// an individual security setting, the profile will become Custom.
-// (https://support.cloudflare.com/hc/en-us/articles/200170056).
-type ZoneSettingSecurityLevelParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingSecurityLevelID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingSecurityLevelValue] `json:"value,required"`
-}
-
-func (r ZoneSettingSecurityLevelParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingSecurityLevelParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingSecurityLevelEditParams struct {
 	// Identifier

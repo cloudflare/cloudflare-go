@@ -92,10 +92,6 @@ func (r zoneSettingTls1_3JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingTLS1_3) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingTLS1_3) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingTLS1_3ID string
 
@@ -144,20 +140,6 @@ func (r ZoneSettingTLS1_3Editable) IsKnown() bool {
 	}
 	return false
 }
-
-// Enables Crypto TLS 1.3 feature for a zone.
-type ZoneSettingTLS1_3Param struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingTLS1_3ID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingTLS1_3Value] `json:"value,required"`
-}
-
-func (r ZoneSettingTLS1_3Param) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingTLS1_3Param) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingTLS1_3EditParams struct {
 	// Identifier

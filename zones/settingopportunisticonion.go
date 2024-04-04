@@ -95,10 +95,6 @@ func (r zoneSettingOpportunisticOnionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingOpportunisticOnion) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingOpportunisticOnion) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingOpportunisticOnionID string
 
@@ -146,21 +142,6 @@ func (r ZoneSettingOpportunisticOnionEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
-// connection to use our onion services instead of exit nodes.
-type ZoneSettingOpportunisticOnionParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingOpportunisticOnionID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingOpportunisticOnionValue] `json:"value,required"`
-}
-
-func (r ZoneSettingOpportunisticOnionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingOpportunisticOnionParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingOpportunisticOnionEditParams struct {
 	// Identifier

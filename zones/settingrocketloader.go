@@ -119,10 +119,6 @@ func (r zoneSettingRocketLoaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingRocketLoader) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingRocketLoader) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingRocketLoaderID string
 
@@ -191,8 +187,6 @@ type ZoneSettingRocketLoaderParam struct {
 func (r ZoneSettingRocketLoaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingRocketLoaderParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingRocketLoaderEditParams struct {
 	// Identifier

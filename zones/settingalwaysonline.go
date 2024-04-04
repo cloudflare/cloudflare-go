@@ -104,10 +104,6 @@ func (r zoneSettingAlwaysOnlineJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingAlwaysOnline) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingAlwaysOnline) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingAlwaysOnlineID string
 
@@ -155,24 +151,6 @@ func (r ZoneSettingAlwaysOnlineEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// When enabled, Cloudflare serves limited copies of web pages available from the
-// [Internet Archive's Wayback Machine](https://archive.org/web/) if your server is
-// offline. Refer to
-// [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
-// more information.
-type ZoneSettingAlwaysOnlineParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingAlwaysOnlineID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingAlwaysOnlineValue] `json:"value,required"`
-}
-
-func (r ZoneSettingAlwaysOnlineParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingAlwaysOnlineParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingAlwaysOnlineEditParams struct {
 	// Identifier

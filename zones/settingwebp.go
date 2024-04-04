@@ -97,10 +97,6 @@ func (r zoneSettingWebPJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingWebP) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingWebP) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingWebPID string
 
@@ -148,22 +144,6 @@ func (r ZoneSettingWebPEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// When the client requesting the image supports the WebP image codec, and WebP
-// offers a performance advantage over the original image format, Cloudflare will
-// serve a WebP version of the original image.
-type ZoneSettingWebPParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingWebPID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingWebPValue] `json:"value,required"`
-}
-
-func (r ZoneSettingWebPParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingWebPParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingWebPEditParams struct {
 	// Identifier

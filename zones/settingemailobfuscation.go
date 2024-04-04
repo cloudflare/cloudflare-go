@@ -95,10 +95,6 @@ func (r zoneSettingEmailObfuscationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingEmailObfuscation) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingEmailObfuscation) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingEmailObfuscationID string
 
@@ -146,21 +142,6 @@ func (r ZoneSettingEmailObfuscationEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Encrypt email adresses on your web page from bots, while keeping them visible to
-// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
-type ZoneSettingEmailObfuscationParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingEmailObfuscationID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingEmailObfuscationValue] `json:"value,required"`
-}
-
-func (r ZoneSettingEmailObfuscationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingEmailObfuscationParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingEmailObfuscationEditParams struct {
 	// Identifier
