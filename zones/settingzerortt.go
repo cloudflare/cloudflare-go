@@ -91,10 +91,6 @@ func (r zoneSetting0rttJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSetting0rtt) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSetting0rtt) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSetting0rttID string
 
@@ -142,20 +138,6 @@ func (r ZoneSetting0rttEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// 0-RTT session resumption enabled for this zone.
-type ZoneSetting0rttParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSetting0rttID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSetting0rttValue] `json:"value,required"`
-}
-
-func (r ZoneSetting0rttParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSetting0rttParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingZeroRTTEditParams struct {
 	// Identifier

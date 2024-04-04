@@ -95,10 +95,6 @@ func (r zoneSettingBrotliJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingBrotli) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingBrotli) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingBrotliID string
 
@@ -146,21 +142,6 @@ func (r ZoneSettingBrotliEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// When the client requesting an asset supports the Brotli compression algorithm,
-// Cloudflare will serve a Brotli compressed version of the asset.
-type ZoneSettingBrotliParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingBrotliID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingBrotliValue] `json:"value,required"`
-}
-
-func (r ZoneSettingBrotliParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingBrotliParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingBrotliEditParams struct {
 	// Identifier

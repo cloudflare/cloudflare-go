@@ -95,10 +95,6 @@ func (r zoneSettingOrangeToOrangeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingOrangeToOrange) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingOrangeToOrange) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingOrangeToOrangeID string
 
@@ -159,8 +155,6 @@ type ZoneSettingOrangeToOrangeParam struct {
 func (r ZoneSettingOrangeToOrangeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingOrangeToOrangeParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingOrangeToOrangeEditParams struct {
 	// Identifier

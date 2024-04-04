@@ -92,10 +92,6 @@ func (r zoneSettingPseudoIPV4JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingPseudoIPV4) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingPseudoIPV4) implementsZonesSettingGetResponse() {}
-
 // Value of the Pseudo IPv4 setting.
 type ZoneSettingPseudoIPV4ID string
 
@@ -144,20 +140,6 @@ func (r ZoneSettingPseudoIPV4Editable) IsKnown() bool {
 	}
 	return false
 }
-
-// The value set for the Pseudo IPv4 setting.
-type ZoneSettingPseudoIPV4Param struct {
-	// Value of the Pseudo IPv4 setting.
-	ID param.Field[ZoneSettingPseudoIPV4ID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingPseudoIPV4Value] `json:"value,required"`
-}
-
-func (r ZoneSettingPseudoIPV4Param) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingPseudoIPV4Param) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingPseudoIPV4EditParams struct {
 	// Identifier

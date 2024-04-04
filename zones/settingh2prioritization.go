@@ -94,10 +94,6 @@ func (r zoneSettingH2PrioritizationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingH2Prioritization) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingH2Prioritization) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingH2PrioritizationID string
 
@@ -160,8 +156,6 @@ type ZoneSettingH2PrioritizationParam struct {
 func (r ZoneSettingH2PrioritizationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingH2PrioritizationParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingH2PrioritizationEditParams struct {
 	// Identifier

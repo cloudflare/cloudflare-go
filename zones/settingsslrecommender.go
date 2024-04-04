@@ -90,10 +90,6 @@ func (r zoneSettingSSLRecommenderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingSSLRecommender) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingSSLRecommender) implementsZonesSettingGetResponse() {}
-
 // Enrollment value for SSL/TLS Recommender.
 type ZoneSettingSSLRecommenderID string
 
@@ -122,8 +118,6 @@ type ZoneSettingSSLRecommenderParam struct {
 func (r ZoneSettingSSLRecommenderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingSSLRecommenderParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingSSLRecommenderEditParams struct {
 	// Identifier

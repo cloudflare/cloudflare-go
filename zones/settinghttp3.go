@@ -92,10 +92,6 @@ func (r zoneSettingHTTP3JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingHTTP3) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingHTTP3) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingHTTP3ID string
 
@@ -143,20 +139,6 @@ func (r ZoneSettingHTTP3Editable) IsKnown() bool {
 	}
 	return false
 }
-
-// HTTP3 enabled for this zone.
-type ZoneSettingHTTP3Param struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingHTTP3ID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingHTTP3Value] `json:"value,required"`
-}
-
-func (r ZoneSettingHTTP3Param) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingHTTP3Param) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingHTTP3EditParams struct {
 	// Identifier

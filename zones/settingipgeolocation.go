@@ -98,10 +98,6 @@ func (r zoneSettingIPGeolocationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingIPGeolocation) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingIPGeolocation) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingIPGeolocationID string
 
@@ -149,22 +145,6 @@ func (r ZoneSettingIPGeolocationEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
-// pass the country code to you.
-// (https://support.cloudflare.com/hc/en-us/articles/200168236).
-type ZoneSettingIPGeolocationParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingIPGeolocationID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingIPGeolocationValue] `json:"value,required"`
-}
-
-func (r ZoneSettingIPGeolocationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingIPGeolocationParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingIPGeolocationEditParams struct {
 	// Identifier

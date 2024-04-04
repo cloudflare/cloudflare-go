@@ -101,10 +101,6 @@ func (r zoneSettingEarlyHintsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingEarlyHints) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingEarlyHints) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingEarlyHintsID string
 
@@ -152,23 +148,6 @@ func (r ZoneSettingEarlyHintsEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// When enabled, Cloudflare will attempt to speed up overall page loads by serving
-// `103` responses with `Link` headers from the final response. Refer to
-// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
-// more information.
-type ZoneSettingEarlyHintsParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingEarlyHintsID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingEarlyHintsValue] `json:"value,required"`
-}
-
-func (r ZoneSettingEarlyHintsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingEarlyHintsParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingEarlyHintEditParams struct {
 	// Identifier

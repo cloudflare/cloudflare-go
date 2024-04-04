@@ -101,10 +101,6 @@ func (r zoneSettingBrowserCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingBrowserCacheTTL) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingBrowserCacheTTL) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingBrowserCacheTTLID string
 
@@ -178,23 +174,6 @@ func (r ZoneSettingBrowserCacheTTLEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
-// will remain on your visitors' computers. Cloudflare will honor any larger times
-// specified by your server.
-// (https://support.cloudflare.com/hc/en-us/articles/200168276).
-type ZoneSettingBrowserCacheTTLParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingBrowserCacheTTLID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingBrowserCacheTTLValue] `json:"value,required"`
-}
-
-func (r ZoneSettingBrowserCacheTTLParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingBrowserCacheTTLParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingBrowserCacheTTLEditParams struct {
 	// Identifier

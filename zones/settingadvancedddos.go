@@ -83,10 +83,6 @@ func (r zoneSettingAdvancedDDoSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingAdvancedDDoS) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingAdvancedDDoS) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingAdvancedDDoSID string
 
@@ -134,22 +130,6 @@ func (r ZoneSettingAdvancedDDoSEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Advanced protection from Distributed Denial of Service (DDoS) attacks on your
-// website. This is an uneditable value that is 'on' in the case of Business and
-// Enterprise zones.
-type ZoneSettingAdvancedDDoSParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingAdvancedDDoSID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingAdvancedDDoSValue] `json:"value,required"`
-}
-
-func (r ZoneSettingAdvancedDDoSParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingAdvancedDDoSParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingAdvancedDDoSGetParams struct {
 	// Identifier

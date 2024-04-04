@@ -95,10 +95,6 @@ func (r zoneSettingTLSClientAuthJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingTLSClientAuth) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingTLSClientAuth) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingTLSClientAuthID string
 
@@ -146,21 +142,6 @@ func (r ZoneSettingTLSClientAuthEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// TLS Client Auth requires Cloudflare to connect to your origin server using a
-// client certificate (Enterprise Only).
-type ZoneSettingTLSClientAuthParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingTLSClientAuthID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingTLSClientAuthValue] `json:"value,required"`
-}
-
-func (r ZoneSettingTLSClientAuthParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingTLSClientAuthParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingTLSClientAuthEditParams struct {
 	// Identifier

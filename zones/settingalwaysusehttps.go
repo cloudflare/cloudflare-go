@@ -98,10 +98,6 @@ func (r zoneSettingAlwaysUseHTTPSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingAlwaysUseHTTPS) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingAlwaysUseHTTPS) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingAlwaysUseHTTPSID string
 
@@ -149,22 +145,6 @@ func (r ZoneSettingAlwaysUseHTTPSEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Reply to all requests for URLs that use "http" with a 301 redirect to the
-// equivalent "https" URL. If you only want to redirect for a subset of requests,
-// consider creating an "Always use HTTPS" page rule.
-type ZoneSettingAlwaysUseHTTPSParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingAlwaysUseHTTPSID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingAlwaysUseHTTPSValue] `json:"value,required"`
-}
-
-func (r ZoneSettingAlwaysUseHTTPSParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingAlwaysUseHTTPSParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingAlwaysUseHTTPSEditParams struct {
 	// Identifier

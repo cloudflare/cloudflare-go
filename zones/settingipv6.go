@@ -94,10 +94,6 @@ func (r zoneSettingIPV6JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingIPV6) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingIPV6) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingIPV6ID string
 
@@ -145,21 +141,6 @@ func (r ZoneSettingIPV6Editable) IsKnown() bool {
 	}
 	return false
 }
-
-// Enable IPv6 on all subdomains that are Cloudflare enabled.
-// (https://support.cloudflare.com/hc/en-us/articles/200168586).
-type ZoneSettingIPV6Param struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingIPV6ID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingIPV6Value] `json:"value,required"`
-}
-
-func (r ZoneSettingIPV6Param) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingIPV6Param) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingIPV6EditParams struct {
 	// Identifier

@@ -101,10 +101,6 @@ func (r zoneSettingBufferingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingBuffering) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingBuffering) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingBufferingID string
 
@@ -152,23 +148,6 @@ func (r ZoneSettingBufferingEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Enables or disables buffering of responses from the proxied server. Cloudflare
-// may buffer the whole payload to deliver it at once to the client versus allowing
-// it to be delivered in chunks. By default, the proxied server streams directly
-// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-type ZoneSettingBufferingParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingBufferingID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingBufferingValue] `json:"value,required"`
-}
-
-func (r ZoneSettingBufferingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingBufferingParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingResponseBufferingEditParams struct {
 	// Identifier

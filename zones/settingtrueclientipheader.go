@@ -95,10 +95,6 @@ func (r zoneSettingTrueClientIPHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingTrueClientIPHeader) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingTrueClientIPHeader) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingTrueClientIPHeaderID string
 
@@ -146,21 +142,6 @@ func (r ZoneSettingTrueClientIPHeaderEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Allows customer to continue to use True Client IP (Akamai feature) in the
-// headers we send to the origin. This is limited to Enterprise Zones.
-type ZoneSettingTrueClientIPHeaderParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingTrueClientIPHeaderID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingTrueClientIPHeaderValue] `json:"value,required"`
-}
-
-func (r ZoneSettingTrueClientIPHeaderParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingTrueClientIPHeaderParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingTrueClientIPHeaderEditParams struct {
 	// Identifier

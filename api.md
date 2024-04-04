@@ -345,21 +345,7 @@ Methods:
 
 ## Settings
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingEditResponse">SettingEditResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingGetResponse">SettingGetResponse</a>
-
-Methods:
-
-- <code title="patch /zones/{zone_id}/settings">client.Zones.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingEditParams">SettingEditParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingEditResponse">SettingEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_id}/settings">client.Zones.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingGetParams">SettingGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingGetResponse">SettingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### ZeroRTT
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSetting0rttParam">ZoneSetting0rttParam</a>
 
 Response Types:
 
@@ -372,10 +358,6 @@ Methods:
 
 ### AdvancedDDoS
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAdvancedDDoSParam">ZoneSettingAdvancedDDoSParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAdvancedDDoS">ZoneSettingAdvancedDDoS</a>
@@ -385,10 +367,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/advanced_ddos">client.Zones.Settings.AdvancedDDoS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingAdvancedDDoSService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingAdvancedDDoSGetParams">SettingAdvancedDDoSGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAdvancedDDoS">ZoneSettingAdvancedDDoS</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### AlwaysOnline
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAlwaysOnlineParam">ZoneSettingAlwaysOnlineParam</a>
 
 Response Types:
 
@@ -401,10 +379,6 @@ Methods:
 
 ### AlwaysUseHTTPS
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAlwaysUseHTTPSParam">ZoneSettingAlwaysUseHTTPSParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAlwaysUseHTTPS">ZoneSettingAlwaysUseHTTPS</a>
@@ -415,10 +389,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/always_use_https">client.Zones.Settings.AlwaysUseHTTPS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingAlwaysUseHTTPSService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingAlwaysUseHTTPSGetParams">SettingAlwaysUseHTTPSGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAlwaysUseHTTPS">ZoneSettingAlwaysUseHTTPS</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### AutomaticHTTPSRewrites
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingAutomaticHTTPSRewritesParam">ZoneSettingAutomaticHTTPSRewritesParam</a>
 
 Response Types:
 
@@ -446,10 +416,6 @@ Methods:
 
 ### Brotli
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingBrotliParam">ZoneSettingBrotliParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingBrotli">ZoneSettingBrotli</a>
@@ -460,10 +426,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/brotli">client.Zones.Settings.Brotli.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingBrotliService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingBrotliGetParams">SettingBrotliGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingBrotli">ZoneSettingBrotli</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### BrowserCacheTTL
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingBrowserCacheTTLParam">ZoneSettingBrowserCacheTTLParam</a>
 
 Response Types:
 
@@ -476,10 +438,6 @@ Methods:
 
 ### BrowserCheck
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingBrowserCheckParam">ZoneSettingBrowserCheckParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingBrowserCheck">ZoneSettingBrowserCheck</a>
@@ -490,10 +448,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/browser_check">client.Zones.Settings.BrowserCheck.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingBrowserCheckService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingBrowserCheckGetParams">SettingBrowserCheckGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingBrowserCheck">ZoneSettingBrowserCheck</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### CacheLevel
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingCacheLevelParam">ZoneSettingCacheLevelParam</a>
 
 Response Types:
 
@@ -506,10 +460,6 @@ Methods:
 
 ### ChallengeTTL
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingChallengeTTLParam">ZoneSettingChallengeTTLParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingChallengeTTL">ZoneSettingChallengeTTL</a>
@@ -520,10 +470,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/challenge_ttl">client.Zones.Settings.ChallengeTTL.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingChallengeTTLService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingChallengeTTLGetParams">SettingChallengeTTLGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingChallengeTTL">ZoneSettingChallengeTTL</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Ciphers
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingCiphersParam">ZoneSettingCiphersParam</a>
 
 Response Types:
 
@@ -536,10 +482,6 @@ Methods:
 
 ### DevelopmentMode
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingDevelopmentModeParam">ZoneSettingDevelopmentModeParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingDevelopmentMode">ZoneSettingDevelopmentMode</a>
@@ -551,10 +493,6 @@ Methods:
 
 ### EarlyHints
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingEarlyHintsParam">ZoneSettingEarlyHintsParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingEarlyHints">ZoneSettingEarlyHints</a>
@@ -565,10 +503,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/early_hints">client.Zones.Settings.EarlyHints.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingEarlyHintService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingEarlyHintGetParams">SettingEarlyHintGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingEarlyHints">ZoneSettingEarlyHints</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### EmailObfuscation
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingEmailObfuscationParam">ZoneSettingEmailObfuscationParam</a>
 
 Response Types:
 
@@ -596,10 +530,6 @@ Methods:
 
 ### HotlinkProtection
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingHotlinkProtectionParam">ZoneSettingHotlinkProtectionParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingHotlinkProtection">ZoneSettingHotlinkProtection</a>
@@ -611,10 +541,6 @@ Methods:
 
 ### HTTP2
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingHTTP2Param">ZoneSettingHTTP2Param</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingHTTP2">ZoneSettingHTTP2</a>
@@ -625,10 +551,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/http2">client.Zones.Settings.HTTP2.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingHTTP2Service.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingHTTP2GetParams">SettingHTTP2GetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingHTTP2">ZoneSettingHTTP2</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### HTTP3
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingHTTP3Param">ZoneSettingHTTP3Param</a>
 
 Response Types:
 
@@ -656,10 +578,6 @@ Methods:
 
 ### IPGeolocation
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingIPGeolocationParam">ZoneSettingIPGeolocationParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingIPGeolocation">ZoneSettingIPGeolocation</a>
@@ -670,10 +588,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/ip_geolocation">client.Zones.Settings.IPGeolocation.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingIPGeolocationService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingIPGeolocationGetParams">SettingIPGeolocationGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingIPGeolocation">ZoneSettingIPGeolocation</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### IPV6
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingIPV6Param">ZoneSettingIPV6Param</a>
 
 Response Types:
 
@@ -686,10 +600,6 @@ Methods:
 
 ### MinTLSVersion
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingMinTLSVersionParam">ZoneSettingMinTLSVersionParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingMinTLSVersion">ZoneSettingMinTLSVersion</a>
@@ -700,10 +610,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/min_tls_version">client.Zones.Settings.MinTLSVersion.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingMinTLSVersionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingMinTLSVersionGetParams">SettingMinTLSVersionGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingMinTLSVersion">ZoneSettingMinTLSVersion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Minify
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingMinifyParam">ZoneSettingMinifyParam</a>
 
 Response Types:
 
@@ -716,10 +622,6 @@ Methods:
 
 ### Mirage
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingMirageParam">ZoneSettingMirageParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingMirage">ZoneSettingMirage</a>
@@ -730,10 +632,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/mirage">client.Zones.Settings.Mirage.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingMirageService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingMirageGetParams">SettingMirageGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingMirage">ZoneSettingMirage</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### MobileRedirect
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingMobileRedirectParam">ZoneSettingMobileRedirectParam</a>
 
 Response Types:
 
@@ -761,10 +659,6 @@ Methods:
 
 ### OpportunisticEncryption
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingOpportunisticEncryptionParam">ZoneSettingOpportunisticEncryptionParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingOpportunisticEncryption">ZoneSettingOpportunisticEncryption</a>
@@ -775,10 +669,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/opportunistic_encryption">client.Zones.Settings.OpportunisticEncryption.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOpportunisticEncryptionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOpportunisticEncryptionGetParams">SettingOpportunisticEncryptionGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingOpportunisticEncryption">ZoneSettingOpportunisticEncryption</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### OpportunisticOnion
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingOpportunisticOnionParam">ZoneSettingOpportunisticOnionParam</a>
 
 Response Types:
 
@@ -805,10 +695,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/orange_to_orange">client.Zones.Settings.OrangeToOrange.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOrangeToOrangeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingOrangeToOrangeGetParams">SettingOrangeToOrangeGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingOrangeToOrange">ZoneSettingOrangeToOrange</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### OriginErrorPagePassThru
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingOriginErrorPagePassThruParam">ZoneSettingOriginErrorPagePassThruParam</a>
 
 Response Types:
 
@@ -849,10 +735,6 @@ Methods:
 
 ### PrefetchPreload
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingPrefetchPreloadParam">ZoneSettingPrefetchPreloadParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingPrefetchPreload">ZoneSettingPrefetchPreload</a>
@@ -879,10 +761,6 @@ Methods:
 
 ### PseudoIPV4
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingPseudoIPV4Param">ZoneSettingPseudoIPV4Param</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingPseudoIPV4">ZoneSettingPseudoIPV4</a>
@@ -893,10 +771,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/pseudo_ipv4">client.Zones.Settings.PseudoIPV4.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingPseudoIPV4Service.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingPseudoIPV4GetParams">SettingPseudoIPV4GetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingPseudoIPV4">ZoneSettingPseudoIPV4</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### ResponseBuffering
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingBufferingParam">ZoneSettingBufferingParam</a>
 
 Response Types:
 
@@ -924,10 +798,6 @@ Methods:
 
 ### SecurityHeaders
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingSecurityHeaderParam">ZoneSettingSecurityHeaderParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingSecurityHeader">ZoneSettingSecurityHeader</a>
@@ -938,10 +808,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/security_header">client.Zones.Settings.SecurityHeaders.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingSecurityHeaderService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingSecurityHeaderGetParams">SettingSecurityHeaderGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingSecurityHeader">ZoneSettingSecurityHeader</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### SecurityLevel
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingSecurityLevelParam">ZoneSettingSecurityLevelParam</a>
 
 Response Types:
 
@@ -954,10 +820,6 @@ Methods:
 
 ### ServerSideExcludes
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingServerSideExcludeParam">ZoneSettingServerSideExcludeParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingServerSideExclude">ZoneSettingServerSideExclude</a>
@@ -969,10 +831,6 @@ Methods:
 
 ### SortQueryStringForCache
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingSortQueryStringForCacheParam">ZoneSettingSortQueryStringForCacheParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingSortQueryStringForCache">ZoneSettingSortQueryStringForCache</a>
@@ -983,10 +841,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/sort_query_string_for_cache">client.Zones.Settings.SortQueryStringForCache.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingSortQueryStringForCacheService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingSortQueryStringForCacheGetParams">SettingSortQueryStringForCacheGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingSortQueryStringForCache">ZoneSettingSortQueryStringForCache</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### SSL
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingSSLParam">ZoneSettingSSLParam</a>
 
 Response Types:
 
@@ -1014,10 +868,6 @@ Methods:
 
 ### TLS1_3
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingTLS1_3Param">ZoneSettingTLS1_3Param</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingTLS1_3">ZoneSettingTLS1_3</a>
@@ -1028,10 +878,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/tls_1_3">client.Zones.Settings.TLS1_3.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingTLS1_3Service.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingTLS1_3GetParams">SettingTLS1_3GetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingTLS1_3">ZoneSettingTLS1_3</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### TLSClientAuth
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingTLSClientAuthParam">ZoneSettingTLSClientAuthParam</a>
 
 Response Types:
 
@@ -1044,10 +890,6 @@ Methods:
 
 ### TrueClientIPHeader
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingTrueClientIPHeaderParam">ZoneSettingTrueClientIPHeaderParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingTrueClientIPHeader">ZoneSettingTrueClientIPHeader</a>
@@ -1058,10 +900,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/true_client_ip_header">client.Zones.Settings.TrueClientIPHeader.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingTrueClientIPHeaderService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingTrueClientIPHeaderGetParams">SettingTrueClientIPHeaderGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingTrueClientIPHeader">ZoneSettingTrueClientIPHeader</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### WAF
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingWAFParam">ZoneSettingWAFParam</a>
 
 Response Types:
 
@@ -1074,10 +912,6 @@ Methods:
 
 ### WebP
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingWebPParam">ZoneSettingWebPParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingWebP">ZoneSettingWebP</a>
@@ -1088,10 +922,6 @@ Methods:
 - <code title="get /zones/{zone_id}/settings/webp">client.Zones.Settings.WebP.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingWebPService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SettingWebPGetParams">SettingWebPGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingWebP">ZoneSettingWebP</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Websocket
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#ZoneSettingWebsocketsParam">ZoneSettingWebsocketsParam</a>
 
 Response Types:
 

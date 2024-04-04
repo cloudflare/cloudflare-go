@@ -117,10 +117,6 @@ func (r zoneSettingWAFJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingWAF) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingWAF) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingWAFID string
 
@@ -168,29 +164,6 @@ func (r ZoneSettingWAFEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// The WAF examines HTTP requests to your website. It inspects both GET and POST
-// requests and applies rules to help filter out illegitimate traffic from
-// legitimate website visitors. The Cloudflare WAF inspects website addresses or
-// URLs to detect anything out of the ordinary. If the Cloudflare WAF determines
-// suspicious user behavior, then the WAF will 'challenge' the web visitor with a
-// page that asks them to submit a CAPTCHA successfully to continue their action.
-// If the challenge is failed, the action will be stopped. What this means is that
-// Cloudflare's WAF will block any traffic identified as illegitimate before it
-// reaches your origin web server.
-// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-type ZoneSettingWAFParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingWAFID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingWAFValue] `json:"value,required"`
-}
-
-func (r ZoneSettingWAFParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingWAFParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingWAFEditParams struct {
 	// Identifier
