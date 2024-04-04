@@ -204,9 +204,9 @@ func (r OriginTLSClientAuthNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OriginTLSClientAuthNewResponseEnvelope struct {
-	Errors   []OriginTLSClientAuthNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginTLSClientAuthNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   OriginTLSClientAuthNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   OriginTLSClientAuthNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originTLSClientAuthNewResponseEnvelopeJSON    `json:"-"`
@@ -228,52 +228,6 @@ func (r *OriginTLSClientAuthNewResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r originTLSClientAuthNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginTLSClientAuthNewResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    originTLSClientAuthNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originTLSClientAuthNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [OriginTLSClientAuthNewResponseEnvelopeErrors]
-type originTLSClientAuthNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originTLSClientAuthNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginTLSClientAuthNewResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    originTLSClientAuthNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originTLSClientAuthNewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [OriginTLSClientAuthNewResponseEnvelopeMessages]
-type originTLSClientAuthNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originTLSClientAuthNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -308,9 +262,9 @@ func (r OriginTLSClientAuthDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type OriginTLSClientAuthDeleteResponseEnvelope struct {
-	Errors   []OriginTLSClientAuthDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginTLSClientAuthDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   OriginTLSClientAuthDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172      `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172      `json:"messages,required"`
+	Result   OriginTLSClientAuthDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originTLSClientAuthDeleteResponseEnvelopeJSON    `json:"-"`
@@ -335,52 +289,6 @@ func (r originTLSClientAuthDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type OriginTLSClientAuthDeleteResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    originTLSClientAuthDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originTLSClientAuthDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [OriginTLSClientAuthDeleteResponseEnvelopeErrors]
-type originTLSClientAuthDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originTLSClientAuthDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginTLSClientAuthDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    originTLSClientAuthDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originTLSClientAuthDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [OriginTLSClientAuthDeleteResponseEnvelopeMessages]
-type originTLSClientAuthDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originTLSClientAuthDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type OriginTLSClientAuthDeleteResponseEnvelopeSuccess bool
 
@@ -402,9 +310,9 @@ type OriginTLSClientAuthGetParams struct {
 }
 
 type OriginTLSClientAuthGetResponseEnvelope struct {
-	Errors   []OriginTLSClientAuthGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginTLSClientAuthGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   OriginTLSClientAuthGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   OriginTLSClientAuthGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originTLSClientAuthGetResponseEnvelopeJSON    `json:"-"`
@@ -426,52 +334,6 @@ func (r *OriginTLSClientAuthGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r originTLSClientAuthGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginTLSClientAuthGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    originTLSClientAuthGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originTLSClientAuthGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [OriginTLSClientAuthGetResponseEnvelopeErrors]
-type originTLSClientAuthGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originTLSClientAuthGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginTLSClientAuthGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    originTLSClientAuthGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originTLSClientAuthGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [OriginTLSClientAuthGetResponseEnvelopeMessages]
-type originTLSClientAuthGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originTLSClientAuthGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

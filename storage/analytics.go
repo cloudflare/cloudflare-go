@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,7 +62,7 @@ func (r *AnalyticsService) Stored(ctx context.Context, params AnalyticsStoredPar
 
 // Metrics on Workers KV requests.
 type WorkersKVComponentsSchemasResult struct {
-	Data []WorkersKVComponentsSchemasResultData `json:"data,required,nullable"`
+	Data []shared.UnnamedSchemaRef148 `json:"data,required,nullable"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -97,28 +98,6 @@ func (r *WorkersKVComponentsSchemasResult) UnmarshalJSON(data []byte) (err error
 }
 
 func (r workersKVComponentsSchemasResultJSON) RawJSON() string {
-	return r.raw
-}
-
-type WorkersKVComponentsSchemasResultData struct {
-	// List of metrics returned by the query.
-	Metrics []interface{}                            `json:"metrics,required"`
-	JSON    workersKVComponentsSchemasResultDataJSON `json:"-"`
-}
-
-// workersKVComponentsSchemasResultDataJSON contains the JSON metadata for the
-// struct [WorkersKVComponentsSchemasResultData]
-type workersKVComponentsSchemasResultDataJSON struct {
-	Metrics     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkersKVComponentsSchemasResultData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r workersKVComponentsSchemasResultDataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -180,7 +159,7 @@ func (r workersKVComponentsSchemasResultQueryJSON) RawJSON() string {
 
 // Metrics on Workers KV requests.
 type WorkersKVSchemasResult struct {
-	Data []WorkersKVSchemasResultData `json:"data,required,nullable"`
+	Data []shared.UnnamedSchemaRef148 `json:"data,required,nullable"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -216,28 +195,6 @@ func (r *WorkersKVSchemasResult) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r workersKVSchemasResultJSON) RawJSON() string {
-	return r.raw
-}
-
-type WorkersKVSchemasResultData struct {
-	// List of metrics returned by the query.
-	Metrics []interface{}                  `json:"metrics,required"`
-	JSON    workersKVSchemasResultDataJSON `json:"-"`
-}
-
-// workersKVSchemasResultDataJSON contains the JSON metadata for the struct
-// [WorkersKVSchemasResultData]
-type workersKVSchemasResultDataJSON struct {
-	Metrics     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkersKVSchemasResultData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r workersKVSchemasResultDataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -389,8 +346,8 @@ func (r AnalyticsListParamsQueryMetric) IsKnown() bool {
 }
 
 type AnalyticsListResponseEnvelope struct {
-	Errors   []AnalyticsListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsListResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Metrics on Workers KV requests.
 	Result WorkersKVSchemasResult `json:"result,required"`
 	// Whether the API call was successful
@@ -414,52 +371,6 @@ func (r *AnalyticsListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r analyticsListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsListResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    analyticsListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// analyticsListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AnalyticsListResponseEnvelopeErrors]
-type analyticsListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsListResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    analyticsListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// analyticsListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AnalyticsListResponseEnvelopeMessages]
-type analyticsListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -567,8 +478,8 @@ func (r AnalyticsStoredParamsQueryMetric) IsKnown() bool {
 }
 
 type AnalyticsStoredResponseEnvelope struct {
-	Errors   []AnalyticsStoredResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsStoredResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Metrics on Workers KV requests.
 	Result WorkersKVComponentsSchemasResult `json:"result,required"`
 	// Whether the API call was successful
@@ -592,52 +503,6 @@ func (r *AnalyticsStoredResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r analyticsStoredResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsStoredResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    analyticsStoredResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// analyticsStoredResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AnalyticsStoredResponseEnvelopeErrors]
-type analyticsStoredResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsStoredResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsStoredResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsStoredResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    analyticsStoredResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// analyticsStoredResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AnalyticsStoredResponseEnvelopeMessages]
-type analyticsStoredResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsStoredResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsStoredResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

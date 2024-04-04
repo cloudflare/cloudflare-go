@@ -99,9 +99,9 @@ func (r TunnelManagementNewParamsResource) IsKnown() bool {
 }
 
 type TunnelManagementNewResponseEnvelope struct {
-	Errors   []TunnelManagementNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TunnelManagementNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelManagementNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   TunnelManagementNewResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelManagementNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelManagementNewResponseEnvelopeJSON    `json:"-"`
@@ -123,52 +123,6 @@ func (r *TunnelManagementNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r tunnelManagementNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TunnelManagementNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    tunnelManagementNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelManagementNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [TunnelManagementNewResponseEnvelopeErrors]
-type tunnelManagementNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelManagementNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelManagementNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TunnelManagementNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    tunnelManagementNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelManagementNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [TunnelManagementNewResponseEnvelopeMessages]
-type tunnelManagementNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelManagementNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelManagementNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

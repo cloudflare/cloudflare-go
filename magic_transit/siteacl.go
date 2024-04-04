@@ -133,9 +133,9 @@ type SiteACLNewResponseACL struct {
 	LAN1           SiteACLNewResponseACLsLAN1 `json:"lan_1"`
 	LAN2           SiteACLNewResponseACLsLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                           `json:"name"`
-	Protocols []SiteACLNewResponseACLsProtocol `json:"protocols"`
-	JSON      siteACLNewResponseACLJSON        `json:"-"`
+	Name      string                      `json:"name"`
+	Protocols []shared.UnnamedSchemaRef82 `json:"protocols"`
+	JSON      siteACLNewResponseACLJSON   `json:"-"`
 }
 
 // siteACLNewResponseACLJSON contains the JSON metadata for the struct
@@ -270,24 +270,6 @@ func init() {
 	)
 }
 
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type SiteACLNewResponseACLsProtocol string
-
-const (
-	SiteACLNewResponseACLsProtocolTcp  SiteACLNewResponseACLsProtocol = "tcp"
-	SiteACLNewResponseACLsProtocolUdp  SiteACLNewResponseACLsProtocol = "udp"
-	SiteACLNewResponseACLsProtocolIcmp SiteACLNewResponseACLsProtocol = "icmp"
-)
-
-func (r SiteACLNewResponseACLsProtocol) IsKnown() bool {
-	switch r {
-	case SiteACLNewResponseACLsProtocolTcp, SiteACLNewResponseACLsProtocolUdp, SiteACLNewResponseACLsProtocolIcmp:
-		return true
-	}
-	return false
-}
-
 type SiteACLUpdateResponse struct {
 	// Bidirectional ACL policy for network traffic within a site.
 	ACL  SiteACLUpdateResponseACL  `json:"acl"`
@@ -324,9 +306,9 @@ type SiteACLUpdateResponseACL struct {
 	LAN1           SiteACLUpdateResponseACLLAN1 `json:"lan_1"`
 	LAN2           SiteACLUpdateResponseACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                             `json:"name"`
-	Protocols []SiteACLUpdateResponseACLProtocol `json:"protocols"`
-	JSON      siteACLUpdateResponseACLJSON       `json:"-"`
+	Name      string                       `json:"name"`
+	Protocols []shared.UnnamedSchemaRef82  `json:"protocols"`
+	JSON      siteACLUpdateResponseACLJSON `json:"-"`
 }
 
 // siteACLUpdateResponseACLJSON contains the JSON metadata for the struct
@@ -461,24 +443,6 @@ func init() {
 	)
 }
 
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type SiteACLUpdateResponseACLProtocol string
-
-const (
-	SiteACLUpdateResponseACLProtocolTcp  SiteACLUpdateResponseACLProtocol = "tcp"
-	SiteACLUpdateResponseACLProtocolUdp  SiteACLUpdateResponseACLProtocol = "udp"
-	SiteACLUpdateResponseACLProtocolIcmp SiteACLUpdateResponseACLProtocol = "icmp"
-)
-
-func (r SiteACLUpdateResponseACLProtocol) IsKnown() bool {
-	switch r {
-	case SiteACLUpdateResponseACLProtocolTcp, SiteACLUpdateResponseACLProtocolUdp, SiteACLUpdateResponseACLProtocolIcmp:
-		return true
-	}
-	return false
-}
-
 type SiteACLListResponse struct {
 	ACLs []SiteACLListResponseACL `json:"acls"`
 	JSON siteACLListResponseJSON  `json:"-"`
@@ -514,9 +478,9 @@ type SiteACLListResponseACL struct {
 	LAN1           SiteACLListResponseACLsLAN1 `json:"lan_1"`
 	LAN2           SiteACLListResponseACLsLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                            `json:"name"`
-	Protocols []SiteACLListResponseACLsProtocol `json:"protocols"`
-	JSON      siteACLListResponseACLJSON        `json:"-"`
+	Name      string                      `json:"name"`
+	Protocols []shared.UnnamedSchemaRef82 `json:"protocols"`
+	JSON      siteACLListResponseACLJSON  `json:"-"`
 }
 
 // siteACLListResponseACLJSON contains the JSON metadata for the struct
@@ -651,24 +615,6 @@ func init() {
 	)
 }
 
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type SiteACLListResponseACLsProtocol string
-
-const (
-	SiteACLListResponseACLsProtocolTcp  SiteACLListResponseACLsProtocol = "tcp"
-	SiteACLListResponseACLsProtocolUdp  SiteACLListResponseACLsProtocol = "udp"
-	SiteACLListResponseACLsProtocolIcmp SiteACLListResponseACLsProtocol = "icmp"
-)
-
-func (r SiteACLListResponseACLsProtocol) IsKnown() bool {
-	switch r {
-	case SiteACLListResponseACLsProtocolTcp, SiteACLListResponseACLsProtocolUdp, SiteACLListResponseACLsProtocolIcmp:
-		return true
-	}
-	return false
-}
-
 type SiteACLDeleteResponse struct {
 	Deleted bool `json:"deleted"`
 	// Bidirectional ACL policy for network traffic within a site.
@@ -707,9 +653,9 @@ type SiteACLDeleteResponseDeletedACL struct {
 	LAN1           SiteACLDeleteResponseDeletedACLLAN1 `json:"lan_1"`
 	LAN2           SiteACLDeleteResponseDeletedACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                                    `json:"name"`
-	Protocols []SiteACLDeleteResponseDeletedACLProtocol `json:"protocols"`
-	JSON      siteACLDeleteResponseDeletedACLJSON       `json:"-"`
+	Name      string                              `json:"name"`
+	Protocols []shared.UnnamedSchemaRef82         `json:"protocols"`
+	JSON      siteACLDeleteResponseDeletedACLJSON `json:"-"`
 }
 
 // siteACLDeleteResponseDeletedACLJSON contains the JSON metadata for the struct
@@ -844,24 +790,6 @@ func init() {
 	)
 }
 
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type SiteACLDeleteResponseDeletedACLProtocol string
-
-const (
-	SiteACLDeleteResponseDeletedACLProtocolTcp  SiteACLDeleteResponseDeletedACLProtocol = "tcp"
-	SiteACLDeleteResponseDeletedACLProtocolUdp  SiteACLDeleteResponseDeletedACLProtocol = "udp"
-	SiteACLDeleteResponseDeletedACLProtocolIcmp SiteACLDeleteResponseDeletedACLProtocol = "icmp"
-)
-
-func (r SiteACLDeleteResponseDeletedACLProtocol) IsKnown() bool {
-	switch r {
-	case SiteACLDeleteResponseDeletedACLProtocolTcp, SiteACLDeleteResponseDeletedACLProtocolUdp, SiteACLDeleteResponseDeletedACLProtocolIcmp:
-		return true
-	}
-	return false
-}
-
 type SiteACLGetResponse struct {
 	// Bidirectional ACL policy for network traffic within a site.
 	ACL  SiteACLGetResponseACL  `json:"acl"`
@@ -898,9 +826,9 @@ type SiteACLGetResponseACL struct {
 	LAN1           SiteACLGetResponseACLLAN1 `json:"lan_1"`
 	LAN2           SiteACLGetResponseACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                          `json:"name"`
-	Protocols []SiteACLGetResponseACLProtocol `json:"protocols"`
-	JSON      siteACLGetResponseACLJSON       `json:"-"`
+	Name      string                      `json:"name"`
+	Protocols []shared.UnnamedSchemaRef82 `json:"protocols"`
+	JSON      siteACLGetResponseACLJSON   `json:"-"`
 }
 
 // siteACLGetResponseACLJSON contains the JSON metadata for the struct
@@ -1035,24 +963,6 @@ func init() {
 	)
 }
 
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type SiteACLGetResponseACLProtocol string
-
-const (
-	SiteACLGetResponseACLProtocolTcp  SiteACLGetResponseACLProtocol = "tcp"
-	SiteACLGetResponseACLProtocolUdp  SiteACLGetResponseACLProtocol = "udp"
-	SiteACLGetResponseACLProtocolIcmp SiteACLGetResponseACLProtocol = "icmp"
-)
-
-func (r SiteACLGetResponseACLProtocol) IsKnown() bool {
-	switch r {
-	case SiteACLGetResponseACLProtocolTcp, SiteACLGetResponseACLProtocolUdp, SiteACLGetResponseACLProtocolIcmp:
-		return true
-	}
-	return false
-}
-
 type SiteACLNewParams struct {
 	// Identifier
 	AccountID param.Field[string]              `path:"account_id,required"`
@@ -1074,8 +984,8 @@ type SiteACLNewParamsACL struct {
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
 	// traffic locally on the Magic WAN Connector. If not included in request, will
 	// default to false.
-	ForwardLocally param.Field[bool]                          `json:"forward_locally"`
-	Protocols      param.Field[[]SiteACLNewParamsACLProtocol] `json:"protocols"`
+	ForwardLocally param.Field[bool]                        `json:"forward_locally"`
+	Protocols      param.Field[[]shared.UnnamedSchemaRef82] `json:"protocols"`
 }
 
 func (r SiteACLNewParamsACL) MarshalJSON() (data []byte, err error) {
@@ -1130,28 +1040,10 @@ type SiteACLNewParamsACLLAN2Subnet interface {
 	ImplementsMagicTransitSiteACLNewParamsAcllan2Subnet()
 }
 
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type SiteACLNewParamsACLProtocol string
-
-const (
-	SiteACLNewParamsACLProtocolTcp  SiteACLNewParamsACLProtocol = "tcp"
-	SiteACLNewParamsACLProtocolUdp  SiteACLNewParamsACLProtocol = "udp"
-	SiteACLNewParamsACLProtocolIcmp SiteACLNewParamsACLProtocol = "icmp"
-)
-
-func (r SiteACLNewParamsACLProtocol) IsKnown() bool {
-	switch r {
-	case SiteACLNewParamsACLProtocolTcp, SiteACLNewParamsACLProtocolUdp, SiteACLNewParamsACLProtocolIcmp:
-		return true
-	}
-	return false
-}
-
 type SiteACLNewResponseEnvelope struct {
-	Errors   []SiteACLNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteACLNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SiteACLNewResponse           `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLNewResponseEnvelopeJSON    `json:"-"`
@@ -1173,52 +1065,6 @@ func (r *SiteACLNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteACLNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLNewResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    siteACLNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteACLNewResponseEnvelopeErrors]
-type siteACLNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLNewResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    siteACLNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteACLNewResponseEnvelopeMessages]
-type siteACLNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1258,8 +1104,8 @@ type SiteACLUpdateParamsACL struct {
 	LAN1           param.Field[SiteACLUpdateParamsACLLAN1] `json:"lan_1"`
 	LAN2           param.Field[SiteACLUpdateParamsACLLAN2] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]                           `json:"name"`
-	Protocols param.Field[[]SiteACLUpdateParamsACLProtocol] `json:"protocols"`
+	Name      param.Field[string]                      `json:"name"`
+	Protocols param.Field[[]shared.UnnamedSchemaRef82] `json:"protocols"`
 }
 
 func (r SiteACLUpdateParamsACL) MarshalJSON() (data []byte, err error) {
@@ -1314,28 +1160,10 @@ type SiteACLUpdateParamsACLLAN2Subnet interface {
 	ImplementsMagicTransitSiteACLUpdateParamsAcllan2Subnet()
 }
 
-// Array of allowed communication protocols between configured LANs. If no
-// protocols are provided, all protocols are allowed.
-type SiteACLUpdateParamsACLProtocol string
-
-const (
-	SiteACLUpdateParamsACLProtocolTcp  SiteACLUpdateParamsACLProtocol = "tcp"
-	SiteACLUpdateParamsACLProtocolUdp  SiteACLUpdateParamsACLProtocol = "udp"
-	SiteACLUpdateParamsACLProtocolIcmp SiteACLUpdateParamsACLProtocol = "icmp"
-)
-
-func (r SiteACLUpdateParamsACLProtocol) IsKnown() bool {
-	switch r {
-	case SiteACLUpdateParamsACLProtocolTcp, SiteACLUpdateParamsACLProtocolUdp, SiteACLUpdateParamsACLProtocolIcmp:
-		return true
-	}
-	return false
-}
-
 type SiteACLUpdateResponseEnvelope struct {
-	Errors   []SiteACLUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteACLUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SiteACLUpdateResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1360,52 +1188,6 @@ func (r siteACLUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteACLUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    siteACLUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SiteACLUpdateResponseEnvelopeErrors]
-type siteACLUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    siteACLUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteACLUpdateResponseEnvelopeMessages]
-type siteACLUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SiteACLUpdateResponseEnvelopeSuccess bool
 
@@ -1427,9 +1209,9 @@ type SiteACLListParams struct {
 }
 
 type SiteACLListResponseEnvelope struct {
-	Errors   []SiteACLListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLListResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteACLListResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SiteACLListResponse          `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLListResponseEnvelopeJSON    `json:"-"`
@@ -1451,52 +1233,6 @@ func (r *SiteACLListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteACLListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLListResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    siteACLListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteACLListResponseEnvelopeErrors]
-type siteACLListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLListResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    siteACLListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteACLListResponseEnvelopeMessages]
-type siteACLListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1526,9 +1262,9 @@ func (r SiteACLDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLDeleteResponseEnvelope struct {
-	Errors   []SiteACLDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteACLDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SiteACLDeleteResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1553,52 +1289,6 @@ func (r siteACLDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteACLDeleteResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    siteACLDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SiteACLDeleteResponseEnvelopeErrors]
-type siteACLDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLDeleteResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    siteACLDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SiteACLDeleteResponseEnvelopeMessages]
-type siteACLDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SiteACLDeleteResponseEnvelopeSuccess bool
 
@@ -1620,9 +1310,9 @@ type SiteACLGetParams struct {
 }
 
 type SiteACLGetResponseEnvelope struct {
-	Errors   []SiteACLGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SiteACLGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SiteACLGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SiteACLGetResponse           `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLGetResponseEnvelopeJSON    `json:"-"`
@@ -1644,52 +1334,6 @@ func (r *SiteACLGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteACLGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    siteACLGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// siteACLGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SiteACLGetResponseEnvelopeErrors]
-type siteACLGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteACLGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    siteACLGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// siteACLGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SiteACLGetResponseEnvelopeMessages]
-type siteACLGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteACLGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteACLGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -70,7 +70,7 @@ type AnalyzeNewParams struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[AnalyzeNewParamsBundleMethod] `json:"bundle_method"`
+	BundleMethod param.Field[shared.UnnamedSchemaRef78] `json:"bundle_method"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate"`
 }
@@ -79,30 +79,10 @@ func (r AnalyzeNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type AnalyzeNewParamsBundleMethod string
-
-const (
-	AnalyzeNewParamsBundleMethodUbiquitous AnalyzeNewParamsBundleMethod = "ubiquitous"
-	AnalyzeNewParamsBundleMethodOptimal    AnalyzeNewParamsBundleMethod = "optimal"
-	AnalyzeNewParamsBundleMethodForce      AnalyzeNewParamsBundleMethod = "force"
-)
-
-func (r AnalyzeNewParamsBundleMethod) IsKnown() bool {
-	switch r {
-	case AnalyzeNewParamsBundleMethodUbiquitous, AnalyzeNewParamsBundleMethodOptimal, AnalyzeNewParamsBundleMethodForce:
-		return true
-	}
-	return false
-}
-
 type AnalyzeNewResponseEnvelope struct {
-	Errors   []AnalyzeNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyzeNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AnalyzeNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AnalyzeNewResponse           `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyzeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyzeNewResponseEnvelopeJSON    `json:"-"`
@@ -124,52 +104,6 @@ func (r *AnalyzeNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r analyzeNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyzeNewResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    analyzeNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// analyzeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [AnalyzeNewResponseEnvelopeErrors]
-type analyzeNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyzeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyzeNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyzeNewResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    analyzeNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// analyzeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [AnalyzeNewResponseEnvelopeMessages]
-type analyzeNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyzeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyzeNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

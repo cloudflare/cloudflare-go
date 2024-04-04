@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -238,9 +239,9 @@ func (r HostnameNewParamsTarget) IsKnown() bool {
 }
 
 type HostnameNewResponseEnvelope struct {
-	Errors   []HostnameNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DistributedWebHostname                `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DistributedWebHostname       `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameNewResponseEnvelopeJSON    `json:"-"`
@@ -262,52 +263,6 @@ func (r *HostnameNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r hostnameNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameNewResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    hostnameNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [HostnameNewResponseEnvelopeErrors]
-type hostnameNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameNewResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    hostnameNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HostnameNewResponseEnvelopeMessages]
-type hostnameNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -335,9 +290,9 @@ func (r HostnameDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameDeleteResponseEnvelope struct {
-	Errors   []HostnameDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   HostnameDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   HostnameDeleteResponse       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success HostnameDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameDeleteResponseEnvelopeJSON    `json:"-"`
@@ -359,52 +314,6 @@ func (r *HostnameDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r hostnameDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameDeleteResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    hostnameDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [HostnameDeleteResponseEnvelopeErrors]
-type hostnameDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameDeleteResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    hostnameDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HostnameDeleteResponseEnvelopeMessages]
-type hostnameDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -435,9 +344,9 @@ func (r HostnameEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameEditResponseEnvelope struct {
-	Errors   []HostnameEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   DistributedWebHostname                 `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DistributedWebHostname       `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameEditResponseEnvelopeJSON    `json:"-"`
@@ -462,52 +371,6 @@ func (r hostnameEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type HostnameEditResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    hostnameEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [HostnameEditResponseEnvelopeErrors]
-type hostnameEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameEditResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    hostnameEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HostnameEditResponseEnvelopeMessages]
-type hostnameEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type HostnameEditResponseEnvelopeSuccess bool
 
@@ -524,9 +387,9 @@ func (r HostnameEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type HostnameGetResponseEnvelope struct {
-	Errors   []HostnameGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DistributedWebHostname                `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DistributedWebHostname       `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`
@@ -548,52 +411,6 @@ func (r *HostnameGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r hostnameGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    hostnameGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [HostnameGetResponseEnvelopeErrors]
-type hostnameGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    hostnameGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HostnameGetResponseEnvelopeMessages]
-type hostnameGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

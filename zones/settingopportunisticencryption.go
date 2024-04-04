@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -187,8 +188,8 @@ func (r SettingOpportunisticEncryptionEditParamsValue) IsKnown() bool {
 }
 
 type SettingOpportunisticEncryptionEditResponseEnvelope struct {
-	Errors   []SettingOpportunisticEncryptionEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOpportunisticEncryptionEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables the Opportunistic Encryption feature for a zone.
@@ -215,62 +216,14 @@ func (r settingOpportunisticEncryptionEditResponseEnvelopeJSON) RawJSON() string
 	return r.raw
 }
 
-type SettingOpportunisticEncryptionEditResponseEnvelopeErrors struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    settingOpportunisticEncryptionEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingOpportunisticEncryptionEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [SettingOpportunisticEncryptionEditResponseEnvelopeErrors]
-type settingOpportunisticEncryptionEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOpportunisticEncryptionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticEncryptionEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOpportunisticEncryptionEditResponseEnvelopeMessages struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    settingOpportunisticEncryptionEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOpportunisticEncryptionEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingOpportunisticEncryptionEditResponseEnvelopeMessages]
-type settingOpportunisticEncryptionEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOpportunisticEncryptionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticEncryptionEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingOpportunisticEncryptionGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingOpportunisticEncryptionGetResponseEnvelope struct {
-	Errors   []SettingOpportunisticEncryptionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOpportunisticEncryptionGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables the Opportunistic Encryption feature for a zone.
@@ -294,53 +247,5 @@ func (r *SettingOpportunisticEncryptionGetResponseEnvelope) UnmarshalJSON(data [
 }
 
 func (r settingOpportunisticEncryptionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOpportunisticEncryptionGetResponseEnvelopeErrors struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    settingOpportunisticEncryptionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingOpportunisticEncryptionGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [SettingOpportunisticEncryptionGetResponseEnvelopeErrors]
-type settingOpportunisticEncryptionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOpportunisticEncryptionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticEncryptionGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOpportunisticEncryptionGetResponseEnvelopeMessages struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    settingOpportunisticEncryptionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOpportunisticEncryptionGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingOpportunisticEncryptionGetResponseEnvelopeMessages]
-type settingOpportunisticEncryptionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOpportunisticEncryptionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticEncryptionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -260,8 +261,8 @@ func (r SettingMobileRedirectEditParamsValueStatus) IsKnown() bool {
 }
 
 type SettingMobileRedirectEditResponseEnvelope struct {
-	Errors   []SettingMobileRedirectEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingMobileRedirectEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically redirect visitors on mobile devices to a mobile-optimized
@@ -291,60 +292,14 @@ func (r settingMobileRedirectEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingMobileRedirectEditResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingMobileRedirectEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingMobileRedirectEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingMobileRedirectEditResponseEnvelopeErrors]
-type settingMobileRedirectEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMobileRedirectEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMobileRedirectEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMobileRedirectEditResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingMobileRedirectEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingMobileRedirectEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingMobileRedirectEditResponseEnvelopeMessages]
-type settingMobileRedirectEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMobileRedirectEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMobileRedirectEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingMobileRedirectGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingMobileRedirectGetResponseEnvelope struct {
-	Errors   []SettingMobileRedirectGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingMobileRedirectGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically redirect visitors on mobile devices to a mobile-optimized
@@ -371,51 +326,5 @@ func (r *SettingMobileRedirectGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r settingMobileRedirectGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMobileRedirectGetResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingMobileRedirectGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingMobileRedirectGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingMobileRedirectGetResponseEnvelopeErrors]
-type settingMobileRedirectGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMobileRedirectGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMobileRedirectGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMobileRedirectGetResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingMobileRedirectGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingMobileRedirectGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingMobileRedirectGetResponseEnvelopeMessages]
-type settingMobileRedirectGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMobileRedirectGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMobileRedirectGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

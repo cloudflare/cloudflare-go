@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -68,9 +69,9 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 			HealthCheck: cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheck{
 				Direction: cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),
-				Rate:      cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheckRateLow),
+				Rate:      cloudflare.F(shared.UnnamedSchemaRef83Low),
 				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheckTypeRequest),
+				Type:      cloudflare.F(shared.UnnamedSchemaRef84Request),
 			}),
 			Mtu: cloudflare.F(int64(0)),
 			TTL: cloudflare.F(int64(0)),

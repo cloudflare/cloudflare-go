@@ -134,9 +134,9 @@ func (r WebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookUpdateResponseEnvelope struct {
-	Errors   []WebhookUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WebhookUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WebhookUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   WebhookUpdateResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookUpdateResponseEnvelopeJSON    `json:"-"`
@@ -158,52 +158,6 @@ func (r *WebhookUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r webhookUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WebhookUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    webhookUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// webhookUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WebhookUpdateResponseEnvelopeErrors]
-type webhookUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WebhookUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r webhookUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WebhookUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    webhookUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// webhookUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WebhookUpdateResponseEnvelopeMessages]
-type webhookUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WebhookUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r webhookUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -233,9 +187,9 @@ func (r WebhookDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookDeleteResponseEnvelope struct {
-	Errors   []WebhookDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WebhookDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   WebhookDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   WebhookDeleteResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookDeleteResponseEnvelopeJSON    `json:"-"`
@@ -260,52 +214,6 @@ func (r webhookDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type WebhookDeleteResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    webhookDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// webhookDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WebhookDeleteResponseEnvelopeErrors]
-type webhookDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WebhookDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r webhookDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WebhookDeleteResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    webhookDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// webhookDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WebhookDeleteResponseEnvelopeMessages]
-type webhookDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WebhookDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r webhookDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type WebhookDeleteResponseEnvelopeSuccess bool
 
@@ -327,9 +235,9 @@ type WebhookGetParams struct {
 }
 
 type WebhookGetResponseEnvelope struct {
-	Errors   []WebhookGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WebhookGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WebhookGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   WebhookGetResponse           `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookGetResponseEnvelopeJSON    `json:"-"`
@@ -351,52 +259,6 @@ func (r *WebhookGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r webhookGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WebhookGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    webhookGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// webhookGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WebhookGetResponseEnvelopeErrors]
-type webhookGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WebhookGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r webhookGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WebhookGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    webhookGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// webhookGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [WebhookGetResponseEnvelopeMessages]
-type webhookGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WebhookGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r webhookGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

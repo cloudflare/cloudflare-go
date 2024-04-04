@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -139,9 +140,9 @@ func (r UniversalSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UniversalSettingEditResponseEnvelope struct {
-	Errors   []UniversalSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UniversalSettingEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   UniversalSSLSettings                           `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   UniversalSSLSettings         `json:"result,required"`
 	// Whether the API call was successful
 	Success UniversalSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    universalSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -166,52 +167,6 @@ func (r universalSettingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type UniversalSettingEditResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    universalSettingEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// universalSettingEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [UniversalSettingEditResponseEnvelopeErrors]
-type universalSettingEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UniversalSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r universalSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UniversalSettingEditResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    universalSettingEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// universalSettingEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [UniversalSettingEditResponseEnvelopeMessages]
-type universalSettingEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UniversalSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r universalSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type UniversalSettingEditResponseEnvelopeSuccess bool
 
@@ -233,9 +188,9 @@ type UniversalSettingGetParams struct {
 }
 
 type UniversalSettingGetResponseEnvelope struct {
-	Errors   []UniversalSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UniversalSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   UniversalSSLSettings                          `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   UniversalSSLSettings         `json:"result,required"`
 	// Whether the API call was successful
 	Success UniversalSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    universalSettingGetResponseEnvelopeJSON    `json:"-"`
@@ -257,52 +212,6 @@ func (r *UniversalSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r universalSettingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type UniversalSettingGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    universalSettingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// universalSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [UniversalSettingGetResponseEnvelopeErrors]
-type universalSettingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UniversalSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r universalSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UniversalSettingGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    universalSettingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// universalSettingGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [UniversalSettingGetResponseEnvelopeMessages]
-type universalSettingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UniversalSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r universalSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -197,8 +198,8 @@ func (r SettingResponseBufferingEditParamsValue) IsKnown() bool {
 }
 
 type SettingResponseBufferingEditResponseEnvelope struct {
-	Errors   []SettingResponseBufferingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingResponseBufferingEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables or disables buffering of responses from the proxied server. Cloudflare
@@ -228,60 +229,14 @@ func (r settingResponseBufferingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingResponseBufferingEditResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingResponseBufferingEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingResponseBufferingEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingResponseBufferingEditResponseEnvelopeErrors]
-type settingResponseBufferingEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingResponseBufferingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingResponseBufferingEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingResponseBufferingEditResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    settingResponseBufferingEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingResponseBufferingEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingResponseBufferingEditResponseEnvelopeMessages]
-type settingResponseBufferingEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingResponseBufferingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingResponseBufferingEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingResponseBufferingGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingResponseBufferingGetResponseEnvelope struct {
-	Errors   []SettingResponseBufferingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingResponseBufferingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables or disables buffering of responses from the proxied server. Cloudflare
@@ -308,51 +263,5 @@ func (r *SettingResponseBufferingGetResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r settingResponseBufferingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingResponseBufferingGetResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingResponseBufferingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingResponseBufferingGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingResponseBufferingGetResponseEnvelopeErrors]
-type settingResponseBufferingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingResponseBufferingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingResponseBufferingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingResponseBufferingGetResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingResponseBufferingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingResponseBufferingGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingResponseBufferingGetResponseEnvelopeMessages]
-type settingResponseBufferingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingResponseBufferingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingResponseBufferingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

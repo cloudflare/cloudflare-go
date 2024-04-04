@@ -9,6 +9,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -97,8 +98,8 @@ func (r loadBalancingPreviewOriginJSON) RawJSON() string {
 }
 
 type LoadBalancerPreviewGetResponseEnvelope struct {
-	Errors   []LoadBalancerPreviewGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPreviewGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Resulting health data from a preview operation.
 	Result LoadBalancingPreview `json:"result,required"`
 	// Whether the API call was successful
@@ -122,52 +123,6 @@ func (r *LoadBalancerPreviewGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r loadBalancerPreviewGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPreviewGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    loadBalancerPreviewGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPreviewGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerPreviewGetResponseEnvelopeErrors]
-type loadBalancerPreviewGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPreviewGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPreviewGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPreviewGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    loadBalancerPreviewGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPreviewGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [LoadBalancerPreviewGetResponseEnvelopeMessages]
-type loadBalancerPreviewGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPreviewGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPreviewGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

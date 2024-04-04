@@ -50,7 +50,7 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 					Subnets: cloudflare.F([]magic_transit.SiteACLNewParamsACLLAN2Subnet{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
 				}),
 				Name:      cloudflare.F("PIN Pad - Cash Register"),
-				Protocols: cloudflare.F([]magic_transit.SiteACLNewParamsACLProtocol{magic_transit.SiteACLNewParamsACLProtocolTcp, magic_transit.SiteACLNewParamsACLProtocolUdp, magic_transit.SiteACLNewParamsACLProtocolIcmp}),
+				Protocols: cloudflare.F([]shared.UnnamedSchemaRef82{shared.UnnamedSchemaRef82Tcp, shared.UnnamedSchemaRef82Udp, shared.UnnamedSchemaRef82Icmp}),
 			}),
 		},
 	)
@@ -99,7 +99,7 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 					Subnets: cloudflare.F([]magic_transit.SiteACLUpdateParamsACLLAN2Subnet{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
 				}),
 				Name:      cloudflare.F("PIN Pad - Cash Register"),
-				Protocols: cloudflare.F([]magic_transit.SiteACLUpdateParamsACLProtocol{magic_transit.SiteACLUpdateParamsACLProtocolTcp, magic_transit.SiteACLUpdateParamsACLProtocolUdp, magic_transit.SiteACLUpdateParamsACLProtocolIcmp}),
+				Protocols: cloudflare.F([]shared.UnnamedSchemaRef82{shared.UnnamedSchemaRef82Tcp, shared.UnnamedSchemaRef82Udp, shared.UnnamedSchemaRef82Icmp}),
 			}),
 		},
 	)

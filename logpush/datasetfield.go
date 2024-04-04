@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -64,9 +65,9 @@ type DatasetFieldGetParams struct {
 }
 
 type DatasetFieldGetResponseEnvelope struct {
-	Errors   []DatasetFieldGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DatasetFieldGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DatasetFieldGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DatasetFieldGetResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success DatasetFieldGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    datasetFieldGetResponseEnvelopeJSON    `json:"-"`
@@ -88,52 +89,6 @@ func (r *DatasetFieldGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r datasetFieldGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatasetFieldGetResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    datasetFieldGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// datasetFieldGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DatasetFieldGetResponseEnvelopeErrors]
-type datasetFieldGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatasetFieldGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r datasetFieldGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatasetFieldGetResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    datasetFieldGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// datasetFieldGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DatasetFieldGetResponseEnvelopeMessages]
-type datasetFieldGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatasetFieldGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r datasetFieldGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -138,9 +139,9 @@ func (r DevicePolicyFallbackDomainUpdateParams) MarshalJSON() (data []byte, err 
 }
 
 type DevicePolicyFallbackDomainUpdateResponseEnvelope struct {
-	Errors   []DevicePolicyFallbackDomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyFallbackDomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicesFallbackDomain                                    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []DevicesFallbackDomain      `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyFallbackDomainUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyFallbackDomainUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -164,53 +165,6 @@ func (r *DevicePolicyFallbackDomainUpdateResponseEnvelope) UnmarshalJSON(data []
 }
 
 func (r devicePolicyFallbackDomainUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyFallbackDomainUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    devicePolicyFallbackDomainUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [DevicePolicyFallbackDomainUpdateResponseEnvelopeErrors]
-type devicePolicyFallbackDomainUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyFallbackDomainUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyFallbackDomainUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    devicePolicyFallbackDomainUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [DevicePolicyFallbackDomainUpdateResponseEnvelopeMessages]
-type devicePolicyFallbackDomainUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyFallbackDomainUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -270,9 +224,9 @@ type DevicePolicyFallbackDomainGetParams struct {
 }
 
 type DevicePolicyFallbackDomainGetResponseEnvelope struct {
-	Errors   []DevicePolicyFallbackDomainGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyFallbackDomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicesFallbackDomain                                 `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []DevicesFallbackDomain      `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyFallbackDomainGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyFallbackDomainGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -296,52 +250,6 @@ func (r *DevicePolicyFallbackDomainGetResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r devicePolicyFallbackDomainGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyFallbackDomainGetResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    devicePolicyFallbackDomainGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [DevicePolicyFallbackDomainGetResponseEnvelopeErrors]
-type devicePolicyFallbackDomainGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyFallbackDomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyFallbackDomainGetResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    devicePolicyFallbackDomainGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [DevicePolicyFallbackDomainGetResponseEnvelopeMessages]
-type devicePolicyFallbackDomainGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyFallbackDomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

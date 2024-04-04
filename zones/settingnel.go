@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -184,8 +185,8 @@ func (r SettingNELEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingNELEditResponseEnvelope struct {
-	Errors   []SettingNELEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingNELEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable Network Error Logging reporting on your zone. (Beta)
@@ -212,60 +213,14 @@ func (r settingNELEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingNELEditResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    settingNELEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingNELEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingNELEditResponseEnvelopeErrors]
-type settingNELEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingNELEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingNELEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingNELEditResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingNELEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingNELEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingNELEditResponseEnvelopeMessages]
-type settingNELEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingNELEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingNELEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingNELGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingNELGetResponseEnvelope struct {
-	Errors   []SettingNELGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingNELGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable Network Error Logging reporting on your zone. (Beta)
@@ -289,51 +244,5 @@ func (r *SettingNELGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r settingNELGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingNELGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    settingNELGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingNELGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingNELGetResponseEnvelopeErrors]
-type settingNELGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingNELGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingNELGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingNELGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    settingNELGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingNELGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingNELGetResponseEnvelopeMessages]
-type settingNELGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingNELGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingNELGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -195,9 +195,9 @@ type RoleGetParams struct {
 }
 
 type RoleGetResponseEnvelope struct {
-	Errors   []RoleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RoleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   RoleGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   RoleGetResponse              `json:"result,required"`
 	// Whether the API call was successful
 	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    roleGetResponseEnvelopeJSON    `json:"-"`
@@ -219,52 +219,6 @@ func (r *RoleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r roleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RoleGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    roleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// roleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RoleGetResponseEnvelopeErrors]
-type roleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RoleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RoleGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    roleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// roleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RoleGetResponseEnvelopeMessages]
-type roleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RoleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

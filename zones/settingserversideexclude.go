@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -225,8 +226,8 @@ func (r SettingServerSideExcludeEditParamsValue) IsKnown() bool {
 }
 
 type SettingServerSideExcludeEditResponseEnvelope struct {
-	Errors   []SettingServerSideExcludeEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingServerSideExcludeEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// If there is sensitive content on your website that you want visible to real
@@ -263,60 +264,14 @@ func (r settingServerSideExcludeEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingServerSideExcludeEditResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingServerSideExcludeEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingServerSideExcludeEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingServerSideExcludeEditResponseEnvelopeErrors]
-type settingServerSideExcludeEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingServerSideExcludeEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingServerSideExcludeEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingServerSideExcludeEditResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    settingServerSideExcludeEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingServerSideExcludeEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingServerSideExcludeEditResponseEnvelopeMessages]
-type settingServerSideExcludeEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingServerSideExcludeEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingServerSideExcludeEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingServerSideExcludeGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingServerSideExcludeGetResponseEnvelope struct {
-	Errors   []SettingServerSideExcludeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingServerSideExcludeGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// If there is sensitive content on your website that you want visible to real
@@ -350,51 +305,5 @@ func (r *SettingServerSideExcludeGetResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r settingServerSideExcludeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingServerSideExcludeGetResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingServerSideExcludeGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingServerSideExcludeGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingServerSideExcludeGetResponseEnvelopeErrors]
-type settingServerSideExcludeGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingServerSideExcludeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingServerSideExcludeGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingServerSideExcludeGetResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingServerSideExcludeGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingServerSideExcludeGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingServerSideExcludeGetResponseEnvelopeMessages]
-type settingServerSideExcludeGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingServerSideExcludeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingServerSideExcludeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

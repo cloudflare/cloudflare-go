@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -95,9 +96,9 @@ func (r V2DirectUploadNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V2DirectUploadNewResponseEnvelope struct {
-	Errors   []V2DirectUploadNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []V2DirectUploadNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   V2DirectUploadNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   V2DirectUploadNewResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success V2DirectUploadNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v2DirectUploadNewResponseEnvelopeJSON    `json:"-"`
@@ -119,52 +120,6 @@ func (r *V2DirectUploadNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r v2DirectUploadNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type V2DirectUploadNewResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    v2DirectUploadNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// v2DirectUploadNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [V2DirectUploadNewResponseEnvelopeErrors]
-type v2DirectUploadNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V2DirectUploadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v2DirectUploadNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type V2DirectUploadNewResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    v2DirectUploadNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// v2DirectUploadNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [V2DirectUploadNewResponseEnvelopeMessages]
-type v2DirectUploadNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V2DirectUploadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v2DirectUploadNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

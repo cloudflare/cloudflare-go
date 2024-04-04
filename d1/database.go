@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // DatabaseService contains methods and other services that help with interacting
@@ -73,7 +71,7 @@ func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseLis
 }
 
 // Deletes the specified D1 database.
-func (r *DatabaseService) Delete(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *DatabaseDeleteResponse, err error) {
+func (r *DatabaseService) Delete(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", accountIdentifier, databaseIdentifier)
@@ -229,22 +227,6 @@ func (r d1QueryResultMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [d1.DatabaseDeleteResponseUnknown] or [shared.UnionString].
-type DatabaseDeleteResponse interface {
-	ImplementsD1DatabaseDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DatabaseDeleteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type DatabaseNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -256,9 +238,9 @@ func (r DatabaseNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DatabaseNewResponseEnvelope struct {
-	Errors   []DatabaseNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DatabaseNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   D1CreateDatabase                      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   D1CreateDatabase             `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseNewResponseEnvelopeJSON    `json:"-"`
@@ -280,52 +262,6 @@ func (r *DatabaseNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r databaseNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseNewResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    databaseNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// databaseNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DatabaseNewResponseEnvelopeErrors]
-type databaseNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseNewResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    databaseNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// databaseNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DatabaseNewResponseEnvelopeMessages]
-type databaseNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -364,9 +300,9 @@ func (r DatabaseListParams) URLQuery() (v url.Values) {
 }
 
 type DatabaseDeleteResponseEnvelope struct {
-	Errors   []DatabaseDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DatabaseDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   DatabaseDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DatabaseDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseDeleteResponseEnvelopeJSON    `json:"-"`
@@ -391,52 +327,6 @@ func (r databaseDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DatabaseDeleteResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    databaseDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// databaseDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DatabaseDeleteResponseEnvelopeErrors]
-type databaseDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseDeleteResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    databaseDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// databaseDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DatabaseDeleteResponseEnvelopeMessages]
-type databaseDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type DatabaseDeleteResponseEnvelopeSuccess bool
 
@@ -453,9 +343,9 @@ func (r DatabaseDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DatabaseGetResponseEnvelope struct {
-	Errors   []DatabaseGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DatabaseGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   D1DatabaseDetails                     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   D1DatabaseDetails            `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseGetResponseEnvelopeJSON    `json:"-"`
@@ -477,52 +367,6 @@ func (r *DatabaseGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r databaseGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    databaseGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// databaseGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DatabaseGetResponseEnvelopeErrors]
-type databaseGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    databaseGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// databaseGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DatabaseGetResponseEnvelopeMessages]
-type databaseGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -551,9 +395,9 @@ func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DatabaseQueryResponseEnvelope struct {
-	Errors   []DatabaseQueryResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DatabaseQueryResponseEnvelopeMessages `json:"messages,required"`
-	Result   []D1QueryResult                         `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []D1QueryResult              `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseQueryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseQueryResponseEnvelopeJSON    `json:"-"`
@@ -575,52 +419,6 @@ func (r *DatabaseQueryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r databaseQueryResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseQueryResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    databaseQueryResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// databaseQueryResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DatabaseQueryResponseEnvelopeErrors]
-type databaseQueryResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseQueryResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseQueryResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseQueryResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    databaseQueryResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// databaseQueryResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DatabaseQueryResponseEnvelopeMessages]
-type databaseQueryResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseQueryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseQueryResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

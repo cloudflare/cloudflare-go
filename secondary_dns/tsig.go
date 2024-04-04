@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -172,9 +173,9 @@ func (r TSIGNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TSIGNewResponseEnvelope struct {
-	Errors   []TSIGNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TSIGNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSTSIG                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SecondaryDNSTSIG             `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigNewResponseEnvelopeJSON    `json:"-"`
@@ -196,52 +197,6 @@ func (r *TSIGNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r tsigNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    tsigNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tsigNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TSIGNewResponseEnvelopeErrors]
-type tsigNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    tsigNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tsigNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TSIGNewResponseEnvelopeMessages]
-type tsigNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -275,9 +230,9 @@ func (r TSIGUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TSIGUpdateResponseEnvelope struct {
-	Errors   []TSIGUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TSIGUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSTSIG                     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SecondaryDNSTSIG             `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigUpdateResponseEnvelopeJSON    `json:"-"`
@@ -299,52 +254,6 @@ func (r *TSIGUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r tsigUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGUpdateResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    tsigUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tsigUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TSIGUpdateResponseEnvelopeErrors]
-type tsigUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGUpdateResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    tsigUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tsigUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TSIGUpdateResponseEnvelopeMessages]
-type tsigUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -377,9 +286,9 @@ func (r TSIGDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TSIGDeleteResponseEnvelope struct {
-	Errors   []TSIGDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TSIGDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   TSIGDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   TSIGDeleteResponse           `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigDeleteResponseEnvelopeJSON    `json:"-"`
@@ -404,52 +313,6 @@ func (r tsigDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type TSIGDeleteResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    tsigDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tsigDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TSIGDeleteResponseEnvelopeErrors]
-type tsigDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGDeleteResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    tsigDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tsigDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TSIGDeleteResponseEnvelopeMessages]
-type tsigDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type TSIGDeleteResponseEnvelopeSuccess bool
 
@@ -470,9 +333,9 @@ type TSIGGetParams struct {
 }
 
 type TSIGGetResponseEnvelope struct {
-	Errors   []TSIGGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TSIGGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSTSIG                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SecondaryDNSTSIG             `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigGetResponseEnvelopeJSON    `json:"-"`
@@ -494,52 +357,6 @@ func (r *TSIGGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r tsigGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    tsigGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tsigGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TSIGGetResponseEnvelopeErrors]
-type tsigGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    tsigGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tsigGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TSIGGetResponseEnvelopeMessages]
-type tsigGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

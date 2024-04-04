@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -189,8 +190,8 @@ func (r SettingTLSClientAuthEditParamsValue) IsKnown() bool {
 }
 
 type SettingTLSClientAuthEditResponseEnvelope struct {
-	Errors   []SettingTLSClientAuthEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTLSClientAuthEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// TLS Client Auth requires Cloudflare to connect to your origin server using a
@@ -218,60 +219,14 @@ func (r settingTLSClientAuthEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingTLSClientAuthEditResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingTLSClientAuthEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTLSClientAuthEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingTLSClientAuthEditResponseEnvelopeErrors]
-type settingTLSClientAuthEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSClientAuthEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSClientAuthEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTLSClientAuthEditResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingTLSClientAuthEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTLSClientAuthEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingTLSClientAuthEditResponseEnvelopeMessages]
-type settingTLSClientAuthEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSClientAuthEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSClientAuthEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingTLSClientAuthGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingTLSClientAuthGetResponseEnvelope struct {
-	Errors   []SettingTLSClientAuthGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTLSClientAuthGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// TLS Client Auth requires Cloudflare to connect to your origin server using a
@@ -296,51 +251,5 @@ func (r *SettingTLSClientAuthGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r settingTLSClientAuthGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTLSClientAuthGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingTLSClientAuthGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTLSClientAuthGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingTLSClientAuthGetResponseEnvelopeErrors]
-type settingTLSClientAuthGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSClientAuthGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSClientAuthGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTLSClientAuthGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingTLSClientAuthGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTLSClientAuthGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingTLSClientAuthGetResponseEnvelopeMessages]
-type settingTLSClientAuthGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTLSClientAuthGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTLSClientAuthGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

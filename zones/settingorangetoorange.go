@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -174,8 +175,8 @@ func (r SettingOrangeToOrangeEditParams) MarshalJSON() (data []byte, err error) 
 }
 
 type SettingOrangeToOrangeEditResponseEnvelope struct {
-	Errors   []SettingOrangeToOrangeEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOrangeToOrangeEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
@@ -203,60 +204,14 @@ func (r settingOrangeToOrangeEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingOrangeToOrangeEditResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingOrangeToOrangeEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingOrangeToOrangeEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingOrangeToOrangeEditResponseEnvelopeErrors]
-type settingOrangeToOrangeEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOrangeToOrangeEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOrangeToOrangeEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOrangeToOrangeEditResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingOrangeToOrangeEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOrangeToOrangeEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingOrangeToOrangeEditResponseEnvelopeMessages]
-type settingOrangeToOrangeEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOrangeToOrangeEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOrangeToOrangeEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingOrangeToOrangeGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingOrangeToOrangeGetResponseEnvelope struct {
-	Errors   []SettingOrangeToOrangeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOrangeToOrangeGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
@@ -281,51 +236,5 @@ func (r *SettingOrangeToOrangeGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r settingOrangeToOrangeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOrangeToOrangeGetResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingOrangeToOrangeGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingOrangeToOrangeGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingOrangeToOrangeGetResponseEnvelopeErrors]
-type settingOrangeToOrangeGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOrangeToOrangeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOrangeToOrangeGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOrangeToOrangeGetResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingOrangeToOrangeGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOrangeToOrangeGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingOrangeToOrangeGetResponseEnvelopeMessages]
-type settingOrangeToOrangeGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOrangeToOrangeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOrangeToOrangeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -209,8 +210,8 @@ func (r SettingHotlinkProtectionEditParamsValue) IsKnown() bool {
 }
 
 type SettingHotlinkProtectionEditResponseEnvelope struct {
-	Errors   []SettingHotlinkProtectionEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingHotlinkProtectionEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, the Hotlink Protection option ensures that other sites cannot suck
@@ -243,60 +244,14 @@ func (r settingHotlinkProtectionEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingHotlinkProtectionEditResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingHotlinkProtectionEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingHotlinkProtectionEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingHotlinkProtectionEditResponseEnvelopeErrors]
-type settingHotlinkProtectionEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHotlinkProtectionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHotlinkProtectionEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingHotlinkProtectionEditResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    settingHotlinkProtectionEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingHotlinkProtectionEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingHotlinkProtectionEditResponseEnvelopeMessages]
-type settingHotlinkProtectionEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHotlinkProtectionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHotlinkProtectionEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingHotlinkProtectionGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingHotlinkProtectionGetResponseEnvelope struct {
-	Errors   []SettingHotlinkProtectionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingHotlinkProtectionGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, the Hotlink Protection option ensures that other sites cannot suck
@@ -326,51 +281,5 @@ func (r *SettingHotlinkProtectionGetResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 func (r settingHotlinkProtectionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingHotlinkProtectionGetResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingHotlinkProtectionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingHotlinkProtectionGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingHotlinkProtectionGetResponseEnvelopeErrors]
-type settingHotlinkProtectionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHotlinkProtectionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHotlinkProtectionGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingHotlinkProtectionGetResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingHotlinkProtectionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingHotlinkProtectionGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingHotlinkProtectionGetResponseEnvelopeMessages]
-type settingHotlinkProtectionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHotlinkProtectionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHotlinkProtectionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

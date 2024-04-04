@@ -110,7 +110,7 @@ func (r as112TopDNSSECResponseJSON) RawJSON() string {
 }
 
 type AS112TopDNSSECResponseMeta struct {
-	DateRange      []AS112TopDNSSECResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                    `json:"dateRange,required"`
 	LastUpdated    string                                   `json:"lastUpdated,required"`
 	ConfidenceInfo AS112TopDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           as112TopDNSSECResponseMetaJSON           `json:"-"`
@@ -134,35 +134,10 @@ func (r as112TopDNSSECResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112TopDNSSECResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                               `json:"startTime,required" format:"date-time"`
-	JSON      as112TopDNSSECResponseMetaDateRangeJSON `json:"-"`
-}
-
-// as112TopDNSSECResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [AS112TopDNSSECResponseMetaDateRange]
-type as112TopDNSSECResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AS112TopDNSSECResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TopDNSSECResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AS112TopDNSSECResponseMetaConfidenceInfo struct {
-	Annotations []AS112TopDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                `json:"level"`
-	JSON        as112TopDNSSECResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                        `json:"annotations"`
+	Level       int64                                        `json:"level"`
+	JSON        as112TopDNSSECResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // as112TopDNSSECResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -179,39 +154,6 @@ func (r *AS112TopDNSSECResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (e
 }
 
 func (r as112TopDNSSECResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112TopDNSSECResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                 `json:"dataSource,required"`
-	Description     string                                                 `json:"description,required"`
-	EventType       string                                                 `json:"eventType,required"`
-	IsInstantaneous interface{}                                            `json:"isInstantaneous,required"`
-	EndTime         time.Time                                              `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                 `json:"linkedUrl"`
-	StartTime       time.Time                                              `json:"startTime" format:"date-time"`
-	JSON            as112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [AS112TopDNSSECResponseMetaConfidenceInfoAnnotation]
-type as112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112TopDNSSECResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -264,7 +206,7 @@ func (r as112TopEdnsResponseJSON) RawJSON() string {
 }
 
 type AS112TopEdnsResponseMeta struct {
-	DateRange      []AS112TopEdnsResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                  `json:"dateRange,required"`
 	LastUpdated    string                                 `json:"lastUpdated,required"`
 	ConfidenceInfo AS112TopEdnsResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           as112TopEdnsResponseMetaJSON           `json:"-"`
@@ -288,35 +230,10 @@ func (r as112TopEdnsResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112TopEdnsResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                             `json:"startTime,required" format:"date-time"`
-	JSON      as112TopEdnsResponseMetaDateRangeJSON `json:"-"`
-}
-
-// as112TopEdnsResponseMetaDateRangeJSON contains the JSON metadata for the struct
-// [AS112TopEdnsResponseMetaDateRange]
-type as112TopEdnsResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AS112TopEdnsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TopEdnsResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AS112TopEdnsResponseMetaConfidenceInfo struct {
-	Annotations []AS112TopEdnsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                              `json:"level"`
-	JSON        as112TopEdnsResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                      `json:"annotations"`
+	Level       int64                                      `json:"level"`
+	JSON        as112TopEdnsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // as112TopEdnsResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -333,39 +250,6 @@ func (r *AS112TopEdnsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err
 }
 
 func (r as112TopEdnsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112TopEdnsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                               `json:"dataSource,required"`
-	Description     string                                               `json:"description,required"`
-	EventType       string                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                          `json:"isInstantaneous,required"`
-	EndTime         time.Time                                            `json:"endTime" format:"date-time"`
-	LinkedURL       string                                               `json:"linkedUrl"`
-	StartTime       time.Time                                            `json:"startTime" format:"date-time"`
-	JSON            as112TopEdnsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112TopEdnsResponseMetaConfidenceInfoAnnotationJSON contains the JSON metadata
-// for the struct [AS112TopEdnsResponseMetaConfidenceInfoAnnotation]
-type as112TopEdnsResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112TopEdnsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TopEdnsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -418,7 +302,7 @@ func (r as112TopIPVersionResponseJSON) RawJSON() string {
 }
 
 type AS112TopIPVersionResponseMeta struct {
-	DateRange      []AS112TopIPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                       `json:"dateRange,required"`
 	LastUpdated    string                                      `json:"lastUpdated,required"`
 	ConfidenceInfo AS112TopIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           as112TopIPVersionResponseMetaJSON           `json:"-"`
@@ -442,35 +326,10 @@ func (r as112TopIPVersionResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112TopIPVersionResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                  `json:"startTime,required" format:"date-time"`
-	JSON      as112TopIPVersionResponseMetaDateRangeJSON `json:"-"`
-}
-
-// as112TopIPVersionResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [AS112TopIPVersionResponseMetaDateRange]
-type as112TopIPVersionResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AS112TopIPVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TopIPVersionResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AS112TopIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []AS112TopIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                   `json:"level"`
-	JSON        as112TopIPVersionResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                           `json:"annotations"`
+	Level       int64                                           `json:"level"`
+	JSON        as112TopIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // as112TopIPVersionResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -487,39 +346,6 @@ func (r *AS112TopIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte)
 }
 
 func (r as112TopIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112TopIPVersionResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                    `json:"dataSource,required"`
-	Description     string                                                    `json:"description,required"`
-	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous interface{}                                               `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                    `json:"linkedUrl"`
-	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
-	JSON            as112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [AS112TopIPVersionResponseMetaConfidenceInfoAnnotation]
-type as112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112TopIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -572,7 +398,7 @@ func (r as112TopLocationsResponseJSON) RawJSON() string {
 }
 
 type AS112TopLocationsResponseMeta struct {
-	DateRange      []AS112TopLocationsResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                       `json:"dateRange,required"`
 	LastUpdated    string                                      `json:"lastUpdated,required"`
 	ConfidenceInfo AS112TopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           as112TopLocationsResponseMetaJSON           `json:"-"`
@@ -596,35 +422,10 @@ func (r as112TopLocationsResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AS112TopLocationsResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                  `json:"startTime,required" format:"date-time"`
-	JSON      as112TopLocationsResponseMetaDateRangeJSON `json:"-"`
-}
-
-// as112TopLocationsResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [AS112TopLocationsResponseMetaDateRange]
-type as112TopLocationsResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AS112TopLocationsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TopLocationsResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AS112TopLocationsResponseMetaConfidenceInfo struct {
-	Annotations []AS112TopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                   `json:"level"`
-	JSON        as112TopLocationsResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                           `json:"annotations"`
+	Level       int64                                           `json:"level"`
+	JSON        as112TopLocationsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // as112TopLocationsResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -641,39 +442,6 @@ func (r *AS112TopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte)
 }
 
 func (r as112TopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AS112TopLocationsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                    `json:"dataSource,required"`
-	Description     string                                                    `json:"description,required"`
-	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous interface{}                                               `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                    `json:"linkedUrl"`
-	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
-	JSON            as112TopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// as112TopLocationsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [AS112TopLocationsResponseMetaConfidenceInfoAnnotation]
-type as112TopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AS112TopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r as112TopLocationsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

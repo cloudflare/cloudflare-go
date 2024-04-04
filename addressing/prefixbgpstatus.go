@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -122,9 +123,9 @@ func (r PrefixBGPStatusEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixBGPStatusEditResponseEnvelope struct {
-	Errors   []PrefixBGPStatusEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPStatusEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   PrefixBGPStatusEditResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   PrefixBGPStatusEditResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPStatusEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPStatusEditResponseEnvelopeJSON    `json:"-"`
@@ -149,52 +150,6 @@ func (r prefixBGPStatusEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PrefixBGPStatusEditResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    prefixBGPStatusEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixBGPStatusEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixBGPStatusEditResponseEnvelopeErrors]
-type prefixBGPStatusEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPStatusEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPStatusEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPStatusEditResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    prefixBGPStatusEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixBGPStatusEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixBGPStatusEditResponseEnvelopeMessages]
-type prefixBGPStatusEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPStatusEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPStatusEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PrefixBGPStatusEditResponseEnvelopeSuccess bool
 
@@ -216,9 +171,9 @@ type PrefixBGPStatusGetParams struct {
 }
 
 type PrefixBGPStatusGetResponseEnvelope struct {
-	Errors   []PrefixBGPStatusGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPStatusGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   PrefixBGPStatusGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   PrefixBGPStatusGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPStatusGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPStatusGetResponseEnvelopeJSON    `json:"-"`
@@ -240,52 +195,6 @@ func (r *PrefixBGPStatusGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r prefixBGPStatusGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPStatusGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    prefixBGPStatusGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixBGPStatusGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixBGPStatusGetResponseEnvelopeErrors]
-type prefixBGPStatusGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPStatusGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPStatusGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPStatusGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    prefixBGPStatusGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixBGPStatusGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixBGPStatusGetResponseEnvelopeMessages]
-type prefixBGPStatusGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPStatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPStatusGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

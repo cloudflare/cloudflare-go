@@ -134,9 +134,9 @@ func (r AccessKeyUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessKeyUpdateResponseEnvelope struct {
-	Errors   []AccessKeyUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessKeyUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessKeyUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AccessKeyUpdateResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -170,52 +170,6 @@ func (r accessKeyUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessKeyUpdateResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    accessKeyUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessKeyUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessKeyUpdateResponseEnvelopeErrors]
-type accessKeyUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessKeyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessKeyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessKeyUpdateResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    accessKeyUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessKeyUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessKeyUpdateResponseEnvelopeMessages]
-type accessKeyUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessKeyUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessKeyUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type AccessKeyUpdateResponseEnvelopeSuccess bool
 
@@ -232,9 +186,9 @@ func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyGetResponseEnvelope struct {
-	Errors   []AccessKeyGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessKeyGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessKeyGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AccessKeyGetResponse         `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyGetResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -268,52 +222,6 @@ func (r accessKeyGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessKeyGetResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    accessKeyGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessKeyGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [AccessKeyGetResponseEnvelopeErrors]
-type accessKeyGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessKeyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessKeyGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessKeyGetResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    accessKeyGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessKeyGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessKeyGetResponseEnvelopeMessages]
-type accessKeyGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessKeyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessKeyGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type AccessKeyGetResponseEnvelopeSuccess bool
 
@@ -330,9 +238,9 @@ func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyRotateResponseEnvelope struct {
-	Errors   []AccessKeyRotateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessKeyRotateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessKeyRotateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AccessKeyRotateResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyRotateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -363,52 +271,6 @@ func (r *AccessKeyRotateResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r accessKeyRotateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessKeyRotateResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    accessKeyRotateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessKeyRotateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessKeyRotateResponseEnvelopeErrors]
-type accessKeyRotateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessKeyRotateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessKeyRotateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessKeyRotateResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    accessKeyRotateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessKeyRotateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessKeyRotateResponseEnvelopeMessages]
-type accessKeyRotateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessKeyRotateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessKeyRotateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

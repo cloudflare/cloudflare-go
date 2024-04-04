@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -258,8 +259,8 @@ func (r SettingSecurityHeaderEditParamsValueStrictTransportSecurity) MarshalJSON
 }
 
 type SettingSecurityHeaderEditResponseEnvelope struct {
-	Errors   []SettingSecurityHeaderEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSecurityHeaderEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare security header for a zone.
@@ -286,60 +287,14 @@ func (r settingSecurityHeaderEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingSecurityHeaderEditResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingSecurityHeaderEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingSecurityHeaderEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingSecurityHeaderEditResponseEnvelopeErrors]
-type settingSecurityHeaderEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSecurityHeaderEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSecurityHeaderEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSecurityHeaderEditResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingSecurityHeaderEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSecurityHeaderEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingSecurityHeaderEditResponseEnvelopeMessages]
-type settingSecurityHeaderEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSecurityHeaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSecurityHeaderEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingSecurityHeaderGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingSecurityHeaderGetResponseEnvelope struct {
-	Errors   []SettingSecurityHeaderGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSecurityHeaderGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare security header for a zone.
@@ -363,51 +318,5 @@ func (r *SettingSecurityHeaderGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r settingSecurityHeaderGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSecurityHeaderGetResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingSecurityHeaderGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingSecurityHeaderGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingSecurityHeaderGetResponseEnvelopeErrors]
-type settingSecurityHeaderGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSecurityHeaderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSecurityHeaderGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSecurityHeaderGetResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingSecurityHeaderGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSecurityHeaderGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingSecurityHeaderGetResponseEnvelopeMessages]
-type settingSecurityHeaderGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSecurityHeaderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSecurityHeaderGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

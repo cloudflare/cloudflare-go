@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -307,9 +308,9 @@ func (r LockdownNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LockdownNewResponseEnvelope struct {
-	Errors   []LockdownNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LockdownNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallZoneLockdown                  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   FirewallZoneLockdown         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LockdownNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownNewResponseEnvelopeJSON    `json:"-"`
@@ -331,52 +332,6 @@ func (r *LockdownNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r lockdownNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LockdownNewResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    lockdownNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// lockdownNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [LockdownNewResponseEnvelopeErrors]
-type lockdownNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LockdownNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r lockdownNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LockdownNewResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    lockdownNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// lockdownNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [LockdownNewResponseEnvelopeMessages]
-type lockdownNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LockdownNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r lockdownNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -404,9 +359,9 @@ func (r LockdownUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LockdownUpdateResponseEnvelope struct {
-	Errors   []LockdownUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LockdownUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallZoneLockdown                     `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   FirewallZoneLockdown         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LockdownUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownUpdateResponseEnvelopeJSON    `json:"-"`
@@ -428,52 +383,6 @@ func (r *LockdownUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r lockdownUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LockdownUpdateResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    lockdownUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// lockdownUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [LockdownUpdateResponseEnvelopeErrors]
-type lockdownUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LockdownUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r lockdownUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LockdownUpdateResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    lockdownUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// lockdownUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [LockdownUpdateResponseEnvelopeMessages]
-type lockdownUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LockdownUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r lockdownUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -558,9 +467,9 @@ func (r lockdownDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LockdownGetResponseEnvelope struct {
-	Errors   []LockdownGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LockdownGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallZoneLockdown                  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   FirewallZoneLockdown         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LockdownGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownGetResponseEnvelopeJSON    `json:"-"`
@@ -582,52 +491,6 @@ func (r *LockdownGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r lockdownGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LockdownGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    lockdownGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// lockdownGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [LockdownGetResponseEnvelopeErrors]
-type lockdownGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LockdownGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r lockdownGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LockdownGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    lockdownGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// lockdownGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [LockdownGetResponseEnvelopeMessages]
-type lockdownGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LockdownGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r lockdownGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

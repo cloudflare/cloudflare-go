@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -45,11 +46,11 @@ func (r *PoolReferenceService) Get(ctx context.Context, poolID string, query Poo
 }
 
 type PoolReferenceGetResponse struct {
-	ReferenceType PoolReferenceGetResponseReferenceType `json:"reference_type"`
-	ResourceID    string                                `json:"resource_id"`
-	ResourceName  string                                `json:"resource_name"`
-	ResourceType  string                                `json:"resource_type"`
-	JSON          poolReferenceGetResponseJSON          `json:"-"`
+	ReferenceType shared.UnnamedSchemaRef146   `json:"reference_type"`
+	ResourceID    string                       `json:"resource_id"`
+	ResourceName  string                       `json:"resource_name"`
+	ResourceType  string                       `json:"resource_type"`
+	JSON          poolReferenceGetResponseJSON `json:"-"`
 }
 
 // poolReferenceGetResponseJSON contains the JSON metadata for the struct
@@ -71,30 +72,14 @@ func (r poolReferenceGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type PoolReferenceGetResponseReferenceType string
-
-const (
-	PoolReferenceGetResponseReferenceTypeStar     PoolReferenceGetResponseReferenceType = "*"
-	PoolReferenceGetResponseReferenceTypeReferral PoolReferenceGetResponseReferenceType = "referral"
-	PoolReferenceGetResponseReferenceTypeReferrer PoolReferenceGetResponseReferenceType = "referrer"
-)
-
-func (r PoolReferenceGetResponseReferenceType) IsKnown() bool {
-	switch r {
-	case PoolReferenceGetResponseReferenceTypeStar, PoolReferenceGetResponseReferenceTypeReferral, PoolReferenceGetResponseReferenceTypeReferrer:
-		return true
-	}
-	return false
-}
-
 type PoolReferenceGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PoolReferenceGetResponseEnvelope struct {
-	Errors   []PoolReferenceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PoolReferenceGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// List of resources that reference a given pool.
 	Result []PoolReferenceGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
@@ -120,52 +105,6 @@ func (r *PoolReferenceGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r poolReferenceGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PoolReferenceGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    poolReferenceGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// poolReferenceGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PoolReferenceGetResponseEnvelopeErrors]
-type poolReferenceGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolReferenceGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolReferenceGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PoolReferenceGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    poolReferenceGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// poolReferenceGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PoolReferenceGetResponseEnvelopeMessages]
-type poolReferenceGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolReferenceGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolReferenceGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

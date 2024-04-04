@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -193,8 +194,8 @@ func (r SettingOriginErrorPagePassThruEditParamsValue) IsKnown() bool {
 }
 
 type SettingOriginErrorPagePassThruEditResponseEnvelope struct {
-	Errors   []SettingOriginErrorPagePassThruEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOriginErrorPagePassThruEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will proxy customer error pages on any 502,504 errors on origin
@@ -223,62 +224,14 @@ func (r settingOriginErrorPagePassThruEditResponseEnvelopeJSON) RawJSON() string
 	return r.raw
 }
 
-type SettingOriginErrorPagePassThruEditResponseEnvelopeErrors struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    settingOriginErrorPagePassThruEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingOriginErrorPagePassThruEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [SettingOriginErrorPagePassThruEditResponseEnvelopeErrors]
-type settingOriginErrorPagePassThruEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOriginErrorPagePassThruEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOriginErrorPagePassThruEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOriginErrorPagePassThruEditResponseEnvelopeMessages struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    settingOriginErrorPagePassThruEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOriginErrorPagePassThruEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingOriginErrorPagePassThruEditResponseEnvelopeMessages]
-type settingOriginErrorPagePassThruEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOriginErrorPagePassThruEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOriginErrorPagePassThruEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingOriginErrorPagePassThruGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingOriginErrorPagePassThruGetResponseEnvelope struct {
-	Errors   []SettingOriginErrorPagePassThruGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOriginErrorPagePassThruGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will proxy customer error pages on any 502,504 errors on origin
@@ -304,53 +257,5 @@ func (r *SettingOriginErrorPagePassThruGetResponseEnvelope) UnmarshalJSON(data [
 }
 
 func (r settingOriginErrorPagePassThruGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOriginErrorPagePassThruGetResponseEnvelopeErrors struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    settingOriginErrorPagePassThruGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingOriginErrorPagePassThruGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [SettingOriginErrorPagePassThruGetResponseEnvelopeErrors]
-type settingOriginErrorPagePassThruGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOriginErrorPagePassThruGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOriginErrorPagePassThruGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOriginErrorPagePassThruGetResponseEnvelopeMessages struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    settingOriginErrorPagePassThruGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOriginErrorPagePassThruGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingOriginErrorPagePassThruGetResponseEnvelopeMessages]
-type settingOriginErrorPagePassThruGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOriginErrorPagePassThruGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOriginErrorPagePassThruGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

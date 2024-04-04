@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -197,8 +198,8 @@ func (r SettingEarlyHintEditParamsValue) IsKnown() bool {
 }
 
 type SettingEarlyHintEditResponseEnvelope struct {
-	Errors   []SettingEarlyHintEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingEarlyHintEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, Cloudflare will attempt to speed up overall page loads by serving
@@ -228,60 +229,14 @@ func (r settingEarlyHintEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingEarlyHintEditResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    settingEarlyHintEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingEarlyHintEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingEarlyHintEditResponseEnvelopeErrors]
-type settingEarlyHintEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEarlyHintEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEarlyHintEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEarlyHintEditResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingEarlyHintEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingEarlyHintEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingEarlyHintEditResponseEnvelopeMessages]
-type settingEarlyHintEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEarlyHintEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEarlyHintEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingEarlyHintGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingEarlyHintGetResponseEnvelope struct {
-	Errors   []SettingEarlyHintGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingEarlyHintGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, Cloudflare will attempt to speed up overall page loads by serving
@@ -308,51 +263,5 @@ func (r *SettingEarlyHintGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r settingEarlyHintGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEarlyHintGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingEarlyHintGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingEarlyHintGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingEarlyHintGetResponseEnvelopeErrors]
-type settingEarlyHintGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEarlyHintGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEarlyHintGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEarlyHintGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    settingEarlyHintGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingEarlyHintGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingEarlyHintGetResponseEnvelopeMessages]
-type settingEarlyHintGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEarlyHintGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEarlyHintGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

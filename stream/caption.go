@@ -151,9 +151,9 @@ func (r CaptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CaptionUpdateResponseEnvelope struct {
-	Errors   []CaptionUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CaptionUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CaptionUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   CaptionUpdateResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -175,52 +175,6 @@ func (r *CaptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r captionUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CaptionUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    captionUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// captionUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CaptionUpdateResponseEnvelopeErrors]
-type captionUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CaptionUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    captionUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// captionUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [CaptionUpdateResponseEnvelopeMessages]
-type captionUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -250,9 +204,9 @@ func (r CaptionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CaptionDeleteResponseEnvelope struct {
-	Errors   []CaptionDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CaptionDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   CaptionDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   CaptionDeleteResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionDeleteResponseEnvelopeJSON    `json:"-"`
@@ -277,52 +231,6 @@ func (r captionDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CaptionDeleteResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    captionDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// captionDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CaptionDeleteResponseEnvelopeErrors]
-type captionDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CaptionDeleteResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    captionDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// captionDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [CaptionDeleteResponseEnvelopeMessages]
-type captionDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CaptionDeleteResponseEnvelopeSuccess bool
 
@@ -344,9 +252,9 @@ type CaptionGetParams struct {
 }
 
 type CaptionGetResponseEnvelope struct {
-	Errors   []CaptionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CaptionGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamCaptions                     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []StreamCaptions             `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionGetResponseEnvelopeJSON    `json:"-"`
@@ -368,52 +276,6 @@ func (r *CaptionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r captionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CaptionGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    captionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// captionGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [CaptionGetResponseEnvelopeErrors]
-type captionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CaptionGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    captionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// captionGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [CaptionGetResponseEnvelopeMessages]
-type captionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

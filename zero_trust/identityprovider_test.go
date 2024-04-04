@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
@@ -40,10 +41,10 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 			SupportGroups:            cloudflare.F(true),
 		}),
 		Name:      cloudflare.F("Widget Corps IDP"),
-		Type:      cloudflare.F(zero_trust.IdentityProviderNewParamsAccessAzureAdTypeOnetimepin),
+		Type:      cloudflare.F(shared.UnnamedSchemaRef163Onetimepin),
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
-		ScimConfig: cloudflare.F(zero_trust.IdentityProviderNewParamsAccessAzureAdScimConfig{
+		ScimConfig: cloudflare.F(shared.UnnamedSchemaRef158Param{
 			Enabled:                cloudflare.F(true),
 			GroupMemberDeprovision: cloudflare.F(true),
 			SeatDeprovision:        cloudflare.F(true),
@@ -89,10 +90,10 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 				SupportGroups:            cloudflare.F(true),
 			}),
 			Name:      cloudflare.F("Widget Corps IDP"),
-			Type:      cloudflare.F(zero_trust.IdentityProviderUpdateParamsAccessAzureAdTypeOnetimepin),
+			Type:      cloudflare.F(shared.UnnamedSchemaRef163Onetimepin),
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
-			ScimConfig: cloudflare.F(zero_trust.IdentityProviderUpdateParamsAccessAzureAdScimConfig{
+			ScimConfig: cloudflare.F(shared.UnnamedSchemaRef158Param{
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
 				SeatDeprovision:        cloudflare.F(true),

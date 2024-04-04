@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -38,9 +39,9 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		HealthCheck: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheck{
 			Direction: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckDirectionBidirectional),
 			Enabled:   cloudflare.F(true),
-			Rate:      cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckRateLow),
+			Rate:      cloudflare.F(shared.UnnamedSchemaRef83Low),
 			Target:    cloudflare.F("203.0.113.1"),
-			Type:      cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckTypeRequest),
+			Type:      cloudflare.F(shared.UnnamedSchemaRef84Request),
 		}),
 		PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 		ReplayProtection: cloudflare.F(false),
@@ -81,9 +82,9 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 			HealthCheck: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheck{
 				Direction: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),
-				Rate:      cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckRateLow),
+				Rate:      cloudflare.F(shared.UnnamedSchemaRef83Low),
 				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckTypeRequest),
+				Type:      cloudflare.F(shared.UnnamedSchemaRef84Request),
 			}),
 			PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 			ReplayProtection: cloudflare.F(false),

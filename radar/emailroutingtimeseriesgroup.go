@@ -112,9 +112,9 @@ func (r *EmailRoutingTimeseriesGroupService) SPF(ctx context.Context, query Emai
 }
 
 type EmailRoutingTimeseriesGroupARCResponse struct {
-	Meta   interface{}                                  `json:"meta,required"`
-	Serie0 EmailRoutingTimeseriesGroupARCResponseSerie0 `json:"serie_0,required"`
-	JSON   emailRoutingTimeseriesGroupARCResponseJSON   `json:"-"`
+	Meta   interface{}                                `json:"meta,required"`
+	Serie0 UnnamedSchemaRef150                        `json:"serie_0,required"`
+	JSON   emailRoutingTimeseriesGroupARCResponseJSON `json:"-"`
 }
 
 // emailRoutingTimeseriesGroupARCResponseJSON contains the JSON metadata for the
@@ -134,35 +134,10 @@ func (r emailRoutingTimeseriesGroupARCResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailRoutingTimeseriesGroupARCResponseSerie0 struct {
-	Fail []string                                         `json:"FAIL,required"`
-	None []string                                         `json:"NONE,required"`
-	Pass []string                                         `json:"PASS,required"`
-	JSON emailRoutingTimeseriesGroupARCResponseSerie0JSON `json:"-"`
-}
-
-// emailRoutingTimeseriesGroupARCResponseSerie0JSON contains the JSON metadata for
-// the struct [EmailRoutingTimeseriesGroupARCResponseSerie0]
-type emailRoutingTimeseriesGroupARCResponseSerie0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingTimeseriesGroupARCResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingTimeseriesGroupARCResponseSerie0JSON) RawJSON() string {
-	return r.raw
-}
-
 type EmailRoutingTimeseriesGroupDKIMResponse struct {
-	Meta   interface{}                                   `json:"meta,required"`
-	Serie0 EmailRoutingTimeseriesGroupDKIMResponseSerie0 `json:"serie_0,required"`
-	JSON   emailRoutingTimeseriesGroupDKIMResponseJSON   `json:"-"`
+	Meta   interface{}                                 `json:"meta,required"`
+	Serie0 UnnamedSchemaRef150                         `json:"serie_0,required"`
+	JSON   emailRoutingTimeseriesGroupDKIMResponseJSON `json:"-"`
 }
 
 // emailRoutingTimeseriesGroupDKIMResponseJSON contains the JSON metadata for the
@@ -182,35 +157,10 @@ func (r emailRoutingTimeseriesGroupDKIMResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailRoutingTimeseriesGroupDKIMResponseSerie0 struct {
-	Fail []string                                          `json:"FAIL,required"`
-	None []string                                          `json:"NONE,required"`
-	Pass []string                                          `json:"PASS,required"`
-	JSON emailRoutingTimeseriesGroupDKIMResponseSerie0JSON `json:"-"`
-}
-
-// emailRoutingTimeseriesGroupDKIMResponseSerie0JSON contains the JSON metadata for
-// the struct [EmailRoutingTimeseriesGroupDKIMResponseSerie0]
-type emailRoutingTimeseriesGroupDKIMResponseSerie0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingTimeseriesGroupDKIMResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingTimeseriesGroupDKIMResponseSerie0JSON) RawJSON() string {
-	return r.raw
-}
-
 type EmailRoutingTimeseriesGroupDMARCResponse struct {
-	Meta   interface{}                                    `json:"meta,required"`
-	Serie0 EmailRoutingTimeseriesGroupDMARCResponseSerie0 `json:"serie_0,required"`
-	JSON   emailRoutingTimeseriesGroupDMARCResponseJSON   `json:"-"`
+	Meta   interface{}                                  `json:"meta,required"`
+	Serie0 UnnamedSchemaRef150                          `json:"serie_0,required"`
+	JSON   emailRoutingTimeseriesGroupDMARCResponseJSON `json:"-"`
 }
 
 // emailRoutingTimeseriesGroupDMARCResponseJSON contains the JSON metadata for the
@@ -227,31 +177,6 @@ func (r *EmailRoutingTimeseriesGroupDMARCResponse) UnmarshalJSON(data []byte) (e
 }
 
 func (r emailRoutingTimeseriesGroupDMARCResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingTimeseriesGroupDMARCResponseSerie0 struct {
-	Fail []string                                           `json:"FAIL,required"`
-	None []string                                           `json:"NONE,required"`
-	Pass []string                                           `json:"PASS,required"`
-	JSON emailRoutingTimeseriesGroupDMARCResponseSerie0JSON `json:"-"`
-}
-
-// emailRoutingTimeseriesGroupDMARCResponseSerie0JSON contains the JSON metadata
-// for the struct [EmailRoutingTimeseriesGroupDMARCResponseSerie0]
-type emailRoutingTimeseriesGroupDMARCResponseSerie0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingTimeseriesGroupDMARCResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingTimeseriesGroupDMARCResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -348,9 +273,9 @@ func (r emailRoutingTimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string
 }
 
 type EmailRoutingTimeseriesGroupSPFResponse struct {
-	Meta   interface{}                                  `json:"meta,required"`
-	Serie0 EmailRoutingTimeseriesGroupSPFResponseSerie0 `json:"serie_0,required"`
-	JSON   emailRoutingTimeseriesGroupSPFResponseJSON   `json:"-"`
+	Meta   interface{}                                `json:"meta,required"`
+	Serie0 UnnamedSchemaRef150                        `json:"serie_0,required"`
+	JSON   emailRoutingTimeseriesGroupSPFResponseJSON `json:"-"`
 }
 
 // emailRoutingTimeseriesGroupSPFResponseJSON contains the JSON metadata for the
@@ -367,31 +292,6 @@ func (r *EmailRoutingTimeseriesGroupSPFResponse) UnmarshalJSON(data []byte) (err
 }
 
 func (r emailRoutingTimeseriesGroupSPFResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingTimeseriesGroupSPFResponseSerie0 struct {
-	Fail []string                                         `json:"FAIL,required"`
-	None []string                                         `json:"NONE,required"`
-	Pass []string                                         `json:"PASS,required"`
-	JSON emailRoutingTimeseriesGroupSPFResponseSerie0JSON `json:"-"`
-}
-
-// emailRoutingTimeseriesGroupSPFResponseSerie0JSON contains the JSON metadata for
-// the struct [EmailRoutingTimeseriesGroupSPFResponseSerie0]
-type emailRoutingTimeseriesGroupSPFResponseSerie0JSON struct {
-	Fail        apijson.Field
-	None        apijson.Field
-	Pass        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingTimeseriesGroupSPFResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingTimeseriesGroupSPFResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

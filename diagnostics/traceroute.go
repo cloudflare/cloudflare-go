@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -275,9 +276,9 @@ func (r TracerouteNewParamsOptionsPacketType) IsKnown() bool {
 }
 
 type TracerouteNewResponseEnvelope struct {
-	Errors   []TracerouteNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TracerouteNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []MagicTransitTargetResult              `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []MagicTransitTargetResult   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    TracerouteNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo TracerouteNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -301,52 +302,6 @@ func (r *TracerouteNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r tracerouteNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TracerouteNewResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    tracerouteNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tracerouteNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [TracerouteNewResponseEnvelopeErrors]
-type tracerouteNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TracerouteNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tracerouteNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TracerouteNewResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    tracerouteNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tracerouteNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [TracerouteNewResponseEnvelopeMessages]
-type tracerouteNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TracerouteNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tracerouteNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

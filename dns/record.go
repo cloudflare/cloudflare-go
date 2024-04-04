@@ -327,7 +327,7 @@ type DNSRecordA struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordAMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -394,32 +394,6 @@ func (r DNSRecordAType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordAMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string             `json:"source"`
-	JSON   dnsRecordAMetaJSON `json:"-"`
-}
-
-// dnsRecordAMetaJSON contains the JSON metadata for the struct [DNSRecordAMeta]
-type dnsRecordAMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordAMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordAMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -476,7 +450,7 @@ type DNSRecordAAAA struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordAAAAMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -543,33 +517,6 @@ func (r DNSRecordAAAAType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordAAAAMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                `json:"source"`
-	JSON   dnsRecordAAAAMetaJSON `json:"-"`
-}
-
-// dnsRecordAAAAMetaJSON contains the JSON metadata for the struct
-// [DNSRecordAAAAMeta]
-type dnsRecordAAAAMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordAAAAMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordAAAAMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -628,7 +575,7 @@ type DNSRecordCAA struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordCAAMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -721,33 +668,6 @@ func (r DNSRecordCAAType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordCAAMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string               `json:"source"`
-	JSON   dnsRecordCAAMetaJSON `json:"-"`
-}
-
-// dnsRecordCAAMetaJSON contains the JSON metadata for the struct
-// [DNSRecordCAAMeta]
-type dnsRecordCAAMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordCAAMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordCAAMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -806,7 +726,7 @@ type DNSRecordCERT struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordCERTMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -902,33 +822,6 @@ func (r DNSRecordCERTType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordCERTMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                `json:"source"`
-	JSON   dnsRecordCERTMetaJSON `json:"-"`
-}
-
-// dnsRecordCERTMetaJSON contains the JSON metadata for the struct
-// [DNSRecordCERTMeta]
-type dnsRecordCERTMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordCERTMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordCERTMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -985,7 +878,7 @@ type DNSRecordCNAME struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordCNAMEMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1052,33 +945,6 @@ func (r DNSRecordCNAMEType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordCNAMEMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                 `json:"source"`
-	JSON   dnsRecordCNAMEMetaJSON `json:"-"`
-}
-
-// dnsRecordCNAMEMetaJSON contains the JSON metadata for the struct
-// [DNSRecordCNAMEMeta]
-type dnsRecordCNAMEMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordCNAMEMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -1137,7 +1003,7 @@ type DNSRecordDNSKEY struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordDNSKEYMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1233,33 +1099,6 @@ func (r DNSRecordDNSKEYType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordDNSKEYMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                  `json:"source"`
-	JSON   dnsRecordDNSKEYMetaJSON `json:"-"`
-}
-
-// dnsRecordDNSKEYMetaJSON contains the JSON metadata for the struct
-// [DNSRecordDNSKEYMeta]
-type dnsRecordDNSKEYMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordDNSKEYMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -1318,7 +1157,7 @@ type DNSRecordDS struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordDSMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1413,32 +1252,6 @@ func (r DNSRecordDSType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordDSMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string              `json:"source"`
-	JSON   dnsRecordDSMetaJSON `json:"-"`
-}
-
-// dnsRecordDSMetaJSON contains the JSON metadata for the struct [DNSRecordDSMeta]
-type dnsRecordDSMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordDSMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordDSMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -1497,7 +1310,7 @@ type DNSRecordHTTPS struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordHTTPSMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1590,33 +1403,6 @@ func (r DNSRecordHTTPSType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordHTTPSMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                 `json:"source"`
-	JSON   dnsRecordHTTPSMetaJSON `json:"-"`
-}
-
-// dnsRecordHTTPSMetaJSON contains the JSON metadata for the struct
-// [DNSRecordHTTPSMeta]
-type dnsRecordHTTPSMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordHTTPSMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -1675,7 +1461,7 @@ type DNSRecordLOC struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordLOCMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1827,33 +1613,6 @@ func (r DNSRecordLOCType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordLOCMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string               `json:"source"`
-	JSON   dnsRecordLOCMetaJSON `json:"-"`
-}
-
-// dnsRecordLOCMetaJSON contains the JSON metadata for the struct
-// [DNSRecordLOCMeta]
-type dnsRecordLOCMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordLOCMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordLOCMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -1913,7 +1672,7 @@ type DNSRecordMX struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordMXMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1977,32 +1736,6 @@ func (r DNSRecordMXType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordMXMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string              `json:"source"`
-	JSON   dnsRecordMXMetaJSON `json:"-"`
-}
-
-// dnsRecordMXMetaJSON contains the JSON metadata for the struct [DNSRecordMXMeta]
-type dnsRecordMXMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordMXMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordMXMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -2061,7 +1794,7 @@ type DNSRecordNAPTR struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNAPTRMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2163,33 +1896,6 @@ func (r DNSRecordNAPTRType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordNAPTRMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                 `json:"source"`
-	JSON   dnsRecordNAPTRMetaJSON `json:"-"`
-}
-
-// dnsRecordNAPTRMetaJSON contains the JSON metadata for the struct
-// [DNSRecordNAPTRMeta]
-type dnsRecordNAPTRMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordNAPTRMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -2246,7 +1952,7 @@ type DNSRecordNS struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNSMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2309,32 +2015,6 @@ func (r DNSRecordNSType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordNSMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string              `json:"source"`
-	JSON   dnsRecordNSMetaJSON `json:"-"`
-}
-
-// dnsRecordNSMetaJSON contains the JSON metadata for the struct [DNSRecordNSMeta]
-type dnsRecordNSMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordNSMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordNSMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -2391,7 +2071,7 @@ type DNSRecordPTR struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordPTRMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2454,33 +2134,6 @@ func (r DNSRecordPTRType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordPTRMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string               `json:"source"`
-	JSON   dnsRecordPTRMetaJSON `json:"-"`
-}
-
-// dnsRecordPTRMetaJSON contains the JSON metadata for the struct
-// [DNSRecordPTRMeta]
-type dnsRecordPTRMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordPTRMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordPTRMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -2539,7 +2192,7 @@ type DNSRecordSMIMEA struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordSMIMEAMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2635,33 +2288,6 @@ func (r DNSRecordSMIMEAType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordSMIMEAMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                  `json:"source"`
-	JSON   dnsRecordSMIMEAMetaJSON `json:"-"`
-}
-
-// dnsRecordSMIMEAMetaJSON contains the JSON metadata for the struct
-// [DNSRecordSMIMEAMeta]
-type dnsRecordSMIMEAMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordSMIMEAMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordSMIMEAMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -2723,7 +2349,7 @@ type DNSRecordSRV struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordSRVMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2835,33 +2461,6 @@ func (r DNSRecordSRVType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordSRVMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string               `json:"source"`
-	JSON   dnsRecordSRVMetaJSON `json:"-"`
-}
-
-// dnsRecordSRVMetaJSON contains the JSON metadata for the struct
-// [DNSRecordSRVMeta]
-type dnsRecordSRVMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordSRVMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordSRVMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -2920,7 +2519,7 @@ type DNSRecordSSHFP struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordSSHFPMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3013,33 +2612,6 @@ func (r DNSRecordSSHFPType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordSSHFPMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                 `json:"source"`
-	JSON   dnsRecordSSHFPMetaJSON `json:"-"`
-}
-
-// dnsRecordSSHFPMetaJSON contains the JSON metadata for the struct
-// [DNSRecordSSHFPMeta]
-type dnsRecordSSHFPMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordSSHFPMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -3098,7 +2670,7 @@ type DNSRecordSVCB struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordSVCBMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3191,33 +2763,6 @@ func (r DNSRecordSVCBType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordSVCBMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                `json:"source"`
-	JSON   dnsRecordSVCBMetaJSON `json:"-"`
-}
-
-// dnsRecordSVCBMetaJSON contains the JSON metadata for the struct
-// [DNSRecordSVCBMeta]
-type dnsRecordSVCBMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordSVCBMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordSVCBMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -3276,7 +2821,7 @@ type DNSRecordTLSA struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordTLSAMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3372,33 +2917,6 @@ func (r DNSRecordTLSAType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSRecordTLSAMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                `json:"source"`
-	JSON   dnsRecordTLSAMetaJSON `json:"-"`
-}
-
-// dnsRecordTLSAMetaJSON contains the JSON metadata for the struct
-// [DNSRecordTLSAMeta]
-type dnsRecordTLSAMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordTLSAMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordTLSAMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
@@ -3455,7 +2973,7 @@ type DNSRecordTXT struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordTXTMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3516,33 +3034,6 @@ func (r DNSRecordTXTType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Extra Cloudflare-specific information about the record.
-type DNSRecordTXTMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string               `json:"source"`
-	JSON   dnsRecordTXTMetaJSON `json:"-"`
-}
-
-// dnsRecordTXTMetaJSON contains the JSON metadata for the struct
-// [DNSRecordTXTMeta]
-type dnsRecordTXTMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordTXTMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordTXTMetaJSON) RawJSON() string {
-	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3606,7 +3097,7 @@ type DNSRecordURI struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordURIMeta `json:"meta"`
+	Meta shared.UnnamedSchemaRef162 `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3695,33 +3186,6 @@ func (r DNSRecordURIType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Extra Cloudflare-specific information about the record.
-type DNSRecordURIMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string               `json:"source"`
-	JSON   dnsRecordURIMetaJSON `json:"-"`
-}
-
-// dnsRecordURIMetaJSON contains the JSON metadata for the struct
-// [DNSRecordURIMeta]
-type dnsRecordURIMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordURIMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsRecordURIMetaJSON) RawJSON() string {
-	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5550,9 +5014,9 @@ func (r RecordNewParamsDNSRecordsURIRecordTTLNumber) IsKnown() bool {
 }
 
 type RecordNewResponseEnvelope struct {
-	Errors   []RecordNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSRecord                           `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DNSRecord                    `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordNewResponseEnvelopeJSON    `json:"-"`
@@ -5574,52 +5038,6 @@ func (r *RecordNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordNewResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    recordNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// recordNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RecordNewResponseEnvelopeErrors]
-type recordNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordNewResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    recordNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// recordNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RecordNewResponseEnvelopeMessages]
-type recordNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -7361,9 +6779,9 @@ func (r RecordUpdateParamsDNSRecordsURIRecordTTLNumber) IsKnown() bool {
 }
 
 type RecordUpdateResponseEnvelope struct {
-	Errors   []RecordUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSRecord                              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DNSRecord                    `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordUpdateResponseEnvelopeJSON    `json:"-"`
@@ -7385,52 +6803,6 @@ func (r *RecordUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    recordUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// recordUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RecordUpdateResponseEnvelopeErrors]
-type recordUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    recordUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// recordUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RecordUpdateResponseEnvelopeMessages]
-type recordUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -9409,9 +8781,9 @@ func (r RecordEditParamsDNSRecordsURIRecordTTLNumber) IsKnown() bool {
 }
 
 type RecordEditResponseEnvelope struct {
-	Errors   []RecordEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSRecord                            `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DNSRecord                    `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordEditResponseEnvelopeJSON    `json:"-"`
@@ -9433,52 +8805,6 @@ func (r *RecordEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordEditResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    recordEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// recordEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RecordEditResponseEnvelopeErrors]
-type recordEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordEditResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    recordEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// recordEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RecordEditResponseEnvelopeMessages]
-type recordEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -9508,9 +8834,9 @@ type RecordGetParams struct {
 }
 
 type RecordGetResponseEnvelope struct {
-	Errors   []RecordGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSRecord                           `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DNSRecord                    `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordGetResponseEnvelopeJSON    `json:"-"`
@@ -9532,52 +8858,6 @@ func (r *RecordGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    recordGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// recordGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RecordGetResponseEnvelopeErrors]
-type recordGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    recordGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// recordGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RecordGetResponseEnvelopeMessages]
-type recordGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -9616,12 +8896,12 @@ func (r RecordImportParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordImportResponseEnvelope struct {
-	Errors   []RecordImportResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordImportResponseEnvelopeMessages `json:"messages,required"`
-	Result   RecordImportResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   RecordImportResponse         `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordImportResponseEnvelopeSuccess `json:"success,required"`
-	Timing  RecordImportResponseEnvelopeTiming  `json:"timing"`
+	Timing  shared.UnnamedSchemaRef62           `json:"timing"`
 	JSON    recordImportResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -9645,52 +8925,6 @@ func (r recordImportResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RecordImportResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    recordImportResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// recordImportResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RecordImportResponseEnvelopeErrors]
-type recordImportResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordImportResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordImportResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordImportResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    recordImportResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// recordImportResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RecordImportResponseEnvelopeMessages]
-type recordImportResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordImportResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordImportResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RecordImportResponseEnvelopeSuccess bool
 
@@ -9706,34 +8940,6 @@ func (r RecordImportResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type RecordImportResponseEnvelopeTiming struct {
-	// When the file parsing ended.
-	EndTime time.Time `json:"end_time" format:"date-time"`
-	// Processing time of the file in seconds.
-	ProcessTime float64 `json:"process_time"`
-	// When the file parsing started.
-	StartTime time.Time                              `json:"start_time" format:"date-time"`
-	JSON      recordImportResponseEnvelopeTimingJSON `json:"-"`
-}
-
-// recordImportResponseEnvelopeTimingJSON contains the JSON metadata for the struct
-// [RecordImportResponseEnvelopeTiming]
-type recordImportResponseEnvelopeTimingJSON struct {
-	EndTime     apijson.Field
-	ProcessTime apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordImportResponseEnvelopeTiming) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordImportResponseEnvelopeTimingJSON) RawJSON() string {
-	return r.raw
-}
-
 type RecordScanParams struct {
 	// Identifier
 	ZoneID param.Field[string]      `path:"zone_id,required"`
@@ -9745,12 +8951,12 @@ func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordScanResponseEnvelope struct {
-	Errors   []RecordScanResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecordScanResponseEnvelopeMessages `json:"messages,required"`
-	Result   RecordScanResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   RecordScanResponse           `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordScanResponseEnvelopeSuccess `json:"success,required"`
-	Timing  RecordScanResponseEnvelopeTiming  `json:"timing"`
+	Timing  shared.UnnamedSchemaRef62         `json:"timing"`
 	JSON    recordScanResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -9774,52 +8980,6 @@ func (r recordScanResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RecordScanResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    recordScanResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// recordScanResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RecordScanResponseEnvelopeErrors]
-type recordScanResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordScanResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordScanResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecordScanResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    recordScanResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// recordScanResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RecordScanResponseEnvelopeMessages]
-type recordScanResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordScanResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordScanResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RecordScanResponseEnvelopeSuccess bool
 
@@ -9833,32 +8993,4 @@ func (r RecordScanResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type RecordScanResponseEnvelopeTiming struct {
-	// When the file parsing ended.
-	EndTime time.Time `json:"end_time" format:"date-time"`
-	// Processing time of the file in seconds.
-	ProcessTime float64 `json:"process_time"`
-	// When the file parsing started.
-	StartTime time.Time                            `json:"start_time" format:"date-time"`
-	JSON      recordScanResponseEnvelopeTimingJSON `json:"-"`
-}
-
-// recordScanResponseEnvelopeTimingJSON contains the JSON metadata for the struct
-// [RecordScanResponseEnvelopeTiming]
-type recordScanResponseEnvelopeTimingJSON struct {
-	EndTime     apijson.Field
-	ProcessTime apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordScanResponseEnvelopeTiming) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordScanResponseEnvelopeTimingJSON) RawJSON() string {
-	return r.raw
 }

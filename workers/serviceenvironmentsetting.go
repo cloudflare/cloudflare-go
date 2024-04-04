@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -167,33 +168,15 @@ func (r serviceEnvironmentSettingGetResponseTailConsumerJSON) RawJSON() string {
 
 type ServiceEnvironmentSettingEditParams struct {
 	// Identifier
-	AccountID param.Field[string]                                       `path:"account_id,required"`
-	Errors    param.Field[[]ServiceEnvironmentSettingEditParamsError]   `json:"errors,required"`
-	Messages  param.Field[[]ServiceEnvironmentSettingEditParamsMessage] `json:"messages,required"`
-	Result    param.Field[ServiceEnvironmentSettingEditParamsResult]    `json:"result,required"`
+	AccountID param.Field[string]                                    `path:"account_id,required"`
+	Errors    param.Field[[]shared.UnnamedSchemaRef172Param]         `json:"errors,required"`
+	Messages  param.Field[[]shared.UnnamedSchemaRef172Param]         `json:"messages,required"`
+	Result    param.Field[ServiceEnvironmentSettingEditParamsResult] `json:"result,required"`
 	// Whether the API call was successful
 	Success param.Field[ServiceEnvironmentSettingEditParamsSuccess] `json:"success,required"`
 }
 
 func (r ServiceEnvironmentSettingEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ServiceEnvironmentSettingEditParamsError struct {
-	Code    param.Field[int64]  `json:"code,required"`
-	Message param.Field[string] `json:"message,required"`
-}
-
-func (r ServiceEnvironmentSettingEditParamsError) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ServiceEnvironmentSettingEditParamsMessage struct {
-	Code    param.Field[int64]  `json:"code,required"`
-	Message param.Field[string] `json:"message,required"`
-}
-
-func (r ServiceEnvironmentSettingEditParamsMessage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -238,9 +221,9 @@ func (r ServiceEnvironmentSettingEditParamsSuccess) IsKnown() bool {
 }
 
 type ServiceEnvironmentSettingEditResponseEnvelope struct {
-	Errors   []ServiceEnvironmentSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ServiceEnvironmentSettingEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   ServiceEnvironmentSettingEditResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172          `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172          `json:"messages,required"`
+	Result   ServiceEnvironmentSettingEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ServiceEnvironmentSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    serviceEnvironmentSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -265,52 +248,6 @@ func (r serviceEnvironmentSettingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ServiceEnvironmentSettingEditResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    serviceEnvironmentSettingEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// serviceEnvironmentSettingEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [ServiceEnvironmentSettingEditResponseEnvelopeErrors]
-type serviceEnvironmentSettingEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ServiceEnvironmentSettingEditResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    serviceEnvironmentSettingEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// serviceEnvironmentSettingEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [ServiceEnvironmentSettingEditResponseEnvelopeMessages]
-type serviceEnvironmentSettingEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ServiceEnvironmentSettingEditResponseEnvelopeSuccess bool
 
@@ -332,9 +269,9 @@ type ServiceEnvironmentSettingGetParams struct {
 }
 
 type ServiceEnvironmentSettingGetResponseEnvelope struct {
-	Errors   []ServiceEnvironmentSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ServiceEnvironmentSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ServiceEnvironmentSettingGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172         `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172         `json:"messages,required"`
+	Result   ServiceEnvironmentSettingGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ServiceEnvironmentSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    serviceEnvironmentSettingGetResponseEnvelopeJSON    `json:"-"`
@@ -356,52 +293,6 @@ func (r *ServiceEnvironmentSettingGetResponseEnvelope) UnmarshalJSON(data []byte
 }
 
 func (r serviceEnvironmentSettingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ServiceEnvironmentSettingGetResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    serviceEnvironmentSettingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// serviceEnvironmentSettingGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [ServiceEnvironmentSettingGetResponseEnvelopeErrors]
-type serviceEnvironmentSettingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ServiceEnvironmentSettingGetResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    serviceEnvironmentSettingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// serviceEnvironmentSettingGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [ServiceEnvironmentSettingGetResponseEnvelopeMessages]
-type serviceEnvironmentSettingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

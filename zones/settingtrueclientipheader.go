@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -189,8 +190,8 @@ func (r SettingTrueClientIPHeaderEditParamsValue) IsKnown() bool {
 }
 
 type SettingTrueClientIPHeaderEditResponseEnvelope struct {
-	Errors   []SettingTrueClientIPHeaderEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTrueClientIPHeaderEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Allows customer to continue to use True Client IP (Akamai feature) in the
@@ -218,60 +219,14 @@ func (r settingTrueClientIPHeaderEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingTrueClientIPHeaderEditResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingTrueClientIPHeaderEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTrueClientIPHeaderEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingTrueClientIPHeaderEditResponseEnvelopeErrors]
-type settingTrueClientIPHeaderEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrueClientIPHeaderEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrueClientIPHeaderEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrueClientIPHeaderEditResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    settingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingTrueClientIPHeaderEditResponseEnvelopeMessages]
-type settingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrueClientIPHeaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingTrueClientIPHeaderGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingTrueClientIPHeaderGetResponseEnvelope struct {
-	Errors   []SettingTrueClientIPHeaderGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTrueClientIPHeaderGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Allows customer to continue to use True Client IP (Akamai feature) in the
@@ -296,51 +251,5 @@ func (r *SettingTrueClientIPHeaderGetResponseEnvelope) UnmarshalJSON(data []byte
 }
 
 func (r settingTrueClientIPHeaderGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrueClientIPHeaderGetResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingTrueClientIPHeaderGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTrueClientIPHeaderGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingTrueClientIPHeaderGetResponseEnvelopeErrors]
-type settingTrueClientIPHeaderGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrueClientIPHeaderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrueClientIPHeaderGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTrueClientIPHeaderGetResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    settingTrueClientIPHeaderGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTrueClientIPHeaderGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingTrueClientIPHeaderGetResponseEnvelopeMessages]
-type settingTrueClientIPHeaderGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrueClientIPHeaderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTrueClientIPHeaderGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

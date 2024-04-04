@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -201,8 +202,8 @@ func (r SettingBrowserCheckEditParamsValue) IsKnown() bool {
 }
 
 type SettingBrowserCheckEditResponseEnvelope struct {
-	Errors   []SettingBrowserCheckEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrowserCheckEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
@@ -233,60 +234,14 @@ func (r settingBrowserCheckEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingBrowserCheckEditResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingBrowserCheckEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrowserCheckEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingBrowserCheckEditResponseEnvelopeErrors]
-type settingBrowserCheckEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCheckEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCheckEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrowserCheckEditResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingBrowserCheckEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrowserCheckEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingBrowserCheckEditResponseEnvelopeMessages]
-type settingBrowserCheckEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCheckEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCheckEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingBrowserCheckGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingBrowserCheckGetResponseEnvelope struct {
-	Errors   []SettingBrowserCheckGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrowserCheckGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
@@ -314,51 +269,5 @@ func (r *SettingBrowserCheckGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r settingBrowserCheckGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrowserCheckGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingBrowserCheckGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrowserCheckGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingBrowserCheckGetResponseEnvelopeErrors]
-type settingBrowserCheckGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCheckGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCheckGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrowserCheckGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingBrowserCheckGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrowserCheckGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingBrowserCheckGetResponseEnvelopeMessages]
-type settingBrowserCheckGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCheckGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCheckGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -119,7 +120,7 @@ func (r ZoneSettingMinifyID) IsKnown() bool {
 // Current value of the zone setting.
 type ZoneSettingMinifyValue struct {
 	// Automatically minify all CSS files for your website.
-	Css ZoneSettingMinifyValueCss `json:"css"`
+	Css shared.UnnamedSchemaRef92 `json:"css"`
 	// Automatically minify all HTML files for your website.
 	HTML ZoneSettingMinifyValueHTML `json:"html"`
 	// Automatically minify all JavaScript files for your website.
@@ -143,22 +144,6 @@ func (r *ZoneSettingMinifyValue) UnmarshalJSON(data []byte) (err error) {
 
 func (r zoneSettingMinifyValueJSON) RawJSON() string {
 	return r.raw
-}
-
-// Automatically minify all CSS files for your website.
-type ZoneSettingMinifyValueCss string
-
-const (
-	ZoneSettingMinifyValueCssOn  ZoneSettingMinifyValueCss = "on"
-	ZoneSettingMinifyValueCssOff ZoneSettingMinifyValueCss = "off"
-)
-
-func (r ZoneSettingMinifyValueCss) IsKnown() bool {
-	switch r {
-	case ZoneSettingMinifyValueCssOn, ZoneSettingMinifyValueCssOff:
-		return true
-	}
-	return false
 }
 
 // Automatically minify all HTML files for your website.
@@ -229,7 +214,7 @@ func (r ZoneSettingMinifyParam) implementsZonesSettingEditParamsItem() {}
 // Current value of the zone setting.
 type ZoneSettingMinifyValueParam struct {
 	// Automatically minify all CSS files for your website.
-	Css param.Field[ZoneSettingMinifyValueCss] `json:"css"`
+	Css param.Field[shared.UnnamedSchemaRef92] `json:"css"`
 	// Automatically minify all HTML files for your website.
 	HTML param.Field[ZoneSettingMinifyValueHTML] `json:"html"`
 	// Automatically minify all JavaScript files for your website.
@@ -254,7 +239,7 @@ func (r SettingMinifyEditParams) MarshalJSON() (data []byte, err error) {
 // Value of the zone setting.
 type SettingMinifyEditParamsValue struct {
 	// Automatically minify all CSS files for your website.
-	Css param.Field[SettingMinifyEditParamsValueCss] `json:"css"`
+	Css param.Field[shared.UnnamedSchemaRef92] `json:"css"`
 	// Automatically minify all HTML files for your website.
 	HTML param.Field[SettingMinifyEditParamsValueHTML] `json:"html"`
 	// Automatically minify all JavaScript files for your website.
@@ -263,22 +248,6 @@ type SettingMinifyEditParamsValue struct {
 
 func (r SettingMinifyEditParamsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Automatically minify all CSS files for your website.
-type SettingMinifyEditParamsValueCss string
-
-const (
-	SettingMinifyEditParamsValueCssOn  SettingMinifyEditParamsValueCss = "on"
-	SettingMinifyEditParamsValueCssOff SettingMinifyEditParamsValueCss = "off"
-)
-
-func (r SettingMinifyEditParamsValueCss) IsKnown() bool {
-	switch r {
-	case SettingMinifyEditParamsValueCssOn, SettingMinifyEditParamsValueCssOff:
-		return true
-	}
-	return false
 }
 
 // Automatically minify all HTML files for your website.
@@ -314,8 +283,8 @@ func (r SettingMinifyEditParamsValueJs) IsKnown() bool {
 }
 
 type SettingMinifyEditResponseEnvelope struct {
-	Errors   []SettingMinifyEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingMinifyEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically minify certain assets for your website. Refer to
@@ -344,60 +313,14 @@ func (r settingMinifyEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingMinifyEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingMinifyEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingMinifyEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingMinifyEditResponseEnvelopeErrors]
-type settingMinifyEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMinifyEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMinifyEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMinifyEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingMinifyEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingMinifyEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingMinifyEditResponseEnvelopeMessages]
-type settingMinifyEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMinifyEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMinifyEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingMinifyGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingMinifyGetResponseEnvelope struct {
-	Errors   []SettingMinifyGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingMinifyGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically minify certain assets for your website. Refer to
@@ -423,51 +346,5 @@ func (r *SettingMinifyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingMinifyGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMinifyGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingMinifyGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingMinifyGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingMinifyGetResponseEnvelopeErrors]
-type settingMinifyGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMinifyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMinifyGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMinifyGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingMinifyGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingMinifyGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingMinifyGetResponseEnvelopeMessages]
-type settingMinifyGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMinifyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMinifyGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

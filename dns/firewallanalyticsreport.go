@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -83,9 +84,9 @@ func (r FirewallAnalyticsReportGetParams) URLQuery() (v url.Values) {
 }
 
 type FirewallAnalyticsReportGetResponseEnvelope struct {
-	Errors   []FirewallAnalyticsReportGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallAnalyticsReportGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSAnalyticsReport                                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DNSAnalyticsReport           `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallAnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAnalyticsReportGetResponseEnvelopeJSON    `json:"-"`
@@ -107,52 +108,6 @@ func (r *FirewallAnalyticsReportGetResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r firewallAnalyticsReportGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAnalyticsReportGetResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    firewallAnalyticsReportGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallAnalyticsReportGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [FirewallAnalyticsReportGetResponseEnvelopeErrors]
-type firewallAnalyticsReportGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAnalyticsReportGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAnalyticsReportGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAnalyticsReportGetResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    firewallAnalyticsReportGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallAnalyticsReportGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [FirewallAnalyticsReportGetResponseEnvelopeMessages]
-type firewallAnalyticsReportGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAnalyticsReportGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAnalyticsReportGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

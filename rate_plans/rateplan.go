@@ -9,6 +9,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -144,9 +145,9 @@ func (r RatePlanGetResponseFrequency) IsKnown() bool {
 }
 
 type RatePlanGetResponseEnvelope struct {
-	Errors   []RatePlanGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RatePlanGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RatePlanGetResponse                 `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []RatePlanGetResponse        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RatePlanGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RatePlanGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -170,52 +171,6 @@ func (r *RatePlanGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ratePlanGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RatePlanGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    ratePlanGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ratePlanGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RatePlanGetResponseEnvelopeErrors]
-type ratePlanGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RatePlanGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ratePlanGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RatePlanGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    ratePlanGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ratePlanGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RatePlanGetResponseEnvelopeMessages]
-type ratePlanGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RatePlanGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ratePlanGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

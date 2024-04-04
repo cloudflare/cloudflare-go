@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // DLPProfileCustomService contains methods and other services that help with
@@ -57,7 +55,7 @@ func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, 
 }
 
 // Deletes a DLP custom profile.
-func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, params DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *DLPProfileCustomDeleteResponse, err error) {
+func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, params DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef169, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", params.AccountID, profileID)
@@ -100,9 +98,9 @@ type DLPCustomProfile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      DLPCustomProfileType `json:"type"`
-	UpdatedAt time.Time            `json:"updated_at" format:"date-time"`
-	JSON      dlpCustomProfileJSON `json:"-"`
+	Type      shared.UnnamedSchemaRef96 `json:"type"`
+	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
+	JSON      dlpCustomProfileJSON      `json:"-"`
 }
 
 // dlpCustomProfileJSON contains the JSON metadata for the struct
@@ -267,38 +265,6 @@ func (r DLPCustomProfileEntriesPatternValidation) IsKnown() bool {
 	return false
 }
 
-// The type of the profile.
-type DLPCustomProfileType string
-
-const (
-	DLPCustomProfileTypeCustom DLPCustomProfileType = "custom"
-)
-
-func (r DLPCustomProfileType) IsKnown() bool {
-	switch r {
-	case DLPCustomProfileTypeCustom:
-		return true
-	}
-	return false
-}
-
-// Union satisfied by [zero_trust.DLPProfileCustomDeleteResponseUnknown] or
-// [shared.UnionString].
-type DLPProfileCustomDeleteResponse interface {
-	ImplementsZeroTrustDLPProfileCustomDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileCustomDeleteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type DLPProfileCustomNewParams struct {
 	// Identifier
 	AccountID param.Field[string]                             `path:"account_id,required"`
@@ -397,9 +363,9 @@ func (r DLPProfileCustomNewParamsProfilesEntriesPatternValidation) IsKnown() boo
 }
 
 type DLPProfileCustomNewResponseEnvelope struct {
-	Errors   []DLPProfileCustomNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileCustomNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DLPCustomProfile                            `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []DLPCustomProfile           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DLPProfileCustomNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DLPProfileCustomNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -423,52 +389,6 @@ func (r *DLPProfileCustomNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r dlpProfileCustomNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileCustomNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    dlpProfileCustomNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dlpProfileCustomNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DLPProfileCustomNewResponseEnvelopeErrors]
-type dlpProfileCustomNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileCustomNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileCustomNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    dlpProfileCustomNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dlpProfileCustomNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DLPProfileCustomNewResponseEnvelopeMessages]
-type dlpProfileCustomNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileCustomNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -660,9 +580,9 @@ func (r DLPProfileCustomDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileCustomDeleteResponseEnvelope struct {
-	Errors   []DLPProfileCustomDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileCustomDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   DLPProfileCustomDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef169   `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileCustomDeleteResponseEnvelopeJSON    `json:"-"`
@@ -687,52 +607,6 @@ func (r dlpProfileCustomDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPProfileCustomDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    dlpProfileCustomDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dlpProfileCustomDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DLPProfileCustomDeleteResponseEnvelopeErrors]
-type dlpProfileCustomDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileCustomDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileCustomDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    dlpProfileCustomDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dlpProfileCustomDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DLPProfileCustomDeleteResponseEnvelopeMessages]
-type dlpProfileCustomDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileCustomDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type DLPProfileCustomDeleteResponseEnvelopeSuccess bool
 
@@ -754,9 +628,9 @@ type DLPProfileCustomGetParams struct {
 }
 
 type DLPProfileCustomGetResponseEnvelope struct {
-	Errors   []DLPProfileCustomGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileCustomGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DLPCustomProfile                              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DLPCustomProfile             `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileCustomGetResponseEnvelopeJSON    `json:"-"`
@@ -778,52 +652,6 @@ func (r *DLPProfileCustomGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r dlpProfileCustomGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileCustomGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    dlpProfileCustomGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dlpProfileCustomGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DLPProfileCustomGetResponseEnvelopeErrors]
-type dlpProfileCustomGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileCustomGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileCustomGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    dlpProfileCustomGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dlpProfileCustomGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DLPProfileCustomGetResponseEnvelopeMessages]
-type dlpProfileCustomGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileCustomGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

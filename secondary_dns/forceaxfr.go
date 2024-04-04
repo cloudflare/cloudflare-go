@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -55,8 +56,8 @@ func (r ForceAXFRNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ForceAXFRNewResponseEnvelope struct {
-	Errors   []ForceAXFRNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ForceAXFRNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// When force_axfr query parameter is set to true, the response is a simple string
 	Result SecondaryDNSForce `json:"result,required"`
 	// Whether the API call was successful
@@ -80,52 +81,6 @@ func (r *ForceAXFRNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r forceAXFRNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ForceAXFRNewResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    forceAXFRNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// forceAXFRNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ForceAXFRNewResponseEnvelopeErrors]
-type forceAXFRNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ForceAXFRNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r forceAXFRNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ForceAXFRNewResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    forceAXFRNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// forceAXFRNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ForceAXFRNewResponseEnvelopeMessages]
-type forceAXFRNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ForceAXFRNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r forceAXFRNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

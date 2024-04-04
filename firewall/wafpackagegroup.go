@@ -340,9 +340,9 @@ func (r WAFPackageGroupEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageGroupEditResponseEnvelope struct {
-	Errors   []WAFPackageGroupEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WAFPackageGroupEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   WAFPackageGroupEditResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   WAFPackageGroupEditResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupEditResponseEnvelopeJSON    `json:"-"`
@@ -367,52 +367,6 @@ func (r wafPackageGroupEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type WAFPackageGroupEditResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    wafPackageGroupEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// wafPackageGroupEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WAFPackageGroupEditResponseEnvelopeErrors]
-type wafPackageGroupEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGroupEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGroupEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageGroupEditResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    wafPackageGroupEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// wafPackageGroupEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WAFPackageGroupEditResponseEnvelopeMessages]
-type wafPackageGroupEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGroupEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGroupEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type WAFPackageGroupEditResponseEnvelopeSuccess bool
 
@@ -434,9 +388,9 @@ type WAFPackageGroupGetParams struct {
 }
 
 type WAFPackageGroupGetResponseEnvelope struct {
-	Errors   []WAFPackageGroupGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WAFPackageGroupGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WAFPackageGroupGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   WAFPackageGroupGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupGetResponseEnvelopeJSON    `json:"-"`
@@ -458,52 +412,6 @@ func (r *WAFPackageGroupGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r wafPackageGroupGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageGroupGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    wafPackageGroupGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// wafPackageGroupGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WAFPackageGroupGetResponseEnvelopeErrors]
-type wafPackageGroupGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGroupGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGroupGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageGroupGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    wafPackageGroupGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// wafPackageGroupGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WAFPackageGroupGetResponseEnvelopeMessages]
-type wafPackageGroupGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGroupGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGroupGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

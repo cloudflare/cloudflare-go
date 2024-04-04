@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -124,9 +125,9 @@ func (r HostnameIPFSUniversalPathContentListUpdateParamsAction) IsKnown() bool {
 }
 
 type HostnameIPFSUniversalPathContentListUpdateResponseEnvelope struct {
-	Errors   []HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DistributedWebConfigContentList                                      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Result   DistributedWebConfigContentList `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON    `json:"-"`
@@ -152,54 +153,6 @@ func (r hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON) RawJSON(
 	return r.raw
 }
 
-type HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                                `json:"code,required"`
-	Message string                                                               `json:"message,required"`
-	JSON    hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrors]
-type hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessages]
-type hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess bool
 
@@ -216,9 +169,9 @@ func (r HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess) IsKno
 }
 
 type HostnameIPFSUniversalPathContentListGetResponseEnvelope struct {
-	Errors   []HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DistributedWebConfigContentList                                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Result   DistributedWebConfigContentList `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON    `json:"-"`
@@ -241,54 +194,6 @@ func (r *HostnameIPFSUniversalPathContentListGetResponseEnvelope) UnmarshalJSON(
 }
 
 func (r hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    hostnameIPFSUniversalPathContentListGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameIPFSUniversalPathContentListGetResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors]
-type hostnameIPFSUniversalPathContentListGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameIPFSUniversalPathContentListGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages struct {
-	Code    int64                                                               `json:"code,required"`
-	Message string                                                              `json:"message,required"`
-	JSON    hostnameIPFSUniversalPathContentListGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameIPFSUniversalPathContentListGetResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages]
-type hostnameIPFSUniversalPathContentListGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameIPFSUniversalPathContentListGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

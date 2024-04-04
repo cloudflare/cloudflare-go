@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -339,7 +340,7 @@ type PhaseVersionGetResponseRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging PhaseVersionGetResponseRulesRulesetsBlockRuleLogging `json:"logging"`
+	Logging shared.Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                            `json:"ref"`
 	JSON phaseVersionGetResponseRulesRulesetsBlockRuleJSON `json:"-"`
@@ -443,29 +444,6 @@ func (r phaseVersionGetResponseRulesRulesetsBlockRuleActionParametersResponseJSO
 	return r.raw
 }
 
-// An object configuring the rule's logging behavior.
-type PhaseVersionGetResponseRulesRulesetsBlockRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                     `json:"enabled,required"`
-	JSON    phaseVersionGetResponseRulesRulesetsBlockRuleLoggingJSON `json:"-"`
-}
-
-// phaseVersionGetResponseRulesRulesetsBlockRuleLoggingJSON contains the JSON
-// metadata for the struct [PhaseVersionGetResponseRulesRulesetsBlockRuleLogging]
-type phaseVersionGetResponseRulesRulesetsBlockRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionGetResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionGetResponseRulesRulesetsBlockRuleLoggingJSON) RawJSON() string {
-	return r.raw
-}
-
 type PhaseVersionGetResponseRulesRulesetsExecuteRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -486,7 +464,7 @@ type PhaseVersionGetResponseRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging PhaseVersionGetResponseRulesRulesetsExecuteRuleLogging `json:"logging"`
+	Logging shared.Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                              `json:"ref"`
 	JSON phaseVersionGetResponseRulesRulesetsExecuteRuleJSON `json:"-"`
@@ -754,29 +732,6 @@ func (r PhaseVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverrides
 	return false
 }
 
-// An object configuring the rule's logging behavior.
-type PhaseVersionGetResponseRulesRulesetsExecuteRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                       `json:"enabled,required"`
-	JSON    phaseVersionGetResponseRulesRulesetsExecuteRuleLoggingJSON `json:"-"`
-}
-
-// phaseVersionGetResponseRulesRulesetsExecuteRuleLoggingJSON contains the JSON
-// metadata for the struct [PhaseVersionGetResponseRulesRulesetsExecuteRuleLogging]
-type phaseVersionGetResponseRulesRulesetsExecuteRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionGetResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionGetResponseRulesRulesetsExecuteRuleLoggingJSON) RawJSON() string {
-	return r.raw
-}
-
 type PhaseVersionGetResponseRulesRulesetsLogRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -797,7 +752,7 @@ type PhaseVersionGetResponseRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging PhaseVersionGetResponseRulesRulesetsLogRuleLogging `json:"logging"`
+	Logging shared.Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                          `json:"ref"`
 	JSON phaseVersionGetResponseRulesRulesetsLogRuleJSON `json:"-"`
@@ -847,29 +802,6 @@ func (r PhaseVersionGetResponseRulesRulesetsLogRuleAction) IsKnown() bool {
 	return false
 }
 
-// An object configuring the rule's logging behavior.
-type PhaseVersionGetResponseRulesRulesetsLogRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                   `json:"enabled,required"`
-	JSON    phaseVersionGetResponseRulesRulesetsLogRuleLoggingJSON `json:"-"`
-}
-
-// phaseVersionGetResponseRulesRulesetsLogRuleLoggingJSON contains the JSON
-// metadata for the struct [PhaseVersionGetResponseRulesRulesetsLogRuleLogging]
-type phaseVersionGetResponseRulesRulesetsLogRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionGetResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionGetResponseRulesRulesetsLogRuleLoggingJSON) RawJSON() string {
-	return r.raw
-}
-
 type PhaseVersionGetResponseRulesRulesetsSkipRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -890,7 +822,7 @@ type PhaseVersionGetResponseRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging PhaseVersionGetResponseRulesRulesetsSkipRuleLogging `json:"logging"`
+	Logging shared.Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                           `json:"ref"`
 	JSON phaseVersionGetResponseRulesRulesetsSkipRuleJSON `json:"-"`
@@ -1052,29 +984,6 @@ func (r PhaseVersionGetResponseRulesRulesetsSkipRuleActionParametersRuleset) IsK
 		return true
 	}
 	return false
-}
-
-// An object configuring the rule's logging behavior.
-type PhaseVersionGetResponseRulesRulesetsSkipRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                    `json:"enabled,required"`
-	JSON    phaseVersionGetResponseRulesRulesetsSkipRuleLoggingJSON `json:"-"`
-}
-
-// phaseVersionGetResponseRulesRulesetsSkipRuleLoggingJSON contains the JSON
-// metadata for the struct [PhaseVersionGetResponseRulesRulesetsSkipRuleLogging]
-type phaseVersionGetResponseRulesRulesetsSkipRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseVersionGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseVersionGetResponseRulesRulesetsSkipRuleLoggingJSON) RawJSON() string {
-	return r.raw
 }
 
 type PhaseVersionListParams struct {

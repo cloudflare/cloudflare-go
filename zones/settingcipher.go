@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -155,8 +156,8 @@ func (r SettingCipherEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingCipherEditResponseEnvelope struct {
-	Errors   []SettingCipherEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingCipherEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
@@ -184,60 +185,14 @@ func (r settingCipherEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingCipherEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingCipherEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingCipherEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingCipherEditResponseEnvelopeErrors]
-type settingCipherEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCipherEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCipherEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingCipherEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingCipherEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingCipherEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingCipherEditResponseEnvelopeMessages]
-type settingCipherEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCipherEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCipherEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingCipherGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingCipherGetResponseEnvelope struct {
-	Errors   []SettingCipherGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingCipherGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
@@ -262,51 +217,5 @@ func (r *SettingCipherGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingCipherGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingCipherGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingCipherGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingCipherGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingCipherGetResponseEnvelopeErrors]
-type settingCipherGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCipherGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCipherGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingCipherGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingCipherGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingCipherGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingCipherGetResponseEnvelopeMessages]
-type settingCipherGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCipherGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCipherGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -72,7 +72,7 @@ func (r attackLayer7TopAseOriginResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7TopAseOriginResponseMeta struct {
-	DateRange      []AttackLayer7TopAseOriginResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                              `json:"dateRange,required"`
 	LastUpdated    string                                             `json:"lastUpdated,required"`
 	ConfidenceInfo AttackLayer7TopAseOriginResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           attackLayer7TopAseOriginResponseMetaJSON           `json:"-"`
@@ -96,35 +96,10 @@ func (r attackLayer7TopAseOriginResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackLayer7TopAseOriginResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
-	JSON      attackLayer7TopAseOriginResponseMetaDateRangeJSON `json:"-"`
-}
-
-// attackLayer7TopAseOriginResponseMetaDateRangeJSON contains the JSON metadata for
-// the struct [AttackLayer7TopAseOriginResponseMetaDateRange]
-type attackLayer7TopAseOriginResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer7TopAseOriginResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer7TopAseOriginResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer7TopAseOriginResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                          `json:"level"`
-	JSON        attackLayer7TopAseOriginResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                                  `json:"annotations"`
+	Level       int64                                                  `json:"level"`
+	JSON        attackLayer7TopAseOriginResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // attackLayer7TopAseOriginResponseMetaConfidenceInfoJSON contains the JSON
@@ -141,40 +116,6 @@ func (r *AttackLayer7TopAseOriginResponseMetaConfidenceInfo) UnmarshalJSON(data 
 }
 
 func (r attackLayer7TopAseOriginResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                           `json:"dataSource,required"`
-	Description     string                                                           `json:"description,required"`
-	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                           `json:"linkedUrl"`
-	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
-	JSON            attackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// attackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [AttackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotation]
-type attackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

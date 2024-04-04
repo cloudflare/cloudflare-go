@@ -72,7 +72,7 @@ func (r httpLocationOSGetResponseJSON) RawJSON() string {
 }
 
 type HTTPLocationOSGetResponseMeta struct {
-	DateRange      []HTTPLocationOSGetResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                       `json:"dateRange,required"`
 	LastUpdated    string                                      `json:"lastUpdated,required"`
 	ConfidenceInfo HTTPLocationOSGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           httpLocationOSGetResponseMetaJSON           `json:"-"`
@@ -96,35 +96,10 @@ func (r httpLocationOSGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type HTTPLocationOSGetResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                  `json:"startTime,required" format:"date-time"`
-	JSON      httpLocationOSGetResponseMetaDateRangeJSON `json:"-"`
-}
-
-// httpLocationOSGetResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [HTTPLocationOSGetResponseMetaDateRange]
-type httpLocationOSGetResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPLocationOSGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationOSGetResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type HTTPLocationOSGetResponseMetaConfidenceInfo struct {
-	Annotations []HTTPLocationOSGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                   `json:"level"`
-	JSON        httpLocationOSGetResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                           `json:"annotations"`
+	Level       int64                                           `json:"level"`
+	JSON        httpLocationOSGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // httpLocationOSGetResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -141,39 +116,6 @@ func (r *HTTPLocationOSGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte)
 }
 
 func (r httpLocationOSGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPLocationOSGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                    `json:"dataSource,required"`
-	Description     string                                                    `json:"description,required"`
-	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous interface{}                                               `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                    `json:"linkedUrl"`
-	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
-	JSON            httpLocationOSGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// httpLocationOSGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [HTTPLocationOSGetResponseMetaConfidenceInfoAnnotation]
-type httpLocationOSGetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *HTTPLocationOSGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationOSGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

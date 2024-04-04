@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -173,8 +174,8 @@ func (r SettingFontSettingEditParamsValue) IsKnown() bool {
 }
 
 type SettingFontSettingEditResponseEnvelope struct {
-	Errors   []SettingFontSettingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingFontSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
@@ -203,60 +204,14 @@ func (r settingFontSettingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingFontSettingEditResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingFontSettingEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingFontSettingEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingFontSettingEditResponseEnvelopeErrors]
-type settingFontSettingEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingFontSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingFontSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingFontSettingEditResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingFontSettingEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingFontSettingEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingFontSettingEditResponseEnvelopeMessages]
-type settingFontSettingEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingFontSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingFontSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingFontSettingGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingFontSettingGetResponseEnvelope struct {
-	Errors   []SettingFontSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingFontSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
@@ -282,51 +237,5 @@ func (r *SettingFontSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r settingFontSettingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingFontSettingGetResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    settingFontSettingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingFontSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingFontSettingGetResponseEnvelopeErrors]
-type settingFontSettingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingFontSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingFontSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingFontSettingGetResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingFontSettingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingFontSettingGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingFontSettingGetResponseEnvelopeMessages]
-type settingFontSettingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingFontSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingFontSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -78,9 +78,9 @@ type DestinationEligibleGetParams struct {
 }
 
 type DestinationEligibleGetResponseEnvelope struct {
-	Errors   []DestinationEligibleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DestinationEligibleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DestinationEligibleGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   DestinationEligibleGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationEligibleGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationEligibleGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -104,52 +104,6 @@ func (r *DestinationEligibleGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r destinationEligibleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationEligibleGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    destinationEligibleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// destinationEligibleGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DestinationEligibleGetResponseEnvelopeErrors]
-type destinationEligibleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationEligibleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationEligibleGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DestinationEligibleGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    destinationEligibleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// destinationEligibleGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DestinationEligibleGetResponseEnvelopeMessages]
-type destinationEligibleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DestinationEligibleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r destinationEligibleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

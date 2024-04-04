@@ -94,9 +94,9 @@ func (r WorkerScriptUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WorkerScriptUpdateResponseEnvelope struct {
-	Errors   []WorkerScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerScriptUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   WorkerScriptUpdateResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptUpdateResponseEnvelopeJSON    `json:"-"`
@@ -118,52 +118,6 @@ func (r *WorkerScriptUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r workerScriptUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WorkerScriptUpdateResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    workerScriptUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// workerScriptUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WorkerScriptUpdateResponseEnvelopeErrors]
-type workerScriptUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r workerScriptUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WorkerScriptUpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    workerScriptUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerScriptUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WorkerScriptUpdateResponseEnvelopeMessages]
-type workerScriptUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r workerScriptUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

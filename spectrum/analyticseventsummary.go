@@ -163,9 +163,9 @@ func (r AnalyticsEventSummaryGetParamsMetric) IsKnown() bool {
 }
 
 type AnalyticsEventSummaryGetResponseEnvelope struct {
-	Errors   []AnalyticsEventSummaryGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsEventSummaryGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AnalyticsEventSummaryGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
+	Result   AnalyticsEventSummaryGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AnalyticsEventSummaryGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsEventSummaryGetResponseEnvelopeJSON    `json:"-"`
@@ -187,52 +187,6 @@ func (r *AnalyticsEventSummaryGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r analyticsEventSummaryGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsEventSummaryGetResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    analyticsEventSummaryGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// analyticsEventSummaryGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AnalyticsEventSummaryGetResponseEnvelopeErrors]
-type analyticsEventSummaryGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsEventSummaryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsEventSummaryGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsEventSummaryGetResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    analyticsEventSummaryGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// analyticsEventSummaryGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AnalyticsEventSummaryGetResponseEnvelopeMessages]
-type analyticsEventSummaryGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsEventSummaryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsEventSummaryGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

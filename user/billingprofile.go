@@ -63,9 +63,9 @@ func init() {
 }
 
 type BillingProfileGetResponseEnvelope struct {
-	Errors   []BillingProfileGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BillingProfileGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   BillingProfileGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   BillingProfileGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success BillingProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    billingProfileGetResponseEnvelopeJSON    `json:"-"`
@@ -87,52 +87,6 @@ func (r *BillingProfileGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r billingProfileGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BillingProfileGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    billingProfileGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// billingProfileGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BillingProfileGetResponseEnvelopeErrors]
-type billingProfileGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingProfileGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r billingProfileGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type BillingProfileGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    billingProfileGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// billingProfileGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [BillingProfileGetResponseEnvelopeMessages]
-type billingProfileGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingProfileGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r billingProfileGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -87,9 +88,9 @@ func (r RecommendationGetResponseValue) IsKnown() bool {
 }
 
 type RecommendationGetResponseEnvelope struct {
-	Errors   []RecommendationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RecommendationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   RecommendationGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   RecommendationGetResponse    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RecommendationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recommendationGetResponseEnvelopeJSON    `json:"-"`
@@ -111,52 +112,6 @@ func (r *RecommendationGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r recommendationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecommendationGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    recommendationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// recommendationGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RecommendationGetResponseEnvelopeErrors]
-type recommendationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecommendationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recommendationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RecommendationGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    recommendationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// recommendationGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RecommendationGetResponseEnvelopeMessages]
-type recommendationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecommendationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recommendationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

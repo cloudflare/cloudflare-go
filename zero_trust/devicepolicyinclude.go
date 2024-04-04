@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -137,9 +138,9 @@ func (r DevicePolicyIncludeUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type DevicePolicyIncludeUpdateResponseEnvelope struct {
-	Errors   []DevicePolicyIncludeUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyIncludeUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicesSplitTunnelInclude                         `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []DevicesSplitTunnelInclude  `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyIncludeUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyIncludeUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -163,52 +164,6 @@ func (r *DevicePolicyIncludeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r devicePolicyIncludeUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyIncludeUpdateResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    devicePolicyIncludeUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyIncludeUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [DevicePolicyIncludeUpdateResponseEnvelopeErrors]
-type devicePolicyIncludeUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyIncludeUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyIncludeUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyIncludeUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    devicePolicyIncludeUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyIncludeUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DevicePolicyIncludeUpdateResponseEnvelopeMessages]
-type devicePolicyIncludeUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyIncludeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyIncludeUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -267,9 +222,9 @@ type DevicePolicyIncludeGetParams struct {
 }
 
 type DevicePolicyIncludeGetResponseEnvelope struct {
-	Errors   []DevicePolicyIncludeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyIncludeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicesSplitTunnelInclude                      `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []DevicesSplitTunnelInclude  `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyIncludeGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyIncludeGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -293,52 +248,6 @@ func (r *DevicePolicyIncludeGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r devicePolicyIncludeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyIncludeGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    devicePolicyIncludeGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyIncludeGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DevicePolicyIncludeGetResponseEnvelopeErrors]
-type devicePolicyIncludeGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyIncludeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyIncludeGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyIncludeGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    devicePolicyIncludeGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyIncludeGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DevicePolicyIncludeGetResponseEnvelopeMessages]
-type devicePolicyIncludeGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyIncludeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyIncludeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -189,8 +190,8 @@ func (r SettingPolishEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingPolishEditResponseEnvelope struct {
-	Errors   []SettingPolishEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPolishEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Removes metadata and compresses your images for faster page load times. Basic
@@ -222,60 +223,14 @@ func (r settingPolishEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingPolishEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingPolishEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingPolishEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingPolishEditResponseEnvelopeErrors]
-type settingPolishEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPolishEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPolishEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPolishEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingPolishEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPolishEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingPolishEditResponseEnvelopeMessages]
-type settingPolishEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPolishEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPolishEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingPolishGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingPolishGetResponseEnvelope struct {
-	Errors   []SettingPolishGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPolishGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Removes metadata and compresses your images for faster page load times. Basic
@@ -304,51 +259,5 @@ func (r *SettingPolishGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingPolishGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPolishGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingPolishGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingPolishGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingPolishGetResponseEnvelopeErrors]
-type settingPolishGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPolishGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPolishGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPolishGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingPolishGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPolishGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingPolishGetResponseEnvelopeMessages]
-type settingPolishGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPolishGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPolishGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

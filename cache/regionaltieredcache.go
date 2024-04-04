@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -67,7 +68,7 @@ func (r *RegionalTieredCacheService) Get(ctx context.Context, query RegionalTier
 // topologies.
 type RegionalTieredCacheEditResponse struct {
 	// ID of the zone setting.
-	ID RegionalTieredCacheEditResponseID `json:"id,required"`
+	ID shared.UnnamedSchemaRef140 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
@@ -95,27 +96,12 @@ func (r regionalTieredCacheEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
-type RegionalTieredCacheEditResponseID string
-
-const (
-	RegionalTieredCacheEditResponseIDTcRegional RegionalTieredCacheEditResponseID = "tc_regional"
-)
-
-func (r RegionalTieredCacheEditResponseID) IsKnown() bool {
-	switch r {
-	case RegionalTieredCacheEditResponseIDTcRegional:
-		return true
-	}
-	return false
-}
-
 // Instructs Cloudflare to check a regional hub data center on the way to your
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
 type RegionalTieredCacheEditResponseValue struct {
 	// ID of the zone setting.
-	ID RegionalTieredCacheEditResponseValueID `json:"id,required"`
+	ID shared.UnnamedSchemaRef140 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                                `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       regionalTieredCacheEditResponseValueJSON `json:"-"`
@@ -138,27 +124,12 @@ func (r regionalTieredCacheEditResponseValueJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
-type RegionalTieredCacheEditResponseValueID string
-
-const (
-	RegionalTieredCacheEditResponseValueIDTcRegional RegionalTieredCacheEditResponseValueID = "tc_regional"
-)
-
-func (r RegionalTieredCacheEditResponseValueID) IsKnown() bool {
-	switch r {
-	case RegionalTieredCacheEditResponseValueIDTcRegional:
-		return true
-	}
-	return false
-}
-
 // Instructs Cloudflare to check a regional hub data center on the way to your
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
 type RegionalTieredCacheGetResponse struct {
 	// ID of the zone setting.
-	ID RegionalTieredCacheGetResponseID `json:"id,required"`
+	ID shared.UnnamedSchemaRef140 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
@@ -186,27 +157,12 @@ func (r regionalTieredCacheGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// ID of the zone setting.
-type RegionalTieredCacheGetResponseID string
-
-const (
-	RegionalTieredCacheGetResponseIDTcRegional RegionalTieredCacheGetResponseID = "tc_regional"
-)
-
-func (r RegionalTieredCacheGetResponseID) IsKnown() bool {
-	switch r {
-	case RegionalTieredCacheGetResponseIDTcRegional:
-		return true
-	}
-	return false
-}
-
 // Instructs Cloudflare to check a regional hub data center on the way to your
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
 type RegionalTieredCacheGetResponseValue struct {
 	// ID of the zone setting.
-	ID RegionalTieredCacheGetResponseValueID `json:"id,required"`
+	ID shared.UnnamedSchemaRef140 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                               `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       regionalTieredCacheGetResponseValueJSON `json:"-"`
@@ -227,21 +183,6 @@ func (r *RegionalTieredCacheGetResponseValue) UnmarshalJSON(data []byte) (err er
 
 func (r regionalTieredCacheGetResponseValueJSON) RawJSON() string {
 	return r.raw
-}
-
-// ID of the zone setting.
-type RegionalTieredCacheGetResponseValueID string
-
-const (
-	RegionalTieredCacheGetResponseValueIDTcRegional RegionalTieredCacheGetResponseValueID = "tc_regional"
-)
-
-func (r RegionalTieredCacheGetResponseValueID) IsKnown() bool {
-	switch r {
-	case RegionalTieredCacheGetResponseValueIDTcRegional:
-		return true
-	}
-	return false
 }
 
 type RegionalTieredCacheEditParams struct {
@@ -272,8 +213,8 @@ func (r RegionalTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type RegionalTieredCacheEditResponseEnvelope struct {
-	Errors   []RegionalTieredCacheEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegionalTieredCacheEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.
@@ -302,52 +243,6 @@ func (r regionalTieredCacheEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RegionalTieredCacheEditResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    regionalTieredCacheEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// regionalTieredCacheEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RegionalTieredCacheEditResponseEnvelopeErrors]
-type regionalTieredCacheEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalTieredCacheEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionalTieredCacheEditResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    regionalTieredCacheEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// regionalTieredCacheEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [RegionalTieredCacheEditResponseEnvelopeMessages]
-type regionalTieredCacheEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalTieredCacheEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RegionalTieredCacheEditResponseEnvelopeSuccess bool
 
@@ -369,8 +264,8 @@ type RegionalTieredCacheGetParams struct {
 }
 
 type RegionalTieredCacheGetResponseEnvelope struct {
-	Errors   []RegionalTieredCacheGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegionalTieredCacheGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.
@@ -396,52 +291,6 @@ func (r *RegionalTieredCacheGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r regionalTieredCacheGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionalTieredCacheGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    regionalTieredCacheGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// regionalTieredCacheGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RegionalTieredCacheGetResponseEnvelopeErrors]
-type regionalTieredCacheGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalTieredCacheGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RegionalTieredCacheGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    regionalTieredCacheGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// regionalTieredCacheGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [RegionalTieredCacheGetResponseEnvelopeMessages]
-type regionalTieredCacheGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegionalTieredCacheGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r regionalTieredCacheGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -97,9 +98,9 @@ func (r WhoisGetParams) URLQuery() (v url.Values) {
 }
 
 type WhoisGetResponseEnvelope struct {
-	Errors   []WhoisGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WhoisGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelWhois                         `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   IntelWhois                   `json:"result,required"`
 	// Whether the API call was successful
 	Success WhoisGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    whoisGetResponseEnvelopeJSON    `json:"-"`
@@ -121,52 +122,6 @@ func (r *WhoisGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r whoisGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WhoisGetResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    whoisGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// whoisGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WhoisGetResponseEnvelopeErrors]
-type whoisGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WhoisGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r whoisGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WhoisGetResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    whoisGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// whoisGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [WhoisGetResponseEnvelopeMessages]
-type whoisGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WhoisGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r whoisGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

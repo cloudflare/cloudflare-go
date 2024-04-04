@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -179,9 +180,9 @@ func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PeerNewResponseEnvelope struct {
-	Errors   []PeerNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PeerNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSPeer                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SecondaryDNSPeer             `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerNewResponseEnvelopeJSON    `json:"-"`
@@ -203,52 +204,6 @@ func (r *PeerNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r peerNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    peerNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// peerNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PeerNewResponseEnvelopeErrors]
-type peerNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    peerNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// peerNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PeerNewResponseEnvelopeMessages]
-type peerNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -292,9 +247,9 @@ func (r PeerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PeerUpdateResponseEnvelope struct {
-	Errors   []PeerUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PeerUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSPeer                     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SecondaryDNSPeer             `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerUpdateResponseEnvelopeJSON    `json:"-"`
@@ -316,52 +271,6 @@ func (r *PeerUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r peerUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerUpdateResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    peerUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// peerUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PeerUpdateResponseEnvelopeErrors]
-type peerUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerUpdateResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    peerUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// peerUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PeerUpdateResponseEnvelopeMessages]
-type peerUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -394,9 +303,9 @@ func (r PeerDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PeerDeleteResponseEnvelope struct {
-	Errors   []PeerDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PeerDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   PeerDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   PeerDeleteResponse           `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerDeleteResponseEnvelopeJSON    `json:"-"`
@@ -421,52 +330,6 @@ func (r peerDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PeerDeleteResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    peerDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// peerDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PeerDeleteResponseEnvelopeErrors]
-type peerDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerDeleteResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    peerDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// peerDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PeerDeleteResponseEnvelopeMessages]
-type peerDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PeerDeleteResponseEnvelopeSuccess bool
 
@@ -487,9 +350,9 @@ type PeerGetParams struct {
 }
 
 type PeerGetResponseEnvelope struct {
-	Errors   []PeerGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PeerGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSPeer                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SecondaryDNSPeer             `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerGetResponseEnvelopeJSON    `json:"-"`
@@ -511,52 +374,6 @@ func (r *PeerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r peerGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    peerGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// peerGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PeerGetResponseEnvelopeErrors]
-type peerGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    peerGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// peerGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PeerGetResponseEnvelopeMessages]
-type peerGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

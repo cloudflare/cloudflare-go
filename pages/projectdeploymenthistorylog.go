@@ -79,9 +79,9 @@ type ProjectDeploymentHistoryLogGetParams struct {
 }
 
 type ProjectDeploymentHistoryLogGetResponseEnvelope struct {
-	Errors   []ProjectDeploymentHistoryLogGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectDeploymentHistoryLogGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectDeploymentHistoryLogGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172           `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172           `json:"messages,required"`
+	Result   ProjectDeploymentHistoryLogGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentHistoryLogGetResponseEnvelopeJSON    `json:"-"`
@@ -103,52 +103,6 @@ func (r *ProjectDeploymentHistoryLogGetResponseEnvelope) UnmarshalJSON(data []by
 }
 
 func (r projectDeploymentHistoryLogGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentHistoryLogGetResponseEnvelopeErrors struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    projectDeploymentHistoryLogGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectDeploymentHistoryLogGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [ProjectDeploymentHistoryLogGetResponseEnvelopeErrors]
-type projectDeploymentHistoryLogGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentHistoryLogGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentHistoryLogGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectDeploymentHistoryLogGetResponseEnvelopeMessages struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    projectDeploymentHistoryLogGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectDeploymentHistoryLogGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [ProjectDeploymentHistoryLogGetResponseEnvelopeMessages]
-type projectDeploymentHistoryLogGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentHistoryLogGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentHistoryLogGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

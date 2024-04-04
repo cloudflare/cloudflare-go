@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -54,8 +55,8 @@ type IntelPassiveDNSByIP struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Reverse DNS look-ups observed during the time period.
-	ReverseRecords []IntelPassiveDNSByIPReverseRecord `json:"reverse_records"`
-	JSON           intelPassiveDNSByIPJSON            `json:"-"`
+	ReverseRecords []shared.UnnamedSchemaRef35 `json:"reverse_records"`
+	JSON           intelPassiveDNSByIPJSON     `json:"-"`
 }
 
 // intelPassiveDNSByIPJSON contains the JSON metadata for the struct
@@ -74,34 +75,6 @@ func (r *IntelPassiveDNSByIP) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r intelPassiveDNSByIPJSON) RawJSON() string {
-	return r.raw
-}
-
-type IntelPassiveDNSByIPReverseRecord struct {
-	// First seen date of the DNS record during the time period.
-	FirstSeen time.Time `json:"first_seen" format:"date"`
-	// Hostname that the IP was observed resolving to.
-	Hostname interface{} `json:"hostname"`
-	// Last seen date of the DNS record during the time period.
-	LastSeen time.Time                            `json:"last_seen" format:"date"`
-	JSON     intelPassiveDNSByIPReverseRecordJSON `json:"-"`
-}
-
-// intelPassiveDNSByIPReverseRecordJSON contains the JSON metadata for the struct
-// [IntelPassiveDNSByIPReverseRecord]
-type intelPassiveDNSByIPReverseRecordJSON struct {
-	FirstSeen   apijson.Field
-	Hostname    apijson.Field
-	LastSeen    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelPassiveDNSByIPReverseRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r intelPassiveDNSByIPReverseRecordJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -141,9 +114,9 @@ func (r DNSGetParamsStartEndParams) URLQuery() (v url.Values) {
 }
 
 type DNSGetResponseEnvelope struct {
-	Errors   []DNSGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelPassiveDNSByIP              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   IntelPassiveDNSByIP          `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsGetResponseEnvelopeJSON    `json:"-"`
@@ -165,52 +138,6 @@ func (r *DNSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dnsGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    dnsGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dnsGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DNSGetResponseEnvelopeErrors]
-type dnsGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    dnsGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dnsGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DNSGetResponseEnvelopeMessages]
-type dnsGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

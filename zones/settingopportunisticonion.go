@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -191,8 +192,8 @@ func (r SettingOpportunisticOnionEditParamsValue) IsKnown() bool {
 }
 
 type SettingOpportunisticOnionEditResponseEnvelope struct {
-	Errors   []SettingOpportunisticOnionEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOpportunisticOnionEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
@@ -220,60 +221,14 @@ func (r settingOpportunisticOnionEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingOpportunisticOnionEditResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingOpportunisticOnionEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingOpportunisticOnionEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingOpportunisticOnionEditResponseEnvelopeErrors]
-type settingOpportunisticOnionEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOpportunisticOnionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticOnionEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOpportunisticOnionEditResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    settingOpportunisticOnionEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOpportunisticOnionEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingOpportunisticOnionEditResponseEnvelopeMessages]
-type settingOpportunisticOnionEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOpportunisticOnionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticOnionEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingOpportunisticOnionGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingOpportunisticOnionGetResponseEnvelope struct {
-	Errors   []SettingOpportunisticOnionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOpportunisticOnionGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
@@ -298,51 +253,5 @@ func (r *SettingOpportunisticOnionGetResponseEnvelope) UnmarshalJSON(data []byte
 }
 
 func (r settingOpportunisticOnionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOpportunisticOnionGetResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingOpportunisticOnionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingOpportunisticOnionGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingOpportunisticOnionGetResponseEnvelopeErrors]
-type settingOpportunisticOnionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOpportunisticOnionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticOnionGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingOpportunisticOnionGetResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    settingOpportunisticOnionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOpportunisticOnionGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingOpportunisticOnionGetResponseEnvelopeMessages]
-type settingOpportunisticOnionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOpportunisticOnionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticOnionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
