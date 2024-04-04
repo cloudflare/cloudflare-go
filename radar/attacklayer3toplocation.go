@@ -83,7 +83,7 @@ func (r attackLayer3TopLocationOriginResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3TopLocationOriginResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                   `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5      `json:"dateRange,required"`
 	LastUpdated    string                                                  `json:"lastUpdated,required"`
 	ConfidenceInfo AttackLayer3TopLocationOriginResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           attackLayer3TopLocationOriginResponseMetaJSON           `json:"-"`
@@ -108,7 +108,7 @@ func (r attackLayer3TopLocationOriginResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3TopLocationOriginResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                       `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1          `json:"annotations"`
 	Level       int64                                                       `json:"level"`
 	JSON        attackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -182,7 +182,7 @@ func (r attackLayer3TopLocationTargetResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3TopLocationTargetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                   `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5      `json:"dateRange,required"`
 	LastUpdated    string                                                  `json:"lastUpdated,required"`
 	ConfidenceInfo AttackLayer3TopLocationTargetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           attackLayer3TopLocationTargetResponseMetaJSON           `json:"-"`
@@ -207,7 +207,7 @@ func (r attackLayer3TopLocationTargetResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3TopLocationTargetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                       `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1          `json:"annotations"`
 	Level       int64                                                       `json:"level"`
 	JSON        attackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON `json:"-"`
 }

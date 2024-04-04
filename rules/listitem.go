@@ -124,6 +124,29 @@ func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, lis
 	return
 }
 
+type UnnamedSchemaRef34bb6e31800bc0207c083affa12d2775 struct {
+	After  string                                               `json:"after"`
+	Before string                                               `json:"before"`
+	JSON   unnamedSchemaRef34bb6e31800bc0207c083affa12d2775JSON `json:"-"`
+}
+
+// unnamedSchemaRef34bb6e31800bc0207c083affa12d2775JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef34bb6e31800bc0207c083affa12d2775]
+type unnamedSchemaRef34bb6e31800bc0207c083affa12d2775JSON struct {
+	After       apijson.Field
+	Before      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef34bb6e31800bc0207c083affa12d2775) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef34bb6e31800bc0207c083affa12d2775JSON) RawJSON() string {
+	return r.raw
+}
+
 type ListItemNewResponse struct {
 	// The unique operation ID of the asynchronous action.
 	OperationID string                  `json:"operation_id"`
@@ -375,9 +398,9 @@ func (r ListItemNewParamsBodyRedirectStatusCode) IsKnown() bool {
 }
 
 type ListItemNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListItemNewResponse   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ListItemNewResponse                                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListItemNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemNewResponseEnvelopeJSON    `json:"-"`
@@ -489,9 +512,9 @@ func (r ListItemUpdateParamsBodyRedirectStatusCode) IsKnown() bool {
 }
 
 type ListItemUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ListItemUpdateResponse `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ListItemUpdateResponse                                    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListItemUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemUpdateResponseEnvelopeJSON    `json:"-"`
@@ -576,9 +599,9 @@ func (r ListItemDeleteParamsItem) MarshalJSON() (data []byte, err error) {
 }
 
 type ListItemDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ListItemDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ListItemDeleteResponse                                    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListItemDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemDeleteResponseEnvelopeJSON    `json:"-"`
@@ -619,8 +642,8 @@ func (r ListItemDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ListItemGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 	// maximum of /64.
 	Result ListItemGetResponseUnion `json:"result,required,nullable"`

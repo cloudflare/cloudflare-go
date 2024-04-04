@@ -53,9 +53,9 @@ func (r *AttackLayer3Service) Timeseries(ctx context.Context, query AttackLayer3
 }
 
 type AttackLayer3TimeseriesResponse struct {
-	Meta   interface{}                          `json:"meta,required"`
-	Serie0 AttackLayer3TimeseriesResponseSerie0 `json:"serie_0,required"`
-	JSON   attackLayer3TimeseriesResponseJSON   `json:"-"`
+	Meta   interface{}                                      `json:"meta,required"`
+	Serie0 UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb `json:"serie_0,required"`
+	JSON   attackLayer3TimeseriesResponseJSON               `json:"-"`
 }
 
 // attackLayer3TimeseriesResponseJSON contains the JSON metadata for the struct
@@ -72,29 +72,6 @@ func (r *AttackLayer3TimeseriesResponse) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r attackLayer3TimeseriesResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3TimeseriesResponseSerie0 struct {
-	Timestamps []string                                 `json:"timestamps,required"`
-	Values     []string                                 `json:"values,required"`
-	JSON       attackLayer3TimeseriesResponseSerie0JSON `json:"-"`
-}
-
-// attackLayer3TimeseriesResponseSerie0JSON contains the JSON metadata for the
-// struct [AttackLayer3TimeseriesResponseSerie0]
-type attackLayer3TimeseriesResponseSerie0JSON struct {
-	Timestamps  apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3TimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3TimeseriesResponseSerie0JSON) RawJSON() string {
 	return r.raw
 }
 

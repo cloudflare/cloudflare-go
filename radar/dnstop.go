@@ -60,9 +60,9 @@ func (r *DNSTopService) Locations(ctx context.Context, query DNSTopLocationsPara
 }
 
 type DNSTopAsesResponse struct {
-	Meta DNSTopAsesResponseMeta `json:"meta,required"`
-	Top0 []UnnamedSchemaRef154  `json:"top_0,required"`
-	JSON dnsTopAsesResponseJSON `json:"-"`
+	Meta DNSTopAsesResponseMeta                             `json:"meta,required"`
+	Top0 []UnnamedSchemaRef4124a22436f90127c7fa2c4543219752 `json:"top_0,required"`
+	JSON dnsTopAsesResponseJSON                             `json:"-"`
 }
 
 // dnsTopAsesResponseJSON contains the JSON metadata for the struct
@@ -83,9 +83,9 @@ func (r dnsTopAsesResponseJSON) RawJSON() string {
 }
 
 type DNSTopAsesResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                `json:"dateRange,required"`
-	ConfidenceInfo DNSTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           dnsTopAsesResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	ConfidenceInfo DNSTopAsesResponseMetaConfidenceInfo               `json:"confidenceInfo"`
+	JSON           dnsTopAsesResponseMetaJSON                         `json:"-"`
 }
 
 // dnsTopAsesResponseMetaJSON contains the JSON metadata for the struct
@@ -106,9 +106,9 @@ func (r dnsTopAsesResponseMetaJSON) RawJSON() string {
 }
 
 type DNSTopAsesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                    `json:"annotations"`
-	Level       int64                                    `json:"level"`
-	JSON        dnsTopAsesResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        dnsTopAsesResponseMetaConfidenceInfoJSON           `json:"-"`
 }
 
 // dnsTopAsesResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -129,9 +129,9 @@ func (r dnsTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
 }
 
 type DNSTopLocationsResponse struct {
-	Meta DNSTopLocationsResponseMeta   `json:"meta,required"`
-	Top0 []DNSTopLocationsResponseTop0 `json:"top_0,required"`
-	JSON dnsTopLocationsResponseJSON   `json:"-"`
+	Meta DNSTopLocationsResponseMeta                        `json:"meta,required"`
+	Top0 []UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09 `json:"top_0,required"`
+	JSON dnsTopLocationsResponseJSON                        `json:"-"`
 }
 
 // dnsTopLocationsResponseJSON contains the JSON metadata for the struct
@@ -152,9 +152,9 @@ func (r dnsTopLocationsResponseJSON) RawJSON() string {
 }
 
 type DNSTopLocationsResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                     `json:"dateRange,required"`
-	ConfidenceInfo DNSTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           dnsTopLocationsResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	ConfidenceInfo DNSTopLocationsResponseMetaConfidenceInfo          `json:"confidenceInfo"`
+	JSON           dnsTopLocationsResponseMetaJSON                    `json:"-"`
 }
 
 // dnsTopLocationsResponseMetaJSON contains the JSON metadata for the struct
@@ -175,9 +175,9 @@ func (r dnsTopLocationsResponseMetaJSON) RawJSON() string {
 }
 
 type DNSTopLocationsResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                         `json:"annotations"`
-	Level       int64                                         `json:"level"`
-	JSON        dnsTopLocationsResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        dnsTopLocationsResponseMetaConfidenceInfoJSON      `json:"-"`
 }
 
 // dnsTopLocationsResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -194,31 +194,6 @@ func (r *DNSTopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (
 }
 
 func (r dnsTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSTopLocationsResponseTop0 struct {
-	ClientCountryAlpha2 string                          `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                          `json:"clientCountryName,required"`
-	Value               string                          `json:"value,required"`
-	JSON                dnsTopLocationsResponseTop0JSON `json:"-"`
-}
-
-// dnsTopLocationsResponseTop0JSON contains the JSON metadata for the struct
-// [DNSTopLocationsResponseTop0]
-type dnsTopLocationsResponseTop0JSON struct {
-	ClientCountryAlpha2 apijson.Field
-	ClientCountryName   apijson.Field
-	Value               apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *DNSTopLocationsResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsTopLocationsResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

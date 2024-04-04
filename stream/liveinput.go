@@ -538,8 +538,8 @@ func (r LiveInputNewParamsRecordingMode) IsKnown() bool {
 }
 
 type LiveInputNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Details about a live input.
 	Result StreamLiveInput `json:"result,required"`
 	// Whether the API call was successful
@@ -650,8 +650,8 @@ func (r LiveInputUpdateParamsRecordingMode) IsKnown() bool {
 }
 
 type LiveInputUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Details about a live input.
 	Result StreamLiveInput `json:"result,required"`
 	// Whether the API call was successful
@@ -710,9 +710,9 @@ func (r LiveInputListParams) URLQuery() (v url.Values) {
 }
 
 type LiveInputListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LiveInputListResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   LiveInputListResponse                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    liveInputListResponseEnvelopeJSON    `json:"-"`
@@ -768,8 +768,8 @@ type LiveInputGetParams struct {
 }
 
 type LiveInputGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Details about a live input.
 	Result StreamLiveInput `json:"result,required"`
 	// Whether the API call was successful

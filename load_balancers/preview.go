@@ -51,8 +51,8 @@ type PreviewGetParams struct {
 }
 
 type PreviewGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Resulting health data from a preview operation.
 	Result user.LoadBalancingPreview `json:"result,required"`
 	// Whether the API call was successful

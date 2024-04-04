@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
@@ -41,10 +40,10 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 			SupportGroups:            cloudflare.F(true),
 		}),
 		Name:      cloudflare.F("Widget Corps IDP"),
-		Type:      cloudflare.F(shared.UnnamedSchemaRef163Onetimepin),
+		Type:      cloudflare.F(zero_trust.UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOnetimepin),
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
-		ScimConfig: cloudflare.F(shared.UnnamedSchemaRef158Param{
+		ScimConfig: cloudflare.F(zero_trust.UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param{
 			Enabled:                cloudflare.F(true),
 			GroupMemberDeprovision: cloudflare.F(true),
 			SeatDeprovision:        cloudflare.F(true),
@@ -90,10 +89,10 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 				SupportGroups:            cloudflare.F(true),
 			}),
 			Name:      cloudflare.F("Widget Corps IDP"),
-			Type:      cloudflare.F(shared.UnnamedSchemaRef163Onetimepin),
+			Type:      cloudflare.F(zero_trust.UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOnetimepin),
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
-			ScimConfig: cloudflare.F(shared.UnnamedSchemaRef158Param{
+			ScimConfig: cloudflare.F(zero_trust.UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param{
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
 				SeatDeprovision:        cloudflare.F(true),

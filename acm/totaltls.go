@@ -208,9 +208,9 @@ func (r TotalTLSNewParamsCertificateAuthority) IsKnown() bool {
 }
 
 type TotalTLSNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TotalTLSNewResponse   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   TotalTLSNewResponse                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success TotalTLSNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    totalTLSNewResponseEnvelopeJSON    `json:"-"`
@@ -256,9 +256,9 @@ type TotalTLSGetParams struct {
 }
 
 type TotalTLSGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TotalTLSGetResponse   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   TotalTLSGetResponse                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success TotalTLSGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    totalTLSGetResponseEnvelopeJSON    `json:"-"`

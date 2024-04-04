@@ -364,9 +364,9 @@ func (r LockdownNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LockdownNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallZoneLockdown  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   FirewallZoneLockdown                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LockdownNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownNewResponseEnvelopeJSON    `json:"-"`
@@ -415,9 +415,9 @@ func (r LockdownUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LockdownUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallZoneLockdown  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   FirewallZoneLockdown                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LockdownUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownUpdateResponseEnvelopeJSON    `json:"-"`
@@ -523,9 +523,9 @@ func (r lockdownDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LockdownGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallZoneLockdown  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   FirewallZoneLockdown                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LockdownGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownGetResponseEnvelopeJSON    `json:"-"`

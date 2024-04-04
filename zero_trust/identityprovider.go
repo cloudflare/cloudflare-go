@@ -155,6 +155,105 @@ func (r *IdentityProviderService) Get(ctx context.Context, uuid string, query Id
 	return
 }
 
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb string
+
+const (
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOnetimepin UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "onetimepin"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbAzureAd    UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "azureAD"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbSaml       UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "saml"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbCentrify   UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "centrify"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbFacebook   UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "facebook"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbGitHub     UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "github"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbGoogleApps UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "google-apps"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbGoogle     UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "google"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbLinkedin   UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "linkedin"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOidc       UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "oidc"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOkta       UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "okta"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOnelogin   UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "onelogin"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbPingone    UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "pingone"
+	UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbYandex     UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb = "yandex"
+)
+
+func (r UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOnetimepin, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbAzureAd, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbSaml, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbCentrify, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbFacebook, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbGitHub, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbGoogleApps, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbGoogle, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbLinkedin, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOidc, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOkta, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbOnelogin, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbPingone, UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcbYandex:
+		return true
+	}
+	return false
+}
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                 `json:"user_deprovision"`
+	JSON            unnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1JSON `json:"-"`
+}
+
+// unnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1]
+type unnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1JSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1JSON) RawJSON() string {
+	return r.raw
+}
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ZeroTrustIdentityProviders struct {
 	Config interface{} `json:"config"`
 	// UUID
@@ -163,12 +262,12 @@ type ZeroTrustIdentityProviders struct {
 	Name string `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158 `json:"scim_config"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type  shared.UnnamedSchemaRef163     `json:"type,required"`
-	JSON  zeroTrustIdentityProvidersJSON `json:"-"`
+	Type  UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
+	JSON  zeroTrustIdentityProvidersJSON                   `json:"-"`
 	union ZeroTrustIdentityProvidersUnion
 }
 
@@ -291,13 +390,13 @@ type ZeroTrustIdentityProvidersAccessAzureAd struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                  `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessAzureAdJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessAzureAdJSON      `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessAzureAdJSON contains the JSON metadata for the
@@ -409,13 +508,13 @@ type ZeroTrustIdentityProvidersAccessCentrify struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                   `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessCentrifyJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessCentrifyJSON     `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessCentrifyJSON contains the JSON metadata for the
@@ -490,13 +589,13 @@ type ZeroTrustIdentityProvidersAccessFacebook struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                   `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessFacebookJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessFacebookJSON     `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessFacebookJSON contains the JSON metadata for the
@@ -559,13 +658,13 @@ type ZeroTrustIdentityProvidersAccessGitHub struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                 `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessGitHubJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessGitHubJSON       `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessGitHubJSON contains the JSON metadata for the
@@ -628,13 +727,13 @@ type ZeroTrustIdentityProvidersAccessGoogle struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                 `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessGoogleJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessGoogleJSON       `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessGoogleJSON contains the JSON metadata for the
@@ -703,13 +802,13 @@ type ZeroTrustIdentityProvidersAccessGoogleApps struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                     `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessGoogleAppsJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessGoogleAppsJSON   `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessGoogleAppsJSON contains the JSON metadata for
@@ -781,13 +880,13 @@ type ZeroTrustIdentityProvidersAccessLinkedin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                   `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessLinkedinJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessLinkedinJSON     `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessLinkedinJSON contains the JSON metadata for the
@@ -850,13 +949,13 @@ type ZeroTrustIdentityProvidersAccessOidc struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158               `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessOidcJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessOidcJSON         `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessOidcJSON contains the JSON metadata for the
@@ -937,13 +1036,13 @@ type ZeroTrustIdentityProvidersAccessOkta struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158               `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessOktaJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessOktaJSON         `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessOktaJSON contains the JSON metadata for the
@@ -1018,13 +1117,13 @@ type ZeroTrustIdentityProvidersAccessOnelogin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                   `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessOneloginJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessOneloginJSON     `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessOneloginJSON contains the JSON metadata for the
@@ -1096,13 +1195,13 @@ type ZeroTrustIdentityProvidersAccessPingone struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                  `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessPingoneJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessPingoneJSON      `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessPingoneJSON contains the JSON metadata for the
@@ -1174,13 +1273,13 @@ type ZeroTrustIdentityProvidersAccessSaml struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158               `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessSamlJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessSamlJSON         `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessSamlJSON contains the JSON metadata for the
@@ -1287,13 +1386,13 @@ type ZeroTrustIdentityProvidersAccessYandex struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                 `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessYandexJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessYandexJSON       `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessYandexJSON contains the JSON metadata for the
@@ -1356,13 +1455,13 @@ type ZeroTrustIdentityProvidersAccessOnetimepin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                     `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessOnetimepinJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       zeroTrustIdentityProvidersAccessOnetimepinJSON   `json:"-"`
 }
 
 // zeroTrustIdentityProvidersAccessOnetimepinJSON contains the JSON metadata for
@@ -1395,12 +1494,12 @@ type IdentityProviderListResponse struct {
 	Name string `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158 `json:"scim_config"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type  shared.UnnamedSchemaRef163       `json:"type,required"`
-	JSON  identityProviderListResponseJSON `json:"-"`
+	Type  UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
+	JSON  identityProviderListResponseJSON                 `json:"-"`
 	union IdentityProviderListResponseUnion
 }
 
@@ -1518,13 +1617,13 @@ type IdentityProviderListResponseAccessAzureAd struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                    `json:"scim_config"`
-	JSON       identityProviderListResponseAccessAzureAdJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessAzureAdJSON    `json:"-"`
 }
 
 // identityProviderListResponseAccessAzureAdJSON contains the JSON metadata for the
@@ -1637,13 +1736,13 @@ type IdentityProviderListResponseAccessCentrify struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                     `json:"scim_config"`
-	JSON       identityProviderListResponseAccessCentrifyJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessCentrifyJSON   `json:"-"`
 }
 
 // identityProviderListResponseAccessCentrifyJSON contains the JSON metadata for
@@ -1719,13 +1818,13 @@ type IdentityProviderListResponseAccessFacebook struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                     `json:"scim_config"`
-	JSON       identityProviderListResponseAccessFacebookJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessFacebookJSON   `json:"-"`
 }
 
 // identityProviderListResponseAccessFacebookJSON contains the JSON metadata for
@@ -1789,13 +1888,13 @@ type IdentityProviderListResponseAccessGitHub struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                   `json:"scim_config"`
-	JSON       identityProviderListResponseAccessGitHubJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessGitHubJSON     `json:"-"`
 }
 
 // identityProviderListResponseAccessGitHubJSON contains the JSON metadata for the
@@ -1858,13 +1957,13 @@ type IdentityProviderListResponseAccessGoogle struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                   `json:"scim_config"`
-	JSON       identityProviderListResponseAccessGoogleJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessGoogleJSON     `json:"-"`
 }
 
 // identityProviderListResponseAccessGoogleJSON contains the JSON metadata for the
@@ -1933,12 +2032,12 @@ type IdentityProviderListResponseAccessGoogleApps struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                       `json:"scim_config"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGoogleAppsJSON `json:"-"`
 }
 
@@ -2012,13 +2111,13 @@ type IdentityProviderListResponseAccessLinkedin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                     `json:"scim_config"`
-	JSON       identityProviderListResponseAccessLinkedinJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessLinkedinJSON   `json:"-"`
 }
 
 // identityProviderListResponseAccessLinkedinJSON contains the JSON metadata for
@@ -2082,13 +2181,13 @@ type IdentityProviderListResponseAccessOidc struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                 `json:"scim_config"`
-	JSON       identityProviderListResponseAccessOidcJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessOidcJSON       `json:"-"`
 }
 
 // identityProviderListResponseAccessOidcJSON contains the JSON metadata for the
@@ -2169,13 +2268,13 @@ type IdentityProviderListResponseAccessOkta struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                 `json:"scim_config"`
-	JSON       identityProviderListResponseAccessOktaJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessOktaJSON       `json:"-"`
 }
 
 // identityProviderListResponseAccessOktaJSON contains the JSON metadata for the
@@ -2250,13 +2349,13 @@ type IdentityProviderListResponseAccessOnelogin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                     `json:"scim_config"`
-	JSON       identityProviderListResponseAccessOneloginJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessOneloginJSON   `json:"-"`
 }
 
 // identityProviderListResponseAccessOneloginJSON contains the JSON metadata for
@@ -2329,13 +2428,13 @@ type IdentityProviderListResponseAccessPingone struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                    `json:"scim_config"`
-	JSON       identityProviderListResponseAccessPingoneJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessPingoneJSON    `json:"-"`
 }
 
 // identityProviderListResponseAccessPingoneJSON contains the JSON metadata for the
@@ -2408,13 +2507,13 @@ type IdentityProviderListResponseAccessSaml struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                 `json:"scim_config"`
-	JSON       identityProviderListResponseAccessSamlJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessSamlJSON       `json:"-"`
 }
 
 // identityProviderListResponseAccessSamlJSON contains the JSON metadata for the
@@ -2521,13 +2620,13 @@ type IdentityProviderListResponseAccessYandex struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type shared.UnnamedSchemaRef163 `json:"type,required"`
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig shared.UnnamedSchemaRef158                   `json:"scim_config"`
-	JSON       identityProviderListResponseAccessYandexJSON `json:"-"`
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       identityProviderListResponseAccessYandexJSON     `json:"-"`
 }
 
 // identityProviderListResponseAccessYandexJSON contains the JSON metadata for the
@@ -2633,14 +2732,14 @@ type IdentityProviderNewParamsAccessAzureAd struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessAzureAd) MarshalJSON() (data []byte, err error) {
@@ -2726,14 +2825,14 @@ type IdentityProviderNewParamsAccessCentrify struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessCentrify) MarshalJSON() (data []byte, err error) {
@@ -2784,14 +2883,14 @@ type IdentityProviderNewParamsAccessFacebook struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessFacebook) MarshalJSON() (data []byte, err error) {
@@ -2834,14 +2933,14 @@ type IdentityProviderNewParamsAccessGitHub struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessGitHub) MarshalJSON() (data []byte, err error) {
@@ -2884,14 +2983,14 @@ type IdentityProviderNewParamsAccessGoogle struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessGoogle) MarshalJSON() (data []byte, err error) {
@@ -2938,14 +3037,14 @@ type IdentityProviderNewParamsAccessGoogleApps struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessGoogleApps) MarshalJSON() (data []byte, err error) {
@@ -2994,14 +3093,14 @@ type IdentityProviderNewParamsAccessLinkedin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessLinkedin) MarshalJSON() (data []byte, err error) {
@@ -3044,14 +3143,14 @@ type IdentityProviderNewParamsAccessOidc struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessOidc) MarshalJSON() (data []byte, err error) {
@@ -3106,14 +3205,14 @@ type IdentityProviderNewParamsAccessOkta struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessOkta) MarshalJSON() (data []byte, err error) {
@@ -3164,14 +3263,14 @@ type IdentityProviderNewParamsAccessOnelogin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessOnelogin) MarshalJSON() (data []byte, err error) {
@@ -3220,14 +3319,14 @@ type IdentityProviderNewParamsAccessPingone struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessPingone) MarshalJSON() (data []byte, err error) {
@@ -3276,14 +3375,14 @@ type IdentityProviderNewParamsAccessSaml struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessSaml) MarshalJSON() (data []byte, err error) {
@@ -3350,14 +3449,14 @@ type IdentityProviderNewParamsAccessYandex struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessYandex) MarshalJSON() (data []byte, err error) {
@@ -3400,14 +3499,14 @@ type IdentityProviderNewParamsAccessOnetimepin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderNewParamsAccessOnetimepin) MarshalJSON() (data []byte, err error) {
@@ -3427,9 +3526,9 @@ func (IdentityProviderNewParamsAccessOnetimepin) ImplementsIdentityProviderNewPa
 }
 
 type IdentityProviderNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   ZeroTrustIdentityProviders `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustIdentityProviders                                `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderNewResponseEnvelopeJSON    `json:"-"`
@@ -3502,14 +3601,14 @@ type IdentityProviderUpdateParamsAccessAzureAd struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessAzureAd) MarshalJSON() (data []byte, err error) {
@@ -3595,14 +3694,14 @@ type IdentityProviderUpdateParamsAccessCentrify struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessCentrify) MarshalJSON() (data []byte, err error) {
@@ -3653,14 +3752,14 @@ type IdentityProviderUpdateParamsAccessFacebook struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessFacebook) MarshalJSON() (data []byte, err error) {
@@ -3703,14 +3802,14 @@ type IdentityProviderUpdateParamsAccessGitHub struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessGitHub) MarshalJSON() (data []byte, err error) {
@@ -3753,14 +3852,14 @@ type IdentityProviderUpdateParamsAccessGoogle struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessGoogle) MarshalJSON() (data []byte, err error) {
@@ -3807,14 +3906,14 @@ type IdentityProviderUpdateParamsAccessGoogleApps struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessGoogleApps) MarshalJSON() (data []byte, err error) {
@@ -3863,14 +3962,14 @@ type IdentityProviderUpdateParamsAccessLinkedin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessLinkedin) MarshalJSON() (data []byte, err error) {
@@ -3913,14 +4012,14 @@ type IdentityProviderUpdateParamsAccessOidc struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessOidc) MarshalJSON() (data []byte, err error) {
@@ -3975,14 +4074,14 @@ type IdentityProviderUpdateParamsAccessOkta struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessOkta) MarshalJSON() (data []byte, err error) {
@@ -4033,14 +4132,14 @@ type IdentityProviderUpdateParamsAccessOnelogin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessOnelogin) MarshalJSON() (data []byte, err error) {
@@ -4089,14 +4188,14 @@ type IdentityProviderUpdateParamsAccessPingone struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessPingone) MarshalJSON() (data []byte, err error) {
@@ -4145,14 +4244,14 @@ type IdentityProviderUpdateParamsAccessSaml struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessSaml) MarshalJSON() (data []byte, err error) {
@@ -4219,14 +4318,14 @@ type IdentityProviderUpdateParamsAccessYandex struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessYandex) MarshalJSON() (data []byte, err error) {
@@ -4269,14 +4368,14 @@ type IdentityProviderUpdateParamsAccessOnetimepin struct {
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[shared.UnnamedSchemaRef163] `json:"type,required"`
+	Type param.Field[UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[shared.UnnamedSchemaRef158Param] `json:"scim_config"`
+	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
 func (r IdentityProviderUpdateParamsAccessOnetimepin) MarshalJSON() (data []byte, err error) {
@@ -4296,9 +4395,9 @@ func (IdentityProviderUpdateParamsAccessOnetimepin) ImplementsIdentityProviderUp
 }
 
 type IdentityProviderUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   ZeroTrustIdentityProviders `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustIdentityProviders                                `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderUpdateResponseEnvelopeJSON    `json:"-"`
@@ -4353,9 +4452,9 @@ type IdentityProviderDeleteParams struct {
 }
 
 type IdentityProviderDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   IdentityProviderDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IdentityProviderDeleteResponse                            `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderDeleteResponseEnvelopeJSON    `json:"-"`
@@ -4403,9 +4502,9 @@ type IdentityProviderGetParams struct {
 }
 
 type IdentityProviderGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   ZeroTrustIdentityProviders `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustIdentityProviders                                `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderGetResponseEnvelopeJSON    `json:"-"`

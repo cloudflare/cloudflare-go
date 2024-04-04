@@ -120,7 +120,7 @@ func init() {
 	)
 }
 
-type AIRunResponseTextClassification []shared.UnnamedSchemaRef135
+type AIRunResponseTextClassification []AIRunResponseTextClassification
 
 func (r AIRunResponseTextClassification) ImplementsWorkersAIRunResponseUnion() {}
 
@@ -154,11 +154,11 @@ func (r aiRunResponseTextEmbeddingsJSON) RawJSON() string {
 func (r AIRunResponseTextEmbeddings) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseSpeechRecognition struct {
-	Text      string                             `json:"text,required"`
-	Vtt       string                             `json:"vtt"`
-	WordCount float64                            `json:"word_count"`
-	Words     []shared.UnnamedSchemaRef94        `json:"words"`
-	JSON      aiRunResponseSpeechRecognitionJSON `json:"-"`
+	Text      string                               `json:"text,required"`
+	Vtt       string                               `json:"vtt"`
+	WordCount float64                              `json:"word_count"`
+	Words     []AIRunResponseSpeechRecognitionWord `json:"words"`
+	JSON      aiRunResponseSpeechRecognitionJSON   `json:"-"`
 }
 
 // aiRunResponseSpeechRecognitionJSON contains the JSON metadata for the struct
@@ -182,7 +182,32 @@ func (r aiRunResponseSpeechRecognitionJSON) RawJSON() string {
 
 func (r AIRunResponseSpeechRecognition) ImplementsWorkersAIRunResponseUnion() {}
 
-type AIRunResponseImageClassification []shared.UnnamedSchemaRef135
+type AIRunResponseSpeechRecognitionWord struct {
+	End   float64                                `json:"end"`
+	Start float64                                `json:"start"`
+	Word  string                                 `json:"word"`
+	JSON  aiRunResponseSpeechRecognitionWordJSON `json:"-"`
+}
+
+// aiRunResponseSpeechRecognitionWordJSON contains the JSON metadata for the struct
+// [AIRunResponseSpeechRecognitionWord]
+type aiRunResponseSpeechRecognitionWordJSON struct {
+	End         apijson.Field
+	Start       apijson.Field
+	Word        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseSpeechRecognitionWord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseSpeechRecognitionWordJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIRunResponseImageClassification []AIRunResponseImageClassification
 
 func (r AIRunResponseImageClassification) ImplementsWorkersAIRunResponseUnion() {}
 
@@ -352,8 +377,8 @@ func (AIRunParamsSentenceSimilarity) ImplementsAIRunParams() {
 }
 
 type AIRunParamsTextEmbeddings struct {
-	AccountID param.Field[string]                               `path:"account_id,required"`
-	Text      param.Field[shared.UnnamedSchemaRef121UnionParam] `json:"text,required"`
+	AccountID param.Field[string]                             `path:"account_id,required"`
+	Text      param.Field[AIRunParamsTextEmbeddingsTextUnion] `json:"text,required"`
 }
 
 func (r AIRunParamsTextEmbeddings) MarshalJSON() (data []byte, err error) {
@@ -367,6 +392,15 @@ func (r AIRunParamsTextEmbeddings) getAccountID() param.Field[string] {
 func (AIRunParamsTextEmbeddings) ImplementsAIRunParams() {
 
 }
+
+// Satisfied by [shared.UnionString], [workers.AIRunParamsTextEmbeddingsTextArray].
+type AIRunParamsTextEmbeddingsTextUnion interface {
+	ImplementsWorkersAIRunParamsTextEmbeddingsTextUnion()
+}
+
+type AIRunParamsTextEmbeddingsTextArray []string
+
+func (r AIRunParamsTextEmbeddingsTextArray) ImplementsWorkersAIRunParamsTextEmbeddingsTextUnion() {}
 
 type AIRunParamsSpeechRecognition struct {
 	AccountID param.Field[string]    `path:"account_id,required"`

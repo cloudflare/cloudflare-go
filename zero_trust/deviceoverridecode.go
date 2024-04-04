@@ -106,9 +106,9 @@ type DeviceOverrideCodeListParams struct {
 }
 
 type DeviceOverrideCodeListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   DeviceOverrideCodeListResponse `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DeviceOverrideCodeListResponse                            `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DeviceOverrideCodeListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DeviceOverrideCodeListResponseEnvelopeResultInfo `json:"result_info"`

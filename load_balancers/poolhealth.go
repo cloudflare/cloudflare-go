@@ -184,9 +184,9 @@ func (r PoolHealthNewParamsType) IsKnown() bool {
 }
 
 type PoolHealthNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PoolHealthNewResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PoolHealthNewResponse                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolHealthNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolHealthNewResponseEnvelopeJSON    `json:"-"`
@@ -232,8 +232,8 @@ type PoolHealthGetParams struct {
 }
 
 type PoolHealthGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	Result PoolHealthGetResponseUnion `json:"result,required"`

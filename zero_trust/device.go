@@ -73,7 +73,7 @@ func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListPara
 }
 
 // Fetches details for a single device.
-func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
+func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/%s", query.AccountID, deviceID)
@@ -217,9 +217,9 @@ type DeviceGetParams struct {
 }
 
 type DeviceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DeviceGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceGetResponseEnvelopeJSON    `json:"-"`

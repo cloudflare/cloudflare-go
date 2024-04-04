@@ -56,8 +56,8 @@ func (r ForceAXFRNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ForceAXFRNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// When force_axfr query parameter is set to true, the response is a simple string
 	Result SecondaryDNSForce `json:"result,required"`
 	// Whether the API call was successful

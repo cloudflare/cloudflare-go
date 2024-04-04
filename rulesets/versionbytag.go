@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -162,7 +163,7 @@ type VersionByTagGetResponseRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref string `json:"ref"`
 	// The version of the rule.
@@ -260,7 +261,7 @@ type VersionByTagGetResponseRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                            `json:"ref"`
 	JSON versionByTagGetResponseRulesRulesetsBlockRuleJSON `json:"-"`
@@ -384,7 +385,7 @@ type VersionByTagGetResponseRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                              `json:"ref"`
 	JSON versionByTagGetResponseRulesRulesetsExecuteRuleJSON `json:"-"`
@@ -672,7 +673,7 @@ type VersionByTagGetResponseRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                          `json:"ref"`
 	JSON versionByTagGetResponseRulesRulesetsLogRuleJSON `json:"-"`
@@ -742,7 +743,7 @@ type VersionByTagGetResponseRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                           `json:"ref"`
 	JSON versionByTagGetResponseRulesRulesetsSkipRuleJSON `json:"-"`

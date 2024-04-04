@@ -190,8 +190,8 @@ func (r SettingBrotliEditParamsValue) IsKnown() bool {
 }
 
 type SettingBrotliEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting an asset supports the Brotli compression algorithm,
@@ -225,8 +225,8 @@ type SettingBrotliGetParams struct {
 }
 
 type SettingBrotliGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting an asset supports the Brotli compression algorithm,

@@ -198,9 +198,9 @@ func (r ScriptSettingEditParamsTailConsumer) MarshalJSON() (data []byte, err err
 }
 
 type ScriptSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   ScriptSettingEditResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptSettingEditResponse                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -246,9 +246,9 @@ type ScriptSettingGetParams struct {
 }
 
 type ScriptSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   ScriptSettingGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptSettingGetResponse                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptSettingGetResponseEnvelopeJSON    `json:"-"`

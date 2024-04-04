@@ -72,7 +72,7 @@ func (r attackLayer7TopAseOriginResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7TopAseOriginResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                              `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
 	LastUpdated    string                                             `json:"lastUpdated,required"`
 	ConfidenceInfo AttackLayer7TopAseOriginResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           attackLayer7TopAseOriginResponseMetaJSON           `json:"-"`
@@ -97,7 +97,7 @@ func (r attackLayer7TopAseOriginResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer7TopAseOriginResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                  `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1     `json:"annotations"`
 	Level       int64                                                  `json:"level"`
 	JSON        attackLayer7TopAseOriginResponseMetaConfidenceInfoJSON `json:"-"`
 }

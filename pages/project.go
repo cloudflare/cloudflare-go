@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // ProjectService contains methods and other services that help with interacting
@@ -40,7 +38,7 @@ func NewProjectService(opts ...option.RequestOption) (r *ProjectService) {
 }
 
 // Create a new project.
-func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts ...option.RequestOption) (res *ProjectNewResponseUnion, err error) {
+func (r *ProjectService) New(ctx context.Context, params ProjectNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects", params.AccountID)
@@ -85,7 +83,7 @@ func (r *ProjectService) Delete(ctx context.Context, projectName string, params 
 
 // Set new attributes for an existing project. Modify environment variables. To
 // delete an environment variable, set the key to null.
-func (r *ProjectService) Edit(ctx context.Context, projectName string, params ProjectEditParams, opts ...option.RequestOption) (res *ProjectEditResponseUnion, err error) {
+func (r *ProjectService) Edit(ctx context.Context, projectName string, params ProjectEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", params.AccountID, projectName)
@@ -1822,57 +1820,7 @@ func (r pagesProjectsDeploymentConfigsProductionVectorizeBindingsVectorizeJSON) 
 	return r.raw
 }
 
-// Union satisfied by [pages.ProjectNewResponseUnknown],
-// [pages.ProjectNewResponseArray] or [shared.UnionString].
-type ProjectNewResponseUnion interface {
-	ImplementsPagesProjectNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ProjectNewResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type ProjectNewResponseArray []interface{}
-
-func (r ProjectNewResponseArray) ImplementsPagesProjectNewResponseUnion() {}
-
 type ProjectDeleteResponse = interface{}
-
-// Union satisfied by [pages.ProjectEditResponseUnknown],
-// [pages.ProjectEditResponseArray] or [shared.UnionString].
-type ProjectEditResponseUnion interface {
-	ImplementsPagesProjectEditResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ProjectEditResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type ProjectEditResponseArray []interface{}
-
-func (r ProjectEditResponseArray) ImplementsPagesProjectEditResponseUnion() {}
 
 type ProjectPurgeBuildCacheResponse = interface{}
 
@@ -2564,9 +2512,9 @@ func (r ProjectNewParamsDeploymentConfigsProductionVectorizeBindingsVectorize) M
 }
 
 type ProjectNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   ProjectNewResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectNewResponseEnvelopeJSON    `json:"-"`
@@ -2632,9 +2580,9 @@ func (r ProjectEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   ProjectEditResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectEditResponseEnvelopeJSON    `json:"-"`
@@ -2680,9 +2628,9 @@ type ProjectGetParams struct {
 }
 
 type ProjectGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PagesProjects         `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PagesProjects                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectGetResponseEnvelopeJSON    `json:"-"`

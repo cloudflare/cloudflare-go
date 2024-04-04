@@ -46,11 +46,11 @@ func (r *MonitorReferenceService) Get(ctx context.Context, monitorID string, que
 }
 
 type MonitorReferenceGetResponse struct {
-	ReferenceType shared.UnnamedSchemaRef146      `json:"reference_type"`
-	ResourceID    string                          `json:"resource_id"`
-	ResourceName  string                          `json:"resource_name"`
-	ResourceType  string                          `json:"resource_type"`
-	JSON          monitorReferenceGetResponseJSON `json:"-"`
+	ReferenceType shared.UnnamedSchemaRefD8600eb4758b3ae35607a0327bcd691b `json:"reference_type"`
+	ResourceID    string                                                  `json:"resource_id"`
+	ResourceName  string                                                  `json:"resource_name"`
+	ResourceType  string                                                  `json:"resource_type"`
+	JSON          monitorReferenceGetResponseJSON                         `json:"-"`
 }
 
 // monitorReferenceGetResponseJSON contains the JSON metadata for the struct
@@ -78,8 +78,8 @@ type MonitorReferenceGetParams struct {
 }
 
 type MonitorReferenceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// List of resources that reference a given monitor.
 	Result []MonitorReferenceGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful

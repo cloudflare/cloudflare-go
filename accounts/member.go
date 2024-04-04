@@ -431,9 +431,9 @@ func (r MemberNewParamsStatus) IsKnown() bool {
 }
 
 type MemberNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MemberWithCode        `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   MemberWithCode                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberNewResponseEnvelopeJSON    `json:"-"`
@@ -484,9 +484,9 @@ func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MemberUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Member                `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   Member                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberUpdateResponseEnvelopeJSON    `json:"-"`
@@ -609,9 +609,9 @@ func (r MemberDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MemberDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MemberDeleteResponse  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   MemberDeleteResponse                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success MemberDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberDeleteResponseEnvelopeJSON    `json:"-"`
@@ -656,9 +656,9 @@ type MemberGetParams struct {
 }
 
 type MemberGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Member                `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   Member                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberGetResponseEnvelopeJSON    `json:"-"`

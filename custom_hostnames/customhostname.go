@@ -81,7 +81,7 @@ func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, params Custo
 }
 
 // Delete Custom Hostname (and any issued SSL certificates)
-func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, params CustomHostnameDeleteParams, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
+func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, params CustomHostnameDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", params.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -115,6 +115,59 @@ func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string
 	}
 	res = &env.Result
 	return
+}
+
+// A ubiquitous bundle has the highest probability of being verified everywhere,
+// even by clients using outdated or unusual trust stores. An optimal bundle uses
+// the shortest chain and newest intermediates. And the force bundle verifies the
+// chain, but does not otherwise modify it.
+type UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 string
+
+const (
+	UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1Ubiquitous UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 = "ubiquitous"
+	UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1Optimal    UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 = "optimal"
+	UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1Force      UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 = "force"
+)
+
+func (r UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1Ubiquitous, UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1Optimal, UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1Force:
+		return true
+	}
+	return false
+}
+
+// Domain control validation (DCV) method used for this hostname.
+type UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 string
+
+const (
+	UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510HTTP  UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 = "http"
+	UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510TXT   UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 = "txt"
+	UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510Email UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 = "email"
+)
+
+func (r UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510HTTP, UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510TXT, UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510Email:
+		return true
+	}
+	return false
+}
+
+// Level of validation to be used for this hostname. Domain validation (dv) must be
+// used.
+type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 string
+
+const (
+	UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1Dv UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 = "dv"
+)
+
+func (r UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1Dv:
+		return true
+	}
+	return false
 }
 
 type CustomHostnameNewResponse struct {
@@ -153,7 +206,7 @@ type CustomHostnameNewResponseSSL struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod shared.UnnamedSchemaRef78 `json:"bundle_method"`
+	BundleMethod UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority CustomHostnameNewResponseSSLCertificateAuthority `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -169,7 +222,7 @@ type CustomHostnameNewResponseSSL struct {
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
-	Method shared.UnnamedSchemaRef79 `json:"method"`
+	Method UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string `json:"serial_number"`
 	// SSL specific settings.
@@ -180,7 +233,7 @@ type CustomHostnameNewResponseSSL struct {
 	Status CustomHostnameNewResponseSSLStatus `json:"status"`
 	// Level of validation to be used for this hostname. Domain validation (dv) must be
 	// used.
-	Type shared.UnnamedSchemaRef80 `json:"type"`
+	Type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
@@ -249,7 +302,7 @@ type CustomHostnameNewResponseSSLSettings struct {
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
 	// Whether or not Early Hints is enabled.
-	EarlyHints shared.UnnamedSchemaRef81 `json:"early_hints"`
+	EarlyHints CustomHostnameNewResponseSSLSettingsEarlyHints `json:"early_hints"`
 	// Whether or not HTTP2 is enabled.
 	HTTP2 CustomHostnameNewResponseSSLSettingsHTTP2 `json:"http2"`
 	// The minimum TLS version supported.
@@ -277,6 +330,22 @@ func (r *CustomHostnameNewResponseSSLSettings) UnmarshalJSON(data []byte) (err e
 
 func (r customHostnameNewResponseSSLSettingsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether or not Early Hints is enabled.
+type CustomHostnameNewResponseSSLSettingsEarlyHints string
+
+const (
+	CustomHostnameNewResponseSSLSettingsEarlyHintsOn  CustomHostnameNewResponseSSLSettingsEarlyHints = "on"
+	CustomHostnameNewResponseSSLSettingsEarlyHintsOff CustomHostnameNewResponseSSLSettingsEarlyHints = "off"
+)
+
+func (r CustomHostnameNewResponseSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewResponseSSLSettingsEarlyHintsOn, CustomHostnameNewResponseSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
 }
 
 // Whether or not HTTP2 is enabled.
@@ -461,7 +530,7 @@ type CustomHostnameListResponseSSL struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod shared.UnnamedSchemaRef78 `json:"bundle_method"`
+	BundleMethod UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority CustomHostnameListResponseSSLCertificateAuthority `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -477,7 +546,7 @@ type CustomHostnameListResponseSSL struct {
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
-	Method shared.UnnamedSchemaRef79 `json:"method"`
+	Method UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string `json:"serial_number"`
 	// SSL specific settings.
@@ -488,7 +557,7 @@ type CustomHostnameListResponseSSL struct {
 	Status CustomHostnameListResponseSSLStatus `json:"status"`
 	// Level of validation to be used for this hostname. Domain validation (dv) must be
 	// used.
-	Type shared.UnnamedSchemaRef80 `json:"type"`
+	Type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
@@ -557,7 +626,7 @@ type CustomHostnameListResponseSSLSettings struct {
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
 	// Whether or not Early Hints is enabled.
-	EarlyHints shared.UnnamedSchemaRef81 `json:"early_hints"`
+	EarlyHints CustomHostnameListResponseSSLSettingsEarlyHints `json:"early_hints"`
 	// Whether or not HTTP2 is enabled.
 	HTTP2 CustomHostnameListResponseSSLSettingsHTTP2 `json:"http2"`
 	// The minimum TLS version supported.
@@ -585,6 +654,22 @@ func (r *CustomHostnameListResponseSSLSettings) UnmarshalJSON(data []byte) (err 
 
 func (r customHostnameListResponseSSLSettingsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether or not Early Hints is enabled.
+type CustomHostnameListResponseSSLSettingsEarlyHints string
+
+const (
+	CustomHostnameListResponseSSLSettingsEarlyHintsOn  CustomHostnameListResponseSSLSettingsEarlyHints = "on"
+	CustomHostnameListResponseSSLSettingsEarlyHintsOff CustomHostnameListResponseSSLSettingsEarlyHints = "off"
+)
+
+func (r CustomHostnameListResponseSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameListResponseSSLSettingsEarlyHintsOn, CustomHostnameListResponseSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
 }
 
 // Whether or not HTTP2 is enabled.
@@ -733,28 +818,6 @@ func (r customHostnameListResponseSSLValidationRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-type CustomHostnameDeleteResponse struct {
-	// Identifier
-	ID   string                           `json:"id"`
-	JSON customHostnameDeleteResponseJSON `json:"-"`
-}
-
-// customHostnameDeleteResponseJSON contains the JSON metadata for the struct
-// [CustomHostnameDeleteResponse]
-type customHostnameDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type CustomHostnameEditResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -791,7 +854,7 @@ type CustomHostnameEditResponseSSL struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod shared.UnnamedSchemaRef78 `json:"bundle_method"`
+	BundleMethod UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority CustomHostnameEditResponseSSLCertificateAuthority `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -807,7 +870,7 @@ type CustomHostnameEditResponseSSL struct {
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
-	Method shared.UnnamedSchemaRef79 `json:"method"`
+	Method UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string `json:"serial_number"`
 	// SSL specific settings.
@@ -818,7 +881,7 @@ type CustomHostnameEditResponseSSL struct {
 	Status CustomHostnameEditResponseSSLStatus `json:"status"`
 	// Level of validation to be used for this hostname. Domain validation (dv) must be
 	// used.
-	Type shared.UnnamedSchemaRef80 `json:"type"`
+	Type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
@@ -887,7 +950,7 @@ type CustomHostnameEditResponseSSLSettings struct {
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
 	// Whether or not Early Hints is enabled.
-	EarlyHints shared.UnnamedSchemaRef81 `json:"early_hints"`
+	EarlyHints CustomHostnameEditResponseSSLSettingsEarlyHints `json:"early_hints"`
 	// Whether or not HTTP2 is enabled.
 	HTTP2 CustomHostnameEditResponseSSLSettingsHTTP2 `json:"http2"`
 	// The minimum TLS version supported.
@@ -915,6 +978,22 @@ func (r *CustomHostnameEditResponseSSLSettings) UnmarshalJSON(data []byte) (err 
 
 func (r customHostnameEditResponseSSLSettingsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether or not Early Hints is enabled.
+type CustomHostnameEditResponseSSLSettingsEarlyHints string
+
+const (
+	CustomHostnameEditResponseSSLSettingsEarlyHintsOn  CustomHostnameEditResponseSSLSettingsEarlyHints = "on"
+	CustomHostnameEditResponseSSLSettingsEarlyHintsOff CustomHostnameEditResponseSSLSettingsEarlyHints = "off"
+)
+
+func (r CustomHostnameEditResponseSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditResponseSSLSettingsEarlyHintsOn, CustomHostnameEditResponseSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
 }
 
 // Whether or not HTTP2 is enabled.
@@ -1099,7 +1178,7 @@ type CustomHostnameGetResponseSSL struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod shared.UnnamedSchemaRef78 `json:"bundle_method"`
+	BundleMethod UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority CustomHostnameGetResponseSSLCertificateAuthority `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -1115,7 +1194,7 @@ type CustomHostnameGetResponseSSL struct {
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
-	Method shared.UnnamedSchemaRef79 `json:"method"`
+	Method UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 `json:"method"`
 	// The serial number on a custom uploaded certificate.
 	SerialNumber string `json:"serial_number"`
 	// SSL specific settings.
@@ -1126,7 +1205,7 @@ type CustomHostnameGetResponseSSL struct {
 	Status CustomHostnameGetResponseSSLStatus `json:"status"`
 	// Level of validation to be used for this hostname. Domain validation (dv) must be
 	// used.
-	Type shared.UnnamedSchemaRef80 `json:"type"`
+	Type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 `json:"type"`
 	// The time the custom certificate was uploaded.
 	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
 	// Domain validation errors that have been received by the certificate authority
@@ -1195,7 +1274,7 @@ type CustomHostnameGetResponseSSLSettings struct {
 	// BoringSSL format.
 	Ciphers []string `json:"ciphers"`
 	// Whether or not Early Hints is enabled.
-	EarlyHints shared.UnnamedSchemaRef81 `json:"early_hints"`
+	EarlyHints CustomHostnameGetResponseSSLSettingsEarlyHints `json:"early_hints"`
 	// Whether or not HTTP2 is enabled.
 	HTTP2 CustomHostnameGetResponseSSLSettingsHTTP2 `json:"http2"`
 	// The minimum TLS version supported.
@@ -1223,6 +1302,22 @@ func (r *CustomHostnameGetResponseSSLSettings) UnmarshalJSON(data []byte) (err e
 
 func (r customHostnameGetResponseSSLSettingsJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether or not Early Hints is enabled.
+type CustomHostnameGetResponseSSLSettingsEarlyHints string
+
+const (
+	CustomHostnameGetResponseSSLSettingsEarlyHintsOn  CustomHostnameGetResponseSSLSettingsEarlyHints = "on"
+	CustomHostnameGetResponseSSLSettingsEarlyHintsOff CustomHostnameGetResponseSSLSettingsEarlyHints = "off"
+)
+
+func (r CustomHostnameGetResponseSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameGetResponseSSLSettingsEarlyHintsOn, CustomHostnameGetResponseSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
 }
 
 // Whether or not HTTP2 is enabled.
@@ -1392,7 +1487,7 @@ type CustomHostnameNewParamsSSL struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[shared.UnnamedSchemaRef78] `json:"bundle_method"`
+	BundleMethod param.Field[UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority param.Field[CustomHostnameNewParamsSSLCertificateAuthority] `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -1400,12 +1495,12 @@ type CustomHostnameNewParamsSSL struct {
 	// The key for a custom uploaded certificate.
 	CustomKey param.Field[string] `json:"custom_key"`
 	// Domain control validation (DCV) method used for this hostname.
-	Method param.Field[CustomHostnameNewParamsSSLMethod] `json:"method"`
+	Method param.Field[UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510] `json:"method"`
 	// SSL specific settings.
 	Settings param.Field[CustomHostnameNewParamsSSLSettings] `json:"settings"`
 	// Level of validation to be used for this hostname. Domain validation (dv) must be
 	// used.
-	Type param.Field[CustomHostnameNewParamsSSLType] `json:"type"`
+	Type param.Field[UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1] `json:"type"`
 	// Indicates whether the certificate covers a wildcard.
 	Wildcard param.Field[bool] `json:"wildcard"`
 }
@@ -1431,30 +1526,13 @@ func (r CustomHostnameNewParamsSSLCertificateAuthority) IsKnown() bool {
 	return false
 }
 
-// Domain control validation (DCV) method used for this hostname.
-type CustomHostnameNewParamsSSLMethod string
-
-const (
-	CustomHostnameNewParamsSSLMethodHTTP  CustomHostnameNewParamsSSLMethod = "http"
-	CustomHostnameNewParamsSSLMethodTXT   CustomHostnameNewParamsSSLMethod = "txt"
-	CustomHostnameNewParamsSSLMethodEmail CustomHostnameNewParamsSSLMethod = "email"
-)
-
-func (r CustomHostnameNewParamsSSLMethod) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewParamsSSLMethodHTTP, CustomHostnameNewParamsSSLMethodTXT, CustomHostnameNewParamsSSLMethodEmail:
-		return true
-	}
-	return false
-}
-
 // SSL specific settings.
 type CustomHostnameNewParamsSSLSettings struct {
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers param.Field[[]string] `json:"ciphers"`
 	// Whether or not Early Hints is enabled.
-	EarlyHints param.Field[shared.UnnamedSchemaRef81] `json:"early_hints"`
+	EarlyHints param.Field[CustomHostnameNewParamsSSLSettingsEarlyHints] `json:"early_hints"`
 	// Whether or not HTTP2 is enabled.
 	HTTP2 param.Field[CustomHostnameNewParamsSSLSettingsHTTP2] `json:"http2"`
 	// The minimum TLS version supported.
@@ -1465,6 +1543,22 @@ type CustomHostnameNewParamsSSLSettings struct {
 
 func (r CustomHostnameNewParamsSSLSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Whether or not Early Hints is enabled.
+type CustomHostnameNewParamsSSLSettingsEarlyHints string
+
+const (
+	CustomHostnameNewParamsSSLSettingsEarlyHintsOn  CustomHostnameNewParamsSSLSettingsEarlyHints = "on"
+	CustomHostnameNewParamsSSLSettingsEarlyHintsOff CustomHostnameNewParamsSSLSettingsEarlyHints = "off"
+)
+
+func (r CustomHostnameNewParamsSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameNewParamsSSLSettingsEarlyHintsOn, CustomHostnameNewParamsSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
 }
 
 // Whether or not HTTP2 is enabled.
@@ -1517,22 +1611,6 @@ func (r CustomHostnameNewParamsSSLSettingsTLS1_3) IsKnown() bool {
 	return false
 }
 
-// Level of validation to be used for this hostname. Domain validation (dv) must be
-// used.
-type CustomHostnameNewParamsSSLType string
-
-const (
-	CustomHostnameNewParamsSSLTypeDv CustomHostnameNewParamsSSLType = "dv"
-)
-
-func (r CustomHostnameNewParamsSSLType) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewParamsSSLTypeDv:
-		return true
-	}
-	return false
-}
-
 // These are per-hostname (customer) settings.
 type CustomHostnameNewParamsCustomMetadata struct {
 	// Unique metadata for this hostname.
@@ -1544,9 +1622,9 @@ func (r CustomHostnameNewParamsCustomMetadata) MarshalJSON() (data []byte, err e
 }
 
 type CustomHostnameNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   CustomHostnameNewResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CustomHostnameNewResponse                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameNewResponseEnvelopeJSON    `json:"-"`
@@ -1713,7 +1791,7 @@ type CustomHostnameEditParamsSSL struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[shared.UnnamedSchemaRef78] `json:"bundle_method"`
+	BundleMethod param.Field[UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority param.Field[CustomHostnameEditParamsSSLCertificateAuthority] `json:"certificate_authority"`
 	// If a custom uploaded certificate is used.
@@ -1721,12 +1799,12 @@ type CustomHostnameEditParamsSSL struct {
 	// The key for a custom uploaded certificate.
 	CustomKey param.Field[string] `json:"custom_key"`
 	// Domain control validation (DCV) method used for this hostname.
-	Method param.Field[CustomHostnameEditParamsSSLMethod] `json:"method"`
+	Method param.Field[UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510] `json:"method"`
 	// SSL specific settings.
 	Settings param.Field[CustomHostnameEditParamsSSLSettings] `json:"settings"`
 	// Level of validation to be used for this hostname. Domain validation (dv) must be
 	// used.
-	Type param.Field[CustomHostnameEditParamsSSLType] `json:"type"`
+	Type param.Field[UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1] `json:"type"`
 	// Indicates whether the certificate covers a wildcard.
 	Wildcard param.Field[bool] `json:"wildcard"`
 }
@@ -1752,30 +1830,13 @@ func (r CustomHostnameEditParamsSSLCertificateAuthority) IsKnown() bool {
 	return false
 }
 
-// Domain control validation (DCV) method used for this hostname.
-type CustomHostnameEditParamsSSLMethod string
-
-const (
-	CustomHostnameEditParamsSSLMethodHTTP  CustomHostnameEditParamsSSLMethod = "http"
-	CustomHostnameEditParamsSSLMethodTXT   CustomHostnameEditParamsSSLMethod = "txt"
-	CustomHostnameEditParamsSSLMethodEmail CustomHostnameEditParamsSSLMethod = "email"
-)
-
-func (r CustomHostnameEditParamsSSLMethod) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditParamsSSLMethodHTTP, CustomHostnameEditParamsSSLMethodTXT, CustomHostnameEditParamsSSLMethodEmail:
-		return true
-	}
-	return false
-}
-
 // SSL specific settings.
 type CustomHostnameEditParamsSSLSettings struct {
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
 	Ciphers param.Field[[]string] `json:"ciphers"`
 	// Whether or not Early Hints is enabled.
-	EarlyHints param.Field[shared.UnnamedSchemaRef81] `json:"early_hints"`
+	EarlyHints param.Field[CustomHostnameEditParamsSSLSettingsEarlyHints] `json:"early_hints"`
 	// Whether or not HTTP2 is enabled.
 	HTTP2 param.Field[CustomHostnameEditParamsSSLSettingsHTTP2] `json:"http2"`
 	// The minimum TLS version supported.
@@ -1786,6 +1847,22 @@ type CustomHostnameEditParamsSSLSettings struct {
 
 func (r CustomHostnameEditParamsSSLSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Whether or not Early Hints is enabled.
+type CustomHostnameEditParamsSSLSettingsEarlyHints string
+
+const (
+	CustomHostnameEditParamsSSLSettingsEarlyHintsOn  CustomHostnameEditParamsSSLSettingsEarlyHints = "on"
+	CustomHostnameEditParamsSSLSettingsEarlyHintsOff CustomHostnameEditParamsSSLSettingsEarlyHints = "off"
+)
+
+func (r CustomHostnameEditParamsSSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case CustomHostnameEditParamsSSLSettingsEarlyHintsOn, CustomHostnameEditParamsSSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
 }
 
 // Whether or not HTTP2 is enabled.
@@ -1838,26 +1915,10 @@ func (r CustomHostnameEditParamsSSLSettingsTLS1_3) IsKnown() bool {
 	return false
 }
 
-// Level of validation to be used for this hostname. Domain validation (dv) must be
-// used.
-type CustomHostnameEditParamsSSLType string
-
-const (
-	CustomHostnameEditParamsSSLTypeDv CustomHostnameEditParamsSSLType = "dv"
-)
-
-func (r CustomHostnameEditParamsSSLType) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditParamsSSLTypeDv:
-		return true
-	}
-	return false
-}
-
 type CustomHostnameEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CustomHostnameEditResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CustomHostnameEditResponse                                `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameEditResponseEnvelopeJSON    `json:"-"`
@@ -1903,9 +1964,9 @@ type CustomHostnameGetParams struct {
 }
 
 type CustomHostnameGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   CustomHostnameGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CustomHostnameGetResponse                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameGetResponseEnvelopeJSON    `json:"-"`

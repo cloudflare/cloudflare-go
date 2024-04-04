@@ -122,9 +122,9 @@ type V1KeyUpdateParams struct {
 }
 
 type V1KeyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ImagesImageKeys       `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ImagesImageKeys                                           `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -170,9 +170,9 @@ type V1KeyListParams struct {
 }
 
 type V1KeyListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ImagesImageKeys       `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ImagesImageKeys                                           `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyListResponseEnvelopeJSON    `json:"-"`
@@ -218,9 +218,9 @@ type V1KeyDeleteParams struct {
 }
 
 type V1KeyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ImagesImageKeys       `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ImagesImageKeys                                           `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyDeleteResponseEnvelopeJSON    `json:"-"`

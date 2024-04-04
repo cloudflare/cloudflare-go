@@ -54,9 +54,9 @@ func (r *AttackLayer7Service) Timeseries(ctx context.Context, query AttackLayer7
 }
 
 type AttackLayer7TimeseriesResponse struct {
-	Meta   AttackLayer7TimeseriesResponseMeta `json:"meta,required"`
-	Serie0 UnnamedSchemaRef129                `json:"serie_0,required"`
-	JSON   attackLayer7TimeseriesResponseJSON `json:"-"`
+	Meta   AttackLayer7TimeseriesResponseMeta               `json:"meta,required"`
+	Serie0 UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesResponseJSON               `json:"-"`
 }
 
 // attackLayer7TimeseriesResponseJSON contains the JSON metadata for the struct
@@ -77,11 +77,11 @@ func (r attackLayer7TimeseriesResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7TimeseriesResponseMeta struct {
-	AggInterval    string                                           `json:"aggInterval,required"`
-	DateRange      []UnnamedSchemaRef175                            `json:"dateRange,required"`
-	LastUpdated    time.Time                                        `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo AttackLayer7TimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           attackLayer7TimeseriesResponseMetaJSON           `json:"-"`
+	AggInterval    string                                             `json:"aggInterval,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    time.Time                                          `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo AttackLayer7TimeseriesResponseMetaConfidenceInfo   `json:"confidenceInfo"`
+	JSON           attackLayer7TimeseriesResponseMetaJSON             `json:"-"`
 }
 
 // attackLayer7TimeseriesResponseMetaJSON contains the JSON metadata for the struct
@@ -104,7 +104,7 @@ func (r attackLayer7TimeseriesResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer7TimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
 	Level       int64                                                `json:"level"`
 	JSON        attackLayer7TimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
 }

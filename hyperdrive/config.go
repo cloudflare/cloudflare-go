@@ -82,7 +82,7 @@ func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListPara
 }
 
 // Deletes the specified Hyperdrive.
-func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body ConfigDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
+func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body ConfigDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", body.AccountID, hyperdriveID)
@@ -253,9 +253,9 @@ func (r ConfigNewParamsOrigin) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigNewResponse     `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ConfigNewResponse                                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
@@ -317,9 +317,9 @@ func (r ConfigUpdateParamsOrigin) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigUpdateResponse  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ConfigUpdateResponse                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
@@ -370,9 +370,9 @@ type ConfigDeleteParams struct {
 }
 
 type ConfigDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configDeleteResponseEnvelopeJSON    `json:"-"`
@@ -433,9 +433,9 @@ func (r ConfigEditParamsOrigin) MarshalJSON() (data []byte, err error) {
 }
 
 type ConfigEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigEditResponse    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ConfigEditResponse                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
@@ -481,9 +481,9 @@ type ConfigGetParams struct {
 }
 
 type ConfigGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigGetResponse     `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ConfigGetResponse                                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`

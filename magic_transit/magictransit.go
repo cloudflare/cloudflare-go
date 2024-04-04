@@ -33,3 +33,36 @@ func NewMagicTransitService(opts ...option.RequestOption) (r *MagicTransitServic
 	r.Sites = NewSiteService(opts...)
 	return
 }
+
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 string
+
+const (
+	UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39Reply   UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 = "reply"
+	UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39Request UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 = "request"
+)
+
+func (r UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39Reply, UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39Request:
+		return true
+	}
+	return false
+}
+
+// How frequent the health check is run. The default value is `mid`.
+type UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 string
+
+const (
+	UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Low  UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 = "low"
+	UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Mid  UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 = "mid"
+	UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5High UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 = "high"
+)
+
+func (r UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Low, UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Mid, UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5High:
+		return true
+	}
+	return false
+}

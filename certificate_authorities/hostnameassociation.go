@@ -117,9 +117,9 @@ func (r HostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type HostnameAssociationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   HostnameAssociationUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   HostnameAssociationUpdateResponse                         `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameAssociationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -178,9 +178,9 @@ func (r HostnameAssociationGetParams) URLQuery() (v url.Values) {
 }
 
 type HostnameAssociationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   HostnameAssociationGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   HostnameAssociationGetResponse                            `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameAssociationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameAssociationGetResponseEnvelopeJSON    `json:"-"`

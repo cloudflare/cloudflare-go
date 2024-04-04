@@ -112,9 +112,9 @@ func (r *EmailRoutingSummaryService) SPF(ctx context.Context, query EmailRouting
 }
 
 type EmailRoutingSummaryARCResponse struct {
-	Meta     EmailRoutingSummaryARCResponseMeta `json:"meta,required"`
-	Summary0 UnnamedSchemaRef149                `json:"summary_0,required"`
-	JSON     emailRoutingSummaryARCResponseJSON `json:"-"`
+	Meta     EmailRoutingSummaryARCResponseMeta               `json:"meta,required"`
+	Summary0 UnnamedSchemaRef853c157ad369010995e35be614e0343f `json:"summary_0,required"`
+	JSON     emailRoutingSummaryARCResponseJSON               `json:"-"`
 }
 
 // emailRoutingSummaryARCResponseJSON contains the JSON metadata for the struct
@@ -135,11 +135,11 @@ func (r emailRoutingSummaryARCResponseJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryARCResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                            `json:"dateRange,required"`
-	LastUpdated    string                                           `json:"lastUpdated,required"`
-	Normalization  string                                           `json:"normalization,required"`
-	ConfidenceInfo EmailRoutingSummaryARCResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailRoutingSummaryARCResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo EmailRoutingSummaryARCResponseMetaConfidenceInfo   `json:"confidenceInfo"`
+	JSON           emailRoutingSummaryARCResponseMetaJSON             `json:"-"`
 }
 
 // emailRoutingSummaryARCResponseMetaJSON contains the JSON metadata for the struct
@@ -162,7 +162,7 @@ func (r emailRoutingSummaryARCResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryARCResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
 	Level       int64                                                `json:"level"`
 	JSON        emailRoutingSummaryARCResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -185,9 +185,9 @@ func (r emailRoutingSummaryARCResponseMetaConfidenceInfoJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryDKIMResponse struct {
-	Meta     EmailRoutingSummaryDKIMResponseMeta `json:"meta,required"`
-	Summary0 UnnamedSchemaRef149                 `json:"summary_0,required"`
-	JSON     emailRoutingSummaryDKIMResponseJSON `json:"-"`
+	Meta     EmailRoutingSummaryDKIMResponseMeta              `json:"meta,required"`
+	Summary0 UnnamedSchemaRef853c157ad369010995e35be614e0343f `json:"summary_0,required"`
+	JSON     emailRoutingSummaryDKIMResponseJSON              `json:"-"`
 }
 
 // emailRoutingSummaryDKIMResponseJSON contains the JSON metadata for the struct
@@ -208,11 +208,11 @@ func (r emailRoutingSummaryDKIMResponseJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryDKIMResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                             `json:"dateRange,required"`
-	LastUpdated    string                                            `json:"lastUpdated,required"`
-	Normalization  string                                            `json:"normalization,required"`
-	ConfidenceInfo EmailRoutingSummaryDKIMResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailRoutingSummaryDKIMResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo EmailRoutingSummaryDKIMResponseMetaConfidenceInfo  `json:"confidenceInfo"`
+	JSON           emailRoutingSummaryDKIMResponseMetaJSON            `json:"-"`
 }
 
 // emailRoutingSummaryDKIMResponseMetaJSON contains the JSON metadata for the
@@ -235,7 +235,7 @@ func (r emailRoutingSummaryDKIMResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryDKIMResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                 `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1    `json:"annotations"`
 	Level       int64                                                 `json:"level"`
 	JSON        emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -258,9 +258,9 @@ func (r emailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON) RawJSON() string 
 }
 
 type EmailRoutingSummaryDMARCResponse struct {
-	Meta     EmailRoutingSummaryDMARCResponseMeta `json:"meta,required"`
-	Summary0 UnnamedSchemaRef149                  `json:"summary_0,required"`
-	JSON     emailRoutingSummaryDMARCResponseJSON `json:"-"`
+	Meta     EmailRoutingSummaryDMARCResponseMeta             `json:"meta,required"`
+	Summary0 UnnamedSchemaRef853c157ad369010995e35be614e0343f `json:"summary_0,required"`
+	JSON     emailRoutingSummaryDMARCResponseJSON             `json:"-"`
 }
 
 // emailRoutingSummaryDMARCResponseJSON contains the JSON metadata for the struct
@@ -281,7 +281,7 @@ func (r emailRoutingSummaryDMARCResponseJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryDMARCResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                              `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
 	LastUpdated    string                                             `json:"lastUpdated,required"`
 	Normalization  string                                             `json:"normalization,required"`
 	ConfidenceInfo EmailRoutingSummaryDMARCResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -308,7 +308,7 @@ func (r emailRoutingSummaryDMARCResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryDMARCResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                  `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1     `json:"annotations"`
 	Level       int64                                                  `json:"level"`
 	JSON        emailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -354,7 +354,7 @@ func (r emailRoutingSummaryEncryptedResponseJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryEncryptedResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                  `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5     `json:"dateRange,required"`
 	LastUpdated    string                                                 `json:"lastUpdated,required"`
 	Normalization  string                                                 `json:"normalization,required"`
 	ConfidenceInfo EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -381,7 +381,7 @@ func (r emailRoutingSummaryEncryptedResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryEncryptedResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                      `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1         `json:"annotations"`
 	Level       int64                                                      `json:"level"`
 	JSON        emailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -427,9 +427,9 @@ func (r emailRoutingSummaryEncryptedResponseSummary0JSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryIPVersionResponse struct {
-	Meta     EmailRoutingSummaryIPVersionResponseMeta     `json:"meta,required"`
-	Summary0 EmailRoutingSummaryIPVersionResponseSummary0 `json:"summary_0,required"`
-	JSON     emailRoutingSummaryIPVersionResponseJSON     `json:"-"`
+	Meta     EmailRoutingSummaryIPVersionResponseMeta         `json:"meta,required"`
+	Summary0 UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297 `json:"summary_0,required"`
+	JSON     emailRoutingSummaryIPVersionResponseJSON         `json:"-"`
 }
 
 // emailRoutingSummaryIPVersionResponseJSON contains the JSON metadata for the
@@ -450,7 +450,7 @@ func (r emailRoutingSummaryIPVersionResponseJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryIPVersionResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                  `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5     `json:"dateRange,required"`
 	LastUpdated    string                                                 `json:"lastUpdated,required"`
 	Normalization  string                                                 `json:"normalization,required"`
 	ConfidenceInfo EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -477,7 +477,7 @@ func (r emailRoutingSummaryIPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                      `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1         `json:"annotations"`
 	Level       int64                                                      `json:"level"`
 	JSON        emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -499,33 +499,10 @@ func (r emailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() st
 	return r.raw
 }
 
-type EmailRoutingSummaryIPVersionResponseSummary0 struct {
-	IPv4 string                                           `json:"IPv4,required"`
-	IPv6 string                                           `json:"IPv6,required"`
-	JSON emailRoutingSummaryIPVersionResponseSummary0JSON `json:"-"`
-}
-
-// emailRoutingSummaryIPVersionResponseSummary0JSON contains the JSON metadata for
-// the struct [EmailRoutingSummaryIPVersionResponseSummary0]
-type emailRoutingSummaryIPVersionResponseSummary0JSON struct {
-	IPv4        apijson.Field
-	IPv6        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingSummaryIPVersionResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingSummaryIPVersionResponseSummary0JSON) RawJSON() string {
-	return r.raw
-}
-
 type EmailRoutingSummarySPFResponse struct {
-	Meta     EmailRoutingSummarySPFResponseMeta `json:"meta,required"`
-	Summary0 UnnamedSchemaRef149                `json:"summary_0,required"`
-	JSON     emailRoutingSummarySPFResponseJSON `json:"-"`
+	Meta     EmailRoutingSummarySPFResponseMeta               `json:"meta,required"`
+	Summary0 UnnamedSchemaRef853c157ad369010995e35be614e0343f `json:"summary_0,required"`
+	JSON     emailRoutingSummarySPFResponseJSON               `json:"-"`
 }
 
 // emailRoutingSummarySPFResponseJSON contains the JSON metadata for the struct
@@ -546,11 +523,11 @@ func (r emailRoutingSummarySPFResponseJSON) RawJSON() string {
 }
 
 type EmailRoutingSummarySPFResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                            `json:"dateRange,required"`
-	LastUpdated    string                                           `json:"lastUpdated,required"`
-	Normalization  string                                           `json:"normalization,required"`
-	ConfidenceInfo EmailRoutingSummarySPFResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailRoutingSummarySPFResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo EmailRoutingSummarySPFResponseMetaConfidenceInfo   `json:"confidenceInfo"`
+	JSON           emailRoutingSummarySPFResponseMetaJSON             `json:"-"`
 }
 
 // emailRoutingSummarySPFResponseMetaJSON contains the JSON metadata for the struct
@@ -573,7 +550,7 @@ func (r emailRoutingSummarySPFResponseMetaJSON) RawJSON() string {
 }
 
 type EmailRoutingSummarySPFResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
 	Level       int64                                                `json:"level"`
 	JSON        emailRoutingSummarySPFResponseMetaConfidenceInfoJSON `json:"-"`
 }

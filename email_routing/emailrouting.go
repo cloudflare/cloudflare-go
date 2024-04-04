@@ -373,9 +373,9 @@ func (r EmailRoutingDisableParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EmailRoutingDisableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   EmailRoutingDisableResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   EmailRoutingDisableResponse                               `json:"result,required"`
 	// Whether the API call was successful
 	Success EmailRoutingDisableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingDisableResponseEnvelopeJSON    `json:"-"`
@@ -424,9 +424,9 @@ func (r EmailRoutingEnableParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EmailRoutingEnableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   EmailRoutingEnableResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   EmailRoutingEnableResponse                                `json:"result,required"`
 	// Whether the API call was successful
 	Success EmailRoutingEnableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingEnableResponseEnvelopeJSON    `json:"-"`
@@ -467,9 +467,9 @@ func (r EmailRoutingEnableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type EmailRoutingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   EmailRoutingGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   EmailRoutingGetResponse                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success EmailRoutingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingGetResponseEnvelopeJSON    `json:"-"`

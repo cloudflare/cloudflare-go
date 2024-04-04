@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -17,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AccountService contains methods and other services that help with interacting
@@ -42,7 +40,7 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 }
 
 // Update an existing account.
-func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponseUnion, err error) {
+func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v", params.AccountID)
@@ -78,7 +76,7 @@ func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListPa
 }
 
 // Get information about a specific account that you are a member of.
-func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponseUnion, err error) {
+func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v", query.AccountID)
@@ -187,40 +185,7 @@ func (r AccountSettingsDefaultNameservers) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [accounts.AccountUpdateResponseUnknown] or
-// [shared.UnionString].
-type AccountUpdateResponseUnion interface {
-	ImplementsAccountsAccountUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccountUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type AccountListResponse = interface{}
-
-// Union satisfied by [accounts.AccountGetResponseUnknown] or [shared.UnionString].
-type AccountGetResponseUnion interface {
-	ImplementsAccountsAccountGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccountGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
 
 type AccountUpdateParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -288,9 +253,9 @@ func (r AccountUpdateParamsSettingsDefaultNameservers) IsKnown() bool {
 }
 
 type AccountUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   AccountUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
@@ -370,9 +335,9 @@ type AccountGetParams struct {
 }
 
 type AccountGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   AccountGetResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountGetResponseEnvelopeJSON    `json:"-"`

@@ -197,13 +197,13 @@ type CfInterconnectListResponseInterconnectsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate shared.UnnamedSchemaRef83 `json:"rate"`
+	Rate UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type shared.UnnamedSchemaRef84                              `json:"type"`
+	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39       `json:"type"`
 	JSON cfInterconnectListResponseInterconnectsHealthCheckJSON `json:"-"`
 }
 
@@ -283,13 +283,13 @@ type CfInterconnectUpdateParamsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[shared.UnnamedSchemaRef83] `json:"rate"`
+	Rate param.Field[UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[shared.UnnamedSchemaRef84] `json:"type"`
+	Type param.Field[UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39] `json:"type"`
 }
 
 func (r CfInterconnectUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -297,9 +297,9 @@ func (r CfInterconnectUpdateParamsHealthCheck) MarshalJSON() (data []byte, err e
 }
 
 type CfInterconnectUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   CfInterconnectUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CfInterconnectUpdateResponse                              `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectUpdateResponseEnvelopeJSON    `json:"-"`
@@ -345,9 +345,9 @@ type CfInterconnectListParams struct {
 }
 
 type CfInterconnectListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CfInterconnectListResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CfInterconnectListResponse                                `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectListResponseEnvelopeJSON    `json:"-"`
@@ -393,9 +393,9 @@ type CfInterconnectGetParams struct {
 }
 
 type CfInterconnectGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   CfInterconnectGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CfInterconnectGetResponse                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success CfInterconnectGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cfInterconnectGetResponseEnvelopeJSON    `json:"-"`

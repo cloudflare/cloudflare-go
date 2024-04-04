@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // DomainService contains methods and other services that help with interacting
@@ -36,7 +34,7 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 }
 
 // Update individual domain.
-func (r *DomainService) Update(ctx context.Context, domainName string, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponseUnion, err error) {
+func (r *DomainService) Update(ctx context.Context, domainName string, params DomainUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", params.AccountID, domainName)
@@ -72,7 +70,7 @@ func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListPara
 }
 
 // Show individual domain.
-func (r *DomainService) Get(ctx context.Context, domainName string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponseUnion, err error) {
+func (r *DomainService) Get(ctx context.Context, domainName string, query DomainGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", query.AccountID, domainName)
@@ -83,31 +81,6 @@ func (r *DomainService) Get(ctx context.Context, domainName string, query Domain
 	res = &env.Result
 	return
 }
-
-// Union satisfied by [registrar.DomainUpdateResponseUnknown],
-// [registrar.DomainUpdateResponseArray] or [shared.UnionString].
-type DomainUpdateResponseUnion interface {
-	ImplementsRegistrarDomainUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DomainUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DomainUpdateResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type DomainUpdateResponseArray []interface{}
-
-func (r DomainUpdateResponseArray) ImplementsRegistrarDomainUpdateResponseUnion() {}
 
 type DomainListResponse struct {
 	// Domain identifier.
@@ -265,31 +238,6 @@ func (r domainListResponseTransferInJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [registrar.DomainGetResponseUnknown],
-// [registrar.DomainGetResponseArray] or [shared.UnionString].
-type DomainGetResponseUnion interface {
-	ImplementsRegistrarDomainGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DomainGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DomainGetResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type DomainGetResponseArray []interface{}
-
-func (r DomainGetResponseArray) ImplementsRegistrarDomainGetResponseUnion() {}
-
 type DomainUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -307,9 +255,9 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DomainUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   DomainUpdateResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
@@ -360,9 +308,9 @@ type DomainGetParams struct {
 }
 
 type DomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   DomainGetResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`

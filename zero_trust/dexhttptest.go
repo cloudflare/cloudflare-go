@@ -61,10 +61,10 @@ type DigitalExperienceMonitoringHTTPDetails struct {
 	// The HTTP method to use when running the test
 	Method string `json:"method"`
 	// The name of the HTTP synthetic application test
-	Name           string                                               `json:"name"`
-	TargetPolicies []DigitalExperienceMonitoringHTTPDetailsTargetPolicy `json:"target_policies"`
-	Targeted       bool                                                 `json:"targeted"`
-	JSON           digitalExperienceMonitoringHTTPDetailsJSON           `json:"-"`
+	Name           string                                             `json:"name"`
+	TargetPolicies []UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11 `json:"target_policies"`
+	Targeted       bool                                               `json:"targeted"`
+	JSON           digitalExperienceMonitoringHTTPDetailsJSON         `json:"-"`
 }
 
 // digitalExperienceMonitoringHTTPDetailsJSON contains the JSON metadata for the
@@ -671,32 +671,6 @@ func (r DigitalExperienceMonitoringHTTPDetailsKind) IsKnown() bool {
 	return false
 }
 
-type DigitalExperienceMonitoringHTTPDetailsTargetPolicy struct {
-	ID string `json:"id,required"`
-	// Whether the policy is the default for the account
-	Default bool                                                   `json:"default,required"`
-	Name    string                                                 `json:"name,required"`
-	JSON    digitalExperienceMonitoringHTTPDetailsTargetPolicyJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringHTTPDetailsTargetPolicyJSON contains the JSON
-// metadata for the struct [DigitalExperienceMonitoringHTTPDetailsTargetPolicy]
-type digitalExperienceMonitoringHTTPDetailsTargetPolicyJSON struct {
-	ID          apijson.Field
-	Default     apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringHTTPDetailsTargetPolicy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringHTTPDetailsTargetPolicyJSON) RawJSON() string {
-	return r.raw
-}
-
 type DEXHTTPTestGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Time interval for aggregate time slots.
@@ -738,9 +712,9 @@ func (r DexhttpTestGetParamsInterval) IsKnown() bool {
 }
 
 type DexhttpTestGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   DigitalExperienceMonitoringHTTPDetails `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DigitalExperienceMonitoringHTTPDetails                    `json:"result,required"`
 	// Whether the API call was successful
 	Success DexhttpTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexhttpTestGetResponseEnvelopeJSON    `json:"-"`

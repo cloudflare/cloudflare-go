@@ -135,9 +135,9 @@ func (r attackLayer7SummaryGetResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                            `json:"dateRange,required"`
-	ConfidenceInfo AttackLayer7SummaryGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           attackLayer7SummaryGetResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	ConfidenceInfo AttackLayer7SummaryGetResponseMetaConfidenceInfo   `json:"confidenceInfo"`
+	JSON           attackLayer7SummaryGetResponseMetaJSON             `json:"-"`
 }
 
 // attackLayer7SummaryGetResponseMetaJSON contains the JSON metadata for the struct
@@ -158,7 +158,7 @@ func (r attackLayer7SummaryGetResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
 	Level       int64                                                `json:"level"`
 	JSON        attackLayer7SummaryGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -237,7 +237,7 @@ func (r attackLayer7SummaryHTTPMethodResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryHTTPMethodResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                   `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5      `json:"dateRange,required"`
 	LastUpdated    string                                                  `json:"lastUpdated,required"`
 	Normalization  string                                                  `json:"normalization,required"`
 	ConfidenceInfo AttackLayer7SummaryHTTPMethodResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -264,7 +264,7 @@ func (r attackLayer7SummaryHTTPMethodResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryHTTPMethodResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                       `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1          `json:"annotations"`
 	Level       int64                                                       `json:"level"`
 	JSON        attackLayer7SummaryHTTPMethodResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -334,7 +334,7 @@ func (r attackLayer7SummaryHTTPVersionResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryHTTPVersionResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5       `json:"dateRange,required"`
 	LastUpdated    string                                                   `json:"lastUpdated,required"`
 	Normalization  string                                                   `json:"normalization,required"`
 	ConfidenceInfo AttackLayer7SummaryHTTPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -361,7 +361,7 @@ func (r attackLayer7SummaryHTTPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryHTTPVersionResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                        `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1           `json:"annotations"`
 	Level       int64                                                        `json:"level"`
 	JSON        attackLayer7SummaryHTTPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -410,9 +410,9 @@ func (r attackLayer7SummaryHTTPVersionResponseSummary0JSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryIPVersionResponse struct {
-	Meta     AttackLayer7SummaryIPVersionResponseMeta     `json:"meta,required"`
-	Summary0 AttackLayer7SummaryIPVersionResponseSummary0 `json:"summary_0,required"`
-	JSON     attackLayer7SummaryIPVersionResponseJSON     `json:"-"`
+	Meta     AttackLayer7SummaryIPVersionResponseMeta         `json:"meta,required"`
+	Summary0 UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297 `json:"summary_0,required"`
+	JSON     attackLayer7SummaryIPVersionResponseJSON         `json:"-"`
 }
 
 // attackLayer7SummaryIPVersionResponseJSON contains the JSON metadata for the
@@ -433,7 +433,7 @@ func (r attackLayer7SummaryIPVersionResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryIPVersionResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                  `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5     `json:"dateRange,required"`
 	LastUpdated    string                                                 `json:"lastUpdated,required"`
 	Normalization  string                                                 `json:"normalization,required"`
 	ConfidenceInfo AttackLayer7SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -460,7 +460,7 @@ func (r attackLayer7SummaryIPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                      `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1         `json:"annotations"`
 	Level       int64                                                      `json:"level"`
 	JSON        attackLayer7SummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -479,29 +479,6 @@ func (r *AttackLayer7SummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(d
 }
 
 func (r attackLayer7SummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer7SummaryIPVersionResponseSummary0 struct {
-	IPv4 string                                           `json:"IPv4,required"`
-	IPv6 string                                           `json:"IPv6,required"`
-	JSON attackLayer7SummaryIPVersionResponseSummary0JSON `json:"-"`
-}
-
-// attackLayer7SummaryIPVersionResponseSummary0JSON contains the JSON metadata for
-// the struct [AttackLayer7SummaryIPVersionResponseSummary0]
-type attackLayer7SummaryIPVersionResponseSummary0JSON struct {
-	IPv4        apijson.Field
-	IPv6        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer7SummaryIPVersionResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer7SummaryIPVersionResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -529,7 +506,7 @@ func (r attackLayer7SummaryManagedRulesResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryManagedRulesResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                     `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5        `json:"dateRange,required"`
 	LastUpdated    string                                                    `json:"lastUpdated,required"`
 	Normalization  string                                                    `json:"normalization,required"`
 	ConfidenceInfo AttackLayer7SummaryManagedRulesResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -556,7 +533,7 @@ func (r attackLayer7SummaryManagedRulesResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryManagedRulesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                         `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1            `json:"annotations"`
 	Level       int64                                                         `json:"level"`
 	JSON        attackLayer7SummaryManagedRulesResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -626,7 +603,7 @@ func (r attackLayer7SummaryMitigationProductResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryMitigationProductResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                          `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5             `json:"dateRange,required"`
 	LastUpdated    string                                                         `json:"lastUpdated,required"`
 	Normalization  string                                                         `json:"normalization,required"`
 	ConfidenceInfo AttackLayer7SummaryMitigationProductResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -653,7 +630,7 @@ func (r attackLayer7SummaryMitigationProductResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryMitigationProductResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                              `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1                 `json:"annotations"`
 	Level       int64                                                              `json:"level"`
 	JSON        attackLayer7SummaryMitigationProductResponseMetaConfidenceInfoJSON `json:"-"`
 }

@@ -144,9 +144,9 @@ func (r PageShieldUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PageShieldUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   PageShieldUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PageShieldUpdateResponse                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PageShieldUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageShieldUpdateResponseEnvelopeJSON    `json:"-"`
@@ -192,9 +192,9 @@ type PageShieldGetParams struct {
 }
 
 type PageShieldGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PageShieldSetting     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PageShieldSetting                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success PageShieldGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageShieldGetResponseEnvelopeJSON    `json:"-"`

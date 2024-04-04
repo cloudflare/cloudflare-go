@@ -190,8 +190,8 @@ func (r SettingPrefetchPreloadEditParamsValue) IsKnown() bool {
 }
 
 type SettingPrefetchPreloadEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will prefetch any URLs that are included in the response headers.
@@ -225,8 +225,8 @@ type SettingPrefetchPreloadGetParams struct {
 }
 
 type SettingPrefetchPreloadGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will prefetch any URLs that are included in the response headers.

@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
@@ -31,21 +30,21 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Update(context.TODO(), zero_trust.GatewayConfigurationUpdateParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Settings: cloudflare.F(shared.UnnamedSchemaRef125Param{
-			ActivityLog: cloudflare.F(shared.UnnamedSchemaRef125ActivityLogParam{
+		Settings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam{
+			ActivityLog: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogParam{
 				Enabled: cloudflare.F(true),
 			}),
-			Antivirus: cloudflare.F(shared.UnnamedSchemaRef125AntivirusParam{
+			Antivirus: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusParam{
 				EnabledDownloadPhase: cloudflare.F(false),
 				EnabledUploadPhase:   cloudflare.F(false),
 				FailClosed:           cloudflare.F(false),
-				NotificationSettings: cloudflare.F(shared.UnnamedSchemaRef125AntivirusNotificationSettingsParam{
+				NotificationSettings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
 					Msg:        cloudflare.F("string"),
 					SupportURL: cloudflare.F("string"),
 				}),
 			}),
-			BlockPage: cloudflare.F(shared.UnnamedSchemaRef125BlockPageParam{
+			BlockPage: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageParam{
 				BackgroundColor: cloudflare.F("string"),
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
@@ -56,27 +55,27 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				Name:            cloudflare.F("Cloudflare"),
 				SuppressFooter:  cloudflare.F(false),
 			}),
-			BodyScanning: cloudflare.F(shared.UnnamedSchemaRef125BodyScanningParam{
+			BodyScanning: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningParam{
 				InspectionMode: cloudflare.F("deep"),
 			}),
-			BrowserIsolation: cloudflare.F(shared.UnnamedSchemaRef125BrowserIsolationParam{
+			BrowserIsolation: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationParam{
 				NonIdentityEnabled:         cloudflare.F(true),
 				URLBrowserIsolationEnabled: cloudflare.F(true),
 			}),
-			CustomCertificate: cloudflare.F(shared.UnnamedSchemaRef125CustomCertificateParam{
+			CustomCertificate: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateParam{
 				Enabled: cloudflare.F(true),
 				ID:      cloudflare.F("d1b364c5-1311-466e-a194-f0e943e0799f"),
 			}),
-			ExtendedEmailMatching: cloudflare.F(shared.UnnamedSchemaRef125ExtendedEmailMatchingParam{
+			ExtendedEmailMatching: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingParam{
 				Enabled: cloudflare.F(true),
 			}),
-			Fips: cloudflare.F(shared.UnnamedSchemaRef125FipsParam{
+			Fips: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsParam{
 				TLS: cloudflare.F(true),
 			}),
-			ProtocolDetection: cloudflare.F(shared.UnnamedSchemaRef125ProtocolDetectionParam{
+			ProtocolDetection: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
 			}),
-			TLSDecrypt: cloudflare.F(shared.UnnamedSchemaRef125TLSDecryptParam{
+			TLSDecrypt: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptParam{
 				Enabled: cloudflare.F(true),
 			}),
 		}),
@@ -106,21 +105,21 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Edit(context.TODO(), zero_trust.GatewayConfigurationEditParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Settings: cloudflare.F(shared.UnnamedSchemaRef125Param{
-			ActivityLog: cloudflare.F(shared.UnnamedSchemaRef125ActivityLogParam{
+		Settings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam{
+			ActivityLog: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogParam{
 				Enabled: cloudflare.F(true),
 			}),
-			Antivirus: cloudflare.F(shared.UnnamedSchemaRef125AntivirusParam{
+			Antivirus: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusParam{
 				EnabledDownloadPhase: cloudflare.F(false),
 				EnabledUploadPhase:   cloudflare.F(false),
 				FailClosed:           cloudflare.F(false),
-				NotificationSettings: cloudflare.F(shared.UnnamedSchemaRef125AntivirusNotificationSettingsParam{
+				NotificationSettings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
 					Msg:        cloudflare.F("string"),
 					SupportURL: cloudflare.F("string"),
 				}),
 			}),
-			BlockPage: cloudflare.F(shared.UnnamedSchemaRef125BlockPageParam{
+			BlockPage: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageParam{
 				BackgroundColor: cloudflare.F("string"),
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
@@ -131,27 +130,27 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 				Name:            cloudflare.F("Cloudflare"),
 				SuppressFooter:  cloudflare.F(false),
 			}),
-			BodyScanning: cloudflare.F(shared.UnnamedSchemaRef125BodyScanningParam{
+			BodyScanning: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningParam{
 				InspectionMode: cloudflare.F("deep"),
 			}),
-			BrowserIsolation: cloudflare.F(shared.UnnamedSchemaRef125BrowserIsolationParam{
+			BrowserIsolation: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationParam{
 				NonIdentityEnabled:         cloudflare.F(true),
 				URLBrowserIsolationEnabled: cloudflare.F(true),
 			}),
-			CustomCertificate: cloudflare.F(shared.UnnamedSchemaRef125CustomCertificateParam{
+			CustomCertificate: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateParam{
 				Enabled: cloudflare.F(true),
 				ID:      cloudflare.F("d1b364c5-1311-466e-a194-f0e943e0799f"),
 			}),
-			ExtendedEmailMatching: cloudflare.F(shared.UnnamedSchemaRef125ExtendedEmailMatchingParam{
+			ExtendedEmailMatching: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingParam{
 				Enabled: cloudflare.F(true),
 			}),
-			Fips: cloudflare.F(shared.UnnamedSchemaRef125FipsParam{
+			Fips: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsParam{
 				TLS: cloudflare.F(true),
 			}),
-			ProtocolDetection: cloudflare.F(shared.UnnamedSchemaRef125ProtocolDetectionParam{
+			ProtocolDetection: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
 			}),
-			TLSDecrypt: cloudflare.F(shared.UnnamedSchemaRef125TLSDecryptParam{
+			TLSDecrypt: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptParam{
 				Enabled: cloudflare.F(true),
 			}),
 		}),

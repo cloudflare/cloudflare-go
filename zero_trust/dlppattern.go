@@ -35,7 +35,7 @@ func NewDLPPatternService(opts ...option.RequestOption) (r *DLPPatternService) {
 // regular expression is too complex or can match an unbounded-length string. Your
 // regex will be rejected if it uses the Kleene Star -- be sure to bound the
 // maximum number of characters that can be matched.
-func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *DLPPatternValidateResponse, err error) {
+func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPPatternValidateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/patterns/validate", params.AccountID)
@@ -45,27 +45,6 @@ func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValid
 	}
 	res = &env.Result
 	return
-}
-
-type DLPPatternValidateResponse struct {
-	Valid bool                           `json:"valid"`
-	JSON  dlpPatternValidateResponseJSON `json:"-"`
-}
-
-// dlpPatternValidateResponseJSON contains the JSON metadata for the struct
-// [DLPPatternValidateResponse]
-type dlpPatternValidateResponseJSON struct {
-	Valid       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPPatternValidateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpPatternValidateResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type DLPPatternValidateParams struct {
@@ -80,9 +59,9 @@ func (r DLPPatternValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPPatternValidateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   DLPPatternValidateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DLPPatternValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpPatternValidateResponseEnvelopeJSON    `json:"-"`

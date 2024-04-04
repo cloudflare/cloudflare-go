@@ -151,9 +151,9 @@ func (r *EmailSecuritySummaryService) TLSVersion(ctx context.Context, query Emai
 }
 
 type EmailSecuritySummaryARCResponse struct {
-	Meta     EmailSecuritySummaryARCResponseMeta `json:"meta,required"`
-	Summary0 UnnamedSchemaRef149                 `json:"summary_0,required"`
-	JSON     emailSecuritySummaryARCResponseJSON `json:"-"`
+	Meta     EmailSecuritySummaryARCResponseMeta              `json:"meta,required"`
+	Summary0 UnnamedSchemaRef853c157ad369010995e35be614e0343f `json:"summary_0,required"`
+	JSON     emailSecuritySummaryARCResponseJSON              `json:"-"`
 }
 
 // emailSecuritySummaryARCResponseJSON contains the JSON metadata for the struct
@@ -174,11 +174,11 @@ func (r emailSecuritySummaryARCResponseJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryARCResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                             `json:"dateRange,required"`
-	LastUpdated    string                                            `json:"lastUpdated,required"`
-	Normalization  string                                            `json:"normalization,required"`
-	ConfidenceInfo EmailSecuritySummaryARCResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailSecuritySummaryARCResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo EmailSecuritySummaryARCResponseMetaConfidenceInfo  `json:"confidenceInfo"`
+	JSON           emailSecuritySummaryARCResponseMetaJSON            `json:"-"`
 }
 
 // emailSecuritySummaryARCResponseMetaJSON contains the JSON metadata for the
@@ -201,7 +201,7 @@ func (r emailSecuritySummaryARCResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryARCResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                 `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1    `json:"annotations"`
 	Level       int64                                                 `json:"level"`
 	JSON        emailSecuritySummaryARCResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -224,9 +224,9 @@ func (r emailSecuritySummaryARCResponseMetaConfidenceInfoJSON) RawJSON() string 
 }
 
 type EmailSecuritySummaryDKIMResponse struct {
-	Meta     EmailSecuritySummaryDKIMResponseMeta `json:"meta,required"`
-	Summary0 UnnamedSchemaRef149                  `json:"summary_0,required"`
-	JSON     emailSecuritySummaryDKIMResponseJSON `json:"-"`
+	Meta     EmailSecuritySummaryDKIMResponseMeta             `json:"meta,required"`
+	Summary0 UnnamedSchemaRef853c157ad369010995e35be614e0343f `json:"summary_0,required"`
+	JSON     emailSecuritySummaryDKIMResponseJSON             `json:"-"`
 }
 
 // emailSecuritySummaryDKIMResponseJSON contains the JSON metadata for the struct
@@ -247,7 +247,7 @@ func (r emailSecuritySummaryDKIMResponseJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryDKIMResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                              `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
 	LastUpdated    string                                             `json:"lastUpdated,required"`
 	Normalization  string                                             `json:"normalization,required"`
 	ConfidenceInfo EmailSecuritySummaryDKIMResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -274,7 +274,7 @@ func (r emailSecuritySummaryDKIMResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryDKIMResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                  `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1     `json:"annotations"`
 	Level       int64                                                  `json:"level"`
 	JSON        emailSecuritySummaryDKIMResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -297,9 +297,9 @@ func (r emailSecuritySummaryDKIMResponseMetaConfidenceInfoJSON) RawJSON() string
 }
 
 type EmailSecuritySummaryDMARCResponse struct {
-	Meta     EmailSecuritySummaryDMARCResponseMeta `json:"meta,required"`
-	Summary0 UnnamedSchemaRef149                   `json:"summary_0,required"`
-	JSON     emailSecuritySummaryDMARCResponseJSON `json:"-"`
+	Meta     EmailSecuritySummaryDMARCResponseMeta            `json:"meta,required"`
+	Summary0 UnnamedSchemaRef853c157ad369010995e35be614e0343f `json:"summary_0,required"`
+	JSON     emailSecuritySummaryDMARCResponseJSON            `json:"-"`
 }
 
 // emailSecuritySummaryDMARCResponseJSON contains the JSON metadata for the struct
@@ -320,7 +320,7 @@ func (r emailSecuritySummaryDMARCResponseJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryDMARCResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                               `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5  `json:"dateRange,required"`
 	LastUpdated    string                                              `json:"lastUpdated,required"`
 	Normalization  string                                              `json:"normalization,required"`
 	ConfidenceInfo EmailSecuritySummaryDMARCResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -347,7 +347,7 @@ func (r emailSecuritySummaryDMARCResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryDMARCResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                   `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1      `json:"annotations"`
 	Level       int64                                                   `json:"level"`
 	JSON        emailSecuritySummaryDMARCResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -393,7 +393,7 @@ func (r emailSecuritySummaryMaliciousResponseJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryMaliciousResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                   `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5      `json:"dateRange,required"`
 	LastUpdated    string                                                  `json:"lastUpdated,required"`
 	Normalization  string                                                  `json:"normalization,required"`
 	ConfidenceInfo EmailSecuritySummaryMaliciousResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -420,7 +420,7 @@ func (r emailSecuritySummaryMaliciousResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryMaliciousResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                       `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1          `json:"annotations"`
 	Level       int64                                                       `json:"level"`
 	JSON        emailSecuritySummaryMaliciousResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -490,7 +490,7 @@ func (r emailSecuritySummarySpamResponseJSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySpamResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                              `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
 	LastUpdated    string                                             `json:"lastUpdated,required"`
 	Normalization  string                                             `json:"normalization,required"`
 	ConfidenceInfo EmailSecuritySummarySpamResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -517,7 +517,7 @@ func (r emailSecuritySummarySpamResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySpamResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                  `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1     `json:"annotations"`
 	Level       int64                                                  `json:"level"`
 	JSON        emailSecuritySummarySpamResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -563,9 +563,9 @@ func (r emailSecuritySummarySpamResponseSummary0JSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySPFResponse struct {
-	Meta     EmailSecuritySummarySPFResponseMeta `json:"meta,required"`
-	Summary0 UnnamedSchemaRef149                 `json:"summary_0,required"`
-	JSON     emailSecuritySummarySPFResponseJSON `json:"-"`
+	Meta     EmailSecuritySummarySPFResponseMeta              `json:"meta,required"`
+	Summary0 UnnamedSchemaRef853c157ad369010995e35be614e0343f `json:"summary_0,required"`
+	JSON     emailSecuritySummarySPFResponseJSON              `json:"-"`
 }
 
 // emailSecuritySummarySPFResponseJSON contains the JSON metadata for the struct
@@ -586,11 +586,11 @@ func (r emailSecuritySummarySPFResponseJSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySPFResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                             `json:"dateRange,required"`
-	LastUpdated    string                                            `json:"lastUpdated,required"`
-	Normalization  string                                            `json:"normalization,required"`
-	ConfidenceInfo EmailSecuritySummarySPFResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           emailSecuritySummarySPFResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo EmailSecuritySummarySPFResponseMetaConfidenceInfo  `json:"confidenceInfo"`
+	JSON           emailSecuritySummarySPFResponseMetaJSON            `json:"-"`
 }
 
 // emailSecuritySummarySPFResponseMetaJSON contains the JSON metadata for the
@@ -613,7 +613,7 @@ func (r emailSecuritySummarySPFResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySPFResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                 `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1    `json:"annotations"`
 	Level       int64                                                 `json:"level"`
 	JSON        emailSecuritySummarySPFResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -659,7 +659,7 @@ func (r emailSecuritySummarySpoofResponseJSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySpoofResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                               `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5  `json:"dateRange,required"`
 	LastUpdated    string                                              `json:"lastUpdated,required"`
 	Normalization  string                                              `json:"normalization,required"`
 	ConfidenceInfo EmailSecuritySummarySpoofResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -686,7 +686,7 @@ func (r emailSecuritySummarySpoofResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecuritySummarySpoofResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                   `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1      `json:"annotations"`
 	Level       int64                                                   `json:"level"`
 	JSON        emailSecuritySummarySpoofResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -755,7 +755,7 @@ func (r emailSecuritySummaryThreatCategoryResponseJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryThreatCategoryResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                        `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5           `json:"dateRange,required"`
 	LastUpdated    string                                                       `json:"lastUpdated,required"`
 	Normalization  string                                                       `json:"normalization,required"`
 	ConfidenceInfo EmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -782,7 +782,7 @@ func (r emailSecuritySummaryThreatCategoryResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                            `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1               `json:"annotations"`
 	Level       int64                                                            `json:"level"`
 	JSON        emailSecuritySummaryThreatCategoryResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -856,7 +856,7 @@ func (r emailSecuritySummaryTLSVersionResponseJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryTLSVersionResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5       `json:"dateRange,required"`
 	LastUpdated    string                                                   `json:"lastUpdated,required"`
 	Normalization  string                                                   `json:"normalization,required"`
 	ConfidenceInfo EmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -883,7 +883,7 @@ func (r emailSecuritySummaryTLSVersionResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                        `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1           `json:"annotations"`
 	Level       int64                                                        `json:"level"`
 	JSON        emailSecuritySummaryTLSVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }

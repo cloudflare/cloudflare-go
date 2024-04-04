@@ -69,6 +69,21 @@ func (r *SettingOriginMaxHTTPVersionService) Get(ctx context.Context, query Sett
 	return
 }
 
+// Value of the zone setting.
+type UnnamedSchemaRefB234e6a28c1a1c7c29213787c0621eaa string
+
+const (
+	UnnamedSchemaRefB234e6a28c1a1c7c29213787c0621eaaOriginMaxHTTPVersion UnnamedSchemaRefB234e6a28c1a1c7c29213787c0621eaa = "origin_max_http_version"
+)
+
+func (r UnnamedSchemaRefB234e6a28c1a1c7c29213787c0621eaa) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRefB234e6a28c1a1c7c29213787c0621eaaOriginMaxHTTPVersion:
+		return true
+	}
+	return false
+}
+
 // Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
 // attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
 // requests to your origin. (Refer to
@@ -77,7 +92,7 @@ func (r *SettingOriginMaxHTTPVersionService) Get(ctx context.Context, query Sett
 // where it is "1"
 type SettingOriginMaxHTTPVersionEditResponse struct {
 	// Value of the zone setting.
-	ID shared.UnnamedSchemaRef142 `json:"id,required"`
+	ID UnnamedSchemaRefB234e6a28c1a1c7c29213787c0621eaa `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the Origin Max HTTP Version Setting.
@@ -127,7 +142,7 @@ func (r SettingOriginMaxHTTPVersionEditResponseValue) IsKnown() bool {
 // where it is "1"
 type SettingOriginMaxHTTPVersionGetResponse struct {
 	// Value of the zone setting.
-	ID shared.UnnamedSchemaRef142 `json:"id,required"`
+	ID UnnamedSchemaRefB234e6a28c1a1c7c29213787c0621eaa `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the Origin Max HTTP Version Setting.
@@ -197,8 +212,8 @@ func (r SettingOriginMaxHTTPVersionEditParamsValue) IsKnown() bool {
 }
 
 type SettingOriginMaxHTTPVersionEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
 	// attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
 	// requests to your origin. (Refer to
@@ -251,8 +266,8 @@ type SettingOriginMaxHTTPVersionGetParams struct {
 }
 
 type SettingOriginMaxHTTPVersionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
 	// attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
 	// requests to your origin. (Refer to

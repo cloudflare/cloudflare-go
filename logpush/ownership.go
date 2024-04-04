@@ -54,7 +54,7 @@ func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, o
 }
 
 // Validates ownership challenge of the destination.
-func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *OwnershipValidateResponse, err error) {
+func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OwnershipValidateResponseEnvelope
 	var accountOrZone string
@@ -100,27 +100,6 @@ func (r ownershipNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type OwnershipValidateResponse struct {
-	Valid bool                          `json:"valid"`
-	JSON  ownershipValidateResponseJSON `json:"-"`
-}
-
-// ownershipValidateResponseJSON contains the JSON metadata for the struct
-// [OwnershipValidateResponse]
-type ownershipValidateResponseJSON struct {
-	Valid       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OwnershipValidateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ownershipValidateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type OwnershipNewParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
@@ -137,9 +116,9 @@ func (r OwnershipNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   OwnershipNewResponse  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   OwnershipNewResponse                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success OwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ownershipNewResponseEnvelopeJSON    `json:"-"`
@@ -197,9 +176,9 @@ func (r OwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipValidateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   OwnershipValidateResponse `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success OwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ownershipValidateResponseEnvelopeJSON    `json:"-"`

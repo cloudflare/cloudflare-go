@@ -432,9 +432,9 @@ func (r entityAsnipResponseASNRelatedJSON) RawJSON() string {
 }
 
 type EntityASNRelResponse struct {
-	Meta UnnamedSchemaRef130       `json:"meta,required"`
-	Rels []EntityASNRelResponseRel `json:"rels,required"`
-	JSON entityASNRelResponseJSON  `json:"-"`
+	Meta UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7 `json:"meta,required"`
+	Rels []EntityASNRelResponseRel                        `json:"rels,required"`
+	JSON entityASNRelResponseJSON                         `json:"-"`
 }
 
 // entityASNRelResponseJSON contains the JSON metadata for the struct

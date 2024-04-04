@@ -237,9 +237,9 @@ func (r ListNewParamsKind) IsKnown() bool {
 }
 
 type ListNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListsList             `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ListsList                                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listNewResponseEnvelopeJSON    `json:"-"`
@@ -291,9 +291,9 @@ func (r ListUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ListUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListsList             `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ListsList                                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listUpdateResponseEnvelopeJSON    `json:"-"`
@@ -349,9 +349,9 @@ func (r ListDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ListDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListDeleteResponse    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ListDeleteResponse                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listDeleteResponseEnvelopeJSON    `json:"-"`
@@ -397,9 +397,9 @@ type ListGetParams struct {
 }
 
 type ListGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListsList             `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ListsList                                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listGetResponseEnvelopeJSON    `json:"-"`

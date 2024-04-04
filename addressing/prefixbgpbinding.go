@@ -83,7 +83,7 @@ func (r *PrefixBGPBindingService) ListAutoPaging(ctx context.Context, prefixID s
 }
 
 // Delete a Service Binding
-func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixBGPBindingDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171Union, err error) {
+func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixBGPBindingDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPBindingDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", body.AccountID, prefixID, bindingID)
@@ -197,9 +197,9 @@ func (r PrefixBGPBindingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixBGPBindingNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   AddressingServiceBinding `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AddressingServiceBinding                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingNewResponseEnvelopeJSON    `json:"-"`
@@ -250,9 +250,9 @@ type PrefixBGPBindingDeleteParams struct {
 }
 
 type PrefixBGPBindingDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171Union `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingDeleteResponseEnvelopeJSON    `json:"-"`
@@ -298,9 +298,9 @@ type PrefixBGPBindingGetParams struct {
 }
 
 type PrefixBGPBindingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   AddressingServiceBinding `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AddressingServiceBinding                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingGetResponseEnvelopeJSON    `json:"-"`

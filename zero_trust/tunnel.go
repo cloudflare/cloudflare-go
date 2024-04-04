@@ -59,7 +59,7 @@ func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ..
 }
 
 // Lists and filters all types of Tunnels in an account.
-func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.UnnamedSchemaRef123], err error) {
+func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,7 +77,7 @@ func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts 
 }
 
 // Lists and filters all types of Tunnels in an account.
-func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.UnnamedSchemaRef123] {
+func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -95,7 +95,7 @@ func (r *TunnelService) Delete(ctx context.Context, tunnelID string, params Tunn
 }
 
 // Updates an existing Cloudflare Tunnel.
-func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params TunnelEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef123, err error) {
+func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params TunnelEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", params.AccountID, tunnelID)
@@ -201,9 +201,9 @@ func (r TunnelNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TunnelArgoTunnel      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   TunnelArgoTunnel                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -287,9 +287,9 @@ func (r TunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TunnelArgoTunnel      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   TunnelArgoTunnel                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -344,10 +344,10 @@ func (r TunnelEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.UnnamedSchemaRef123 `json:"result,required"`
+	Result shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8 `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelEditResponseEnvelopeJSON    `json:"-"`
@@ -393,9 +393,9 @@ type TunnelGetParams struct {
 }
 
 type TunnelGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TunnelArgoTunnel      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   TunnelArgoTunnel                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelGetResponseEnvelopeJSON    `json:"-"`

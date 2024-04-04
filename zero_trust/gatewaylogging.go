@@ -58,12 +58,55 @@ func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGet
 	return
 }
 
+// Logging settings by rule type.
+type UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b struct {
+	// Logging settings for DNS firewall.
+	DNS interface{} `json:"dns"`
+	// Logging settings for HTTP/HTTPS firewall.
+	HTTP interface{} `json:"http"`
+	// Logging settings for Network firewall.
+	L4   interface{}                                          `json:"l4"`
+	JSON unnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bJSON `json:"-"`
+}
+
+// unnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bJSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b]
+type unnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bJSON struct {
+	DNS         apijson.Field
+	HTTP        apijson.Field
+	L4          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bJSON) RawJSON() string {
+	return r.raw
+}
+
+// Logging settings by rule type.
+type UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam struct {
+	// Logging settings for DNS firewall.
+	DNS param.Field[interface{}] `json:"dns"`
+	// Logging settings for HTTP/HTTPS firewall.
+	HTTP param.Field[interface{}] `json:"http"`
+	// Logging settings for Network firewall.
+	L4 param.Field[interface{}] `json:"l4"`
+}
+
+func (r UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ZeroTrustGatewayGatewayAccountLoggingSettings struct {
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii bool `json:"redact_pii"`
 	// Logging settings by rule type.
-	SettingsByRuleType shared.UnnamedSchemaRef28                         `json:"settings_by_rule_type"`
+	SettingsByRuleType UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7b  `json:"settings_by_rule_type"`
 	JSON               zeroTrustGatewayGatewayAccountLoggingSettingsJSON `json:"-"`
 }
 
@@ -90,7 +133,7 @@ type GatewayLoggingUpdateParams struct {
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii param.Field[bool] `json:"redact_pii"`
 	// Logging settings by rule type.
-	SettingsByRuleType param.Field[shared.UnnamedSchemaRef28Param] `json:"settings_by_rule_type"`
+	SettingsByRuleType param.Field[UnnamedSchemaRefE86eeb84b7e922c35cfb0031a6309f7bParam] `json:"settings_by_rule_type"`
 }
 
 func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -98,9 +141,9 @@ func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLoggingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                         `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
-	Result   ZeroTrustGatewayGatewayAccountLoggingSettings `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayGatewayAccountLoggingSettings             `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLoggingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -145,9 +188,9 @@ type GatewayLoggingGetParams struct {
 }
 
 type GatewayLoggingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                         `json:"errors,required"`
-	Messages []shared.ResponseInfo                         `json:"messages,required"`
-	Result   ZeroTrustGatewayGatewayAccountLoggingSettings `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayGatewayAccountLoggingSettings             `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLoggingGetResponseEnvelopeJSON    `json:"-"`

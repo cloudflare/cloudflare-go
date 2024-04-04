@@ -49,9 +49,9 @@ func (r *HTTPLocationTLSVersionService) Get(ctx context.Context, tlsVersion HTTP
 }
 
 type HTTPLocationTLSVersionGetResponse struct {
-	Meta HTTPLocationTLSVersionGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPLocationTLSVersionGetResponseTop0 `json:"top_0,required"`
-	JSON httpLocationTLSVersionGetResponseJSON   `json:"-"`
+	Meta HTTPLocationTLSVersionGetResponseMeta              `json:"meta,required"`
+	Top0 []UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09 `json:"top_0,required"`
+	JSON httpLocationTLSVersionGetResponseJSON              `json:"-"`
 }
 
 // httpLocationTLSVersionGetResponseJSON contains the JSON metadata for the struct
@@ -72,7 +72,7 @@ func (r httpLocationTLSVersionGetResponseJSON) RawJSON() string {
 }
 
 type HTTPLocationTLSVersionGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                               `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5  `json:"dateRange,required"`
 	LastUpdated    string                                              `json:"lastUpdated,required"`
 	ConfidenceInfo HTTPLocationTLSVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           httpLocationTLSVersionGetResponseMetaJSON           `json:"-"`
@@ -97,7 +97,7 @@ func (r httpLocationTLSVersionGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPLocationTLSVersionGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                   `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1      `json:"annotations"`
 	Level       int64                                                   `json:"level"`
 	JSON        httpLocationTLSVersionGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -116,31 +116,6 @@ func (r *HTTPLocationTLSVersionGetResponseMetaConfidenceInfo) UnmarshalJSON(data
 }
 
 func (r httpLocationTLSVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPLocationTLSVersionGetResponseTop0 struct {
-	ClientCountryAlpha2 string                                    `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                    `json:"clientCountryName,required"`
-	Value               string                                    `json:"value,required"`
-	JSON                httpLocationTLSVersionGetResponseTop0JSON `json:"-"`
-}
-
-// httpLocationTLSVersionGetResponseTop0JSON contains the JSON metadata for the
-// struct [HTTPLocationTLSVersionGetResponseTop0]
-type httpLocationTLSVersionGetResponseTop0JSON struct {
-	ClientCountryAlpha2 apijson.Field
-	ClientCountryName   apijson.Field
-	Value               apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *HTTPLocationTLSVersionGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationTLSVersionGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

@@ -52,9 +52,9 @@ func (r *AS112Service) Timeseries(ctx context.Context, query AS112TimeseriesPara
 }
 
 type AS112TimeseriesResponse struct {
-	Meta   AS112TimeseriesResponseMeta `json:"meta,required"`
-	Serie0 UnnamedSchemaRef129         `json:"serie_0,required"`
-	JSON   as112TimeseriesResponseJSON `json:"-"`
+	Meta   AS112TimeseriesResponseMeta                      `json:"meta,required"`
+	Serie0 UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb `json:"serie_0,required"`
+	JSON   as112TimeseriesResponseJSON                      `json:"-"`
 }
 
 // as112TimeseriesResponseJSON contains the JSON metadata for the struct
@@ -75,11 +75,11 @@ func (r as112TimeseriesResponseJSON) RawJSON() string {
 }
 
 type AS112TimeseriesResponseMeta struct {
-	AggInterval    string                                    `json:"aggInterval,required"`
-	DateRange      []UnnamedSchemaRef175                     `json:"dateRange,required"`
-	LastUpdated    time.Time                                 `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo AS112TimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112TimeseriesResponseMetaJSON           `json:"-"`
+	AggInterval    string                                             `json:"aggInterval,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    time.Time                                          `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo AS112TimeseriesResponseMetaConfidenceInfo          `json:"confidenceInfo"`
+	JSON           as112TimeseriesResponseMetaJSON                    `json:"-"`
 }
 
 // as112TimeseriesResponseMetaJSON contains the JSON metadata for the struct
@@ -102,9 +102,9 @@ func (r as112TimeseriesResponseMetaJSON) RawJSON() string {
 }
 
 type AS112TimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                         `json:"annotations"`
-	Level       int64                                         `json:"level"`
-	JSON        as112TimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        as112TimeseriesResponseMetaConfidenceInfoJSON      `json:"-"`
 }
 
 // as112TimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the

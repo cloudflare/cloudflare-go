@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -17,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AttackSurfaceReportIssueService contains methods and other services that help
@@ -75,7 +73,7 @@ func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params Atta
 }
 
 // Archive Security Center Insight
-func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponseUnion, err error) {
+func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueDismissResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/attack-surface-report/%s/dismiss", params.AccountID, issueID)
@@ -114,9 +112,9 @@ func (r *AttackSurfaceReportIssueService) Type(ctx context.Context, params Attac
 }
 
 type AttackSurfaceReportIssueListResponse struct {
-	Errors   []shared.ResponseInfo                      `json:"errors,required"`
-	Messages []shared.ResponseInfo                      `json:"messages,required"`
-	Result   AttackSurfaceReportIssueListResponseResult `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AttackSurfaceReportIssueListResponseResult                `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueListResponseSuccess `json:"success,required"`
 	JSON    attackSurfaceReportIssueListResponseJSON    `json:"-"`
@@ -282,23 +280,6 @@ func (r *AttackSurfaceReportIssueClassResponse) UnmarshalJSON(data []byte) (err 
 
 func (r attackSurfaceReportIssueClassResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// Union satisfied by [intel.AttackSurfaceReportIssueDismissResponseUnknown] or
-// [shared.UnionString].
-type AttackSurfaceReportIssueDismissResponseUnion interface {
-	ImplementsIntelAttackSurfaceReportIssueDismissResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AttackSurfaceReportIssueDismissResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type AttackSurfaceReportIssueSeverityResponse struct {
@@ -538,9 +519,9 @@ func (r AttackSurfaceReportIssueClassParamsSeverityNeq) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueClassResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                   `json:"messages,required"`
-	Result   []AttackSurfaceReportIssueClassResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []AttackSurfaceReportIssueClassResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueClassResponseEnvelopeSuccess `json:"success,required"`
 	JSON    attackSurfaceReportIssueClassResponseEnvelopeJSON    `json:"-"`
@@ -591,9 +572,9 @@ func (r AttackSurfaceReportIssueDismissParams) MarshalJSON() (data []byte, err e
 }
 
 type AttackSurfaceReportIssueDismissResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                        `json:"messages,required"`
-	Result   AttackSurfaceReportIssueDismissResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueDismissResponseEnvelopeSuccess `json:"success,required"`
 	JSON    attackSurfaceReportIssueDismissResponseEnvelopeJSON    `json:"-"`
@@ -727,9 +708,9 @@ func (r AttackSurfaceReportIssueSeverityParamsSeverityNeq) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueSeverityResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                      `json:"errors,required"`
-	Messages []shared.ResponseInfo                      `json:"messages,required"`
-	Result   []AttackSurfaceReportIssueSeverityResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []AttackSurfaceReportIssueSeverityResponse                `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueSeverityResponseEnvelopeSuccess `json:"success,required"`
 	JSON    attackSurfaceReportIssueSeverityResponseEnvelopeJSON    `json:"-"`
@@ -863,9 +844,9 @@ func (r AttackSurfaceReportIssueTypeParamsSeverityNeq) IsKnown() bool {
 }
 
 type AttackSurfaceReportIssueTypeResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   []AttackSurfaceReportIssueTypeResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []AttackSurfaceReportIssueTypeResponse                    `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueTypeResponseEnvelopeSuccess `json:"success,required"`
 	JSON    attackSurfaceReportIssueTypeResponseEnvelopeJSON    `json:"-"`

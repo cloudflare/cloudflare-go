@@ -227,13 +227,13 @@ type IPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate shared.UnnamedSchemaRef83 `json:"rate"`
+	Rate UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type shared.UnnamedSchemaRef84                               `json:"type"`
+	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39        `json:"type"`
 	JSON ipsecTunnelNewResponseIPSECTunnelsTunnelHealthCheckJSON `json:"-"`
 }
 
@@ -385,13 +385,13 @@ type IPSECTunnelListResponseIPSECTunnelsTunnelHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate shared.UnnamedSchemaRef83 `json:"rate"`
+	Rate UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type shared.UnnamedSchemaRef84                                `json:"type"`
+	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39         `json:"type"`
 	JSON ipsecTunnelListResponseIPSECTunnelsTunnelHealthCheckJSON `json:"-"`
 }
 
@@ -547,7 +547,7 @@ type IPSECTunnelNewParamsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[shared.UnnamedSchemaRef83] `json:"rate"`
+	Rate param.Field[UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -555,7 +555,7 @@ type IPSECTunnelNewParamsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[shared.UnnamedSchemaRef84] `json:"type"`
+	Type param.Field[UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39] `json:"type"`
 }
 
 func (r IPSECTunnelNewParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -584,9 +584,9 @@ func (r IPSECTunnelNewParamsHealthCheckDirection) IsKnown() bool {
 }
 
 type IPSECTunnelNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   IPSECTunnelNewResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IPSECTunnelNewResponse                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -664,7 +664,7 @@ type IPSECTunnelUpdateParamsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[shared.UnnamedSchemaRef83] `json:"rate"`
+	Rate param.Field[UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -672,7 +672,7 @@ type IPSECTunnelUpdateParamsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[shared.UnnamedSchemaRef84] `json:"type"`
+	Type param.Field[UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39] `json:"type"`
 }
 
 func (r IPSECTunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -701,9 +701,9 @@ func (r IPSECTunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
 }
 
 type IPSECTunnelUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   IPSECTunnelUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IPSECTunnelUpdateResponse                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelUpdateResponseEnvelopeJSON    `json:"-"`
@@ -749,9 +749,9 @@ type IPSECTunnelListParams struct {
 }
 
 type IPSECTunnelListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   IPSECTunnelListResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IPSECTunnelListResponse                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelListResponseEnvelopeJSON    `json:"-"`
@@ -802,9 +802,9 @@ func (r IPSECTunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IPSECTunnelDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   IPSECTunnelDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IPSECTunnelDeleteResponse                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -850,9 +850,9 @@ type IPSECTunnelGetParams struct {
 }
 
 type IPSECTunnelGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   IPSECTunnelGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IPSECTunnelGetResponse                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelGetResponseEnvelopeJSON    `json:"-"`
@@ -903,9 +903,9 @@ func (r IPSECTunnelPSKGenerateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IPSECTunnelPSKGenerateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   IPSECTunnelPSKGenerateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IPSECTunnelPSKGenerateResponse                            `json:"result,required"`
 	// Whether the API call was successful
 	Success IPSECTunnelPSKGenerateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ipsecTunnelPSKGenerateResponseEnvelopeJSON    `json:"-"`

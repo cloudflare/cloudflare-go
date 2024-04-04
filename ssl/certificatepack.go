@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // CertificatePackService contains methods and other services that help with
@@ -65,7 +63,7 @@ func (r *CertificatePackService) ListAutoPaging(ctx context.Context, params Cert
 }
 
 // For a given zone, delete an advanced certificate pack.
-func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, params CertificatePackDeleteParams, opts ...option.RequestOption) (res *CertificatePackDeleteResponse, err error) {
+func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID string, params CertificatePackDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", params.ZoneID, certificatePackID)
@@ -93,7 +91,7 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 }
 
 // For a given zone, get a certificate pack.
-func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponseUnion, err error) {
+func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", query.ZoneID, certificatePackID)
@@ -106,28 +104,6 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 }
 
 type CertificatePackListResponse = interface{}
-
-type CertificatePackDeleteResponse struct {
-	// Identifier
-	ID   string                            `json:"id"`
-	JSON certificatePackDeleteResponseJSON `json:"-"`
-}
-
-// certificatePackDeleteResponseJSON contains the JSON metadata for the struct
-// [CertificatePackDeleteResponse]
-type certificatePackDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
 
 type CertificatePackEditResponse struct {
 	// Identifier
@@ -279,23 +255,6 @@ func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [ssl.CertificatePackGetResponseUnknown] or
-// [shared.UnionString].
-type CertificatePackGetResponseUnion interface {
-	ImplementsSSLCertificatePackGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CertificatePackGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type CertificatePackListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -338,9 +297,9 @@ func (r CertificatePackDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CertificatePackDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   CertificatePackDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837   `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackDeleteResponseEnvelopeJSON    `json:"-"`
@@ -391,9 +350,9 @@ func (r CertificatePackEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CertificatePackEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   CertificatePackEditResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CertificatePackEditResponse                               `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackEditResponseEnvelopeJSON    `json:"-"`
@@ -439,9 +398,9 @@ type CertificatePackGetParams struct {
 }
 
 type CertificatePackGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   CertificatePackGetResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackGetResponseEnvelopeJSON    `json:"-"`

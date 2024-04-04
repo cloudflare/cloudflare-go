@@ -33,7 +33,7 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 }
 
 // Delete DNSSEC.
-func (r *DNSSECService) Delete(ctx context.Context, params DNSSECDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef49Union, err error) {
+func (r *DNSSECService) Delete(ctx context.Context, params DNSSECDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSECDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", params.ZoneID)
@@ -171,9 +171,9 @@ func (r DNSSECDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSSECDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef49Union `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSECDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnssecDeleteResponseEnvelopeJSON    `json:"-"`
@@ -258,9 +258,9 @@ func (r DNSSECEditParamsStatus) IsKnown() bool {
 }
 
 type DNSSECEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNSSEC                `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DNSSEC                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSECEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnssecEditResponseEnvelopeJSON    `json:"-"`
@@ -306,9 +306,9 @@ type DNSSECGetParams struct {
 }
 
 type DNSSECGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNSSEC                `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DNSSEC                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSECGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnssecGetResponseEnvelopeJSON    `json:"-"`

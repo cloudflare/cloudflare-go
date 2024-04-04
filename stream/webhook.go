@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // WebhookService contains methods and other services that help with interacting
@@ -34,7 +32,7 @@ func NewWebhookService(opts ...option.RequestOption) (r *WebhookService) {
 }
 
 // Creates a webhook notification.
-func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *WebhookUpdateResponseUnion, err error) {
+func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WebhookUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/webhook", params.AccountID)
@@ -47,7 +45,7 @@ func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams,
 }
 
 // Deletes a webhook.
-func (r *WebhookService) Delete(ctx context.Context, params WebhookDeleteParams, opts ...option.RequestOption) (res *WebhookDeleteResponseUnion, err error) {
+func (r *WebhookService) Delete(ctx context.Context, params WebhookDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WebhookDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/webhook", params.AccountID)
@@ -60,7 +58,7 @@ func (r *WebhookService) Delete(ctx context.Context, params WebhookDeleteParams,
 }
 
 // Retrieves a list of webhooks.
-func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *WebhookGetResponseUnion, err error) {
+func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WebhookGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/webhook", query.AccountID)
@@ -70,56 +68,6 @@ func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts .
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [stream.WebhookUpdateResponseUnknown] or
-// [shared.UnionString].
-type WebhookUpdateResponseUnion interface {
-	ImplementsStreamWebhookUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WebhookUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [stream.WebhookDeleteResponseUnknown] or
-// [shared.UnionString].
-type WebhookDeleteResponseUnion interface {
-	ImplementsStreamWebhookDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WebhookDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [stream.WebhookGetResponseUnknown] or [shared.UnionString].
-type WebhookGetResponseUnion interface {
-	ImplementsStreamWebhookGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WebhookGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type WebhookUpdateParams struct {
@@ -134,9 +82,9 @@ func (r WebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   WebhookUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookUpdateResponseEnvelopeJSON    `json:"-"`
@@ -187,9 +135,9 @@ func (r WebhookDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WebhookDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   WebhookDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookDeleteResponseEnvelopeJSON    `json:"-"`
@@ -235,9 +183,9 @@ type WebhookGetParams struct {
 }
 
 type WebhookGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   WebhookGetResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WebhookGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    webhookGetResponseEnvelopeJSON    `json:"-"`

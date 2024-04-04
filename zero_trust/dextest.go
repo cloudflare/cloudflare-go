@@ -133,7 +133,7 @@ type DigitalExperienceMonitoringTestsTest struct {
 	HTTPResultsByColo []DigitalExperienceMonitoringTestsTestsHTTPResultsByColo `json:"httpResultsByColo"`
 	// for HTTP, the method to use when running the test
 	Method                  string                                                         `json:"method"`
-	TargetPolicies          []DigitalExperienceMonitoringTestsTestsTargetPolicy            `json:"target_policies"`
+	TargetPolicies          []UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11             `json:"target_policies"`
 	Targeted                bool                                                           `json:"targeted"`
 	TracerouteResults       DigitalExperienceMonitoringTestsTestsTracerouteResults         `json:"tracerouteResults,nullable"`
 	TracerouteResultsByColo []DigitalExperienceMonitoringTestsTestsTracerouteResultsByColo `json:"tracerouteResultsByColo"`
@@ -592,32 +592,6 @@ func (r digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeO
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTargetPolicy struct {
-	ID string `json:"id,required"`
-	// Whether the policy is the default for the account
-	Default bool                                                  `json:"default,required"`
-	Name    string                                                `json:"name,required"`
-	JSON    digitalExperienceMonitoringTestsTestsTargetPolicyJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringTestsTestsTargetPolicyJSON contains the JSON metadata
-// for the struct [DigitalExperienceMonitoringTestsTestsTargetPolicy]
-type digitalExperienceMonitoringTestsTestsTargetPolicyJSON struct {
-	ID          apijson.Field
-	Default     apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTestsTestsTargetPolicy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTestsTestsTargetPolicyJSON) RawJSON() string {
-	return r.raw
-}
-
 type DigitalExperienceMonitoringTestsTestsTracerouteResults struct {
 	RoundTripTime DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTime `json:"roundTripTime,required"`
 	JSON          digitalExperienceMonitoringTestsTestsTracerouteResultsJSON          `json:"-"`
@@ -1025,9 +999,9 @@ func (r digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTim
 }
 
 type DEXTestListResponse struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   DigitalExperienceMonitoringTests `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DigitalExperienceMonitoringTests                          `json:"result,required"`
 	// Whether the API call was successful
 	Success    DEXTestListResponseSuccess    `json:"success,required"`
 	ResultInfo DEXTestListResponseResultInfo `json:"result_info"`
