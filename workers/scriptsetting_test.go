@@ -33,65 +33,20 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Settings: cloudflare.F(workers.ScriptSettingEditParamsSettings{
-				Bindings: cloudflare.F([]workers.ScriptSettingEditParamsSettingsBinding{workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding(workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
-					Type: cloudflare.F(workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				}), workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding(workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
-					Type: cloudflare.F(workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				}), workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding(workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
-					Type: cloudflare.F(workers.ScriptSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				})}),
-				CompatibilityDate:  cloudflare.F("2022-04-05"),
-				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
-				Logpush:            cloudflare.F(false),
-				Migrations: cloudflare.F[workers.ScriptSettingEditParamsSettingsMigrations](workers.ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations(workers.ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations{
-					NewTag:         cloudflare.F("v2"),
-					OldTag:         cloudflare.F("v1"),
-					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
-					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]workers.ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsRenamedClass{{
-						From: cloudflare.F("string"),
-						To:   cloudflare.F("string"),
-					}, {
-						From: cloudflare.F("string"),
-						To:   cloudflare.F("string"),
-					}, {
-						From: cloudflare.F("string"),
-						To:   cloudflare.F("string"),
-					}}),
-					TransferredClasses: cloudflare.F([]workers.ScriptSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsTransferredClass{{
-						From:       cloudflare.F("string"),
-						FromScript: cloudflare.F("string"),
-						To:         cloudflare.F("string"),
-					}, {
-						From:       cloudflare.F("string"),
-						FromScript: cloudflare.F("string"),
-						To:         cloudflare.F("string"),
-					}, {
-						From:       cloudflare.F("string"),
-						FromScript: cloudflare.F("string"),
-						To:         cloudflare.F("string"),
-					}}),
-				})),
-				Placement: cloudflare.F(workers.ScriptSettingEditParamsSettingsPlacement{
-					Mode: cloudflare.F(workers.ScriptSettingEditParamsSettingsPlacementModeSmart),
-				}),
-				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
-				TailConsumers: cloudflare.F([]workers.ScriptSettingEditParamsSettingsTailConsumer{{
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
-				}, {
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
-				}, {
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
-				}}),
-				UsageModel: cloudflare.F("unbound"),
-			}),
+			Logpush:   cloudflare.F(false),
+			TailConsumers: cloudflare.F([]workers.ScriptSettingEditParamsTailConsumer{{
+				Environment: cloudflare.F("production"),
+				Namespace:   cloudflare.F("my-namespace"),
+				Service:     cloudflare.F("my-log-consumer"),
+			}, {
+				Environment: cloudflare.F("production"),
+				Namespace:   cloudflare.F("my-namespace"),
+				Service:     cloudflare.F("my-log-consumer"),
+			}, {
+				Environment: cloudflare.F("production"),
+				Namespace:   cloudflare.F("my-namespace"),
+				Service:     cloudflare.F("my-log-consumer"),
+			}}),
 		},
 	)
 	if err != nil {

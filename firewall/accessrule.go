@@ -397,9 +397,9 @@ func (r AccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type AccessRuleNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -622,9 +622,9 @@ func (r AccessRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessRuleDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AccessRuleDeleteResponse     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   AccessRuleDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -871,9 +871,9 @@ func (r AccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type AccessRuleEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
@@ -921,9 +921,9 @@ type AccessRuleGetParams struct {
 }
 
 type AccessRuleGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`

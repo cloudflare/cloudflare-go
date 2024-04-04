@@ -122,9 +122,9 @@ func (r SmartRoutingEditParamsValue) IsKnown() bool {
 }
 
 type SmartRoutingEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SmartRoutingEditResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   SmartRoutingEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartRoutingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartRoutingEditResponseEnvelopeJSON    `json:"-"`
@@ -170,9 +170,9 @@ type SmartRoutingGetParams struct {
 }
 
 type SmartRoutingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SmartRoutingGetResponse      `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   SmartRoutingGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartRoutingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartRoutingGetResponseEnvelopeJSON    `json:"-"`

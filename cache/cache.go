@@ -217,9 +217,9 @@ func (r CachePurgeParamsCachePurgeFilesFilesCachePurgeURLAndHeaders) ImplementsC
 }
 
 type CachePurgeResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CachePurgeResponse           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CachePurgeResponse    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success CachePurgeResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cachePurgeResponseEnvelopeJSON    `json:"-"`

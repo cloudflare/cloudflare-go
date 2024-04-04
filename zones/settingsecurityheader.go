@@ -259,8 +259,8 @@ func (r SettingSecurityHeaderEditParamsValueStrictTransportSecurity) MarshalJSON
 }
 
 type SettingSecurityHeaderEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare security header for a zone.
@@ -293,8 +293,8 @@ type SettingSecurityHeaderGetParams struct {
 }
 
 type SettingSecurityHeaderGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare security header for a zone.

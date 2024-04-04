@@ -363,9 +363,9 @@ func (r DLPProfileCustomNewParamsProfilesEntriesPatternValidation) IsKnown() boo
 }
 
 type DLPProfileCustomNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []DLPCustomProfile           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []DLPCustomProfile    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DLPProfileCustomNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DLPProfileCustomNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -580,9 +580,9 @@ func (r DLPProfileCustomDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileCustomDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef169   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef169 `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileCustomDeleteResponseEnvelopeJSON    `json:"-"`
@@ -628,9 +628,9 @@ type DLPProfileCustomGetParams struct {
 }
 
 type DLPProfileCustomGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DLPCustomProfile             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DLPCustomProfile      `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileCustomGetResponseEnvelopeJSON    `json:"-"`

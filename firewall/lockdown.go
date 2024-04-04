@@ -308,9 +308,9 @@ func (r LockdownNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LockdownNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   FirewallZoneLockdown         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallZoneLockdown  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LockdownNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownNewResponseEnvelopeJSON    `json:"-"`
@@ -359,9 +359,9 @@ func (r LockdownUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LockdownUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   FirewallZoneLockdown         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallZoneLockdown  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LockdownUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownUpdateResponseEnvelopeJSON    `json:"-"`
@@ -467,9 +467,9 @@ func (r lockdownDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 type LockdownGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   FirewallZoneLockdown         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   FirewallZoneLockdown  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LockdownGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    lockdownGetResponseEnvelopeJSON    `json:"-"`

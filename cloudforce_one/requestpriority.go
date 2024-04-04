@@ -192,9 +192,9 @@ func (r RequestPriorityNewParamsTlp) IsKnown() bool {
 }
 
 type RequestPriorityNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CloudforceOnePriorityItem    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   CloudforceOnePriorityItem `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityNewResponseEnvelopeJSON    `json:"-"`
@@ -269,9 +269,9 @@ func (r RequestPriorityUpdateParamsTlp) IsKnown() bool {
 }
 
 type RequestPriorityUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CloudforceOneRequestItem     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   CloudforceOneRequestItem `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityUpdateResponseEnvelopeJSON    `json:"-"`
@@ -312,9 +312,9 @@ func (r RequestPriorityUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityDeleteResponseEnvelopeJSON    `json:"-"`
@@ -355,9 +355,9 @@ func (r RequestPriorityDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CloudforceOneRequestItem     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   CloudforceOneRequestItem `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityGetResponseEnvelopeJSON    `json:"-"`
@@ -398,9 +398,9 @@ func (r RequestPriorityGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityQuotaResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CloudforceOneQuota           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CloudforceOneQuota    `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityQuotaResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityQuotaResponseEnvelopeJSON    `json:"-"`

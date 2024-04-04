@@ -80,9 +80,9 @@ func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType 
 }
 
 type ScriptContentUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WorkersScript                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   WorkersScript         `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptContentUpdateResponseEnvelopeJSON    `json:"-"`

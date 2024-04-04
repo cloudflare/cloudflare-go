@@ -116,9 +116,9 @@ func (r SettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SettingUpdateResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -164,9 +164,9 @@ type SettingGetParams struct {
 }
 
 type SettingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SettingGetResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SettingGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingGetResponseEnvelopeJSON    `json:"-"`

@@ -135,8 +135,8 @@ func (r OriginPostQuantumEncryptionUpdateParamsValue) IsKnown() bool {
 }
 
 type OriginPostQuantumEncryptionUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172              `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172              `json:"messages,required"`
+	Errors   []shared.ResponseInfo                     `json:"errors,required"`
+	Messages []shared.ResponseInfo                     `json:"messages,required"`
 	Result   OriginPostQuantumEncryptionUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -183,8 +183,8 @@ type OriginPostQuantumEncryptionGetParams struct {
 }
 
 type OriginPostQuantumEncryptionGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172           `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172           `json:"messages,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
 	Result   OriginPostQuantumEncryptionGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginPostQuantumEncryptionGetResponseEnvelopeSuccess `json:"success,required"`

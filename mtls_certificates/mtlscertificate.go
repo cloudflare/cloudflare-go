@@ -211,9 +211,9 @@ func (r MTLSCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MTLSCertificateNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   MTLSCertificateUpdate        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   MTLSCertificateUpdate `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -269,9 +269,9 @@ func (r MTLSCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MTLSCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   MTLSCertificate              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   MTLSCertificate       `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -317,9 +317,9 @@ type MTLSCertificateGetParams struct {
 }
 
 type MTLSCertificateGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   MTLSCertificate              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   MTLSCertificate       `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateGetResponseEnvelopeJSON    `json:"-"`

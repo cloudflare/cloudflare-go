@@ -55,8 +55,8 @@ func (r TokenValueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenValueUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// The token value.
 	Result TokenValue `json:"result,required"`
 	// Whether the API call was successful

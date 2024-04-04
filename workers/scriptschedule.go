@@ -111,8 +111,8 @@ func (r ScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptScheduleUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
 	Result   ScriptScheduleUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptScheduleUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -159,9 +159,9 @@ type ScriptScheduleGetParams struct {
 }
 
 type ScriptScheduleGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ScriptScheduleGetResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   ScriptScheduleGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptScheduleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptScheduleGetResponseEnvelopeJSON    `json:"-"`

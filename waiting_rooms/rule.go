@@ -196,9 +196,9 @@ func (r RuleNewParamsAction) IsKnown() bool {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []WaitingroomRule            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []WaitingroomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -312,9 +312,9 @@ func (r RuleUpdateParamsBodyAction) IsKnown() bool {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []WaitingroomRule            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []WaitingroomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -403,9 +403,9 @@ func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []WaitingroomRule            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []WaitingroomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -536,9 +536,9 @@ func (r RuleEditParamsPositionObject) MarshalJSON() (data []byte, err error) {
 func (r RuleEditParamsPositionObject) implementsWaitingRoomsRuleEditParamsPosition() {}
 
 type RuleEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []WaitingroomRule            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []WaitingroomRule     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`

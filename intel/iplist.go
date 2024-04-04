@@ -74,9 +74,9 @@ type IPListGetParams struct {
 }
 
 type IPListGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []IntelIPList                `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []IntelIPList         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    IPListGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo IPListGetResponseEnvelopeResultInfo `json:"result_info"`

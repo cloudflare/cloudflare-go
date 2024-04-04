@@ -175,8 +175,8 @@ func (r GatewayProxyEndpointNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayProxyEndpointNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ZeroTrustGatewayProxyEndpoints `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointNewResponseEnvelopeSuccess `json:"success,required"`
@@ -231,8 +231,8 @@ func (r GatewayProxyEndpointDeleteParams) MarshalJSON() (data []byte, err error)
 }
 
 type GatewayProxyEndpointDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172       `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172       `json:"messages,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
 	Result   GatewayProxyEndpointDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -286,8 +286,8 @@ func (r GatewayProxyEndpointEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayProxyEndpointEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ZeroTrustGatewayProxyEndpoints `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointEditResponseEnvelopeSuccess `json:"success,required"`
@@ -333,8 +333,8 @@ type GatewayProxyEndpointGetParams struct {
 }
 
 type GatewayProxyEndpointGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ZeroTrustGatewayProxyEndpoints `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointGetResponseEnvelopeSuccess `json:"success,required"`

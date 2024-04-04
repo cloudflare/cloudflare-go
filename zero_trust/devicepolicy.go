@@ -301,9 +301,9 @@ func (r DevicePolicyNewParamsServiceModeV2) MarshalJSON() (data []byte, err erro
 }
 
 type DevicePolicyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DevicesDeviceSettingsPolicy  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   DevicesDeviceSettingsPolicy `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -390,8 +390,8 @@ func (r DevicePolicyDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DevicePolicyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   []DevicesDeviceSettingsPolicy `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyDeleteResponseEnvelopeSuccess    `json:"success,required"`
@@ -518,9 +518,9 @@ func (r DevicePolicyEditParamsServiceModeV2) MarshalJSON() (data []byte, err err
 }
 
 type DevicePolicyEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DevicesDeviceSettingsPolicy  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   DevicesDeviceSettingsPolicy `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyEditResponseEnvelopeResultInfo `json:"result_info"`
@@ -598,9 +598,9 @@ type DevicePolicyGetParams struct {
 }
 
 type DevicePolicyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DevicesDeviceSettingsPolicy  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   DevicesDeviceSettingsPolicy `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyGetResponseEnvelopeResultInfo `json:"result_info"`

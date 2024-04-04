@@ -167,9 +167,9 @@ func (r HoldNewParams) URLQuery() (v url.Values) {
 }
 
 type HoldNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   HoldNewResponse              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   HoldNewResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success HoldNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdNewResponseEnvelopeJSON    `json:"-"`
@@ -253,9 +253,9 @@ type HoldGetParams struct {
 }
 
 type HoldGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   HoldGetResponse              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   HoldGetResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success HoldGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdGetResponseEnvelopeJSON    `json:"-"`

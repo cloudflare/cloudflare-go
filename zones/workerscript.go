@@ -94,9 +94,9 @@ func (r WorkerScriptUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WorkerScriptUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WorkerScriptUpdateResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   WorkerScriptUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptUpdateResponseEnvelopeJSON    `json:"-"`

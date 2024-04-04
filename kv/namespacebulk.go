@@ -135,9 +135,9 @@ func (r NamespaceBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceBulkUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   NamespaceBulkUpdateResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   NamespaceBulkUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceBulkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -188,9 +188,9 @@ func (r NamespaceBulkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceBulkDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   NamespaceBulkDeleteResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   NamespaceBulkDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceBulkDeleteResponseEnvelopeJSON    `json:"-"`

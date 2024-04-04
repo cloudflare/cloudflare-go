@@ -156,8 +156,8 @@ func (r SettingCipherEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingCipherEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
@@ -191,8 +191,8 @@ type SettingCipherGetParams struct {
 }
 
 type SettingCipherGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the

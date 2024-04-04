@@ -150,9 +150,9 @@ func (r MonitorPreviewNewParamsType) IsKnown() bool {
 }
 
 type MonitorPreviewNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   MonitorPreviewNewResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   MonitorPreviewNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorPreviewNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorPreviewNewResponseEnvelopeJSON    `json:"-"`

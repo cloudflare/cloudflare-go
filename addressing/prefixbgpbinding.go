@@ -197,9 +197,9 @@ func (r PrefixBGPBindingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixBGPBindingNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressingServiceBinding     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   AddressingServiceBinding `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingNewResponseEnvelopeJSON    `json:"-"`
@@ -250,9 +250,9 @@ type PrefixBGPBindingDeleteParams struct {
 }
 
 type PrefixBGPBindingDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingDeleteResponseEnvelopeJSON    `json:"-"`
@@ -298,9 +298,9 @@ type PrefixBGPBindingGetParams struct {
 }
 
 type PrefixBGPBindingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AddressingServiceBinding     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   AddressingServiceBinding `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingGetResponseEnvelopeJSON    `json:"-"`

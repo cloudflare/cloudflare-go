@@ -101,9 +101,9 @@ func (r GatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte, err erro
 }
 
 type GatewayAuditSSHSettingUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGatewaySettings     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   ZeroTrustGatewaySettings `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayAuditSSHSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -148,9 +148,9 @@ type GatewayAuditSSHSettingGetParams struct {
 }
 
 type GatewayAuditSSHSettingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGatewaySettings     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   ZeroTrustGatewaySettings `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayAuditSSHSettingGetResponseEnvelopeJSON    `json:"-"`

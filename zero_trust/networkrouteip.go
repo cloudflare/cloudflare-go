@@ -66,9 +66,9 @@ func (r NetworkRouteIPGetParams) URLQuery() (v url.Values) {
 }
 
 type NetworkRouteIPGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TunnelTeamnet                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TunnelTeamnet         `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteIPGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteIPGetResponseEnvelopeJSON    `json:"-"`

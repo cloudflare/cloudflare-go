@@ -222,9 +222,9 @@ func (r GatewayLocationNewParamsNetwork) MarshalJSON() (data []byte, err error) 
 }
 
 type GatewayLocationNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGatewayLocations    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   ZeroTrustGatewayLocations `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationNewResponseEnvelopeJSON    `json:"-"`
@@ -290,9 +290,9 @@ func (r GatewayLocationUpdateParamsNetwork) MarshalJSON() (data []byte, err erro
 }
 
 type GatewayLocationUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGatewayLocations    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   ZeroTrustGatewayLocations `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -346,8 +346,8 @@ func (r GatewayLocationDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLocationDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
 	Result   GatewayLocationDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -393,9 +393,9 @@ type GatewayLocationGetParams struct {
 }
 
 type GatewayLocationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGatewayLocations    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   ZeroTrustGatewayLocations `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationGetResponseEnvelopeJSON    `json:"-"`

@@ -99,9 +99,9 @@ func (r SearchGetParamsSearchParamsReferences) IsKnown() bool {
 }
 
 type SearchGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []SearchGetResponse          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []SearchGetResponse   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SearchGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SearchGetResponseEnvelopeResultInfo `json:"result_info"`

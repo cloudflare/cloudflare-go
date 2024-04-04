@@ -144,9 +144,9 @@ type SettingTLSUpdateParamsValueArray []string
 func (r SettingTLSUpdateParamsValueArray) ImplementsHostnamesSettingTLSUpdateParamsValue() {}
 
 type SettingTLSUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef65    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65 `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingTLSUpdateResponseEnvelopeJSON    `json:"-"`
@@ -209,9 +209,9 @@ func (r SettingTLSDeleteParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   HostnameSettingDelete        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   HostnameSettingDelete `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingTLSDeleteResponseEnvelopeJSON    `json:"-"`
@@ -274,9 +274,9 @@ func (r SettingTLSGetParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []shared.UnnamedSchemaRef65  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   []shared.UnnamedSchemaRef65 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SettingTLSGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SettingTLSGetResponseEnvelopeResultInfo `json:"result_info"`

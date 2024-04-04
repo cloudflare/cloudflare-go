@@ -268,8 +268,8 @@ func (r AccessCustomPageNewParamsType) IsKnown() bool {
 }
 
 type AccessCustomPageNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ZeroTrustCustomPageWithoutHTML `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success,required"`
@@ -342,8 +342,8 @@ func (r AccessCustomPageUpdateParamsType) IsKnown() bool {
 }
 
 type AccessCustomPageUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ZeroTrustCustomPageWithoutHTML `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -385,8 +385,8 @@ func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessCustomPageDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   AccessCustomPageDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -428,9 +428,9 @@ func (r AccessCustomPageDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessCustomPageGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustCustomPage          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustCustomPage   `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageGetResponseEnvelopeJSON    `json:"-"`

@@ -207,9 +207,9 @@ func (r DomainBulkGetParams) URLQuery() (v url.Values) {
 }
 
 type DomainBulkGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []DomainBulkGetResponse      `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   []DomainBulkGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DomainBulkGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DomainBulkGetResponseEnvelopeResultInfo `json:"result_info"`

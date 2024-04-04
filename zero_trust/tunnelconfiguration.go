@@ -290,8 +290,8 @@ func (r TunnelConfigurationUpdateParamsConfigWARPRouting) MarshalJSON() (data []
 }
 
 type TunnelConfigurationUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172      `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172      `json:"messages,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
 	Result   TunnelConfigurationUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -338,8 +338,8 @@ type TunnelConfigurationGetParams struct {
 }
 
 type TunnelConfigurationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   TunnelConfigurationGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelConfigurationGetResponseEnvelopeSuccess `json:"success,required"`

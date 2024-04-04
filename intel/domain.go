@@ -237,9 +237,9 @@ func (r DomainGetParams) URLQuery() (v url.Values) {
 }
 
 type DomainGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IntelDomain                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IntelDomain           `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`

@@ -103,9 +103,9 @@ func init() {
 }
 
 type WAFPackageListResponseLegacyJhsAPIResponseCollection struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccess    `json:"success,required"`
 	ResultInfo WAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo `json:"result_info"`
@@ -458,8 +458,8 @@ func init() {
 }
 
 type WAFPackageGetResponseLegacyJhsAPIResponseSingle struct {
-	Errors   []shared.UnnamedSchemaRef172                          `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172                          `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                                 `json:"messages,required"`
 	Result   WAFPackageGetResponseLegacyJhsAPIResponseSingleResult `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccess `json:"success,required"`

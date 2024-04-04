@@ -98,8 +98,8 @@ func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLoggingUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172                  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172                  `json:"messages,required"`
+	Errors   []shared.ResponseInfo                         `json:"errors,required"`
+	Messages []shared.ResponseInfo                         `json:"messages,required"`
 	Result   ZeroTrustGatewayGatewayAccountLoggingSettings `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -145,8 +145,8 @@ type GatewayLoggingGetParams struct {
 }
 
 type GatewayLoggingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172                  `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172                  `json:"messages,required"`
+	Errors   []shared.ResponseInfo                         `json:"errors,required"`
+	Messages []shared.ResponseInfo                         `json:"messages,required"`
 	Result   ZeroTrustGatewayGatewayAccountLoggingSettings `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`

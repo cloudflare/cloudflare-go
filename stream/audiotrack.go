@@ -160,9 +160,9 @@ type AudioTrackDeleteParams struct {
 }
 
 type AudioTrackDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AudioTrackDeleteResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   AudioTrackDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    audioTrackDeleteResponseEnvelopeJSON    `json:"-"`
@@ -219,9 +219,9 @@ func (r AudioTrackCopyParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AudioTrackCopyResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   StreamAudio                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   StreamAudio           `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackCopyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    audioTrackCopyResponseEnvelopeJSON    `json:"-"`
@@ -276,9 +276,9 @@ func (r AudioTrackEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AudioTrackEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   StreamAudio                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   StreamAudio           `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    audioTrackEditResponseEnvelopeJSON    `json:"-"`
@@ -324,9 +324,9 @@ type AudioTrackGetParams struct {
 }
 
 type AudioTrackGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []StreamAudio                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []StreamAudio         `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    audioTrackGetResponseEnvelopeJSON    `json:"-"`

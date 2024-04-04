@@ -5161,9 +5161,9 @@ func (r AccessGroupNewParamsRequireAccessDevicePostureRuleDevicePosture) Marshal
 }
 
 type AccessGroupNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGroups              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustGroups       `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessGroupNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessGroupNewResponseEnvelopeJSON    `json:"-"`
@@ -6440,9 +6440,9 @@ func (r AccessGroupUpdateParamsRequireAccessDevicePostureRuleDevicePosture) Mars
 }
 
 type AccessGroupUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGroups              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustGroups       `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessGroupUpdateResponseEnvelopeJSON    `json:"-"`
@@ -6497,9 +6497,9 @@ type AccessGroupDeleteParams struct {
 }
 
 type AccessGroupDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   AccessGroupDeleteResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   AccessGroupDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessGroupDeleteResponseEnvelopeJSON    `json:"-"`
@@ -6547,9 +6547,9 @@ type AccessGroupGetParams struct {
 }
 
 type AccessGroupGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ZeroTrustGroups              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZeroTrustGroups       `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessGroupGetResponseEnvelopeJSON    `json:"-"`

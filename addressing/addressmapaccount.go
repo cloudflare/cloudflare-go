@@ -69,9 +69,9 @@ func (r AddressMapAccountUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapAccountUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapAccountUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapAccountUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -155,9 +155,9 @@ func (r AddressMapAccountDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapAccountDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapAccountDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapAccountDeleteResponseEnvelopeResultInfo `json:"result_info"`

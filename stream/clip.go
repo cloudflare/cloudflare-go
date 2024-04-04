@@ -228,9 +228,9 @@ func (r ClipNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 }
 
 type ClipNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   StreamClipping               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   StreamClipping        `json:"result,required"`
 	// Whether the API call was successful
 	Success ClipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clipNewResponseEnvelopeJSON    `json:"-"`

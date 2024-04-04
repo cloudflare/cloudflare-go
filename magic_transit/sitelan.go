@@ -1329,9 +1329,9 @@ func (r SiteLANNewParamsLANStaticAddressingDhcpServer) MarshalJSON() (data []byt
 }
 
 type SiteLANNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteLANNewResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteLANNewResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteLANNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteLANNewResponseEnvelopeJSON    `json:"-"`
@@ -1471,9 +1471,9 @@ func (r SiteLANUpdateParamsLANStaticAddressingDhcpServer) MarshalJSON() (data []
 }
 
 type SiteLANUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteLANUpdateResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteLANUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteLANUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteLANUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1519,9 +1519,9 @@ type SiteLANListParams struct {
 }
 
 type SiteLANListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteLANListResponse          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteLANListResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteLANListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteLANListResponseEnvelopeJSON    `json:"-"`
@@ -1572,9 +1572,9 @@ func (r SiteLANDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteLANDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteLANDeleteResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteLANDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteLANDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteLANDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1620,9 +1620,9 @@ type SiteLANGetParams struct {
 }
 
 type SiteLANGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   SiteLANGetResponse           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteLANGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteLANGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteLANGetResponseEnvelopeJSON    `json:"-"`

@@ -142,9 +142,9 @@ func (r BrandProtectionSubmitParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BrandProtectionSubmitResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IntelPhishingURLSubmit       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   IntelPhishingURLSubmit `json:"result,required"`
 	// Whether the API call was successful
 	Success BrandProtectionSubmitResponseEnvelopeSuccess `json:"success,required"`
 	JSON    brandProtectionSubmitResponseEnvelopeJSON    `json:"-"`
@@ -215,9 +215,9 @@ func (r BrandProtectionURLInfoParamsURLIDParam) URLQuery() (v url.Values) {
 }
 
 type BrandProtectionURLInfoResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   IntelPhishingURLInfo         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IntelPhishingURLInfo  `json:"result,required"`
 	// Whether the API call was successful
 	Success BrandProtectionURLInfoResponseEnvelopeSuccess `json:"success,required"`
 	JSON    brandProtectionURLInfoResponseEnvelopeJSON    `json:"-"`

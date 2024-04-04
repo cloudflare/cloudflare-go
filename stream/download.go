@@ -132,9 +132,9 @@ func (r DownloadNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DownloadNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DownloadNewResponse          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DownloadNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success DownloadNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    downloadNewResponseEnvelopeJSON    `json:"-"`
@@ -180,9 +180,9 @@ type DownloadDeleteParams struct {
 }
 
 type DownloadDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DownloadDeleteResponse       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   DownloadDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DownloadDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    downloadDeleteResponseEnvelopeJSON    `json:"-"`
@@ -228,9 +228,9 @@ type DownloadGetParams struct {
 }
 
 type DownloadGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DownloadGetResponse          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DownloadGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success DownloadGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    downloadGetResponseEnvelopeJSON    `json:"-"`

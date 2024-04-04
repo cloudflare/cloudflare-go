@@ -84,9 +84,9 @@ func (r FirewallAnalyticsReportGetParams) URLQuery() (v url.Values) {
 }
 
 type FirewallAnalyticsReportGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DNSAnalyticsReport           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DNSAnalyticsReport    `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallAnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAnalyticsReportGetResponseEnvelopeJSON    `json:"-"`

@@ -23,6 +23,12 @@ type Logging = shared.Logging
 type LoggingParam = shared.LoggingParam
 
 // This is an alias to an internal type.
+type ResponseInfo = shared.ResponseInfo
+
+// This is an alias to an internal type.
+type ResponseInfoParam = shared.ResponseInfoParam
+
+// This is an alias to an internal type.
 type UnnamedSchemaRef10 = shared.UnnamedSchemaRef10
 
 // This is an alias to an internal type.
@@ -421,12 +427,6 @@ type UnnamedSchemaRef171 = shared.UnnamedSchemaRef171
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef171Array = shared.UnnamedSchemaRef171Array
-
-// This is an alias to an internal type.
-type UnnamedSchemaRef172 = shared.UnnamedSchemaRef172
-
-// This is an alias to an internal type.
-type UnnamedSchemaRef172Param = shared.UnnamedSchemaRef172Param
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef173 = shared.UnnamedSchemaRef173

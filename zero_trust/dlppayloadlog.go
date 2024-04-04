@@ -112,9 +112,9 @@ func (r DLPPayloadLogUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPPayloadLogUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DLPPayloadLogUpdateResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   DLPPayloadLogUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPPayloadLogUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpPayloadLogUpdateResponseEnvelopeJSON    `json:"-"`
@@ -160,9 +160,9 @@ type DLPPayloadLogGetParams struct {
 }
 
 type DLPPayloadLogGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DLPPayloadLogGetResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   DLPPayloadLogGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPPayloadLogGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpPayloadLogGetResponseEnvelopeJSON    `json:"-"`

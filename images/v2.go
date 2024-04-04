@@ -110,9 +110,9 @@ func (r V2ListParamsSortOrder) IsKnown() bool {
 }
 
 type V2ListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   V2ListResponse               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   V2ListResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success V2ListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v2ListResponseEnvelopeJSON    `json:"-"`

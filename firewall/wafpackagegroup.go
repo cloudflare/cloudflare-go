@@ -340,9 +340,9 @@ func (r WAFPackageGroupEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageGroupEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WAFPackageGroupEditResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   WAFPackageGroupEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupEditResponseEnvelopeJSON    `json:"-"`
@@ -388,9 +388,9 @@ type WAFPackageGroupGetParams struct {
 }
 
 type WAFPackageGroupGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   WAFPackageGroupGetResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   WAFPackageGroupGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupGetResponseEnvelopeJSON    `json:"-"`

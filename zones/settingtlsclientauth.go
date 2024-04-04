@@ -190,8 +190,8 @@ func (r SettingTLSClientAuthEditParamsValue) IsKnown() bool {
 }
 
 type SettingTLSClientAuthEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// TLS Client Auth requires Cloudflare to connect to your origin server using a
@@ -225,8 +225,8 @@ type SettingTLSClientAuthGetParams struct {
 }
 
 type SettingTLSClientAuthGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// TLS Client Auth requires Cloudflare to connect to your origin server using a

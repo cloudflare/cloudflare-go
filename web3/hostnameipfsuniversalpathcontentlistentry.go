@@ -240,8 +240,8 @@ func (r HostnameIPFSUniversalPathContentListEntryNewParamsType) IsKnown() bool {
 }
 
 type HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Content list entry to be blocked.
 	Result DistributedWebConfigContentListEntry `json:"result,required"`
 	// Whether the API call was successful
@@ -314,8 +314,8 @@ func (r HostnameIPFSUniversalPathContentListEntryUpdateParamsType) IsKnown() boo
 }
 
 type HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Content list entry to be blocked.
 	Result DistributedWebConfigContentListEntry `json:"result,required"`
 	// Whether the API call was successful
@@ -359,8 +359,8 @@ func (r HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccess) 
 }
 
 type HostnameIPFSUniversalPathContentListEntryListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172                          `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172                          `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                                 `json:"messages,required"`
 	Result   HostnameIPFSUniversalPathContentListEntryListResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeSuccess    `json:"success,required"`
@@ -445,8 +445,8 @@ func (r HostnameIPFSUniversalPathContentListEntryDeleteParams) MarshalJSON() (da
 }
 
 type HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172                            `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172                            `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                   `json:"errors,required"`
+	Messages []shared.ResponseInfo                                   `json:"messages,required"`
 	Result   HostnameIPFSUniversalPathContentListEntryDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -489,8 +489,8 @@ func (r HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess) 
 }
 
 type HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Content list entry to be blocked.
 	Result DistributedWebConfigContentListEntry `json:"result,required"`
 	// Whether the API call was successful

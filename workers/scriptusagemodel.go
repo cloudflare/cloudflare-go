@@ -112,8 +112,8 @@ func (r ScriptUsageModelUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptUsageModelUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   ScriptUsageModelUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptUsageModelUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -160,9 +160,9 @@ type ScriptUsageModelGetParams struct {
 }
 
 type ScriptUsageModelGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   ScriptUsageModelGetResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   ScriptUsageModelGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptUsageModelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptUsageModelGetResponseEnvelopeJSON    `json:"-"`

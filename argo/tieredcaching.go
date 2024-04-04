@@ -122,9 +122,9 @@ func (r TieredCachingEditParamsValue) IsKnown() bool {
 }
 
 type TieredCachingEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TieredCachingEditResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   TieredCachingEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingEditResponseEnvelopeJSON    `json:"-"`
@@ -170,9 +170,9 @@ type TieredCachingGetParams struct {
 }
 
 type TieredCachingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TieredCachingGetResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   TieredCachingGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingGetResponseEnvelopeJSON    `json:"-"`

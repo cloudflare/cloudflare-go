@@ -317,8 +317,8 @@ func (r VariantDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type VariantDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Variant support enables caching variants of images with certain file extensions
 	// in addition to the original. This only applies when the origin server sends the
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
@@ -417,8 +417,8 @@ func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {
 }
 
 type VariantEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Variant support enables caching variants of images with certain file extensions
 	// in addition to the original. This only applies when the origin server sends the
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
@@ -470,8 +470,8 @@ type VariantGetParams struct {
 }
 
 type VariantGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Variant support enables caching variants of images with certain file extensions
 	// in addition to the original. This only applies when the origin server sends the
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but

@@ -1544,9 +1544,9 @@ func (r CustomHostnameNewParamsCustomMetadata) MarshalJSON() (data []byte, err e
 }
 
 type CustomHostnameNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CustomHostnameNewResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   CustomHostnameNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameNewResponseEnvelopeJSON    `json:"-"`
@@ -1855,9 +1855,9 @@ func (r CustomHostnameEditParamsSSLType) IsKnown() bool {
 }
 
 type CustomHostnameEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CustomHostnameEditResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   CustomHostnameEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameEditResponseEnvelopeJSON    `json:"-"`
@@ -1903,9 +1903,9 @@ type CustomHostnameGetParams struct {
 }
 
 type CustomHostnameGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   CustomHostnameGetResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   CustomHostnameGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameGetResponseEnvelopeJSON    `json:"-"`

@@ -159,9 +159,9 @@ func (r IPGetParams) URLQuery() (v url.Values) {
 }
 
 type IPGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   []IntelSchemasIP             `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []IntelSchemasIP      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    IPGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo IPGetResponseEnvelopeResultInfo `json:"result_info"`

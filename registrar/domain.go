@@ -307,9 +307,9 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DomainUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DomainUpdateResponse         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DomainUpdateResponse  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
@@ -360,9 +360,9 @@ type DomainGetParams struct {
 }
 
 type DomainGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DomainGetResponse            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DomainGetResponse     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`

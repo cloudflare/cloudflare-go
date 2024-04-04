@@ -103,8 +103,8 @@ func (r CustomNameserverUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   CustomNameserverUpdateResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverUpdateResponseEnvelopeSuccess    `json:"success,required"`
@@ -184,9 +184,9 @@ type CustomNameserverGetParams struct {
 }
 
 type CustomNameserverGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success CustomNameserverGetResponseEnvelopeSuccess `json:"success,required"`
 	// Whether zone uses account-level custom nameservers.

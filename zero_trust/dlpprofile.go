@@ -319,9 +319,9 @@ type DLPProfileGetParams struct {
 }
 
 type DLPProfileGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   DLPProfileGetResponse        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DLPProfileGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileGetResponseEnvelopeJSON    `json:"-"`

@@ -333,9 +333,9 @@ func (r TokenNewParamsConditionRequestIP) MarshalJSON() (data []byte, err error)
 }
 
 type TokenNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TokenNewResponse             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TokenNewResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success TokenNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenNewResponseEnvelopeJSON    `json:"-"`
@@ -471,9 +471,9 @@ func (r TokenUpdateParamsConditionRequestIP) MarshalJSON() (data []byte, err err
 }
 
 type TokenUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TokenUpdateResponse          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TokenUpdateResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success TokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenUpdateResponseEnvelopeJSON    `json:"-"`
@@ -555,9 +555,9 @@ func (r TokenDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TokenDeleteResponse          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TokenDeleteResponse   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success TokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenDeleteResponseEnvelopeJSON    `json:"-"`
@@ -598,9 +598,9 @@ func (r TokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TokenGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TokenGetResponse             `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TokenGetResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success TokenGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenGetResponseEnvelopeJSON    `json:"-"`
@@ -641,9 +641,9 @@ func (r TokenGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TokenVerifyResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TokenVerifyResponse          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   TokenVerifyResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success TokenVerifyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenVerifyResponseEnvelopeJSON    `json:"-"`

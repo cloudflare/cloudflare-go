@@ -204,8 +204,8 @@ func (r OriginTLSClientAuthNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OriginTLSClientAuthNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   OriginTLSClientAuthNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthNewResponseEnvelopeSuccess `json:"success,required"`
@@ -262,8 +262,8 @@ func (r OriginTLSClientAuthDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type OriginTLSClientAuthDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172      `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172      `json:"messages,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
 	Result   OriginTLSClientAuthDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -310,8 +310,8 @@ type OriginTLSClientAuthGetParams struct {
 }
 
 type OriginTLSClientAuthGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
 	Result   OriginTLSClientAuthGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthGetResponseEnvelopeSuccess `json:"success,required"`

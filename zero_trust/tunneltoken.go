@@ -78,9 +78,9 @@ type TunnelTokenGetParams struct {
 }
 
 type TunnelTokenGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
-	Result   TunnelTokenGetResponse       `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   TunnelTokenGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelTokenGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelTokenGetResponseEnvelopeJSON    `json:"-"`
