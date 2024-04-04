@@ -249,9 +249,9 @@ func (r IncomingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IncomingNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IncomingNewResponse   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IncomingNewResponse                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success IncomingNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    incomingNewResponseEnvelopeJSON    `json:"-"`
@@ -307,9 +307,9 @@ func (r IncomingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IncomingUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   IncomingUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IncomingUpdateResponse                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success IncomingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    incomingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -359,9 +359,9 @@ func (r IncomingDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IncomingDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   IncomingDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IncomingDeleteResponse                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success IncomingDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    incomingDeleteResponseEnvelopeJSON    `json:"-"`
@@ -406,9 +406,9 @@ type IncomingGetParams struct {
 }
 
 type IncomingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IncomingGetResponse   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IncomingGetResponse                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success IncomingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    incomingGetResponseEnvelopeJSON    `json:"-"`

@@ -84,11 +84,11 @@ func (r qualityIQISummaryResponseJSON) RawJSON() string {
 }
 
 type QualityIQISummaryResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                       `json:"dateRange,required"`
-	LastUpdated    string                                      `json:"lastUpdated,required"`
-	Normalization  string                                      `json:"normalization,required"`
-	ConfidenceInfo QualityIQISummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           qualityIQISummaryResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo QualityIQISummaryResponseMetaConfidenceInfo        `json:"confidenceInfo"`
+	JSON           qualityIQISummaryResponseMetaJSON                  `json:"-"`
 }
 
 // qualityIQISummaryResponseMetaJSON contains the JSON metadata for the struct
@@ -111,9 +111,9 @@ func (r qualityIQISummaryResponseMetaJSON) RawJSON() string {
 }
 
 type QualityIQISummaryResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                           `json:"annotations"`
-	Level       int64                                           `json:"level"`
-	JSON        qualityIQISummaryResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        qualityIQISummaryResponseMetaConfidenceInfoJSON    `json:"-"`
 }
 
 // qualityIQISummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for

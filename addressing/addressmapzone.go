@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AddressMapZoneService contains methods and other services that help with
@@ -35,7 +33,7 @@ func NewAddressMapZoneService(opts ...option.RequestOption) (r *AddressMapZoneSe
 }
 
 // Add a zone as a member of a particular address map.
-func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string, params AddressMapZoneUpdateParams, opts ...option.RequestOption) (res *AddressMapZoneUpdateResponseUnion, err error) {
+func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string, params AddressMapZoneUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapZoneUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", params.AccountID, addressMapID, params.ZoneID)
@@ -48,7 +46,7 @@ func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string,
 }
 
 // Remove a zone as a member of a particular address map.
-func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string, params AddressMapZoneDeleteParams, opts ...option.RequestOption) (res *AddressMapZoneDeleteResponseUnion, err error) {
+func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string, params AddressMapZoneDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapZoneDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", params.AccountID, addressMapID, params.ZoneID)
@@ -59,56 +57,6 @@ func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string,
 	res = &env.Result
 	return
 }
-
-// Union satisfied by [addressing.AddressMapZoneUpdateResponseUnknown],
-// [addressing.AddressMapZoneUpdateResponseArray] or [shared.UnionString].
-type AddressMapZoneUpdateResponseUnion interface {
-	ImplementsAddressingAddressMapZoneUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapZoneUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AddressMapZoneUpdateResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AddressMapZoneUpdateResponseArray []interface{}
-
-func (r AddressMapZoneUpdateResponseArray) ImplementsAddressingAddressMapZoneUpdateResponseUnion() {}
-
-// Union satisfied by [addressing.AddressMapZoneDeleteResponseUnknown],
-// [addressing.AddressMapZoneDeleteResponseArray] or [shared.UnionString].
-type AddressMapZoneDeleteResponseUnion interface {
-	ImplementsAddressingAddressMapZoneDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapZoneDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AddressMapZoneDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AddressMapZoneDeleteResponseArray []interface{}
-
-func (r AddressMapZoneDeleteResponseArray) ImplementsAddressingAddressMapZoneDeleteResponseUnion() {}
 
 type AddressMapZoneUpdateParams struct {
 	// Identifier
@@ -123,9 +71,9 @@ func (r AddressMapZoneUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapZoneUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   AddressMapZoneUpdateResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapZoneUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapZoneUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -211,9 +159,9 @@ func (r AddressMapZoneDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapZoneDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   AddressMapZoneDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapZoneDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapZoneDeleteResponseEnvelopeResultInfo `json:"result_info"`

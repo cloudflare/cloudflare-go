@@ -136,7 +136,7 @@ func (r attackLayer3SummaryBitrateResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryBitrateResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5   `json:"dateRange,required"`
 	LastUpdated    string                                               `json:"lastUpdated,required"`
 	Normalization  string                                               `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryBitrateResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -163,7 +163,7 @@ func (r attackLayer3SummaryBitrateResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryBitrateResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                    `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1       `json:"annotations"`
 	Level       int64                                                    `json:"level"`
 	JSON        attackLayer3SummaryBitrateResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -238,7 +238,7 @@ func (r attackLayer3SummaryDurationResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryDurationResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                 `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5    `json:"dateRange,required"`
 	LastUpdated    string                                                `json:"lastUpdated,required"`
 	Normalization  string                                                `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryDurationResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -265,7 +265,7 @@ func (r attackLayer3SummaryDurationResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryDurationResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                     `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1        `json:"annotations"`
 	Level       int64                                                     `json:"level"`
 	JSON        attackLayer3SummaryDurationResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -342,9 +342,9 @@ func (r attackLayer3SummaryGetResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                            `json:"dateRange,required"`
-	ConfidenceInfo AttackLayer3SummaryGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           attackLayer3SummaryGetResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	ConfidenceInfo AttackLayer3SummaryGetResponseMetaConfidenceInfo   `json:"confidenceInfo"`
+	JSON           attackLayer3SummaryGetResponseMetaJSON             `json:"-"`
 }
 
 // attackLayer3SummaryGetResponseMetaJSON contains the JSON metadata for the struct
@@ -365,7 +365,7 @@ func (r attackLayer3SummaryGetResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
 	Level       int64                                                `json:"level"`
 	JSON        attackLayer3SummaryGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -415,9 +415,9 @@ func (r attackLayer3SummaryGetResponseSummary0JSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryIPVersionResponse struct {
-	Meta     AttackLayer3SummaryIPVersionResponseMeta     `json:"meta,required"`
-	Summary0 AttackLayer3SummaryIPVersionResponseSummary0 `json:"summary_0,required"`
-	JSON     attackLayer3SummaryIPVersionResponseJSON     `json:"-"`
+	Meta     AttackLayer3SummaryIPVersionResponseMeta         `json:"meta,required"`
+	Summary0 UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297 `json:"summary_0,required"`
+	JSON     attackLayer3SummaryIPVersionResponseJSON         `json:"-"`
 }
 
 // attackLayer3SummaryIPVersionResponseJSON contains the JSON metadata for the
@@ -438,7 +438,7 @@ func (r attackLayer3SummaryIPVersionResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryIPVersionResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                  `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5     `json:"dateRange,required"`
 	LastUpdated    string                                                 `json:"lastUpdated,required"`
 	Normalization  string                                                 `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -465,7 +465,7 @@ func (r attackLayer3SummaryIPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                      `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1         `json:"annotations"`
 	Level       int64                                                      `json:"level"`
 	JSON        attackLayer3SummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -484,29 +484,6 @@ func (r *AttackLayer3SummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(d
 }
 
 func (r attackLayer3SummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3SummaryIPVersionResponseSummary0 struct {
-	IPv4 string                                           `json:"IPv4,required"`
-	IPv6 string                                           `json:"IPv6,required"`
-	JSON attackLayer3SummaryIPVersionResponseSummary0JSON `json:"-"`
-}
-
-// attackLayer3SummaryIPVersionResponseSummary0JSON contains the JSON metadata for
-// the struct [AttackLayer3SummaryIPVersionResponseSummary0]
-type attackLayer3SummaryIPVersionResponseSummary0JSON struct {
-	IPv4        apijson.Field
-	IPv6        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryIPVersionResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryIPVersionResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -534,7 +511,7 @@ func (r attackLayer3SummaryProtocolResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryProtocolResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                 `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5    `json:"dateRange,required"`
 	LastUpdated    string                                                `json:"lastUpdated,required"`
 	Normalization  string                                                `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -561,7 +538,7 @@ func (r attackLayer3SummaryProtocolResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryProtocolResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                     `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1        `json:"annotations"`
 	Level       int64                                                     `json:"level"`
 	JSON        attackLayer3SummaryProtocolResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -634,7 +611,7 @@ func (r attackLayer3SummaryVectorResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryVectorResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                               `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5  `json:"dateRange,required"`
 	LastUpdated    string                                              `json:"lastUpdated,required"`
 	Normalization  string                                              `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryVectorResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -661,7 +638,7 @@ func (r attackLayer3SummaryVectorResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryVectorResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                   `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1      `json:"annotations"`
 	Level       int64                                                   `json:"level"`
 	JSON        attackLayer3SummaryVectorResponseMetaConfidenceInfoJSON `json:"-"`
 }

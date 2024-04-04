@@ -78,7 +78,7 @@ type TrafficAnomalyGetResponseTrafficAnomaly struct {
 	UUID                 string                                              `json:"uuid,required"`
 	ASNDetails           TrafficAnomalyGetResponseTrafficAnomaliesASNDetails `json:"asnDetails"`
 	EndDate              string                                              `json:"endDate"`
-	LocationDetails      UnnamedSchemaRef106                                 `json:"locationDetails"`
+	LocationDetails      UnnamedSchemaRef16e559c45a31db5480e21fbe904b2e42    `json:"locationDetails"`
 	VisibleInDataSources []string                                            `json:"visibleInDataSources"`
 	JSON                 trafficAnomalyGetResponseTrafficAnomalyJSON         `json:"-"`
 }
@@ -109,7 +109,7 @@ func (r trafficAnomalyGetResponseTrafficAnomalyJSON) RawJSON() string {
 type TrafficAnomalyGetResponseTrafficAnomaliesASNDetails struct {
 	ASN       string                                                  `json:"asn,required"`
 	Name      string                                                  `json:"name,required"`
-	Locations UnnamedSchemaRef106                                     `json:"locations"`
+	Locations UnnamedSchemaRef16e559c45a31db5480e21fbe904b2e42        `json:"locations"`
 	JSON      trafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON `json:"-"`
 }
 

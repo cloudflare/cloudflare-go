@@ -123,9 +123,9 @@ func (r PrefixBGPStatusEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixBGPStatusEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   PrefixBGPStatusEditResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PrefixBGPStatusEditResponse                               `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPStatusEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPStatusEditResponseEnvelopeJSON    `json:"-"`
@@ -171,9 +171,9 @@ type PrefixBGPStatusGetParams struct {
 }
 
 type PrefixBGPStatusGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   PrefixBGPStatusGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PrefixBGPStatusGetResponse                                `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPStatusGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPStatusGetResponseEnvelopeJSON    `json:"-"`

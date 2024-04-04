@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,9 +62,9 @@ func (r *HTTPTopService) Browsers(ctx context.Context, query HTTPTopBrowsersPara
 }
 
 type HTTPTopBrowserFamiliesResponse struct {
-	Meta HTTPTopBrowserFamiliesResponseMeta   `json:"meta,required"`
-	Top0 []HTTPTopBrowserFamiliesResponseTop0 `json:"top_0,required"`
-	JSON httpTopBrowserFamiliesResponseJSON   `json:"-"`
+	Meta HTTPTopBrowserFamiliesResponseMeta                        `json:"meta,required"`
+	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
+	JSON httpTopBrowserFamiliesResponseJSON                        `json:"-"`
 }
 
 // httpTopBrowserFamiliesResponseJSON contains the JSON metadata for the struct
@@ -84,10 +85,10 @@ func (r httpTopBrowserFamiliesResponseJSON) RawJSON() string {
 }
 
 type HTTPTopBrowserFamiliesResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                            `json:"dateRange,required"`
-	LastUpdated    string                                           `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPTopBrowserFamiliesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpTopBrowserFamiliesResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPTopBrowserFamiliesResponseMetaConfidenceInfo   `json:"confidenceInfo"`
+	JSON           httpTopBrowserFamiliesResponseMetaJSON             `json:"-"`
 }
 
 // httpTopBrowserFamiliesResponseMetaJSON contains the JSON metadata for the struct
@@ -109,7 +110,7 @@ func (r httpTopBrowserFamiliesResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPTopBrowserFamiliesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
 	Level       int64                                                `json:"level"`
 	JSON        httpTopBrowserFamiliesResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -131,33 +132,10 @@ func (r httpTopBrowserFamiliesResponseMetaConfidenceInfoJSON) RawJSON() string {
 	return r.raw
 }
 
-type HTTPTopBrowserFamiliesResponseTop0 struct {
-	Name  string                                 `json:"name,required"`
-	Value string                                 `json:"value,required"`
-	JSON  httpTopBrowserFamiliesResponseTop0JSON `json:"-"`
-}
-
-// httpTopBrowserFamiliesResponseTop0JSON contains the JSON metadata for the struct
-// [HTTPTopBrowserFamiliesResponseTop0]
-type httpTopBrowserFamiliesResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPTopBrowserFamiliesResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpTopBrowserFamiliesResponseTop0JSON) RawJSON() string {
-	return r.raw
-}
-
 type HTTPTopBrowsersResponse struct {
-	Meta HTTPTopBrowsersResponseMeta   `json:"meta,required"`
-	Top0 []HTTPTopBrowsersResponseTop0 `json:"top_0,required"`
-	JSON httpTopBrowsersResponseJSON   `json:"-"`
+	Meta HTTPTopBrowsersResponseMeta                               `json:"meta,required"`
+	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
+	JSON httpTopBrowsersResponseJSON                               `json:"-"`
 }
 
 // httpTopBrowsersResponseJSON contains the JSON metadata for the struct
@@ -178,10 +156,10 @@ func (r httpTopBrowsersResponseJSON) RawJSON() string {
 }
 
 type HTTPTopBrowsersResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                     `json:"dateRange,required"`
-	LastUpdated    string                                    `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPTopBrowsersResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpTopBrowsersResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPTopBrowsersResponseMetaConfidenceInfo          `json:"confidenceInfo"`
+	JSON           httpTopBrowsersResponseMetaJSON                    `json:"-"`
 }
 
 // httpTopBrowsersResponseMetaJSON contains the JSON metadata for the struct
@@ -203,9 +181,9 @@ func (r httpTopBrowsersResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPTopBrowsersResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                         `json:"annotations"`
-	Level       int64                                         `json:"level"`
-	JSON        httpTopBrowsersResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        httpTopBrowsersResponseMetaConfidenceInfoJSON      `json:"-"`
 }
 
 // httpTopBrowsersResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -222,29 +200,6 @@ func (r *HTTPTopBrowsersResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (
 }
 
 func (r httpTopBrowsersResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPTopBrowsersResponseTop0 struct {
-	Name  string                          `json:"name,required"`
-	Value string                          `json:"value,required"`
-	JSON  httpTopBrowsersResponseTop0JSON `json:"-"`
-}
-
-// httpTopBrowsersResponseTop0JSON contains the JSON metadata for the struct
-// [HTTPTopBrowsersResponseTop0]
-type httpTopBrowsersResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPTopBrowsersResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpTopBrowsersResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

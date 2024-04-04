@@ -39,7 +39,7 @@ func NewWARPConnectorService(opts ...option.RequestOption) (r *WARPConnectorServ
 }
 
 // Creates a new Warp Connector Tunnel in an account.
-func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef123, err error) {
+func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector", params.AccountID)
@@ -52,7 +52,7 @@ func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewP
 }
 
 // Lists and filters Warp Connector Tunnels in an account.
-func (r *WARPConnectorService) List(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.UnnamedSchemaRef123], err error) {
+func (r *WARPConnectorService) List(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -70,12 +70,12 @@ func (r *WARPConnectorService) List(ctx context.Context, params WARPConnectorLis
 }
 
 // Lists and filters Warp Connector Tunnels in an account.
-func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.UnnamedSchemaRef123] {
+func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a Warp Connector Tunnel from an account.
-func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, params WARPConnectorDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef123, err error) {
+func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, params WARPConnectorDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", params.AccountID, tunnelID)
@@ -88,7 +88,7 @@ func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, para
 }
 
 // Updates an existing Warp Connector Tunnel.
-func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params WARPConnectorEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef123, err error) {
+func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params WARPConnectorEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", params.AccountID, tunnelID)
@@ -101,7 +101,7 @@ func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params
 }
 
 // Fetches a single Warp Connector Tunnel.
-func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query WARPConnectorGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef123, err error) {
+func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query WARPConnectorGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", query.AccountID, tunnelID)
@@ -164,10 +164,10 @@ func (r WARPConnectorNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WARPConnectorNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.UnnamedSchemaRef123 `json:"result,required"`
+	Result shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8 `json:"result,required"`
 	// Whether the API call was successful
 	Success WARPConnectorNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    warpConnectorNewResponseEnvelopeJSON    `json:"-"`
@@ -250,10 +250,10 @@ func (r WARPConnectorDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WARPConnectorDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.UnnamedSchemaRef123 `json:"result,required"`
+	Result shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8 `json:"result,required"`
 	// Whether the API call was successful
 	Success WARPConnectorDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    warpConnectorDeleteResponseEnvelopeJSON    `json:"-"`
@@ -308,10 +308,10 @@ func (r WARPConnectorEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WARPConnectorEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.UnnamedSchemaRef123 `json:"result,required"`
+	Result shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8 `json:"result,required"`
 	// Whether the API call was successful
 	Success WARPConnectorEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    warpConnectorEditResponseEnvelopeJSON    `json:"-"`
@@ -357,10 +357,10 @@ type WARPConnectorGetParams struct {
 }
 
 type WARPConnectorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result shared.UnnamedSchemaRef123 `json:"result,required"`
+	Result shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8 `json:"result,required"`
 	// Whether the API call was successful
 	Success WARPConnectorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    warpConnectorGetResponseEnvelopeJSON    `json:"-"`
@@ -406,9 +406,9 @@ type WARPConnectorTokenParams struct {
 }
 
 type WARPConnectorTokenResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   WARPConnectorTokenResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   WARPConnectorTokenResponseUnion                           `json:"result,required"`
 	// Whether the API call was successful
 	Success WARPConnectorTokenResponseEnvelopeSuccess `json:"success,required"`
 	JSON    warpConnectorTokenResponseEnvelopeJSON    `json:"-"`

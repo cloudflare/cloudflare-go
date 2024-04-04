@@ -401,9 +401,9 @@ func (DispatchNamespaceScriptUpdateParamsVariant1) ImplementsDispatchNamespaceSc
 }
 
 type DispatchNamespaceScriptUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   workers.WorkersScript `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   workers.WorkersScript                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptUpdateResponseEnvelopeJSON    `json:"-"`
@@ -472,8 +472,8 @@ type DispatchNamespaceScriptGetParams struct {
 }
 
 type DispatchNamespaceScriptGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Details about a worker uploaded to a Workers for Platforms namespace.
 	Result WorkersForPlatformsNamespaceScript `json:"result,required"`
 	// Whether the API call was successful

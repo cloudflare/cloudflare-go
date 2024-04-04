@@ -49,9 +49,9 @@ func (r *NetflowService) Timeseries(ctx context.Context, query NetflowTimeseries
 }
 
 type NetflowTimeseriesResponse struct {
-	Meta   NetflowTimeseriesResponseMeta `json:"meta,required"`
-	Serie0 UnnamedSchemaRef129           `json:"serie_0,required"`
-	JSON   netflowTimeseriesResponseJSON `json:"-"`
+	Meta   NetflowTimeseriesResponseMeta                    `json:"meta,required"`
+	Serie0 UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb `json:"serie_0,required"`
+	JSON   netflowTimeseriesResponseJSON                    `json:"-"`
 }
 
 // netflowTimeseriesResponseJSON contains the JSON metadata for the struct
@@ -72,11 +72,11 @@ func (r netflowTimeseriesResponseJSON) RawJSON() string {
 }
 
 type NetflowTimeseriesResponseMeta struct {
-	AggInterval    string                                      `json:"aggInterval,required"`
-	DateRange      []UnnamedSchemaRef175                       `json:"dateRange,required"`
-	LastUpdated    time.Time                                   `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo NetflowTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           netflowTimeseriesResponseMetaJSON           `json:"-"`
+	AggInterval    string                                             `json:"aggInterval,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    time.Time                                          `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo NetflowTimeseriesResponseMetaConfidenceInfo        `json:"confidenceInfo"`
+	JSON           netflowTimeseriesResponseMetaJSON                  `json:"-"`
 }
 
 // netflowTimeseriesResponseMetaJSON contains the JSON metadata for the struct
@@ -99,9 +99,9 @@ func (r netflowTimeseriesResponseMetaJSON) RawJSON() string {
 }
 
 type NetflowTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                           `json:"annotations"`
-	Level       int64                                           `json:"level"`
-	JSON        netflowTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        netflowTimeseriesResponseMetaConfidenceInfoJSON    `json:"-"`
 }
 
 // netflowTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for

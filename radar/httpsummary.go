@@ -156,11 +156,11 @@ func (r httpSummaryBotClassResponseJSON) RawJSON() string {
 }
 
 type HTTPSummaryBotClassResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                         `json:"dateRange,required"`
-	LastUpdated    string                                        `json:"lastUpdated,required"`
-	Normalization  string                                        `json:"normalization,required"`
-	ConfidenceInfo HTTPSummaryBotClassResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpSummaryBotClassResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo HTTPSummaryBotClassResponseMetaConfidenceInfo      `json:"confidenceInfo"`
+	JSON           httpSummaryBotClassResponseMetaJSON                `json:"-"`
 }
 
 // httpSummaryBotClassResponseMetaJSON contains the JSON metadata for the struct
@@ -183,9 +183,9 @@ func (r httpSummaryBotClassResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPSummaryBotClassResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                             `json:"annotations"`
-	Level       int64                                             `json:"level"`
-	JSON        httpSummaryBotClassResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        httpSummaryBotClassResponseMetaConfidenceInfoJSON  `json:"-"`
 }
 
 // httpSummaryBotClassResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -252,11 +252,11 @@ func (r httpSummaryDeviceTypeResponseJSON) RawJSON() string {
 }
 
 type HTTPSummaryDeviceTypeResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                           `json:"dateRange,required"`
-	LastUpdated    string                                          `json:"lastUpdated,required"`
-	Normalization  string                                          `json:"normalization,required"`
-	ConfidenceInfo HTTPSummaryDeviceTypeResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpSummaryDeviceTypeResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo HTTPSummaryDeviceTypeResponseMetaConfidenceInfo    `json:"confidenceInfo"`
+	JSON           httpSummaryDeviceTypeResponseMetaJSON              `json:"-"`
 }
 
 // httpSummaryDeviceTypeResponseMetaJSON contains the JSON metadata for the struct
@@ -279,7 +279,7 @@ func (r httpSummaryDeviceTypeResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPSummaryDeviceTypeResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                               `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1  `json:"annotations"`
 	Level       int64                                               `json:"level"`
 	JSON        httpSummaryDeviceTypeResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -350,11 +350,11 @@ func (r httpSummaryHTTPProtocolResponseJSON) RawJSON() string {
 }
 
 type HTTPSummaryHTTPProtocolResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                             `json:"dateRange,required"`
-	LastUpdated    string                                            `json:"lastUpdated,required"`
-	Normalization  string                                            `json:"normalization,required"`
-	ConfidenceInfo HTTPSummaryHTTPProtocolResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpSummaryHTTPProtocolResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo HTTPSummaryHTTPProtocolResponseMetaConfidenceInfo  `json:"confidenceInfo"`
+	JSON           httpSummaryHTTPProtocolResponseMetaJSON            `json:"-"`
 }
 
 // httpSummaryHTTPProtocolResponseMetaJSON contains the JSON metadata for the
@@ -377,7 +377,7 @@ func (r httpSummaryHTTPProtocolResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPSummaryHTTPProtocolResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                 `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1    `json:"annotations"`
 	Level       int64                                                 `json:"level"`
 	JSON        httpSummaryHTTPProtocolResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -446,11 +446,11 @@ func (r httpSummaryHTTPVersionResponseJSON) RawJSON() string {
 }
 
 type HTTPSummaryHTTPVersionResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                            `json:"dateRange,required"`
-	LastUpdated    string                                           `json:"lastUpdated,required"`
-	Normalization  string                                           `json:"normalization,required"`
-	ConfidenceInfo HTTPSummaryHTTPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpSummaryHTTPVersionResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo HTTPSummaryHTTPVersionResponseMetaConfidenceInfo   `json:"confidenceInfo"`
+	JSON           httpSummaryHTTPVersionResponseMetaJSON             `json:"-"`
 }
 
 // httpSummaryHTTPVersionResponseMetaJSON contains the JSON metadata for the struct
@@ -473,7 +473,7 @@ func (r httpSummaryHTTPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPSummaryHTTPVersionResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
 	Level       int64                                                `json:"level"`
 	JSON        httpSummaryHTTPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -521,9 +521,9 @@ func (r httpSummaryHTTPVersionResponseSummary0JSON) RawJSON() string {
 }
 
 type HTTPSummaryIPVersionResponse struct {
-	Meta     HTTPSummaryIPVersionResponseMeta     `json:"meta,required"`
-	Summary0 HTTPSummaryIPVersionResponseSummary0 `json:"summary_0,required"`
-	JSON     httpSummaryIPVersionResponseJSON     `json:"-"`
+	Meta     HTTPSummaryIPVersionResponseMeta                 `json:"meta,required"`
+	Summary0 UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297 `json:"summary_0,required"`
+	JSON     httpSummaryIPVersionResponseJSON                 `json:"-"`
 }
 
 // httpSummaryIPVersionResponseJSON contains the JSON metadata for the struct
@@ -544,11 +544,11 @@ func (r httpSummaryIPVersionResponseJSON) RawJSON() string {
 }
 
 type HTTPSummaryIPVersionResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                          `json:"dateRange,required"`
-	LastUpdated    string                                         `json:"lastUpdated,required"`
-	Normalization  string                                         `json:"normalization,required"`
-	ConfidenceInfo HTTPSummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpSummaryIPVersionResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo HTTPSummaryIPVersionResponseMetaConfidenceInfo     `json:"confidenceInfo"`
+	JSON           httpSummaryIPVersionResponseMetaJSON               `json:"-"`
 }
 
 // httpSummaryIPVersionResponseMetaJSON contains the JSON metadata for the struct
@@ -571,7 +571,7 @@ func (r httpSummaryIPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPSummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                              `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
 	Level       int64                                              `json:"level"`
 	JSON        httpSummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -590,29 +590,6 @@ func (r *HTTPSummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []by
 }
 
 func (r httpSummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPSummaryIPVersionResponseSummary0 struct {
-	IPv4 string                                   `json:"IPv4,required"`
-	IPv6 string                                   `json:"IPv6,required"`
-	JSON httpSummaryIPVersionResponseSummary0JSON `json:"-"`
-}
-
-// httpSummaryIPVersionResponseSummary0JSON contains the JSON metadata for the
-// struct [HTTPSummaryIPVersionResponseSummary0]
-type httpSummaryIPVersionResponseSummary0JSON struct {
-	IPv4        apijson.Field
-	IPv6        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPSummaryIPVersionResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpSummaryIPVersionResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -640,11 +617,11 @@ func (r httpSummaryOSResponseJSON) RawJSON() string {
 }
 
 type HTTPSummaryOSResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                   `json:"dateRange,required"`
-	LastUpdated    string                                  `json:"lastUpdated,required"`
-	Normalization  string                                  `json:"normalization,required"`
-	ConfidenceInfo HTTPSummaryOSResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpSummaryOSResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo HTTPSummaryOSResponseMetaConfidenceInfo            `json:"confidenceInfo"`
+	JSON           httpSummaryOSResponseMetaJSON                      `json:"-"`
 }
 
 // httpSummaryOSResponseMetaJSON contains the JSON metadata for the struct
@@ -667,9 +644,9 @@ func (r httpSummaryOSResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPSummaryOSResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                       `json:"annotations"`
-	Level       int64                                       `json:"level"`
-	JSON        httpSummaryOSResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        httpSummaryOSResponseMetaConfidenceInfoJSON        `json:"-"`
 }
 
 // httpSummaryOSResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -736,11 +713,11 @@ func (r httpSummaryTLSVersionResponseJSON) RawJSON() string {
 }
 
 type HTTPSummaryTLSVersionResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                           `json:"dateRange,required"`
-	LastUpdated    string                                          `json:"lastUpdated,required"`
-	Normalization  string                                          `json:"normalization,required"`
-	ConfidenceInfo HTTPSummaryTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpSummaryTLSVersionResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo HTTPSummaryTLSVersionResponseMetaConfidenceInfo    `json:"confidenceInfo"`
+	JSON           httpSummaryTLSVersionResponseMetaJSON              `json:"-"`
 }
 
 // httpSummaryTLSVersionResponseMetaJSON contains the JSON metadata for the struct
@@ -763,7 +740,7 @@ func (r httpSummaryTLSVersionResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPSummaryTLSVersionResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                               `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1  `json:"annotations"`
 	Level       int64                                               `json:"level"`
 	JSON        httpSummaryTLSVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }

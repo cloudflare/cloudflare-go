@@ -137,9 +137,9 @@ func (r ProjectDeploymentNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDeploymentNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PagesDeployments      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PagesDeployments                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentNewResponseEnvelopeJSON    `json:"-"`
@@ -227,9 +227,9 @@ type ProjectDeploymentGetParams struct {
 }
 
 type ProjectDeploymentGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PagesDeployments      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PagesDeployments                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentGetResponseEnvelopeJSON    `json:"-"`
@@ -280,9 +280,9 @@ func (r ProjectDeploymentRetryParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDeploymentRetryResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PagesDeployments      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PagesDeployments                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRetryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRetryResponseEnvelopeJSON    `json:"-"`
@@ -333,9 +333,9 @@ func (r ProjectDeploymentRollbackParams) MarshalJSON() (data []byte, err error) 
 }
 
 type ProjectDeploymentRollbackResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PagesDeployments      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PagesDeployments                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRollbackResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRollbackResponseEnvelopeJSON    `json:"-"`

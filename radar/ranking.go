@@ -90,8 +90,8 @@ func (r rankingTimeseriesGroupsResponseJSON) RawJSON() string {
 }
 
 type RankingTimeseriesGroupsResponseMeta struct {
-	DateRange []UnnamedSchemaRef175                   `json:"dateRange,required"`
-	JSON      rankingTimeseriesGroupsResponseMetaJSON `json:"-"`
+	DateRange []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	JSON      rankingTimeseriesGroupsResponseMetaJSON            `json:"-"`
 }
 
 // rankingTimeseriesGroupsResponseMetaJSON contains the JSON metadata for the

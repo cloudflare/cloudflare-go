@@ -62,14 +62,45 @@ func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, qu
 	return
 }
 
+type UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8 struct {
+	// Human-readable message about the deployment.
+	WorkersMessage string                                               `json:"workers/message"`
+	JSON           unnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8JSON `json:"-"`
+}
+
+// unnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8]
+type unnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8JSON struct {
+	WorkersMessage apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8JSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8Param struct {
+	// Human-readable message about the deployment.
+	WorkersMessage param.Field[string] `json:"workers/message"`
+}
+
+func (r UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ScriptDeploymentNewResponse struct {
-	ID          string                                 `json:"id"`
-	Annotations ScriptDeploymentNewResponseAnnotations `json:"annotations"`
-	AuthorEmail string                                 `json:"author_email"`
-	CreatedOn   string                                 `json:"created_on"`
-	Source      string                                 `json:"source"`
-	Strategy    string                                 `json:"strategy"`
-	JSON        scriptDeploymentNewResponseJSON        `json:"-"`
+	ID          string                                           `json:"id"`
+	Annotations UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8 `json:"annotations"`
+	AuthorEmail string                                           `json:"author_email"`
+	CreatedOn   string                                           `json:"created_on"`
+	Source      string                                           `json:"source"`
+	Strategy    string                                           `json:"strategy"`
+	JSON        scriptDeploymentNewResponseJSON                  `json:"-"`
 }
 
 // scriptDeploymentNewResponseJSON contains the JSON metadata for the struct
@@ -90,28 +121,6 @@ func (r *ScriptDeploymentNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptDeploymentNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptDeploymentNewResponseAnnotations struct {
-	// Human-readable message about the deployment.
-	WorkersMessage string                                     `json:"workers/message"`
-	JSON           scriptDeploymentNewResponseAnnotationsJSON `json:"-"`
-}
-
-// scriptDeploymentNewResponseAnnotationsJSON contains the JSON metadata for the
-// struct [ScriptDeploymentNewResponseAnnotations]
-type scriptDeploymentNewResponseAnnotationsJSON struct {
-	WorkersMessage apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *ScriptDeploymentNewResponseAnnotations) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptDeploymentNewResponseAnnotationsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -137,13 +146,13 @@ func (r scriptDeploymentGetResponseJSON) RawJSON() string {
 }
 
 type ScriptDeploymentGetResponseDeployment struct {
-	ID          string                                            `json:"id"`
-	Annotations ScriptDeploymentGetResponseDeploymentsAnnotations `json:"annotations"`
-	AuthorEmail string                                            `json:"author_email"`
-	CreatedOn   string                                            `json:"created_on"`
-	Source      string                                            `json:"source"`
-	Strategy    string                                            `json:"strategy"`
-	JSON        scriptDeploymentGetResponseDeploymentJSON         `json:"-"`
+	ID          string                                           `json:"id"`
+	Annotations UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8 `json:"annotations"`
+	AuthorEmail string                                           `json:"author_email"`
+	CreatedOn   string                                           `json:"created_on"`
+	Source      string                                           `json:"source"`
+	Strategy    string                                           `json:"strategy"`
+	JSON        scriptDeploymentGetResponseDeploymentJSON        `json:"-"`
 }
 
 // scriptDeploymentGetResponseDeploymentJSON contains the JSON metadata for the
@@ -167,52 +176,21 @@ func (r scriptDeploymentGetResponseDeploymentJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScriptDeploymentGetResponseDeploymentsAnnotations struct {
-	// Human-readable message about the deployment.
-	WorkersMessage string                                                `json:"workers/message"`
-	JSON           scriptDeploymentGetResponseDeploymentsAnnotationsJSON `json:"-"`
-}
-
-// scriptDeploymentGetResponseDeploymentsAnnotationsJSON contains the JSON metadata
-// for the struct [ScriptDeploymentGetResponseDeploymentsAnnotations]
-type scriptDeploymentGetResponseDeploymentsAnnotationsJSON struct {
-	WorkersMessage apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *ScriptDeploymentGetResponseDeploymentsAnnotations) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptDeploymentGetResponseDeploymentsAnnotationsJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScriptDeploymentNewParams struct {
 	// Identifier
-	AccountID   param.Field[string]                               `path:"account_id,required"`
-	Annotations param.Field[ScriptDeploymentNewParamsAnnotations] `json:"annotations"`
-	Strategy    param.Field[string]                               `json:"strategy"`
+	AccountID   param.Field[string]                                                `path:"account_id,required"`
+	Annotations param.Field[UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8Param] `json:"annotations"`
+	Strategy    param.Field[string]                                                `json:"strategy"`
 }
 
 func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ScriptDeploymentNewParamsAnnotations struct {
-	// Human-readable message about the deployment.
-	WorkersMessage param.Field[string] `json:"workers/message"`
-}
-
-func (r ScriptDeploymentNewParamsAnnotations) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ScriptDeploymentNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ScriptDeploymentNewResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptDeploymentNewResponse                               `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptDeploymentNewResponseEnvelopeJSON    `json:"-"`
@@ -258,9 +236,9 @@ type ScriptDeploymentGetParams struct {
 }
 
 type ScriptDeploymentGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ScriptDeploymentGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptDeploymentGetResponse                               `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptDeploymentGetResponseEnvelopeJSON    `json:"-"`

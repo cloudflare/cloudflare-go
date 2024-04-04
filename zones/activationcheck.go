@@ -74,9 +74,9 @@ type ActivationCheckTriggerParams struct {
 }
 
 type ActivationCheckTriggerResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ActivationCheckTriggerResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ActivationCheckTriggerResponse                            `json:"result,required"`
 	// Whether the API call was successful
 	Success ActivationCheckTriggerResponseEnvelopeSuccess `json:"success,required"`
 	JSON    activationCheckTriggerResponseEnvelopeJSON    `json:"-"`

@@ -135,11 +135,11 @@ func (r as112SummaryDNSSECResponseJSON) RawJSON() string {
 }
 
 type AS112SummaryDNSSECResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                        `json:"dateRange,required"`
-	LastUpdated    string                                       `json:"lastUpdated,required"`
-	Normalization  string                                       `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryDNSSECResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo AS112SummaryDNSSECResponseMetaConfidenceInfo       `json:"confidenceInfo"`
+	JSON           as112SummaryDNSSECResponseMetaJSON                 `json:"-"`
 }
 
 // as112SummaryDNSSECResponseMetaJSON contains the JSON metadata for the struct
@@ -162,9 +162,9 @@ func (r as112SummaryDNSSECResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryDNSSECResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                            `json:"annotations"`
-	Level       int64                                            `json:"level"`
-	JSON        as112SummaryDNSSECResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        as112SummaryDNSSECResponseMetaConfidenceInfoJSON   `json:"-"`
 }
 
 // as112SummaryDNSSECResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -231,11 +231,11 @@ func (r as112SummaryEdnsResponseJSON) RawJSON() string {
 }
 
 type AS112SummaryEdnsResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                      `json:"dateRange,required"`
-	LastUpdated    string                                     `json:"lastUpdated,required"`
-	Normalization  string                                     `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryEdnsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryEdnsResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo AS112SummaryEdnsResponseMetaConfidenceInfo         `json:"confidenceInfo"`
+	JSON           as112SummaryEdnsResponseMetaJSON                   `json:"-"`
 }
 
 // as112SummaryEdnsResponseMetaJSON contains the JSON metadata for the struct
@@ -258,9 +258,9 @@ func (r as112SummaryEdnsResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryEdnsResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                          `json:"annotations"`
-	Level       int64                                          `json:"level"`
-	JSON        as112SummaryEdnsResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        as112SummaryEdnsResponseMetaConfidenceInfoJSON     `json:"-"`
 }
 
 // as112SummaryEdnsResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -304,9 +304,9 @@ func (r as112SummaryEdnsResponseSummary0JSON) RawJSON() string {
 }
 
 type AS112SummaryIPVersionResponse struct {
-	Meta     AS112SummaryIPVersionResponseMeta `json:"meta,required"`
-	Summary0 UnnamedSchemaRef128               `json:"summary_0,required"`
-	JSON     as112SummaryIPVersionResponseJSON `json:"-"`
+	Meta     AS112SummaryIPVersionResponseMeta                `json:"meta,required"`
+	Summary0 UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297 `json:"summary_0,required"`
+	JSON     as112SummaryIPVersionResponseJSON                `json:"-"`
 }
 
 // as112SummaryIPVersionResponseJSON contains the JSON metadata for the struct
@@ -327,11 +327,11 @@ func (r as112SummaryIPVersionResponseJSON) RawJSON() string {
 }
 
 type AS112SummaryIPVersionResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                           `json:"dateRange,required"`
-	LastUpdated    string                                          `json:"lastUpdated,required"`
-	Normalization  string                                          `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryIPVersionResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo AS112SummaryIPVersionResponseMetaConfidenceInfo    `json:"confidenceInfo"`
+	JSON           as112SummaryIPVersionResponseMetaJSON              `json:"-"`
 }
 
 // as112SummaryIPVersionResponseMetaJSON contains the JSON metadata for the struct
@@ -354,7 +354,7 @@ func (r as112SummaryIPVersionResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                               `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1  `json:"annotations"`
 	Level       int64                                               `json:"level"`
 	JSON        as112SummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -400,11 +400,11 @@ func (r as112SummaryProtocolResponseJSON) RawJSON() string {
 }
 
 type AS112SummaryProtocolResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                          `json:"dateRange,required"`
-	LastUpdated    string                                         `json:"lastUpdated,required"`
-	Normalization  string                                         `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryProtocolResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo AS112SummaryProtocolResponseMetaConfidenceInfo     `json:"confidenceInfo"`
+	JSON           as112SummaryProtocolResponseMetaJSON               `json:"-"`
 }
 
 // as112SummaryProtocolResponseMetaJSON contains the JSON metadata for the struct
@@ -427,7 +427,7 @@ func (r as112SummaryProtocolResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryProtocolResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                              `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
 	Level       int64                                              `json:"level"`
 	JSON        as112SummaryProtocolResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -496,11 +496,11 @@ func (r as112SummaryQueryTypeResponseJSON) RawJSON() string {
 }
 
 type AS112SummaryQueryTypeResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                           `json:"dateRange,required"`
-	LastUpdated    string                                          `json:"lastUpdated,required"`
-	Normalization  string                                          `json:"normalization,required"`
-	ConfidenceInfo AS112SummaryQueryTypeResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           as112SummaryQueryTypeResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo AS112SummaryQueryTypeResponseMetaConfidenceInfo    `json:"confidenceInfo"`
+	JSON           as112SummaryQueryTypeResponseMetaJSON              `json:"-"`
 }
 
 // as112SummaryQueryTypeResponseMetaJSON contains the JSON metadata for the struct
@@ -523,7 +523,7 @@ func (r as112SummaryQueryTypeResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryQueryTypeResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                               `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1  `json:"annotations"`
 	Level       int64                                               `json:"level"`
 	JSON        as112SummaryQueryTypeResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -598,7 +598,7 @@ func (r as112SummaryResponseCodesResponseJSON) RawJSON() string {
 }
 
 type AS112SummaryResponseCodesResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                               `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5  `json:"dateRange,required"`
 	LastUpdated    string                                              `json:"lastUpdated,required"`
 	Normalization  string                                              `json:"normalization,required"`
 	ConfidenceInfo AS112SummaryResponseCodesResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -625,7 +625,7 @@ func (r as112SummaryResponseCodesResponseMetaJSON) RawJSON() string {
 }
 
 type AS112SummaryResponseCodesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                   `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1      `json:"annotations"`
 	Level       int64                                                   `json:"level"`
 	JSON        as112SummaryResponseCodesResponseMetaConfidenceInfoJSON `json:"-"`
 }

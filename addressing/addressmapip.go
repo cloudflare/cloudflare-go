@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AddressMapIPService contains methods and other services that help with
@@ -35,7 +33,7 @@ func NewAddressMapIPService(opts ...option.RequestOption) (r *AddressMapIPServic
 }
 
 // Add an IP from a prefix owned by the account to a particular address map.
-func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPUpdateParams, opts ...option.RequestOption) (res *AddressMapIPUpdateResponseUnion, err error) {
+func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
@@ -48,7 +46,7 @@ func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, i
 }
 
 // Remove an IP from a particular address map.
-func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPDeleteParams, opts ...option.RequestOption) (res *AddressMapIPDeleteResponseUnion, err error) {
+func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, params AddressMapIPDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", params.AccountID, addressMapID, ipAddress)
@@ -59,56 +57,6 @@ func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, i
 	res = &env.Result
 	return
 }
-
-// Union satisfied by [addressing.AddressMapIPUpdateResponseUnknown],
-// [addressing.AddressMapIPUpdateResponseArray] or [shared.UnionString].
-type AddressMapIPUpdateResponseUnion interface {
-	ImplementsAddressingAddressMapIPUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapIPUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AddressMapIPUpdateResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AddressMapIPUpdateResponseArray []interface{}
-
-func (r AddressMapIPUpdateResponseArray) ImplementsAddressingAddressMapIPUpdateResponseUnion() {}
-
-// Union satisfied by [addressing.AddressMapIPDeleteResponseUnknown],
-// [addressing.AddressMapIPDeleteResponseArray] or [shared.UnionString].
-type AddressMapIPDeleteResponseUnion interface {
-	ImplementsAddressingAddressMapIPDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapIPDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AddressMapIPDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AddressMapIPDeleteResponseArray []interface{}
-
-func (r AddressMapIPDeleteResponseArray) ImplementsAddressingAddressMapIPDeleteResponseUnion() {}
 
 type AddressMapIPUpdateParams struct {
 	// Identifier
@@ -121,9 +69,9 @@ func (r AddressMapIPUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapIPUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   AddressMapIPUpdateResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapIPUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapIPUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -207,9 +155,9 @@ func (r AddressMapIPDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapIPDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   AddressMapIPDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapIPDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapIPDeleteResponseEnvelopeResultInfo `json:"result_info"`

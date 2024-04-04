@@ -68,8 +68,8 @@ type DLPPredefinedProfile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type shared.UnnamedSchemaRef97 `json:"type"`
-	JSON dlpPredefinedProfileJSON  `json:"-"`
+	Type UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 `json:"type"`
+	JSON dlpPredefinedProfileJSON                         `json:"-"`
 }
 
 // dlpPredefinedProfileJSON contains the JSON metadata for the struct
@@ -238,9 +238,9 @@ type DLPProfilePredefinedGetParams struct {
 }
 
 type DLPProfilePredefinedGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DLPPredefinedProfile  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DLPPredefinedProfile                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfilePredefinedGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfilePredefinedGetResponseEnvelopeJSON    `json:"-"`

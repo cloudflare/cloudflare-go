@@ -101,13 +101,43 @@ func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStat
 	return
 }
 
+// ID of the zone setting.
+type UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d string
+
+const (
+	UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968dCacheReserveClear UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d = "cache_reserve_clear"
+)
+
+func (r UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968dCacheReserveClear:
+		return true
+	}
+	return false
+}
+
+// ID of the zone setting.
+type UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad string
+
+const (
+	UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7adCacheReserve UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad = "cache_reserve"
+)
+
+func (r UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7adCacheReserve:
+		return true
+	}
+	return false
+}
+
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
 type CacheReserveClearResponse struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef139 `json:"id,required"`
+	ID UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// The time that the latest Cache Reserve Clear operation started.
@@ -163,7 +193,7 @@ func (r CacheReserveClearResponseState) IsKnown() bool {
 // for more information.
 type CacheReserveEditResponse struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef144 `json:"id,required"`
+	ID UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the Cache Reserve zone setting.
@@ -213,7 +243,7 @@ func (r CacheReserveEditResponseValue) IsKnown() bool {
 // for more information.
 type CacheReserveGetResponse struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef144 `json:"id,required"`
+	ID UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the Cache Reserve zone setting.
@@ -261,7 +291,7 @@ func (r CacheReserveGetResponseValue) IsKnown() bool {
 // that you cannot undo or cancel this operation.
 type CacheReserveStatusResponse struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef139 `json:"id,required"`
+	ID UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// The time that the latest Cache Reserve Clear operation started.
@@ -320,8 +350,8 @@ func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CacheReserveClearResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -394,8 +424,8 @@ func (r CacheReserveEditParamsValue) IsKnown() bool {
 }
 
 type CacheReserveEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Increase cache lifetimes by automatically storing all cacheable files into
 	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
 	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
@@ -448,8 +478,8 @@ type CacheReserveGetParams struct {
 }
 
 type CacheReserveGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Increase cache lifetimes by automatically storing all cacheable files into
 	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
 	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
@@ -502,8 +532,8 @@ type CacheReserveStatusParams struct {
 }
 
 type CacheReserveStatusResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind

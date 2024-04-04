@@ -49,9 +49,9 @@ func (r *HTTPLocationIPVersionService) Get(ctx context.Context, ipVersion HTTPLo
 }
 
 type HTTPLocationIPVersionGetResponse struct {
-	Meta HTTPLocationIPVersionGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPLocationIPVersionGetResponseTop0 `json:"top_0,required"`
-	JSON httpLocationIPVersionGetResponseJSON   `json:"-"`
+	Meta HTTPLocationIPVersionGetResponseMeta               `json:"meta,required"`
+	Top0 []UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09 `json:"top_0,required"`
+	JSON httpLocationIPVersionGetResponseJSON               `json:"-"`
 }
 
 // httpLocationIPVersionGetResponseJSON contains the JSON metadata for the struct
@@ -72,7 +72,7 @@ func (r httpLocationIPVersionGetResponseJSON) RawJSON() string {
 }
 
 type HTTPLocationIPVersionGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                              `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
 	LastUpdated    string                                             `json:"lastUpdated,required"`
 	ConfidenceInfo HTTPLocationIPVersionGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           httpLocationIPVersionGetResponseMetaJSON           `json:"-"`
@@ -97,7 +97,7 @@ func (r httpLocationIPVersionGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPLocationIPVersionGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                  `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1     `json:"annotations"`
 	Level       int64                                                  `json:"level"`
 	JSON        httpLocationIPVersionGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -116,31 +116,6 @@ func (r *HTTPLocationIPVersionGetResponseMetaConfidenceInfo) UnmarshalJSON(data 
 }
 
 func (r httpLocationIPVersionGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPLocationIPVersionGetResponseTop0 struct {
-	ClientCountryAlpha2 string                                   `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                   `json:"clientCountryName,required"`
-	Value               string                                   `json:"value,required"`
-	JSON                httpLocationIPVersionGetResponseTop0JSON `json:"-"`
-}
-
-// httpLocationIPVersionGetResponseTop0JSON contains the JSON metadata for the
-// struct [HTTPLocationIPVersionGetResponseTop0]
-type httpLocationIPVersionGetResponseTop0JSON struct {
-	ClientCountryAlpha2 apijson.Field
-	ClientCountryName   apijson.Field
-	Value               apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *HTTPLocationIPVersionGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationIPVersionGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

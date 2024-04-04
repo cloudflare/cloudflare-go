@@ -62,7 +62,7 @@ func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier st
 }
 
 // Delete a Request Message
-func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171Union, err error) {
+func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", accountIdentifier, requestIdentifier, messageIdentifer)
@@ -134,9 +134,9 @@ func (r RequestMessageNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RequestMessageNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   CloudforceOneRequestMessageItem `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CloudforceOneRequestMessageItem                           `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageNewResponseEnvelopeJSON    `json:"-"`
@@ -213,9 +213,9 @@ func (r RequestMessageUpdateParamsTlp) IsKnown() bool {
 }
 
 type RequestMessageUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   CloudforceOneRequestMessageItem `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CloudforceOneRequestMessageItem                           `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageUpdateResponseEnvelopeJSON    `json:"-"`
@@ -256,9 +256,9 @@ func (r RequestMessageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestMessageDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171Union `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageDeleteResponseEnvelopeJSON    `json:"-"`
@@ -334,9 +334,9 @@ func (r RequestMessageGetParamsSortOrder) IsKnown() bool {
 }
 
 type RequestMessageGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   []CloudforceOneRequestMessageItem `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []CloudforceOneRequestMessageItem                         `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageGetResponseEnvelopeJSON    `json:"-"`

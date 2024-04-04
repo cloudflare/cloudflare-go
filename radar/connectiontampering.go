@@ -83,7 +83,7 @@ func (r connectionTamperingSummaryResponseJSON) RawJSON() string {
 }
 
 type ConnectionTamperingSummaryResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5   `json:"dateRange,required"`
 	ConfidenceInfo ConnectionTamperingSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           connectionTamperingSummaryResponseMetaJSON           `json:"-"`
 }
@@ -106,7 +106,7 @@ func (r connectionTamperingSummaryResponseMetaJSON) RawJSON() string {
 }
 
 type ConnectionTamperingSummaryResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                    `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1       `json:"annotations"`
 	Level       int64                                                    `json:"level"`
 	JSON        connectionTamperingSummaryResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -192,7 +192,7 @@ func (r connectionTamperingTimeseriesGroupsResponseJSON) RawJSON() string {
 
 type ConnectionTamperingTimeseriesGroupsResponseMeta struct {
 	AggInterval    string                                                        `json:"aggInterval,required"`
-	DateRange      []UnnamedSchemaRef175                                         `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5            `json:"dateRange,required"`
 	LastUpdated    time.Time                                                     `json:"lastUpdated,required" format:"date-time"`
 	ConfidenceInfo ConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           connectionTamperingTimeseriesGroupsResponseMetaJSON           `json:"-"`
@@ -218,7 +218,7 @@ func (r connectionTamperingTimeseriesGroupsResponseMetaJSON) RawJSON() string {
 }
 
 type ConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                             `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1                `json:"annotations"`
 	Level       int64                                                             `json:"level"`
 	JSON        connectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoJSON `json:"-"`
 }

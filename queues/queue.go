@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // QueueService contains methods and other services that help with interacting with
@@ -77,7 +75,7 @@ func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...
 }
 
 // Deletes a queue.
-func (r *QueueService) Delete(ctx context.Context, queueID string, params QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponseUnion, err error) {
+func (r *QueueService) Delete(ctx context.Context, queueID string, params QueueDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/queues/%s", params.AccountID, queueID)
@@ -191,31 +189,6 @@ func (r queueListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [queues.QueueDeleteResponseUnknown],
-// [queues.QueueDeleteResponseArray] or [shared.UnionString].
-type QueueDeleteResponseUnion interface {
-	ImplementsQueuesQueueDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*QueueDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(QueueDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type QueueDeleteResponseArray []interface{}
-
-func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponseUnion() {}
-
 type QueueGetResponse struct {
 	Consumers           interface{}          `json:"consumers"`
 	ConsumersTotalCount interface{}          `json:"consumers_total_count"`
@@ -262,13 +235,13 @@ func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueNewResponseEnvelope struct {
-	CreatedOn  interface{}           `json:"created_on,required"`
-	Errors     []shared.ResponseInfo `json:"errors,required"`
-	Messages   []shared.ResponseInfo `json:"messages,required"`
-	ModifiedOn interface{}           `json:"modified_on,required"`
-	QueueID    interface{}           `json:"queue_id,required"`
-	QueueName  interface{}           `json:"queue_name,required"`
-	Result     QueueNewResponse      `json:"result,required,nullable"`
+	CreatedOn  interface{}                                               `json:"created_on,required"`
+	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	ModifiedOn interface{}                                               `json:"modified_on,required"`
+	QueueID    interface{}                                               `json:"queue_id,required"`
+	QueueName  interface{}                                               `json:"queue_name,required"`
+	Result     QueueNewResponse                                          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -356,13 +329,13 @@ func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueUpdateResponseEnvelope struct {
-	CreatedOn  interface{}           `json:"created_on,required"`
-	Errors     []shared.ResponseInfo `json:"errors,required"`
-	Messages   []shared.ResponseInfo `json:"messages,required"`
-	ModifiedOn interface{}           `json:"modified_on,required"`
-	QueueID    interface{}           `json:"queue_id,required"`
-	QueueName  interface{}           `json:"queue_name,required"`
-	Result     QueueUpdateResponse   `json:"result,required,nullable"`
+	CreatedOn  interface{}                                               `json:"created_on,required"`
+	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	ModifiedOn interface{}                                               `json:"modified_on,required"`
+	QueueID    interface{}                                               `json:"queue_id,required"`
+	QueueName  interface{}                                               `json:"queue_name,required"`
+	Result     QueueUpdateResponse                                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -445,17 +418,17 @@ type QueueListParams struct {
 }
 
 type QueueListResponseEnvelope struct {
-	Consumers           interface{}           `json:"consumers,required"`
-	ConsumersTotalCount interface{}           `json:"consumers_total_count,required"`
-	CreatedOn           interface{}           `json:"created_on,required"`
-	Errors              []shared.ResponseInfo `json:"errors,required"`
-	Messages            []shared.ResponseInfo `json:"messages,required"`
-	ModifiedOn          interface{}           `json:"modified_on,required"`
-	Producers           interface{}           `json:"producers,required"`
-	ProducersTotalCount interface{}           `json:"producers_total_count,required"`
-	QueueID             interface{}           `json:"queue_id,required"`
-	QueueName           interface{}           `json:"queue_name,required"`
-	Result              []QueueListResponse   `json:"result,required,nullable"`
+	Consumers           interface{}                                               `json:"consumers,required"`
+	ConsumersTotalCount interface{}                                               `json:"consumers_total_count,required"`
+	CreatedOn           interface{}                                               `json:"created_on,required"`
+	Errors              []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages            []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	ModifiedOn          interface{}                                               `json:"modified_on,required"`
+	Producers           interface{}                                               `json:"producers,required"`
+	ProducersTotalCount interface{}                                               `json:"producers_total_count,required"`
+	QueueID             interface{}                                               `json:"queue_id,required"`
+	QueueName           interface{}                                               `json:"queue_name,required"`
+	Result              []QueueListResponse                                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueListResponseEnvelopeResultInfo `json:"result_info"`
@@ -549,9 +522,9 @@ func (r QueueDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type QueueDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   QueueDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -630,13 +603,13 @@ type QueueGetParams struct {
 }
 
 type QueueGetResponseEnvelope struct {
-	CreatedOn  interface{}           `json:"created_on,required"`
-	Errors     []shared.ResponseInfo `json:"errors,required"`
-	Messages   []shared.ResponseInfo `json:"messages,required"`
-	ModifiedOn interface{}           `json:"modified_on,required"`
-	QueueID    interface{}           `json:"queue_id,required"`
-	QueueName  interface{}           `json:"queue_name,required"`
-	Result     QueueGetResponse      `json:"result,required,nullable"`
+	CreatedOn  interface{}                                               `json:"created_on,required"`
+	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	ModifiedOn interface{}                                               `json:"modified_on,required"`
+	QueueID    interface{}                                               `json:"queue_id,required"`
+	QueueName  interface{}                                               `json:"queue_name,required"`
+	Result     QueueGetResponse                                          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueGetResponseEnvelopeResultInfo `json:"result_info"`

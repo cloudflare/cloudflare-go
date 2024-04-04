@@ -202,8 +202,8 @@ func (r SettingBrowserCheckEditParamsValue) IsKnown() bool {
 }
 
 type SettingBrowserCheckEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
@@ -240,8 +240,8 @@ type SettingBrowserCheckGetParams struct {
 }
 
 type SettingBrowserCheckGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP

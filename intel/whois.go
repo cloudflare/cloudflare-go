@@ -98,9 +98,9 @@ func (r WhoisGetParams) URLQuery() (v url.Values) {
 }
 
 type WhoisGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IntelWhois            `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IntelWhois                                                `json:"result,required"`
 	// Whether the API call was successful
 	Success WhoisGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    whoisGetResponseEnvelopeJSON    `json:"-"`

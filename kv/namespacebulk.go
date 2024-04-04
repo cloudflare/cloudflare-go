@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // NamespaceBulkService contains methods and other services that help with
@@ -40,7 +38,7 @@ func NewNamespaceBulkService(opts ...option.RequestOption) (r *NamespaceBulkServ
 // `expiration_ttl` is specified, the key-value pair will never expire. If both are
 // set, `expiration_ttl` is used and `expiration` is ignored. The entire request
 // size must be 100 megabytes or less.
-func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceBulkUpdateResponseUnion, err error) {
+func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", params.AccountID, namespaceID)
@@ -54,7 +52,7 @@ func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, p
 
 // Remove multiple KV pairs from the namespace. Body should be an array of up to
 // 10,000 keys to be removed.
-func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, params NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponseUnion, err error) {
+func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, params NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", params.AccountID, namespaceID)
@@ -64,40 +62,6 @@ func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, p
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [kv.NamespaceBulkUpdateResponseUnknown] or
-// [shared.UnionString].
-type NamespaceBulkUpdateResponseUnion interface {
-	ImplementsKVNamespaceBulkUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceBulkUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [kv.NamespaceBulkDeleteResponseUnknown] or
-// [shared.UnionString].
-type NamespaceBulkDeleteResponseUnion interface {
-	ImplementsKVNamespaceBulkDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceBulkDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type NamespaceBulkUpdateParams struct {
@@ -135,9 +99,9 @@ func (r NamespaceBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   NamespaceBulkUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceBulkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -188,9 +152,9 @@ func (r NamespaceBulkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceBulkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   NamespaceBulkDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceBulkDeleteResponseEnvelopeJSON    `json:"-"`

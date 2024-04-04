@@ -49,9 +49,9 @@ func (r *HTTPLocationHTTPProtocolService) Get(ctx context.Context, httpProtocol 
 }
 
 type HTTPLocationHTTPProtocolGetResponse struct {
-	Meta HTTPLocationHTTPProtocolGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPLocationHTTPProtocolGetResponseTop0 `json:"top_0,required"`
-	JSON httpLocationHTTPProtocolGetResponseJSON   `json:"-"`
+	Meta HTTPLocationHTTPProtocolGetResponseMeta            `json:"meta,required"`
+	Top0 []UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09 `json:"top_0,required"`
+	JSON httpLocationHTTPProtocolGetResponseJSON            `json:"-"`
 }
 
 // httpLocationHTTPProtocolGetResponseJSON contains the JSON metadata for the
@@ -72,7 +72,7 @@ func (r httpLocationHTTPProtocolGetResponseJSON) RawJSON() string {
 }
 
 type HTTPLocationHTTPProtocolGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                 `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5    `json:"dateRange,required"`
 	LastUpdated    string                                                `json:"lastUpdated,required"`
 	ConfidenceInfo HTTPLocationHTTPProtocolGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           httpLocationHTTPProtocolGetResponseMetaJSON           `json:"-"`
@@ -97,7 +97,7 @@ func (r httpLocationHTTPProtocolGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPLocationHTTPProtocolGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                     `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1        `json:"annotations"`
 	Level       int64                                                     `json:"level"`
 	JSON        httpLocationHTTPProtocolGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -116,31 +116,6 @@ func (r *HTTPLocationHTTPProtocolGetResponseMetaConfidenceInfo) UnmarshalJSON(da
 }
 
 func (r httpLocationHTTPProtocolGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPLocationHTTPProtocolGetResponseTop0 struct {
-	ClientCountryAlpha2 string                                      `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                      `json:"clientCountryName,required"`
-	Value               string                                      `json:"value,required"`
-	JSON                httpLocationHTTPProtocolGetResponseTop0JSON `json:"-"`
-}
-
-// httpLocationHTTPProtocolGetResponseTop0JSON contains the JSON metadata for the
-// struct [HTTPLocationHTTPProtocolGetResponseTop0]
-type httpLocationHTTPProtocolGetResponseTop0JSON struct {
-	ClientCountryAlpha2 apijson.Field
-	ClientCountryName   apijson.Field
-	Value               apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *HTTPLocationHTTPProtocolGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationHTTPProtocolGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

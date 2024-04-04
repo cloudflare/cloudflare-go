@@ -103,9 +103,9 @@ type R2SippyDestination struct {
 	AccessKeyID string `json:"accessKeyId"`
 	Account     string `json:"account"`
 	// Name of the bucket on the provider
-	Bucket   string                    `json:"bucket"`
-	Provider shared.UnnamedSchemaRef85 `json:"provider"`
-	JSON     r2SippyDestinationJSON    `json:"-"`
+	Bucket   string                                           `json:"bucket"`
+	Provider UnnamedSchemaRef6430970563db310f19d39aafe3debd27 `json:"provider"`
+	JSON     r2SippyDestinationJSON                           `json:"-"`
 }
 
 // r2SippyDestinationJSON contains the JSON metadata for the struct
@@ -164,6 +164,20 @@ const (
 func (r R2SippySourceProvider) IsKnown() bool {
 	switch r {
 	case R2SippySourceProviderAws, R2SippySourceProviderGcs:
+		return true
+	}
+	return false
+}
+
+type UnnamedSchemaRef6430970563db310f19d39aafe3debd27 string
+
+const (
+	UnnamedSchemaRef6430970563db310f19d39aafe3debd27R2 UnnamedSchemaRef6430970563db310f19d39aafe3debd27 = "r2"
+)
+
+func (r UnnamedSchemaRef6430970563db310f19d39aafe3debd27) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef6430970563db310f19d39aafe3debd27R2:
 		return true
 	}
 	return false
@@ -241,8 +255,8 @@ type SippyUpdateParamsR2EnableSippyAwsDestination struct {
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
 	// this token to the bucket you're enabling Sippy for.
-	AccessKeyID param.Field[string]                    `json:"accessKeyId"`
-	Provider    param.Field[shared.UnnamedSchemaRef85] `json:"provider"`
+	AccessKeyID param.Field[string]                                           `json:"accessKeyId"`
+	Provider    param.Field[UnnamedSchemaRef6430970563db310f19d39aafe3debd27] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
 	// when creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
@@ -316,8 +330,8 @@ type SippyUpdateParamsR2EnableSippyGcsDestination struct {
 	//
 	// Sippy will use this token when writing objects to R2, so it is best to scope
 	// this token to the bucket you're enabling Sippy for.
-	AccessKeyID param.Field[string]                    `json:"accessKeyId"`
-	Provider    param.Field[shared.UnnamedSchemaRef85] `json:"provider"`
+	AccessKeyID param.Field[string]                                           `json:"accessKeyId"`
+	Provider    param.Field[UnnamedSchemaRef6430970563db310f19d39aafe3debd27] `json:"provider"`
 	// Value of a Cloudflare API token. This is the value labelled "Secret Access Key"
 	// when creating an API token from the
 	// [R2 dashboard](https://dash.cloudflare.com/?to=/:account/r2/api-tokens).
@@ -361,9 +375,9 @@ func (r SippyUpdateParamsR2EnableSippyGcsSourceProvider) IsKnown() bool {
 }
 
 type SippyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   R2Sippy               `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []string                                                  `json:"messages,required"`
+	Result   R2Sippy                                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success SippyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sippyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -409,9 +423,9 @@ type SippyDeleteParams struct {
 }
 
 type SippyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   SippyDeleteResponse   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []string                                                  `json:"messages,required"`
+	Result   SippyDeleteResponse                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success SippyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sippyDeleteResponseEnvelopeJSON    `json:"-"`
@@ -457,9 +471,9 @@ type SippyGetParams struct {
 }
 
 type SippyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []string              `json:"messages,required"`
-	Result   R2Sippy               `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []string                                                  `json:"messages,required"`
+	Result   R2Sippy                                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success SippyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    sippyGetResponseEnvelopeJSON    `json:"-"`

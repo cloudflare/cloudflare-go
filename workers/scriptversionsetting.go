@@ -2589,9 +2589,9 @@ func (r ScriptVersionSettingEditParamsSettingsTailConsumer) MarshalJSON() (data 
 }
 
 type ScriptVersionSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   ScriptVersionSettingEditResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptVersionSettingEditResponse                          `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptVersionSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptVersionSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -2637,9 +2637,9 @@ type ScriptVersionSettingGetParams struct {
 }
 
 type ScriptVersionSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   ScriptVersionSettingGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptVersionSettingGetResponse                           `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptVersionSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptVersionSettingGetResponseEnvelopeJSON    `json:"-"`

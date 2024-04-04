@@ -61,12 +61,12 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 				}}),
 				StaticAddressing: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressing{
 					Address: cloudflare.F("192.0.2.0/24"),
-					DHCPRelay: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressingDHCPRelay{
+					DhcpRelay: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressingDhcpRelay{
 						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 					}),
-					DHCPServer: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressingDHCPServer{
-						DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
-						DHCPPoolStart: cloudflare.F("192.0.2.1"),
+					DhcpServer: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressingDhcpServer{
+						DhcpPoolEnd:   cloudflare.F("192.0.2.1"),
+						DhcpPoolStart: cloudflare.F("192.0.2.1"),
 						DNSServer:     cloudflare.F("192.0.2.1"),
 						Reservations: cloudflare.F(map[string]string{
 							"00:11:22:33:44:55": "192.0.2.100",
@@ -136,12 +136,12 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				StaticAddressing: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressing{
 					Address: cloudflare.F("192.0.2.0/24"),
-					DHCPRelay: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressingDHCPRelay{
+					DhcpRelay: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressingDhcpRelay{
 						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 					}),
-					DHCPServer: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressingDHCPServer{
-						DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
-						DHCPPoolStart: cloudflare.F("192.0.2.1"),
+					DhcpServer: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressingDhcpServer{
+						DhcpPoolEnd:   cloudflare.F("192.0.2.1"),
+						DhcpPoolStart: cloudflare.F("192.0.2.1"),
 						DNSServer:     cloudflare.F("192.0.2.1"),
 						Reservations: cloudflare.F(map[string]string{
 							"00:11:22:33:44:55": "192.0.2.100",

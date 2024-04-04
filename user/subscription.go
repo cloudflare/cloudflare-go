@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // SubscriptionService contains methods and other services that help with
@@ -36,7 +34,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 }
 
 // Updates a user's subscriptions.
-func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
+func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionUpdateResponseEnvelope
 	path := fmt.Sprintf("user/subscriptions/%s", identifier)
@@ -49,7 +47,7 @@ func (r *SubscriptionService) Update(ctx context.Context, identifier string, bod
 }
 
 // Deletes a user's subscription.
-func (r *SubscriptionService) Delete(ctx context.Context, identifier string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef3, err error) {
+func (r *SubscriptionService) Delete(ctx context.Context, identifier string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/subscriptions/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -57,7 +55,7 @@ func (r *SubscriptionService) Delete(ctx context.Context, identifier string, bod
 }
 
 // Updates zone subscriptions, either plan or add-ons.
-func (r *SubscriptionService) Edit(ctx context.Context, identifier string, body SubscriptionEditParams, opts ...option.RequestOption) (res *SubscriptionEditResponseUnion, err error) {
+func (r *SubscriptionService) Edit(ctx context.Context, identifier string, body SubscriptionEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
@@ -82,38 +80,26 @@ func (r *SubscriptionService) Get(ctx context.Context, opts ...option.RequestOpt
 	return
 }
 
-// Union satisfied by [user.SubscriptionUpdateResponseUnknown] or
-// [shared.UnionString].
-type SubscriptionUpdateResponseUnion interface {
-	ImplementsUserSubscriptionUpdateResponseUnion()
+type SubscriptionDeleteResponse struct {
+	// Subscription identifier tag.
+	SubscriptionID string                         `json:"subscription_id"`
+	JSON           subscriptionDeleteResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// subscriptionDeleteResponseJSON contains the JSON metadata for the struct
+// [SubscriptionDeleteResponse]
+type subscriptionDeleteResponseJSON struct {
+	SubscriptionID apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
-// Union satisfied by [user.SubscriptionEditResponseUnknown] or
-// [shared.UnionString].
-type SubscriptionEditResponseUnion interface {
-	ImplementsUserSubscriptionEditResponseUnion()
+func (r *SubscriptionDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r subscriptionDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type SubscriptionGetResponse struct {
@@ -418,9 +404,9 @@ func (r SubscriptionUpdateParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   SubscriptionUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -558,9 +544,9 @@ func (r SubscriptionEditParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   SubscriptionEditResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionEditResponseEnvelopeJSON    `json:"-"`
@@ -601,9 +587,9 @@ func (r SubscriptionEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   []SubscriptionGetResponse `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []SubscriptionGetResponse                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SubscriptionGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SubscriptionGetResponseEnvelopeResultInfo `json:"result_info"`

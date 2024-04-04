@@ -399,9 +399,9 @@ func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteNewResponse      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   RouteNewResponse                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
@@ -475,9 +475,9 @@ func (r RouteUpdateParamsScope) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteUpdateResponse   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   RouteUpdateResponse                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeUpdateResponseEnvelopeJSON    `json:"-"`
@@ -523,9 +523,9 @@ type RouteListParams struct {
 }
 
 type RouteListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteListResponse     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   RouteListResponse                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeListResponseEnvelopeJSON    `json:"-"`
@@ -576,9 +576,9 @@ func (r RouteDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteDeleteResponse   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   RouteDeleteResponse                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeDeleteResponseEnvelopeJSON    `json:"-"`
@@ -636,9 +636,9 @@ func (r RouteEmptyParamsRoute) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteEmptyResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteEmptyResponse    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   RouteEmptyResponse                                        `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteEmptyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeEmptyResponseEnvelopeJSON    `json:"-"`
@@ -684,9 +684,9 @@ type RouteGetParams struct {
 }
 
 type RouteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteGetResponse      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   RouteGetResponse                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeGetResponseEnvelopeJSON    `json:"-"`

@@ -55,8 +55,8 @@ type IntelPassiveDNSByIP struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Reverse DNS look-ups observed during the time period.
-	ReverseRecords []shared.UnnamedSchemaRef35 `json:"reverse_records"`
-	JSON           intelPassiveDNSByIPJSON     `json:"-"`
+	ReverseRecords []UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050 `json:"reverse_records"`
+	JSON           intelPassiveDNSByIPJSON                            `json:"-"`
 }
 
 // intelPassiveDNSByIPJSON contains the JSON metadata for the struct
@@ -75,6 +75,34 @@ func (r *IntelPassiveDNSByIP) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r intelPassiveDNSByIPJSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050 struct {
+	// First seen date of the DNS record during the time period.
+	FirstSeen time.Time `json:"first_seen" format:"date"`
+	// Hostname that the IP was observed resolving to.
+	Hostname interface{} `json:"hostname"`
+	// Last seen date of the DNS record during the time period.
+	LastSeen time.Time                                            `json:"last_seen" format:"date"`
+	JSON     unnamedSchemaRefB5e16cee4f32382c294201aedb9fc050JSON `json:"-"`
+}
+
+// unnamedSchemaRefB5e16cee4f32382c294201aedb9fc050JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050]
+type unnamedSchemaRefB5e16cee4f32382c294201aedb9fc050JSON struct {
+	FirstSeen   apijson.Field
+	Hostname    apijson.Field
+	LastSeen    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRefB5e16cee4f32382c294201aedb9fc050JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -114,9 +142,9 @@ func (r DNSGetParamsStartEndParams) URLQuery() (v url.Values) {
 }
 
 type DNSGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IntelPassiveDNSByIP   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IntelPassiveDNSByIP                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsGetResponseEnvelopeJSON    `json:"-"`

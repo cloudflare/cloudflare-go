@@ -6,13 +6,11 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // ProfileService contains methods and other services that help with interacting
@@ -33,7 +31,7 @@ func NewProfileService(opts ...option.RequestOption) (r *ProfileService) {
 }
 
 // Gets the current billing profile for the account.
-func (r *ProfileService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *ProfileGetResponseUnion, err error) {
+func (r *ProfileService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProfileGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/billing/profile", accountIdentifier)
@@ -45,26 +43,10 @@ func (r *ProfileService) Get(ctx context.Context, accountIdentifier interface{},
 	return
 }
 
-// Union satisfied by [billing.ProfileGetResponseUnknown] or [shared.UnionString].
-type ProfileGetResponseUnion interface {
-	ImplementsBillingProfileGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ProfileGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type ProfileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   ProfileGetResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    profileGetResponseEnvelopeJSON    `json:"-"`

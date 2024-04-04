@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AccessKeyService contains methods and other services that help with interacting
@@ -35,7 +33,7 @@ func NewAccessKeyService(opts ...option.RequestOption) (r *AccessKeyService) {
 }
 
 // Updates the Access key rotation settings for an account.
-func (r *AccessKeyService) Update(ctx context.Context, identifier string, body AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponseUnion, err error) {
+func (r *AccessKeyService) Update(ctx context.Context, identifier string, body AccessKeyUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
@@ -48,7 +46,7 @@ func (r *AccessKeyService) Update(ctx context.Context, identifier string, body A
 }
 
 // Gets the Access key rotation settings for an account.
-func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyGetResponseUnion, err error) {
+func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
@@ -61,7 +59,7 @@ func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...o
 }
 
 // Perfoms a key rotation for an account.
-func (r *AccessKeyService) Rotate(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyRotateResponseUnion, err error) {
+func (r *AccessKeyService) Rotate(ctx context.Context, identifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyRotateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/keys/rotate", identifier)
@@ -71,57 +69,6 @@ func (r *AccessKeyService) Rotate(ctx context.Context, identifier string, opts .
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [zero_trust.AccessKeyUpdateResponseUnknown] or
-// [shared.UnionString].
-type AccessKeyUpdateResponseUnion interface {
-	ImplementsZeroTrustAccessKeyUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [zero_trust.AccessKeyGetResponseUnknown] or
-// [shared.UnionString].
-type AccessKeyGetResponseUnion interface {
-	ImplementsZeroTrustAccessKeyGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [zero_trust.AccessKeyRotateResponseUnknown] or
-// [shared.UnionString].
-type AccessKeyRotateResponseUnion interface {
-	ImplementsZeroTrustAccessKeyRotateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyRotateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type AccessKeyUpdateParams struct {
@@ -134,9 +81,9 @@ func (r AccessKeyUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessKeyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   AccessKeyUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -186,9 +133,9 @@ func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   AccessKeyGetResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyGetResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -238,9 +185,9 @@ func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyRotateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   AccessKeyRotateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyRotateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.

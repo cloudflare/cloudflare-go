@@ -85,10 +85,10 @@ func (r qualitySpeedTopAsesResponseJSON) RawJSON() string {
 }
 
 type QualitySpeedTopAsesResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                         `json:"dateRange,required"`
-	LastUpdated    string                                        `json:"lastUpdated,required"`
-	ConfidenceInfo QualitySpeedTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           qualitySpeedTopAsesResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	ConfidenceInfo QualitySpeedTopAsesResponseMetaConfidenceInfo      `json:"confidenceInfo"`
+	JSON           qualitySpeedTopAsesResponseMetaJSON                `json:"-"`
 }
 
 // qualitySpeedTopAsesResponseMetaJSON contains the JSON metadata for the struct
@@ -110,9 +110,9 @@ func (r qualitySpeedTopAsesResponseMetaJSON) RawJSON() string {
 }
 
 type QualitySpeedTopAsesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                             `json:"annotations"`
-	Level       int64                                             `json:"level"`
-	JSON        qualitySpeedTopAsesResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        qualitySpeedTopAsesResponseMetaConfidenceInfoJSON  `json:"-"`
 }
 
 // qualitySpeedTopAsesResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -195,7 +195,7 @@ func (r qualitySpeedTopLocationsResponseJSON) RawJSON() string {
 }
 
 type QualitySpeedTopLocationsResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                              `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
 	LastUpdated    string                                             `json:"lastUpdated,required"`
 	ConfidenceInfo QualitySpeedTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           qualitySpeedTopLocationsResponseMetaJSON           `json:"-"`
@@ -220,7 +220,7 @@ func (r qualitySpeedTopLocationsResponseMetaJSON) RawJSON() string {
 }
 
 type QualitySpeedTopLocationsResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                  `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1     `json:"annotations"`
 	Level       int64                                                  `json:"level"`
 	JSON        qualitySpeedTopLocationsResponseMetaConfidenceInfoJSON `json:"-"`
 }

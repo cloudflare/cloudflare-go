@@ -35,7 +35,7 @@ func NewCaptionService(opts ...option.RequestOption) (r *CaptionService) {
 
 // Uploads the caption or subtitle file to the endpoint for a specific BCP47
 // language. One caption or subtitle file per language is allowed.
-func (r *CaptionService) Update(ctx context.Context, identifier string, language string, params CaptionUpdateParams, opts ...option.RequestOption) (res *CaptionUpdateResponseUnion, err error) {
+func (r *CaptionService) Update(ctx context.Context, identifier string, language string, params CaptionUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
@@ -97,23 +97,6 @@ func (r streamCaptionsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [stream.CaptionUpdateResponseUnknown] or
-// [shared.UnionString].
-type CaptionUpdateResponseUnion interface {
-	ImplementsStreamCaptionUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CaptionUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 // Union satisfied by [stream.CaptionDeleteResponseUnknown],
 // [stream.CaptionDeleteResponseArray] or [shared.UnionString].
 type CaptionDeleteResponseUnion interface {
@@ -151,9 +134,9 @@ func (r CaptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CaptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CaptionUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -204,9 +187,9 @@ func (r CaptionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CaptionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CaptionDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CaptionDeleteResponseUnion                                `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionDeleteResponseEnvelopeJSON    `json:"-"`
@@ -252,9 +235,9 @@ type CaptionGetParams struct {
 }
 
 type CaptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []StreamCaptions      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []StreamCaptions                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionGetResponseEnvelopeJSON    `json:"-"`

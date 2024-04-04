@@ -212,9 +212,9 @@ func (r PrefixBGPPrefixEditParamsOnDemand) MarshalJSON() (data []byte, err error
 }
 
 type PrefixBGPPrefixEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   AddressingIpamBGPPrefixes `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AddressingIpamBGPPrefixes                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPPrefixEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPPrefixEditResponseEnvelopeJSON    `json:"-"`
@@ -260,9 +260,9 @@ type PrefixBGPPrefixGetParams struct {
 }
 
 type PrefixBGPPrefixGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   AddressingIpamBGPPrefixes `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AddressingIpamBGPPrefixes                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPPrefixGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPPrefixGetResponseEnvelopeJSON    `json:"-"`

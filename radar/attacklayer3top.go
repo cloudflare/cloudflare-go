@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -101,10 +102,10 @@ func (r attackLayer3TopAttacksResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3TopAttacksResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                            `json:"dateRange,required"`
-	LastUpdated    string                                           `json:"lastUpdated,required"`
-	ConfidenceInfo AttackLayer3TopAttacksResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           attackLayer3TopAttacksResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	ConfidenceInfo AttackLayer3TopAttacksResponseMetaConfidenceInfo   `json:"confidenceInfo"`
+	JSON           attackLayer3TopAttacksResponseMetaJSON             `json:"-"`
 }
 
 // attackLayer3TopAttacksResponseMetaJSON contains the JSON metadata for the struct
@@ -126,7 +127,7 @@ func (r attackLayer3TopAttacksResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3TopAttacksResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1   `json:"annotations"`
 	Level       int64                                                `json:"level"`
 	JSON        attackLayer3TopAttacksResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -174,9 +175,9 @@ func (r attackLayer3TopAttacksResponseTop0JSON) RawJSON() string {
 }
 
 type AttackLayer3TopIndustryResponse struct {
-	Meta AttackLayer3TopIndustryResponseMeta   `json:"meta,required"`
-	Top0 []AttackLayer3TopIndustryResponseTop0 `json:"top_0,required"`
-	JSON attackLayer3TopIndustryResponseJSON   `json:"-"`
+	Meta AttackLayer3TopIndustryResponseMeta                       `json:"meta,required"`
+	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
+	JSON attackLayer3TopIndustryResponseJSON                       `json:"-"`
 }
 
 // attackLayer3TopIndustryResponseJSON contains the JSON metadata for the struct
@@ -197,10 +198,10 @@ func (r attackLayer3TopIndustryResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3TopIndustryResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                             `json:"dateRange,required"`
-	LastUpdated    string                                            `json:"lastUpdated,required"`
-	ConfidenceInfo AttackLayer3TopIndustryResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           attackLayer3TopIndustryResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	ConfidenceInfo AttackLayer3TopIndustryResponseMetaConfidenceInfo  `json:"confidenceInfo"`
+	JSON           attackLayer3TopIndustryResponseMetaJSON            `json:"-"`
 }
 
 // attackLayer3TopIndustryResponseMetaJSON contains the JSON metadata for the
@@ -222,7 +223,7 @@ func (r attackLayer3TopIndustryResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3TopIndustryResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                 `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1    `json:"annotations"`
 	Level       int64                                                 `json:"level"`
 	JSON        attackLayer3TopIndustryResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -244,33 +245,10 @@ func (r attackLayer3TopIndustryResponseMetaConfidenceInfoJSON) RawJSON() string 
 	return r.raw
 }
 
-type AttackLayer3TopIndustryResponseTop0 struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
-	JSON  attackLayer3TopIndustryResponseTop0JSON `json:"-"`
-}
-
-// attackLayer3TopIndustryResponseTop0JSON contains the JSON metadata for the
-// struct [AttackLayer3TopIndustryResponseTop0]
-type attackLayer3TopIndustryResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3TopIndustryResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3TopIndustryResponseTop0JSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer3TopVerticalResponse struct {
-	Meta AttackLayer3TopVerticalResponseMeta   `json:"meta,required"`
-	Top0 []AttackLayer3TopVerticalResponseTop0 `json:"top_0,required"`
-	JSON attackLayer3TopVerticalResponseJSON   `json:"-"`
+	Meta AttackLayer3TopVerticalResponseMeta                       `json:"meta,required"`
+	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
+	JSON attackLayer3TopVerticalResponseJSON                       `json:"-"`
 }
 
 // attackLayer3TopVerticalResponseJSON contains the JSON metadata for the struct
@@ -291,10 +269,10 @@ func (r attackLayer3TopVerticalResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3TopVerticalResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                             `json:"dateRange,required"`
-	LastUpdated    string                                            `json:"lastUpdated,required"`
-	ConfidenceInfo AttackLayer3TopVerticalResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           attackLayer3TopVerticalResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	ConfidenceInfo AttackLayer3TopVerticalResponseMetaConfidenceInfo  `json:"confidenceInfo"`
+	JSON           attackLayer3TopVerticalResponseMetaJSON            `json:"-"`
 }
 
 // attackLayer3TopVerticalResponseMetaJSON contains the JSON metadata for the
@@ -316,7 +294,7 @@ func (r attackLayer3TopVerticalResponseMetaJSON) RawJSON() string {
 }
 
 type AttackLayer3TopVerticalResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                 `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1    `json:"annotations"`
 	Level       int64                                                 `json:"level"`
 	JSON        attackLayer3TopVerticalResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -335,29 +313,6 @@ func (r *AttackLayer3TopVerticalResponseMetaConfidenceInfo) UnmarshalJSON(data [
 }
 
 func (r attackLayer3TopVerticalResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3TopVerticalResponseTop0 struct {
-	Name  string                                  `json:"name,required"`
-	Value string                                  `json:"value,required"`
-	JSON  attackLayer3TopVerticalResponseTop0JSON `json:"-"`
-}
-
-// attackLayer3TopVerticalResponseTop0JSON contains the JSON metadata for the
-// struct [AttackLayer3TopVerticalResponseTop0]
-type attackLayer3TopVerticalResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3TopVerticalResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3TopVerticalResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

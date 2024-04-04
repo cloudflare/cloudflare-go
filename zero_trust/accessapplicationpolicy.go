@@ -282,7 +282,7 @@ type ZeroTrustPoliciesExclude struct {
 	IP                   interface{}                  `json:"ip,required"`
 	IPList               interface{}                  `json:"ip_list,required"`
 	Certificate          interface{}                  `json:"certificate,required"`
-	Group                shared.UnnamedSchemaRef131   `json:"group"`
+	Group                interface{}                  `json:"group,required"`
 	AzureAd              interface{}                  `json:"azureAD,required"`
 	GitHubOrganization   interface{}                  `json:"github-organization,required"`
 	Gsuite               interface{}                  `json:"gsuite,required"`
@@ -730,8 +730,8 @@ func (r ZeroTrustPoliciesExcludeAccessCertificateRule) implementsZeroTrustZeroTr
 
 // Matches an Access group.
 type ZeroTrustPoliciesExcludeAccessAccessGroupRule struct {
-	Group shared.UnnamedSchemaRef131                        `json:"group,required"`
-	JSON  zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON `json:"-"`
+	Group ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON  `json:"-"`
 }
 
 // zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON contains the JSON metadata for
@@ -751,6 +751,28 @@ func (r zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON) RawJSON() string {
 }
 
 func (r ZeroTrustPoliciesExcludeAccessAccessGroupRule) implementsZeroTrustZeroTrustPoliciesExclude() {
+}
+
+type ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                 `json:"id,required"`
+	JSON zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup]
+type zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -1279,7 +1301,7 @@ type ZeroTrustPoliciesInclude struct {
 	IP                   interface{}                  `json:"ip,required"`
 	IPList               interface{}                  `json:"ip_list,required"`
 	Certificate          interface{}                  `json:"certificate,required"`
-	Group                shared.UnnamedSchemaRef131   `json:"group"`
+	Group                interface{}                  `json:"group,required"`
 	AzureAd              interface{}                  `json:"azureAD,required"`
 	GitHubOrganization   interface{}                  `json:"github-organization,required"`
 	Gsuite               interface{}                  `json:"gsuite,required"`
@@ -1727,8 +1749,8 @@ func (r ZeroTrustPoliciesIncludeAccessCertificateRule) implementsZeroTrustZeroTr
 
 // Matches an Access group.
 type ZeroTrustPoliciesIncludeAccessAccessGroupRule struct {
-	Group shared.UnnamedSchemaRef131                        `json:"group,required"`
-	JSON  zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON `json:"-"`
+	Group ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON  `json:"-"`
 }
 
 // zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON contains the JSON metadata for
@@ -1748,6 +1770,28 @@ func (r zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON) RawJSON() string {
 }
 
 func (r ZeroTrustPoliciesIncludeAccessAccessGroupRule) implementsZeroTrustZeroTrustPoliciesInclude() {
+}
+
+type ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                 `json:"id,required"`
+	JSON zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup]
+type zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -2276,7 +2320,7 @@ type ZeroTrustPoliciesRequire struct {
 	IP                   interface{}                  `json:"ip,required"`
 	IPList               interface{}                  `json:"ip_list,required"`
 	Certificate          interface{}                  `json:"certificate,required"`
-	Group                shared.UnnamedSchemaRef131   `json:"group"`
+	Group                interface{}                  `json:"group,required"`
 	AzureAd              interface{}                  `json:"azureAD,required"`
 	GitHubOrganization   interface{}                  `json:"github-organization,required"`
 	Gsuite               interface{}                  `json:"gsuite,required"`
@@ -2724,8 +2768,8 @@ func (r ZeroTrustPoliciesRequireAccessCertificateRule) implementsZeroTrustZeroTr
 
 // Matches an Access group.
 type ZeroTrustPoliciesRequireAccessAccessGroupRule struct {
-	Group shared.UnnamedSchemaRef131                        `json:"group,required"`
-	JSON  zeroTrustPoliciesRequireAccessAccessGroupRuleJSON `json:"-"`
+	Group ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  zeroTrustPoliciesRequireAccessAccessGroupRuleJSON  `json:"-"`
 }
 
 // zeroTrustPoliciesRequireAccessAccessGroupRuleJSON contains the JSON metadata for
@@ -2745,6 +2789,28 @@ func (r zeroTrustPoliciesRequireAccessAccessGroupRuleJSON) RawJSON() string {
 }
 
 func (r ZeroTrustPoliciesRequireAccessAccessGroupRule) implementsZeroTrustZeroTrustPoliciesRequire() {
+}
+
+type ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                 `json:"id,required"`
+	JSON zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct [ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup]
+type zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -3349,25 +3415,25 @@ func (r AccessApplicationPolicyNewParamsDecision) IsKnown() bool {
 
 // Matches a specific email.
 type AccessApplicationPolicyNewParamsInclude struct {
-	Email                param.Field[interface{}]                     `json:"email,required"`
-	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
-	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
-	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
-	IP                   param.Field[interface{}]                     `json:"ip,required"`
-	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
-	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
-	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
-	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
-	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
-	Okta                 param.Field[interface{}]                     `json:"okta,required"`
-	Saml                 param.Field[interface{}]                     `json:"saml,required"`
-	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}]                     `json:"geo,required"`
-	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+	Email                param.Field[interface{}] `json:"email,required"`
+	EmailList            param.Field[interface{}] `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
+	Everyone             param.Field[interface{}] `json:"everyone,required"`
+	IP                   param.Field[interface{}] `json:"ip,required"`
+	IPList               param.Field[interface{}] `json:"ip_list,required"`
+	Certificate          param.Field[interface{}] `json:"certificate,required"`
+	Group                param.Field[interface{}] `json:"group,required"`
+	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
+	Okta                 param.Field[interface{}] `json:"okta,required"`
+	Saml                 param.Field[interface{}] `json:"saml,required"`
+	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}] `json:"geo,required"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
 }
 
 func (r AccessApplicationPolicyNewParamsInclude) MarshalJSON() (data []byte, err error) {
@@ -3536,7 +3602,7 @@ func (r AccessApplicationPolicyNewParamsIncludeAccessCertificateRule) implements
 
 // Matches an Access group.
 type AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRule struct {
-	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
+	Group param.Field[AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRuleGroup] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -3544,6 +3610,15 @@ func (r AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRule) MarshalJSO
 }
 
 func (r AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyNewParamsIncludeUnion() {
+}
+
+type AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -3799,25 +3874,25 @@ func (r AccessApplicationPolicyNewParamsApprovalGroup) MarshalJSON() (data []byt
 
 // Matches a specific email.
 type AccessApplicationPolicyNewParamsExclude struct {
-	Email                param.Field[interface{}]                     `json:"email,required"`
-	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
-	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
-	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
-	IP                   param.Field[interface{}]                     `json:"ip,required"`
-	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
-	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
-	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
-	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
-	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
-	Okta                 param.Field[interface{}]                     `json:"okta,required"`
-	Saml                 param.Field[interface{}]                     `json:"saml,required"`
-	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}]                     `json:"geo,required"`
-	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+	Email                param.Field[interface{}] `json:"email,required"`
+	EmailList            param.Field[interface{}] `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
+	Everyone             param.Field[interface{}] `json:"everyone,required"`
+	IP                   param.Field[interface{}] `json:"ip,required"`
+	IPList               param.Field[interface{}] `json:"ip_list,required"`
+	Certificate          param.Field[interface{}] `json:"certificate,required"`
+	Group                param.Field[interface{}] `json:"group,required"`
+	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
+	Okta                 param.Field[interface{}] `json:"okta,required"`
+	Saml                 param.Field[interface{}] `json:"saml,required"`
+	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}] `json:"geo,required"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
 }
 
 func (r AccessApplicationPolicyNewParamsExclude) MarshalJSON() (data []byte, err error) {
@@ -3986,7 +4061,7 @@ func (r AccessApplicationPolicyNewParamsExcludeAccessCertificateRule) implements
 
 // Matches an Access group.
 type AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRule struct {
-	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
+	Group param.Field[AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRuleGroup] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -3994,6 +4069,15 @@ func (r AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRule) MarshalJSO
 }
 
 func (r AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyNewParamsExcludeUnion() {
+}
+
+type AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -4235,25 +4319,25 @@ func (r AccessApplicationPolicyNewParamsExcludeAccessDevicePostureRuleDevicePost
 
 // Matches a specific email.
 type AccessApplicationPolicyNewParamsRequire struct {
-	Email                param.Field[interface{}]                     `json:"email,required"`
-	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
-	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
-	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
-	IP                   param.Field[interface{}]                     `json:"ip,required"`
-	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
-	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
-	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
-	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
-	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
-	Okta                 param.Field[interface{}]                     `json:"okta,required"`
-	Saml                 param.Field[interface{}]                     `json:"saml,required"`
-	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}]                     `json:"geo,required"`
-	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+	Email                param.Field[interface{}] `json:"email,required"`
+	EmailList            param.Field[interface{}] `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
+	Everyone             param.Field[interface{}] `json:"everyone,required"`
+	IP                   param.Field[interface{}] `json:"ip,required"`
+	IPList               param.Field[interface{}] `json:"ip_list,required"`
+	Certificate          param.Field[interface{}] `json:"certificate,required"`
+	Group                param.Field[interface{}] `json:"group,required"`
+	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
+	Okta                 param.Field[interface{}] `json:"okta,required"`
+	Saml                 param.Field[interface{}] `json:"saml,required"`
+	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}] `json:"geo,required"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
 }
 
 func (r AccessApplicationPolicyNewParamsRequire) MarshalJSON() (data []byte, err error) {
@@ -4422,7 +4506,7 @@ func (r AccessApplicationPolicyNewParamsRequireAccessCertificateRule) implements
 
 // Matches an Access group.
 type AccessApplicationPolicyNewParamsRequireAccessAccessGroupRule struct {
-	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
+	Group param.Field[AccessApplicationPolicyNewParamsRequireAccessAccessGroupRuleGroup] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyNewParamsRequireAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -4430,6 +4514,15 @@ func (r AccessApplicationPolicyNewParamsRequireAccessAccessGroupRule) MarshalJSO
 }
 
 func (r AccessApplicationPolicyNewParamsRequireAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyNewParamsRequireUnion() {
+}
+
+type AccessApplicationPolicyNewParamsRequireAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessApplicationPolicyNewParamsRequireAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -4670,9 +4763,9 @@ func (r AccessApplicationPolicyNewParamsRequireAccessDevicePostureRuleDevicePost
 }
 
 type AccessApplicationPolicyNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustPolicies     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustPolicies                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyNewResponseEnvelopeJSON    `json:"-"`
@@ -4775,25 +4868,25 @@ func (r AccessApplicationPolicyUpdateParamsDecision) IsKnown() bool {
 
 // Matches a specific email.
 type AccessApplicationPolicyUpdateParamsInclude struct {
-	Email                param.Field[interface{}]                     `json:"email,required"`
-	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
-	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
-	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
-	IP                   param.Field[interface{}]                     `json:"ip,required"`
-	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
-	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
-	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
-	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
-	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
-	Okta                 param.Field[interface{}]                     `json:"okta,required"`
-	Saml                 param.Field[interface{}]                     `json:"saml,required"`
-	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}]                     `json:"geo,required"`
-	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+	Email                param.Field[interface{}] `json:"email,required"`
+	EmailList            param.Field[interface{}] `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
+	Everyone             param.Field[interface{}] `json:"everyone,required"`
+	IP                   param.Field[interface{}] `json:"ip,required"`
+	IPList               param.Field[interface{}] `json:"ip_list,required"`
+	Certificate          param.Field[interface{}] `json:"certificate,required"`
+	Group                param.Field[interface{}] `json:"group,required"`
+	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
+	Okta                 param.Field[interface{}] `json:"okta,required"`
+	Saml                 param.Field[interface{}] `json:"saml,required"`
+	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}] `json:"geo,required"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsInclude) MarshalJSON() (data []byte, err error) {
@@ -4962,7 +5055,7 @@ func (r AccessApplicationPolicyUpdateParamsIncludeAccessCertificateRule) impleme
 
 // Matches an Access group.
 type AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRule struct {
-	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
+	Group param.Field[AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRuleGroup] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -4970,6 +5063,15 @@ func (r AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRule) Marshal
 }
 
 func (r AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateParamsIncludeUnion() {
+}
+
+type AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -5225,25 +5327,25 @@ func (r AccessApplicationPolicyUpdateParamsApprovalGroup) MarshalJSON() (data []
 
 // Matches a specific email.
 type AccessApplicationPolicyUpdateParamsExclude struct {
-	Email                param.Field[interface{}]                     `json:"email,required"`
-	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
-	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
-	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
-	IP                   param.Field[interface{}]                     `json:"ip,required"`
-	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
-	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
-	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
-	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
-	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
-	Okta                 param.Field[interface{}]                     `json:"okta,required"`
-	Saml                 param.Field[interface{}]                     `json:"saml,required"`
-	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}]                     `json:"geo,required"`
-	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+	Email                param.Field[interface{}] `json:"email,required"`
+	EmailList            param.Field[interface{}] `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
+	Everyone             param.Field[interface{}] `json:"everyone,required"`
+	IP                   param.Field[interface{}] `json:"ip,required"`
+	IPList               param.Field[interface{}] `json:"ip_list,required"`
+	Certificate          param.Field[interface{}] `json:"certificate,required"`
+	Group                param.Field[interface{}] `json:"group,required"`
+	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
+	Okta                 param.Field[interface{}] `json:"okta,required"`
+	Saml                 param.Field[interface{}] `json:"saml,required"`
+	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}] `json:"geo,required"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsExclude) MarshalJSON() (data []byte, err error) {
@@ -5412,7 +5514,7 @@ func (r AccessApplicationPolicyUpdateParamsExcludeAccessCertificateRule) impleme
 
 // Matches an Access group.
 type AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRule struct {
-	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
+	Group param.Field[AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRuleGroup] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -5420,6 +5522,15 @@ func (r AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRule) Marshal
 }
 
 func (r AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateParamsExcludeUnion() {
+}
+
+type AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -5661,25 +5772,25 @@ func (r AccessApplicationPolicyUpdateParamsExcludeAccessDevicePostureRuleDeviceP
 
 // Matches a specific email.
 type AccessApplicationPolicyUpdateParamsRequire struct {
-	Email                param.Field[interface{}]                     `json:"email,required"`
-	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
-	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
-	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
-	IP                   param.Field[interface{}]                     `json:"ip,required"`
-	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
-	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
-	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
-	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
-	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
-	Okta                 param.Field[interface{}]                     `json:"okta,required"`
-	Saml                 param.Field[interface{}]                     `json:"saml,required"`
-	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}]                     `json:"geo,required"`
-	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+	Email                param.Field[interface{}] `json:"email,required"`
+	EmailList            param.Field[interface{}] `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
+	Everyone             param.Field[interface{}] `json:"everyone,required"`
+	IP                   param.Field[interface{}] `json:"ip,required"`
+	IPList               param.Field[interface{}] `json:"ip_list,required"`
+	Certificate          param.Field[interface{}] `json:"certificate,required"`
+	Group                param.Field[interface{}] `json:"group,required"`
+	AzureAd              param.Field[interface{}] `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}] `json:"gsuite,required"`
+	Okta                 param.Field[interface{}] `json:"okta,required"`
+	Saml                 param.Field[interface{}] `json:"saml,required"`
+	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}] `json:"geo,required"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsRequire) MarshalJSON() (data []byte, err error) {
@@ -5848,7 +5959,7 @@ func (r AccessApplicationPolicyUpdateParamsRequireAccessCertificateRule) impleme
 
 // Matches an Access group.
 type AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRule struct {
-	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
+	Group param.Field[AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRuleGroup] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -5856,6 +5967,15 @@ func (r AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRule) Marshal
 }
 
 func (r AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateParamsRequireUnion() {
+}
+
+type AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID param.Field[string] `json:"id,required"`
+}
+
+func (r AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -6096,9 +6216,9 @@ func (r AccessApplicationPolicyUpdateParamsRequireAccessDevicePostureRuleDeviceP
 }
 
 type AccessApplicationPolicyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustPolicies     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustPolicies                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -6153,9 +6273,9 @@ type AccessApplicationPolicyDeleteParams struct {
 }
 
 type AccessApplicationPolicyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   AccessApplicationPolicyDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AccessApplicationPolicyDeleteResponse                     `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyDeleteResponseEnvelopeJSON    `json:"-"`
@@ -6203,9 +6323,9 @@ type AccessApplicationPolicyGetParams struct {
 }
 
 type AccessApplicationPolicyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustPolicies     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustPolicies                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyGetResponseEnvelopeJSON    `json:"-"`

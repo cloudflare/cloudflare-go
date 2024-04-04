@@ -99,9 +99,9 @@ func (r TunnelManagementNewParamsResource) IsKnown() bool {
 }
 
 type TunnelManagementNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   TunnelManagementNewResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   TunnelManagementNewResponseUnion                          `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelManagementNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelManagementNewResponseEnvelopeJSON    `json:"-"`

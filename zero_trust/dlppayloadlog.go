@@ -33,7 +33,7 @@ func NewDLPPayloadLogService(opts ...option.RequestOption) (r *DLPPayloadLogServ
 }
 
 // Updates the DLP payload log settings for this account.
-func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogUpdateParams, opts ...option.RequestOption) (res *DLPPayloadLogUpdateResponse, err error) {
+func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogUpdateParams, opts ...option.RequestOption) (res *UnnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPPayloadLogUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/payload_log", params.AccountID)
@@ -46,7 +46,7 @@ func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogU
 }
 
 // Gets the current DLP payload log settings for this account.
-func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetParams, opts ...option.RequestOption) (res *DLPPayloadLogGetResponse, err error) {
+func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetParams, opts ...option.RequestOption) (res *UnnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPPayloadLogGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/payload_log", query.AccountID)
@@ -58,45 +58,24 @@ func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetPa
 	return
 }
 
-type DLPPayloadLogUpdateResponse struct {
-	PublicKey string                          `json:"public_key,required,nullable"`
-	JSON      dlpPayloadLogUpdateResponseJSON `json:"-"`
+type UnnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5 struct {
+	PublicKey string                                               `json:"public_key,required,nullable"`
+	JSON      unnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5JSON `json:"-"`
 }
 
-// dlpPayloadLogUpdateResponseJSON contains the JSON metadata for the struct
-// [DLPPayloadLogUpdateResponse]
-type dlpPayloadLogUpdateResponseJSON struct {
+// unnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5]
+type unnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5JSON struct {
 	PublicKey   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPPayloadLogUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UnnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpPayloadLogUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPPayloadLogGetResponse struct {
-	PublicKey string                       `json:"public_key,required,nullable"`
-	JSON      dlpPayloadLogGetResponseJSON `json:"-"`
-}
-
-// dlpPayloadLogGetResponseJSON contains the JSON metadata for the struct
-// [DLPPayloadLogGetResponse]
-type dlpPayloadLogGetResponseJSON struct {
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPPayloadLogGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpPayloadLogGetResponseJSON) RawJSON() string {
+func (r unnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -112,9 +91,9 @@ func (r DLPPayloadLogUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPPayloadLogUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   DLPPayloadLogUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   UnnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DLPPayloadLogUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpPayloadLogUpdateResponseEnvelopeJSON    `json:"-"`
@@ -160,9 +139,9 @@ type DLPPayloadLogGetParams struct {
 }
 
 type DLPPayloadLogGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   DLPPayloadLogGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   UnnamedSchemaRefE31ff4936b1b42746e8cb62bbc87f2e5          `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DLPPayloadLogGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpPayloadLogGetResponseEnvelopeJSON    `json:"-"`

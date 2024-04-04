@@ -81,9 +81,9 @@ func (r LOADocumentNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LOADocumentNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   LOADocumentNewResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   LOADocumentNewResponse                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success LOADocumentNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loaDocumentNewResponseEnvelopeJSON    `json:"-"`

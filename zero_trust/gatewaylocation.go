@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // GatewayLocationService contains methods and other services that help with
@@ -86,7 +84,7 @@ func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query Gatew
 }
 
 // Deletes a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, params GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponseUnion, err error) {
+func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, params GatewayLocationDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", params.AccountID, locationID)
@@ -179,23 +177,6 @@ func (r zeroTrustGatewayLocationsNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [zero_trust.GatewayLocationDeleteResponseUnknown] or
-// [shared.UnionString].
-type GatewayLocationDeleteResponseUnion interface {
-	ImplementsZeroTrustGatewayLocationDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayLocationDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type GatewayLocationNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the location.
@@ -222,9 +203,9 @@ func (r GatewayLocationNewParamsNetwork) MarshalJSON() (data []byte, err error) 
 }
 
 type GatewayLocationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   ZeroTrustGatewayLocations `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayLocations                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationNewResponseEnvelopeJSON    `json:"-"`
@@ -290,9 +271,9 @@ func (r GatewayLocationUpdateParamsNetwork) MarshalJSON() (data []byte, err erro
 }
 
 type GatewayLocationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   ZeroTrustGatewayLocations `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayLocations                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -346,9 +327,9 @@ func (r GatewayLocationDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLocationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   GatewayLocationDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -393,9 +374,9 @@ type GatewayLocationGetParams struct {
 }
 
 type GatewayLocationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   ZeroTrustGatewayLocations `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayLocations                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationGetResponseEnvelopeJSON    `json:"-"`

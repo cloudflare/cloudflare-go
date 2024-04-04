@@ -86,7 +86,7 @@ func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, rule
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *WAFPackageRuleGetResponseUnion, err error) {
+func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageRuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", query.ZoneID, packageID, ruleID)
@@ -98,6 +98,32 @@ func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleI
 	return
 }
 
+// The rule group to which the current WAF rule belongs.
+type UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 struct {
+	// The unique identifier of the rule group.
+	ID string `json:"id"`
+	// The name of the rule group.
+	Name string                                               `json:"name"`
+	JSON unnamedSchemaRef532d8b97684c9032dd36bae8acddebf5JSON `json:"-"`
+}
+
+// unnamedSchemaRef532d8b97684c9032dd36bae8acddebf5JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5]
+type unnamedSchemaRef532d8b97684c9032dd36bae8acddebf5JSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef532d8b97684c9032dd36bae8acddebf5JSON) RawJSON() string {
+	return r.raw
+}
+
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
 // configure the total scoring threshold through the 'sensitivity' property of the
@@ -106,7 +132,7 @@ type WAFManagedRulesRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
 	// The unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// The unique identifier of a WAF package.
@@ -197,7 +223,7 @@ type WAFManagedRulesRuleWAFManagedRulesAnomalyRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
 	Mode WAFManagedRulesRuleWAFManagedRulesAnomalyRuleMode `json:"mode,required"`
@@ -280,7 +306,7 @@ type WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
 	// The action that the current WAF rule will perform when triggered. Applies to
 	// traditional (deny) WAF rules.
 	Mode WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
@@ -387,7 +413,7 @@ type WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
 	// When set to `on`, the current rule will be used when evaluating the request.
 	// Applies to traditional (allow) WAF rules.
 	Mode WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
@@ -488,7 +514,7 @@ type WAFPackageRuleEditResponse struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
 	// The unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// The unique identifier of a WAF package.
@@ -580,7 +606,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleMode `json:"mode,required"`
@@ -664,7 +690,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
 	// The action that the current WAF rule will perform when triggered. Applies to
 	// traditional (deny) WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
@@ -772,7 +798,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule struct {
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	Group UnnamedSchemaRef532d8b97684c9032dd36bae8acddebf5 `json:"group,required"`
 	// When set to `on`, the current rule will be used when evaluating the request.
 	// Applies to traditional (allow) WAF rules.
 	Mode WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
@@ -864,23 +890,6 @@ func (r WAFPackageRuleEditResponseMode) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [firewall.WAFPackageRuleGetResponseUnknown] or
-// [shared.UnionString].
-type WAFPackageRuleGetResponseUnion interface {
-	ImplementsFirewallWAFPackageRuleGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageRuleGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type WAFPackageRuleListParams struct {
@@ -1019,8 +1028,8 @@ func (r WAFPackageRuleEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageRuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// When triggered, anomaly detection WAF rules contribute to an overall threat
 	// score that will determine if a request is considered malicious. You can
 	// configure the total scoring threshold through the 'sensitivity' property of the
@@ -1071,9 +1080,9 @@ type WAFPackageRuleGetParams struct {
 }
 
 type WAFPackageRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   WAFPackageRuleGetResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageRuleGetResponseEnvelopeJSON    `json:"-"`

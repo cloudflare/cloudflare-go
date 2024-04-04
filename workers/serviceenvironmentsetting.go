@@ -168,10 +168,10 @@ func (r serviceEnvironmentSettingGetResponseTailConsumerJSON) RawJSON() string {
 
 type ServiceEnvironmentSettingEditParams struct {
 	// Identifier
-	AccountID param.Field[string]                                    `path:"account_id,required"`
-	Errors    param.Field[[]shared.ResponseInfoParam]                `json:"errors,required"`
-	Messages  param.Field[[]shared.ResponseInfoParam]                `json:"messages,required"`
-	Result    param.Field[ServiceEnvironmentSettingEditParamsResult] `json:"result,required"`
+	AccountID param.Field[string]                                                         `path:"account_id,required"`
+	Errors    param.Field[[]shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param] `json:"errors,required"`
+	Messages  param.Field[[]shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param] `json:"messages,required"`
+	Result    param.Field[ServiceEnvironmentSettingEditParamsResult]                      `json:"result,required"`
 	// Whether the API call was successful
 	Success param.Field[ServiceEnvironmentSettingEditParamsSuccess] `json:"success,required"`
 }
@@ -221,9 +221,9 @@ func (r ServiceEnvironmentSettingEditParamsSuccess) IsKnown() bool {
 }
 
 type ServiceEnvironmentSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   ServiceEnvironmentSettingEditResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ServiceEnvironmentSettingEditResponse                     `json:"result,required"`
 	// Whether the API call was successful
 	Success ServiceEnvironmentSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    serviceEnvironmentSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -269,9 +269,9 @@ type ServiceEnvironmentSettingGetParams struct {
 }
 
 type ServiceEnvironmentSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                `json:"errors,required"`
-	Messages []shared.ResponseInfo                `json:"messages,required"`
-	Result   ServiceEnvironmentSettingGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ServiceEnvironmentSettingGetResponse                      `json:"result,required"`
 	// Whether the API call was successful
 	Success ServiceEnvironmentSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    serviceEnvironmentSettingGetResponseEnvelopeJSON    `json:"-"`

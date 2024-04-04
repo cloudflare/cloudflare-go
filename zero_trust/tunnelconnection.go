@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // TunnelConnectionService contains methods and other services that help with
@@ -37,7 +35,7 @@ func NewTunnelConnectionService(opts ...option.RequestOption) (r *TunnelConnecti
 
 // Removes connections that are in a disconnected or pending reconnect state. We
 // recommend running this command after shutting down a tunnel.
-func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, params TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponseUnion, err error) {
+func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, params TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConnectionDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s/connections", params.AccountID, tunnelID)
@@ -151,32 +149,6 @@ func (r tunnelTunnelClientConnJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [zero_trust.TunnelConnectionDeleteResponseUnknown],
-// [zero_trust.TunnelConnectionDeleteResponseArray] or [shared.UnionString].
-type TunnelConnectionDeleteResponseUnion interface {
-	ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelConnectionDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TunnelConnectionDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type TunnelConnectionDeleteResponseArray []interface{}
-
-func (r TunnelConnectionDeleteResponseArray) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion() {
-}
-
 type TunnelConnectionDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string]      `path:"account_id,required"`
@@ -188,9 +160,9 @@ func (r TunnelConnectionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelConnectionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   TunnelConnectionDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success TunnelConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConnectionDeleteResponseEnvelopeJSON    `json:"-"`
@@ -236,9 +208,9 @@ type TunnelConnectionGetParams struct {
 }
 
 type TunnelConnectionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []TunnelTunnelClient  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []TunnelTunnelClient                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    TunnelConnectionGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo TunnelConnectionGetResponseEnvelopeResultInfo `json:"result_info"`
