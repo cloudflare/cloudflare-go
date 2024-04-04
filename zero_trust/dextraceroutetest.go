@@ -83,7 +83,7 @@ type DigitalExperienceMonitoringTracerouteDetails struct {
 	Kind     DigitalExperienceMonitoringTracerouteDetailsKind `json:"kind,required"`
 	// The name of the Traceroute synthetic application test
 	Name                  string                                                              `json:"name,required"`
-	TargetPolicies        []DigitalExperienceMonitoringTracerouteDetailsTargetPolicy          `json:"target_policies"`
+	TargetPolicies        []UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11                  `json:"target_policies"`
 	Targeted              bool                                                                `json:"targeted"`
 	TracerouteStats       DigitalExperienceMonitoringTracerouteDetailsTracerouteStats         `json:"tracerouteStats,nullable"`
 	TracerouteStatsByColo []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColo `json:"tracerouteStatsByColo"`
@@ -125,33 +125,6 @@ func (r DigitalExperienceMonitoringTracerouteDetailsKind) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type DigitalExperienceMonitoringTracerouteDetailsTargetPolicy struct {
-	ID string `json:"id,required"`
-	// Whether the policy is the default for the account
-	Default bool                                                         `json:"default,required"`
-	Name    string                                                       `json:"name,required"`
-	JSON    digitalExperienceMonitoringTracerouteDetailsTargetPolicyJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringTracerouteDetailsTargetPolicyJSON contains the JSON
-// metadata for the struct
-// [DigitalExperienceMonitoringTracerouteDetailsTargetPolicy]
-type digitalExperienceMonitoringTracerouteDetailsTargetPolicyJSON struct {
-	ID          apijson.Field
-	Default     apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTracerouteDetailsTargetPolicy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTracerouteDetailsTargetPolicyJSON) RawJSON() string {
-	return r.raw
 }
 
 type DigitalExperienceMonitoringTracerouteDetailsTracerouteStats struct {
@@ -977,9 +950,9 @@ func (r DEXTracerouteTestGetParamsInterval) IsKnown() bool {
 }
 
 type DEXTracerouteTestGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                        `json:"errors,required"`
-	Messages []shared.ResponseInfo                        `json:"messages,required"`
-	Result   DigitalExperienceMonitoringTracerouteDetails `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DigitalExperienceMonitoringTracerouteDetails              `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestGetResponseEnvelopeJSON    `json:"-"`
@@ -1057,9 +1030,9 @@ func (r DEXTracerouteTestNetworkPathParamsInterval) IsKnown() bool {
 }
 
 type DEXTracerouteTestNetworkPathResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                `json:"errors,required"`
-	Messages []shared.ResponseInfo                                `json:"messages,required"`
-	Result   DigitalExperienceMonitoringTracerouteTestNetworkPath `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DigitalExperienceMonitoringTracerouteTestNetworkPath      `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestNetworkPathResponseEnvelopeJSON    `json:"-"`
@@ -1123,9 +1096,9 @@ func (r DEXTracerouteTestPercentilesParams) URLQuery() (v url.Values) {
 }
 
 type DEXTracerouteTestPercentilesResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                                   `json:"messages,required"`
-	Result   DigitalExperienceMonitoringTracerouteDetailsPercentiles `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DigitalExperienceMonitoringTracerouteDetailsPercentiles   `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestPercentilesResponseEnvelopeJSON    `json:"-"`

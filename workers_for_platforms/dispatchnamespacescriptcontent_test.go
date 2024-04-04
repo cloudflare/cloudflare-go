@@ -40,7 +40,7 @@ func TestDispatchNamespaceScriptContentUpdateWithOptionalParams(t *testing.T) {
 		workers_for_platforms.DispatchNamespaceScriptContentUpdateParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
-			Metadata: cloudflare.F(shared.UnnamedSchemaRef51Param{
+			Metadata: cloudflare.F(shared.UnnamedSchemaRefEe1e79edcb234d14c4dd266880f2fd24Param{
 				BodyPart:   cloudflare.F("worker.js"),
 				MainModule: cloudflare.F("worker.js"),
 			}),

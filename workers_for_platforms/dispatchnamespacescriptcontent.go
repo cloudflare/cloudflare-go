@@ -70,9 +70,9 @@ type DispatchNamespaceScriptContentUpdateParams struct {
 	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name.
 	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[shared.UnnamedSchemaRef51Param] `json:"metadata"`
-	CfWorkerBodyPart       param.Field[string]                         `header:"CF-WORKER-BODY-PART"`
-	CfWorkerMainModulePart param.Field[string]                         `header:"CF-WORKER-MAIN-MODULE-PART"`
+	Metadata               param.Field[shared.UnnamedSchemaRefEe1e79edcb234d14c4dd266880f2fd24Param] `json:"metadata"`
+	CfWorkerBodyPart       param.Field[string]                                                       `header:"CF-WORKER-BODY-PART"`
+	CfWorkerMainModulePart param.Field[string]                                                       `header:"CF-WORKER-MAIN-MODULE-PART"`
 }
 
 func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -91,9 +91,9 @@ func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []b
 }
 
 type DispatchNamespaceScriptContentUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   workers.WorkersScript `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   workers.WorkersScript                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptContentUpdateResponseEnvelopeJSON    `json:"-"`

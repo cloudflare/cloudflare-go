@@ -35,7 +35,7 @@ func NewHoldService(opts ...option.RequestOption) (r *HoldService) {
 
 // Enforce a zone hold on the zone, blocking the creation and activation of zones
 // with this zone's hostname.
-func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...option.RequestOption) (res *HoldNewResponse, err error) {
+func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...option.RequestOption) (res *UnnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HoldNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
@@ -49,7 +49,7 @@ func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...opt
 
 // Stop enforcement of a zone hold on the zone, permanently or temporarily,
 // allowing the creation and activation of zones with this zone's hostname.
-func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts ...option.RequestOption) (res *UnnamedSchemaRef64, err error) {
+func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts ...option.RequestOption) (res *UnnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HoldDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
@@ -63,7 +63,7 @@ func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts 
 
 // Retrieve whether the zone is subject to a zone hold, and metadata about the
 // hold.
-func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...option.RequestOption) (res *HoldGetResponse, err error) {
+func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...option.RequestOption) (res *UnnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HoldGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hold", query.ZoneID)
@@ -75,16 +75,16 @@ func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...opti
 	return
 }
 
-type UnnamedSchemaRef64 struct {
-	Hold              bool                   `json:"hold"`
-	HoldAfter         string                 `json:"hold_after"`
-	IncludeSubdomains string                 `json:"include_subdomains"`
-	JSON              unnamedSchemaRef64JSON `json:"-"`
+type UnnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820 struct {
+	Hold              bool                                                 `json:"hold"`
+	HoldAfter         string                                               `json:"hold_after"`
+	IncludeSubdomains string                                               `json:"include_subdomains"`
+	JSON              unnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820JSON `json:"-"`
 }
 
-// unnamedSchemaRef64JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef64]
-type unnamedSchemaRef64JSON struct {
+// unnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820]
+type unnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820JSON struct {
 	Hold              apijson.Field
 	HoldAfter         apijson.Field
 	IncludeSubdomains apijson.Field
@@ -92,59 +92,11 @@ type unnamedSchemaRef64JSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef64) UnmarshalJSON(data []byte) (err error) {
+func (r *UnnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef64JSON) RawJSON() string {
-	return r.raw
-}
-
-type HoldNewResponse struct {
-	Hold              bool                `json:"hold"`
-	HoldAfter         string              `json:"hold_after"`
-	IncludeSubdomains string              `json:"include_subdomains"`
-	JSON              holdNewResponseJSON `json:"-"`
-}
-
-// holdNewResponseJSON contains the JSON metadata for the struct [HoldNewResponse]
-type holdNewResponseJSON struct {
-	Hold              apijson.Field
-	HoldAfter         apijson.Field
-	IncludeSubdomains apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *HoldNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r holdNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type HoldGetResponse struct {
-	Hold              bool                `json:"hold"`
-	HoldAfter         string              `json:"hold_after"`
-	IncludeSubdomains string              `json:"include_subdomains"`
-	JSON              holdGetResponseJSON `json:"-"`
-}
-
-// holdGetResponseJSON contains the JSON metadata for the struct [HoldGetResponse]
-type holdGetResponseJSON struct {
-	Hold              apijson.Field
-	HoldAfter         apijson.Field
-	IncludeSubdomains apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *HoldGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r holdGetResponseJSON) RawJSON() string {
+func (r unnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820JSON) RawJSON() string {
 	return r.raw
 }
 
@@ -167,9 +119,9 @@ func (r HoldNewParams) URLQuery() (v url.Values) {
 }
 
 type HoldNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   HoldNewResponse       `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   UnnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820          `json:"result,required"`
 	// Whether the API call was successful
 	Success HoldNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdNewResponseEnvelopeJSON    `json:"-"`
@@ -227,8 +179,8 @@ func (r HoldDeleteParams) URLQuery() (v url.Values) {
 }
 
 type HoldDeleteResponseEnvelope struct {
-	Result UnnamedSchemaRef64             `json:"result"`
-	JSON   holdDeleteResponseEnvelopeJSON `json:"-"`
+	Result UnnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820 `json:"result"`
+	JSON   holdDeleteResponseEnvelopeJSON                   `json:"-"`
 }
 
 // holdDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -253,9 +205,9 @@ type HoldGetParams struct {
 }
 
 type HoldGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   HoldGetResponse       `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   UnnamedSchemaRef45004a9444b6da9f88158ed2fb9a5820          `json:"result,required"`
 	// Whether the API call was successful
 	Success HoldGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdGetResponseEnvelopeJSON    `json:"-"`

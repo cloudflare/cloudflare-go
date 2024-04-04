@@ -169,8 +169,8 @@ func (r AccessTagNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessTagNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A tag
 	Result ZeroTrustTag `json:"result,required"`
 	// Whether the API call was successful
@@ -222,8 +222,8 @@ func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessTagUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A tag
 	Result ZeroTrustTag `json:"result,required"`
 	// Whether the API call was successful
@@ -266,9 +266,9 @@ func (r AccessTagUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessTagDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   AccessTagDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AccessTagDeleteResponse                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessTagDeleteResponseEnvelopeJSON    `json:"-"`
@@ -309,8 +309,8 @@ func (r AccessTagDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessTagGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A tag
 	Result ZeroTrustTag `json:"result,required"`
 	// Whether the API call was successful

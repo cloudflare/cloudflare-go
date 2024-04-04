@@ -70,7 +70,7 @@ func (r *DevicePostureIntegrationService) ListAutoPaging(ctx context.Context, qu
 }
 
 // Delete a configured device posture integration.
-func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, params DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
+func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, params DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/posture/integration/%s", params.AccountID, integrationID)
@@ -394,9 +394,9 @@ func (r DevicePostureIntegrationNewParamsType) IsKnown() bool {
 }
 
 type DevicePostureIntegrationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   DevicePostureIntegrations `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DevicePostureIntegrations                                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationNewResponseEnvelopeJSON    `json:"-"`
@@ -450,9 +450,9 @@ func (r DevicePostureIntegrationDeleteParams) MarshalJSON() (data []byte, err er
 }
 
 type DevicePostureIntegrationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -693,9 +693,9 @@ func (r DevicePostureIntegrationEditParamsType) IsKnown() bool {
 }
 
 type DevicePostureIntegrationEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   DevicePostureIntegrations `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DevicePostureIntegrations                                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationEditResponseEnvelopeJSON    `json:"-"`
@@ -740,9 +740,9 @@ type DevicePostureIntegrationGetParams struct {
 }
 
 type DevicePostureIntegrationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   DevicePostureIntegrations `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DevicePostureIntegrations                                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationGetResponseEnvelopeJSON    `json:"-"`

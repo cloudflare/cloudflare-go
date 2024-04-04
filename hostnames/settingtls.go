@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -13,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // SettingTLSService contains methods and other services that help with interacting
@@ -33,7 +35,7 @@ func NewSettingTLSService(opts ...option.RequestOption) (r *SettingTLSService) {
 }
 
 // Update the tls setting value for the hostname.
-func (r *SettingTLSService) Update(ctx context.Context, settingID SettingTLSUpdateParamsSettingID, hostname string, params SettingTLSUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65, err error) {
+func (r *SettingTLSService) Update(ctx context.Context, settingID SettingTLSUpdateParamsSettingID, hostname string, params SettingTLSUpdateParams, opts ...option.RequestOption) (res *HostnameStting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", params.ZoneID, settingID, hostname)
@@ -59,7 +61,7 @@ func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDele
 }
 
 // List the requested TLS setting for the hostnames under this zone.
-func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetParamsSettingID, query SettingTLSGetParams, opts ...option.RequestOption) (res *[]shared.UnnamedSchemaRef65, err error) {
+func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetParamsSettingID, query SettingTLSGetParams, opts ...option.RequestOption) (res *[]SettingTLSGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v", query.ZoneID, settingID)
@@ -103,6 +105,135 @@ func (r hostnameSettingDeleteJSON) RawJSON() string {
 	return r.raw
 }
 
+type HostnameStting struct {
+	// This is the time the tls setting was originally created for this hostname.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The hostname for which the tls settings are set.
+	Hostname string `json:"hostname"`
+	// Deployment status for the given tls setting.
+	Status string `json:"status"`
+	// This is the time the tls setting was updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// The tls setting value.
+	Value HostnameSttingValueUnion `json:"value"`
+	JSON  hostnameSttingJSON       `json:"-"`
+}
+
+// hostnameSttingJSON contains the JSON metadata for the struct [HostnameStting]
+type hostnameSttingJSON struct {
+	CreatedAt   apijson.Field
+	Hostname    apijson.Field
+	Status      apijson.Field
+	UpdatedAt   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameStting) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameSttingJSON) RawJSON() string {
+	return r.raw
+}
+
+// The tls setting value.
+//
+// Union satisfied by [shared.UnionFloat], [shared.UnionString] or
+// [hostnames.HostnameSttingValueArray].
+type HostnameSttingValueUnion interface {
+	ImplementsHostnamesHostnameSttingValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*HostnameSttingValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(HostnameSttingValueArray{}),
+		},
+	)
+}
+
+type HostnameSttingValueArray []string
+
+func (r HostnameSttingValueArray) ImplementsHostnamesHostnameSttingValueUnion() {}
+
+type SettingTLSGetResponse struct {
+	// This is the time the tls setting was originally created for this hostname.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The hostname for which the tls settings are set.
+	Hostname string `json:"hostname"`
+	// Deployment status for the given tls setting.
+	Status string `json:"status"`
+	// This is the time the tls setting was updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// The tls setting value.
+	Value SettingTLSGetResponseValueUnion `json:"value"`
+	JSON  settingTLSGetResponseJSON       `json:"-"`
+}
+
+// settingTLSGetResponseJSON contains the JSON metadata for the struct
+// [SettingTLSGetResponse]
+type settingTLSGetResponseJSON struct {
+	CreatedAt   apijson.Field
+	Hostname    apijson.Field
+	Status      apijson.Field
+	UpdatedAt   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTLSGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingTLSGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The tls setting value.
+//
+// Union satisfied by [shared.UnionFloat], [shared.UnionString] or
+// [hostnames.SettingTLSGetResponseValueArray].
+type SettingTLSGetResponseValueUnion interface {
+	ImplementsHostnamesSettingTLSGetResponseValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SettingTLSGetResponseValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SettingTLSGetResponseValueArray{}),
+		},
+	)
+}
+
+type SettingTLSGetResponseValueArray []string
+
+func (r SettingTLSGetResponseValueArray) ImplementsHostnamesSettingTLSGetResponseValueUnion() {}
+
 type SettingTLSUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -144,9 +275,9 @@ type SettingTLSUpdateParamsValueArray []string
 func (r SettingTLSUpdateParamsValueArray) ImplementsHostnamesSettingTLSUpdateParamsValueUnion() {}
 
 type SettingTLSUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef65 `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   HostnameStting                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingTLSUpdateResponseEnvelopeJSON    `json:"-"`
@@ -209,9 +340,9 @@ func (r SettingTLSDeleteParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   HostnameSettingDelete `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   HostnameSettingDelete                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    settingTLSDeleteResponseEnvelopeJSON    `json:"-"`
@@ -274,9 +405,9 @@ func (r SettingTLSGetParamsSettingID) IsKnown() bool {
 }
 
 type SettingTLSGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   []shared.UnnamedSchemaRef65 `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []SettingTLSGetResponse                                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SettingTLSGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SettingTLSGetResponseEnvelopeResultInfo `json:"result_info"`

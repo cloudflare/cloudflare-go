@@ -48,9 +48,9 @@ func (r *HTTPAseOSService) Get(ctx context.Context, os HTTPAseOSGetParamsOS, que
 }
 
 type HTTPAseOSGetResponse struct {
-	Meta HTTPAseOSGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPAseOSGetResponseTop0 `json:"top_0,required"`
-	JSON httpAseOSGetResponseJSON   `json:"-"`
+	Meta HTTPAseOSGetResponseMeta                           `json:"meta,required"`
+	Top0 []UnnamedSchemaRef4124a22436f90127c7fa2c4543219752 `json:"top_0,required"`
+	JSON httpAseOSGetResponseJSON                           `json:"-"`
 }
 
 // httpAseOSGetResponseJSON contains the JSON metadata for the struct
@@ -71,10 +71,10 @@ func (r httpAseOSGetResponseJSON) RawJSON() string {
 }
 
 type HTTPAseOSGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                  `json:"dateRange,required"`
-	LastUpdated    string                                 `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPAseOSGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpAseOSGetResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPAseOSGetResponseMetaConfidenceInfo             `json:"confidenceInfo"`
+	JSON           httpAseOSGetResponseMetaJSON                       `json:"-"`
 }
 
 // httpAseOSGetResponseMetaJSON contains the JSON metadata for the struct
@@ -96,9 +96,9 @@ func (r httpAseOSGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPAseOSGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                      `json:"annotations"`
-	Level       int64                                      `json:"level"`
-	JSON        httpAseOSGetResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        httpAseOSGetResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
 // httpAseOSGetResponseMetaConfidenceInfoJSON contains the JSON metadata for the
@@ -115,31 +115,6 @@ func (r *HTTPAseOSGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err
 }
 
 func (r httpAseOSGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPAseOSGetResponseTop0 struct {
-	ClientASN    int64                        `json:"clientASN,required"`
-	ClientAsName string                       `json:"clientASName,required"`
-	Value        string                       `json:"value,required"`
-	JSON         httpAseOSGetResponseTop0JSON `json:"-"`
-}
-
-// httpAseOSGetResponseTop0JSON contains the JSON metadata for the struct
-// [HTTPAseOSGetResponseTop0]
-type httpAseOSGetResponseTop0JSON struct {
-	ClientASN    apijson.Field
-	ClientAsName apijson.Field
-	Value        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *HTTPAseOSGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpAseOSGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

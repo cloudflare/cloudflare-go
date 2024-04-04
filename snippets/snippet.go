@@ -73,7 +73,7 @@ func (r *SnippetService) ListAutoPaging(ctx context.Context, zoneIdentifier stri
 }
 
 // Delete Snippet
-func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171Union, err error) {
+func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
@@ -146,8 +146,8 @@ func (r SnippetUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type SnippetUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Snippet Information
 	Result Snippet `json:"result,required"`
 	// Whether the API call was successful
@@ -190,9 +190,9 @@ func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171Union `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetDeleteResponseEnvelopeJSON    `json:"-"`
@@ -233,8 +233,8 @@ func (r SnippetDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Snippet Information
 	Result Snippet `json:"result,required"`
 	// Whether the API call was successful

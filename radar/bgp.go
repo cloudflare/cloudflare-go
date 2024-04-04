@@ -56,9 +56,9 @@ func (r *BGPService) Timeseries(ctx context.Context, query BGPTimeseriesParams, 
 }
 
 type BGPTimeseriesResponse struct {
-	Meta   BGPTimeseriesResponseMeta `json:"meta,required"`
-	Serie0 UnnamedSchemaRef129       `json:"serie_0,required"`
-	JSON   bgpTimeseriesResponseJSON `json:"-"`
+	Meta   BGPTimeseriesResponseMeta                        `json:"meta,required"`
+	Serie0 UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb `json:"serie_0,required"`
+	JSON   bgpTimeseriesResponseJSON                        `json:"-"`
 }
 
 // bgpTimeseriesResponseJSON contains the JSON metadata for the struct
@@ -79,11 +79,11 @@ func (r bgpTimeseriesResponseJSON) RawJSON() string {
 }
 
 type BGPTimeseriesResponseMeta struct {
-	AggInterval    string                                  `json:"aggInterval,required"`
-	DateRange      []UnnamedSchemaRef175                   `json:"dateRange,required"`
-	LastUpdated    time.Time                               `json:"lastUpdated,required" format:"date-time"`
-	ConfidenceInfo BGPTimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           bgpTimeseriesResponseMetaJSON           `json:"-"`
+	AggInterval    string                                             `json:"aggInterval,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    time.Time                                          `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo BGPTimeseriesResponseMetaConfidenceInfo            `json:"confidenceInfo"`
+	JSON           bgpTimeseriesResponseMetaJSON                      `json:"-"`
 }
 
 // bgpTimeseriesResponseMetaJSON contains the JSON metadata for the struct
@@ -106,9 +106,9 @@ func (r bgpTimeseriesResponseMetaJSON) RawJSON() string {
 }
 
 type BGPTimeseriesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                       `json:"annotations"`
-	Level       int64                                       `json:"level"`
-	JSON        bgpTimeseriesResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        bgpTimeseriesResponseMetaConfidenceInfoJSON        `json:"-"`
 }
 
 // bgpTimeseriesResponseMetaConfidenceInfoJSON contains the JSON metadata for the

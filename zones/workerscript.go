@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // WorkerScriptService contains methods and other services that help with
@@ -35,7 +33,7 @@ func NewWorkerScriptService(opts ...option.RequestOption) (r *WorkerScriptServic
 }
 
 // Upload a worker, or a new version of a worker.
-func (r *WorkerScriptService) Update(ctx context.Context, params WorkerScriptUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUpdateResponseUnion, err error) {
+func (r *WorkerScriptService) Update(ctx context.Context, params WorkerScriptUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/script", params.ZoneID)
@@ -66,23 +64,6 @@ func (r *WorkerScriptService) Get(ctx context.Context, query WorkerScriptGetPara
 	return
 }
 
-// Union satisfied by [zones.WorkerScriptUpdateResponseUnknown] or
-// [shared.UnionString].
-type WorkerScriptUpdateResponseUnion interface {
-	ImplementsZonesWorkerScriptUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WorkerScriptUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type WorkerScriptUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string]      `path:"zone_id,required"`
@@ -94,9 +75,9 @@ func (r WorkerScriptUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WorkerScriptUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   WorkerScriptUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptUpdateResponseEnvelopeJSON    `json:"-"`

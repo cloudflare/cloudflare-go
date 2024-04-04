@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/rulesets"
@@ -45,7 +46,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
 			ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-			Logging: cloudflare.F(rulesets.LoggingParam{
+			Logging: cloudflare.F(shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam{
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
@@ -62,7 +63,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
 			ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-			Logging: cloudflare.F(rulesets.LoggingParam{
+			Logging: cloudflare.F(shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam{
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
@@ -79,7 +80,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
 			ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-			Logging: cloudflare.F(rulesets.LoggingParam{
+			Logging: cloudflare.F(shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam{
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
@@ -128,7 +129,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
 				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-				Logging: cloudflare.F(rulesets.LoggingParam{
+				Logging: cloudflare.F(shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
@@ -145,7 +146,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
 				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-				Logging: cloudflare.F(rulesets.LoggingParam{
+				Logging: cloudflare.F(shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
@@ -162,7 +163,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
 				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-				Logging: cloudflare.F(rulesets.LoggingParam{
+				Logging: cloudflare.F(shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),

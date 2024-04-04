@@ -340,8 +340,8 @@ func (r ZoneNewParamsType) IsKnown() bool {
 }
 
 type ZoneNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                        `json:"success,required"`
 	Result  Zone                        `json:"result"`
@@ -502,8 +502,8 @@ type ZoneDeleteParams struct {
 }
 
 type ZoneDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                           `json:"success,required"`
 	Result  ZoneDeleteResponse             `json:"result,nullable"`
@@ -583,8 +583,8 @@ func (r ZoneEditParamsType) IsKnown() bool {
 }
 
 type ZoneEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                         `json:"success,required"`
 	Result  Zone                         `json:"result"`
@@ -616,8 +616,8 @@ type ZoneGetParams struct {
 }
 
 type ZoneGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                        `json:"success,required"`
 	Result  Zone                        `json:"result"`

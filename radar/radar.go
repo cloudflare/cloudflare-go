@@ -58,132 +58,39 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	return
 }
 
-type UnnamedSchemaRef106 struct {
-	Code string                  `json:"code,required"`
-	Name string                  `json:"name,required"`
-	JSON unnamedSchemaRef106JSON `json:"-"`
+type UnnamedSchemaRef16e559c45a31db5480e21fbe904b2e42 struct {
+	Code string                                               `json:"code,required"`
+	Name string                                               `json:"name,required"`
+	JSON unnamedSchemaRef16e559c45a31db5480e21fbe904b2e42JSON `json:"-"`
 }
 
-// unnamedSchemaRef106JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef106]
-type unnamedSchemaRef106JSON struct {
+// unnamedSchemaRef16e559c45a31db5480e21fbe904b2e42JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef16e559c45a31db5480e21fbe904b2e42]
+type unnamedSchemaRef16e559c45a31db5480e21fbe904b2e42JSON struct {
 	Code        apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef106) UnmarshalJSON(data []byte) (err error) {
+func (r *UnnamedSchemaRef16e559c45a31db5480e21fbe904b2e42) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef106JSON) RawJSON() string {
+func (r unnamedSchemaRef16e559c45a31db5480e21fbe904b2e42JSON) RawJSON() string {
 	return r.raw
 }
 
-type UnnamedSchemaRef128 struct {
-	IPv4 string                  `json:"IPv4,required"`
-	IPv6 string                  `json:"IPv6,required"`
-	JSON unnamedSchemaRef128JSON `json:"-"`
+type UnnamedSchemaRef4124a22436f90127c7fa2c4543219752 struct {
+	ClientASN    int64                                                `json:"clientASN,required"`
+	ClientAsName string                                               `json:"clientASName,required"`
+	Value        string                                               `json:"value,required"`
+	JSON         unnamedSchemaRef4124a22436f90127c7fa2c4543219752JSON `json:"-"`
 }
 
-// unnamedSchemaRef128JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef128]
-type unnamedSchemaRef128JSON struct {
-	IPv4        apijson.Field
-	IPv6        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef128) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef128JSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRef129 struct {
-	Timestamps []time.Time             `json:"timestamps,required" format:"date-time"`
-	Values     []string                `json:"values,required"`
-	JSON       unnamedSchemaRef129JSON `json:"-"`
-}
-
-// unnamedSchemaRef129JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef129]
-type unnamedSchemaRef129JSON struct {
-	Timestamps  apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef129) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef129JSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRef130 struct {
-	DataTime   string                  `json:"data_time,required"`
-	QueryTime  string                  `json:"query_time,required"`
-	TotalPeers int64                   `json:"total_peers,required"`
-	JSON       unnamedSchemaRef130JSON `json:"-"`
-}
-
-// unnamedSchemaRef130JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef130]
-type unnamedSchemaRef130JSON struct {
-	DataTime    apijson.Field
-	QueryTime   apijson.Field
-	TotalPeers  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef130) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef130JSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRef153 struct {
-	Timestamps  []string                `json:"timestamps,required"`
-	ExtraFields map[string][]string     `json:"-,extras"`
-	JSON        unnamedSchemaRef153JSON `json:"-"`
-}
-
-// unnamedSchemaRef153JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef153]
-type unnamedSchemaRef153JSON struct {
-	Timestamps  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef153) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef153JSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRef154 struct {
-	ClientASN    int64                   `json:"clientASN,required"`
-	ClientAsName string                  `json:"clientASName,required"`
-	Value        string                  `json:"value,required"`
-	JSON         unnamedSchemaRef154JSON `json:"-"`
-}
-
-// unnamedSchemaRef154JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef154]
-type unnamedSchemaRef154JSON struct {
+// unnamedSchemaRef4124a22436f90127c7fa2c4543219752JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef4124a22436f90127c7fa2c4543219752]
+type unnamedSchemaRef4124a22436f90127c7fa2c4543219752JSON struct {
 	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
@@ -191,24 +98,69 @@ type unnamedSchemaRef154JSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef154) UnmarshalJSON(data []byte) (err error) {
+func (r *UnnamedSchemaRef4124a22436f90127c7fa2c4543219752) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef154JSON) RawJSON() string {
+func (r unnamedSchemaRef4124a22436f90127c7fa2c4543219752JSON) RawJSON() string {
 	return r.raw
 }
 
-type UnnamedSchemaRef160 struct {
-	ClientCountryAlpha2 string                  `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                  `json:"clientCountryName,required"`
-	Value               string                  `json:"value,required"`
-	JSON                unnamedSchemaRef160JSON `json:"-"`
+type UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb struct {
+	Timestamps []time.Time                                          `json:"timestamps,required" format:"date-time"`
+	Values     []string                                             `json:"values,required"`
+	JSON       unnamedSchemaRef75bae70cf28e6bcef364b9840db3bdebJSON `json:"-"`
 }
 
-// unnamedSchemaRef160JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef160]
-type unnamedSchemaRef160JSON struct {
+// unnamedSchemaRef75bae70cf28e6bcef364b9840db3bdebJSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb]
+type unnamedSchemaRef75bae70cf28e6bcef364b9840db3bdebJSON struct {
+	Timestamps  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef75bae70cf28e6bcef364b9840db3bdeb) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef75bae70cf28e6bcef364b9840db3bdebJSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55 struct {
+	Timestamps  []string                                             `json:"timestamps,required"`
+	ExtraFields map[string][]string                                  `json:"-,extras"`
+	JSON        unnamedSchemaRef7826220e105d84352ba1108d9ed88e55JSON `json:"-"`
+}
+
+// unnamedSchemaRef7826220e105d84352ba1108d9ed88e55JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55]
+type unnamedSchemaRef7826220e105d84352ba1108d9ed88e55JSON struct {
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef7826220e105d84352ba1108d9ed88e55) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef7826220e105d84352ba1108d9ed88e55JSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09 struct {
+	ClientCountryAlpha2 string                                               `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string                                               `json:"clientCountryName,required"`
+	Value               string                                               `json:"value,required"`
+	JSON                unnamedSchemaRef83a14d589e799bc901b9ccc870251d09JSON `json:"-"`
+}
+
+// unnamedSchemaRef83a14d589e799bc901b9ccc870251d09JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09]
+type unnamedSchemaRef83a14d589e799bc901b9ccc870251d09JSON struct {
 	ClientCountryAlpha2 apijson.Field
 	ClientCountryName   apijson.Field
 	Value               apijson.Field
@@ -216,28 +168,76 @@ type unnamedSchemaRef160JSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef160) UnmarshalJSON(data []byte) (err error) {
+func (r *UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef160JSON) RawJSON() string {
+func (r unnamedSchemaRef83a14d589e799bc901b9ccc870251d09JSON) RawJSON() string {
 	return r.raw
 }
 
-type UnnamedSchemaRef174 struct {
-	DataSource      string                  `json:"dataSource,required"`
-	Description     string                  `json:"description,required"`
-	EventType       string                  `json:"eventType,required"`
-	IsInstantaneous interface{}             `json:"isInstantaneous,required"`
-	EndTime         time.Time               `json:"endTime" format:"date-time"`
-	LinkedURL       string                  `json:"linkedUrl"`
-	StartTime       time.Time               `json:"startTime" format:"date-time"`
-	JSON            unnamedSchemaRef174JSON `json:"-"`
+type UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297 struct {
+	IPv4 string                                               `json:"IPv4,required"`
+	IPv6 string                                               `json:"IPv6,required"`
+	JSON unnamedSchemaRef8b383e904d9fb02521257ef9cc77d297JSON `json:"-"`
 }
 
-// unnamedSchemaRef174JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef174]
-type unnamedSchemaRef174JSON struct {
+// unnamedSchemaRef8b383e904d9fb02521257ef9cc77d297JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297]
+type unnamedSchemaRef8b383e904d9fb02521257ef9cc77d297JSON struct {
+	IPv4        apijson.Field
+	IPv6        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef8b383e904d9fb02521257ef9cc77d297) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef8b383e904d9fb02521257ef9cc77d297JSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef9002274ed7cb7f3dc567421e31529a3a struct {
+	IPv4       []string                                             `json:"IPv4,required"`
+	IPv6       []string                                             `json:"IPv6,required"`
+	Timestamps []string                                             `json:"timestamps,required"`
+	JSON       unnamedSchemaRef9002274ed7cb7f3dc567421e31529a3aJSON `json:"-"`
+}
+
+// unnamedSchemaRef9002274ed7cb7f3dc567421e31529a3aJSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef9002274ed7cb7f3dc567421e31529a3a]
+type unnamedSchemaRef9002274ed7cb7f3dc567421e31529a3aJSON struct {
+	IPv4        apijson.Field
+	IPv6        apijson.Field
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef9002274ed7cb7f3dc567421e31529a3a) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef9002274ed7cb7f3dc567421e31529a3aJSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 struct {
+	DataSource      string                                               `json:"dataSource,required"`
+	Description     string                                               `json:"description,required"`
+	EventType       string                                               `json:"eventType,required"`
+	IsInstantaneous interface{}                                          `json:"isInstantaneous,required"`
+	EndTime         time.Time                                            `json:"endTime" format:"date-time"`
+	LinkedURL       string                                               `json:"linkedUrl"`
+	StartTime       time.Time                                            `json:"startTime" format:"date-time"`
+	JSON            unnamedSchemaRefB5f3bd1840490bc487ffef84567807b1JSON `json:"-"`
+}
+
+// unnamedSchemaRefB5f3bd1840490bc487ffef84567807b1JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1]
+type unnamedSchemaRefB5f3bd1840490bc487ffef84567807b1JSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -249,60 +249,60 @@ type unnamedSchemaRef174JSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef174) UnmarshalJSON(data []byte) (err error) {
+func (r *UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef174JSON) RawJSON() string {
+func (r unnamedSchemaRefB5f3bd1840490bc487ffef84567807b1JSON) RawJSON() string {
 	return r.raw
 }
 
-type UnnamedSchemaRef175 struct {
+type UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time               `json:"startTime,required" format:"date-time"`
-	JSON      unnamedSchemaRef175JSON `json:"-"`
+	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON      unnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5JSON `json:"-"`
 }
 
-// unnamedSchemaRef175JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef175]
-type unnamedSchemaRef175JSON struct {
+// unnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5]
+type unnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5JSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef175) UnmarshalJSON(data []byte) (err error) {
+func (r *UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef175JSON) RawJSON() string {
+func (r unnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5JSON) RawJSON() string {
 	return r.raw
 }
 
-type UnnamedSchemaRef53 struct {
-	IPv4       []string               `json:"IPv4,required"`
-	IPv6       []string               `json:"IPv6,required"`
-	Timestamps []string               `json:"timestamps,required"`
-	JSON       unnamedSchemaRef53JSON `json:"-"`
+type UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7 struct {
+	DataTime   string                                               `json:"data_time,required"`
+	QueryTime  string                                               `json:"query_time,required"`
+	TotalPeers int64                                                `json:"total_peers,required"`
+	JSON       unnamedSchemaRefC5858f1f916a921846e0b6159af470a7JSON `json:"-"`
 }
 
-// unnamedSchemaRef53JSON contains the JSON metadata for the struct
-// [UnnamedSchemaRef53]
-type unnamedSchemaRef53JSON struct {
-	IPv4        apijson.Field
-	IPv6        apijson.Field
-	Timestamps  apijson.Field
+// unnamedSchemaRefC5858f1f916a921846e0b6159af470a7JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7]
+type unnamedSchemaRefC5858f1f916a921846e0b6159af470a7JSON struct {
+	DataTime    apijson.Field
+	QueryTime   apijson.Field
+	TotalPeers  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRef53) UnmarshalJSON(data []byte) (err error) {
+func (r *UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRef53JSON) RawJSON() string {
+func (r unnamedSchemaRefC5858f1f916a921846e0b6159af470a7JSON) RawJSON() string {
 	return r.raw
 }

@@ -49,8 +49,8 @@ func (r *TrafficAnomalyLocationService) Get(ctx context.Context, query TrafficAn
 }
 
 type TrafficAnomalyLocationGetResponse struct {
-	TrafficAnomalies []UnnamedSchemaRef160                 `json:"trafficAnomalies,required"`
-	JSON             trafficAnomalyLocationGetResponseJSON `json:"-"`
+	TrafficAnomalies []UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09 `json:"trafficAnomalies,required"`
+	JSON             trafficAnomalyLocationGetResponseJSON              `json:"-"`
 }
 
 // trafficAnomalyLocationGetResponseJSON contains the JSON metadata for the struct

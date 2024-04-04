@@ -91,9 +91,9 @@ func (r zeroTrustAccessRequestsJSON) RawJSON() string {
 }
 
 type AccessLogAccessRequestListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   []ZeroTrustAccessRequests `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []ZeroTrustAccessRequests                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessLogAccessRequestListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessLogAccessRequestListResponseEnvelopeResultInfo `json:"result_info"`

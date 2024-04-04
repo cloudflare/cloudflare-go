@@ -120,7 +120,7 @@ func (r ZoneSettingMinifyID) IsKnown() bool {
 // Current value of the zone setting.
 type ZoneSettingMinifyValue struct {
 	// Automatically minify all CSS files for your website.
-	Css shared.UnnamedSchemaRef92 `json:"css"`
+	Css ZoneSettingMinifyValueCss `json:"css"`
 	// Automatically minify all HTML files for your website.
 	HTML ZoneSettingMinifyValueHTML `json:"html"`
 	// Automatically minify all JavaScript files for your website.
@@ -144,6 +144,22 @@ func (r *ZoneSettingMinifyValue) UnmarshalJSON(data []byte) (err error) {
 
 func (r zoneSettingMinifyValueJSON) RawJSON() string {
 	return r.raw
+}
+
+// Automatically minify all CSS files for your website.
+type ZoneSettingMinifyValueCss string
+
+const (
+	ZoneSettingMinifyValueCssOn  ZoneSettingMinifyValueCss = "on"
+	ZoneSettingMinifyValueCssOff ZoneSettingMinifyValueCss = "off"
+)
+
+func (r ZoneSettingMinifyValueCss) IsKnown() bool {
+	switch r {
+	case ZoneSettingMinifyValueCssOn, ZoneSettingMinifyValueCssOff:
+		return true
+	}
+	return false
 }
 
 // Automatically minify all HTML files for your website.
@@ -214,7 +230,7 @@ func (r ZoneSettingMinifyParam) implementsZonesSettingEditParamsItemUnion() {}
 // Current value of the zone setting.
 type ZoneSettingMinifyValueParam struct {
 	// Automatically minify all CSS files for your website.
-	Css param.Field[shared.UnnamedSchemaRef92] `json:"css"`
+	Css param.Field[ZoneSettingMinifyValueCss] `json:"css"`
 	// Automatically minify all HTML files for your website.
 	HTML param.Field[ZoneSettingMinifyValueHTML] `json:"html"`
 	// Automatically minify all JavaScript files for your website.
@@ -239,7 +255,7 @@ func (r SettingMinifyEditParams) MarshalJSON() (data []byte, err error) {
 // Value of the zone setting.
 type SettingMinifyEditParamsValue struct {
 	// Automatically minify all CSS files for your website.
-	Css param.Field[shared.UnnamedSchemaRef92] `json:"css"`
+	Css param.Field[SettingMinifyEditParamsValueCss] `json:"css"`
 	// Automatically minify all HTML files for your website.
 	HTML param.Field[SettingMinifyEditParamsValueHTML] `json:"html"`
 	// Automatically minify all JavaScript files for your website.
@@ -248,6 +264,22 @@ type SettingMinifyEditParamsValue struct {
 
 func (r SettingMinifyEditParamsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Automatically minify all CSS files for your website.
+type SettingMinifyEditParamsValueCss string
+
+const (
+	SettingMinifyEditParamsValueCssOn  SettingMinifyEditParamsValueCss = "on"
+	SettingMinifyEditParamsValueCssOff SettingMinifyEditParamsValueCss = "off"
+)
+
+func (r SettingMinifyEditParamsValueCss) IsKnown() bool {
+	switch r {
+	case SettingMinifyEditParamsValueCssOn, SettingMinifyEditParamsValueCssOff:
+		return true
+	}
+	return false
 }
 
 // Automatically minify all HTML files for your website.
@@ -283,8 +315,8 @@ func (r SettingMinifyEditParamsValueJs) IsKnown() bool {
 }
 
 type SettingMinifyEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically minify certain assets for your website. Refer to
@@ -319,8 +351,8 @@ type SettingMinifyGetParams struct {
 }
 
 type SettingMinifyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically minify certain assets for your website. Refer to

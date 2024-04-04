@@ -86,9 +86,9 @@ func (r *BGPRouteService) Timeseries(ctx context.Context, query BGPRouteTimeseri
 }
 
 type BGPRouteMoasResponse struct {
-	Meta UnnamedSchemaRef130       `json:"meta,required"`
-	Moas []BGPRouteMoasResponseMoa `json:"moas,required"`
-	JSON bgpRouteMoasResponseJSON  `json:"-"`
+	Meta UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7 `json:"meta,required"`
+	Moas []BGPRouteMoasResponseMoa                        `json:"moas,required"`
+	JSON bgpRouteMoasResponseJSON                         `json:"-"`
 }
 
 // bgpRouteMoasResponseJSON contains the JSON metadata for the struct
@@ -157,9 +157,9 @@ func (r bgpRouteMoasResponseMoasOriginJSON) RawJSON() string {
 }
 
 type BGPRoutePfx2asResponse struct {
-	Meta          UnnamedSchemaRef130                  `json:"meta,required"`
-	PrefixOrigins []BGPRoutePfx2asResponsePrefixOrigin `json:"prefix_origins,required"`
-	JSON          bgpRoutePfx2asResponseJSON           `json:"-"`
+	Meta          UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7 `json:"meta,required"`
+	PrefixOrigins []BGPRoutePfx2asResponsePrefixOrigin             `json:"prefix_origins,required"`
+	JSON          bgpRoutePfx2asResponseJSON                       `json:"-"`
 }
 
 // bgpRoutePfx2asResponseJSON contains the JSON metadata for the struct
@@ -207,9 +207,9 @@ func (r bgpRoutePfx2asResponsePrefixOriginJSON) RawJSON() string {
 }
 
 type BGPRouteStatsResponse struct {
-	Meta  UnnamedSchemaRef130        `json:"meta,required"`
-	Stats BGPRouteStatsResponseStats `json:"stats,required"`
-	JSON  bgpRouteStatsResponseJSON  `json:"-"`
+	Meta  UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7 `json:"meta,required"`
+	Stats BGPRouteStatsResponseStats                       `json:"stats,required"`
+	JSON  bgpRouteStatsResponseJSON                        `json:"-"`
 }
 
 // bgpRouteStatsResponseJSON contains the JSON metadata for the struct
@@ -310,8 +310,8 @@ func (r bgpRouteTimeseriesResponseJSON) RawJSON() string {
 }
 
 type BGPRouteTimeseriesResponseMeta struct {
-	DateRange []UnnamedSchemaRef175              `json:"dateRange,required"`
-	JSON      bgpRouteTimeseriesResponseMetaJSON `json:"-"`
+	DateRange []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	JSON      bgpRouteTimeseriesResponseMetaJSON                 `json:"-"`
 }
 
 // bgpRouteTimeseriesResponseMetaJSON contains the JSON metadata for the struct

@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // RoleService contains methods and other services that help with interacting with
@@ -58,7 +56,7 @@ func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, 
 }
 
 // Get information about a specific role for an account.
-func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponseUnion, err error) {
+func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RoleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/roles/%v", query.AccountID, roleID)
@@ -170,22 +168,6 @@ func (r roleListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [accounts.RoleGetResponseUnknown] or [shared.UnionString].
-type RoleGetResponseUnion interface {
-	ImplementsAccountsRoleGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RoleGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type RoleListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -195,9 +177,9 @@ type RoleGetParams struct {
 }
 
 type RoleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RoleGetResponseUnion  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    roleGetResponseEnvelopeJSON    `json:"-"`

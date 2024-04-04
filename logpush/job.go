@@ -109,7 +109,7 @@ func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, op
 }
 
 // Deletes a Logpush job.
-func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef161Union, err error) {
+func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobDeleteResponseEnvelope
 	var accountOrZone string
@@ -288,9 +288,9 @@ func (r JobNewParamsOutputOptionsTimestampFormat) IsKnown() bool {
 }
 
 type JobNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LogpushJob            `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   LogpushJob                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobNewResponseEnvelopeJSON    `json:"-"`
@@ -460,9 +460,9 @@ func (r JobUpdateParamsOutputOptionsTimestampFormat) IsKnown() bool {
 }
 
 type JobUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LogpushJob            `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   LogpushJob                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobUpdateResponseEnvelopeJSON    `json:"-"`
@@ -522,9 +522,9 @@ func (r JobDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type JobDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef161Union `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobDeleteResponseEnvelopeJSON    `json:"-"`
@@ -572,9 +572,9 @@ type JobGetParams struct {
 }
 
 type JobGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LogpushJob            `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   LogpushJob                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobGetResponseEnvelopeJSON    `json:"-"`

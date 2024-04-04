@@ -112,9 +112,9 @@ func (r ScriptUsageModelUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptUsageModelUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ScriptUsageModelUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptUsageModelUpdateResponse                            `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptUsageModelUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptUsageModelUpdateResponseEnvelopeJSON    `json:"-"`
@@ -160,9 +160,9 @@ type ScriptUsageModelGetParams struct {
 }
 
 type ScriptUsageModelGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ScriptUsageModelGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptUsageModelGetResponse                               `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptUsageModelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptUsageModelGetResponseEnvelopeJSON    `json:"-"`

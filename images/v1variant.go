@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // V1VariantService contains methods and other services that help with interacting
@@ -60,7 +58,7 @@ func (r *V1VariantService) List(ctx context.Context, query V1VariantListParams, 
 }
 
 // Deleting a variant purges the cache for all images associated with the variant.
-func (r *V1VariantService) Delete(ctx context.Context, variantID string, params V1VariantDeleteParams, opts ...option.RequestOption) (res *V1VariantDeleteResponseUnion, err error) {
+func (r *V1VariantService) Delete(ctx context.Context, variantID string, params V1VariantDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1VariantDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/variants/%s", params.AccountID, variantID)
@@ -355,23 +353,6 @@ func (r V1ImageVariantsVariantsHeroOptionsMetadata) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [images.V1VariantDeleteResponseUnknown] or
-// [shared.UnionString].
-type V1VariantDeleteResponseUnion interface {
-	ImplementsImagesV1VariantDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*V1VariantDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type V1VariantNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -442,9 +423,9 @@ func (r V1VariantNewParamsOptionsMetadata) IsKnown() bool {
 }
 
 type V1VariantNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1ImageVariant        `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   V1ImageVariant                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantNewResponseEnvelopeJSON    `json:"-"`
@@ -490,9 +471,9 @@ type V1VariantListParams struct {
 }
 
 type V1VariantListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1ImageVariants       `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   V1ImageVariants                                           `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantListResponseEnvelopeJSON    `json:"-"`
@@ -543,9 +524,9 @@ func (r V1VariantDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1VariantDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   V1VariantDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantDeleteResponseEnvelopeJSON    `json:"-"`
@@ -654,9 +635,9 @@ func (r V1VariantEditParamsOptionsMetadata) IsKnown() bool {
 }
 
 type V1VariantEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1ImageVariant        `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   V1ImageVariant                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantEditResponseEnvelopeJSON    `json:"-"`
@@ -702,9 +683,9 @@ type V1VariantGetParams struct {
 }
 
 type V1VariantGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1ImageVariant        `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   V1ImageVariant                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantGetResponseEnvelopeJSON    `json:"-"`

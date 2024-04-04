@@ -58,9 +58,34 @@ func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, quer
 	return
 }
 
+type UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26 struct {
+	CreatedOn  interface{}                                          `json:"created_on"`
+	Cron       interface{}                                          `json:"cron"`
+	ModifiedOn interface{}                                          `json:"modified_on"`
+	JSON       unnamedSchemaRefC8302c265937f9d6f96fd69644e56b26JSON `json:"-"`
+}
+
+// unnamedSchemaRefC8302c265937f9d6f96fd69644e56b26JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26]
+type unnamedSchemaRefC8302c265937f9d6f96fd69644e56b26JSON struct {
+	CreatedOn   apijson.Field
+	Cron        apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRefC8302c265937f9d6f96fd69644e56b26JSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptScheduleUpdateResponse struct {
-	Schedules []shared.UnnamedSchemaRef102     `json:"schedules"`
-	JSON      scriptScheduleUpdateResponseJSON `json:"-"`
+	Schedules []UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26 `json:"schedules"`
+	JSON      scriptScheduleUpdateResponseJSON                   `json:"-"`
 }
 
 // scriptScheduleUpdateResponseJSON contains the JSON metadata for the struct
@@ -80,8 +105,8 @@ func (r scriptScheduleUpdateResponseJSON) RawJSON() string {
 }
 
 type ScriptScheduleGetResponse struct {
-	Schedules []shared.UnnamedSchemaRef102  `json:"schedules"`
-	JSON      scriptScheduleGetResponseJSON `json:"-"`
+	Schedules []UnnamedSchemaRefC8302c265937f9d6f96fd69644e56b26 `json:"schedules"`
+	JSON      scriptScheduleGetResponseJSON                      `json:"-"`
 }
 
 // scriptScheduleGetResponseJSON contains the JSON metadata for the struct
@@ -111,9 +136,9 @@ func (r ScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptScheduleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   ScriptScheduleUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptScheduleUpdateResponse                              `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptScheduleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptScheduleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -159,9 +184,9 @@ type ScriptScheduleGetParams struct {
 }
 
 type ScriptScheduleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   ScriptScheduleGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ScriptScheduleGetResponse                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptScheduleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptScheduleGetResponseEnvelopeJSON    `json:"-"`

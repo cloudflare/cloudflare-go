@@ -87,7 +87,7 @@ func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opt
 
 // Delete an image on Cloudflare Images. On success, all copies of the image are
 // deleted and purged from cache.
-func (r *V1Service) Delete(ctx context.Context, imageID string, params V1DeleteParams, opts ...option.RequestOption) (res *V1DeleteResponseUnion, err error) {
+func (r *V1Service) Delete(ctx context.Context, imageID string, params V1DeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1DeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", params.AccountID, imageID)
@@ -192,9 +192,9 @@ func init() {
 }
 
 type V1ListResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1ListResponseResult  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   V1ListResponseResult                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success V1ListResponseSuccess `json:"success,required"`
 	JSON    v1ListResponseJSON    `json:"-"`
@@ -254,22 +254,6 @@ func (r V1ListResponseSuccess) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [images.V1DeleteResponseUnknown] or [shared.UnionString].
-type V1DeleteResponseUnion interface {
-	ImplementsImagesV1DeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*V1DeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 // This interface is a union satisfied by one of the following:
 // [V1NewParamsImagesImageUploadViaFile], [V1NewParamsImagesImageUploadViaURL].
 type V1NewParams interface {
@@ -317,9 +301,9 @@ func (V1NewParamsImagesImageUploadViaURL) ImplementsV1NewParams() {
 }
 
 type V1NewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Image                 `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   Image                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success V1NewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1NewResponseEnvelopeJSON    `json:"-"`
@@ -387,9 +371,9 @@ func (r V1DeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1DeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1DeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success V1DeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1DeleteResponseEnvelopeJSON    `json:"-"`
@@ -446,9 +430,9 @@ func (r V1EditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1EditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Image                 `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   Image                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success V1EditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1EditResponseEnvelopeJSON    `json:"-"`
@@ -494,9 +478,9 @@ type V1GetParams struct {
 }
 
 type V1GetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Image                 `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   Image                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success V1GetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1GetResponseEnvelopeJSON    `json:"-"`

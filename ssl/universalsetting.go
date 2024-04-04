@@ -140,9 +140,9 @@ func (r UniversalSettingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UniversalSettingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UniversalSSLSettings  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   UniversalSSLSettings                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success UniversalSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    universalSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -188,9 +188,9 @@ type UniversalSettingGetParams struct {
 }
 
 type UniversalSettingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   UniversalSSLSettings  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   UniversalSSLSettings                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success UniversalSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    universalSettingGetResponseEnvelopeJSON    `json:"-"`

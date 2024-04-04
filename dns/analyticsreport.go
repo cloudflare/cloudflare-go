@@ -56,7 +56,7 @@ func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReport
 
 type DNSAnalyticsReport struct {
 	// Array with one row per combination of dimension values.
-	Data []shared.UnnamedSchemaRef22 `json:"data,required"`
+	Data []UnnamedSchemaRef6595695ff25b0614667b25f66b7bbaba `json:"data,required"`
 	// Number of seconds between current time and last processed event, in another
 	// words how many seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -168,9 +168,9 @@ func (r AnalyticsReportGetParams) URLQuery() (v url.Values) {
 }
 
 type AnalyticsReportGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNSAnalyticsReport    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DNSAnalyticsReport                                        `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsReportGetResponseEnvelopeJSON    `json:"-"`

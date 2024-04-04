@@ -650,11 +650,11 @@ func (r loadBalancerPoolPreviewResponseJSON) RawJSON() string {
 }
 
 type LoadBalancerPoolReferencesResponse struct {
-	ReferenceType shared.UnnamedSchemaRef146             `json:"reference_type"`
-	ResourceID    string                                 `json:"resource_id"`
-	ResourceName  string                                 `json:"resource_name"`
-	ResourceType  string                                 `json:"resource_type"`
-	JSON          loadBalancerPoolReferencesResponseJSON `json:"-"`
+	ReferenceType shared.UnnamedSchemaRefD8600eb4758b3ae35607a0327bcd691b `json:"reference_type"`
+	ResourceID    string                                                  `json:"resource_id"`
+	ResourceName  string                                                  `json:"resource_name"`
+	ResourceType  string                                                  `json:"resource_type"`
+	JSON          loadBalancerPoolReferencesResponseJSON                  `json:"-"`
 }
 
 // loadBalancerPoolReferencesResponseJSON contains the JSON metadata for the struct
@@ -956,9 +956,9 @@ func (r LoadBalancerPoolNewParamsOriginSteeringPolicy) IsKnown() bool {
 }
 
 type LoadBalancerPoolNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   Pool                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolNewResponseEnvelopeJSON    `json:"-"`
@@ -1278,9 +1278,9 @@ func (r LoadBalancerPoolUpdateParamsOriginSteeringPolicy) IsKnown() bool {
 }
 
 type LoadBalancerPoolUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   Pool                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1344,9 +1344,9 @@ func (r LoadBalancerPoolDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LoadBalancerPoolDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   LoadBalancerPoolDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   LoadBalancerPoolDeleteResponse                            `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1666,9 +1666,9 @@ func (r LoadBalancerPoolEditParamsOriginsHeader) MarshalJSON() (data []byte, err
 }
 
 type LoadBalancerPoolEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   Pool                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolEditResponseEnvelopeJSON    `json:"-"`
@@ -1709,9 +1709,9 @@ func (r LoadBalancerPoolEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerPoolGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   Pool                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolGetResponseEnvelopeJSON    `json:"-"`
@@ -1752,8 +1752,8 @@ func (r LoadBalancerPoolGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerPoolHealthResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	Result LoadBalancerPoolHealthResponseUnion `json:"result,required"`
@@ -1874,9 +1874,9 @@ func (r LoadBalancerPoolPreviewParamsType) IsKnown() bool {
 }
 
 type LoadBalancerPoolPreviewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   LoadBalancerPoolPreviewResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   LoadBalancerPoolPreviewResponse                           `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolPreviewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolPreviewResponseEnvelopeJSON    `json:"-"`
@@ -1917,8 +1917,8 @@ func (r LoadBalancerPoolPreviewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerPoolReferencesResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// List of resources that reference a given pool.
 	Result []LoadBalancerPoolReferencesResponse `json:"result,required,nullable"`
 	// Whether the API call was successful

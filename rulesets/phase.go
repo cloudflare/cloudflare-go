@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -195,7 +196,7 @@ type PhaseUpdateResponseRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref string `json:"ref"`
 	// The version of the rule.
@@ -293,7 +294,7 @@ type PhaseUpdateResponseRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                        `json:"ref"`
 	JSON phaseUpdateResponseRulesRulesetsBlockRuleJSON `json:"-"`
@@ -416,7 +417,7 @@ type PhaseUpdateResponseRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                          `json:"ref"`
 	JSON phaseUpdateResponseRulesRulesetsExecuteRuleJSON `json:"-"`
@@ -703,7 +704,7 @@ type PhaseUpdateResponseRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                      `json:"ref"`
 	JSON phaseUpdateResponseRulesRulesetsLogRuleJSON `json:"-"`
@@ -772,7 +773,7 @@ type PhaseUpdateResponseRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                       `json:"ref"`
 	JSON phaseUpdateResponseRulesRulesetsSkipRuleJSON `json:"-"`
@@ -1068,7 +1069,7 @@ type PhaseGetResponseRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref string `json:"ref"`
 	// The version of the rule.
@@ -1166,7 +1167,7 @@ type PhaseGetResponseRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                     `json:"ref"`
 	JSON phaseGetResponseRulesRulesetsBlockRuleJSON `json:"-"`
@@ -1288,7 +1289,7 @@ type PhaseGetResponseRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                       `json:"ref"`
 	JSON phaseGetResponseRulesRulesetsExecuteRuleJSON `json:"-"`
@@ -1575,7 +1576,7 @@ type PhaseGetResponseRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                   `json:"ref"`
 	JSON phaseGetResponseRulesRulesetsLogRuleJSON `json:"-"`
@@ -1644,7 +1645,7 @@ type PhaseGetResponseRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Logging shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                    `json:"ref"`
 	JSON phaseGetResponseRulesRulesetsSkipRuleJSON `json:"-"`
@@ -1896,7 +1897,7 @@ type PhaseUpdateParamsRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
+	Logging param.Field[shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -1929,7 +1930,7 @@ type PhaseUpdateParamsRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
+	Logging param.Field[shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -1993,7 +1994,7 @@ type PhaseUpdateParamsRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
+	Logging param.Field[shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -2168,7 +2169,7 @@ type PhaseUpdateParamsRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
+	Logging param.Field[shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -2208,7 +2209,7 @@ type PhaseUpdateParamsRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
+	Logging param.Field[shared.UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }

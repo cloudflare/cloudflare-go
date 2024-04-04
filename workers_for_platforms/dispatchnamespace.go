@@ -232,9 +232,9 @@ func (r DispatchNamespaceNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DispatchNamespaceNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   DispatchNamespaceNewResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DispatchNamespaceNewResponse                              `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceNewResponseEnvelopeJSON    `json:"-"`
@@ -285,9 +285,9 @@ type DispatchNamespaceDeleteParams struct {
 }
 
 type DispatchNamespaceDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   DispatchNamespaceDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DispatchNamespaceDeleteResponse                           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DispatchNamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceDeleteResponseEnvelopeJSON    `json:"-"`
@@ -333,9 +333,9 @@ type DispatchNamespaceGetParams struct {
 }
 
 type DispatchNamespaceGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   DispatchNamespaceGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DispatchNamespaceGetResponse                              `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceGetResponseEnvelopeJSON    `json:"-"`

@@ -136,9 +136,9 @@ type GatewayNewParams struct {
 }
 
 type GatewayNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayNewResponse    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   GatewayNewResponse                                        `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayNewResponseEnvelopeJSON    `json:"-"`
@@ -183,9 +183,9 @@ type GatewayListParams struct {
 }
 
 type GatewayListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GatewayListResponse   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   GatewayListResponse                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayListResponseEnvelopeJSON    `json:"-"`

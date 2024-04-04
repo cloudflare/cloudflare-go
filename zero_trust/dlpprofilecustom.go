@@ -55,7 +55,7 @@ func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, 
 }
 
 // Deletes a DLP custom profile.
-func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, params DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef169Union, err error) {
+func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, params DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", params.AccountID, profileID)
@@ -98,9 +98,9 @@ type DLPCustomProfile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      shared.UnnamedSchemaRef96 `json:"type"`
-	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
-	JSON      dlpCustomProfileJSON      `json:"-"`
+	Type      UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1 `json:"type"`
+	UpdatedAt time.Time                                        `json:"updated_at" format:"date-time"`
+	JSON      dlpCustomProfileJSON                             `json:"-"`
 }
 
 // dlpCustomProfileJSON contains the JSON metadata for the struct
@@ -363,9 +363,9 @@ func (r DLPProfileCustomNewParamsProfilesEntriesPatternValidation) IsKnown() boo
 }
 
 type DLPProfileCustomNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []DLPCustomProfile    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []DLPCustomProfile                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DLPProfileCustomNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DLPProfileCustomNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -594,9 +594,9 @@ func (r DLPProfileCustomDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileCustomDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef169Union `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileCustomDeleteResponseEnvelopeJSON    `json:"-"`
@@ -642,9 +642,9 @@ type DLPProfileCustomGetParams struct {
 }
 
 type DLPProfileCustomGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DLPCustomProfile      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DLPCustomProfile                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileCustomGetResponseEnvelopeJSON    `json:"-"`

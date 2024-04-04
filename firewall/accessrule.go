@@ -39,7 +39,7 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 //
 // Note: To create an IP Access rule that applies to a single zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
+func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleNewResponseEnvelope
 	var accountOrZone string
@@ -123,7 +123,7 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 // Updates an IP Access rule defined.
 //
 // Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
+func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleEditResponseEnvelope
 	var accountOrZone string
@@ -145,7 +145,7 @@ func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, pa
 }
 
 // Fetches the details of an IP Access rule defined.
-func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
+func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleGetResponseEnvelope
 	var accountOrZone string
@@ -434,9 +434,9 @@ func (r AccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type AccessRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -659,9 +659,9 @@ func (r AccessRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   AccessRuleDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AccessRuleDeleteResponse                                  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -946,9 +946,9 @@ func (r AccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type AccessRuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
@@ -996,9 +996,9 @@ type AccessRuleGetParams struct {
 }
 
 type AccessRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`

@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // GatewayProxyEndpointService contains methods and other services that help with
@@ -73,7 +71,7 @@ func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query 
 }
 
 // Deletes a configured Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponseUnion, err error) {
+func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", params.AccountID, proxyEndpointID)
@@ -145,23 +143,6 @@ func (r zeroTrustGatewayProxyEndpointsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [zero_trust.GatewayProxyEndpointDeleteResponseUnknown] or
-// [shared.UnionString].
-type GatewayProxyEndpointDeleteResponseUnion interface {
-	ImplementsZeroTrustGatewayProxyEndpointDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayProxyEndpointDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type GatewayProxyEndpointNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of CIDRs to restrict ingress connections.
@@ -175,9 +156,9 @@ func (r GatewayProxyEndpointNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayProxyEndpointNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ZeroTrustGatewayProxyEndpoints `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayProxyEndpoints                            `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayProxyEndpointNewResponseEnvelopeJSON    `json:"-"`
@@ -231,9 +212,9 @@ func (r GatewayProxyEndpointDeleteParams) MarshalJSON() (data []byte, err error)
 }
 
 type GatewayProxyEndpointDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                   `json:"messages,required"`
-	Result   GatewayProxyEndpointDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayProxyEndpointDeleteResponseEnvelopeJSON    `json:"-"`
@@ -286,9 +267,9 @@ func (r GatewayProxyEndpointEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayProxyEndpointEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ZeroTrustGatewayProxyEndpoints `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayProxyEndpoints                            `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayProxyEndpointEditResponseEnvelopeJSON    `json:"-"`
@@ -333,9 +314,9 @@ type GatewayProxyEndpointGetParams struct {
 }
 
 type GatewayProxyEndpointGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ZeroTrustGatewayProxyEndpoints `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayProxyEndpoints                            `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayProxyEndpointGetResponseEnvelopeJSON    `json:"-"`

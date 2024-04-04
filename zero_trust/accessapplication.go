@@ -184,6 +184,70 @@ func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID Acces
 	return
 }
 
+type UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832 struct {
+	// The name of the IdP attribute.
+	Name string                                               `json:"name"`
+	JSON unnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832JSON `json:"-"`
+}
+
+// unnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832]
+type unnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832JSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832JSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832Param struct {
+	// The name of the IdP attribute.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A globally unique name for an identity or service provider.
+type UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9 string
+
+const (
+	UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatUnspecified UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9 = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+	UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatBasic       UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9 = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+	UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatURI         UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9 = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+)
+
+func (r UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatBasic, UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatURI:
+		return true
+	}
+	return false
+}
+
+// The format of the name identifier sent to the SaaS application.
+type UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 string
+
+const (
+	UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419ID    UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 = "id"
+	UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419Email UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 = "email"
+)
+
+func (r UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419ID, UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419Email:
+		return true
+	}
+	return false
+}
+
 type ZeroTrustApps struct {
 	// Audience tag.
 	Aud       string    `json:"aud"`
@@ -602,7 +666,7 @@ type ZeroTrustAppsSaaSApplicationSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat shared.UnnamedSchemaRef77 `json:"name_id_format"`
+	NameIDFormat UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -716,7 +780,7 @@ type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat shared.UnnamedSchemaRef77 `json:"name_id_format"`
+	NameIDFormat UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -790,8 +854,8 @@ type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes struct
 	// The name of the attribute.
 	Name string `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat shared.UnnamedSchemaRef75                                                `json:"name_format"`
-	Source     shared.UnnamedSchemaRef76                                                `json:"source"`
+	NameFormat UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9                         `json:"name_format"`
+	Source     UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832                         `json:"source"`
 	JSON       zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON `json:"-"`
 }
 
@@ -1798,7 +1862,7 @@ type AccessApplicationNewParamsSaaSApplicationSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[shared.UnnamedSchemaRef77] `json:"name_id_format"`
+	NameIDFormat param.Field[UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1858,7 +1922,7 @@ type AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[shared.UnnamedSchemaRef77] `json:"name_id_format"`
+	NameIDFormat param.Field[UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1906,8 +1970,8 @@ type AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttr
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[shared.UnnamedSchemaRef75]      `json:"name_format"`
-	Source     param.Field[shared.UnnamedSchemaRef76Param] `json:"source"`
+	NameFormat param.Field[UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9]      `json:"name_format"`
+	Source     param.Field[UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832Param] `json:"source"`
 }
 
 func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
@@ -2477,9 +2541,9 @@ func (AccessApplicationNewParamsBookmarkApplication) ImplementsAccessApplication
 }
 
 type AccessApplicationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustApps         `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustApps                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationNewResponseEnvelopeJSON    `json:"-"`
@@ -2735,7 +2799,7 @@ type AccessApplicationUpdateParamsSaaSApplicationSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[shared.UnnamedSchemaRef77] `json:"name_id_format"`
+	NameIDFormat param.Field[UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -2795,7 +2859,7 @@ type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasApp struct
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[shared.UnnamedSchemaRef77] `json:"name_id_format"`
+	NameIDFormat param.Field[UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -2843,8 +2907,8 @@ type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomA
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[shared.UnnamedSchemaRef75]      `json:"name_format"`
-	Source     param.Field[shared.UnnamedSchemaRef76Param] `json:"source"`
+	NameFormat param.Field[UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9]      `json:"name_format"`
+	Source     param.Field[UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832Param] `json:"source"`
 }
 
 func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
@@ -3456,9 +3520,9 @@ type AccessApplicationUpdateParamsBookmarkApplicationAppIDUnion interface {
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustApps         `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustApps                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -3520,9 +3584,9 @@ type AccessApplicationDeleteParamsAppIDUnion interface {
 }
 
 type AccessApplicationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   AccessApplicationDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AccessApplicationDeleteResponse                           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -3577,9 +3641,9 @@ type AccessApplicationGetParamsAppIDUnion interface {
 }
 
 type AccessApplicationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustApps         `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustApps                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationGetResponseEnvelopeJSON    `json:"-"`

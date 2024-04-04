@@ -138,9 +138,9 @@ func (r DevicePolicyIncludeUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type DevicePolicyIncludeUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   []DevicesSplitTunnelInclude `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []DevicesSplitTunnelInclude                               `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyIncludeUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyIncludeUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -222,9 +222,9 @@ type DevicePolicyIncludeGetParams struct {
 }
 
 type DevicePolicyIncludeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   []DevicesSplitTunnelInclude `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []DevicesSplitTunnelInclude                               `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyIncludeGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyIncludeGetResponseEnvelopeResultInfo `json:"result_info"`

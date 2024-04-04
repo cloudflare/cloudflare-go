@@ -62,14 +62,14 @@ func (r *BrandProtectionService) URLInfo(ctx context.Context, params BrandProtec
 
 type IntelPhishingURLInfo struct {
 	// List of categorizations applied to this submission.
-	Categorizations []shared.UnnamedSchemaRef13 `json:"categorizations"`
+	Categorizations []UnnamedSchemaRef209db30ed499548152d6f3bccf720b54 `json:"categorizations"`
 	// List of model results for completed scans.
-	ModelResults []shared.UnnamedSchemaRef14 `json:"model_results"`
+	ModelResults []UnnamedSchemaRef9b4c9779a35b172cb69c71389ebc7014 `json:"model_results"`
 	// List of signatures that matched against site content found when crawling the
 	// URL.
-	RuleMatches []shared.UnnamedSchemaRef15 `json:"rule_matches"`
+	RuleMatches []UnnamedSchemaRef3e10ea08deb8102a27500f986488c1e8 `json:"rule_matches"`
 	// Status of the most recent scan found.
-	ScanStatus shared.UnnamedSchemaRef16 `json:"scan_status"`
+	ScanStatus UnnamedSchemaRefA64e2a18a86750b6bd72cdf37ecfd869 `json:"scan_status"`
 	// For internal use.
 	ScreenshotDownloadSignature string `json:"screenshot_download_signature"`
 	// For internal use.
@@ -104,12 +104,12 @@ func (r intelPhishingURLInfoJSON) RawJSON() string {
 type IntelPhishingURLSubmit struct {
 	// URLs that were excluded from scanning because their domain is in our no-scan
 	// list.
-	ExcludedURLs []shared.UnnamedSchemaRef10 `json:"excluded_urls"`
+	ExcludedURLs []UnnamedSchemaRef767c0981cf47f45f0c766253dbd18669 `json:"excluded_urls"`
 	// URLs that were skipped because the same URL is currently being scanned
-	SkippedURLs []shared.UnnamedSchemaRef11 `json:"skipped_urls"`
+	SkippedURLs []UnnamedSchemaRef44e66100b948bfe723054c56b6144766 `json:"skipped_urls"`
 	// URLs that were successfully submitted for scanning.
-	SubmittedURLs []shared.UnnamedSchemaRef12 `json:"submitted_urls"`
-	JSON          intelPhishingURLSubmitJSON  `json:"-"`
+	SubmittedURLs []UnnamedSchemaRef39419d70e2399b28b15cd660afd342fb `json:"submitted_urls"`
+	JSON          intelPhishingURLSubmitJSON                         `json:"-"`
 }
 
 // intelPhishingURLSubmitJSON contains the JSON metadata for the struct
@@ -130,6 +130,191 @@ func (r intelPhishingURLSubmitJSON) RawJSON() string {
 	return r.raw
 }
 
+type UnnamedSchemaRef209db30ed499548152d6f3bccf720b54 struct {
+	// Name of the category applied.
+	Category string `json:"category"`
+	// Result of human review for this categorization.
+	VerificationStatus string                                               `json:"verification_status"`
+	JSON               unnamedSchemaRef209db30ed499548152d6f3bccf720b54JSON `json:"-"`
+}
+
+// unnamedSchemaRef209db30ed499548152d6f3bccf720b54JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef209db30ed499548152d6f3bccf720b54]
+type unnamedSchemaRef209db30ed499548152d6f3bccf720b54JSON struct {
+	Category           apijson.Field
+	VerificationStatus apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef209db30ed499548152d6f3bccf720b54) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef209db30ed499548152d6f3bccf720b54JSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef39419d70e2399b28b15cd660afd342fb struct {
+	// URL that was submitted.
+	URL string `json:"url"`
+	// ID assigned to this URL submission. Used to retrieve scanning results.
+	URLID int64                                                `json:"url_id"`
+	JSON  unnamedSchemaRef39419d70e2399b28b15cd660afd342fbJSON `json:"-"`
+}
+
+// unnamedSchemaRef39419d70e2399b28b15cd660afd342fbJSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef39419d70e2399b28b15cd660afd342fb]
+type unnamedSchemaRef39419d70e2399b28b15cd660afd342fbJSON struct {
+	URL         apijson.Field
+	URLID       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef39419d70e2399b28b15cd660afd342fb) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef39419d70e2399b28b15cd660afd342fbJSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef3e10ea08deb8102a27500f986488c1e8 struct {
+	// For internal use.
+	Banning bool `json:"banning"`
+	// For internal use.
+	Blocking bool `json:"blocking"`
+	// Description of the signature that matched.
+	Description string `json:"description"`
+	// Name of the signature that matched.
+	Name string                                               `json:"name"`
+	JSON unnamedSchemaRef3e10ea08deb8102a27500f986488c1e8JSON `json:"-"`
+}
+
+// unnamedSchemaRef3e10ea08deb8102a27500f986488c1e8JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef3e10ea08deb8102a27500f986488c1e8]
+type unnamedSchemaRef3e10ea08deb8102a27500f986488c1e8JSON struct {
+	Banning     apijson.Field
+	Blocking    apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef3e10ea08deb8102a27500f986488c1e8) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef3e10ea08deb8102a27500f986488c1e8JSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef44e66100b948bfe723054c56b6144766 struct {
+	// URL that was skipped.
+	URL string `json:"url"`
+	// ID of the submission of that URL that is currently scanning.
+	URLID int64                                                `json:"url_id"`
+	JSON  unnamedSchemaRef44e66100b948bfe723054c56b6144766JSON `json:"-"`
+}
+
+// unnamedSchemaRef44e66100b948bfe723054c56b6144766JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef44e66100b948bfe723054c56b6144766]
+type unnamedSchemaRef44e66100b948bfe723054c56b6144766JSON struct {
+	URL         apijson.Field
+	URLID       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef44e66100b948bfe723054c56b6144766) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef44e66100b948bfe723054c56b6144766JSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef767c0981cf47f45f0c766253dbd18669 struct {
+	// URL that was excluded.
+	URL  string                                               `json:"url"`
+	JSON unnamedSchemaRef767c0981cf47f45f0c766253dbd18669JSON `json:"-"`
+}
+
+// unnamedSchemaRef767c0981cf47f45f0c766253dbd18669JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef767c0981cf47f45f0c766253dbd18669]
+type unnamedSchemaRef767c0981cf47f45f0c766253dbd18669JSON struct {
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef767c0981cf47f45f0c766253dbd18669) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef767c0981cf47f45f0c766253dbd18669JSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef9b4c9779a35b172cb69c71389ebc7014 struct {
+	// Name of the model.
+	ModelName string `json:"model_name"`
+	// Score output by the model for this submission.
+	ModelScore float64                                              `json:"model_score"`
+	JSON       unnamedSchemaRef9b4c9779a35b172cb69c71389ebc7014JSON `json:"-"`
+}
+
+// unnamedSchemaRef9b4c9779a35b172cb69c71389ebc7014JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef9b4c9779a35b172cb69c71389ebc7014]
+type unnamedSchemaRef9b4c9779a35b172cb69c71389ebc7014JSON struct {
+	ModelName   apijson.Field
+	ModelScore  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef9b4c9779a35b172cb69c71389ebc7014) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef9b4c9779a35b172cb69c71389ebc7014JSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the most recent scan found.
+type UnnamedSchemaRefA64e2a18a86750b6bd72cdf37ecfd869 struct {
+	// Timestamp of when the submission was processed.
+	LastProcessed string `json:"last_processed"`
+	// For internal use.
+	ScanComplete bool `json:"scan_complete"`
+	// Status code that the crawler received when loading the submitted URL.
+	StatusCode int64 `json:"status_code"`
+	// ID of the most recent submission.
+	SubmissionID int64                                                `json:"submission_id"`
+	JSON         unnamedSchemaRefA64e2a18a86750b6bd72cdf37ecfd869JSON `json:"-"`
+}
+
+// unnamedSchemaRefA64e2a18a86750b6bd72cdf37ecfd869JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefA64e2a18a86750b6bd72cdf37ecfd869]
+type unnamedSchemaRefA64e2a18a86750b6bd72cdf37ecfd869JSON struct {
+	LastProcessed apijson.Field
+	ScanComplete  apijson.Field
+	StatusCode    apijson.Field
+	SubmissionID  apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRefA64e2a18a86750b6bd72cdf37ecfd869) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRefA64e2a18a86750b6bd72cdf37ecfd869JSON) RawJSON() string {
+	return r.raw
+}
+
 type BrandProtectionSubmitParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -142,9 +327,9 @@ func (r BrandProtectionSubmitParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BrandProtectionSubmitResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   IntelPhishingURLSubmit `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IntelPhishingURLSubmit                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success BrandProtectionSubmitResponseEnvelopeSuccess `json:"success,required"`
 	JSON    brandProtectionSubmitResponseEnvelopeJSON    `json:"-"`
@@ -215,9 +400,9 @@ func (r BrandProtectionURLInfoParamsURLIDParam) URLQuery() (v url.Values) {
 }
 
 type BrandProtectionURLInfoResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   IntelPhishingURLInfo  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   IntelPhishingURLInfo                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success BrandProtectionURLInfoResponseEnvelopeSuccess `json:"success,required"`
 	JSON    brandProtectionURLInfoResponseEnvelopeJSON    `json:"-"`

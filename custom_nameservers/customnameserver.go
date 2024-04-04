@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // CustomNameserverService contains methods and other services that help with
@@ -48,7 +46,7 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 }
 
 // Delete Account Custom Nameserver
-func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, params CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponseUnion, err error) {
+func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, params CustomNameserverDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns/%s", params.AccountID, customNSID)
@@ -192,33 +190,6 @@ func (r CustomNameserverStatus) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [custom_nameservers.CustomNameserverDeleteResponseUnknown],
-// [custom_nameservers.CustomNameserverDeleteResponseArray] or
-// [shared.UnionString].
-type CustomNameserverDeleteResponseUnion interface {
-	ImplementsCustomNameserversCustomNameserverDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomNameserverDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CustomNameserverDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type CustomNameserverDeleteResponseArray []interface{}
-
-func (r CustomNameserverDeleteResponseArray) ImplementsCustomNameserversCustomNameserverDeleteResponseUnion() {
-}
-
 type CustomNameserverNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -233,8 +204,8 @@ func (r CustomNameserverNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A single account custom nameserver.
 	Result CustomNameserver `json:"result,required"`
 	// Whether the API call was successful
@@ -287,9 +258,9 @@ func (r CustomNameserverDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   CustomNameserverDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -368,9 +339,9 @@ type CustomNameserverAvailabiltyParams struct {
 }
 
 type CustomNameserverAvailabiltyResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []string              `json:"result,required,nullable" format:"hostname"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []string                                                  `json:"result,required,nullable" format:"hostname"`
 	// Whether the API call was successful
 	Success    CustomNameserverAvailabiltyResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverAvailabiltyResponseEnvelopeResultInfo `json:"result_info"`
@@ -449,9 +420,9 @@ type CustomNameserverGetParams struct {
 }
 
 type CustomNameserverGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []CustomNameserver    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []CustomNameserver                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -535,9 +506,9 @@ func (r CustomNameserverVerifyParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverVerifyResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []CustomNameserver    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []CustomNameserver                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverVerifyResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverVerifyResponseEnvelopeResultInfo `json:"result_info"`

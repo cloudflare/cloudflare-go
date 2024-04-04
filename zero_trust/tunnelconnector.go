@@ -51,8 +51,8 @@ type TunnelConnectorGetParams struct {
 }
 
 type TunnelConnectorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A client (typically cloudflared) that maintains connections to a Cloudflare data
 	// center.
 	Result TunnelTunnelClient `json:"result,required"`

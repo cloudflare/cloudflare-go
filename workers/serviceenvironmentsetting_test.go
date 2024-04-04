@@ -35,7 +35,7 @@ func TestServiceEnvironmentSettingEditWithOptionalParams(t *testing.T) {
 		"production",
 		workers.ServiceEnvironmentSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Errors: cloudflare.F([]shared.ResponseInfoParam{{
+			Errors: cloudflare.F([]shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {
@@ -45,7 +45,7 @@ func TestServiceEnvironmentSettingEditWithOptionalParams(t *testing.T) {
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Messages: cloudflare.F([]shared.ResponseInfoParam{{
+			Messages: cloudflare.F([]shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {

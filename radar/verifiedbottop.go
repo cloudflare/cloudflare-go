@@ -84,9 +84,9 @@ func (r verifiedBotTopBotsResponseJSON) RawJSON() string {
 }
 
 type VerifiedBotTopBotsResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                        `json:"dateRange,required"`
-	ConfidenceInfo VerifiedBotTopBotsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           verifiedBotTopBotsResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	ConfidenceInfo VerifiedBotTopBotsResponseMetaConfidenceInfo       `json:"confidenceInfo"`
+	JSON           verifiedBotTopBotsResponseMetaJSON                 `json:"-"`
 }
 
 // verifiedBotTopBotsResponseMetaJSON contains the JSON metadata for the struct
@@ -107,9 +107,9 @@ func (r verifiedBotTopBotsResponseMetaJSON) RawJSON() string {
 }
 
 type VerifiedBotTopBotsResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                            `json:"annotations"`
-	Level       int64                                            `json:"level"`
-	JSON        verifiedBotTopBotsResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        verifiedBotTopBotsResponseMetaConfidenceInfoJSON   `json:"-"`
 }
 
 // verifiedBotTopBotsResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -180,7 +180,7 @@ func (r verifiedBotTopCategoriesResponseJSON) RawJSON() string {
 }
 
 type VerifiedBotTopCategoriesResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                              `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
 	ConfidenceInfo VerifiedBotTopCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           verifiedBotTopCategoriesResponseMetaJSON           `json:"-"`
 }
@@ -203,7 +203,7 @@ func (r verifiedBotTopCategoriesResponseMetaJSON) RawJSON() string {
 }
 
 type VerifiedBotTopCategoriesResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                  `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1     `json:"annotations"`
 	Level       int64                                                  `json:"level"`
 	JSON        verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON `json:"-"`
 }

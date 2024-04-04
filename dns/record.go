@@ -211,7 +211,7 @@ type DNSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -409,7 +409,7 @@ type DNSRecordDNSRecordsARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -534,7 +534,7 @@ type DNSRecordDNSRecordsAAAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -661,7 +661,7 @@ type DNSRecordDNSRecordsCAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -814,7 +814,7 @@ type DNSRecordDNSRecordsCERTRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -968,7 +968,7 @@ type DNSRecordDNSRecordsCNAMERecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1095,7 +1095,7 @@ type DNSRecordDNSRecordsDNSKEYRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1251,7 +1251,7 @@ type DNSRecordDNSRecordsDSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1407,7 +1407,7 @@ type DNSRecordDNSRecordsHTTPSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1560,7 +1560,7 @@ type DNSRecordDNSRecordsLOCRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1773,7 +1773,7 @@ type DNSRecordDNSRecordsMXRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1897,7 +1897,7 @@ type DNSRecordDNSRecordsNAPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2057,7 +2057,7 @@ type DNSRecordDNSRecordsNSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2178,7 +2178,7 @@ type DNSRecordDNSRecordsPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2301,7 +2301,7 @@ type DNSRecordDNSRecordsSMIMEARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2460,7 +2460,7 @@ type DNSRecordDNSRecordsSRVRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2632,7 +2632,7 @@ type DNSRecordDNSRecordsSSHFPRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2785,7 +2785,7 @@ type DNSRecordDNSRecordsSVCBRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2938,7 +2938,7 @@ type DNSRecordDNSRecordsTLSARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3092,7 +3092,7 @@ type DNSRecordDNSRecordsTXTRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3218,7 +3218,7 @@ type DNSRecordDNSRecordsURIRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta shared.UnnamedSchemaRef162 `json:"meta"`
+	Meta UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3381,6 +3381,61 @@ func (r DNSRecordType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Extra Cloudflare-specific information about the record.
+type UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool `json:"auto_added"`
+	// Where the record originated from.
+	Source string                                               `json:"source"`
+	JSON   unnamedSchemaRef1391721bdb8938d5420a8bc738a44debJSON `json:"-"`
+}
+
+// unnamedSchemaRef1391721bdb8938d5420a8bc738a44debJSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb]
+type unnamedSchemaRef1391721bdb8938d5420a8bc738a44debJSON struct {
+	AutoAdded   apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef1391721bdb8938d5420a8bc738a44deb) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef1391721bdb8938d5420a8bc738a44debJSON) RawJSON() string {
+	return r.raw
+}
+
+type UnnamedSchemaRef2f895e023ae55b55d2f5925449b819cd struct {
+	// When the file parsing ended.
+	EndTime time.Time `json:"end_time" format:"date-time"`
+	// Processing time of the file in seconds.
+	ProcessTime float64 `json:"process_time"`
+	// When the file parsing started.
+	StartTime time.Time                                            `json:"start_time" format:"date-time"`
+	JSON      unnamedSchemaRef2f895e023ae55b55d2f5925449b819cdJSON `json:"-"`
+}
+
+// unnamedSchemaRef2f895e023ae55b55d2f5925449b819cdJSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef2f895e023ae55b55d2f5925449b819cd]
+type unnamedSchemaRef2f895e023ae55b55d2f5925449b819cdJSON struct {
+	EndTime     apijson.Field
+	ProcessTime apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef2f895e023ae55b55d2f5925449b819cd) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef2f895e023ae55b55d2f5925449b819cdJSON) RawJSON() string {
+	return r.raw
 }
 
 type RecordDeleteResponse struct {
@@ -5171,9 +5226,9 @@ func (r RecordNewParamsDNSRecordsURIRecordTTLNumber) IsKnown() bool {
 }
 
 type RecordNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNSRecord             `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DNSRecord                                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordNewResponseEnvelopeJSON    `json:"-"`
@@ -6936,9 +6991,9 @@ func (r RecordUpdateParamsDNSRecordsURIRecordTTLNumber) IsKnown() bool {
 }
 
 type RecordUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNSRecord             `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DNSRecord                                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordUpdateResponseEnvelopeJSON    `json:"-"`
@@ -8938,9 +8993,9 @@ func (r RecordEditParamsDNSRecordsURIRecordTTLNumber) IsKnown() bool {
 }
 
 type RecordEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNSRecord             `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DNSRecord                                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordEditResponseEnvelopeJSON    `json:"-"`
@@ -8991,9 +9046,9 @@ type RecordGetParams struct {
 }
 
 type RecordGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DNSRecord             `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DNSRecord                                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success RecordGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    recordGetResponseEnvelopeJSON    `json:"-"`
@@ -9053,13 +9108,13 @@ func (r RecordImportParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordImportResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RecordImportResponse  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   RecordImportResponse                                      `json:"result,required"`
 	// Whether the API call was successful
-	Success RecordImportResponseEnvelopeSuccess `json:"success,required"`
-	Timing  shared.UnnamedSchemaRef62           `json:"timing"`
-	JSON    recordImportResponseEnvelopeJSON    `json:"-"`
+	Success RecordImportResponseEnvelopeSuccess              `json:"success,required"`
+	Timing  UnnamedSchemaRef2f895e023ae55b55d2f5925449b819cd `json:"timing"`
+	JSON    recordImportResponseEnvelopeJSON                 `json:"-"`
 }
 
 // recordImportResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -9108,13 +9163,13 @@ func (r RecordScanParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordScanResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RecordScanResponse    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   RecordScanResponse                                        `json:"result,required"`
 	// Whether the API call was successful
-	Success RecordScanResponseEnvelopeSuccess `json:"success,required"`
-	Timing  shared.UnnamedSchemaRef62         `json:"timing"`
-	JSON    recordScanResponseEnvelopeJSON    `json:"-"`
+	Success RecordScanResponseEnvelopeSuccess                `json:"success,required"`
+	Timing  UnnamedSchemaRef2f895e023ae55b55d2f5925449b819cd `json:"timing"`
+	JSON    recordScanResponseEnvelopeJSON                   `json:"-"`
 }
 
 // recordScanResponseEnvelopeJSON contains the JSON metadata for the struct

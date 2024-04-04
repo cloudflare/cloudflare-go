@@ -135,11 +135,11 @@ func (r qualitySpeedSummaryResponseJSON) RawJSON() string {
 }
 
 type QualitySpeedSummaryResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                         `json:"dateRange,required"`
-	LastUpdated    string                                        `json:"lastUpdated,required"`
-	Normalization  string                                        `json:"normalization,required"`
-	ConfidenceInfo QualitySpeedSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           qualitySpeedSummaryResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	Normalization  string                                             `json:"normalization,required"`
+	ConfidenceInfo QualitySpeedSummaryResponseMetaConfidenceInfo      `json:"confidenceInfo"`
+	JSON           qualitySpeedSummaryResponseMetaJSON                `json:"-"`
 }
 
 // qualitySpeedSummaryResponseMetaJSON contains the JSON metadata for the struct
@@ -162,9 +162,9 @@ func (r qualitySpeedSummaryResponseMetaJSON) RawJSON() string {
 }
 
 type QualitySpeedSummaryResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                             `json:"annotations"`
-	Level       int64                                             `json:"level"`
-	JSON        qualitySpeedSummaryResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        qualitySpeedSummaryResponseMetaConfidenceInfoJSON  `json:"-"`
 }
 
 // qualitySpeedSummaryResponseMetaConfidenceInfoJSON contains the JSON metadata for

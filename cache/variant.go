@@ -90,7 +90,7 @@ func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts .
 // be indicated with BYPASS cache status in the response headers.
 type CacheVariants struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef151 `json:"id,required"`
+	ID UnnamedSchemaRef669bfbb16c0913af7077c3c194fbfcd0 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time         `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       cacheVariantsJSON `json:"-"`
@@ -112,6 +112,21 @@ func (r cacheVariantsJSON) RawJSON() string {
 	return r.raw
 }
 
+// ID of the zone setting.
+type UnnamedSchemaRef669bfbb16c0913af7077c3c194fbfcd0 string
+
+const (
+	UnnamedSchemaRef669bfbb16c0913af7077c3c194fbfcd0Variants UnnamedSchemaRef669bfbb16c0913af7077c3c194fbfcd0 = "variants"
+)
+
+func (r UnnamedSchemaRef669bfbb16c0913af7077c3c194fbfcd0) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef669bfbb16c0913af7077c3c194fbfcd0Variants:
+		return true
+	}
+	return false
+}
+
 // Variant support enables caching variants of images with certain file extensions
 // in addition to the original. This only applies when the origin server sends the
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
@@ -119,7 +134,7 @@ func (r cacheVariantsJSON) RawJSON() string {
 // be indicated with BYPASS cache status in the response headers.
 type VariantEditResponse struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef151 `json:"id,required"`
+	ID UnnamedSchemaRef669bfbb16c0913af7077c3c194fbfcd0 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the zone setting.
@@ -216,7 +231,7 @@ func (r variantEditResponseValueJSON) RawJSON() string {
 // be indicated with BYPASS cache status in the response headers.
 type VariantGetResponse struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef151 `json:"id,required"`
+	ID UnnamedSchemaRef669bfbb16c0913af7077c3c194fbfcd0 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the zone setting.
@@ -317,8 +332,8 @@ func (r VariantDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type VariantDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Variant support enables caching variants of images with certain file extensions
 	// in addition to the original. This only applies when the origin server sends the
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
@@ -417,8 +432,8 @@ func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {
 }
 
 type VariantEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Variant support enables caching variants of images with certain file extensions
 	// in addition to the original. This only applies when the origin server sends the
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
@@ -470,8 +485,8 @@ type VariantGetParams struct {
 }
 
 type VariantGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Variant support enables caching variants of images with certain file extensions
 	// in addition to the original. This only applies when the origin server sends the
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but

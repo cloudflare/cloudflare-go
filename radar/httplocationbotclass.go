@@ -51,9 +51,9 @@ func (r *HTTPLocationBotClassService) Get(ctx context.Context, botClass HTTPLoca
 }
 
 type HTTPLocationBotClassGetResponse struct {
-	Meta HTTPLocationBotClassGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPLocationBotClassGetResponseTop0 `json:"top_0,required"`
-	JSON httpLocationBotClassGetResponseJSON   `json:"-"`
+	Meta HTTPLocationBotClassGetResponseMeta                `json:"meta,required"`
+	Top0 []UnnamedSchemaRef83a14d589e799bc901b9ccc870251d09 `json:"top_0,required"`
+	JSON httpLocationBotClassGetResponseJSON                `json:"-"`
 }
 
 // httpLocationBotClassGetResponseJSON contains the JSON metadata for the struct
@@ -74,10 +74,10 @@ func (r httpLocationBotClassGetResponseJSON) RawJSON() string {
 }
 
 type HTTPLocationBotClassGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                             `json:"dateRange,required"`
-	LastUpdated    string                                            `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPLocationBotClassGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpLocationBotClassGetResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPLocationBotClassGetResponseMetaConfidenceInfo  `json:"confidenceInfo"`
+	JSON           httpLocationBotClassGetResponseMetaJSON            `json:"-"`
 }
 
 // httpLocationBotClassGetResponseMetaJSON contains the JSON metadata for the
@@ -99,7 +99,7 @@ func (r httpLocationBotClassGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPLocationBotClassGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                 `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1    `json:"annotations"`
 	Level       int64                                                 `json:"level"`
 	JSON        httpLocationBotClassGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -118,31 +118,6 @@ func (r *HTTPLocationBotClassGetResponseMetaConfidenceInfo) UnmarshalJSON(data [
 }
 
 func (r httpLocationBotClassGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPLocationBotClassGetResponseTop0 struct {
-	ClientCountryAlpha2 string                                  `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                  `json:"clientCountryName,required"`
-	Value               string                                  `json:"value,required"`
-	JSON                httpLocationBotClassGetResponseTop0JSON `json:"-"`
-}
-
-// httpLocationBotClassGetResponseTop0JSON contains the JSON metadata for the
-// struct [HTTPLocationBotClassGetResponseTop0]
-type httpLocationBotClassGetResponseTop0JSON struct {
-	ClientCountryAlpha2 apijson.Field
-	ClientCountryName   apijson.Field
-	Value               apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *HTTPLocationBotClassGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpLocationBotClassGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

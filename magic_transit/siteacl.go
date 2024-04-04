@@ -98,6 +98,24 @@ func (r *SiteACLService) Get(ctx context.Context, siteID string, aclIdentifier s
 	return
 }
 
+// Array of allowed communication protocols between configured LANs. If no
+// protocols are provided, all protocols are allowed.
+type UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 string
+
+const (
+	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Tcp  UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "tcp"
+	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Udp  UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "udp"
+	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Icmp UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "icmp"
+)
+
+func (r UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Tcp, UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Udp, UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Icmp:
+		return true
+	}
+	return false
+}
+
 type SiteACLNewResponse struct {
 	ACLs []SiteACLNewResponseACL `json:"acls"`
 	JSON siteACLNewResponseJSON  `json:"-"`
@@ -133,9 +151,9 @@ type SiteACLNewResponseACL struct {
 	LAN1           SiteACLNewResponseACLsLAN1 `json:"lan_1"`
 	LAN2           SiteACLNewResponseACLsLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                      `json:"name"`
-	Protocols []shared.UnnamedSchemaRef82 `json:"protocols"`
-	JSON      siteACLNewResponseACLJSON   `json:"-"`
+	Name      string                                             `json:"name"`
+	Protocols []UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 `json:"protocols"`
+	JSON      siteACLNewResponseACLJSON                          `json:"-"`
 }
 
 // siteACLNewResponseACLJSON contains the JSON metadata for the struct
@@ -306,9 +324,9 @@ type SiteACLUpdateResponseACL struct {
 	LAN1           SiteACLUpdateResponseACLLAN1 `json:"lan_1"`
 	LAN2           SiteACLUpdateResponseACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                       `json:"name"`
-	Protocols []shared.UnnamedSchemaRef82  `json:"protocols"`
-	JSON      siteACLUpdateResponseACLJSON `json:"-"`
+	Name      string                                             `json:"name"`
+	Protocols []UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 `json:"protocols"`
+	JSON      siteACLUpdateResponseACLJSON                       `json:"-"`
 }
 
 // siteACLUpdateResponseACLJSON contains the JSON metadata for the struct
@@ -478,9 +496,9 @@ type SiteACLListResponseACL struct {
 	LAN1           SiteACLListResponseACLsLAN1 `json:"lan_1"`
 	LAN2           SiteACLListResponseACLsLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                      `json:"name"`
-	Protocols []shared.UnnamedSchemaRef82 `json:"protocols"`
-	JSON      siteACLListResponseACLJSON  `json:"-"`
+	Name      string                                             `json:"name"`
+	Protocols []UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 `json:"protocols"`
+	JSON      siteACLListResponseACLJSON                         `json:"-"`
 }
 
 // siteACLListResponseACLJSON contains the JSON metadata for the struct
@@ -653,9 +671,9 @@ type SiteACLDeleteResponseDeletedACL struct {
 	LAN1           SiteACLDeleteResponseDeletedACLLAN1 `json:"lan_1"`
 	LAN2           SiteACLDeleteResponseDeletedACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                              `json:"name"`
-	Protocols []shared.UnnamedSchemaRef82         `json:"protocols"`
-	JSON      siteACLDeleteResponseDeletedACLJSON `json:"-"`
+	Name      string                                             `json:"name"`
+	Protocols []UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 `json:"protocols"`
+	JSON      siteACLDeleteResponseDeletedACLJSON                `json:"-"`
 }
 
 // siteACLDeleteResponseDeletedACLJSON contains the JSON metadata for the struct
@@ -826,9 +844,9 @@ type SiteACLGetResponseACL struct {
 	LAN1           SiteACLGetResponseACLLAN1 `json:"lan_1"`
 	LAN2           SiteACLGetResponseACLLAN2 `json:"lan_2"`
 	// The name of the ACL.
-	Name      string                      `json:"name"`
-	Protocols []shared.UnnamedSchemaRef82 `json:"protocols"`
-	JSON      siteACLGetResponseACLJSON   `json:"-"`
+	Name      string                                             `json:"name"`
+	Protocols []UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 `json:"protocols"`
+	JSON      siteACLGetResponseACLJSON                          `json:"-"`
 }
 
 // siteACLGetResponseACLJSON contains the JSON metadata for the struct
@@ -984,8 +1002,8 @@ type SiteACLNewParamsACL struct {
 	// will forward traffic to Cloudflare. If set to "true", the policy will forward
 	// traffic locally on the Magic WAN Connector. If not included in request, will
 	// default to false.
-	ForwardLocally param.Field[bool]                        `json:"forward_locally"`
-	Protocols      param.Field[[]shared.UnnamedSchemaRef82] `json:"protocols"`
+	ForwardLocally param.Field[bool]                                               `json:"forward_locally"`
+	Protocols      param.Field[[]UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916] `json:"protocols"`
 }
 
 func (r SiteACLNewParamsACL) MarshalJSON() (data []byte, err error) {
@@ -1041,9 +1059,9 @@ type SiteACLNewParamsACLLAN2SubnetUnion interface {
 }
 
 type SiteACLNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLNewResponse    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   SiteACLNewResponse                                        `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLNewResponseEnvelopeJSON    `json:"-"`
@@ -1104,8 +1122,8 @@ type SiteACLUpdateParamsACL struct {
 	LAN1           param.Field[SiteACLUpdateParamsACLLAN1] `json:"lan_1"`
 	LAN2           param.Field[SiteACLUpdateParamsACLLAN2] `json:"lan_2"`
 	// The name of the ACL.
-	Name      param.Field[string]                      `json:"name"`
-	Protocols param.Field[[]shared.UnnamedSchemaRef82] `json:"protocols"`
+	Name      param.Field[string]                                             `json:"name"`
+	Protocols param.Field[[]UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916] `json:"protocols"`
 }
 
 func (r SiteACLUpdateParamsACL) MarshalJSON() (data []byte, err error) {
@@ -1161,9 +1179,9 @@ type SiteACLUpdateParamsACLLAN2SubnetUnion interface {
 }
 
 type SiteACLUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   SiteACLUpdateResponse                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1209,9 +1227,9 @@ type SiteACLListParams struct {
 }
 
 type SiteACLListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLListResponse   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   SiteACLListResponse                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLListResponseEnvelopeJSON    `json:"-"`
@@ -1262,9 +1280,9 @@ func (r SiteACLDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteACLDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   SiteACLDeleteResponse                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1310,9 +1328,9 @@ type SiteACLGetParams struct {
 }
 
 type SiteACLGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SiteACLGetResponse    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   SiteACLGetResponse                                        `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteACLGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteACLGetResponseEnvelopeJSON    `json:"-"`

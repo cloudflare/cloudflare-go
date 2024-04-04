@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/zones"
@@ -32,7 +31,7 @@ func TestSettingMinifyEditWithOptionalParams(t *testing.T) {
 	_, err := client.Zones.Settings.Minify.Edit(context.TODO(), zones.SettingMinifyEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Value: cloudflare.F(zones.SettingMinifyEditParamsValue{
-			Css:  cloudflare.F(shared.UnnamedSchemaRef92On),
+			Css:  cloudflare.F(zones.SettingMinifyEditParamsValueCssOn),
 			HTML: cloudflare.F(zones.SettingMinifyEditParamsValueHTMLOn),
 			Js:   cloudflare.F(zones.SettingMinifyEditParamsValueJsOn),
 		}),

@@ -63,8 +63,8 @@ type DNSAnalyticsReportByTime struct {
 	Max interface{} `json:"max,required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{}               `json:"min,required"`
-	Query shared.UnnamedSchemaRef24 `json:"query,required"`
+	Min   interface{}                                      `json:"min,required"`
+	Query UnnamedSchemaRef85b45d163202bbab7456da6b346d9fe2 `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Array of time intervals in the response data. Each interval is represented as an
@@ -105,8 +105,8 @@ type DNSAnalyticsReportByTimeData struct {
 	Dimensions []string `json:"dimensions,required"`
 	// Array with one item per requested metric. Each item is an array of values,
 	// broken down by time interval.
-	Metrics []shared.UnnamedSchemaRef23      `json:"metrics,required"`
-	JSON    dnsAnalyticsReportByTimeDataJSON `json:"-"`
+	Metrics []UnnamedSchemaRef65be9614de145bf4a58d0fddf46df7ca `json:"metrics,required"`
+	JSON    dnsAnalyticsReportByTimeDataJSON                   `json:"-"`
 }
 
 // dnsAnalyticsReportByTimeDataJSON contains the JSON metadata for the struct
@@ -182,9 +182,9 @@ func (r AnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
 }
 
 type AnalyticsReportBytimeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   DNSAnalyticsReportByTime `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DNSAnalyticsReportByTime                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`

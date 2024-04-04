@@ -87,8 +87,8 @@ type DLPProfiles struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      shared.UnnamedSchemaRef97 `json:"type"`
-	CreatedAt time.Time                 `json:"created_at" format:"date-time"`
+	Type      UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 `json:"type"`
+	CreatedAt time.Time                                        `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string          `json:"description"`
 	UpdatedAt   time.Time       `json:"updated_at" format:"date-time"`
@@ -244,6 +244,36 @@ func (r DLPProfilesDLPIntegrationProfileType) IsKnown() bool {
 	return false
 }
 
+// The type of the profile.
+type UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1 string
+
+const (
+	UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1Custom UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1 = "custom"
+)
+
+func (r UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRefC105db122868c71badeac3b4822ad6b1Custom:
+		return true
+	}
+	return false
+}
+
+// The type of the profile.
+type UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 string
+
+const (
+	UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0Predefined UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 = "predefined"
+)
+
+func (r UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0Predefined:
+		return true
+	}
+	return false
+}
+
 type DLPProfileGetResponse struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64     `json:"allowed_match_count"`
@@ -256,8 +286,8 @@ type DLPProfileGetResponse struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      shared.UnnamedSchemaRef97 `json:"type"`
-	CreatedAt time.Time                 `json:"created_at" format:"date-time"`
+	Type      UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 `json:"type"`
+	CreatedAt time.Time                                        `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string                    `json:"description"`
 	UpdatedAt   time.Time                 `json:"updated_at" format:"date-time"`
@@ -426,9 +456,9 @@ type DLPProfileGetParams struct {
 }
 
 type DLPProfileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DLPProfileGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DLPProfileGetResponse                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfileGetResponseEnvelopeJSON    `json:"-"`

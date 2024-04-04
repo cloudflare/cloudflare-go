@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // RouteService contains methods and other services that help with interacting with
@@ -35,7 +33,7 @@ func NewRouteService(opts ...option.RequestOption) (r *RouteService) {
 }
 
 // Creates a route that maps a URL pattern to a Worker.
-func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponseUnion, err error) {
+func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes", params.ZoneID)
@@ -84,7 +82,7 @@ func (r *RouteService) ListAutoPaging(ctx context.Context, query RouteListParams
 }
 
 // Deletes a route.
-func (r *RouteService) Delete(ctx context.Context, routeID string, params RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponseUnion, err error) {
+func (r *RouteService) Delete(ctx context.Context, routeID string, params RouteDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", params.ZoneID, routeID)
@@ -135,38 +133,6 @@ func (r workersRouteJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [workers.RouteNewResponseUnknown] or [shared.UnionString].
-type RouteNewResponseUnion interface {
-	ImplementsWorkersRouteNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RouteNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [workers.RouteDeleteResponseUnknown] or [shared.UnionString].
-type RouteDeleteResponseUnion interface {
-	ImplementsWorkersRouteDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RouteDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type RouteNewParams struct {
 	// Identifier
 	ZoneID  param.Field[string] `path:"zone_id,required"`
@@ -180,9 +146,9 @@ func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteNewResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
@@ -235,9 +201,9 @@ func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   WorkersRoute          `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   WorkersRoute                                              `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeUpdateResponseEnvelopeJSON    `json:"-"`
@@ -293,9 +259,9 @@ func (r RouteDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   RouteDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeDeleteResponseEnvelopeJSON    `json:"-"`
@@ -341,9 +307,9 @@ type RouteGetParams struct {
 }
 
 type RouteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   WorkersRoute          `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   WorkersRoute                                              `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeGetResponseEnvelopeJSON    `json:"-"`

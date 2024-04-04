@@ -157,7 +157,7 @@ type AccessUserActiveSessionGetResponse struct {
 	DeviceSessions     map[string]AccessUserActiveSessionGetResponseDeviceSession `json:"device_sessions"`
 	DevicePosture      map[string]AccessUserActiveSessionGetResponseDevicePosture `json:"devicePosture"`
 	Email              string                                                     `json:"email"`
-	Geo                AccessUserActiveSessionGetResponseGeo                      `json:"geo"`
+	Geo                UnnamedSchemaRef6a02fe18089d53b52b2cd3949b717919           `json:"geo"`
 	Iat                float64                                                    `json:"iat"`
 	IDP                AccessUserActiveSessionGetResponseIDP                      `json:"idp"`
 	IP                 string                                                     `json:"ip"`
@@ -287,27 +287,6 @@ func (r accessUserActiveSessionGetResponseDevicePostureCheckJSON) RawJSON() stri
 	return r.raw
 }
 
-type AccessUserActiveSessionGetResponseGeo struct {
-	Country string                                    `json:"country"`
-	JSON    accessUserActiveSessionGetResponseGeoJSON `json:"-"`
-}
-
-// accessUserActiveSessionGetResponseGeoJSON contains the JSON metadata for the
-// struct [AccessUserActiveSessionGetResponseGeo]
-type accessUserActiveSessionGetResponseGeoJSON struct {
-	Country     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserActiveSessionGetResponseGeo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessUserActiveSessionGetResponseGeoJSON) RawJSON() string {
-	return r.raw
-}
-
 type AccessUserActiveSessionGetResponseIDP struct {
 	ID   string                                    `json:"id"`
 	Type string                                    `json:"type"`
@@ -361,9 +340,9 @@ func (r accessUserActiveSessionGetResponseMTLSAuthJSON) RawJSON() string {
 }
 
 type AccessUserActiveSessionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   AccessUserActiveSessionGetResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AccessUserActiveSessionGetResponse                        `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessUserActiveSessionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessUserActiveSessionGetResponseEnvelopeJSON    `json:"-"`

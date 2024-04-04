@@ -187,7 +187,7 @@ type GRETunnelNewResponseGRETunnelsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate shared.UnnamedSchemaRef83 `json:"rate"`
+	Rate UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -195,8 +195,8 @@ type GRETunnelNewResponseGRETunnelsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type shared.UnnamedSchemaRef84                     `json:"type"`
-	JSON greTunnelNewResponseGRETunnelsHealthCheckJSON `json:"-"`
+	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 `json:"type"`
+	JSON greTunnelNewResponseGRETunnelsHealthCheckJSON    `json:"-"`
 }
 
 // greTunnelNewResponseGRETunnelsHealthCheckJSON contains the JSON metadata for the
@@ -350,7 +350,7 @@ type GRETunnelListResponseGRETunnelsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate shared.UnnamedSchemaRef83 `json:"rate"`
+	Rate UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -358,8 +358,8 @@ type GRETunnelListResponseGRETunnelsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type shared.UnnamedSchemaRef84                      `json:"type"`
-	JSON greTunnelListResponseGRETunnelsHealthCheckJSON `json:"-"`
+	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 `json:"type"`
+	JSON greTunnelListResponseGRETunnelsHealthCheckJSON   `json:"-"`
 }
 
 // greTunnelListResponseGRETunnelsHealthCheckJSON contains the JSON metadata for
@@ -458,9 +458,9 @@ func (r GRETunnelNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GRETunnelNewResponse  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   GRETunnelNewResponse                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -539,7 +539,7 @@ type GRETunnelUpdateParamsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[shared.UnnamedSchemaRef83] `json:"rate"`
+	Rate param.Field[UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -547,7 +547,7 @@ type GRETunnelUpdateParamsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[shared.UnnamedSchemaRef84] `json:"type"`
+	Type param.Field[UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39] `json:"type"`
 }
 
 func (r GRETunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -576,9 +576,9 @@ func (r GRETunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
 }
 
 type GRETunnelUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   GRETunnelUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   GRETunnelUpdateResponse                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelUpdateResponseEnvelopeJSON    `json:"-"`
@@ -624,9 +624,9 @@ type GRETunnelListParams struct {
 }
 
 type GRETunnelListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GRETunnelListResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   GRETunnelListResponse                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelListResponseEnvelopeJSON    `json:"-"`
@@ -677,9 +677,9 @@ func (r GRETunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   GRETunnelDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   GRETunnelDeleteResponse                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -725,9 +725,9 @@ type GRETunnelGetParams struct {
 }
 
 type GRETunnelGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   GRETunnelGetResponse  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   GRETunnelGetResponse                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelGetResponseEnvelopeJSON    `json:"-"`

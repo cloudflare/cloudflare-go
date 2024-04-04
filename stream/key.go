@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // KeyService contains methods and other services that help with interacting with
@@ -50,7 +48,7 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 }
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
-func (r *KeyService) Delete(ctx context.Context, identifier string, params KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponseUnion, err error) {
+func (r *KeyService) Delete(ctx context.Context, identifier string, params KeyDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/keys/%s", params.AccountID, identifier)
@@ -105,22 +103,6 @@ func (r streamKeysJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [stream.KeyDeleteResponseUnknown] or [shared.UnionString].
-type KeyDeleteResponseUnion interface {
-	ImplementsStreamKeyDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*KeyDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type KeyGetResponse struct {
 	// Identifier
 	ID string `json:"id"`
@@ -156,9 +138,9 @@ func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeyNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   StreamKeys            `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   StreamKeys                                                `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyNewResponseEnvelopeJSON    `json:"-"`
@@ -209,9 +191,9 @@ func (r KeyDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   KeyDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef602dd5f63eab958d53da61434dec08f0Union `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyDeleteResponseEnvelopeJSON    `json:"-"`
@@ -257,9 +239,9 @@ type KeyGetParams struct {
 }
 
 type KeyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []KeyGetResponse      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []KeyGetResponse                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyGetResponseEnvelopeJSON    `json:"-"`

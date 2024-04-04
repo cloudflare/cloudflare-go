@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // MiscategorizationService contains methods and other services that help with
@@ -35,7 +33,7 @@ func NewMiscategorizationService(opts ...option.RequestOption) (r *Miscategoriza
 }
 
 // Create Miscategorization
-func (r *MiscategorizationService) New(ctx context.Context, params MiscategorizationNewParams, opts ...option.RequestOption) (res *MiscategorizationNewResponseUnion, err error) {
+func (r *MiscategorizationService) New(ctx context.Context, params MiscategorizationNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MiscategorizationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/miscategorization", params.AccountID)
@@ -45,23 +43,6 @@ func (r *MiscategorizationService) New(ctx context.Context, params Miscategoriza
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [intel.MiscategorizationNewResponseUnknown] or
-// [shared.UnionString].
-type MiscategorizationNewResponseUnion interface {
-	ImplementsIntelMiscategorizationNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*MiscategorizationNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type MiscategorizationNewParams struct {
@@ -106,9 +87,9 @@ func (r MiscategorizationNewParamsIndicatorType) IsKnown() bool {
 }
 
 type MiscategorizationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   MiscategorizationNewResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success MiscategorizationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    miscategorizationNewResponseEnvelopeJSON    `json:"-"`

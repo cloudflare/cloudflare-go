@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // TunnelConfigurationService contains methods and other services that help with
@@ -35,7 +33,7 @@ func NewTunnelConfigurationService(opts ...option.RequestOption) (r *TunnelConfi
 }
 
 // Adds or updates the configuration for a remotely-managed tunnel.
-func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponseUnion, err error) {
+func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, tunnelID)
@@ -48,7 +46,7 @@ func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string
 }
 
 // Gets the configuration for a remotely-managed tunnel
-func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelConfigurationGetParams, opts ...option.RequestOption) (res *TunnelConfigurationGetResponseUnion, err error) {
+func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, query TunnelConfigurationGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", query.AccountID, tunnelID)
@@ -58,58 +56,6 @@ func (r *TunnelConfigurationService) Get(ctx context.Context, tunnelID string, q
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [zero_trust.TunnelConfigurationUpdateResponseUnknown],
-// [zero_trust.TunnelConfigurationUpdateResponseArray] or [shared.UnionString].
-type TunnelConfigurationUpdateResponseUnion interface {
-	ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelConfigurationUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TunnelConfigurationUpdateResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type TunnelConfigurationUpdateResponseArray []interface{}
-
-func (r TunnelConfigurationUpdateResponseArray) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion() {
-}
-
-// Union satisfied by [zero_trust.TunnelConfigurationGetResponseUnknown],
-// [zero_trust.TunnelConfigurationGetResponseArray] or [shared.UnionString].
-type TunnelConfigurationGetResponseUnion interface {
-	ImplementsZeroTrustTunnelConfigurationGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelConfigurationGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TunnelConfigurationGetResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type TunnelConfigurationGetResponseArray []interface{}
-
-func (r TunnelConfigurationGetResponseArray) ImplementsZeroTrustTunnelConfigurationGetResponseUnion() {
 }
 
 type TunnelConfigurationUpdateParams struct {
@@ -291,9 +237,9 @@ func (r TunnelConfigurationUpdateParamsConfigWARPRouting) MarshalJSON() (data []
 }
 
 type TunnelConfigurationUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   TunnelConfigurationUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success TunnelConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConfigurationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -339,9 +285,9 @@ type TunnelConfigurationGetParams struct {
 }
 
 type TunnelConfigurationGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   TunnelConfigurationGetResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success TunnelConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConfigurationGetResponseEnvelopeJSON    `json:"-"`

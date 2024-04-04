@@ -60,9 +60,31 @@ func (r *AnalyticsService) Stored(ctx context.Context, params AnalyticsStoredPar
 	return
 }
 
+type UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7 struct {
+	// List of metrics returned by the query.
+	Metrics []interface{}                                        `json:"metrics,required"`
+	JSON    unnamedSchemaRef608bee5065f7314d6fa572b89a1910f7JSON `json:"-"`
+}
+
+// unnamedSchemaRef608bee5065f7314d6fa572b89a1910f7JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7]
+type unnamedSchemaRef608bee5065f7314d6fa572b89a1910f7JSON struct {
+	Metrics     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef608bee5065f7314d6fa572b89a1910f7JSON) RawJSON() string {
+	return r.raw
+}
+
 // Metrics on Workers KV requests.
 type WorkersKVComponentsSchemasResult struct {
-	Data []shared.UnnamedSchemaRef148 `json:"data,required,nullable"`
+	Data []UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7 `json:"data,required,nullable"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -159,7 +181,7 @@ func (r workersKVComponentsSchemasResultQueryJSON) RawJSON() string {
 
 // Metrics on Workers KV requests.
 type WorkersKVSchemasResult struct {
-	Data []shared.UnnamedSchemaRef148 `json:"data,required,nullable"`
+	Data []UnnamedSchemaRef608bee5065f7314d6fa572b89a1910f7 `json:"data,required,nullable"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -346,8 +368,8 @@ func (r AnalyticsListParamsQueryMetric) IsKnown() bool {
 }
 
 type AnalyticsListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Metrics on Workers KV requests.
 	Result WorkersKVSchemasResult `json:"result,required"`
 	// Whether the API call was successful
@@ -478,8 +500,8 @@ func (r AnalyticsStoredParamsQueryMetric) IsKnown() bool {
 }
 
 type AnalyticsStoredResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Metrics on Workers KV requests.
 	Result WorkersKVComponentsSchemasResult `json:"result,required"`
 	// Whether the API call was successful

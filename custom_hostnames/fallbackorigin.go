@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // FallbackOriginService contains methods and other services that help with
@@ -35,7 +33,7 @@ func NewFallbackOriginService(opts ...option.RequestOption) (r *FallbackOriginSe
 }
 
 // Update Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *FallbackOriginUpdateResponseUnion, err error) {
+func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", params.ZoneID)
@@ -48,7 +46,7 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 }
 
 // Delete Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Delete(ctx context.Context, params FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponseUnion, err error) {
+func (r *FallbackOriginService) Delete(ctx context.Context, params FallbackOriginDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", params.ZoneID)
@@ -61,7 +59,7 @@ func (r *FallbackOriginService) Delete(ctx context.Context, params FallbackOrigi
 }
 
 // Get Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *FallbackOriginGetResponseUnion, err error) {
+func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", query.ZoneID)
@@ -71,57 +69,6 @@ func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGet
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [custom_hostnames.FallbackOriginUpdateResponseUnknown] or
-// [shared.UnionString].
-type FallbackOriginUpdateResponseUnion interface {
-	ImplementsCustomHostnamesFallbackOriginUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FallbackOriginUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [custom_hostnames.FallbackOriginDeleteResponseUnknown] or
-// [shared.UnionString].
-type FallbackOriginDeleteResponseUnion interface {
-	ImplementsCustomHostnamesFallbackOriginDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FallbackOriginDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [custom_hostnames.FallbackOriginGetResponseUnknown] or
-// [shared.UnionString].
-type FallbackOriginGetResponseUnion interface {
-	ImplementsCustomHostnamesFallbackOriginGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FallbackOriginGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type FallbackOriginUpdateParams struct {
@@ -136,9 +83,9 @@ func (r FallbackOriginUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FallbackOriginUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   FallbackOriginUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success FallbackOriginUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    fallbackOriginUpdateResponseEnvelopeJSON    `json:"-"`
@@ -189,9 +136,9 @@ func (r FallbackOriginDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FallbackOriginDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   FallbackOriginDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success FallbackOriginDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    fallbackOriginDeleteResponseEnvelopeJSON    `json:"-"`
@@ -237,9 +184,9 @@ type FallbackOriginGetParams struct {
 }
 
 type FallbackOriginGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   FallbackOriginGetResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success FallbackOriginGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    fallbackOriginGetResponseEnvelopeJSON    `json:"-"`

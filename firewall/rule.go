@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
+	"github.com/cloudflare/cloudflare-go/v2/filters"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -15,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // RuleService contains methods and other services that help with interacting with
@@ -131,8 +134,8 @@ type FirewallFilterRule struct {
 	// an Enterprise plan.
 	Action FirewallFilterRuleAction `json:"action"`
 	// An informative summary of the firewall rule.
-	Description string                     `json:"description"`
-	Filter      shared.UnnamedSchemaRef107 `json:"filter"`
+	Description string                                           `json:"description"`
+	Filter      UnnamedSchemaRefAb48d2d33259c9107401d174735701c7 `json:"filter"`
 	// When true, indicates that the firewall rule is currently paused.
 	Paused bool `json:"paused"`
 	// The priority of the rule. Optional value used to define the processing order. A
@@ -211,6 +214,103 @@ func (r FirewallFilterRuleProduct) IsKnown() bool {
 	return false
 }
 
+type UnnamedSchemaRefAb48d2d33259c9107401d174735701c7 struct {
+	// An informative summary of the filter.
+	Description string `json:"description"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression string `json:"expression"`
+	// The unique identifier of the filter.
+	ID string `json:"id"`
+	// When true, indicates that the filter is currently paused.
+	Paused bool `json:"paused"`
+	// A short reference tag. Allows you to select related filters.
+	Ref string `json:"ref"`
+	// When true, indicates that the firewall rule was deleted.
+	Deleted bool                                                 `json:"deleted"`
+	JSON    unnamedSchemaRefAb48d2d33259c9107401d174735701c7JSON `json:"-"`
+	union   UnnamedSchemaRefAb48d2d33259c9107401d174735701c7Union
+}
+
+// unnamedSchemaRefAb48d2d33259c9107401d174735701c7JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefAb48d2d33259c9107401d174735701c7]
+type unnamedSchemaRefAb48d2d33259c9107401d174735701c7JSON struct {
+	Description apijson.Field
+	Expression  apijson.Field
+	ID          apijson.Field
+	Paused      apijson.Field
+	Ref         apijson.Field
+	Deleted     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r unnamedSchemaRefAb48d2d33259c9107401d174735701c7JSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *UnnamedSchemaRefAb48d2d33259c9107401d174735701c7) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r UnnamedSchemaRefAb48d2d33259c9107401d174735701c7) AsUnion() UnnamedSchemaRefAb48d2d33259c9107401d174735701c7Union {
+	return r.union
+}
+
+// Union satisfied by [filters.FirewallFilter] or
+// [firewall.UnnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilter].
+type UnnamedSchemaRefAb48d2d33259c9107401d174735701c7Union interface {
+	implementsFirewallUnnamedSchemaRefAb48d2d33259c9107401d174735701c7()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UnnamedSchemaRefAb48d2d33259c9107401d174735701c7Union)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(filters.FirewallFilter{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UnnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilter{}),
+		},
+	)
+}
+
+type UnnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilter struct {
+	// The unique identifier of the filter.
+	ID string `json:"id,required"`
+	// When true, indicates that the firewall rule was deleted.
+	Deleted bool                                                                       `json:"deleted,required"`
+	JSON    unnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilterJSON `json:"-"`
+}
+
+// unnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilterJSON
+// contains the JSON metadata for the struct
+// [UnnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilter]
+type unnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilterJSON struct {
+	ID          apijson.Field
+	Deleted     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilterJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r UnnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilter) implementsFirewallUnnamedSchemaRefAb48d2d33259c9107401d174735701c7() {
+}
+
 type RuleNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -220,9 +320,9 @@ func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []FirewallFilterRule  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []FirewallFilterRule                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -304,9 +404,9 @@ func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallFilterRule    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   FirewallFilterRule                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -380,9 +480,9 @@ func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallFilterRule    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   FirewallFilterRule                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -431,9 +531,9 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []FirewallFilterRule  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []FirewallFilterRule                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`
@@ -522,9 +622,9 @@ func (r RuleGetParams) URLQuery() (v url.Values) {
 }
 
 type RuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallFilterRule    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   FirewallFilterRule                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`

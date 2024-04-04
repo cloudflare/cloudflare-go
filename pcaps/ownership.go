@@ -145,9 +145,9 @@ func (r OwnershipNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   MagicVisibilityPCAPsOwnership `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   MagicVisibilityPCAPsOwnership                             `json:"result,required"`
 	// Whether the API call was successful
 	Success OwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ownershipNewResponseEnvelopeJSON    `json:"-"`
@@ -198,9 +198,9 @@ type OwnershipGetParams struct {
 }
 
 type OwnershipGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   []MagicVisibilityPCAPsOwnership `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []MagicVisibilityPCAPsOwnership                           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    OwnershipGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo OwnershipGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -287,9 +287,9 @@ func (r OwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OwnershipValidateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   MagicVisibilityPCAPsOwnership `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   MagicVisibilityPCAPsOwnership                             `json:"result,required"`
 	// Whether the API call was successful
 	Success OwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ownershipValidateResponseEnvelopeJSON    `json:"-"`

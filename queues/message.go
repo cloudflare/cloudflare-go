@@ -148,9 +148,9 @@ func (r MessageAckParamsRetry) MarshalJSON() (data []byte, err error) {
 }
 
 type MessageAckResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   MessageAckResponse    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   MessageAckResponse                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    MessageAckResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo MessageAckResponseEnvelopeResultInfo `json:"result_info"`
@@ -238,9 +238,9 @@ func (r MessagePullParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MessagePullResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []MessagePullResponse `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   []MessagePullResponse                                     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    MessagePullResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo MessagePullResponseEnvelopeResultInfo `json:"result_info"`

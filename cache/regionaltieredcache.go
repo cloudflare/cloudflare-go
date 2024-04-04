@@ -63,12 +63,27 @@ func (r *RegionalTieredCacheService) Get(ctx context.Context, query RegionalTier
 	return
 }
 
+// ID of the zone setting.
+type UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 string
+
+const (
+	UnnamedSchemaRef6535d2df7d4d089d21166bd140651307TcRegional UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 = "tc_regional"
+)
+
+func (r UnnamedSchemaRef6535d2df7d4d089d21166bd140651307) IsKnown() bool {
+	switch r {
+	case UnnamedSchemaRef6535d2df7d4d089d21166bd140651307TcRegional:
+		return true
+	}
+	return false
+}
+
 // Instructs Cloudflare to check a regional hub data center on the way to your
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
 type RegionalTieredCacheEditResponse struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef140 `json:"id,required"`
+	ID UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
@@ -101,7 +116,7 @@ func (r regionalTieredCacheEditResponseJSON) RawJSON() string {
 // topologies.
 type RegionalTieredCacheEditResponseValue struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef140 `json:"id,required"`
+	ID UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                                `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       regionalTieredCacheEditResponseValueJSON `json:"-"`
@@ -129,7 +144,7 @@ func (r regionalTieredCacheEditResponseValueJSON) RawJSON() string {
 // topologies.
 type RegionalTieredCacheGetResponse struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef140 `json:"id,required"`
+	ID UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
@@ -162,7 +177,7 @@ func (r regionalTieredCacheGetResponseJSON) RawJSON() string {
 // topologies.
 type RegionalTieredCacheGetResponseValue struct {
 	// ID of the zone setting.
-	ID shared.UnnamedSchemaRef140 `json:"id,required"`
+	ID UnnamedSchemaRef6535d2df7d4d089d21166bd140651307 `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                               `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       regionalTieredCacheGetResponseValueJSON `json:"-"`
@@ -213,8 +228,8 @@ func (r RegionalTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type RegionalTieredCacheEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.
@@ -264,8 +279,8 @@ type RegionalTieredCacheGetParams struct {
 }
 
 type RegionalTieredCacheGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.

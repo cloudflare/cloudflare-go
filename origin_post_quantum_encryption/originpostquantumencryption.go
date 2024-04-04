@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // OriginPostQuantumEncryptionService contains methods and other services that help
@@ -40,7 +38,7 @@ func NewOriginPostQuantumEncryptionService(opts ...option.RequestOption) (r *Ori
 // connections when the origin supports and prefers PQ), supported means that PQ
 // algorithms are advertised but only used when requested by the origin, and off
 // means that PQ algorithms are not advertised
-func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params OriginPostQuantumEncryptionUpdateParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionUpdateResponseUnion, err error) {
+func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params OriginPostQuantumEncryptionUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginPostQuantumEncryptionUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/origin_post_quantum_encryption", params.ZoneID)
@@ -58,7 +56,7 @@ func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, params 
 // connections when the origin supports and prefers PQ), supported means that PQ
 // algorithms are advertised but only used when requested by the origin, and off
 // means that PQ algorithms are not advertised
-func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query OriginPostQuantumEncryptionGetParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionGetResponseUnion, err error) {
+func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query OriginPostQuantumEncryptionGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginPostQuantumEncryptionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/origin_post_quantum_encryption", query.ZoneID)
@@ -68,42 +66,6 @@ func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query Orig
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by
-// [origin_post_quantum_encryption.OriginPostQuantumEncryptionUpdateResponseUnknown]
-// or [shared.UnionString].
-type OriginPostQuantumEncryptionUpdateResponseUnion interface {
-	ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncryptionUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginPostQuantumEncryptionUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by
-// [origin_post_quantum_encryption.OriginPostQuantumEncryptionGetResponseUnknown]
-// or [shared.UnionString].
-type OriginPostQuantumEncryptionGetResponseUnion interface {
-	ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncryptionGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginPostQuantumEncryptionGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type OriginPostQuantumEncryptionUpdateParams struct {
@@ -135,9 +97,9 @@ func (r OriginPostQuantumEncryptionUpdateParamsValue) IsKnown() bool {
 }
 
 type OriginPostQuantumEncryptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                          `json:"errors,required"`
-	Messages []shared.ResponseInfo                          `json:"messages,required"`
-	Result   OriginPostQuantumEncryptionUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originPostQuantumEncryptionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -183,9 +145,9 @@ type OriginPostQuantumEncryptionGetParams struct {
 }
 
 type OriginPostQuantumEncryptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
-	Result   OriginPostQuantumEncryptionGetResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginPostQuantumEncryptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originPostQuantumEncryptionGetResponseEnvelopeJSON    `json:"-"`

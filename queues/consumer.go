@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // ConsumerService contains methods and other services that help with interacting
@@ -60,7 +58,7 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 }
 
 // Deletes the consumer for a queue.
-func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, params ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponseUnion, err error) {
+func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, params ConsumerDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", params.AccountID, queueID, consumerID)
@@ -85,14 +83,40 @@ func (r *ConsumerService) Get(ctx context.Context, queueID string, query Consume
 	return
 }
 
+type UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5 struct {
+	// The maximum number of messages to include in a batch
+	BatchSize     float64                                              `json:"batch_size"`
+	MaxRetries    float64                                              `json:"max_retries"`
+	MaxWaitTimeMs float64                                              `json:"max_wait_time_ms"`
+	JSON          unnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5JSON `json:"-"`
+}
+
+// unnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5JSON contains the JSON metadata
+// for the struct [UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5]
+type unnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5JSON struct {
+	BatchSize     apijson.Field
+	MaxRetries    apijson.Field
+	MaxWaitTimeMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5JSON) RawJSON() string {
+	return r.raw
+}
+
 type ConsumerNewResponse struct {
-	CreatedOn       interface{}               `json:"created_on"`
-	DeadLetterQueue string                    `json:"dead_letter_queue"`
-	Environment     interface{}               `json:"environment"`
-	QueueName       interface{}               `json:"queue_name"`
-	ScriptName      interface{}               `json:"script_name"`
-	Settings        shared.UnnamedSchemaRef41 `json:"settings"`
-	JSON            consumerNewResponseJSON   `json:"-"`
+	CreatedOn       interface{}                                      `json:"created_on"`
+	DeadLetterQueue string                                           `json:"dead_letter_queue"`
+	Environment     interface{}                                      `json:"environment"`
+	QueueName       interface{}                                      `json:"queue_name"`
+	ScriptName      interface{}                                      `json:"script_name"`
+	Settings        UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5 `json:"settings"`
+	JSON            consumerNewResponseJSON                          `json:"-"`
 }
 
 // consumerNewResponseJSON contains the JSON metadata for the struct
@@ -172,38 +196,13 @@ func (r consumerUpdateResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [queues.ConsumerDeleteResponseUnknown],
-// [queues.ConsumerDeleteResponseArray] or [shared.UnionString].
-type ConsumerDeleteResponseUnion interface {
-	ImplementsQueuesConsumerDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ConsumerDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConsumerDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type ConsumerDeleteResponseArray []interface{}
-
-func (r ConsumerDeleteResponseArray) ImplementsQueuesConsumerDeleteResponseUnion() {}
-
 type ConsumerGetResponse struct {
-	CreatedOn   interface{}               `json:"created_on"`
-	Environment interface{}               `json:"environment"`
-	QueueName   interface{}               `json:"queue_name"`
-	Service     interface{}               `json:"service"`
-	Settings    shared.UnnamedSchemaRef41 `json:"settings"`
-	JSON        consumerGetResponseJSON   `json:"-"`
+	CreatedOn   interface{}                                      `json:"created_on"`
+	Environment interface{}                                      `json:"environment"`
+	QueueName   interface{}                                      `json:"queue_name"`
+	Service     interface{}                                      `json:"service"`
+	Settings    UnnamedSchemaRefFbd3a4642487e41594e9af0ccb9a5ca5 `json:"settings"`
+	JSON        consumerGetResponseJSON                          `json:"-"`
 }
 
 // consumerGetResponseJSON contains the JSON metadata for the struct
@@ -237,14 +236,14 @@ func (r ConsumerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerNewResponseEnvelope struct {
-	CreatedOn       interface{}           `json:"created_on,required"`
-	DeadLetterQueue interface{}           `json:"dead_letter_queue,required"`
-	Errors          []shared.ResponseInfo `json:"errors,required"`
-	Messages        []shared.ResponseInfo `json:"messages,required"`
-	QueueName       interface{}           `json:"queue_name,required"`
-	Result          ConsumerNewResponse   `json:"result,required,nullable"`
-	ScriptName      interface{}           `json:"script_name,required"`
-	Settings        interface{}           `json:"settings,required"`
+	CreatedOn       interface{}                                               `json:"created_on,required"`
+	DeadLetterQueue interface{}                                               `json:"dead_letter_queue,required"`
+	Errors          []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages        []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	QueueName       interface{}                                               `json:"queue_name,required"`
+	Result          ConsumerNewResponse                                       `json:"result,required,nullable"`
+	ScriptName      interface{}                                               `json:"script_name,required"`
+	Settings        interface{}                                               `json:"settings,required"`
 	// Whether the API call was successful
 	Success    ConsumerNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -333,14 +332,14 @@ func (r ConsumerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerUpdateResponseEnvelope struct {
-	CreatedOn       interface{}            `json:"created_on,required"`
-	DeadLetterQueue interface{}            `json:"dead_letter_queue,required"`
-	Errors          []shared.ResponseInfo  `json:"errors,required"`
-	Messages        []shared.ResponseInfo  `json:"messages,required"`
-	QueueName       interface{}            `json:"queue_name,required"`
-	Result          ConsumerUpdateResponse `json:"result,required,nullable"`
-	ScriptName      interface{}            `json:"script_name,required"`
-	Settings        interface{}            `json:"settings,required"`
+	CreatedOn       interface{}                                               `json:"created_on,required"`
+	DeadLetterQueue interface{}                                               `json:"dead_letter_queue,required"`
+	Errors          []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages        []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	QueueName       interface{}                                               `json:"queue_name,required"`
+	Result          ConsumerUpdateResponse                                    `json:"result,required,nullable"`
+	ScriptName      interface{}                                               `json:"script_name,required"`
+	Settings        interface{}                                               `json:"settings,required"`
 	// Whether the API call was successful
 	Success    ConsumerUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -429,9 +428,9 @@ func (r ConsumerDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ConsumerDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ConsumerDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -510,12 +509,12 @@ type ConsumerGetParams struct {
 }
 
 type ConsumerGetResponseEnvelope struct {
-	CreatedOn interface{}           `json:"created_on,required"`
-	Errors    []shared.ResponseInfo `json:"errors,required"`
-	Messages  []shared.ResponseInfo `json:"messages,required"`
-	QueueName interface{}           `json:"queue_name,required"`
-	Result    []ConsumerGetResponse `json:"result,required,nullable"`
-	Settings  interface{}           `json:"settings,required"`
+	CreatedOn interface{}                                               `json:"created_on,required"`
+	Errors    []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages  []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	QueueName interface{}                                               `json:"queue_name,required"`
+	Result    []ConsumerGetResponse                                     `json:"result,required,nullable"`
+	Settings  interface{}                                               `json:"settings,required"`
 	// Whether the API call was successful
 	Success    ConsumerGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerGetResponseEnvelopeResultInfo `json:"result_info"`

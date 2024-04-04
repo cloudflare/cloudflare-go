@@ -175,9 +175,9 @@ func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FilterNewResponse     `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   FilterNewResponse                                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterNewResponseEnvelopeJSON    `json:"-"`
@@ -229,9 +229,9 @@ func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   WorkersFilter         `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   WorkersFilter                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
@@ -287,9 +287,9 @@ func (r FilterDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FilterDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FilterDeleteResponse  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   FilterDeleteResponse                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterDeleteResponseEnvelopeJSON    `json:"-"`

@@ -185,9 +185,9 @@ func (r CallNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CallNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CallsAppWithSecret    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CallsAppWithSecret                                        `json:"result,required"`
 	// Whether the API call was successful
 	Success CallNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    callNewResponseEnvelopeJSON    `json:"-"`
@@ -239,9 +239,9 @@ func (r CallUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CallUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CallsApp              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CallsApp                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success CallUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    callUpdateResponseEnvelopeJSON    `json:"-"`
@@ -292,9 +292,9 @@ type CallDeleteParams struct {
 }
 
 type CallDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CallsApp              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CallsApp                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success CallDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    callDeleteResponseEnvelopeJSON    `json:"-"`
@@ -340,9 +340,9 @@ type CallGetParams struct {
 }
 
 type CallGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CallsApp              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CallsApp                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success CallGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    callGetResponseEnvelopeJSON    `json:"-"`

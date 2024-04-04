@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // GatewayRuleService contains methods and other services that help with
@@ -86,7 +84,7 @@ func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRu
 }
 
 // Deletes a Zero Trust Gateway rule.
-func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, params GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponseUnion, err error) {
+func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, params GatewayRuleDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", params.AccountID, ruleID)
@@ -715,23 +713,6 @@ func (r zeroTrustGatewayRulesScheduleJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [zero_trust.GatewayRuleDeleteResponseUnknown] or
-// [shared.UnionString].
-type GatewayRuleDeleteResponseUnion interface {
-	ImplementsZeroTrustGatewayRuleDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayRuleDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type GatewayRuleNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The action to preform when the associated traffic, identity, and device posture
@@ -1093,9 +1074,9 @@ func (r GatewayRuleNewParamsSchedule) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustGatewayRules `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayRules                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -1496,9 +1477,9 @@ func (r GatewayRuleUpdateParamsSchedule) MarshalJSON() (data []byte, err error) 
 }
 
 type GatewayRuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustGatewayRules `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayRules                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1552,9 +1533,9 @@ func (r GatewayRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   GatewayRuleDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1599,9 +1580,9 @@ type GatewayRuleGetParams struct {
 }
 
 type GatewayRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustGatewayRules `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustGatewayRules                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleGetResponseEnvelopeJSON    `json:"-"`

@@ -85,8 +85,8 @@ func (r bgpTopAseGetResponseJSON) RawJSON() string {
 }
 
 type BGPTopAseGetResponseMeta struct {
-	DateRange []UnnamedSchemaRef175        `json:"dateRange,required"`
-	JSON      bgpTopAseGetResponseMetaJSON `json:"-"`
+	DateRange []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	JSON      bgpTopAseGetResponseMetaJSON                       `json:"-"`
 }
 
 // bgpTopAseGetResponseMetaJSON contains the JSON metadata for the struct
@@ -133,9 +133,9 @@ func (r bgpTopAseGetResponseTop0JSON) RawJSON() string {
 }
 
 type BGPTopAsePrefixesResponse struct {
-	ASNs []BGPTopAsePrefixesResponseASN `json:"asns,required"`
-	Meta UnnamedSchemaRef130            `json:"meta,required"`
-	JSON bgpTopAsePrefixesResponseJSON  `json:"-"`
+	ASNs []BGPTopAsePrefixesResponseASN                   `json:"asns,required"`
+	Meta UnnamedSchemaRefC5858f1f916a921846e0b6159af470a7 `json:"meta,required"`
+	JSON bgpTopAsePrefixesResponseJSON                    `json:"-"`
 }
 
 // bgpTopAsePrefixesResponseJSON contains the JSON metadata for the struct

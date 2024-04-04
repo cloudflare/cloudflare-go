@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // DestinationWebhookService contains methods and other services that help with
@@ -86,7 +84,7 @@ func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query De
 }
 
 // Delete a configured webhook destination.
-func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string, body DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *DestinationWebhookDeleteResponseUnion, err error) {
+func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string, body DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", body.AccountID, webhookID)
@@ -220,32 +218,6 @@ func (r destinationWebhookUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [alerting.DestinationWebhookDeleteResponseUnknown],
-// [alerting.DestinationWebhookDeleteResponseArray] or [shared.UnionString].
-type DestinationWebhookDeleteResponseUnion interface {
-	ImplementsAlertingDestinationWebhookDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DestinationWebhookDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DestinationWebhookDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type DestinationWebhookDeleteResponseArray []interface{}
-
-func (r DestinationWebhookDeleteResponseArray) ImplementsAlertingDestinationWebhookDeleteResponseUnion() {
-}
-
 type DestinationWebhookNewParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -265,9 +237,9 @@ func (r DestinationWebhookNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   DestinationWebhookNewResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DestinationWebhookNewResponse                             `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationWebhookNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationWebhookNewResponseEnvelopeJSON    `json:"-"`
@@ -326,9 +298,9 @@ func (r DestinationWebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   DestinationWebhookUpdateResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   DestinationWebhookUpdateResponse                          `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationWebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationWebhookUpdateResponseEnvelopeJSON    `json:"-"`
@@ -379,9 +351,9 @@ type DestinationWebhookDeleteParams struct {
 }
 
 type DestinationWebhookDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   DestinationWebhookDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationWebhookDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationWebhookDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -460,9 +432,9 @@ type DestinationWebhookGetParams struct {
 }
 
 type DestinationWebhookGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   AlertingWebhooks      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AlertingWebhooks                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationWebhookGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationWebhookGetResponseEnvelopeJSON    `json:"-"`

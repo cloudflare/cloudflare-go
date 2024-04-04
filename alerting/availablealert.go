@@ -6,12 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // AvailableAlertService contains methods and other services that help with
@@ -33,7 +35,7 @@ func NewAvailableAlertService(opts ...option.RequestOption) (r *AvailableAlertSe
 }
 
 // Gets a list of all alert types for which an account is eligible.
-func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef116Union, err error) {
+func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *AvailableAlertListResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailableAlertListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/available_alerts", query.AccountID)
@@ -45,15 +47,40 @@ func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertLi
 	return
 }
 
+// Union satisfied by [alerting.AvailableAlertListResponseUnknown],
+// [alerting.AvailableAlertListResponseArray] or [shared.UnionString].
+type AvailableAlertListResponseUnion interface {
+	ImplementsAlertingAvailableAlertListResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AvailableAlertListResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AvailableAlertListResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type AvailableAlertListResponseArray []interface{}
+
+func (r AvailableAlertListResponseArray) ImplementsAlertingAvailableAlertListResponseUnion() {}
+
 type AvailableAlertListParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AvailableAlertListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef116Union `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AvailableAlertListResponseUnion                           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AvailableAlertListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AvailableAlertListResponseEnvelopeResultInfo `json:"result_info"`

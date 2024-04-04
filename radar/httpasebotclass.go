@@ -51,9 +51,9 @@ func (r *HTTPAseBotClassService) Get(ctx context.Context, botClass HTTPAseBotCla
 }
 
 type HTTPAseBotClassGetResponse struct {
-	Meta HTTPAseBotClassGetResponseMeta   `json:"meta,required"`
-	Top0 []HTTPAseBotClassGetResponseTop0 `json:"top_0,required"`
-	JSON httpAseBotClassGetResponseJSON   `json:"-"`
+	Meta HTTPAseBotClassGetResponseMeta                     `json:"meta,required"`
+	Top0 []UnnamedSchemaRef4124a22436f90127c7fa2c4543219752 `json:"top_0,required"`
+	JSON httpAseBotClassGetResponseJSON                     `json:"-"`
 }
 
 // httpAseBotClassGetResponseJSON contains the JSON metadata for the struct
@@ -74,10 +74,10 @@ func (r httpAseBotClassGetResponseJSON) RawJSON() string {
 }
 
 type HTTPAseBotClassGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                        `json:"dateRange,required"`
-	LastUpdated    string                                       `json:"lastUpdated,required"`
-	ConfidenceInfo HTTPAseBotClassGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           httpAseBotClassGetResponseMetaJSON           `json:"-"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	LastUpdated    string                                             `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPAseBotClassGetResponseMetaConfidenceInfo       `json:"confidenceInfo"`
+	JSON           httpAseBotClassGetResponseMetaJSON                 `json:"-"`
 }
 
 // httpAseBotClassGetResponseMetaJSON contains the JSON metadata for the struct
@@ -99,9 +99,9 @@ func (r httpAseBotClassGetResponseMetaJSON) RawJSON() string {
 }
 
 type HTTPAseBotClassGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                            `json:"annotations"`
-	Level       int64                                            `json:"level"`
-	JSON        httpAseBotClassGetResponseMetaConfidenceInfoJSON `json:"-"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1 `json:"annotations"`
+	Level       int64                                              `json:"level"`
+	JSON        httpAseBotClassGetResponseMetaConfidenceInfoJSON   `json:"-"`
 }
 
 // httpAseBotClassGetResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -118,31 +118,6 @@ func (r *HTTPAseBotClassGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte
 }
 
 func (r httpAseBotClassGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type HTTPAseBotClassGetResponseTop0 struct {
-	ClientASN    int64                              `json:"clientASN,required"`
-	ClientAsName string                             `json:"clientASName,required"`
-	Value        string                             `json:"value,required"`
-	JSON         httpAseBotClassGetResponseTop0JSON `json:"-"`
-}
-
-// httpAseBotClassGetResponseTop0JSON contains the JSON metadata for the struct
-// [HTTPAseBotClassGetResponseTop0]
-type httpAseBotClassGetResponseTop0JSON struct {
-	ClientASN    apijson.Field
-	ClientAsName apijson.Field
-	Value        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *HTTPAseBotClassGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpAseBotClassGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

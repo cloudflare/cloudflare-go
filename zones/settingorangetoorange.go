@@ -175,8 +175,8 @@ func (r SettingOrangeToOrangeEditParams) MarshalJSON() (data []byte, err error) 
 }
 
 type SettingOrangeToOrangeEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
@@ -210,8 +210,8 @@ type SettingOrangeToOrangeGetParams struct {
 }
 
 type SettingOrangeToOrangeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also

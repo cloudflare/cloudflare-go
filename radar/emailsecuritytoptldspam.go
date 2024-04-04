@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -48,9 +49,9 @@ func (r *EmailSecurityTopTldSpamService) Get(ctx context.Context, spam EmailSecu
 }
 
 type EmailSecurityTopTldSpamGetResponse struct {
-	Meta EmailSecurityTopTldSpamGetResponseMeta   `json:"meta,required"`
-	Top0 []EmailSecurityTopTldSpamGetResponseTop0 `json:"top_0,required"`
-	JSON emailSecurityTopTldSpamGetResponseJSON   `json:"-"`
+	Meta EmailSecurityTopTldSpamGetResponseMeta                    `json:"meta,required"`
+	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
+	JSON emailSecurityTopTldSpamGetResponseJSON                    `json:"-"`
 }
 
 // emailSecurityTopTldSpamGetResponseJSON contains the JSON metadata for the struct
@@ -71,7 +72,7 @@ func (r emailSecurityTopTldSpamGetResponseJSON) RawJSON() string {
 }
 
 type EmailSecurityTopTldSpamGetResponseMeta struct {
-	DateRange      []UnnamedSchemaRef175                                `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5   `json:"dateRange,required"`
 	LastUpdated    string                                               `json:"lastUpdated,required"`
 	ConfidenceInfo EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           emailSecurityTopTldSpamGetResponseMetaJSON           `json:"-"`
@@ -96,7 +97,7 @@ func (r emailSecurityTopTldSpamGetResponseMetaJSON) RawJSON() string {
 }
 
 type EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo struct {
-	Annotations []UnnamedSchemaRef174                                    `json:"annotations"`
+	Annotations []UnnamedSchemaRefB5f3bd1840490bc487ffef84567807b1       `json:"annotations"`
 	Level       int64                                                    `json:"level"`
 	JSON        emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
@@ -115,29 +116,6 @@ func (r *EmailSecurityTopTldSpamGetResponseMetaConfidenceInfo) UnmarshalJSON(dat
 }
 
 func (r emailSecurityTopTldSpamGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailSecurityTopTldSpamGetResponseTop0 struct {
-	Name  string                                     `json:"name,required"`
-	Value string                                     `json:"value,required"`
-	JSON  emailSecurityTopTldSpamGetResponseTop0JSON `json:"-"`
-}
-
-// emailSecurityTopTldSpamGetResponseTop0JSON contains the JSON metadata for the
-// struct [EmailSecurityTopTldSpamGetResponseTop0]
-type emailSecurityTopTldSpamGetResponseTop0JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailSecurityTopTldSpamGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailSecurityTopTldSpamGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AnalyticsEventSummaryService contains methods and other services that help with
@@ -38,7 +36,7 @@ func NewAnalyticsEventSummaryService(opts ...option.RequestOption) (r *Analytics
 }
 
 // Retrieves a list of summarised aggregate metrics over a given time period.
-func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, query AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *AnalyticsEventSummaryGetResponseUnion, err error) {
+func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, query AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsEventSummaryGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/summary", zone)
@@ -48,23 +46,6 @@ func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, que
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [spectrum.AnalyticsEventSummaryGetResponseUnknown] or
-// [shared.UnionString].
-type AnalyticsEventSummaryGetResponseUnion interface {
-	ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AnalyticsEventSummaryGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type AnalyticsEventSummaryGetParams struct {
@@ -163,9 +144,9 @@ func (r AnalyticsEventSummaryGetParamsMetric) IsKnown() bool {
 }
 
 type AnalyticsEventSummaryGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   AnalyticsEventSummaryGetResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsEventSummaryGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsEventSummaryGetResponseEnvelopeJSON    `json:"-"`

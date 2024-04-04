@@ -268,9 +268,9 @@ func (r AccessCustomPageNewParamsType) IsKnown() bool {
 }
 
 type AccessCustomPageNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ZeroTrustCustomPageWithoutHTML `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustCustomPageWithoutHTML                            `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageNewResponseEnvelopeJSON    `json:"-"`
@@ -342,9 +342,9 @@ func (r AccessCustomPageUpdateParamsType) IsKnown() bool {
 }
 
 type AccessCustomPageUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ZeroTrustCustomPageWithoutHTML `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustCustomPageWithoutHTML                            `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageUpdateResponseEnvelopeJSON    `json:"-"`
@@ -385,9 +385,9 @@ func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessCustomPageDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   AccessCustomPageDeleteResponse `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   AccessCustomPageDeleteResponse                            `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageDeleteResponseEnvelopeJSON    `json:"-"`
@@ -428,9 +428,9 @@ func (r AccessCustomPageDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessCustomPageGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustCustomPage   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustCustomPage                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageGetResponseEnvelopeJSON    `json:"-"`

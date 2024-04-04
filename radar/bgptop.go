@@ -72,8 +72,8 @@ func (r bgpTopPrefixesResponseJSON) RawJSON() string {
 }
 
 type BGPTopPrefixesResponseMeta struct {
-	DateRange []UnnamedSchemaRef175          `json:"dateRange,required"`
-	JSON      bgpTopPrefixesResponseMetaJSON `json:"-"`
+	DateRange []UnnamedSchemaRefBaac9d7da12de53e99142f8ecd3982e5 `json:"dateRange,required"`
+	JSON      bgpTopPrefixesResponseMetaJSON                     `json:"-"`
 }
 
 // bgpTopPrefixesResponseMetaJSON contains the JSON metadata for the struct

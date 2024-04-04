@@ -188,8 +188,8 @@ func (r SettingAutomaticHTTPSRewriteEditParamsValue) IsKnown() bool {
 }
 
 type SettingAutomaticHTTPSRewriteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable the Automatic HTTPS Rewrites feature for this zone.
@@ -222,8 +222,8 @@ type SettingAutomaticHTTPSRewriteGetParams struct {
 }
 
 type SettingAutomaticHTTPSRewriteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable the Automatic HTTPS Rewrites feature for this zone.

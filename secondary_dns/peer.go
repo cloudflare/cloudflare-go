@@ -180,9 +180,9 @@ func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PeerNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SecondaryDNSPeer      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   SecondaryDNSPeer                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerNewResponseEnvelopeJSON    `json:"-"`
@@ -247,9 +247,9 @@ func (r PeerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PeerUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SecondaryDNSPeer      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   SecondaryDNSPeer                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerUpdateResponseEnvelopeJSON    `json:"-"`
@@ -303,9 +303,9 @@ func (r PeerDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PeerDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PeerDeleteResponse    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   PeerDeleteResponse                                        `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerDeleteResponseEnvelopeJSON    `json:"-"`
@@ -350,9 +350,9 @@ type PeerGetParams struct {
 }
 
 type PeerGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   SecondaryDNSPeer      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   SecondaryDNSPeer                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerGetResponseEnvelopeJSON    `json:"-"`

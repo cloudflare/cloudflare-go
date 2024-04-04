@@ -45,25 +45,25 @@ func (r *AccessUserLastSeenIdentityService) Get(ctx context.Context, identifier 
 }
 
 type ZeroTrustIdentity struct {
-	AccountID          string                                    `json:"account_id"`
-	AuthStatus         string                                    `json:"auth_status"`
-	CommonName         string                                    `json:"common_name"`
-	DeviceID           string                                    `json:"device_id"`
-	DeviceSessions     map[string]ZeroTrustIdentityDeviceSession `json:"device_sessions"`
-	DevicePosture      map[string]ZeroTrustIdentityDevicePosture `json:"devicePosture"`
-	Email              string                                    `json:"email"`
-	Geo                ZeroTrustIdentityGeo                      `json:"geo"`
-	Iat                float64                                   `json:"iat"`
-	IDP                ZeroTrustIdentityIDP                      `json:"idp"`
-	IP                 string                                    `json:"ip"`
-	IsGateway          bool                                      `json:"is_gateway"`
-	IsWARP             bool                                      `json:"is_warp"`
-	MTLSAuth           ZeroTrustIdentityMTLSAuth                 `json:"mtls_auth"`
-	ServiceTokenID     string                                    `json:"service_token_id"`
-	ServiceTokenStatus bool                                      `json:"service_token_status"`
-	UserUUID           string                                    `json:"user_uuid"`
-	Version            float64                                   `json:"version"`
-	JSON               zeroTrustIdentityJSON                     `json:"-"`
+	AccountID          string                                           `json:"account_id"`
+	AuthStatus         string                                           `json:"auth_status"`
+	CommonName         string                                           `json:"common_name"`
+	DeviceID           string                                           `json:"device_id"`
+	DeviceSessions     map[string]ZeroTrustIdentityDeviceSession        `json:"device_sessions"`
+	DevicePosture      map[string]ZeroTrustIdentityDevicePosture        `json:"devicePosture"`
+	Email              string                                           `json:"email"`
+	Geo                UnnamedSchemaRef6a02fe18089d53b52b2cd3949b717919 `json:"geo"`
+	Iat                float64                                          `json:"iat"`
+	IDP                ZeroTrustIdentityIDP                             `json:"idp"`
+	IP                 string                                           `json:"ip"`
+	IsGateway          bool                                             `json:"is_gateway"`
+	IsWARP             bool                                             `json:"is_warp"`
+	MTLSAuth           ZeroTrustIdentityMTLSAuth                        `json:"mtls_auth"`
+	ServiceTokenID     string                                           `json:"service_token_id"`
+	ServiceTokenStatus bool                                             `json:"service_token_status"`
+	UserUUID           string                                           `json:"user_uuid"`
+	Version            float64                                          `json:"version"`
+	JSON               zeroTrustIdentityJSON                            `json:"-"`
 }
 
 // zeroTrustIdentityJSON contains the JSON metadata for the struct
@@ -180,27 +180,6 @@ func (r zeroTrustIdentityDevicePostureCheckJSON) RawJSON() string {
 	return r.raw
 }
 
-type ZeroTrustIdentityGeo struct {
-	Country string                   `json:"country"`
-	JSON    zeroTrustIdentityGeoJSON `json:"-"`
-}
-
-// zeroTrustIdentityGeoJSON contains the JSON metadata for the struct
-// [ZeroTrustIdentityGeo]
-type zeroTrustIdentityGeoJSON struct {
-	Country     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustIdentityGeo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustIdentityGeoJSON) RawJSON() string {
-	return r.raw
-}
-
 type ZeroTrustIdentityIDP struct {
 	ID   string                   `json:"id"`
 	Type string                   `json:"type"`
@@ -254,9 +233,9 @@ func (r zeroTrustIdentityMTLSAuthJSON) RawJSON() string {
 }
 
 type AccessUserLastSeenIdentityGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ZeroTrustIdentity     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   ZeroTrustIdentity                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessUserLastSeenIdentityGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessUserLastSeenIdentityGetResponseEnvelopeJSON    `json:"-"`

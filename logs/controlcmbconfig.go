@@ -46,7 +46,7 @@ func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConf
 }
 
 // Deletes CMB config.
-func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef161Union, err error) {
+func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
@@ -104,9 +104,9 @@ func (r ControlCmbConfigNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlCmbConfigNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CmbConfig             `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CmbConfig                                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigNewResponseEnvelopeJSON    `json:"-"`
@@ -157,9 +157,9 @@ func (r ControlCmbConfigDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlCmbConfigDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef161Union `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigDeleteResponseEnvelopeJSON    `json:"-"`
@@ -205,9 +205,9 @@ type ControlCmbConfigGetParams struct {
 }
 
 type ControlCmbConfigGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CmbConfig             `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Result   CmbConfig                                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigGetResponseEnvelopeJSON    `json:"-"`
