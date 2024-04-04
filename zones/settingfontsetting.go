@@ -36,7 +36,7 @@ func NewSettingFontSettingService(opts ...option.RequestOption) (r *SettingFontS
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-func (r *SettingFontSettingService) Edit(ctx context.Context, params SettingFontSettingEditParams, opts ...option.RequestOption) (res *ZoneSettingFonts, err error) {
+func (r *SettingFontSettingService) Edit(ctx context.Context, params SettingFontSettingEditParams, opts ...option.RequestOption) (res *FontSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingFontSettingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/fonts", params.ZoneID)
@@ -51,7 +51,7 @@ func (r *SettingFontSettingService) Edit(ctx context.Context, params SettingFont
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-func (r *SettingFontSettingService) Get(ctx context.Context, query SettingFontSettingGetParams, opts ...option.RequestOption) (res *ZoneSettingFonts, err error) {
+func (r *SettingFontSettingService) Get(ctx context.Context, query SettingFontSettingGetParams, opts ...option.RequestOption) (res *FontSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingFontSettingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/fonts", query.ZoneID)
@@ -66,22 +66,21 @@ func (r *SettingFontSettingService) Get(ctx context.Context, query SettingFontSe
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-type ZoneSettingFonts struct {
+type FontSettings struct {
 	// ID of the zone setting.
-	ID ZoneSettingFontsID `json:"id,required"`
+	ID FontSettingsID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingFontsValue `json:"value,required"`
+	Value FontSettingsValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingFontsEditable `json:"editable"`
+	Editable FontSettingsEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingFontsJSON `json:"-"`
+	ModifiedOn time.Time        `json:"modified_on,nullable" format:"date-time"`
+	JSON       fontSettingsJSON `json:"-"`
 }
 
-// zoneSettingFontsJSON contains the JSON metadata for the struct
-// [ZoneSettingFonts]
-type zoneSettingFontsJSON struct {
+// fontSettingsJSON contains the JSON metadata for the struct [FontSettings]
+type fontSettingsJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -90,40 +89,40 @@ type zoneSettingFontsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingFonts) UnmarshalJSON(data []byte) (err error) {
+func (r *FontSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingFontsJSON) RawJSON() string {
+func (r fontSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
 // ID of the zone setting.
-type ZoneSettingFontsID string
+type FontSettingsID string
 
 const (
-	ZoneSettingFontsIDFonts ZoneSettingFontsID = "fonts"
+	FontSettingsIDFonts FontSettingsID = "fonts"
 )
 
-func (r ZoneSettingFontsID) IsKnown() bool {
+func (r FontSettingsID) IsKnown() bool {
 	switch r {
-	case ZoneSettingFontsIDFonts:
+	case FontSettingsIDFonts:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingFontsValue string
+type FontSettingsValue string
 
 const (
-	ZoneSettingFontsValueOn  ZoneSettingFontsValue = "on"
-	ZoneSettingFontsValueOff ZoneSettingFontsValue = "off"
+	FontSettingsValueOn  FontSettingsValue = "on"
+	FontSettingsValueOff FontSettingsValue = "off"
 )
 
-func (r ZoneSettingFontsValue) IsKnown() bool {
+func (r FontSettingsValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingFontsValueOn, ZoneSettingFontsValueOff:
+	case FontSettingsValueOn, FontSettingsValueOff:
 		return true
 	}
 	return false
@@ -131,16 +130,16 @@ func (r ZoneSettingFontsValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingFontsEditable bool
+type FontSettingsEditable bool
 
 const (
-	ZoneSettingFontsEditableTrue  ZoneSettingFontsEditable = true
-	ZoneSettingFontsEditableFalse ZoneSettingFontsEditable = false
+	FontSettingsEditableTrue  FontSettingsEditable = true
+	FontSettingsEditableFalse FontSettingsEditable = false
 )
 
-func (r ZoneSettingFontsEditable) IsKnown() bool {
+func (r FontSettingsEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingFontsEditableTrue, ZoneSettingFontsEditableFalse:
+	case FontSettingsEditableTrue, FontSettingsEditableFalse:
 		return true
 	}
 	return false
@@ -181,7 +180,7 @@ type SettingFontSettingEditResponseEnvelope struct {
 	// Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 	// Hosted fonts from your own domain, boost performance, and enhance user privacy.
 	// Refer to the Cloudflare Fonts documentation for more information.
-	Result ZoneSettingFonts                           `json:"result"`
+	Result FontSettings                               `json:"result"`
 	JSON   settingFontSettingEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -217,7 +216,7 @@ type SettingFontSettingGetResponseEnvelope struct {
 	// Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 	// Hosted fonts from your own domain, boost performance, and enhance user privacy.
 	// Refer to the Cloudflare Fonts documentation for more information.
-	Result ZoneSettingFonts                          `json:"result"`
+	Result FontSettings                              `json:"result"`
 	JSON   settingFontSettingGetResponseEnvelopeJSON `json:"-"`
 }
 

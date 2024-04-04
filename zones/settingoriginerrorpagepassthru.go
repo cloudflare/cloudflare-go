@@ -36,7 +36,7 @@ func NewSettingOriginErrorPagePassThruService(opts ...option.RequestOption) (r *
 // Cloudflare will proxy customer error pages on any 502,504 errors on origin
 // server instead of showing a default Cloudflare error page. This does not apply
 // to 522 errors and is limited to Enterprise Zones.
-func (r *SettingOriginErrorPagePassThruService) Edit(ctx context.Context, params SettingOriginErrorPagePassThruEditParams, opts ...option.RequestOption) (res *ZoneSettingOriginErrorPagePassThru, err error) {
+func (r *SettingOriginErrorPagePassThruService) Edit(ctx context.Context, params SettingOriginErrorPagePassThruEditParams, opts ...option.RequestOption) (res *OriginErrorPagePassThru, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOriginErrorPagePassThruEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/origin_error_page_pass_thru", params.ZoneID)
@@ -51,7 +51,7 @@ func (r *SettingOriginErrorPagePassThruService) Edit(ctx context.Context, params
 // Cloudflare will proxy customer error pages on any 502,504 errors on origin
 // server instead of showing a default Cloudflare error page. This does not apply
 // to 522 errors and is limited to Enterprise Zones.
-func (r *SettingOriginErrorPagePassThruService) Get(ctx context.Context, query SettingOriginErrorPagePassThruGetParams, opts ...option.RequestOption) (res *ZoneSettingOriginErrorPagePassThru, err error) {
+func (r *SettingOriginErrorPagePassThruService) Get(ctx context.Context, query SettingOriginErrorPagePassThruGetParams, opts ...option.RequestOption) (res *OriginErrorPagePassThru, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOriginErrorPagePassThruGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/origin_error_page_pass_thru", query.ZoneID)
@@ -66,22 +66,22 @@ func (r *SettingOriginErrorPagePassThruService) Get(ctx context.Context, query S
 // Cloudflare will proxy customer error pages on any 502,504 errors on origin
 // server instead of showing a default Cloudflare error page. This does not apply
 // to 522 errors and is limited to Enterprise Zones.
-type ZoneSettingOriginErrorPagePassThru struct {
+type OriginErrorPagePassThru struct {
 	// ID of the zone setting.
-	ID ZoneSettingOriginErrorPagePassThruID `json:"id,required"`
+	ID OriginErrorPagePassThruID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingOriginErrorPagePassThruValue `json:"value,required"`
+	Value OriginErrorPagePassThruValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingOriginErrorPagePassThruEditable `json:"editable"`
+	Editable OriginErrorPagePassThruEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingOriginErrorPagePassThruJSON `json:"-"`
+	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       originErrorPagePassThruJSON `json:"-"`
 }
 
-// zoneSettingOriginErrorPagePassThruJSON contains the JSON metadata for the struct
-// [ZoneSettingOriginErrorPagePassThru]
-type zoneSettingOriginErrorPagePassThruJSON struct {
+// originErrorPagePassThruJSON contains the JSON metadata for the struct
+// [OriginErrorPagePassThru]
+type originErrorPagePassThruJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -90,40 +90,40 @@ type zoneSettingOriginErrorPagePassThruJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingOriginErrorPagePassThru) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginErrorPagePassThru) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingOriginErrorPagePassThruJSON) RawJSON() string {
+func (r originErrorPagePassThruJSON) RawJSON() string {
 	return r.raw
 }
 
 // ID of the zone setting.
-type ZoneSettingOriginErrorPagePassThruID string
+type OriginErrorPagePassThruID string
 
 const (
-	ZoneSettingOriginErrorPagePassThruIDOriginErrorPagePassThru ZoneSettingOriginErrorPagePassThruID = "origin_error_page_pass_thru"
+	OriginErrorPagePassThruIDOriginErrorPagePassThru OriginErrorPagePassThruID = "origin_error_page_pass_thru"
 )
 
-func (r ZoneSettingOriginErrorPagePassThruID) IsKnown() bool {
+func (r OriginErrorPagePassThruID) IsKnown() bool {
 	switch r {
-	case ZoneSettingOriginErrorPagePassThruIDOriginErrorPagePassThru:
+	case OriginErrorPagePassThruIDOriginErrorPagePassThru:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingOriginErrorPagePassThruValue string
+type OriginErrorPagePassThruValue string
 
 const (
-	ZoneSettingOriginErrorPagePassThruValueOn  ZoneSettingOriginErrorPagePassThruValue = "on"
-	ZoneSettingOriginErrorPagePassThruValueOff ZoneSettingOriginErrorPagePassThruValue = "off"
+	OriginErrorPagePassThruValueOn  OriginErrorPagePassThruValue = "on"
+	OriginErrorPagePassThruValueOff OriginErrorPagePassThruValue = "off"
 )
 
-func (r ZoneSettingOriginErrorPagePassThruValue) IsKnown() bool {
+func (r OriginErrorPagePassThruValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingOriginErrorPagePassThruValueOn, ZoneSettingOriginErrorPagePassThruValueOff:
+	case OriginErrorPagePassThruValueOn, OriginErrorPagePassThruValueOff:
 		return true
 	}
 	return false
@@ -131,16 +131,16 @@ func (r ZoneSettingOriginErrorPagePassThruValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingOriginErrorPagePassThruEditable bool
+type OriginErrorPagePassThruEditable bool
 
 const (
-	ZoneSettingOriginErrorPagePassThruEditableTrue  ZoneSettingOriginErrorPagePassThruEditable = true
-	ZoneSettingOriginErrorPagePassThruEditableFalse ZoneSettingOriginErrorPagePassThruEditable = false
+	OriginErrorPagePassThruEditableTrue  OriginErrorPagePassThruEditable = true
+	OriginErrorPagePassThruEditableFalse OriginErrorPagePassThruEditable = false
 )
 
-func (r ZoneSettingOriginErrorPagePassThruEditable) IsKnown() bool {
+func (r OriginErrorPagePassThruEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingOriginErrorPagePassThruEditableTrue, ZoneSettingOriginErrorPagePassThruEditableFalse:
+	case OriginErrorPagePassThruEditableTrue, OriginErrorPagePassThruEditableFalse:
 		return true
 	}
 	return false
@@ -181,7 +181,7 @@ type SettingOriginErrorPagePassThruEditResponseEnvelope struct {
 	// Cloudflare will proxy customer error pages on any 502,504 errors on origin
 	// server instead of showing a default Cloudflare error page. This does not apply
 	// to 522 errors and is limited to Enterprise Zones.
-	Result ZoneSettingOriginErrorPagePassThru                     `json:"result"`
+	Result OriginErrorPagePassThru                                `json:"result"`
 	JSON   settingOriginErrorPagePassThruEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -217,7 +217,7 @@ type SettingOriginErrorPagePassThruGetResponseEnvelope struct {
 	// Cloudflare will proxy customer error pages on any 502,504 errors on origin
 	// server instead of showing a default Cloudflare error page. This does not apply
 	// to 522 errors and is limited to Enterprise Zones.
-	Result ZoneSettingOriginErrorPagePassThru                    `json:"result"`
+	Result OriginErrorPagePassThru                               `json:"result"`
 	JSON   settingOriginErrorPagePassThruGetResponseEnvelopeJSON `json:"-"`
 }
 

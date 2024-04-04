@@ -37,7 +37,7 @@ func NewSettingMirageService(opts ...option.RequestOption) (r *SettingMirageServ
 // Refer to our
 // [blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for more
 // information.
-func (r *SettingMirageService) Edit(ctx context.Context, params SettingMirageEditParams, opts ...option.RequestOption) (res *ZoneSettingMirage, err error) {
+func (r *SettingMirageService) Edit(ctx context.Context, params SettingMirageEditParams, opts ...option.RequestOption) (res *Mirage, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMirageEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/mirage", params.ZoneID)
@@ -53,7 +53,7 @@ func (r *SettingMirageService) Edit(ctx context.Context, params SettingMirageEdi
 // Refer to our
 // [blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for more
 // information.
-func (r *SettingMirageService) Get(ctx context.Context, query SettingMirageGetParams, opts ...option.RequestOption) (res *ZoneSettingMirage, err error) {
+func (r *SettingMirageService) Get(ctx context.Context, query SettingMirageGetParams, opts ...option.RequestOption) (res *Mirage, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMirageGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/mirage", query.ZoneID)
@@ -69,22 +69,21 @@ func (r *SettingMirageService) Get(ctx context.Context, query SettingMirageGetPa
 // Refer to
 // [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
 // more information.
-type ZoneSettingMirage struct {
+type Mirage struct {
 	// ID of the zone setting.
-	ID ZoneSettingMirageID `json:"id,required"`
+	ID MirageID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingMirageValue `json:"value,required"`
+	Value MirageValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingMirageEditable `json:"editable"`
+	Editable MirageEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingMirageJSON `json:"-"`
+	ModifiedOn time.Time  `json:"modified_on,nullable" format:"date-time"`
+	JSON       mirageJSON `json:"-"`
 }
 
-// zoneSettingMirageJSON contains the JSON metadata for the struct
-// [ZoneSettingMirage]
-type zoneSettingMirageJSON struct {
+// mirageJSON contains the JSON metadata for the struct [Mirage]
+type mirageJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -93,40 +92,40 @@ type zoneSettingMirageJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingMirage) UnmarshalJSON(data []byte) (err error) {
+func (r *Mirage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingMirageJSON) RawJSON() string {
+func (r mirageJSON) RawJSON() string {
 	return r.raw
 }
 
 // ID of the zone setting.
-type ZoneSettingMirageID string
+type MirageID string
 
 const (
-	ZoneSettingMirageIDMirage ZoneSettingMirageID = "mirage"
+	MirageIDMirage MirageID = "mirage"
 )
 
-func (r ZoneSettingMirageID) IsKnown() bool {
+func (r MirageID) IsKnown() bool {
 	switch r {
-	case ZoneSettingMirageIDMirage:
+	case MirageIDMirage:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingMirageValue string
+type MirageValue string
 
 const (
-	ZoneSettingMirageValueOn  ZoneSettingMirageValue = "on"
-	ZoneSettingMirageValueOff ZoneSettingMirageValue = "off"
+	MirageValueOn  MirageValue = "on"
+	MirageValueOff MirageValue = "off"
 )
 
-func (r ZoneSettingMirageValue) IsKnown() bool {
+func (r MirageValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingMirageValueOn, ZoneSettingMirageValueOff:
+	case MirageValueOn, MirageValueOff:
 		return true
 	}
 	return false
@@ -134,16 +133,16 @@ func (r ZoneSettingMirageValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingMirageEditable bool
+type MirageEditable bool
 
 const (
-	ZoneSettingMirageEditableTrue  ZoneSettingMirageEditable = true
-	ZoneSettingMirageEditableFalse ZoneSettingMirageEditable = false
+	MirageEditableTrue  MirageEditable = true
+	MirageEditableFalse MirageEditable = false
 )
 
-func (r ZoneSettingMirageEditable) IsKnown() bool {
+func (r MirageEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingMirageEditableTrue, ZoneSettingMirageEditableFalse:
+	case MirageEditableTrue, MirageEditableFalse:
 		return true
 	}
 	return false
@@ -185,7 +184,7 @@ type SettingMirageEditResponseEnvelope struct {
 	// Refer to
 	// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
 	// more information.
-	Result ZoneSettingMirage                     `json:"result"`
+	Result Mirage                                `json:"result"`
 	JSON   settingMirageEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -222,7 +221,7 @@ type SettingMirageGetResponseEnvelope struct {
 	// Refer to
 	// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
 	// more information.
-	Result ZoneSettingMirage                    `json:"result"`
+	Result Mirage                               `json:"result"`
 	JSON   settingMirageGetResponseEnvelopeJSON `json:"-"`
 }
 

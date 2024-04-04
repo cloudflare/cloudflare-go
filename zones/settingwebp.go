@@ -36,7 +36,7 @@ func NewSettingWebPService(opts ...option.RequestOption) (r *SettingWebPService)
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
 // serve a WebP version of the original image.
-func (r *SettingWebPService) Edit(ctx context.Context, params SettingWebPEditParams, opts ...option.RequestOption) (res *ZoneSettingWebP, err error) {
+func (r *SettingWebPService) Edit(ctx context.Context, params SettingWebPEditParams, opts ...option.RequestOption) (res *WebP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebPEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/webp", params.ZoneID)
@@ -51,7 +51,7 @@ func (r *SettingWebPService) Edit(ctx context.Context, params SettingWebPEditPar
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
 // serve a WebP version of the original image.
-func (r *SettingWebPService) Get(ctx context.Context, query SettingWebPGetParams, opts ...option.RequestOption) (res *ZoneSettingWebP, err error) {
+func (r *SettingWebPService) Get(ctx context.Context, query SettingWebPGetParams, opts ...option.RequestOption) (res *WebP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebPGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/webp", query.ZoneID)
@@ -66,21 +66,21 @@ func (r *SettingWebPService) Get(ctx context.Context, query SettingWebPGetParams
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
 // serve a WebP version of the original image.
-type ZoneSettingWebP struct {
+type WebP struct {
 	// ID of the zone setting.
-	ID ZoneSettingWebPID `json:"id,required"`
+	ID WebPID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingWebPValue `json:"value,required"`
+	Value WebPValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingWebPEditable `json:"editable"`
+	Editable WebPEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingWebPJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	JSON       WebPJSON  `json:"-"`
 }
 
-// zoneSettingWebPJSON contains the JSON metadata for the struct [ZoneSettingWebP]
-type zoneSettingWebPJSON struct {
+// WebPJSON contains the JSON metadata for the struct [WebP]
+type WebPJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -89,40 +89,40 @@ type zoneSettingWebPJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWebP) UnmarshalJSON(data []byte) (err error) {
+func (r *WebP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingWebPJSON) RawJSON() string {
+func (r WebPJSON) RawJSON() string {
 	return r.raw
 }
 
 // ID of the zone setting.
-type ZoneSettingWebPID string
+type WebPID string
 
 const (
-	ZoneSettingWebPIDWebP ZoneSettingWebPID = "webp"
+	WebPIDWebP WebPID = "webp"
 )
 
-func (r ZoneSettingWebPID) IsKnown() bool {
+func (r WebPID) IsKnown() bool {
 	switch r {
-	case ZoneSettingWebPIDWebP:
+	case WebPIDWebP:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingWebPValue string
+type WebPValue string
 
 const (
-	ZoneSettingWebPValueOff ZoneSettingWebPValue = "off"
-	ZoneSettingWebPValueOn  ZoneSettingWebPValue = "on"
+	WebPValueOff WebPValue = "off"
+	WebPValueOn  WebPValue = "on"
 )
 
-func (r ZoneSettingWebPValue) IsKnown() bool {
+func (r WebPValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingWebPValueOff, ZoneSettingWebPValueOn:
+	case WebPValueOff, WebPValueOn:
 		return true
 	}
 	return false
@@ -130,16 +130,16 @@ func (r ZoneSettingWebPValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingWebPEditable bool
+type WebPEditable bool
 
 const (
-	ZoneSettingWebPEditableTrue  ZoneSettingWebPEditable = true
-	ZoneSettingWebPEditableFalse ZoneSettingWebPEditable = false
+	WebPEditableTrue  WebPEditable = true
+	WebPEditableFalse WebPEditable = false
 )
 
-func (r ZoneSettingWebPEditable) IsKnown() bool {
+func (r WebPEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingWebPEditableTrue, ZoneSettingWebPEditableFalse:
+	case WebPEditableTrue, WebPEditableFalse:
 		return true
 	}
 	return false
@@ -180,7 +180,7 @@ type SettingWebPEditResponseEnvelope struct {
 	// When the client requesting the image supports the WebP image codec, and WebP
 	// offers a performance advantage over the original image format, Cloudflare will
 	// serve a WebP version of the original image.
-	Result ZoneSettingWebP                     `json:"result"`
+	Result WebP                                `json:"result"`
 	JSON   settingWebPEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -216,7 +216,7 @@ type SettingWebPGetResponseEnvelope struct {
 	// When the client requesting the image supports the WebP image codec, and WebP
 	// offers a performance advantage over the original image format, Cloudflare will
 	// serve a WebP version of the original image.
-	Result ZoneSettingWebP                    `json:"result"`
+	Result WebP                               `json:"result"`
 	JSON   settingWebPGetResponseEnvelopeJSON `json:"-"`
 }
 

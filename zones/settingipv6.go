@@ -35,7 +35,7 @@ func NewSettingIPV6Service(opts ...option.RequestOption) (r *SettingIPV6Service)
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-func (r *SettingIPV6Service) Edit(ctx context.Context, params SettingIPV6EditParams, opts ...option.RequestOption) (res *ZoneSettingIPV6, err error) {
+func (r *SettingIPV6Service) Edit(ctx context.Context, params SettingIPV6EditParams, opts ...option.RequestOption) (res *IPV6, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingIPV6EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ipv6", params.ZoneID)
@@ -49,7 +49,7 @@ func (r *SettingIPV6Service) Edit(ctx context.Context, params SettingIPV6EditPar
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-func (r *SettingIPV6Service) Get(ctx context.Context, query SettingIPV6GetParams, opts ...option.RequestOption) (res *ZoneSettingIPV6, err error) {
+func (r *SettingIPV6Service) Get(ctx context.Context, query SettingIPV6GetParams, opts ...option.RequestOption) (res *IPV6, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingIPV6GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ipv6", query.ZoneID)
@@ -63,21 +63,21 @@ func (r *SettingIPV6Service) Get(ctx context.Context, query SettingIPV6GetParams
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-type ZoneSettingIPV6 struct {
+type IPV6 struct {
 	// ID of the zone setting.
-	ID ZoneSettingIPV6ID `json:"id,required"`
+	ID IPV6ID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingIPV6Value `json:"value,required"`
+	Value IPV6Value `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingIPV6Editable `json:"editable"`
+	Editable IPV6Editable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingIPV6JSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	JSON       ipv6JSON  `json:"-"`
 }
 
-// zoneSettingIPV6JSON contains the JSON metadata for the struct [ZoneSettingIPV6]
-type zoneSettingIPV6JSON struct {
+// ipv6JSON contains the JSON metadata for the struct [IPV6]
+type ipv6JSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,40 +86,40 @@ type zoneSettingIPV6JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingIPV6) UnmarshalJSON(data []byte) (err error) {
+func (r *IPV6) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingIPV6JSON) RawJSON() string {
+func (r ipv6JSON) RawJSON() string {
 	return r.raw
 }
 
 // ID of the zone setting.
-type ZoneSettingIPV6ID string
+type IPV6ID string
 
 const (
-	ZoneSettingIPV6IDIPV6 ZoneSettingIPV6ID = "ipv6"
+	IPV6IDIPV6 IPV6ID = "ipv6"
 )
 
-func (r ZoneSettingIPV6ID) IsKnown() bool {
+func (r IPV6ID) IsKnown() bool {
 	switch r {
-	case ZoneSettingIPV6IDIPV6:
+	case IPV6IDIPV6:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingIPV6Value string
+type IPV6Value string
 
 const (
-	ZoneSettingIPV6ValueOff ZoneSettingIPV6Value = "off"
-	ZoneSettingIPV6ValueOn  ZoneSettingIPV6Value = "on"
+	IPV6ValueOff IPV6Value = "off"
+	IPV6ValueOn  IPV6Value = "on"
 )
 
-func (r ZoneSettingIPV6Value) IsKnown() bool {
+func (r IPV6Value) IsKnown() bool {
 	switch r {
-	case ZoneSettingIPV6ValueOff, ZoneSettingIPV6ValueOn:
+	case IPV6ValueOff, IPV6ValueOn:
 		return true
 	}
 	return false
@@ -127,16 +127,16 @@ func (r ZoneSettingIPV6Value) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingIPV6Editable bool
+type IPV6Editable bool
 
 const (
-	ZoneSettingIPV6EditableTrue  ZoneSettingIPV6Editable = true
-	ZoneSettingIPV6EditableFalse ZoneSettingIPV6Editable = false
+	IPV6EditableTrue  IPV6Editable = true
+	IPV6EditableFalse IPV6Editable = false
 )
 
-func (r ZoneSettingIPV6Editable) IsKnown() bool {
+func (r IPV6Editable) IsKnown() bool {
 	switch r {
-	case ZoneSettingIPV6EditableTrue, ZoneSettingIPV6EditableFalse:
+	case IPV6EditableTrue, IPV6EditableFalse:
 		return true
 	}
 	return false
@@ -176,7 +176,7 @@ type SettingIPV6EditResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Enable IPv6 on all subdomains that are Cloudflare enabled.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168586).
-	Result ZoneSettingIPV6                     `json:"result"`
+	Result IPV6                                `json:"result"`
 	JSON   settingIPV6EditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -211,7 +211,7 @@ type SettingIPV6GetResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Enable IPv6 on all subdomains that are Cloudflare enabled.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168586).
-	Result ZoneSettingIPV6                    `json:"result"`
+	Result IPV6                               `json:"result"`
 	JSON   settingIPV6GetResponseEnvelopeJSON `json:"-"`
 }
 
