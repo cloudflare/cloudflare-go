@@ -162,7 +162,7 @@ func (r ZoneSettingMinTLSVersionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingMinTLSVersionParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingMinTLSVersionParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingMinTLSVersionEditParams struct {
 	// Identifier

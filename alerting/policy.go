@@ -85,7 +85,7 @@ func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListPara
 }
 
 // Delete a Notification policy.
-func (r *PolicyService) Delete(ctx context.Context, policyID string, body PolicyDeleteParams, opts ...option.RequestOption) (res *PolicyDeleteResponse, err error) {
+func (r *PolicyService) Delete(ctx context.Context, policyID string, body PolicyDeleteParams, opts ...option.RequestOption) (res *PolicyDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PolicyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", body.AccountID, policyID)
@@ -422,8 +422,8 @@ func (r AlertingPoliciesFiltersTrafficExclusion) IsKnown() bool {
 
 type AlertingPoliciesMechanisms struct {
 	// UUID
-	ID   AlertingPoliciesMechanismsID   `json:"id"`
-	JSON alertingPoliciesMechanismsJSON `json:"-"`
+	ID   AlertingPoliciesMechanismsIDUnion `json:"id"`
+	JSON alertingPoliciesMechanismsJSON    `json:"-"`
 }
 
 // alertingPoliciesMechanismsJSON contains the JSON metadata for the struct
@@ -445,13 +445,13 @@ func (r alertingPoliciesMechanismsJSON) RawJSON() string {
 // UUID
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type AlertingPoliciesMechanismsID interface {
-	ImplementsAlertingAlertingPoliciesMechanismsID()
+type AlertingPoliciesMechanismsIDUnion interface {
+	ImplementsAlertingAlertingPoliciesMechanismsIDUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AlertingPoliciesMechanismsID)(nil)).Elem(),
+		reflect.TypeOf((*AlertingPoliciesMechanismsIDUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -510,13 +510,13 @@ func (r policyUpdateResponseJSON) RawJSON() string {
 
 // Union satisfied by [alerting.PolicyDeleteResponseUnknown],
 // [alerting.PolicyDeleteResponseArray] or [shared.UnionString].
-type PolicyDeleteResponse interface {
-	ImplementsAlertingPolicyDeleteResponse()
+type PolicyDeleteResponseUnion interface {
+	ImplementsAlertingPolicyDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PolicyDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*PolicyDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -531,7 +531,7 @@ func init() {
 
 type PolicyDeleteResponseArray []interface{}
 
-func (r PolicyDeleteResponseArray) ImplementsAlertingPolicyDeleteResponse() {}
+func (r PolicyDeleteResponseArray) ImplementsAlertingPolicyDeleteResponseUnion() {}
 
 type PolicyNewParams struct {
 	// The account id
@@ -632,7 +632,7 @@ func (r PolicyNewParamsAlertType) IsKnown() bool {
 
 type PolicyNewParamsMechanisms struct {
 	// UUID
-	ID param.Field[PolicyNewParamsMechanismsID] `json:"id"`
+	ID param.Field[PolicyNewParamsMechanismsIDUnion] `json:"id"`
 }
 
 func (r PolicyNewParamsMechanisms) MarshalJSON() (data []byte, err error) {
@@ -642,8 +642,8 @@ func (r PolicyNewParamsMechanisms) MarshalJSON() (data []byte, err error) {
 // UUID
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type PolicyNewParamsMechanismsID interface {
-	ImplementsAlertingPolicyNewParamsMechanismsID()
+type PolicyNewParamsMechanismsIDUnion interface {
+	ImplementsAlertingPolicyNewParamsMechanismsIDUnion()
 }
 
 // Optional filters that allow you to be alerted only on a subset of events for
@@ -1064,7 +1064,7 @@ func (r PolicyUpdateParamsFiltersTrafficExclusion) IsKnown() bool {
 
 type PolicyUpdateParamsMechanisms struct {
 	// UUID
-	ID param.Field[PolicyUpdateParamsMechanismsID] `json:"id"`
+	ID param.Field[PolicyUpdateParamsMechanismsIDUnion] `json:"id"`
 }
 
 func (r PolicyUpdateParamsMechanisms) MarshalJSON() (data []byte, err error) {
@@ -1074,8 +1074,8 @@ func (r PolicyUpdateParamsMechanisms) MarshalJSON() (data []byte, err error) {
 // UUID
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type PolicyUpdateParamsMechanismsID interface {
-	ImplementsAlertingPolicyUpdateParamsMechanismsID()
+type PolicyUpdateParamsMechanismsIDUnion interface {
+	ImplementsAlertingPolicyUpdateParamsMechanismsIDUnion()
 }
 
 type PolicyUpdateResponseEnvelope struct {
@@ -1132,9 +1132,9 @@ type PolicyDeleteParams struct {
 }
 
 type PolicyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PolicyDeleteResponse  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   PolicyDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PolicyDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PolicyDeleteResponseEnvelopeResultInfo `json:"result_info"`

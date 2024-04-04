@@ -161,7 +161,7 @@ func (r ZoneSettingH2PrioritizationParam) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingH2PrioritizationParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingH2PrioritizationParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingH2PrioritizationEditParams struct {
 	// Identifier

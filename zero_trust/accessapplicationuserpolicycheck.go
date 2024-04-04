@@ -33,7 +33,7 @@ func NewAccessApplicationUserPolicyCheckService(opts ...option.RequestOption) (r
 }
 
 // Tests if a specific user has permission to access an application.
-func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appID AccessApplicationUserPolicyCheckListParamsAppID, query AccessApplicationUserPolicyCheckListParams, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
+func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appID AccessApplicationUserPolicyCheckListParamsAppIDUnion, query AccessApplicationUserPolicyCheckListParams, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationUserPolicyCheckListResponseEnvelope
 	var accountOrZone string
@@ -184,8 +184,8 @@ type AccessApplicationUserPolicyCheckListParams struct {
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUserPolicyCheckListParamsAppID interface {
-	ImplementsZeroTrustAccessApplicationUserPolicyCheckListParamsAppID()
+type AccessApplicationUserPolicyCheckListParamsAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationUserPolicyCheckListParamsAppIDUnion()
 }
 
 type AccessApplicationUserPolicyCheckListResponseEnvelope struct {

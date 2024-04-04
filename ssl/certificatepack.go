@@ -93,7 +93,7 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 }
 
 // For a given zone, get a certificate pack.
-func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponse, err error) {
+func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", query.ZoneID, certificatePackID)
@@ -281,13 +281,13 @@ func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
 
 // Union satisfied by [ssl.CertificatePackGetResponseUnknown] or
 // [shared.UnionString].
-type CertificatePackGetResponse interface {
-	ImplementsSSLCertificatePackGetResponse()
+type CertificatePackGetResponseUnion interface {
+	ImplementsSSLCertificatePackGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CertificatePackGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*CertificatePackGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -439,9 +439,9 @@ type CertificatePackGetParams struct {
 }
 
 type CertificatePackGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   CertificatePackGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   CertificatePackGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackGetResponseEnvelopeJSON    `json:"-"`

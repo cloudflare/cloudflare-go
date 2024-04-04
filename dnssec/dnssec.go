@@ -33,7 +33,7 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 }
 
 // Delete DNSSEC.
-func (r *DNSSECService) Delete(ctx context.Context, params DNSSECDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef49, err error) {
+func (r *DNSSECService) Delete(ctx context.Context, params DNSSECDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef49Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSSECDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", params.ZoneID)
@@ -171,9 +171,9 @@ func (r DNSSECDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSSECDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef49 `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef49Union `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSSECDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnssecDeleteResponseEnvelopeJSON    `json:"-"`

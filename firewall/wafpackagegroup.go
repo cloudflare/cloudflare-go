@@ -71,7 +71,7 @@ func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID s
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, groupID string, params WAFPackageGroupEditParams, opts ...option.RequestOption) (res *WAFPackageGroupEditResponse, err error) {
+func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, groupID string, params WAFPackageGroupEditParams, opts ...option.RequestOption) (res *WAFPackageGroupEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageGroupEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", params.ZoneID, packageID, groupID)
@@ -87,7 +87,7 @@ func (r *WAFPackageGroupService) Edit(ctx context.Context, packageID string, gro
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, groupID string, query WAFPackageGroupGetParams, opts ...option.RequestOption) (res *WAFPackageGroupGetResponse, err error) {
+func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, groupID string, query WAFPackageGroupGetParams, opts ...option.RequestOption) (res *WAFPackageGroupGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageGroupGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", query.ZoneID, packageID, groupID)
@@ -180,13 +180,13 @@ func (r WAFManagedRulesGroupAllowedMode) IsKnown() bool {
 
 // Union satisfied by [firewall.WAFPackageGroupEditResponseUnknown] or
 // [shared.UnionString].
-type WAFPackageGroupEditResponse interface {
-	ImplementsFirewallWAFPackageGroupEditResponse()
+type WAFPackageGroupEditResponseUnion interface {
+	ImplementsFirewallWAFPackageGroupEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageGroupEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*WAFPackageGroupEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -197,13 +197,13 @@ func init() {
 
 // Union satisfied by [firewall.WAFPackageGroupGetResponseUnknown] or
 // [shared.UnionString].
-type WAFPackageGroupGetResponse interface {
-	ImplementsFirewallWAFPackageGroupGetResponse()
+type WAFPackageGroupGetResponseUnion interface {
+	ImplementsFirewallWAFPackageGroupGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageGroupGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*WAFPackageGroupGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -340,9 +340,9 @@ func (r WAFPackageGroupEditParamsMode) IsKnown() bool {
 }
 
 type WAFPackageGroupEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   WAFPackageGroupEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   WAFPackageGroupEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupEditResponseEnvelopeJSON    `json:"-"`
@@ -388,9 +388,9 @@ type WAFPackageGroupGetParams struct {
 }
 
 type WAFPackageGroupGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   WAFPackageGroupGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   WAFPackageGroupGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageGroupGetResponseEnvelopeJSON    `json:"-"`

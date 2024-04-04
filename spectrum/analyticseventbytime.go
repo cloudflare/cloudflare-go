@@ -38,7 +38,7 @@ func NewAnalyticsEventBytimeService(opts ...option.RequestOption) (r *AnalyticsE
 }
 
 // Retrieves a list of aggregate metrics grouped by time interval.
-func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, query AnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsEventBytimeGetResponse, err error) {
+func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, query AnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsEventBytimeGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsEventBytimeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/bytime", zone)
@@ -52,13 +52,13 @@ func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, quer
 
 // Union satisfied by [spectrum.AnalyticsEventBytimeGetResponseUnknown] or
 // [shared.UnionString].
-type AnalyticsEventBytimeGetResponse interface {
-	ImplementsSpectrumAnalyticsEventBytimeGetResponse()
+type AnalyticsEventBytimeGetResponseUnion interface {
+	ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AnalyticsEventBytimeGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*AnalyticsEventBytimeGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -187,9 +187,9 @@ func (r AnalyticsEventBytimeGetParamsTimeDelta) IsKnown() bool {
 }
 
 type AnalyticsEventBytimeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   AnalyticsEventBytimeGetResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                `json:"errors,required"`
+	Messages []shared.ResponseInfo                `json:"messages,required"`
+	Result   AnalyticsEventBytimeGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AnalyticsEventBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsEventBytimeGetResponseEnvelopeJSON    `json:"-"`

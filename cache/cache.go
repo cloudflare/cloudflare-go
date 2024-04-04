@@ -182,8 +182,8 @@ func (CachePurgeParamsCachePurgeEverything) ImplementsCachePurgeParams() {
 }
 
 type CachePurgeParamsCachePurgeFiles struct {
-	ZoneID param.Field[string]                                `path:"zone_id,required"`
-	Files  param.Field[[]CachePurgeParamsCachePurgeFilesFile] `json:"files"`
+	ZoneID param.Field[string]                                     `path:"zone_id,required"`
+	Files  param.Field[[]CachePurgeParamsCachePurgeFilesFileUnion] `json:"files"`
 }
 
 func (r CachePurgeParamsCachePurgeFiles) MarshalJSON() (data []byte, err error) {
@@ -198,10 +198,23 @@ func (CachePurgeParamsCachePurgeFiles) ImplementsCachePurgeParams() {
 
 }
 
+type CachePurgeParamsCachePurgeFilesFile struct {
+	Headers param.Field[interface{}] `json:"headers,required"`
+	URL     param.Field[string]      `json:"url"`
+}
+
+func (r CachePurgeParamsCachePurgeFilesFile) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CachePurgeParamsCachePurgeFilesFile) ImplementsCacheCachePurgeParamsCachePurgeFilesFileUnion() {
+}
+
 // Satisfied by [shared.UnionString],
-// [cache.CachePurgeParamsCachePurgeFilesFilesCachePurgeURLAndHeaders].
-type CachePurgeParamsCachePurgeFilesFile interface {
-	ImplementsCacheCachePurgeParamsCachePurgeFilesFile()
+// [cache.CachePurgeParamsCachePurgeFilesFilesCachePurgeURLAndHeaders],
+// [CachePurgeParamsCachePurgeFilesFile].
+type CachePurgeParamsCachePurgeFilesFileUnion interface {
+	ImplementsCacheCachePurgeParamsCachePurgeFilesFileUnion()
 }
 
 type CachePurgeParamsCachePurgeFilesFilesCachePurgeURLAndHeaders struct {
@@ -213,7 +226,7 @@ func (r CachePurgeParamsCachePurgeFilesFilesCachePurgeURLAndHeaders) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParamsCachePurgeFilesFilesCachePurgeURLAndHeaders) ImplementsCacheCachePurgeParamsCachePurgeFilesFile() {
+func (r CachePurgeParamsCachePurgeFilesFilesCachePurgeURLAndHeaders) ImplementsCacheCachePurgeParamsCachePurgeFilesFileUnion() {
 }
 
 type CachePurgeResponseEnvelope struct {

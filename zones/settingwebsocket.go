@@ -171,7 +171,7 @@ func (r ZoneSettingWebsocketsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingWebsocketsParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingWebsocketsParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingWebsocketEditParams struct {
 	// Identifier

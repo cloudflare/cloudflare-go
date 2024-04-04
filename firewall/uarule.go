@@ -35,7 +35,7 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 }
 
 // Creates a new User Agent Blocking rule in a zone.
-func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
+func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
@@ -48,7 +48,7 @@ func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UAR
 }
 
 // Updates an existing User Agent Blocking rule.
-func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
+func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
@@ -99,7 +99,7 @@ func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a User Agent Blocking rule.
-func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
+func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
@@ -222,9 +222,9 @@ func (r UARuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UARuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -273,9 +273,9 @@ func (r UARuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UARuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -389,9 +389,9 @@ func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleGetResponseEnvelopeJSON    `json:"-"`

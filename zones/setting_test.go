@@ -30,16 +30,16 @@ func TestSettingEdit(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.Edit(context.TODO(), zones.SettingEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Items: cloudflare.F([]zones.SettingEditParamsItem{zones.ZoneSettingAlwaysOnlineParam(zones.ZoneSettingAlwaysOnlineParam{
+		Items: cloudflare.F([]zones.SettingEditParamsItemUnion{zones.ZoneSettingAlwaysOnlineParam{
 			ID:    cloudflare.F(zones.ZoneSettingAlwaysOnlineIDAlwaysOnline),
 			Value: cloudflare.F(zones.ZoneSettingAlwaysOnlineValueOn),
-		}), zones.ZoneSettingBrowserCacheTTLParam(zones.ZoneSettingBrowserCacheTTLParam{
+		}, zones.ZoneSettingBrowserCacheTTLParam{
 			ID:    cloudflare.F(zones.ZoneSettingBrowserCacheTTLIDBrowserCacheTTL),
 			Value: cloudflare.F(zones.ZoneSettingBrowserCacheTTLValue18000),
-		}), zones.ZoneSettingIPGeolocationParam(zones.ZoneSettingIPGeolocationParam{
+		}, zones.ZoneSettingIPGeolocationParam{
 			ID:    cloudflare.F(zones.ZoneSettingIPGeolocationIDIPGeolocation),
 			Value: cloudflare.F(zones.ZoneSettingIPGeolocationValueOff),
-		})}),
+		}}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -46,7 +46,7 @@ func (r *ControlCmbConfigService) New(ctx context.Context, params ControlCmbConf
 }
 
 // Deletes CMB config.
-func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef161, err error) {
+func (r *ControlCmbConfigService) Delete(ctx context.Context, params ControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef161Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
@@ -157,9 +157,9 @@ func (r ControlCmbConfigDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlCmbConfigDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef161 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef161Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ControlCmbConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    controlCmbConfigDeleteResponseEnvelopeJSON    `json:"-"`

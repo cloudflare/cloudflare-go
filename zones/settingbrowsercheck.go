@@ -172,7 +172,7 @@ func (r ZoneSettingBrowserCheckParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingBrowserCheckParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingBrowserCheckParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingBrowserCheckEditParams struct {
 	// Identifier

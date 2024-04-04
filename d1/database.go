@@ -71,7 +71,7 @@ func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseLis
 }
 
 // Deletes the specified D1 database.
-func (r *DatabaseService) Delete(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
+func (r *DatabaseService) Delete(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", accountIdentifier, databaseIdentifier)
@@ -300,9 +300,9 @@ func (r DatabaseListParams) URLQuery() (v url.Values) {
 }
 
 type DatabaseDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DatabaseDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseDeleteResponseEnvelopeJSON    `json:"-"`

@@ -35,7 +35,7 @@ func NewAnalyzeService(opts ...option.RequestOption) (r *AnalyzeService) {
 
 // Returns the set of hostnames, the signature algorithm, and the expiration date
 // of the certificate.
-func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts ...option.RequestOption) (res *AnalyzeNewResponse, err error) {
+func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts ...option.RequestOption) (res *AnalyzeNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyzeNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/analyze", params.ZoneID)
@@ -48,13 +48,13 @@ func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts 
 }
 
 // Union satisfied by [ssl.AnalyzeNewResponseUnknown] or [shared.UnionString].
-type AnalyzeNewResponse interface {
-	ImplementsSSLAnalyzeNewResponse()
+type AnalyzeNewResponseUnion interface {
+	ImplementsSSLAnalyzeNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AnalyzeNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*AnalyzeNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -80,9 +80,9 @@ func (r AnalyzeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AnalyzeNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   AnalyzeNewResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   AnalyzeNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyzeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyzeNewResponseEnvelopeJSON    `json:"-"`

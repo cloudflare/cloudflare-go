@@ -79,7 +79,7 @@ func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMap
 
 // Delete a particular address map owned by the account. An Address Map must be
 // disabled before it can be deleted.
-func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, params AddressMapDeleteParams, opts ...option.RequestOption) (res *AddressMapDeleteResponse, err error) {
+func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, params AddressMapDeleteParams, opts ...option.RequestOption) (res *AddressMapDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
@@ -294,13 +294,13 @@ func (r AddressMapNewResponseMembershipsKind) IsKnown() bool {
 
 // Union satisfied by [addressing.AddressMapDeleteResponseUnknown],
 // [addressing.AddressMapDeleteResponseArray] or [shared.UnionString].
-type AddressMapDeleteResponse interface {
-	ImplementsAddressingAddressMapDeleteResponse()
+type AddressMapDeleteResponseUnion interface {
+	ImplementsAddressingAddressMapDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*AddressMapDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -315,7 +315,7 @@ func init() {
 
 type AddressMapDeleteResponseArray []interface{}
 
-func (r AddressMapDeleteResponseArray) ImplementsAddressingAddressMapDeleteResponse() {}
+func (r AddressMapDeleteResponseArray) ImplementsAddressingAddressMapDeleteResponseUnion() {}
 
 type AddressMapGetResponse struct {
 	// Identifier
@@ -517,9 +517,9 @@ func (r AddressMapDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   AddressMapDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   AddressMapDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapDeleteResponseEnvelopeResultInfo `json:"result_info"`

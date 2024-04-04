@@ -32,7 +32,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 		Kind:  cloudflare.F(rulesets.RulesetNewParamsKindRoot),
 		Name:  cloudflare.F("My ruleset"),
 		Phase: cloudflare.F(rulesets.RulesetNewParamsPhaseHTTPRequestFirewallCustom),
-		Rules: cloudflare.F([]rulesets.RulesetNewParamsRule{rulesets.RulesetNewParamsRulesRulesetsBlockRule(rulesets.RulesetNewParamsRulesRulesetsBlockRule{
+		Rules: cloudflare.F([]rulesets.RulesetNewParamsRuleUnion{rulesets.RulesetNewParamsRulesRulesetsBlockRule{
 			Action: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionBlock),
 			ActionParameters: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParameters{
 				Response: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParametersResponse{
@@ -49,7 +49,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
-		}), rulesets.RulesetNewParamsRulesRulesetsBlockRule(rulesets.RulesetNewParamsRulesRulesetsBlockRule{
+		}, rulesets.RulesetNewParamsRulesRulesetsBlockRule{
 			Action: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionBlock),
 			ActionParameters: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParameters{
 				Response: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParametersResponse{
@@ -66,7 +66,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
-		}), rulesets.RulesetNewParamsRulesRulesetsBlockRule(rulesets.RulesetNewParamsRulesRulesetsBlockRule{
+		}, rulesets.RulesetNewParamsRulesRulesetsBlockRule{
 			Action: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionBlock),
 			ActionParameters: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParameters{
 				Response: cloudflare.F(rulesets.RulesetNewParamsRulesRulesetsBlockRuleActionParametersResponse{
@@ -83,7 +83,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
-		})}),
+		}}),
 		AccountID:   cloudflare.F("string"),
 		ZoneID:      cloudflare.F("string"),
 		Description: cloudflare.F("My ruleset to execute managed rulesets"),
@@ -115,7 +115,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetUpdateParams{
-			Rules: cloudflare.F([]rulesets.RulesetUpdateParamsRule{rulesets.RulesetUpdateParamsRulesRulesetsBlockRule(rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
+			Rules: cloudflare.F([]rulesets.RulesetUpdateParamsRuleUnion{rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters{
 					Response: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
@@ -132,7 +132,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), rulesets.RulesetUpdateParamsRulesRulesetsBlockRule(rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
+			}, rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters{
 					Response: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
@@ -149,7 +149,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), rulesets.RulesetUpdateParamsRulesRulesetsBlockRule(rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
+			}, rulesets.RulesetUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters{
 					Response: cloudflare.F(rulesets.RulesetUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
@@ -166,7 +166,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			})}),
+			}}),
 			AccountID:   cloudflare.F("string"),
 			ZoneID:      cloudflare.F("string"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),

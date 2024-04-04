@@ -168,7 +168,7 @@ func (r ZoneSettingMirageParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingMirageParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingMirageParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingMirageEditParams struct {
 	// Identifier

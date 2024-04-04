@@ -51,7 +51,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
 				Logpush:            cloudflare.F(false),
 				MainModule:         cloudflare.F("worker.js"),
-				Migrations: cloudflare.F[workers.ScriptUpdateParamsVariant0MetadataMigrations](workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations(workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[workers.ScriptUpdateParamsVariant0MetadataMigrationsUnion](workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
@@ -79,7 +79,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
 					}}),
-				})),
+				}),
 				Placement: cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataPlacement{
 					Mode: cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataPlacementModeSmart),
 				}),

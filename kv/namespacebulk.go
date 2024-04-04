@@ -40,7 +40,7 @@ func NewNamespaceBulkService(opts ...option.RequestOption) (r *NamespaceBulkServ
 // `expiration_ttl` is specified, the key-value pair will never expire. If both are
 // set, `expiration_ttl` is used and `expiration` is ignored. The entire request
 // size must be 100 megabytes or less.
-func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceBulkUpdateResponse, err error) {
+func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, params NamespaceBulkUpdateParams, opts ...option.RequestOption) (res *NamespaceBulkUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", params.AccountID, namespaceID)
@@ -54,7 +54,7 @@ func (r *NamespaceBulkService) Update(ctx context.Context, namespaceID string, p
 
 // Remove multiple KV pairs from the namespace. Body should be an array of up to
 // 10,000 keys to be removed.
-func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, params NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponse, err error) {
+func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, params NamespaceBulkDeleteParams, opts ...option.RequestOption) (res *NamespaceBulkDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceBulkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", params.AccountID, namespaceID)
@@ -68,13 +68,13 @@ func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, p
 
 // Union satisfied by [kv.NamespaceBulkUpdateResponseUnknown] or
 // [shared.UnionString].
-type NamespaceBulkUpdateResponse interface {
-	ImplementsKVNamespaceBulkUpdateResponse()
+type NamespaceBulkUpdateResponseUnion interface {
+	ImplementsKVNamespaceBulkUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceBulkUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*NamespaceBulkUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -85,13 +85,13 @@ func init() {
 
 // Union satisfied by [kv.NamespaceBulkDeleteResponseUnknown] or
 // [shared.UnionString].
-type NamespaceBulkDeleteResponse interface {
-	ImplementsKVNamespaceBulkDeleteResponse()
+type NamespaceBulkDeleteResponseUnion interface {
+	ImplementsKVNamespaceBulkDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*NamespaceBulkDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*NamespaceBulkDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -135,9 +135,9 @@ func (r NamespaceBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceBulkUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   NamespaceBulkUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   NamespaceBulkUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceBulkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -188,9 +188,9 @@ func (r NamespaceBulkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NamespaceBulkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   NamespaceBulkDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   NamespaceBulkDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceBulkDeleteResponseEnvelopeJSON    `json:"-"`

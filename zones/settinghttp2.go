@@ -156,7 +156,7 @@ func (r ZoneSettingHTTP2Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingHTTP2Param) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingHTTP2Param) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingHTTP2EditParams struct {
 	// Identifier

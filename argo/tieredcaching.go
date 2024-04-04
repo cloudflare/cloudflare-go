@@ -35,7 +35,7 @@ func NewTieredCachingService(opts ...option.RequestOption) (r *TieredCachingServ
 }
 
 // Updates enablement of Tiered Caching
-func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponse, err error) {
+func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TieredCachingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", params.ZoneID)
@@ -48,7 +48,7 @@ func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEdi
 }
 
 // Get Tiered Caching setting
-func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponse, err error) {
+func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TieredCachingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", query.ZoneID)
@@ -62,13 +62,13 @@ func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetPa
 
 // Union satisfied by [argo.TieredCachingEditResponseUnknown] or
 // [shared.UnionString].
-type TieredCachingEditResponse interface {
-	ImplementsArgoTieredCachingEditResponse()
+type TieredCachingEditResponseUnion interface {
+	ImplementsArgoTieredCachingEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TieredCachingEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*TieredCachingEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -79,13 +79,13 @@ func init() {
 
 // Union satisfied by [argo.TieredCachingGetResponseUnknown] or
 // [shared.UnionString].
-type TieredCachingGetResponse interface {
-	ImplementsArgoTieredCachingGetResponse()
+type TieredCachingGetResponseUnion interface {
+	ImplementsArgoTieredCachingGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TieredCachingGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*TieredCachingGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -122,9 +122,9 @@ func (r TieredCachingEditParamsValue) IsKnown() bool {
 }
 
 type TieredCachingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   TieredCachingEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   TieredCachingEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingEditResponseEnvelopeJSON    `json:"-"`
@@ -170,9 +170,9 @@ type TieredCachingGetParams struct {
 }
 
 type TieredCachingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   TieredCachingGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   TieredCachingGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TieredCachingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tieredCachingGetResponseEnvelopeJSON    `json:"-"`

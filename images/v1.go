@@ -87,7 +87,7 @@ func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opt
 
 // Delete an image on Cloudflare Images. On success, all copies of the image are
 // deleted and purged from cache.
-func (r *V1Service) Delete(ctx context.Context, imageID string, params V1DeleteParams, opts ...option.RequestOption) (res *V1DeleteResponse, err error) {
+func (r *V1Service) Delete(ctx context.Context, imageID string, params V1DeleteParams, opts ...option.RequestOption) (res *V1DeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1DeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", params.AccountID, imageID)
@@ -140,8 +140,8 @@ type Image struct {
 	// When the media item was uploaded.
 	Uploaded time.Time `json:"uploaded" format:"date-time"`
 	// Object specifying available variants for an image.
-	Variants []ImageVariant `json:"variants" format:"uri"`
-	JSON     imageJSON      `json:"-"`
+	Variants []ImageVariantsUnion `json:"variants" format:"uri"`
+	JSON     imageJSON            `json:"-"`
 }
 
 // imageJSON contains the JSON metadata for the struct [Image]
@@ -168,13 +168,13 @@ func (r imageJSON) RawJSON() string {
 //
 // Union satisfied by [shared.UnionString], [shared.UnionString] or
 // [shared.UnionString].
-type ImageVariant interface {
-	ImplementsImagesImageVariant()
+type ImageVariantsUnion interface {
+	ImplementsImagesImageVariantsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ImageVariant)(nil)).Elem(),
+		reflect.TypeOf((*ImageVariantsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -255,13 +255,13 @@ func (r V1ListResponseSuccess) IsKnown() bool {
 }
 
 // Union satisfied by [images.V1DeleteResponseUnknown] or [shared.UnionString].
-type V1DeleteResponse interface {
-	ImplementsImagesV1DeleteResponse()
+type V1DeleteResponseUnion interface {
+	ImplementsImagesV1DeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*V1DeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*V1DeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -389,7 +389,7 @@ func (r V1DeleteParams) MarshalJSON() (data []byte, err error) {
 type V1DeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1DeleteResponse      `json:"result,required"`
+	Result   V1DeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success V1DeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1DeleteResponseEnvelopeJSON    `json:"-"`

@@ -82,7 +82,7 @@ func (r *IndexService) ListAutoPaging(ctx context.Context, accountIdentifier str
 }
 
 // Deletes the specified Vectorize Index.
-func (r *IndexService) Delete(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
+func (r *IndexService) Delete(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IndexDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s", accountIdentifier, indexName)
@@ -382,8 +382,8 @@ type IndexGetByIDsResponse = interface{}
 
 type IndexNewParams struct {
 	// Specifies the type of configuration to use for the index.
-	Config param.Field[IndexNewParamsConfig] `json:"config,required"`
-	Name   param.Field[string]               `json:"name,required"`
+	Config param.Field[IndexNewParamsConfigUnion] `json:"config,required"`
+	Name   param.Field[string]                    `json:"name,required"`
 	// Specifies the description of the index.
 	Description param.Field[string] `json:"description"`
 }
@@ -393,11 +393,28 @@ func (r IndexNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 // Specifies the type of configuration to use for the index.
+type IndexNewParamsConfig struct {
+	// Specifies the preset to use for the index.
+	Preset param.Field[IndexNewParamsConfigPreset] `json:"preset"`
+	// Specifies the number of dimensions for the index
+	Dimensions param.Field[int64] `json:"dimensions"`
+	// Specifies the type of metric to use calculating distance.
+	Metric param.Field[IndexNewParamsConfigMetric] `json:"metric"`
+}
+
+func (r IndexNewParamsConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r IndexNewParamsConfig) implementsVectorizeIndexNewParamsConfigUnion() {}
+
+// Specifies the type of configuration to use for the index.
 //
 // Satisfied by [vectorize.IndexNewParamsConfigVectorizeIndexPresetConfiguration],
-// [vectorize.IndexNewParamsConfigVectorizeIndexDimensionConfiguration].
-type IndexNewParamsConfig interface {
-	implementsVectorizeIndexNewParamsConfig()
+// [vectorize.IndexNewParamsConfigVectorizeIndexDimensionConfiguration],
+// [IndexNewParamsConfig].
+type IndexNewParamsConfigUnion interface {
+	implementsVectorizeIndexNewParamsConfigUnion()
 }
 
 type IndexNewParamsConfigVectorizeIndexPresetConfiguration struct {
@@ -409,7 +426,7 @@ func (r IndexNewParamsConfigVectorizeIndexPresetConfiguration) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r IndexNewParamsConfigVectorizeIndexPresetConfiguration) implementsVectorizeIndexNewParamsConfig() {
+func (r IndexNewParamsConfigVectorizeIndexPresetConfiguration) implementsVectorizeIndexNewParamsConfigUnion() {
 }
 
 // Specifies the preset to use for the index.
@@ -442,7 +459,7 @@ func (r IndexNewParamsConfigVectorizeIndexDimensionConfiguration) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r IndexNewParamsConfigVectorizeIndexDimensionConfiguration) implementsVectorizeIndexNewParamsConfig() {
+func (r IndexNewParamsConfigVectorizeIndexDimensionConfiguration) implementsVectorizeIndexNewParamsConfigUnion() {
 }
 
 // Specifies the type of metric to use calculating distance.
@@ -457,6 +474,42 @@ const (
 func (r IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetric) IsKnown() bool {
 	switch r {
 	case IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetricCosine, IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetricEuclidean, IndexNewParamsConfigVectorizeIndexDimensionConfigurationMetricDotProduct:
+		return true
+	}
+	return false
+}
+
+// Specifies the preset to use for the index.
+type IndexNewParamsConfigPreset string
+
+const (
+	IndexNewParamsConfigPresetCfBaaiBgeSmallEnV1_5        IndexNewParamsConfigPreset = "@cf/baai/bge-small-en-v1.5"
+	IndexNewParamsConfigPresetCfBaaiBgeBaseEnV1_5         IndexNewParamsConfigPreset = "@cf/baai/bge-base-en-v1.5"
+	IndexNewParamsConfigPresetCfBaaiBgeLargeEnV1_5        IndexNewParamsConfigPreset = "@cf/baai/bge-large-en-v1.5"
+	IndexNewParamsConfigPresetOpenAITextEmbeddingAda002   IndexNewParamsConfigPreset = "openai/text-embedding-ada-002"
+	IndexNewParamsConfigPresetCohereEmbedMultilingualV2_0 IndexNewParamsConfigPreset = "cohere/embed-multilingual-v2.0"
+)
+
+func (r IndexNewParamsConfigPreset) IsKnown() bool {
+	switch r {
+	case IndexNewParamsConfigPresetCfBaaiBgeSmallEnV1_5, IndexNewParamsConfigPresetCfBaaiBgeBaseEnV1_5, IndexNewParamsConfigPresetCfBaaiBgeLargeEnV1_5, IndexNewParamsConfigPresetOpenAITextEmbeddingAda002, IndexNewParamsConfigPresetCohereEmbedMultilingualV2_0:
+		return true
+	}
+	return false
+}
+
+// Specifies the type of metric to use calculating distance.
+type IndexNewParamsConfigMetric string
+
+const (
+	IndexNewParamsConfigMetricCosine     IndexNewParamsConfigMetric = "cosine"
+	IndexNewParamsConfigMetricEuclidean  IndexNewParamsConfigMetric = "euclidean"
+	IndexNewParamsConfigMetricDotProduct IndexNewParamsConfigMetric = "dot-product"
+)
+
+func (r IndexNewParamsConfigMetric) IsKnown() bool {
+	switch r {
+	case IndexNewParamsConfigMetricCosine, IndexNewParamsConfigMetricEuclidean, IndexNewParamsConfigMetricDotProduct:
 		return true
 	}
 	return false
@@ -558,9 +611,9 @@ func (r IndexUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IndexDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteResponseEnvelopeJSON    `json:"-"`

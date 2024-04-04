@@ -264,8 +264,8 @@ type ScriptUpdateParamsVariant0Metadata struct {
 	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[ScriptUpdateParamsVariant0MetadataMigrations] `json:"migrations"`
-	Placement  param.Field[ScriptUpdateParamsVariant0MetadataPlacement]  `json:"placement"`
+	Migrations param.Field[ScriptUpdateParamsVariant0MetadataMigrationsUnion] `json:"migrations"`
+	Placement  param.Field[ScriptUpdateParamsVariant0MetadataPlacement]       `json:"placement"`
 	// List of strings to use as tags for this Worker
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -281,12 +281,34 @@ func (r ScriptUpdateParamsVariant0Metadata) MarshalJSON() (data []byte, err erro
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
+type ScriptUpdateParamsVariant0MetadataMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag             param.Field[string]      `json:"old_tag"`
+	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
+	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
+	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
+	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
+	Steps              param.Field[interface{}] `json:"steps,required"`
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrations) implementsWorkersScriptUpdateParamsVariant0MetadataMigrationsUnion() {
+}
+
+// Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by
 // [workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations],
-// [workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations].
-type ScriptUpdateParamsVariant0MetadataMigrations interface {
-	implementsWorkersScriptUpdateParamsVariant0MetadataMigrations()
+// [workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations],
+// [ScriptUpdateParamsVariant0MetadataMigrations].
+type ScriptUpdateParamsVariant0MetadataMigrationsUnion interface {
+	implementsWorkersScriptUpdateParamsVariant0MetadataMigrationsUnion()
 }
 
 // A single set of migrations to apply.
@@ -311,7 +333,7 @@ func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations)
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) implementsWorkersScriptUpdateParamsVariant0MetadataMigrations() {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) implementsWorkersScriptUpdateParamsVariant0MetadataMigrationsUnion() {
 }
 
 type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass struct {
@@ -347,7 +369,7 @@ func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) implementsWorkersScriptUpdateParamsVariant0MetadataMigrations() {
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) implementsWorkersScriptUpdateParamsVariant0MetadataMigrationsUnion() {
 }
 
 type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep struct {

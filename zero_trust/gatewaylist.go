@@ -88,7 +88,7 @@ func (r *GatewayListService) ListAutoPaging(ctx context.Context, query GatewayLi
 }
 
 // Deletes a Zero Trust list.
-func (r *GatewayListService) Delete(ctx context.Context, listID string, params GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponse, err error) {
+func (r *GatewayListService) Delete(ctx context.Context, listID string, params GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
@@ -266,13 +266,13 @@ func (r GatewayListNewResponseType) IsKnown() bool {
 
 // Union satisfied by [zero_trust.GatewayListDeleteResponseUnknown] or
 // [shared.UnionString].
-type GatewayListDeleteResponse interface {
-	ImplementsZeroTrustGatewayListDeleteResponse()
+type GatewayListDeleteResponseUnion interface {
+	ImplementsZeroTrustGatewayListDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayListDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*GatewayListDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -437,9 +437,9 @@ func (r GatewayListDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayListDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   GatewayListDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   GatewayListDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayListDeleteResponseEnvelopeJSON    `json:"-"`

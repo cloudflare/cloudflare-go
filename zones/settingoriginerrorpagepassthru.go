@@ -164,7 +164,7 @@ func (r ZoneSettingOriginErrorPagePassThruParam) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingOriginErrorPagePassThruParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingOriginErrorPagePassThruParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingOriginErrorPagePassThruEditParams struct {
 	// Identifier

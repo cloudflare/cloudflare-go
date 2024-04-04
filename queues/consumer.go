@@ -60,7 +60,7 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 }
 
 // Deletes the consumer for a queue.
-func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, params ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponse, err error) {
+func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, params ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", params.AccountID, queueID, consumerID)
@@ -174,13 +174,13 @@ func (r consumerUpdateResponseSettingsJSON) RawJSON() string {
 
 // Union satisfied by [queues.ConsumerDeleteResponseUnknown],
 // [queues.ConsumerDeleteResponseArray] or [shared.UnionString].
-type ConsumerDeleteResponse interface {
-	ImplementsQueuesConsumerDeleteResponse()
+type ConsumerDeleteResponseUnion interface {
+	ImplementsQueuesConsumerDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ConsumerDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*ConsumerDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -195,7 +195,7 @@ func init() {
 
 type ConsumerDeleteResponseArray []interface{}
 
-func (r ConsumerDeleteResponseArray) ImplementsQueuesConsumerDeleteResponse() {}
+func (r ConsumerDeleteResponseArray) ImplementsQueuesConsumerDeleteResponseUnion() {}
 
 type ConsumerGetResponse struct {
 	CreatedOn   interface{}               `json:"created_on"`
@@ -429,9 +429,9 @@ func (r ConsumerDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ConsumerDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   ConsumerDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ConsumerDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerDeleteResponseEnvelopeResultInfo `json:"result_info"`

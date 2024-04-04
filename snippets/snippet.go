@@ -73,7 +73,7 @@ func (r *SnippetService) ListAutoPaging(ctx context.Context, zoneIdentifier stri
 }
 
 // Delete Snippet
-func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171, err error) {
+func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
@@ -190,9 +190,9 @@ func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171Union `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetDeleteResponseEnvelopeJSON    `json:"-"`

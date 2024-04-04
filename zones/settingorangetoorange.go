@@ -160,7 +160,7 @@ func (r ZoneSettingOrangeToOrangeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingOrangeToOrangeParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingOrangeToOrangeParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingOrangeToOrangeEditParams struct {
 	// Identifier

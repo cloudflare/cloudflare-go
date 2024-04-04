@@ -32,7 +32,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		rulesets.PhaseUpdateParamsRulesetPhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseUpdateParams{
-			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRule{rulesets.PhaseUpdateParamsRulesRulesetsBlockRule(rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
+			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRuleUnion{rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
 					Response: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
@@ -49,7 +49,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), rulesets.PhaseUpdateParamsRulesRulesetsBlockRule(rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
+			}, rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
 					Response: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
@@ -66,7 +66,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}), rulesets.PhaseUpdateParamsRulesRulesetsBlockRule(rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
+			}, rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
 					Response: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
@@ -83,7 +83,7 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			})}),
+			}}),
 			AccountID:   cloudflare.F("string"),
 			ZoneID:      cloudflare.F("string"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),

@@ -37,7 +37,7 @@ func NewTunnelConnectionService(opts ...option.RequestOption) (r *TunnelConnecti
 
 // Removes connections that are in a disconnected or pending reconnect state. We
 // recommend running this command after shutting down a tunnel.
-func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, params TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponse, err error) {
+func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, params TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConnectionDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s/connections", params.AccountID, tunnelID)
@@ -153,13 +153,13 @@ func (r tunnelTunnelClientConnJSON) RawJSON() string {
 
 // Union satisfied by [zero_trust.TunnelConnectionDeleteResponseUnknown],
 // [zero_trust.TunnelConnectionDeleteResponseArray] or [shared.UnionString].
-type TunnelConnectionDeleteResponse interface {
-	ImplementsZeroTrustTunnelConnectionDeleteResponse()
+type TunnelConnectionDeleteResponseUnion interface {
+	ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelConnectionDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*TunnelConnectionDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -174,7 +174,8 @@ func init() {
 
 type TunnelConnectionDeleteResponseArray []interface{}
 
-func (r TunnelConnectionDeleteResponseArray) ImplementsZeroTrustTunnelConnectionDeleteResponse() {}
+func (r TunnelConnectionDeleteResponseArray) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion() {
+}
 
 type TunnelConnectionDeleteParams struct {
 	// Cloudflare account ID
@@ -187,9 +188,9 @@ func (r TunnelConnectionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelConnectionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   TunnelConnectionDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   TunnelConnectionDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConnectionDeleteResponseEnvelopeJSON    `json:"-"`

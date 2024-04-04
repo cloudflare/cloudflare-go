@@ -87,15 +87,79 @@ func (r *PCAPService) Get(ctx context.Context, pcapID string, query PCAPGetParam
 	return
 }
 
+type PCAPNewResponse struct {
+	FilterV1 interface{} `json:"filter_v1,required"`
+	// The ID for the packet capture.
+	ID string `json:"id"`
+	// The status of the packet capture request.
+	Status PCAPNewResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when the packet capture was created.
+	Submitted string `json:"submitted"`
+	// The system used to collect packet captures.
+	System PCAPNewResponseSystem `json:"system"`
+	// The packet capture duration in seconds.
+	TimeLimit float64 `json:"time_limit"`
+	// The type of packet capture. `Simple` captures sampled packets, and `full`
+	// captures entire payloads and non-sampled packets.
+	Type PCAPNewResponseType `json:"type"`
+	// The maximum number of bytes to capture. This field only applies to `full` packet
+	// captures.
+	ByteLimit float64 `json:"byte_limit"`
+	// The name of the data center used for the packet capture. This can be a specific
+	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
+	// packet captures.
+	ColoName string `json:"colo_name"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf string `json:"destination_conf"`
+	// An error message that describes why the packet capture failed. This field only
+	// applies to `full` packet captures.
+	ErrorMessage string              `json:"error_message"`
+	JSON         pcapNewResponseJSON `json:"-"`
+	union        PCAPNewResponseUnion
+}
+
+// pcapNewResponseJSON contains the JSON metadata for the struct [PCAPNewResponse]
+type pcapNewResponseJSON struct {
+	FilterV1        apijson.Field
+	ID              apijson.Field
+	Status          apijson.Field
+	Submitted       apijson.Field
+	System          apijson.Field
+	TimeLimit       apijson.Field
+	Type            apijson.Field
+	ByteLimit       apijson.Field
+	ColoName        apijson.Field
+	DestinationConf apijson.Field
+	ErrorMessage    apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r pcapNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *PCAPNewResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r PCAPNewResponse) AsUnion() PCAPNewResponseUnion {
+	return r.union
+}
+
 // Union satisfied by [pcaps.PCAPNewResponseMagicVisibilityPCAPsResponseSimple] or
 // [pcaps.PCAPNewResponseMagicVisibilityPCAPsResponseFull].
-type PCAPNewResponse interface {
+type PCAPNewResponseUnion interface {
 	implementsPCAPsPCAPNewResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PCAPNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*PCAPNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -390,15 +454,134 @@ func (r PCAPNewResponseMagicVisibilityPCAPsResponseFullType) IsKnown() bool {
 	return false
 }
 
+// The status of the packet capture request.
+type PCAPNewResponseStatus string
+
+const (
+	PCAPNewResponseStatusUnknown           PCAPNewResponseStatus = "unknown"
+	PCAPNewResponseStatusSuccess           PCAPNewResponseStatus = "success"
+	PCAPNewResponseStatusPending           PCAPNewResponseStatus = "pending"
+	PCAPNewResponseStatusRunning           PCAPNewResponseStatus = "running"
+	PCAPNewResponseStatusConversionPending PCAPNewResponseStatus = "conversion_pending"
+	PCAPNewResponseStatusConversionRunning PCAPNewResponseStatus = "conversion_running"
+	PCAPNewResponseStatusComplete          PCAPNewResponseStatus = "complete"
+	PCAPNewResponseStatusFailed            PCAPNewResponseStatus = "failed"
+)
+
+func (r PCAPNewResponseStatus) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseStatusUnknown, PCAPNewResponseStatusSuccess, PCAPNewResponseStatusPending, PCAPNewResponseStatusRunning, PCAPNewResponseStatusConversionPending, PCAPNewResponseStatusConversionRunning, PCAPNewResponseStatusComplete, PCAPNewResponseStatusFailed:
+		return true
+	}
+	return false
+}
+
+// The system used to collect packet captures.
+type PCAPNewResponseSystem string
+
+const (
+	PCAPNewResponseSystemMagicTransit PCAPNewResponseSystem = "magic-transit"
+)
+
+func (r PCAPNewResponseSystem) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseSystemMagicTransit:
+		return true
+	}
+	return false
+}
+
+// The type of packet capture. `Simple` captures sampled packets, and `full`
+// captures entire payloads and non-sampled packets.
+type PCAPNewResponseType string
+
+const (
+	PCAPNewResponseTypeSimple PCAPNewResponseType = "simple"
+	PCAPNewResponseTypeFull   PCAPNewResponseType = "full"
+)
+
+func (r PCAPNewResponseType) IsKnown() bool {
+	switch r {
+	case PCAPNewResponseTypeSimple, PCAPNewResponseTypeFull:
+		return true
+	}
+	return false
+}
+
+type PCAPListResponse struct {
+	FilterV1 interface{} `json:"filter_v1,required"`
+	// The ID for the packet capture.
+	ID string `json:"id"`
+	// The status of the packet capture request.
+	Status PCAPListResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when the packet capture was created.
+	Submitted string `json:"submitted"`
+	// The system used to collect packet captures.
+	System PCAPListResponseSystem `json:"system"`
+	// The packet capture duration in seconds.
+	TimeLimit float64 `json:"time_limit"`
+	// The type of packet capture. `Simple` captures sampled packets, and `full`
+	// captures entire payloads and non-sampled packets.
+	Type PCAPListResponseType `json:"type"`
+	// The maximum number of bytes to capture. This field only applies to `full` packet
+	// captures.
+	ByteLimit float64 `json:"byte_limit"`
+	// The name of the data center used for the packet capture. This can be a specific
+	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
+	// packet captures.
+	ColoName string `json:"colo_name"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf string `json:"destination_conf"`
+	// An error message that describes why the packet capture failed. This field only
+	// applies to `full` packet captures.
+	ErrorMessage string               `json:"error_message"`
+	JSON         pcapListResponseJSON `json:"-"`
+	union        PCAPListResponseUnion
+}
+
+// pcapListResponseJSON contains the JSON metadata for the struct
+// [PCAPListResponse]
+type pcapListResponseJSON struct {
+	FilterV1        apijson.Field
+	ID              apijson.Field
+	Status          apijson.Field
+	Submitted       apijson.Field
+	System          apijson.Field
+	TimeLimit       apijson.Field
+	Type            apijson.Field
+	ByteLimit       apijson.Field
+	ColoName        apijson.Field
+	DestinationConf apijson.Field
+	ErrorMessage    apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r pcapListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *PCAPListResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r PCAPListResponse) AsUnion() PCAPListResponseUnion {
+	return r.union
+}
+
 // Union satisfied by [pcaps.PCAPListResponseMagicVisibilityPCAPsResponseSimple] or
 // [pcaps.PCAPListResponseMagicVisibilityPCAPsResponseFull].
-type PCAPListResponse interface {
+type PCAPListResponseUnion interface {
 	implementsPCAPsPCAPListResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PCAPListResponse)(nil)).Elem(),
+		reflect.TypeOf((*PCAPListResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -693,15 +876,133 @@ func (r PCAPListResponseMagicVisibilityPCAPsResponseFullType) IsKnown() bool {
 	return false
 }
 
+// The status of the packet capture request.
+type PCAPListResponseStatus string
+
+const (
+	PCAPListResponseStatusUnknown           PCAPListResponseStatus = "unknown"
+	PCAPListResponseStatusSuccess           PCAPListResponseStatus = "success"
+	PCAPListResponseStatusPending           PCAPListResponseStatus = "pending"
+	PCAPListResponseStatusRunning           PCAPListResponseStatus = "running"
+	PCAPListResponseStatusConversionPending PCAPListResponseStatus = "conversion_pending"
+	PCAPListResponseStatusConversionRunning PCAPListResponseStatus = "conversion_running"
+	PCAPListResponseStatusComplete          PCAPListResponseStatus = "complete"
+	PCAPListResponseStatusFailed            PCAPListResponseStatus = "failed"
+)
+
+func (r PCAPListResponseStatus) IsKnown() bool {
+	switch r {
+	case PCAPListResponseStatusUnknown, PCAPListResponseStatusSuccess, PCAPListResponseStatusPending, PCAPListResponseStatusRunning, PCAPListResponseStatusConversionPending, PCAPListResponseStatusConversionRunning, PCAPListResponseStatusComplete, PCAPListResponseStatusFailed:
+		return true
+	}
+	return false
+}
+
+// The system used to collect packet captures.
+type PCAPListResponseSystem string
+
+const (
+	PCAPListResponseSystemMagicTransit PCAPListResponseSystem = "magic-transit"
+)
+
+func (r PCAPListResponseSystem) IsKnown() bool {
+	switch r {
+	case PCAPListResponseSystemMagicTransit:
+		return true
+	}
+	return false
+}
+
+// The type of packet capture. `Simple` captures sampled packets, and `full`
+// captures entire payloads and non-sampled packets.
+type PCAPListResponseType string
+
+const (
+	PCAPListResponseTypeSimple PCAPListResponseType = "simple"
+	PCAPListResponseTypeFull   PCAPListResponseType = "full"
+)
+
+func (r PCAPListResponseType) IsKnown() bool {
+	switch r {
+	case PCAPListResponseTypeSimple, PCAPListResponseTypeFull:
+		return true
+	}
+	return false
+}
+
+type PCAPGetResponse struct {
+	FilterV1 interface{} `json:"filter_v1,required"`
+	// The ID for the packet capture.
+	ID string `json:"id"`
+	// The status of the packet capture request.
+	Status PCAPGetResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when the packet capture was created.
+	Submitted string `json:"submitted"`
+	// The system used to collect packet captures.
+	System PCAPGetResponseSystem `json:"system"`
+	// The packet capture duration in seconds.
+	TimeLimit float64 `json:"time_limit"`
+	// The type of packet capture. `Simple` captures sampled packets, and `full`
+	// captures entire payloads and non-sampled packets.
+	Type PCAPGetResponseType `json:"type"`
+	// The maximum number of bytes to capture. This field only applies to `full` packet
+	// captures.
+	ByteLimit float64 `json:"byte_limit"`
+	// The name of the data center used for the packet capture. This can be a specific
+	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
+	// packet captures.
+	ColoName string `json:"colo_name"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf string `json:"destination_conf"`
+	// An error message that describes why the packet capture failed. This field only
+	// applies to `full` packet captures.
+	ErrorMessage string              `json:"error_message"`
+	JSON         pcapGetResponseJSON `json:"-"`
+	union        PCAPGetResponseUnion
+}
+
+// pcapGetResponseJSON contains the JSON metadata for the struct [PCAPGetResponse]
+type pcapGetResponseJSON struct {
+	FilterV1        apijson.Field
+	ID              apijson.Field
+	Status          apijson.Field
+	Submitted       apijson.Field
+	System          apijson.Field
+	TimeLimit       apijson.Field
+	Type            apijson.Field
+	ByteLimit       apijson.Field
+	ColoName        apijson.Field
+	DestinationConf apijson.Field
+	ErrorMessage    apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r pcapGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *PCAPGetResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r PCAPGetResponse) AsUnion() PCAPGetResponseUnion {
+	return r.union
+}
+
 // Union satisfied by [pcaps.PCAPGetResponseMagicVisibilityPCAPsResponseSimple] or
 // [pcaps.PCAPGetResponseMagicVisibilityPCAPsResponseFull].
-type PCAPGetResponse interface {
+type PCAPGetResponseUnion interface {
 	implementsPCAPsPCAPGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PCAPGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*PCAPGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -991,6 +1292,60 @@ const (
 func (r PCAPGetResponseMagicVisibilityPCAPsResponseFullType) IsKnown() bool {
 	switch r {
 	case PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeSimple, PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeFull:
+		return true
+	}
+	return false
+}
+
+// The status of the packet capture request.
+type PCAPGetResponseStatus string
+
+const (
+	PCAPGetResponseStatusUnknown           PCAPGetResponseStatus = "unknown"
+	PCAPGetResponseStatusSuccess           PCAPGetResponseStatus = "success"
+	PCAPGetResponseStatusPending           PCAPGetResponseStatus = "pending"
+	PCAPGetResponseStatusRunning           PCAPGetResponseStatus = "running"
+	PCAPGetResponseStatusConversionPending PCAPGetResponseStatus = "conversion_pending"
+	PCAPGetResponseStatusConversionRunning PCAPGetResponseStatus = "conversion_running"
+	PCAPGetResponseStatusComplete          PCAPGetResponseStatus = "complete"
+	PCAPGetResponseStatusFailed            PCAPGetResponseStatus = "failed"
+)
+
+func (r PCAPGetResponseStatus) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseStatusUnknown, PCAPGetResponseStatusSuccess, PCAPGetResponseStatusPending, PCAPGetResponseStatusRunning, PCAPGetResponseStatusConversionPending, PCAPGetResponseStatusConversionRunning, PCAPGetResponseStatusComplete, PCAPGetResponseStatusFailed:
+		return true
+	}
+	return false
+}
+
+// The system used to collect packet captures.
+type PCAPGetResponseSystem string
+
+const (
+	PCAPGetResponseSystemMagicTransit PCAPGetResponseSystem = "magic-transit"
+)
+
+func (r PCAPGetResponseSystem) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseSystemMagicTransit:
+		return true
+	}
+	return false
+}
+
+// The type of packet capture. `Simple` captures sampled packets, and `full`
+// captures entire payloads and non-sampled packets.
+type PCAPGetResponseType string
+
+const (
+	PCAPGetResponseTypeSimple PCAPGetResponseType = "simple"
+	PCAPGetResponseTypeFull   PCAPGetResponseType = "full"
+)
+
+func (r PCAPGetResponseType) IsKnown() bool {
+	switch r {
+	case PCAPGetResponseTypeSimple, PCAPGetResponseTypeFull:
 		return true
 	}
 	return false

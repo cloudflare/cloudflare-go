@@ -36,7 +36,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 }
 
 // Updates a user's subscriptions.
-func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponse, err error) {
+func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionUpdateResponseEnvelope
 	path := fmt.Sprintf("user/subscriptions/%s", identifier)
@@ -57,7 +57,7 @@ func (r *SubscriptionService) Delete(ctx context.Context, identifier string, bod
 }
 
 // Updates zone subscriptions, either plan or add-ons.
-func (r *SubscriptionService) Edit(ctx context.Context, identifier string, body SubscriptionEditParams, opts ...option.RequestOption) (res *SubscriptionEditResponse, err error) {
+func (r *SubscriptionService) Edit(ctx context.Context, identifier string, body SubscriptionEditParams, opts ...option.RequestOption) (res *SubscriptionEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
@@ -84,13 +84,13 @@ func (r *SubscriptionService) Get(ctx context.Context, opts ...option.RequestOpt
 
 // Union satisfied by [user.SubscriptionUpdateResponseUnknown] or
 // [shared.UnionString].
-type SubscriptionUpdateResponse interface {
-	ImplementsUserSubscriptionUpdateResponse()
+type SubscriptionUpdateResponseUnion interface {
+	ImplementsUserSubscriptionUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*SubscriptionUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -101,13 +101,13 @@ func init() {
 
 // Union satisfied by [user.SubscriptionEditResponseUnknown] or
 // [shared.UnionString].
-type SubscriptionEditResponse interface {
-	ImplementsUserSubscriptionEditResponse()
+type SubscriptionEditResponseUnion interface {
+	ImplementsUserSubscriptionEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*SubscriptionEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -418,9 +418,9 @@ func (r SubscriptionUpdateParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   SubscriptionUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   SubscriptionUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -558,9 +558,9 @@ func (r SubscriptionEditParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   SubscriptionEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   SubscriptionEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionEditResponseEnvelopeJSON    `json:"-"`

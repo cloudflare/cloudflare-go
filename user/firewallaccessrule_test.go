@@ -29,10 +29,10 @@ func TestFirewallAccessRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Firewall.AccessRules.New(context.TODO(), user.FirewallAccessRuleNewParams{
-		Configuration: cloudflare.F[user.FirewallAccessRuleNewParamsConfiguration](user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration(user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
+		Configuration: cloudflare.F[user.FirewallAccessRuleNewParamsConfigurationUnion](user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
 			Target: cloudflare.F(user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
-		})),
+		}),
 		Mode:  cloudflare.F(user.FirewallAccessRuleNewParamsModeChallenge),
 		Notes: cloudflare.F("This rule is enabled because of an event that occurred on date X."),
 	})

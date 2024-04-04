@@ -83,7 +83,7 @@ func (r *PrefixBGPBindingService) ListAutoPaging(ctx context.Context, prefixID s
 }
 
 // Delete a Service Binding
-func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixBGPBindingDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171, err error) {
+func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixBGPBindingDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPBindingDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", body.AccountID, prefixID, bindingID)
@@ -250,9 +250,9 @@ type PrefixBGPBindingDeleteParams struct {
 }
 
 type PrefixBGPBindingDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171Union `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingDeleteResponseEnvelopeJSON    `json:"-"`

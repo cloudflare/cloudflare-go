@@ -184,7 +184,7 @@ func (r ZoneSettingChallengeTTLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingChallengeTTLParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingChallengeTTLParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingChallengeTTLEditParams struct {
 	// Identifier

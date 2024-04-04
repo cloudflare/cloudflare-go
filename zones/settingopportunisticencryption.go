@@ -156,7 +156,7 @@ func (r ZoneSettingOpportunisticEncryptionParam) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingOpportunisticEncryptionParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingOpportunisticEncryptionParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingOpportunisticEncryptionEditParams struct {
 	// Identifier

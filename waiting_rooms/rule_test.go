@@ -180,9 +180,9 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 			Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 			Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 			Enabled:     cloudflare.F(true),
-			Position: cloudflare.F[waiting_rooms.RuleEditParamsPosition](waiting_rooms.RuleEditParamsPositionObject(waiting_rooms.RuleEditParamsPositionObject{
+			Position: cloudflare.F[waiting_rooms.RuleEditParamsPositionUnion](waiting_rooms.RuleEditParamsPositionObject{
 				Index: cloudflare.F(int64(0)),
-			})),
+			}),
 		},
 	)
 	if err != nil {

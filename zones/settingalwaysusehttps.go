@@ -164,7 +164,7 @@ func (r ZoneSettingAlwaysUseHTTPSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingAlwaysUseHTTPSParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingAlwaysUseHTTPSParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingAlwaysUseHTTPSEditParams struct {
 	// Identifier

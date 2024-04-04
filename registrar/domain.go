@@ -36,7 +36,7 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 }
 
 // Update individual domain.
-func (r *DomainService) Update(ctx context.Context, domainName string, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponse, err error) {
+func (r *DomainService) Update(ctx context.Context, domainName string, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", params.AccountID, domainName)
@@ -72,7 +72,7 @@ func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListPara
 }
 
 // Show individual domain.
-func (r *DomainService) Get(ctx context.Context, domainName string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponse, err error) {
+func (r *DomainService) Get(ctx context.Context, domainName string, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", query.AccountID, domainName)
@@ -86,13 +86,13 @@ func (r *DomainService) Get(ctx context.Context, domainName string, query Domain
 
 // Union satisfied by [registrar.DomainUpdateResponseUnknown],
 // [registrar.DomainUpdateResponseArray] or [shared.UnionString].
-type DomainUpdateResponse interface {
-	ImplementsRegistrarDomainUpdateResponse()
+type DomainUpdateResponseUnion interface {
+	ImplementsRegistrarDomainUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DomainUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*DomainUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -107,7 +107,7 @@ func init() {
 
 type DomainUpdateResponseArray []interface{}
 
-func (r DomainUpdateResponseArray) ImplementsRegistrarDomainUpdateResponse() {}
+func (r DomainUpdateResponseArray) ImplementsRegistrarDomainUpdateResponseUnion() {}
 
 type DomainListResponse struct {
 	// Domain identifier.
@@ -267,13 +267,13 @@ func (r domainListResponseTransferInJSON) RawJSON() string {
 
 // Union satisfied by [registrar.DomainGetResponseUnknown],
 // [registrar.DomainGetResponseArray] or [shared.UnionString].
-type DomainGetResponse interface {
-	ImplementsRegistrarDomainGetResponse()
+type DomainGetResponseUnion interface {
+	ImplementsRegistrarDomainGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DomainGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*DomainGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -288,7 +288,7 @@ func init() {
 
 type DomainGetResponseArray []interface{}
 
-func (r DomainGetResponseArray) ImplementsRegistrarDomainGetResponse() {}
+func (r DomainGetResponseArray) ImplementsRegistrarDomainGetResponseUnion() {}
 
 type DomainUpdateParams struct {
 	// Identifier
@@ -307,9 +307,9 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DomainUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DomainUpdateResponse  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   DomainUpdateResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
@@ -360,9 +360,9 @@ type DomainGetParams struct {
 }
 
 type DomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DomainGetResponse     `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   DomainGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`

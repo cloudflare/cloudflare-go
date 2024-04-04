@@ -216,7 +216,7 @@ func (r ZoneSettingSSLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingSSLParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingSSLParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingSSLEditParams struct {
 	// Identifier

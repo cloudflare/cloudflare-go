@@ -149,7 +149,7 @@ func (r ZoneSettingAdvancedDDoSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingAdvancedDDoSParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingAdvancedDDoSParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingAdvancedDDoSGetParams struct {
 	// Identifier

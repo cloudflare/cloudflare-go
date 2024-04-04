@@ -35,7 +35,7 @@ func NewAccessKeyService(opts ...option.RequestOption) (r *AccessKeyService) {
 }
 
 // Updates the Access key rotation settings for an account.
-func (r *AccessKeyService) Update(ctx context.Context, identifier string, body AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponse, err error) {
+func (r *AccessKeyService) Update(ctx context.Context, identifier string, body AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
@@ -48,7 +48,7 @@ func (r *AccessKeyService) Update(ctx context.Context, identifier string, body A
 }
 
 // Gets the Access key rotation settings for an account.
-func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyGetResponse, err error) {
+func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/keys", identifier)
@@ -61,7 +61,7 @@ func (r *AccessKeyService) Get(ctx context.Context, identifier string, opts ...o
 }
 
 // Perfoms a key rotation for an account.
-func (r *AccessKeyService) Rotate(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyRotateResponse, err error) {
+func (r *AccessKeyService) Rotate(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyRotateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessKeyRotateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/keys/rotate", identifier)
@@ -75,13 +75,13 @@ func (r *AccessKeyService) Rotate(ctx context.Context, identifier string, opts .
 
 // Union satisfied by [zero_trust.AccessKeyUpdateResponseUnknown] or
 // [shared.UnionString].
-type AccessKeyUpdateResponse interface {
-	ImplementsZeroTrustAccessKeyUpdateResponse()
+type AccessKeyUpdateResponseUnion interface {
+	ImplementsZeroTrustAccessKeyUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccessKeyUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -92,13 +92,13 @@ func init() {
 
 // Union satisfied by [zero_trust.AccessKeyGetResponseUnknown] or
 // [shared.UnionString].
-type AccessKeyGetResponse interface {
-	ImplementsZeroTrustAccessKeyGetResponse()
+type AccessKeyGetResponseUnion interface {
+	ImplementsZeroTrustAccessKeyGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccessKeyGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -109,13 +109,13 @@ func init() {
 
 // Union satisfied by [zero_trust.AccessKeyRotateResponseUnknown] or
 // [shared.UnionString].
-type AccessKeyRotateResponse interface {
-	ImplementsZeroTrustAccessKeyRotateResponse()
+type AccessKeyRotateResponseUnion interface {
+	ImplementsZeroTrustAccessKeyRotateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyRotateResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccessKeyRotateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -134,9 +134,9 @@ func (r AccessKeyUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessKeyUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   AccessKeyUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   AccessKeyUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -186,9 +186,9 @@ func (r AccessKeyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   AccessKeyGetResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   AccessKeyGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyGetResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
@@ -238,9 +238,9 @@ func (r AccessKeyGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessKeyRotateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   AccessKeyRotateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   AccessKeyRotateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessKeyRotateResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.

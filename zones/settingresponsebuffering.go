@@ -168,7 +168,7 @@ func (r ZoneSettingBufferingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingBufferingParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingBufferingParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingResponseBufferingEditParams struct {
 	// Identifier

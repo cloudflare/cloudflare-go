@@ -59,7 +59,7 @@ func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.Reque
 }
 
 // Responds to an invitation.
-func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *InviteEditResponse, err error) {
+func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *InviteEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteEditResponseEnvelope
 	path := fmt.Sprintf("user/invites/%s", inviteID)
@@ -72,7 +72,7 @@ func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEd
 }
 
 // Gets the details of an invitation.
-func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteGetResponse, err error) {
+func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env InviteGetResponseEnvelope
 	path := fmt.Sprintf("user/invites/%s", inviteID)
@@ -183,13 +183,13 @@ func (r InviteListResponseStatus) IsKnown() bool {
 }
 
 // Union satisfied by [user.InviteEditResponseUnknown] or [shared.UnionString].
-type InviteEditResponse interface {
-	ImplementsUserInviteEditResponse()
+type InviteEditResponseUnion interface {
+	ImplementsUserInviteEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*InviteEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*InviteEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -199,13 +199,13 @@ func init() {
 }
 
 // Union satisfied by [user.InviteGetResponseUnknown] or [shared.UnionString].
-type InviteGetResponse interface {
-	ImplementsUserInviteGetResponse()
+type InviteGetResponseUnion interface {
+	ImplementsUserInviteGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*InviteGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*InviteGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -240,9 +240,9 @@ func (r InviteEditParamsStatus) IsKnown() bool {
 }
 
 type InviteEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   InviteEditResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   InviteEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success InviteEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    inviteEditResponseEnvelopeJSON    `json:"-"`
@@ -283,9 +283,9 @@ func (r InviteEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type InviteGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   InviteGetResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   InviteGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success InviteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    inviteGetResponseEnvelopeJSON    `json:"-"`

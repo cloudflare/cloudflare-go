@@ -201,6 +201,73 @@ func (r zeroTrustGroupsJSON) RawJSON() string {
 }
 
 // Matches a specific email.
+type ZeroTrustGroupsExclude struct {
+	Email                interface{}                `json:"email,required"`
+	EmailList            interface{}                `json:"email_list,required"`
+	EmailDomain          interface{}                `json:"email_domain,required"`
+	Everyone             interface{}                `json:"everyone,required"`
+	IP                   interface{}                `json:"ip,required"`
+	IPList               interface{}                `json:"ip_list,required"`
+	Certificate          interface{}                `json:"certificate,required"`
+	Group                shared.UnnamedSchemaRef131 `json:"group"`
+	AzureAd              interface{}                `json:"azureAD,required"`
+	GitHubOrganization   interface{}                `json:"github-organization,required"`
+	Gsuite               interface{}                `json:"gsuite,required"`
+	Okta                 interface{}                `json:"okta,required"`
+	Saml                 interface{}                `json:"saml,required"`
+	ServiceToken         interface{}                `json:"service_token,required"`
+	AnyValidServiceToken interface{}                `json:"any_valid_service_token,required"`
+	ExternalEvaluation   interface{}                `json:"external_evaluation,required"`
+	Geo                  interface{}                `json:"geo,required"`
+	AuthMethod           interface{}                `json:"auth_method,required"`
+	DevicePosture        interface{}                `json:"device_posture,required"`
+	JSON                 zeroTrustGroupsExcludeJSON `json:"-"`
+	union                ZeroTrustGroupsExcludeUnion
+}
+
+// zeroTrustGroupsExcludeJSON contains the JSON metadata for the struct
+// [ZeroTrustGroupsExclude]
+type zeroTrustGroupsExcludeJSON struct {
+	Email                apijson.Field
+	EmailList            apijson.Field
+	EmailDomain          apijson.Field
+	Everyone             apijson.Field
+	IP                   apijson.Field
+	IPList               apijson.Field
+	Certificate          apijson.Field
+	Group                apijson.Field
+	AzureAd              apijson.Field
+	GitHubOrganization   apijson.Field
+	Gsuite               apijson.Field
+	Okta                 apijson.Field
+	Saml                 apijson.Field
+	ServiceToken         apijson.Field
+	AnyValidServiceToken apijson.Field
+	ExternalEvaluation   apijson.Field
+	Geo                  apijson.Field
+	AuthMethod           apijson.Field
+	DevicePosture        apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r zeroTrustGroupsExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ZeroTrustGroupsExclude) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ZeroTrustGroupsExclude) AsUnion() ZeroTrustGroupsExcludeUnion {
+	return r.union
+}
+
+// Matches a specific email.
 //
 // Union satisfied by [zero_trust.ZeroTrustGroupsExcludeAccessEmailRule],
 // [zero_trust.ZeroTrustGroupsExcludeAccessEmailListRule],
@@ -221,13 +288,13 @@ func (r zeroTrustGroupsJSON) RawJSON() string {
 // [zero_trust.ZeroTrustGroupsExcludeAccessCountryRule],
 // [zero_trust.ZeroTrustGroupsExcludeAccessAuthenticationMethodRule] or
 // [zero_trust.ZeroTrustGroupsExcludeAccessDevicePostureRule].
-type ZeroTrustGroupsExclude interface {
+type ZeroTrustGroupsExcludeUnion interface {
 	implementsZeroTrustZeroTrustGroupsExclude()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZeroTrustGroupsExclude)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustGroupsExcludeUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1126,6 +1193,73 @@ func (r zeroTrustGroupsExcludeAccessDevicePostureRuleDevicePostureJSON) RawJSON(
 }
 
 // Matches a specific email.
+type ZeroTrustGroupsInclude struct {
+	Email                interface{}                `json:"email,required"`
+	EmailList            interface{}                `json:"email_list,required"`
+	EmailDomain          interface{}                `json:"email_domain,required"`
+	Everyone             interface{}                `json:"everyone,required"`
+	IP                   interface{}                `json:"ip,required"`
+	IPList               interface{}                `json:"ip_list,required"`
+	Certificate          interface{}                `json:"certificate,required"`
+	Group                shared.UnnamedSchemaRef131 `json:"group"`
+	AzureAd              interface{}                `json:"azureAD,required"`
+	GitHubOrganization   interface{}                `json:"github-organization,required"`
+	Gsuite               interface{}                `json:"gsuite,required"`
+	Okta                 interface{}                `json:"okta,required"`
+	Saml                 interface{}                `json:"saml,required"`
+	ServiceToken         interface{}                `json:"service_token,required"`
+	AnyValidServiceToken interface{}                `json:"any_valid_service_token,required"`
+	ExternalEvaluation   interface{}                `json:"external_evaluation,required"`
+	Geo                  interface{}                `json:"geo,required"`
+	AuthMethod           interface{}                `json:"auth_method,required"`
+	DevicePosture        interface{}                `json:"device_posture,required"`
+	JSON                 zeroTrustGroupsIncludeJSON `json:"-"`
+	union                ZeroTrustGroupsIncludeUnion
+}
+
+// zeroTrustGroupsIncludeJSON contains the JSON metadata for the struct
+// [ZeroTrustGroupsInclude]
+type zeroTrustGroupsIncludeJSON struct {
+	Email                apijson.Field
+	EmailList            apijson.Field
+	EmailDomain          apijson.Field
+	Everyone             apijson.Field
+	IP                   apijson.Field
+	IPList               apijson.Field
+	Certificate          apijson.Field
+	Group                apijson.Field
+	AzureAd              apijson.Field
+	GitHubOrganization   apijson.Field
+	Gsuite               apijson.Field
+	Okta                 apijson.Field
+	Saml                 apijson.Field
+	ServiceToken         apijson.Field
+	AnyValidServiceToken apijson.Field
+	ExternalEvaluation   apijson.Field
+	Geo                  apijson.Field
+	AuthMethod           apijson.Field
+	DevicePosture        apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r zeroTrustGroupsIncludeJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ZeroTrustGroupsInclude) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ZeroTrustGroupsInclude) AsUnion() ZeroTrustGroupsIncludeUnion {
+	return r.union
+}
+
+// Matches a specific email.
 //
 // Union satisfied by [zero_trust.ZeroTrustGroupsIncludeAccessEmailRule],
 // [zero_trust.ZeroTrustGroupsIncludeAccessEmailListRule],
@@ -1146,13 +1280,13 @@ func (r zeroTrustGroupsExcludeAccessDevicePostureRuleDevicePostureJSON) RawJSON(
 // [zero_trust.ZeroTrustGroupsIncludeAccessCountryRule],
 // [zero_trust.ZeroTrustGroupsIncludeAccessAuthenticationMethodRule] or
 // [zero_trust.ZeroTrustGroupsIncludeAccessDevicePostureRule].
-type ZeroTrustGroupsInclude interface {
+type ZeroTrustGroupsIncludeUnion interface {
 	implementsZeroTrustZeroTrustGroupsInclude()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZeroTrustGroupsInclude)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustGroupsIncludeUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -2051,6 +2185,73 @@ func (r zeroTrustGroupsIncludeAccessDevicePostureRuleDevicePostureJSON) RawJSON(
 }
 
 // Matches a specific email.
+type ZeroTrustGroupsIsDefault struct {
+	Email                interface{}                  `json:"email,required"`
+	EmailList            interface{}                  `json:"email_list,required"`
+	EmailDomain          interface{}                  `json:"email_domain,required"`
+	Everyone             interface{}                  `json:"everyone,required"`
+	IP                   interface{}                  `json:"ip,required"`
+	IPList               interface{}                  `json:"ip_list,required"`
+	Certificate          interface{}                  `json:"certificate,required"`
+	Group                shared.UnnamedSchemaRef131   `json:"group"`
+	AzureAd              interface{}                  `json:"azureAD,required"`
+	GitHubOrganization   interface{}                  `json:"github-organization,required"`
+	Gsuite               interface{}                  `json:"gsuite,required"`
+	Okta                 interface{}                  `json:"okta,required"`
+	Saml                 interface{}                  `json:"saml,required"`
+	ServiceToken         interface{}                  `json:"service_token,required"`
+	AnyValidServiceToken interface{}                  `json:"any_valid_service_token,required"`
+	ExternalEvaluation   interface{}                  `json:"external_evaluation,required"`
+	Geo                  interface{}                  `json:"geo,required"`
+	AuthMethod           interface{}                  `json:"auth_method,required"`
+	DevicePosture        interface{}                  `json:"device_posture,required"`
+	JSON                 zeroTrustGroupsIsDefaultJSON `json:"-"`
+	union                ZeroTrustGroupsIsDefaultUnion
+}
+
+// zeroTrustGroupsIsDefaultJSON contains the JSON metadata for the struct
+// [ZeroTrustGroupsIsDefault]
+type zeroTrustGroupsIsDefaultJSON struct {
+	Email                apijson.Field
+	EmailList            apijson.Field
+	EmailDomain          apijson.Field
+	Everyone             apijson.Field
+	IP                   apijson.Field
+	IPList               apijson.Field
+	Certificate          apijson.Field
+	Group                apijson.Field
+	AzureAd              apijson.Field
+	GitHubOrganization   apijson.Field
+	Gsuite               apijson.Field
+	Okta                 apijson.Field
+	Saml                 apijson.Field
+	ServiceToken         apijson.Field
+	AnyValidServiceToken apijson.Field
+	ExternalEvaluation   apijson.Field
+	Geo                  apijson.Field
+	AuthMethod           apijson.Field
+	DevicePosture        apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r zeroTrustGroupsIsDefaultJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ZeroTrustGroupsIsDefault) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ZeroTrustGroupsIsDefault) AsUnion() ZeroTrustGroupsIsDefaultUnion {
+	return r.union
+}
+
+// Matches a specific email.
 //
 // Union satisfied by [zero_trust.ZeroTrustGroupsIsDefaultAccessEmailRule],
 // [zero_trust.ZeroTrustGroupsIsDefaultAccessEmailListRule],
@@ -2071,13 +2272,13 @@ func (r zeroTrustGroupsIncludeAccessDevicePostureRuleDevicePostureJSON) RawJSON(
 // [zero_trust.ZeroTrustGroupsIsDefaultAccessCountryRule],
 // [zero_trust.ZeroTrustGroupsIsDefaultAccessAuthenticationMethodRule] or
 // [zero_trust.ZeroTrustGroupsIsDefaultAccessDevicePostureRule].
-type ZeroTrustGroupsIsDefault interface {
+type ZeroTrustGroupsIsDefaultUnion interface {
 	implementsZeroTrustZeroTrustGroupsIsDefault()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZeroTrustGroupsIsDefault)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustGroupsIsDefaultUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -2981,6 +3182,73 @@ func (r zeroTrustGroupsIsDefaultAccessDevicePostureRuleDevicePostureJSON) RawJSO
 }
 
 // Matches a specific email.
+type ZeroTrustGroupsRequire struct {
+	Email                interface{}                `json:"email,required"`
+	EmailList            interface{}                `json:"email_list,required"`
+	EmailDomain          interface{}                `json:"email_domain,required"`
+	Everyone             interface{}                `json:"everyone,required"`
+	IP                   interface{}                `json:"ip,required"`
+	IPList               interface{}                `json:"ip_list,required"`
+	Certificate          interface{}                `json:"certificate,required"`
+	Group                shared.UnnamedSchemaRef131 `json:"group"`
+	AzureAd              interface{}                `json:"azureAD,required"`
+	GitHubOrganization   interface{}                `json:"github-organization,required"`
+	Gsuite               interface{}                `json:"gsuite,required"`
+	Okta                 interface{}                `json:"okta,required"`
+	Saml                 interface{}                `json:"saml,required"`
+	ServiceToken         interface{}                `json:"service_token,required"`
+	AnyValidServiceToken interface{}                `json:"any_valid_service_token,required"`
+	ExternalEvaluation   interface{}                `json:"external_evaluation,required"`
+	Geo                  interface{}                `json:"geo,required"`
+	AuthMethod           interface{}                `json:"auth_method,required"`
+	DevicePosture        interface{}                `json:"device_posture,required"`
+	JSON                 zeroTrustGroupsRequireJSON `json:"-"`
+	union                ZeroTrustGroupsRequireUnion
+}
+
+// zeroTrustGroupsRequireJSON contains the JSON metadata for the struct
+// [ZeroTrustGroupsRequire]
+type zeroTrustGroupsRequireJSON struct {
+	Email                apijson.Field
+	EmailList            apijson.Field
+	EmailDomain          apijson.Field
+	Everyone             apijson.Field
+	IP                   apijson.Field
+	IPList               apijson.Field
+	Certificate          apijson.Field
+	Group                apijson.Field
+	AzureAd              apijson.Field
+	GitHubOrganization   apijson.Field
+	Gsuite               apijson.Field
+	Okta                 apijson.Field
+	Saml                 apijson.Field
+	ServiceToken         apijson.Field
+	AnyValidServiceToken apijson.Field
+	ExternalEvaluation   apijson.Field
+	Geo                  apijson.Field
+	AuthMethod           apijson.Field
+	DevicePosture        apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r zeroTrustGroupsRequireJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ZeroTrustGroupsRequire) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ZeroTrustGroupsRequire) AsUnion() ZeroTrustGroupsRequireUnion {
+	return r.union
+}
+
+// Matches a specific email.
 //
 // Union satisfied by [zero_trust.ZeroTrustGroupsRequireAccessEmailRule],
 // [zero_trust.ZeroTrustGroupsRequireAccessEmailListRule],
@@ -3001,13 +3269,13 @@ func (r zeroTrustGroupsIsDefaultAccessDevicePostureRuleDevicePostureJSON) RawJSO
 // [zero_trust.ZeroTrustGroupsRequireAccessCountryRule],
 // [zero_trust.ZeroTrustGroupsRequireAccessAuthenticationMethodRule] or
 // [zero_trust.ZeroTrustGroupsRequireAccessDevicePostureRule].
-type ZeroTrustGroupsRequire interface {
+type ZeroTrustGroupsRequireUnion interface {
 	implementsZeroTrustZeroTrustGroupsRequire()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZeroTrustGroupsRequire)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustGroupsRequireUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -3930,7 +4198,7 @@ func (r accessGroupDeleteResponseJSON) RawJSON() string {
 type AccessGroupNewParams struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include param.Field[[]AccessGroupNewParamsInclude] `json:"include,required"`
+	Include param.Field[[]AccessGroupNewParamsIncludeUnion] `json:"include,required"`
 	// The name of the Access group.
 	Name param.Field[string] `json:"name,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -3939,17 +4207,46 @@ type AccessGroupNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessGroupNewParamsExclude] `json:"exclude"`
+	Exclude param.Field[[]AccessGroupNewParamsExcludeUnion] `json:"exclude"`
 	// Whether this is the default group
 	IsDefault param.Field[bool] `json:"is_default"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require param.Field[[]AccessGroupNewParamsRequire] `json:"require"`
+	Require param.Field[[]AccessGroupNewParamsRequireUnion] `json:"require"`
 }
 
 func (r AccessGroupNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Matches a specific email.
+type AccessGroupNewParamsInclude struct {
+	Email                param.Field[interface{}]                     `json:"email,required"`
+	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
+	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
+	IP                   param.Field[interface{}]                     `json:"ip,required"`
+	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
+	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
+	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
+	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
+	Okta                 param.Field[interface{}]                     `json:"okta,required"`
+	Saml                 param.Field[interface{}]                     `json:"saml,required"`
+	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}]                     `json:"geo,required"`
+	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+}
+
+func (r AccessGroupNewParamsInclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessGroupNewParamsInclude) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {}
 
 // Matches a specific email.
 //
@@ -3971,9 +4268,10 @@ func (r AccessGroupNewParams) MarshalJSON() (data []byte, err error) {
 // [zero_trust.AccessGroupNewParamsIncludeAccessExternalEvaluationRule],
 // [zero_trust.AccessGroupNewParamsIncludeAccessCountryRule],
 // [zero_trust.AccessGroupNewParamsIncludeAccessAuthenticationMethodRule],
-// [zero_trust.AccessGroupNewParamsIncludeAccessDevicePostureRule].
-type AccessGroupNewParamsInclude interface {
-	implementsZeroTrustAccessGroupNewParamsInclude()
+// [zero_trust.AccessGroupNewParamsIncludeAccessDevicePostureRule],
+// [AccessGroupNewParamsInclude].
+type AccessGroupNewParamsIncludeUnion interface {
+	implementsZeroTrustAccessGroupNewParamsIncludeUnion()
 }
 
 // Matches a specific email.
@@ -3985,7 +4283,7 @@ func (r AccessGroupNewParamsIncludeAccessEmailRule) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessEmailRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessEmailRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessEmailRuleEmail struct {
@@ -4006,7 +4304,7 @@ func (r AccessGroupNewParamsIncludeAccessEmailListRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessEmailListRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessEmailListRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessEmailListRuleEmailList struct {
@@ -4027,7 +4325,7 @@ func (r AccessGroupNewParamsIncludeAccessDomainRule) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessDomainRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessDomainRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessDomainRuleEmailDomain struct {
@@ -4049,7 +4347,7 @@ func (r AccessGroupNewParamsIncludeAccessEveryoneRule) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessEveryoneRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessEveryoneRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 // Matches an IP address block.
@@ -4061,7 +4359,8 @@ func (r AccessGroupNewParamsIncludeAccessIPRule) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessIPRule) implementsZeroTrustAccessGroupNewParamsInclude() {}
+func (r AccessGroupNewParamsIncludeAccessIPRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
+}
 
 type AccessGroupNewParamsIncludeAccessIPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
@@ -4081,7 +4380,7 @@ func (r AccessGroupNewParamsIncludeAccessIPListRule) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessIPListRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessIPListRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessIPListRuleIPList struct {
@@ -4102,7 +4401,7 @@ func (r AccessGroupNewParamsIncludeAccessCertificateRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessCertificateRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessCertificateRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 // Matches an Access group.
@@ -4114,7 +4413,7 @@ func (r AccessGroupNewParamsIncludeAccessAccessGroupRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessAccessGroupRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessAccessGroupRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -4126,7 +4425,7 @@ func (r AccessGroupNewParamsIncludeAccessAzureGroupRule) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessAzureGroupRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessAzureGroupRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessAzureGroupRuleAzureAd struct {
@@ -4149,7 +4448,7 @@ func (r AccessGroupNewParamsIncludeAccessGitHubOrganizationRule) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessGitHubOrganizationRuleGitHubOrganization struct {
@@ -4173,7 +4472,7 @@ func (r AccessGroupNewParamsIncludeAccessGsuiteGroupRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessGsuiteGroupRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessGsuiteGroupRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessGsuiteGroupRuleGsuite struct {
@@ -4196,7 +4495,7 @@ func (r AccessGroupNewParamsIncludeAccessOktaGroupRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessOktaGroupRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessOktaGroupRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessOktaGroupRuleOkta struct {
@@ -4219,7 +4518,7 @@ func (r AccessGroupNewParamsIncludeAccessSamlGroupRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessSamlGroupRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessSamlGroupRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessSamlGroupRuleSaml struct {
@@ -4242,7 +4541,7 @@ func (r AccessGroupNewParamsIncludeAccessServiceTokenRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessServiceTokenRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessServiceTokenRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessServiceTokenRuleServiceToken struct {
@@ -4264,7 +4563,7 @@ func (r AccessGroupNewParamsIncludeAccessAnyValidServiceTokenRule) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
@@ -4276,7 +4575,7 @@ func (r AccessGroupNewParamsIncludeAccessExternalEvaluationRule) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessExternalEvaluationRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessExternalEvaluationRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessExternalEvaluationRuleExternalEvaluation struct {
@@ -4300,7 +4599,7 @@ func (r AccessGroupNewParamsIncludeAccessCountryRule) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessCountryRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessCountryRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessCountryRuleGeo struct {
@@ -4321,7 +4620,7 @@ func (r AccessGroupNewParamsIncludeAccessAuthenticationMethodRule) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessAuthenticationMethodRuleAuthMethod struct {
@@ -4342,7 +4641,7 @@ func (r AccessGroupNewParamsIncludeAccessDevicePostureRule) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsIncludeAccessDevicePostureRule) implementsZeroTrustAccessGroupNewParamsInclude() {
+func (r AccessGroupNewParamsIncludeAccessDevicePostureRule) implementsZeroTrustAccessGroupNewParamsIncludeUnion() {
 }
 
 type AccessGroupNewParamsIncludeAccessDevicePostureRuleDevicePosture struct {
@@ -4353,6 +4652,35 @@ type AccessGroupNewParamsIncludeAccessDevicePostureRuleDevicePosture struct {
 func (r AccessGroupNewParamsIncludeAccessDevicePostureRuleDevicePosture) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Matches a specific email.
+type AccessGroupNewParamsExclude struct {
+	Email                param.Field[interface{}]                     `json:"email,required"`
+	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
+	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
+	IP                   param.Field[interface{}]                     `json:"ip,required"`
+	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
+	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
+	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
+	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
+	Okta                 param.Field[interface{}]                     `json:"okta,required"`
+	Saml                 param.Field[interface{}]                     `json:"saml,required"`
+	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}]                     `json:"geo,required"`
+	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+}
+
+func (r AccessGroupNewParamsExclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessGroupNewParamsExclude) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {}
 
 // Matches a specific email.
 //
@@ -4374,9 +4702,10 @@ func (r AccessGroupNewParamsIncludeAccessDevicePostureRuleDevicePosture) Marshal
 // [zero_trust.AccessGroupNewParamsExcludeAccessExternalEvaluationRule],
 // [zero_trust.AccessGroupNewParamsExcludeAccessCountryRule],
 // [zero_trust.AccessGroupNewParamsExcludeAccessAuthenticationMethodRule],
-// [zero_trust.AccessGroupNewParamsExcludeAccessDevicePostureRule].
-type AccessGroupNewParamsExclude interface {
-	implementsZeroTrustAccessGroupNewParamsExclude()
+// [zero_trust.AccessGroupNewParamsExcludeAccessDevicePostureRule],
+// [AccessGroupNewParamsExclude].
+type AccessGroupNewParamsExcludeUnion interface {
+	implementsZeroTrustAccessGroupNewParamsExcludeUnion()
 }
 
 // Matches a specific email.
@@ -4388,7 +4717,7 @@ func (r AccessGroupNewParamsExcludeAccessEmailRule) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessEmailRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessEmailRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessEmailRuleEmail struct {
@@ -4409,7 +4738,7 @@ func (r AccessGroupNewParamsExcludeAccessEmailListRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessEmailListRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessEmailListRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessEmailListRuleEmailList struct {
@@ -4430,7 +4759,7 @@ func (r AccessGroupNewParamsExcludeAccessDomainRule) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessDomainRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessDomainRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessDomainRuleEmailDomain struct {
@@ -4452,7 +4781,7 @@ func (r AccessGroupNewParamsExcludeAccessEveryoneRule) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessEveryoneRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessEveryoneRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 // Matches an IP address block.
@@ -4464,7 +4793,8 @@ func (r AccessGroupNewParamsExcludeAccessIPRule) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessIPRule) implementsZeroTrustAccessGroupNewParamsExclude() {}
+func (r AccessGroupNewParamsExcludeAccessIPRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
+}
 
 type AccessGroupNewParamsExcludeAccessIPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
@@ -4484,7 +4814,7 @@ func (r AccessGroupNewParamsExcludeAccessIPListRule) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessIPListRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessIPListRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessIPListRuleIPList struct {
@@ -4505,7 +4835,7 @@ func (r AccessGroupNewParamsExcludeAccessCertificateRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessCertificateRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessCertificateRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 // Matches an Access group.
@@ -4517,7 +4847,7 @@ func (r AccessGroupNewParamsExcludeAccessAccessGroupRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessAccessGroupRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessAccessGroupRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -4529,7 +4859,7 @@ func (r AccessGroupNewParamsExcludeAccessAzureGroupRule) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessAzureGroupRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessAzureGroupRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessAzureGroupRuleAzureAd struct {
@@ -4552,7 +4882,7 @@ func (r AccessGroupNewParamsExcludeAccessGitHubOrganizationRule) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessGitHubOrganizationRuleGitHubOrganization struct {
@@ -4576,7 +4906,7 @@ func (r AccessGroupNewParamsExcludeAccessGsuiteGroupRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessGsuiteGroupRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessGsuiteGroupRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessGsuiteGroupRuleGsuite struct {
@@ -4599,7 +4929,7 @@ func (r AccessGroupNewParamsExcludeAccessOktaGroupRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessOktaGroupRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessOktaGroupRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessOktaGroupRuleOkta struct {
@@ -4622,7 +4952,7 @@ func (r AccessGroupNewParamsExcludeAccessSamlGroupRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessSamlGroupRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessSamlGroupRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessSamlGroupRuleSaml struct {
@@ -4645,7 +4975,7 @@ func (r AccessGroupNewParamsExcludeAccessServiceTokenRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessServiceTokenRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessServiceTokenRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessServiceTokenRuleServiceToken struct {
@@ -4667,7 +4997,7 @@ func (r AccessGroupNewParamsExcludeAccessAnyValidServiceTokenRule) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
@@ -4679,7 +5009,7 @@ func (r AccessGroupNewParamsExcludeAccessExternalEvaluationRule) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessExternalEvaluationRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessExternalEvaluationRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessExternalEvaluationRuleExternalEvaluation struct {
@@ -4703,7 +5033,7 @@ func (r AccessGroupNewParamsExcludeAccessCountryRule) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessCountryRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessCountryRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessCountryRuleGeo struct {
@@ -4724,7 +5054,7 @@ func (r AccessGroupNewParamsExcludeAccessAuthenticationMethodRule) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessAuthenticationMethodRuleAuthMethod struct {
@@ -4745,7 +5075,7 @@ func (r AccessGroupNewParamsExcludeAccessDevicePostureRule) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsExcludeAccessDevicePostureRule) implementsZeroTrustAccessGroupNewParamsExclude() {
+func (r AccessGroupNewParamsExcludeAccessDevicePostureRule) implementsZeroTrustAccessGroupNewParamsExcludeUnion() {
 }
 
 type AccessGroupNewParamsExcludeAccessDevicePostureRuleDevicePosture struct {
@@ -4756,6 +5086,35 @@ type AccessGroupNewParamsExcludeAccessDevicePostureRuleDevicePosture struct {
 func (r AccessGroupNewParamsExcludeAccessDevicePostureRuleDevicePosture) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Matches a specific email.
+type AccessGroupNewParamsRequire struct {
+	Email                param.Field[interface{}]                     `json:"email,required"`
+	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
+	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
+	IP                   param.Field[interface{}]                     `json:"ip,required"`
+	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
+	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
+	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
+	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
+	Okta                 param.Field[interface{}]                     `json:"okta,required"`
+	Saml                 param.Field[interface{}]                     `json:"saml,required"`
+	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}]                     `json:"geo,required"`
+	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+}
+
+func (r AccessGroupNewParamsRequire) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessGroupNewParamsRequire) implementsZeroTrustAccessGroupNewParamsRequireUnion() {}
 
 // Matches a specific email.
 //
@@ -4777,9 +5136,10 @@ func (r AccessGroupNewParamsExcludeAccessDevicePostureRuleDevicePosture) Marshal
 // [zero_trust.AccessGroupNewParamsRequireAccessExternalEvaluationRule],
 // [zero_trust.AccessGroupNewParamsRequireAccessCountryRule],
 // [zero_trust.AccessGroupNewParamsRequireAccessAuthenticationMethodRule],
-// [zero_trust.AccessGroupNewParamsRequireAccessDevicePostureRule].
-type AccessGroupNewParamsRequire interface {
-	implementsZeroTrustAccessGroupNewParamsRequire()
+// [zero_trust.AccessGroupNewParamsRequireAccessDevicePostureRule],
+// [AccessGroupNewParamsRequire].
+type AccessGroupNewParamsRequireUnion interface {
+	implementsZeroTrustAccessGroupNewParamsRequireUnion()
 }
 
 // Matches a specific email.
@@ -4791,7 +5151,7 @@ func (r AccessGroupNewParamsRequireAccessEmailRule) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessEmailRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessEmailRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessEmailRuleEmail struct {
@@ -4812,7 +5172,7 @@ func (r AccessGroupNewParamsRequireAccessEmailListRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessEmailListRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessEmailListRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessEmailListRuleEmailList struct {
@@ -4833,7 +5193,7 @@ func (r AccessGroupNewParamsRequireAccessDomainRule) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessDomainRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessDomainRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessDomainRuleEmailDomain struct {
@@ -4855,7 +5215,7 @@ func (r AccessGroupNewParamsRequireAccessEveryoneRule) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessEveryoneRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessEveryoneRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 // Matches an IP address block.
@@ -4867,7 +5227,8 @@ func (r AccessGroupNewParamsRequireAccessIPRule) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessIPRule) implementsZeroTrustAccessGroupNewParamsRequire() {}
+func (r AccessGroupNewParamsRequireAccessIPRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
+}
 
 type AccessGroupNewParamsRequireAccessIPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
@@ -4887,7 +5248,7 @@ func (r AccessGroupNewParamsRequireAccessIPListRule) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessIPListRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessIPListRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessIPListRuleIPList struct {
@@ -4908,7 +5269,7 @@ func (r AccessGroupNewParamsRequireAccessCertificateRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessCertificateRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessCertificateRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 // Matches an Access group.
@@ -4920,7 +5281,7 @@ func (r AccessGroupNewParamsRequireAccessAccessGroupRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessAccessGroupRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessAccessGroupRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -4932,7 +5293,7 @@ func (r AccessGroupNewParamsRequireAccessAzureGroupRule) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessAzureGroupRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessAzureGroupRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessAzureGroupRuleAzureAd struct {
@@ -4955,7 +5316,7 @@ func (r AccessGroupNewParamsRequireAccessGitHubOrganizationRule) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessGitHubOrganizationRuleGitHubOrganization struct {
@@ -4979,7 +5340,7 @@ func (r AccessGroupNewParamsRequireAccessGsuiteGroupRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessGsuiteGroupRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessGsuiteGroupRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessGsuiteGroupRuleGsuite struct {
@@ -5002,7 +5363,7 @@ func (r AccessGroupNewParamsRequireAccessOktaGroupRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessOktaGroupRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessOktaGroupRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessOktaGroupRuleOkta struct {
@@ -5025,7 +5386,7 @@ func (r AccessGroupNewParamsRequireAccessSamlGroupRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessSamlGroupRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessSamlGroupRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessSamlGroupRuleSaml struct {
@@ -5048,7 +5409,7 @@ func (r AccessGroupNewParamsRequireAccessServiceTokenRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessServiceTokenRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessServiceTokenRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessServiceTokenRuleServiceToken struct {
@@ -5070,7 +5431,7 @@ func (r AccessGroupNewParamsRequireAccessAnyValidServiceTokenRule) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
@@ -5082,7 +5443,7 @@ func (r AccessGroupNewParamsRequireAccessExternalEvaluationRule) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessExternalEvaluationRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessExternalEvaluationRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessExternalEvaluationRuleExternalEvaluation struct {
@@ -5106,7 +5467,7 @@ func (r AccessGroupNewParamsRequireAccessCountryRule) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessCountryRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessCountryRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessCountryRuleGeo struct {
@@ -5127,7 +5488,7 @@ func (r AccessGroupNewParamsRequireAccessAuthenticationMethodRule) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessAuthenticationMethodRuleAuthMethod struct {
@@ -5148,7 +5509,7 @@ func (r AccessGroupNewParamsRequireAccessDevicePostureRule) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupNewParamsRequireAccessDevicePostureRule) implementsZeroTrustAccessGroupNewParamsRequire() {
+func (r AccessGroupNewParamsRequireAccessDevicePostureRule) implementsZeroTrustAccessGroupNewParamsRequireUnion() {
 }
 
 type AccessGroupNewParamsRequireAccessDevicePostureRuleDevicePosture struct {
@@ -5206,7 +5567,7 @@ func (r AccessGroupNewResponseEnvelopeSuccess) IsKnown() bool {
 type AccessGroupUpdateParams struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
-	Include param.Field[[]AccessGroupUpdateParamsInclude] `json:"include,required"`
+	Include param.Field[[]AccessGroupUpdateParamsIncludeUnion] `json:"include,required"`
 	// The name of the Access group.
 	Name param.Field[string] `json:"name,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -5215,17 +5576,46 @@ type AccessGroupUpdateParams struct {
 	ZoneID param.Field[string] `path:"zone_id"`
 	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
 	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessGroupUpdateParamsExclude] `json:"exclude"`
+	Exclude param.Field[[]AccessGroupUpdateParamsExcludeUnion] `json:"exclude"`
 	// Whether this is the default group
 	IsDefault param.Field[bool] `json:"is_default"`
 	// Rules evaluated with an AND logical operator. To match a policy, a user must
 	// meet all of the Require rules.
-	Require param.Field[[]AccessGroupUpdateParamsRequire] `json:"require"`
+	Require param.Field[[]AccessGroupUpdateParamsRequireUnion] `json:"require"`
 }
 
 func (r AccessGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Matches a specific email.
+type AccessGroupUpdateParamsInclude struct {
+	Email                param.Field[interface{}]                     `json:"email,required"`
+	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
+	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
+	IP                   param.Field[interface{}]                     `json:"ip,required"`
+	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
+	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
+	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
+	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
+	Okta                 param.Field[interface{}]                     `json:"okta,required"`
+	Saml                 param.Field[interface{}]                     `json:"saml,required"`
+	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}]                     `json:"geo,required"`
+	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+}
+
+func (r AccessGroupUpdateParamsInclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessGroupUpdateParamsInclude) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {}
 
 // Matches a specific email.
 //
@@ -5247,9 +5637,10 @@ func (r AccessGroupUpdateParams) MarshalJSON() (data []byte, err error) {
 // [zero_trust.AccessGroupUpdateParamsIncludeAccessExternalEvaluationRule],
 // [zero_trust.AccessGroupUpdateParamsIncludeAccessCountryRule],
 // [zero_trust.AccessGroupUpdateParamsIncludeAccessAuthenticationMethodRule],
-// [zero_trust.AccessGroupUpdateParamsIncludeAccessDevicePostureRule].
-type AccessGroupUpdateParamsInclude interface {
-	implementsZeroTrustAccessGroupUpdateParamsInclude()
+// [zero_trust.AccessGroupUpdateParamsIncludeAccessDevicePostureRule],
+// [AccessGroupUpdateParamsInclude].
+type AccessGroupUpdateParamsIncludeUnion interface {
+	implementsZeroTrustAccessGroupUpdateParamsIncludeUnion()
 }
 
 // Matches a specific email.
@@ -5261,7 +5652,7 @@ func (r AccessGroupUpdateParamsIncludeAccessEmailRule) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessEmailRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessEmailRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessEmailRuleEmail struct {
@@ -5282,7 +5673,7 @@ func (r AccessGroupUpdateParamsIncludeAccessEmailListRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessEmailListRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessEmailListRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessEmailListRuleEmailList struct {
@@ -5303,7 +5694,7 @@ func (r AccessGroupUpdateParamsIncludeAccessDomainRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessDomainRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessDomainRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessDomainRuleEmailDomain struct {
@@ -5325,7 +5716,7 @@ func (r AccessGroupUpdateParamsIncludeAccessEveryoneRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessEveryoneRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessEveryoneRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 // Matches an IP address block.
@@ -5337,7 +5728,7 @@ func (r AccessGroupUpdateParamsIncludeAccessIPRule) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessIPRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessIPRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessIPRuleIP struct {
@@ -5358,7 +5749,7 @@ func (r AccessGroupUpdateParamsIncludeAccessIPListRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessIPListRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessIPListRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessIPListRuleIPList struct {
@@ -5379,7 +5770,7 @@ func (r AccessGroupUpdateParamsIncludeAccessCertificateRule) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessCertificateRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessCertificateRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 // Matches an Access group.
@@ -5391,7 +5782,7 @@ func (r AccessGroupUpdateParamsIncludeAccessAccessGroupRule) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessAccessGroupRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessAccessGroupRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -5403,7 +5794,7 @@ func (r AccessGroupUpdateParamsIncludeAccessAzureGroupRule) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessAzureGroupRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessAzureGroupRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessAzureGroupRuleAzureAd struct {
@@ -5426,7 +5817,7 @@ func (r AccessGroupUpdateParamsIncludeAccessGitHubOrganizationRule) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessGitHubOrganizationRuleGitHubOrganization struct {
@@ -5450,7 +5841,7 @@ func (r AccessGroupUpdateParamsIncludeAccessGsuiteGroupRule) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessGsuiteGroupRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessGsuiteGroupRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessGsuiteGroupRuleGsuite struct {
@@ -5473,7 +5864,7 @@ func (r AccessGroupUpdateParamsIncludeAccessOktaGroupRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessOktaGroupRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessOktaGroupRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessOktaGroupRuleOkta struct {
@@ -5496,7 +5887,7 @@ func (r AccessGroupUpdateParamsIncludeAccessSamlGroupRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessSamlGroupRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessSamlGroupRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessSamlGroupRuleSaml struct {
@@ -5519,7 +5910,7 @@ func (r AccessGroupUpdateParamsIncludeAccessServiceTokenRule) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessServiceTokenRuleServiceToken struct {
@@ -5541,7 +5932,7 @@ func (r AccessGroupUpdateParamsIncludeAccessAnyValidServiceTokenRule) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
@@ -5553,7 +5944,7 @@ func (r AccessGroupUpdateParamsIncludeAccessExternalEvaluationRule) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessExternalEvaluationRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessExternalEvaluationRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessExternalEvaluationRuleExternalEvaluation struct {
@@ -5577,7 +5968,7 @@ func (r AccessGroupUpdateParamsIncludeAccessCountryRule) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessCountryRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessCountryRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessCountryRuleGeo struct {
@@ -5598,7 +5989,7 @@ func (r AccessGroupUpdateParamsIncludeAccessAuthenticationMethodRule) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessAuthenticationMethodRuleAuthMethod struct {
@@ -5619,7 +6010,7 @@ func (r AccessGroupUpdateParamsIncludeAccessDevicePostureRule) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsIncludeAccessDevicePostureRule) implementsZeroTrustAccessGroupUpdateParamsInclude() {
+func (r AccessGroupUpdateParamsIncludeAccessDevicePostureRule) implementsZeroTrustAccessGroupUpdateParamsIncludeUnion() {
 }
 
 type AccessGroupUpdateParamsIncludeAccessDevicePostureRuleDevicePosture struct {
@@ -5630,6 +6021,35 @@ type AccessGroupUpdateParamsIncludeAccessDevicePostureRuleDevicePosture struct {
 func (r AccessGroupUpdateParamsIncludeAccessDevicePostureRuleDevicePosture) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Matches a specific email.
+type AccessGroupUpdateParamsExclude struct {
+	Email                param.Field[interface{}]                     `json:"email,required"`
+	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
+	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
+	IP                   param.Field[interface{}]                     `json:"ip,required"`
+	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
+	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
+	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
+	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
+	Okta                 param.Field[interface{}]                     `json:"okta,required"`
+	Saml                 param.Field[interface{}]                     `json:"saml,required"`
+	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}]                     `json:"geo,required"`
+	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+}
+
+func (r AccessGroupUpdateParamsExclude) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessGroupUpdateParamsExclude) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {}
 
 // Matches a specific email.
 //
@@ -5651,9 +6071,10 @@ func (r AccessGroupUpdateParamsIncludeAccessDevicePostureRuleDevicePosture) Mars
 // [zero_trust.AccessGroupUpdateParamsExcludeAccessExternalEvaluationRule],
 // [zero_trust.AccessGroupUpdateParamsExcludeAccessCountryRule],
 // [zero_trust.AccessGroupUpdateParamsExcludeAccessAuthenticationMethodRule],
-// [zero_trust.AccessGroupUpdateParamsExcludeAccessDevicePostureRule].
-type AccessGroupUpdateParamsExclude interface {
-	implementsZeroTrustAccessGroupUpdateParamsExclude()
+// [zero_trust.AccessGroupUpdateParamsExcludeAccessDevicePostureRule],
+// [AccessGroupUpdateParamsExclude].
+type AccessGroupUpdateParamsExcludeUnion interface {
+	implementsZeroTrustAccessGroupUpdateParamsExcludeUnion()
 }
 
 // Matches a specific email.
@@ -5665,7 +6086,7 @@ func (r AccessGroupUpdateParamsExcludeAccessEmailRule) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessEmailRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessEmailRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessEmailRuleEmail struct {
@@ -5686,7 +6107,7 @@ func (r AccessGroupUpdateParamsExcludeAccessEmailListRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessEmailListRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessEmailListRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessEmailListRuleEmailList struct {
@@ -5707,7 +6128,7 @@ func (r AccessGroupUpdateParamsExcludeAccessDomainRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessDomainRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessDomainRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessDomainRuleEmailDomain struct {
@@ -5729,7 +6150,7 @@ func (r AccessGroupUpdateParamsExcludeAccessEveryoneRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessEveryoneRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessEveryoneRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 // Matches an IP address block.
@@ -5741,7 +6162,7 @@ func (r AccessGroupUpdateParamsExcludeAccessIPRule) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessIPRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessIPRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessIPRuleIP struct {
@@ -5762,7 +6183,7 @@ func (r AccessGroupUpdateParamsExcludeAccessIPListRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessIPListRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessIPListRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessIPListRuleIPList struct {
@@ -5783,7 +6204,7 @@ func (r AccessGroupUpdateParamsExcludeAccessCertificateRule) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessCertificateRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessCertificateRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 // Matches an Access group.
@@ -5795,7 +6216,7 @@ func (r AccessGroupUpdateParamsExcludeAccessAccessGroupRule) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessAccessGroupRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessAccessGroupRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -5807,7 +6228,7 @@ func (r AccessGroupUpdateParamsExcludeAccessAzureGroupRule) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessAzureGroupRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessAzureGroupRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessAzureGroupRuleAzureAd struct {
@@ -5830,7 +6251,7 @@ func (r AccessGroupUpdateParamsExcludeAccessGitHubOrganizationRule) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessGitHubOrganizationRuleGitHubOrganization struct {
@@ -5854,7 +6275,7 @@ func (r AccessGroupUpdateParamsExcludeAccessGsuiteGroupRule) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessGsuiteGroupRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessGsuiteGroupRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessGsuiteGroupRuleGsuite struct {
@@ -5877,7 +6298,7 @@ func (r AccessGroupUpdateParamsExcludeAccessOktaGroupRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessOktaGroupRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessOktaGroupRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessOktaGroupRuleOkta struct {
@@ -5900,7 +6321,7 @@ func (r AccessGroupUpdateParamsExcludeAccessSamlGroupRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessSamlGroupRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessSamlGroupRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessSamlGroupRuleSaml struct {
@@ -5923,7 +6344,7 @@ func (r AccessGroupUpdateParamsExcludeAccessServiceTokenRule) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessServiceTokenRuleServiceToken struct {
@@ -5945,7 +6366,7 @@ func (r AccessGroupUpdateParamsExcludeAccessAnyValidServiceTokenRule) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
@@ -5957,7 +6378,7 @@ func (r AccessGroupUpdateParamsExcludeAccessExternalEvaluationRule) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessExternalEvaluationRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessExternalEvaluationRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessExternalEvaluationRuleExternalEvaluation struct {
@@ -5981,7 +6402,7 @@ func (r AccessGroupUpdateParamsExcludeAccessCountryRule) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessCountryRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessCountryRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessCountryRuleGeo struct {
@@ -6002,7 +6423,7 @@ func (r AccessGroupUpdateParamsExcludeAccessAuthenticationMethodRule) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessAuthenticationMethodRuleAuthMethod struct {
@@ -6023,7 +6444,7 @@ func (r AccessGroupUpdateParamsExcludeAccessDevicePostureRule) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsExcludeAccessDevicePostureRule) implementsZeroTrustAccessGroupUpdateParamsExclude() {
+func (r AccessGroupUpdateParamsExcludeAccessDevicePostureRule) implementsZeroTrustAccessGroupUpdateParamsExcludeUnion() {
 }
 
 type AccessGroupUpdateParamsExcludeAccessDevicePostureRuleDevicePosture struct {
@@ -6034,6 +6455,35 @@ type AccessGroupUpdateParamsExcludeAccessDevicePostureRuleDevicePosture struct {
 func (r AccessGroupUpdateParamsExcludeAccessDevicePostureRuleDevicePosture) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Matches a specific email.
+type AccessGroupUpdateParamsRequire struct {
+	Email                param.Field[interface{}]                     `json:"email,required"`
+	EmailList            param.Field[interface{}]                     `json:"email_list,required"`
+	EmailDomain          param.Field[interface{}]                     `json:"email_domain,required"`
+	Everyone             param.Field[interface{}]                     `json:"everyone,required"`
+	IP                   param.Field[interface{}]                     `json:"ip,required"`
+	IPList               param.Field[interface{}]                     `json:"ip_list,required"`
+	Certificate          param.Field[interface{}]                     `json:"certificate,required"`
+	Group                param.Field[shared.UnnamedSchemaRef131Param] `json:"group"`
+	AzureAd              param.Field[interface{}]                     `json:"azureAD,required"`
+	GitHubOrganization   param.Field[interface{}]                     `json:"github-organization,required"`
+	Gsuite               param.Field[interface{}]                     `json:"gsuite,required"`
+	Okta                 param.Field[interface{}]                     `json:"okta,required"`
+	Saml                 param.Field[interface{}]                     `json:"saml,required"`
+	ServiceToken         param.Field[interface{}]                     `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}]                     `json:"any_valid_service_token,required"`
+	ExternalEvaluation   param.Field[interface{}]                     `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}]                     `json:"geo,required"`
+	AuthMethod           param.Field[interface{}]                     `json:"auth_method,required"`
+	DevicePosture        param.Field[interface{}]                     `json:"device_posture,required"`
+}
+
+func (r AccessGroupUpdateParamsRequire) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessGroupUpdateParamsRequire) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {}
 
 // Matches a specific email.
 //
@@ -6055,9 +6505,10 @@ func (r AccessGroupUpdateParamsExcludeAccessDevicePostureRuleDevicePosture) Mars
 // [zero_trust.AccessGroupUpdateParamsRequireAccessExternalEvaluationRule],
 // [zero_trust.AccessGroupUpdateParamsRequireAccessCountryRule],
 // [zero_trust.AccessGroupUpdateParamsRequireAccessAuthenticationMethodRule],
-// [zero_trust.AccessGroupUpdateParamsRequireAccessDevicePostureRule].
-type AccessGroupUpdateParamsRequire interface {
-	implementsZeroTrustAccessGroupUpdateParamsRequire()
+// [zero_trust.AccessGroupUpdateParamsRequireAccessDevicePostureRule],
+// [AccessGroupUpdateParamsRequire].
+type AccessGroupUpdateParamsRequireUnion interface {
+	implementsZeroTrustAccessGroupUpdateParamsRequireUnion()
 }
 
 // Matches a specific email.
@@ -6069,7 +6520,7 @@ func (r AccessGroupUpdateParamsRequireAccessEmailRule) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessEmailRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessEmailRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessEmailRuleEmail struct {
@@ -6090,7 +6541,7 @@ func (r AccessGroupUpdateParamsRequireAccessEmailListRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessEmailListRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessEmailListRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessEmailListRuleEmailList struct {
@@ -6111,7 +6562,7 @@ func (r AccessGroupUpdateParamsRequireAccessDomainRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessDomainRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessDomainRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessDomainRuleEmailDomain struct {
@@ -6133,7 +6584,7 @@ func (r AccessGroupUpdateParamsRequireAccessEveryoneRule) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessEveryoneRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessEveryoneRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 // Matches an IP address block.
@@ -6145,7 +6596,7 @@ func (r AccessGroupUpdateParamsRequireAccessIPRule) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessIPRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessIPRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessIPRuleIP struct {
@@ -6166,7 +6617,7 @@ func (r AccessGroupUpdateParamsRequireAccessIPListRule) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessIPListRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessIPListRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessIPListRuleIPList struct {
@@ -6187,7 +6638,7 @@ func (r AccessGroupUpdateParamsRequireAccessCertificateRule) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessCertificateRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessCertificateRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 // Matches an Access group.
@@ -6199,7 +6650,7 @@ func (r AccessGroupUpdateParamsRequireAccessAccessGroupRule) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessAccessGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessAccessGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -6211,7 +6662,7 @@ func (r AccessGroupUpdateParamsRequireAccessAzureGroupRule) MarshalJSON() (data 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessAzureGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessAzureGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessAzureGroupRuleAzureAd struct {
@@ -6234,7 +6685,7 @@ func (r AccessGroupUpdateParamsRequireAccessGitHubOrganizationRule) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessGitHubOrganizationRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessGitHubOrganizationRuleGitHubOrganization struct {
@@ -6258,7 +6709,7 @@ func (r AccessGroupUpdateParamsRequireAccessGsuiteGroupRule) MarshalJSON() (data
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessGsuiteGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessGsuiteGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessGsuiteGroupRuleGsuite struct {
@@ -6281,7 +6732,7 @@ func (r AccessGroupUpdateParamsRequireAccessOktaGroupRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessOktaGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessOktaGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessOktaGroupRuleOkta struct {
@@ -6304,7 +6755,7 @@ func (r AccessGroupUpdateParamsRequireAccessSamlGroupRule) MarshalJSON() (data [
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessSamlGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessSamlGroupRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessSamlGroupRuleSaml struct {
@@ -6327,7 +6778,7 @@ func (r AccessGroupUpdateParamsRequireAccessServiceTokenRule) MarshalJSON() (dat
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessServiceTokenRuleServiceToken struct {
@@ -6349,7 +6800,7 @@ func (r AccessGroupUpdateParamsRequireAccessAnyValidServiceTokenRule) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessAnyValidServiceTokenRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
@@ -6361,7 +6812,7 @@ func (r AccessGroupUpdateParamsRequireAccessExternalEvaluationRule) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessExternalEvaluationRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessExternalEvaluationRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessExternalEvaluationRuleExternalEvaluation struct {
@@ -6385,7 +6836,7 @@ func (r AccessGroupUpdateParamsRequireAccessCountryRule) MarshalJSON() (data []b
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessCountryRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessCountryRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessCountryRuleGeo struct {
@@ -6406,7 +6857,7 @@ func (r AccessGroupUpdateParamsRequireAccessAuthenticationMethodRule) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessAuthenticationMethodRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessAuthenticationMethodRuleAuthMethod struct {
@@ -6427,7 +6878,7 @@ func (r AccessGroupUpdateParamsRequireAccessDevicePostureRule) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessGroupUpdateParamsRequireAccessDevicePostureRule) implementsZeroTrustAccessGroupUpdateParamsRequire() {
+func (r AccessGroupUpdateParamsRequireAccessDevicePostureRule) implementsZeroTrustAccessGroupUpdateParamsRequireUnion() {
 }
 
 type AccessGroupUpdateParamsRequireAccessDevicePostureRuleDevicePosture struct {

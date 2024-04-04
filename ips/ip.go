@@ -111,14 +111,50 @@ func (r JDCloudIPsJSON) RawJSON() string {
 
 func (r JDCloudIPs) implementsIPsIPListResponse() {}
 
+type IPListResponse struct {
+	// A digest of the IP data. Useful for determining if the data has changed.
+	Etag         string             `json:"etag"`
+	IPV4CIDRs    interface{}        `json:"ipv4_cidrs,required"`
+	IPV6CIDRs    interface{}        `json:"ipv6_cidrs,required"`
+	JDCloudCIDRs interface{}        `json:"jdcloud_cidrs,required"`
+	JSON         ipListResponseJSON `json:"-"`
+	union        IPListResponseUnion
+}
+
+// ipListResponseJSON contains the JSON metadata for the struct [IPListResponse]
+type ipListResponseJSON struct {
+	Etag         apijson.Field
+	IPV4CIDRs    apijson.Field
+	IPV6CIDRs    apijson.Field
+	JDCloudCIDRs apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r ipListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *IPListResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r IPListResponse) AsUnion() IPListResponseUnion {
+	return r.union
+}
+
 // Union satisfied by [ips.IPs] or [ips.JDCloudIPs].
-type IPListResponse interface {
+type IPListResponseUnion interface {
 	implementsIPsIPListResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*IPListResponse)(nil)).Elem(),
+		reflect.TypeOf((*IPListResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,

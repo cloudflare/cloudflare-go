@@ -34,7 +34,7 @@ type UnnamedSchemaRef107LegacyJhsDeletedFilter = shared.UnnamedSchemaRef107Legac
 type UnnamedSchemaRef11 = shared.UnnamedSchemaRef11
 
 // This is an alias to an internal type.
-type UnnamedSchemaRef116 = shared.UnnamedSchemaRef116
+type UnnamedSchemaRef116Union = shared.UnnamedSchemaRef116Union
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef116Array = shared.UnnamedSchemaRef116Array
@@ -62,7 +62,7 @@ type UnnamedSchemaRef12 = shared.UnnamedSchemaRef12
 type UnnamedSchemaRef120 = shared.UnnamedSchemaRef120
 
 // This is an alias to an internal type.
-type UnnamedSchemaRef121Param = shared.UnnamedSchemaRef121Param
+type UnnamedSchemaRef121UnionParam = shared.UnnamedSchemaRef121UnionParam
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef121ArrayParam = shared.UnnamedSchemaRef121ArrayParam
@@ -127,6 +127,26 @@ const UnnamedSchemaRef123TunnelWARPConnectorTunnelTunTypeGRE = shared.UnnamedSch
 
 // This is an alias to an internal value.
 const UnnamedSchemaRef123TunnelWARPConnectorTunnelTunTypeCni = shared.UnnamedSchemaRef123TunnelWARPConnectorTunnelTunTypeCni
+
+// The type of tunnel.
+//
+// This is an alias to an internal type.
+type UnnamedSchemaRef123TunType = shared.UnnamedSchemaRef123TunType
+
+// This is an alias to an internal value.
+const UnnamedSchemaRef123TunTypeCfdTunnel = shared.UnnamedSchemaRef123TunTypeCfdTunnel
+
+// This is an alias to an internal value.
+const UnnamedSchemaRef123TunTypeWARPConnector = shared.UnnamedSchemaRef123TunTypeWARPConnector
+
+// This is an alias to an internal value.
+const UnnamedSchemaRef123TunTypeIPSec = shared.UnnamedSchemaRef123TunTypeIPSec
+
+// This is an alias to an internal value.
+const UnnamedSchemaRef123TunTypeGRE = shared.UnnamedSchemaRef123TunTypeGRE
+
+// This is an alias to an internal value.
+const UnnamedSchemaRef123TunTypeCni = shared.UnnamedSchemaRef123TunTypeCni
 
 // account settings.
 //
@@ -344,7 +364,7 @@ type UnnamedSchemaRef158Param = shared.UnnamedSchemaRef158Param
 type UnnamedSchemaRef16 = shared.UnnamedSchemaRef16
 
 // This is an alias to an internal type.
-type UnnamedSchemaRef161 = shared.UnnamedSchemaRef161
+type UnnamedSchemaRef161Union = shared.UnnamedSchemaRef161Union
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef161Array = shared.UnnamedSchemaRef161Array
@@ -404,16 +424,16 @@ const UnnamedSchemaRef163Pingone = shared.UnnamedSchemaRef163Pingone
 const UnnamedSchemaRef163Yandex = shared.UnnamedSchemaRef163Yandex
 
 // This is an alias to an internal type.
-type UnnamedSchemaRef169 = shared.UnnamedSchemaRef169
+type UnnamedSchemaRef169Union = shared.UnnamedSchemaRef169Union
 
 // This is an alias to an internal type.
-type UnnamedSchemaRef171 = shared.UnnamedSchemaRef171
+type UnnamedSchemaRef171Union = shared.UnnamedSchemaRef171Union
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef171Array = shared.UnnamedSchemaRef171Array
 
 // This is an alias to an internal type.
-type UnnamedSchemaRef173 = shared.UnnamedSchemaRef173
+type UnnamedSchemaRef173Union = shared.UnnamedSchemaRef173Union
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef22 = shared.UnnamedSchemaRef22
@@ -484,7 +504,7 @@ type UnnamedSchemaRef41 = shared.UnnamedSchemaRef41
 type UnnamedSchemaRef44 = shared.UnnamedSchemaRef44
 
 // This is an alias to an internal type.
-type UnnamedSchemaRef49 = shared.UnnamedSchemaRef49
+type UnnamedSchemaRef49Union = shared.UnnamedSchemaRef49Union
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
 //
@@ -500,7 +520,7 @@ type UnnamedSchemaRef65 = shared.UnnamedSchemaRef65
 // The tls setting value.
 //
 // This is an alias to an internal type.
-type UnnamedSchemaRef65Value = shared.UnnamedSchemaRef65Value
+type UnnamedSchemaRef65ValueUnion = shared.UnnamedSchemaRef65ValueUnion
 
 // This is an alias to an internal type.
 type UnnamedSchemaRef65ValueArray = shared.UnnamedSchemaRef65ValueArray

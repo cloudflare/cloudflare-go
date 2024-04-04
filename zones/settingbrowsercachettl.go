@@ -194,7 +194,7 @@ func (r ZoneSettingBrowserCacheTTLParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingBrowserCacheTTLParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingBrowserCacheTTLParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingBrowserCacheTTLEditParams struct {
 	// Identifier

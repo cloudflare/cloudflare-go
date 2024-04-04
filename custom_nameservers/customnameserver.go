@@ -48,7 +48,7 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 }
 
 // Delete Account Custom Nameserver
-func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, params CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponse, err error) {
+func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, params CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns/%s", params.AccountID, customNSID)
@@ -195,13 +195,13 @@ func (r CustomNameserverStatus) IsKnown() bool {
 // Union satisfied by [custom_nameservers.CustomNameserverDeleteResponseUnknown],
 // [custom_nameservers.CustomNameserverDeleteResponseArray] or
 // [shared.UnionString].
-type CustomNameserverDeleteResponse interface {
-	ImplementsCustomNameserversCustomNameserverDeleteResponse()
+type CustomNameserverDeleteResponseUnion interface {
+	ImplementsCustomNameserversCustomNameserverDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomNameserverDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*CustomNameserverDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -216,7 +216,7 @@ func init() {
 
 type CustomNameserverDeleteResponseArray []interface{}
 
-func (r CustomNameserverDeleteResponseArray) ImplementsCustomNameserversCustomNameserverDeleteResponse() {
+func (r CustomNameserverDeleteResponseArray) ImplementsCustomNameserversCustomNameserverDeleteResponseUnion() {
 }
 
 type CustomNameserverNewParams struct {
@@ -287,9 +287,9 @@ func (r CustomNameserverDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   CustomNameserverDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   CustomNameserverDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverDeleteResponseEnvelopeResultInfo `json:"result_info"`

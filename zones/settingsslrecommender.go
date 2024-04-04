@@ -123,7 +123,7 @@ func (r ZoneSettingSSLRecommenderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingSSLRecommenderParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingSSLRecommenderParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingSSLRecommenderEditParams struct {
 	// Identifier

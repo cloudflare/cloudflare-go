@@ -172,7 +172,7 @@ func (r ZoneSettingAlwaysOnlineParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingAlwaysOnlineParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingAlwaysOnlineParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingAlwaysOnlineEditParams struct {
 	// Identifier

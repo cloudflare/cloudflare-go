@@ -39,7 +39,7 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 //
 // Note: To create an IP Access rule that applies to a single zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
+func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleNewResponseEnvelope
 	var accountOrZone string
@@ -123,7 +123,7 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 // Updates an IP Access rule defined.
 //
 // Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
+func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleEditResponseEnvelope
 	var accountOrZone string
@@ -145,7 +145,7 @@ func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, pa
 }
 
 // Fetches the details of an IP Access rule defined.
-func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
+func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleGetResponseEnvelope
 	var accountOrZone string
@@ -192,7 +192,7 @@ func (r accessRuleDeleteResponseJSON) RawJSON() string {
 
 type AccessRuleNewParams struct {
 	// The rule configuration.
-	Configuration param.Field[AccessRuleNewParamsConfiguration] `json:"configuration,required"`
+	Configuration param.Field[AccessRuleNewParamsConfigurationUnion] `json:"configuration,required"`
 	// The action to apply to a matched request.
 	Mode param.Field[AccessRuleNewParamsMode] `json:"mode,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -208,15 +208,32 @@ func (r AccessRuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 // The rule configuration.
+type AccessRuleNewParamsConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the rule.
+	Target param.Field[AccessRuleNewParamsConfigurationTarget] `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r AccessRuleNewParamsConfiguration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleNewParamsConfiguration) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
+
+// The rule configuration.
 //
 // Satisfied by
 // [firewall.AccessRuleNewParamsConfigurationLegacyJhsIPConfiguration],
 // [firewall.AccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration],
 // [firewall.AccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration],
 // [firewall.AccessRuleNewParamsConfigurationLegacyJhsASNConfiguration],
-// [firewall.AccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration].
-type AccessRuleNewParamsConfiguration interface {
-	implementsFirewallAccessRuleNewParamsConfiguration()
+// [firewall.AccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration],
+// [AccessRuleNewParamsConfiguration].
+type AccessRuleNewParamsConfigurationUnion interface {
+	implementsFirewallAccessRuleNewParamsConfigurationUnion()
 }
 
 type AccessRuleNewParamsConfigurationLegacyJhsIPConfiguration struct {
@@ -232,7 +249,7 @@ func (r AccessRuleNewParamsConfigurationLegacyJhsIPConfiguration) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleNewParamsConfigurationLegacyJhsIPConfiguration) implementsFirewallAccessRuleNewParamsConfiguration() {
+func (r AccessRuleNewParamsConfigurationLegacyJhsIPConfiguration) implementsFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
@@ -263,7 +280,7 @@ func (r AccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration) implementsFirewallAccessRuleNewParamsConfiguration() {
+func (r AccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration) implementsFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `ip6` when specifying an
@@ -295,7 +312,7 @@ func (r AccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) implementsFirewallAccessRuleNewParamsConfiguration() {
+func (r AccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) implementsFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
@@ -326,7 +343,7 @@ func (r AccessRuleNewParamsConfigurationLegacyJhsASNConfiguration) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleNewParamsConfigurationLegacyJhsASNConfiguration) implementsFirewallAccessRuleNewParamsConfiguration() {
+func (r AccessRuleNewParamsConfigurationLegacyJhsASNConfiguration) implementsFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
@@ -358,7 +375,7 @@ func (r AccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration) MarshalJS
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration) implementsFirewallAccessRuleNewParamsConfiguration() {
+func (r AccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration) implementsFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `country` when specifying a
@@ -372,6 +389,26 @@ const (
 func (r AccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bool {
 	switch r {
 	case AccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the rule.
+type AccessRuleNewParamsConfigurationTarget string
+
+const (
+	AccessRuleNewParamsConfigurationTargetIP      AccessRuleNewParamsConfigurationTarget = "ip"
+	AccessRuleNewParamsConfigurationTargetIp6     AccessRuleNewParamsConfigurationTarget = "ip6"
+	AccessRuleNewParamsConfigurationTargetIPRange AccessRuleNewParamsConfigurationTarget = "ip_range"
+	AccessRuleNewParamsConfigurationTargetASN     AccessRuleNewParamsConfigurationTarget = "asn"
+	AccessRuleNewParamsConfigurationTargetCountry AccessRuleNewParamsConfigurationTarget = "country"
+)
+
+func (r AccessRuleNewParamsConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleNewParamsConfigurationTargetIP, AccessRuleNewParamsConfigurationTargetIp6, AccessRuleNewParamsConfigurationTargetIPRange, AccessRuleNewParamsConfigurationTargetASN, AccessRuleNewParamsConfigurationTargetCountry:
 		return true
 	}
 	return false
@@ -397,9 +434,9 @@ func (r AccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type AccessRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -666,7 +703,7 @@ func (r AccessRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessRuleEditParams struct {
 	// The rule configuration.
-	Configuration param.Field[AccessRuleEditParamsConfiguration] `json:"configuration,required"`
+	Configuration param.Field[AccessRuleEditParamsConfigurationUnion] `json:"configuration,required"`
 	// The action to apply to a matched request.
 	Mode param.Field[AccessRuleEditParamsMode] `json:"mode,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -682,15 +719,33 @@ func (r AccessRuleEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 // The rule configuration.
+type AccessRuleEditParamsConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the rule.
+	Target param.Field[AccessRuleEditParamsConfigurationTarget] `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r AccessRuleEditParamsConfiguration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleEditParamsConfiguration) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
+}
+
+// The rule configuration.
 //
 // Satisfied by
 // [firewall.AccessRuleEditParamsConfigurationLegacyJhsIPConfiguration],
 // [firewall.AccessRuleEditParamsConfigurationLegacyJhsIPV6Configuration],
 // [firewall.AccessRuleEditParamsConfigurationLegacyJhsCIDRConfiguration],
 // [firewall.AccessRuleEditParamsConfigurationLegacyJhsASNConfiguration],
-// [firewall.AccessRuleEditParamsConfigurationLegacyJhsCountryConfiguration].
-type AccessRuleEditParamsConfiguration interface {
-	implementsFirewallAccessRuleEditParamsConfiguration()
+// [firewall.AccessRuleEditParamsConfigurationLegacyJhsCountryConfiguration],
+// [AccessRuleEditParamsConfiguration].
+type AccessRuleEditParamsConfigurationUnion interface {
+	implementsFirewallAccessRuleEditParamsConfigurationUnion()
 }
 
 type AccessRuleEditParamsConfigurationLegacyJhsIPConfiguration struct {
@@ -706,7 +761,7 @@ func (r AccessRuleEditParamsConfigurationLegacyJhsIPConfiguration) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleEditParamsConfigurationLegacyJhsIPConfiguration) implementsFirewallAccessRuleEditParamsConfiguration() {
+func (r AccessRuleEditParamsConfigurationLegacyJhsIPConfiguration) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
@@ -737,7 +792,7 @@ func (r AccessRuleEditParamsConfigurationLegacyJhsIPV6Configuration) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleEditParamsConfigurationLegacyJhsIPV6Configuration) implementsFirewallAccessRuleEditParamsConfiguration() {
+func (r AccessRuleEditParamsConfigurationLegacyJhsIPV6Configuration) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `ip6` when specifying an
@@ -769,7 +824,7 @@ func (r AccessRuleEditParamsConfigurationLegacyJhsCIDRConfiguration) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleEditParamsConfigurationLegacyJhsCIDRConfiguration) implementsFirewallAccessRuleEditParamsConfiguration() {
+func (r AccessRuleEditParamsConfigurationLegacyJhsCIDRConfiguration) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
@@ -800,7 +855,7 @@ func (r AccessRuleEditParamsConfigurationLegacyJhsASNConfiguration) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleEditParamsConfigurationLegacyJhsASNConfiguration) implementsFirewallAccessRuleEditParamsConfiguration() {
+func (r AccessRuleEditParamsConfigurationLegacyJhsASNConfiguration) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
@@ -832,7 +887,7 @@ func (r AccessRuleEditParamsConfigurationLegacyJhsCountryConfiguration) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleEditParamsConfigurationLegacyJhsCountryConfiguration) implementsFirewallAccessRuleEditParamsConfiguration() {
+func (r AccessRuleEditParamsConfigurationLegacyJhsCountryConfiguration) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `country` when specifying a
@@ -846,6 +901,26 @@ const (
 func (r AccessRuleEditParamsConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bool {
 	switch r {
 	case AccessRuleEditParamsConfigurationLegacyJhsCountryConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the rule.
+type AccessRuleEditParamsConfigurationTarget string
+
+const (
+	AccessRuleEditParamsConfigurationTargetIP      AccessRuleEditParamsConfigurationTarget = "ip"
+	AccessRuleEditParamsConfigurationTargetIp6     AccessRuleEditParamsConfigurationTarget = "ip6"
+	AccessRuleEditParamsConfigurationTargetIPRange AccessRuleEditParamsConfigurationTarget = "ip_range"
+	AccessRuleEditParamsConfigurationTargetASN     AccessRuleEditParamsConfigurationTarget = "asn"
+	AccessRuleEditParamsConfigurationTargetCountry AccessRuleEditParamsConfigurationTarget = "country"
+)
+
+func (r AccessRuleEditParamsConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleEditParamsConfigurationTargetIP, AccessRuleEditParamsConfigurationTargetIp6, AccessRuleEditParamsConfigurationTargetIPRange, AccessRuleEditParamsConfigurationTargetASN, AccessRuleEditParamsConfigurationTargetCountry:
 		return true
 	}
 	return false
@@ -871,9 +946,9 @@ func (r AccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type AccessRuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
@@ -921,9 +996,9 @@ type AccessRuleGetParams struct {
 }
 
 type AccessRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`

@@ -163,6 +163,55 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 }
 
 // 0-RTT session resumption enabled for this zone.
+type SettingEditResponse struct {
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingEditResponseEditable `json:"editable"`
+	// ID of the zone setting.
+	ID SettingEditResponseID `json:"id"`
+	// last time this setting was modified.
+	ModifiedOn time.Time   `json:"modified_on,nullable" format:"date-time"`
+	Value      interface{} `json:"value,required"`
+	// Value of the zone setting. Notes: The interval (in seconds) from when
+	// development mode expires (positive integer) or last expired (negative integer)
+	// for the domain. If development mode has never been enabled, this value is false.
+	TimeRemaining float64 `json:"time_remaining"`
+	// ssl-recommender enrollment setting.
+	Enabled bool                    `json:"enabled"`
+	JSON    settingEditResponseJSON `json:"-"`
+	union   SettingEditResponseUnion
+}
+
+// settingEditResponseJSON contains the JSON metadata for the struct
+// [SettingEditResponse]
+type settingEditResponseJSON struct {
+	Editable      apijson.Field
+	ID            apijson.Field
+	ModifiedOn    apijson.Field
+	Value         apijson.Field
+	TimeRemaining apijson.Field
+	Enabled       apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r settingEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
+	return r.union
+}
+
+// 0-RTT session resumption enabled for this zone.
 //
 // Union satisfied by [zones.ZoneSetting0rtt], [zones.ZoneSettingAdvancedDDoS],
 // [zones.ZoneSettingAlwaysOnline], [zones.ZoneSettingAlwaysUseHTTPS],
@@ -194,13 +243,13 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 // [zones.ZoneSettingTLS1_3], [zones.ZoneSettingTLSClientAuth],
 // [zones.ZoneSettingTrueClientIPHeader], [zones.ZoneSettingWAF],
 // [zones.ZoneSettingWebP] or [zones.ZoneSettingWebsockets].
-type SettingEditResponse interface {
+type SettingEditResponseUnion interface {
 	implementsZonesSettingEditResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SettingEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*SettingEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -928,6 +977,140 @@ func (r SettingEditResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
 	return false
 }
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditResponseEditable bool
+
+const (
+	SettingEditResponseEditableTrue  SettingEditResponseEditable = true
+	SettingEditResponseEditableFalse SettingEditResponseEditable = false
+)
+
+func (r SettingEditResponseEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseEditableTrue, SettingEditResponseEditableFalse:
+		return true
+	}
+	return false
+}
+
+// ID of the zone setting.
+type SettingEditResponseID string
+
+const (
+	SettingEditResponseID0rtt                          SettingEditResponseID = "0rtt"
+	SettingEditResponseIDAdvancedDDoS                  SettingEditResponseID = "advanced_ddos"
+	SettingEditResponseIDAlwaysOnline                  SettingEditResponseID = "always_online"
+	SettingEditResponseIDAlwaysUseHTTPS                SettingEditResponseID = "always_use_https"
+	SettingEditResponseIDAutomaticHTTPSRewrites        SettingEditResponseID = "automatic_https_rewrites"
+	SettingEditResponseIDBrotli                        SettingEditResponseID = "brotli"
+	SettingEditResponseIDBrowserCacheTTL               SettingEditResponseID = "browser_cache_ttl"
+	SettingEditResponseIDBrowserCheck                  SettingEditResponseID = "browser_check"
+	SettingEditResponseIDCacheLevel                    SettingEditResponseID = "cache_level"
+	SettingEditResponseIDChallengeTTL                  SettingEditResponseID = "challenge_ttl"
+	SettingEditResponseIDCiphers                       SettingEditResponseID = "ciphers"
+	SettingEditResponseIDCNAMEFlattening               SettingEditResponseID = "cname_flattening"
+	SettingEditResponseIDDevelopmentMode               SettingEditResponseID = "development_mode"
+	SettingEditResponseIDEarlyHints                    SettingEditResponseID = "early_hints"
+	SettingEditResponseIDEdgeCacheTTL                  SettingEditResponseID = "edge_cache_ttl"
+	SettingEditResponseIDEmailObfuscation              SettingEditResponseID = "email_obfuscation"
+	SettingEditResponseIDH2Prioritization              SettingEditResponseID = "h2_prioritization"
+	SettingEditResponseIDHotlinkProtection             SettingEditResponseID = "hotlink_protection"
+	SettingEditResponseIDHTTP2                         SettingEditResponseID = "http2"
+	SettingEditResponseIDHTTP3                         SettingEditResponseID = "http3"
+	SettingEditResponseIDImageResizing                 SettingEditResponseID = "image_resizing"
+	SettingEditResponseIDIPGeolocation                 SettingEditResponseID = "ip_geolocation"
+	SettingEditResponseIDIPV6                          SettingEditResponseID = "ipv6"
+	SettingEditResponseIDMaxUpload                     SettingEditResponseID = "max_upload"
+	SettingEditResponseIDMinTLSVersion                 SettingEditResponseID = "min_tls_version"
+	SettingEditResponseIDMinify                        SettingEditResponseID = "minify"
+	SettingEditResponseIDMirage                        SettingEditResponseID = "mirage"
+	SettingEditResponseIDMobileRedirect                SettingEditResponseID = "mobile_redirect"
+	SettingEditResponseIDNEL                           SettingEditResponseID = "nel"
+	SettingEditResponseIDOpportunisticEncryption       SettingEditResponseID = "opportunistic_encryption"
+	SettingEditResponseIDOpportunisticOnion            SettingEditResponseID = "opportunistic_onion"
+	SettingEditResponseIDOrangeToOrange                SettingEditResponseID = "orange_to_orange"
+	SettingEditResponseIDOriginErrorPagePassThru       SettingEditResponseID = "origin_error_page_pass_thru"
+	SettingEditResponseIDPolish                        SettingEditResponseID = "polish"
+	SettingEditResponseIDPrefetchPreload               SettingEditResponseID = "prefetch_preload"
+	SettingEditResponseIDProxyReadTimeout              SettingEditResponseID = "proxy_read_timeout"
+	SettingEditResponseIDPseudoIPV4                    SettingEditResponseID = "pseudo_ipv4"
+	SettingEditResponseIDResponseBuffering             SettingEditResponseID = "response_buffering"
+	SettingEditResponseIDRocketLoader                  SettingEditResponseID = "rocket_loader"
+	SettingEditResponseIDAutomaticPlatformOptimization SettingEditResponseID = "automatic_platform_optimization"
+	SettingEditResponseIDSecurityHeader                SettingEditResponseID = "security_header"
+	SettingEditResponseIDSecurityLevel                 SettingEditResponseID = "security_level"
+	SettingEditResponseIDServerSideExclude             SettingEditResponseID = "server_side_exclude"
+	SettingEditResponseIDSha1Support                   SettingEditResponseID = "sha1_support"
+	SettingEditResponseIDSortQueryStringForCache       SettingEditResponseID = "sort_query_string_for_cache"
+	SettingEditResponseIDSSL                           SettingEditResponseID = "ssl"
+	SettingEditResponseIDSSLRecommender                SettingEditResponseID = "ssl_recommender"
+	SettingEditResponseIDTLS1_2Only                    SettingEditResponseID = "tls_1_2_only"
+	SettingEditResponseIDTLS1_3                        SettingEditResponseID = "tls_1_3"
+	SettingEditResponseIDTLSClientAuth                 SettingEditResponseID = "tls_client_auth"
+	SettingEditResponseIDTrueClientIPHeader            SettingEditResponseID = "true_client_ip_header"
+	SettingEditResponseIDWAF                           SettingEditResponseID = "waf"
+	SettingEditResponseIDWebP                          SettingEditResponseID = "webp"
+	SettingEditResponseIDWebsockets                    SettingEditResponseID = "websockets"
+)
+
+func (r SettingEditResponseID) IsKnown() bool {
+	switch r {
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMinify, SettingEditResponseIDMirage, SettingEditResponseIDMobileRedirect, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+		return true
+	}
+	return false
+}
+
+// 0-RTT session resumption enabled for this zone.
+type SettingGetResponse struct {
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingGetResponseEditable `json:"editable"`
+	// ID of the zone setting.
+	ID SettingGetResponseID `json:"id"`
+	// last time this setting was modified.
+	ModifiedOn time.Time   `json:"modified_on,nullable" format:"date-time"`
+	Value      interface{} `json:"value,required"`
+	// Value of the zone setting. Notes: The interval (in seconds) from when
+	// development mode expires (positive integer) or last expired (negative integer)
+	// for the domain. If development mode has never been enabled, this value is false.
+	TimeRemaining float64 `json:"time_remaining"`
+	// ssl-recommender enrollment setting.
+	Enabled bool                   `json:"enabled"`
+	JSON    settingGetResponseJSON `json:"-"`
+	union   SettingGetResponseUnion
+}
+
+// settingGetResponseJSON contains the JSON metadata for the struct
+// [SettingGetResponse]
+type settingGetResponseJSON struct {
+	Editable      apijson.Field
+	ID            apijson.Field
+	ModifiedOn    apijson.Field
+	Value         apijson.Field
+	TimeRemaining apijson.Field
+	Enabled       apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r settingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
+	return r.union
+}
+
 // 0-RTT session resumption enabled for this zone.
 //
 // Union satisfied by [zones.ZoneSetting0rtt], [zones.ZoneSettingAdvancedDDoS],
@@ -960,13 +1143,13 @@ func (r SettingEditResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
 // [zones.ZoneSettingTLS1_3], [zones.ZoneSettingTLSClientAuth],
 // [zones.ZoneSettingTrueClientIPHeader], [zones.ZoneSettingWAF],
 // [zones.ZoneSettingWebP] or [zones.ZoneSettingWebsockets].
-type SettingGetResponse interface {
+type SettingGetResponseUnion interface {
 	implementsZonesSettingGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SettingGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*SettingGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1694,16 +1877,116 @@ func (r SettingGetResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
 	return false
 }
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingGetResponseEditable bool
+
+const (
+	SettingGetResponseEditableTrue  SettingGetResponseEditable = true
+	SettingGetResponseEditableFalse SettingGetResponseEditable = false
+)
+
+func (r SettingGetResponseEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseEditableTrue, SettingGetResponseEditableFalse:
+		return true
+	}
+	return false
+}
+
+// ID of the zone setting.
+type SettingGetResponseID string
+
+const (
+	SettingGetResponseID0rtt                          SettingGetResponseID = "0rtt"
+	SettingGetResponseIDAdvancedDDoS                  SettingGetResponseID = "advanced_ddos"
+	SettingGetResponseIDAlwaysOnline                  SettingGetResponseID = "always_online"
+	SettingGetResponseIDAlwaysUseHTTPS                SettingGetResponseID = "always_use_https"
+	SettingGetResponseIDAutomaticHTTPSRewrites        SettingGetResponseID = "automatic_https_rewrites"
+	SettingGetResponseIDBrotli                        SettingGetResponseID = "brotli"
+	SettingGetResponseIDBrowserCacheTTL               SettingGetResponseID = "browser_cache_ttl"
+	SettingGetResponseIDBrowserCheck                  SettingGetResponseID = "browser_check"
+	SettingGetResponseIDCacheLevel                    SettingGetResponseID = "cache_level"
+	SettingGetResponseIDChallengeTTL                  SettingGetResponseID = "challenge_ttl"
+	SettingGetResponseIDCiphers                       SettingGetResponseID = "ciphers"
+	SettingGetResponseIDCNAMEFlattening               SettingGetResponseID = "cname_flattening"
+	SettingGetResponseIDDevelopmentMode               SettingGetResponseID = "development_mode"
+	SettingGetResponseIDEarlyHints                    SettingGetResponseID = "early_hints"
+	SettingGetResponseIDEdgeCacheTTL                  SettingGetResponseID = "edge_cache_ttl"
+	SettingGetResponseIDEmailObfuscation              SettingGetResponseID = "email_obfuscation"
+	SettingGetResponseIDH2Prioritization              SettingGetResponseID = "h2_prioritization"
+	SettingGetResponseIDHotlinkProtection             SettingGetResponseID = "hotlink_protection"
+	SettingGetResponseIDHTTP2                         SettingGetResponseID = "http2"
+	SettingGetResponseIDHTTP3                         SettingGetResponseID = "http3"
+	SettingGetResponseIDImageResizing                 SettingGetResponseID = "image_resizing"
+	SettingGetResponseIDIPGeolocation                 SettingGetResponseID = "ip_geolocation"
+	SettingGetResponseIDIPV6                          SettingGetResponseID = "ipv6"
+	SettingGetResponseIDMaxUpload                     SettingGetResponseID = "max_upload"
+	SettingGetResponseIDMinTLSVersion                 SettingGetResponseID = "min_tls_version"
+	SettingGetResponseIDMinify                        SettingGetResponseID = "minify"
+	SettingGetResponseIDMirage                        SettingGetResponseID = "mirage"
+	SettingGetResponseIDMobileRedirect                SettingGetResponseID = "mobile_redirect"
+	SettingGetResponseIDNEL                           SettingGetResponseID = "nel"
+	SettingGetResponseIDOpportunisticEncryption       SettingGetResponseID = "opportunistic_encryption"
+	SettingGetResponseIDOpportunisticOnion            SettingGetResponseID = "opportunistic_onion"
+	SettingGetResponseIDOrangeToOrange                SettingGetResponseID = "orange_to_orange"
+	SettingGetResponseIDOriginErrorPagePassThru       SettingGetResponseID = "origin_error_page_pass_thru"
+	SettingGetResponseIDPolish                        SettingGetResponseID = "polish"
+	SettingGetResponseIDPrefetchPreload               SettingGetResponseID = "prefetch_preload"
+	SettingGetResponseIDProxyReadTimeout              SettingGetResponseID = "proxy_read_timeout"
+	SettingGetResponseIDPseudoIPV4                    SettingGetResponseID = "pseudo_ipv4"
+	SettingGetResponseIDResponseBuffering             SettingGetResponseID = "response_buffering"
+	SettingGetResponseIDRocketLoader                  SettingGetResponseID = "rocket_loader"
+	SettingGetResponseIDAutomaticPlatformOptimization SettingGetResponseID = "automatic_platform_optimization"
+	SettingGetResponseIDSecurityHeader                SettingGetResponseID = "security_header"
+	SettingGetResponseIDSecurityLevel                 SettingGetResponseID = "security_level"
+	SettingGetResponseIDServerSideExclude             SettingGetResponseID = "server_side_exclude"
+	SettingGetResponseIDSha1Support                   SettingGetResponseID = "sha1_support"
+	SettingGetResponseIDSortQueryStringForCache       SettingGetResponseID = "sort_query_string_for_cache"
+	SettingGetResponseIDSSL                           SettingGetResponseID = "ssl"
+	SettingGetResponseIDSSLRecommender                SettingGetResponseID = "ssl_recommender"
+	SettingGetResponseIDTLS1_2Only                    SettingGetResponseID = "tls_1_2_only"
+	SettingGetResponseIDTLS1_3                        SettingGetResponseID = "tls_1_3"
+	SettingGetResponseIDTLSClientAuth                 SettingGetResponseID = "tls_client_auth"
+	SettingGetResponseIDTrueClientIPHeader            SettingGetResponseID = "true_client_ip_header"
+	SettingGetResponseIDWAF                           SettingGetResponseID = "waf"
+	SettingGetResponseIDWebP                          SettingGetResponseID = "webp"
+	SettingGetResponseIDWebsockets                    SettingGetResponseID = "websockets"
+)
+
+func (r SettingGetResponseID) IsKnown() bool {
+	switch r {
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMinify, SettingGetResponseIDMirage, SettingGetResponseIDMobileRedirect, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+		return true
+	}
+	return false
+}
+
 type SettingEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// One or more zone setting objects. Must contain an ID and a value.
-	Items param.Field[[]SettingEditParamsItem] `json:"items,required"`
+	Items param.Field[[]SettingEditParamsItemUnion] `json:"items,required"`
 }
 
 func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// 0-RTT session resumption enabled for this zone.
+type SettingEditParamsItem struct {
+	// ID of the zone setting.
+	ID    param.Field[SettingEditParamsItemsID] `json:"id"`
+	Value param.Field[interface{}]              `json:"value,required"`
+	// ssl-recommender enrollment setting.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r SettingEditParamsItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingEditParamsItem) implementsZonesSettingEditParamsItemUnion() {}
 
 // 0-RTT session resumption enabled for this zone.
 //
@@ -1740,9 +2023,10 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 // [zones.SettingEditParamsItemsZonesTLS1_2Only], [zones.ZoneSettingTLS1_3Param],
 // [zones.ZoneSettingTLSClientAuthParam],
 // [zones.ZoneSettingTrueClientIPHeaderParam], [zones.ZoneSettingWAFParam],
-// [zones.ZoneSettingWebPParam], [zones.ZoneSettingWebsocketsParam].
-type SettingEditParamsItem interface {
-	implementsZonesSettingEditParamsItem()
+// [zones.ZoneSettingWebPParam], [zones.ZoneSettingWebsocketsParam],
+// [SettingEditParamsItem].
+type SettingEditParamsItemUnion interface {
+	implementsZonesSettingEditParamsItemUnion()
 }
 
 // Whether or not cname flattening is on.
@@ -1757,7 +2041,7 @@ func (r SettingEditParamsItemsZonesCNAMEFlattening) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsItemsZonesCNAMEFlattening) implementsZonesSettingEditParamsItem() {}
+func (r SettingEditParamsItemsZonesCNAMEFlattening) implementsZonesSettingEditParamsItemUnion() {}
 
 // How to flatten the cname destination.
 type SettingEditParamsItemsZonesCNAMEFlatteningID string
@@ -1820,7 +2104,7 @@ func (r SettingEditParamsItemsZonesEdgeCacheTTL) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsItemsZonesEdgeCacheTTL) implementsZonesSettingEditParamsItem() {}
+func (r SettingEditParamsItemsZonesEdgeCacheTTL) implementsZonesSettingEditParamsItemUnion() {}
 
 // ID of the zone setting.
 type SettingEditParamsItemsZonesEdgeCacheTTLID string
@@ -1901,7 +2185,7 @@ func (r SettingEditParamsItemsZonesMaxUpload) MarshalJSON() (data []byte, err er
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsItemsZonesMaxUpload) implementsZonesSettingEditParamsItem() {}
+func (r SettingEditParamsItemsZonesMaxUpload) implementsZonesSettingEditParamsItemUnion() {}
 
 // identifier of the zone setting.
 type SettingEditParamsItemsZonesMaxUploadID string
@@ -1966,7 +2250,7 @@ func (r SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimization) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimization) implementsZonesSettingEditParamsItem() {
+func (r SettingEditParamsItemsZonesSchemasAutomaticPlatformOptimization) implementsZonesSettingEditParamsItemUnion() {
 }
 
 // ID of the zone setting.
@@ -2013,7 +2297,7 @@ func (r SettingEditParamsItemsZonesSha1Support) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsItemsZonesSha1Support) implementsZonesSettingEditParamsItem() {}
+func (r SettingEditParamsItemsZonesSha1Support) implementsZonesSettingEditParamsItemUnion() {}
 
 // Zone setting identifier.
 type SettingEditParamsItemsZonesSha1SupportID string
@@ -2075,7 +2359,7 @@ func (r SettingEditParamsItemsZonesTLS1_2Only) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsItemsZonesTLS1_2Only) implementsZonesSettingEditParamsItem() {}
+func (r SettingEditParamsItemsZonesTLS1_2Only) implementsZonesSettingEditParamsItemUnion() {}
 
 // Zone setting identifier.
 type SettingEditParamsItemsZonesTLS1_2OnlyID string
@@ -2120,6 +2404,91 @@ const (
 func (r SettingEditParamsItemsZonesTLS1_2OnlyEditable) IsKnown() bool {
 	switch r {
 	case SettingEditParamsItemsZonesTLS1_2OnlyEditableTrue, SettingEditParamsItemsZonesTLS1_2OnlyEditableFalse:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditParamsItemsEditable bool
+
+const (
+	SettingEditParamsItemsEditableTrue  SettingEditParamsItemsEditable = true
+	SettingEditParamsItemsEditableFalse SettingEditParamsItemsEditable = false
+)
+
+func (r SettingEditParamsItemsEditable) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsEditableTrue, SettingEditParamsItemsEditableFalse:
+		return true
+	}
+	return false
+}
+
+// ID of the zone setting.
+type SettingEditParamsItemsID string
+
+const (
+	SettingEditParamsItemsID0rtt                          SettingEditParamsItemsID = "0rtt"
+	SettingEditParamsItemsIDAdvancedDDoS                  SettingEditParamsItemsID = "advanced_ddos"
+	SettingEditParamsItemsIDAlwaysOnline                  SettingEditParamsItemsID = "always_online"
+	SettingEditParamsItemsIDAlwaysUseHTTPS                SettingEditParamsItemsID = "always_use_https"
+	SettingEditParamsItemsIDAutomaticHTTPSRewrites        SettingEditParamsItemsID = "automatic_https_rewrites"
+	SettingEditParamsItemsIDBrotli                        SettingEditParamsItemsID = "brotli"
+	SettingEditParamsItemsIDBrowserCacheTTL               SettingEditParamsItemsID = "browser_cache_ttl"
+	SettingEditParamsItemsIDBrowserCheck                  SettingEditParamsItemsID = "browser_check"
+	SettingEditParamsItemsIDCacheLevel                    SettingEditParamsItemsID = "cache_level"
+	SettingEditParamsItemsIDChallengeTTL                  SettingEditParamsItemsID = "challenge_ttl"
+	SettingEditParamsItemsIDCiphers                       SettingEditParamsItemsID = "ciphers"
+	SettingEditParamsItemsIDCNAMEFlattening               SettingEditParamsItemsID = "cname_flattening"
+	SettingEditParamsItemsIDDevelopmentMode               SettingEditParamsItemsID = "development_mode"
+	SettingEditParamsItemsIDEarlyHints                    SettingEditParamsItemsID = "early_hints"
+	SettingEditParamsItemsIDEdgeCacheTTL                  SettingEditParamsItemsID = "edge_cache_ttl"
+	SettingEditParamsItemsIDEmailObfuscation              SettingEditParamsItemsID = "email_obfuscation"
+	SettingEditParamsItemsIDH2Prioritization              SettingEditParamsItemsID = "h2_prioritization"
+	SettingEditParamsItemsIDHotlinkProtection             SettingEditParamsItemsID = "hotlink_protection"
+	SettingEditParamsItemsIDHTTP2                         SettingEditParamsItemsID = "http2"
+	SettingEditParamsItemsIDHTTP3                         SettingEditParamsItemsID = "http3"
+	SettingEditParamsItemsIDImageResizing                 SettingEditParamsItemsID = "image_resizing"
+	SettingEditParamsItemsIDIPGeolocation                 SettingEditParamsItemsID = "ip_geolocation"
+	SettingEditParamsItemsIDIPV6                          SettingEditParamsItemsID = "ipv6"
+	SettingEditParamsItemsIDMaxUpload                     SettingEditParamsItemsID = "max_upload"
+	SettingEditParamsItemsIDMinTLSVersion                 SettingEditParamsItemsID = "min_tls_version"
+	SettingEditParamsItemsIDMinify                        SettingEditParamsItemsID = "minify"
+	SettingEditParamsItemsIDMirage                        SettingEditParamsItemsID = "mirage"
+	SettingEditParamsItemsIDMobileRedirect                SettingEditParamsItemsID = "mobile_redirect"
+	SettingEditParamsItemsIDNEL                           SettingEditParamsItemsID = "nel"
+	SettingEditParamsItemsIDOpportunisticEncryption       SettingEditParamsItemsID = "opportunistic_encryption"
+	SettingEditParamsItemsIDOpportunisticOnion            SettingEditParamsItemsID = "opportunistic_onion"
+	SettingEditParamsItemsIDOrangeToOrange                SettingEditParamsItemsID = "orange_to_orange"
+	SettingEditParamsItemsIDOriginErrorPagePassThru       SettingEditParamsItemsID = "origin_error_page_pass_thru"
+	SettingEditParamsItemsIDPolish                        SettingEditParamsItemsID = "polish"
+	SettingEditParamsItemsIDPrefetchPreload               SettingEditParamsItemsID = "prefetch_preload"
+	SettingEditParamsItemsIDProxyReadTimeout              SettingEditParamsItemsID = "proxy_read_timeout"
+	SettingEditParamsItemsIDPseudoIPV4                    SettingEditParamsItemsID = "pseudo_ipv4"
+	SettingEditParamsItemsIDResponseBuffering             SettingEditParamsItemsID = "response_buffering"
+	SettingEditParamsItemsIDRocketLoader                  SettingEditParamsItemsID = "rocket_loader"
+	SettingEditParamsItemsIDAutomaticPlatformOptimization SettingEditParamsItemsID = "automatic_platform_optimization"
+	SettingEditParamsItemsIDSecurityHeader                SettingEditParamsItemsID = "security_header"
+	SettingEditParamsItemsIDSecurityLevel                 SettingEditParamsItemsID = "security_level"
+	SettingEditParamsItemsIDServerSideExclude             SettingEditParamsItemsID = "server_side_exclude"
+	SettingEditParamsItemsIDSha1Support                   SettingEditParamsItemsID = "sha1_support"
+	SettingEditParamsItemsIDSortQueryStringForCache       SettingEditParamsItemsID = "sort_query_string_for_cache"
+	SettingEditParamsItemsIDSSL                           SettingEditParamsItemsID = "ssl"
+	SettingEditParamsItemsIDSSLRecommender                SettingEditParamsItemsID = "ssl_recommender"
+	SettingEditParamsItemsIDTLS1_2Only                    SettingEditParamsItemsID = "tls_1_2_only"
+	SettingEditParamsItemsIDTLS1_3                        SettingEditParamsItemsID = "tls_1_3"
+	SettingEditParamsItemsIDTLSClientAuth                 SettingEditParamsItemsID = "tls_client_auth"
+	SettingEditParamsItemsIDTrueClientIPHeader            SettingEditParamsItemsID = "true_client_ip_header"
+	SettingEditParamsItemsIDWAF                           SettingEditParamsItemsID = "waf"
+	SettingEditParamsItemsIDWebP                          SettingEditParamsItemsID = "webp"
+	SettingEditParamsItemsIDWebsockets                    SettingEditParamsItemsID = "websockets"
+)
+
+func (r SettingEditParamsItemsID) IsKnown() bool {
+	switch r {
+	case SettingEditParamsItemsID0rtt, SettingEditParamsItemsIDAdvancedDDoS, SettingEditParamsItemsIDAlwaysOnline, SettingEditParamsItemsIDAlwaysUseHTTPS, SettingEditParamsItemsIDAutomaticHTTPSRewrites, SettingEditParamsItemsIDBrotli, SettingEditParamsItemsIDBrowserCacheTTL, SettingEditParamsItemsIDBrowserCheck, SettingEditParamsItemsIDCacheLevel, SettingEditParamsItemsIDChallengeTTL, SettingEditParamsItemsIDCiphers, SettingEditParamsItemsIDCNAMEFlattening, SettingEditParamsItemsIDDevelopmentMode, SettingEditParamsItemsIDEarlyHints, SettingEditParamsItemsIDEdgeCacheTTL, SettingEditParamsItemsIDEmailObfuscation, SettingEditParamsItemsIDH2Prioritization, SettingEditParamsItemsIDHotlinkProtection, SettingEditParamsItemsIDHTTP2, SettingEditParamsItemsIDHTTP3, SettingEditParamsItemsIDImageResizing, SettingEditParamsItemsIDIPGeolocation, SettingEditParamsItemsIDIPV6, SettingEditParamsItemsIDMaxUpload, SettingEditParamsItemsIDMinTLSVersion, SettingEditParamsItemsIDMinify, SettingEditParamsItemsIDMirage, SettingEditParamsItemsIDMobileRedirect, SettingEditParamsItemsIDNEL, SettingEditParamsItemsIDOpportunisticEncryption, SettingEditParamsItemsIDOpportunisticOnion, SettingEditParamsItemsIDOrangeToOrange, SettingEditParamsItemsIDOriginErrorPagePassThru, SettingEditParamsItemsIDPolish, SettingEditParamsItemsIDPrefetchPreload, SettingEditParamsItemsIDProxyReadTimeout, SettingEditParamsItemsIDPseudoIPV4, SettingEditParamsItemsIDResponseBuffering, SettingEditParamsItemsIDRocketLoader, SettingEditParamsItemsIDAutomaticPlatformOptimization, SettingEditParamsItemsIDSecurityHeader, SettingEditParamsItemsIDSecurityLevel, SettingEditParamsItemsIDServerSideExclude, SettingEditParamsItemsIDSha1Support, SettingEditParamsItemsIDSortQueryStringForCache, SettingEditParamsItemsIDSSL, SettingEditParamsItemsIDSSLRecommender, SettingEditParamsItemsIDTLS1_2Only, SettingEditParamsItemsIDTLS1_3, SettingEditParamsItemsIDTLSClientAuth, SettingEditParamsItemsIDTrueClientIPHeader, SettingEditParamsItemsIDWAF, SettingEditParamsItemsIDWebP, SettingEditParamsItemsIDWebsockets:
 		return true
 	}
 	return false

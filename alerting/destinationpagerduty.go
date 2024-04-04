@@ -48,7 +48,7 @@ func (r *DestinationPagerdutyService) New(ctx context.Context, body DestinationP
 }
 
 // Deletes all the PagerDuty Services connected to the account.
-func (r *DestinationPagerdutyService) Delete(ctx context.Context, body DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *DestinationPagerdutyDeleteResponse, err error) {
+func (r *DestinationPagerdutyService) Delete(ctx context.Context, body DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *DestinationPagerdutyDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationPagerdutyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", body.AccountID)
@@ -135,13 +135,13 @@ func (r destinationPagerdutyNewResponseJSON) RawJSON() string {
 
 // Union satisfied by [alerting.DestinationPagerdutyDeleteResponseUnknown],
 // [alerting.DestinationPagerdutyDeleteResponseArray] or [shared.UnionString].
-type DestinationPagerdutyDeleteResponse interface {
-	ImplementsAlertingDestinationPagerdutyDeleteResponse()
+type DestinationPagerdutyDeleteResponseUnion interface {
+	ImplementsAlertingDestinationPagerdutyDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DestinationPagerdutyDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*DestinationPagerdutyDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -156,7 +156,7 @@ func init() {
 
 type DestinationPagerdutyDeleteResponseArray []interface{}
 
-func (r DestinationPagerdutyDeleteResponseArray) ImplementsAlertingDestinationPagerdutyDeleteResponse() {
+func (r DestinationPagerdutyDeleteResponseArray) ImplementsAlertingDestinationPagerdutyDeleteResponseUnion() {
 }
 
 type DestinationPagerdutyLinkResponse struct {
@@ -235,9 +235,9 @@ type DestinationPagerdutyDeleteParams struct {
 }
 
 type DestinationPagerdutyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo              `json:"errors,required"`
-	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   DestinationPagerdutyDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                   `json:"errors,required"`
+	Messages []shared.ResponseInfo                   `json:"messages,required"`
+	Result   DestinationPagerdutyDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationPagerdutyDeleteResponseEnvelopeResultInfo `json:"result_info"`

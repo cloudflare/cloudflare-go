@@ -163,7 +163,7 @@ func (r ZoneSettingWebPParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingWebPParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingWebPParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingWebPEditParams struct {
 	// Identifier
