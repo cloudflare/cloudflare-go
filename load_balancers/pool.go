@@ -40,7 +40,7 @@ func NewPoolService(opts ...option.RequestOption) (r *PoolService) {
 }
 
 // Create a new pool.
-func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...option.RequestOption) (res *user.LoadBalancingPool, err error) {
+func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...option.RequestOption) (res *user.Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
@@ -53,7 +53,7 @@ func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...opt
 }
 
 // Modify a configured pool.
-func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpdateParams, opts ...option.RequestOption) (res *user.LoadBalancingPool, err error) {
+func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpdateParams, opts ...option.RequestOption) (res *user.Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
@@ -66,7 +66,7 @@ func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpda
 }
 
 // List configured pools.
-func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.LoadBalancingPool], err error) {
+func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.Pool], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -84,7 +84,7 @@ func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...o
 }
 
 // List configured pools.
-func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.LoadBalancingPool] {
+func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Pool] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -102,7 +102,7 @@ func (r *PoolService) Delete(ctx context.Context, poolID string, params PoolDele
 }
 
 // Apply changes to an existing pool, overwriting the supplied properties.
-func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *user.LoadBalancingPool, err error) {
+func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *user.Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
@@ -115,7 +115,7 @@ func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditPa
 }
 
 // Fetch a single configured pool.
-func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParams, opts ...option.RequestOption) (res *user.LoadBalancingPool, err error) {
+func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParams, opts ...option.RequestOption) (res *user.Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", query.AccountID, poolID)
@@ -395,9 +395,9 @@ func (r PoolNewParamsOriginSteeringPolicy) IsKnown() bool {
 }
 
 type PoolNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   user.LoadBalancingPool `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Pool             `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolNewResponseEnvelopeJSON    `json:"-"`
@@ -719,9 +719,9 @@ func (r PoolUpdateParamsOriginSteeringPolicy) IsKnown() bool {
 }
 
 type PoolUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   user.LoadBalancingPool `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Pool             `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1112,9 +1112,9 @@ func (r PoolEditParamsOriginsHeader) MarshalJSON() (data []byte, err error) {
 }
 
 type PoolEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   user.LoadBalancingPool `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Pool             `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolEditResponseEnvelopeJSON    `json:"-"`
@@ -1160,9 +1160,9 @@ type PoolGetParams struct {
 }
 
 type PoolGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   user.LoadBalancingPool `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Pool             `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolGetResponseEnvelopeJSON    `json:"-"`

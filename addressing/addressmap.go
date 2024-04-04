@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // AddressMapService contains methods and other services that help with interacting
@@ -77,7 +79,7 @@ func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMap
 
 // Delete a particular address map owned by the account. An Address Map must be
 // disabled before it can be deleted.
-func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, params AddressMapDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
+func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, params AddressMapDeleteParams, opts ...option.RequestOption) (res *AddressMapDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
@@ -290,6 +292,31 @@ func (r AddressMapNewResponseMembershipsKind) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [addressing.AddressMapDeleteResponseUnknown],
+// [addressing.AddressMapDeleteResponseArray] or [shared.UnionString].
+type AddressMapDeleteResponse interface {
+	ImplementsAddressingAddressMapDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AddressMapDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AddressMapDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type AddressMapDeleteResponseArray []interface{}
+
+func (r AddressMapDeleteResponseArray) ImplementsAddressingAddressMapDeleteResponse() {}
+
 type AddressMapGetResponse struct {
 	// Identifier
 	ID string `json:"id"`
@@ -490,9 +517,9 @@ func (r AddressMapDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   AddressMapDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapDeleteResponseEnvelopeResultInfo `json:"result_info"`

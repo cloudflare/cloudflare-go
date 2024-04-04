@@ -42,7 +42,7 @@ func NewFirewallAccessRuleService(opts ...option.RequestOption) (r *FirewallAcce
 //
 // Note: To create an IP Access rule that applies to a specific zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *FirewallAccessRuleService) New(ctx context.Context, body FirewallAccessRuleNewParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
+func (r *FirewallAccessRuleService) New(ctx context.Context, body FirewallAccessRuleNewParams, opts ...option.RequestOption) (res *AccessRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAccessRuleNewResponseEnvelope
 	path := "user/firewall/access_rules/rules"
@@ -56,7 +56,7 @@ func (r *FirewallAccessRuleService) New(ctx context.Context, body FirewallAccess
 
 // Fetches IP Access rules of the user. You can filter the results using several
 // optional parameters.
-func (r *FirewallAccessRuleService) List(ctx context.Context, query FirewallAccessRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallRule], err error) {
+func (r *FirewallAccessRuleService) List(ctx context.Context, query FirewallAccessRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -75,7 +75,7 @@ func (r *FirewallAccessRuleService) List(ctx context.Context, query FirewallAcce
 
 // Fetches IP Access rules of the user. You can filter the results using several
 // optional parameters.
-func (r *FirewallAccessRuleService) ListAutoPaging(ctx context.Context, query FirewallAccessRuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallRule] {
+func (r *FirewallAccessRuleService) ListAutoPaging(ctx context.Context, query FirewallAccessRuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessRule] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -96,7 +96,7 @@ func (r *FirewallAccessRuleService) Delete(ctx context.Context, identifier strin
 
 // Updates an IP Access rule defined at the user level. You can only update the
 // rule action (`mode` parameter) and notes.
-func (r *FirewallAccessRuleService) Edit(ctx context.Context, identifier string, body FirewallAccessRuleEditParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
+func (r *FirewallAccessRuleService) Edit(ctx context.Context, identifier string, body FirewallAccessRuleEditParams, opts ...option.RequestOption) (res *AccessRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAccessRuleEditResponseEnvelope
 	path := fmt.Sprintf("user/firewall/access_rules/rules/%s", identifier)
@@ -108,26 +108,26 @@ func (r *FirewallAccessRuleService) Edit(ctx context.Context, identifier string,
 	return
 }
 
-type FirewallRule struct {
+type AccessRule struct {
 	// The unique identifier of the IP Access rule.
 	ID string `json:"id,required"`
 	// The available actions that a rule can apply to a matched request.
-	AllowedModes []FirewallRuleAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []AccessRuleAllowedMode `json:"allowed_modes,required"`
 	// The rule configuration.
-	Configuration FirewallRuleConfiguration `json:"configuration,required"`
+	Configuration AccessRuleConfiguration `json:"configuration,required"`
 	// The action to apply to a matched request.
-	Mode FirewallRuleMode `json:"mode,required"`
+	Mode AccessRuleMode `json:"mode,required"`
 	// The timestamp of when the rule was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// The timestamp of when the rule was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// An informative summary of the rule, typically used as a reminder or explanation.
-	Notes string           `json:"notes"`
-	JSON  firewallRuleJSON `json:"-"`
+	Notes string         `json:"notes"`
+	JSON  accessRuleJSON `json:"-"`
 }
 
-// firewallRuleJSON contains the JSON metadata for the struct [FirewallRule]
-type firewallRuleJSON struct {
+// accessRuleJSON contains the JSON metadata for the struct [AccessRule]
+type accessRuleJSON struct {
 	ID            apijson.Field
 	AllowedModes  apijson.Field
 	Configuration apijson.Field
@@ -139,28 +139,28 @@ type firewallRuleJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *FirewallRule) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallRuleJSON) RawJSON() string {
+func (r accessRuleJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action to apply to a matched request.
-type FirewallRuleAllowedMode string
+type AccessRuleAllowedMode string
 
 const (
-	FirewallRuleAllowedModeBlock            FirewallRuleAllowedMode = "block"
-	FirewallRuleAllowedModeChallenge        FirewallRuleAllowedMode = "challenge"
-	FirewallRuleAllowedModeWhitelist        FirewallRuleAllowedMode = "whitelist"
-	FirewallRuleAllowedModeJsChallenge      FirewallRuleAllowedMode = "js_challenge"
-	FirewallRuleAllowedModeManagedChallenge FirewallRuleAllowedMode = "managed_challenge"
+	AccessRuleAllowedModeBlock            AccessRuleAllowedMode = "block"
+	AccessRuleAllowedModeChallenge        AccessRuleAllowedMode = "challenge"
+	AccessRuleAllowedModeWhitelist        AccessRuleAllowedMode = "whitelist"
+	AccessRuleAllowedModeJsChallenge      AccessRuleAllowedMode = "js_challenge"
+	AccessRuleAllowedModeManagedChallenge AccessRuleAllowedMode = "managed_challenge"
 )
 
-func (r FirewallRuleAllowedMode) IsKnown() bool {
+func (r AccessRuleAllowedMode) IsKnown() bool {
 	switch r {
-	case FirewallRuleAllowedModeBlock, FirewallRuleAllowedModeChallenge, FirewallRuleAllowedModeWhitelist, FirewallRuleAllowedModeJsChallenge, FirewallRuleAllowedModeManagedChallenge:
+	case AccessRuleAllowedModeBlock, AccessRuleAllowedModeChallenge, AccessRuleAllowedModeWhitelist, AccessRuleAllowedModeJsChallenge, AccessRuleAllowedModeManagedChallenge:
 		return true
 	}
 	return false
@@ -168,284 +168,280 @@ func (r FirewallRuleAllowedMode) IsKnown() bool {
 
 // The rule configuration.
 //
-// Union satisfied by [user.FirewallRuleConfigurationLegacyJhsIPConfiguration],
-// [user.FirewallRuleConfigurationLegacyJhsIPV6Configuration],
-// [user.FirewallRuleConfigurationLegacyJhsCIDRConfiguration],
-// [user.FirewallRuleConfigurationLegacyJhsASNConfiguration] or
-// [user.FirewallRuleConfigurationLegacyJhsCountryConfiguration].
-type FirewallRuleConfiguration interface {
-	implementsUserFirewallRuleConfiguration()
+// Union satisfied by [user.AccessRuleConfigurationLegacyJhsIPConfiguration],
+// [user.AccessRuleConfigurationLegacyJhsIPV6Configuration],
+// [user.AccessRuleConfigurationLegacyJhsCIDRConfiguration],
+// [user.AccessRuleConfigurationLegacyJhsASNConfiguration] or
+// [user.AccessRuleConfigurationLegacyJhsCountryConfiguration].
+type AccessRuleConfiguration interface {
+	implementsUserAccessRuleConfiguration()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallRuleConfiguration)(nil)).Elem(),
+		reflect.TypeOf((*AccessRuleConfiguration)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(FirewallRuleConfigurationLegacyJhsIPConfiguration{}),
+			Type:       reflect.TypeOf(AccessRuleConfigurationLegacyJhsIPConfiguration{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(FirewallRuleConfigurationLegacyJhsIPV6Configuration{}),
+			Type:       reflect.TypeOf(AccessRuleConfigurationLegacyJhsIPV6Configuration{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(FirewallRuleConfigurationLegacyJhsCIDRConfiguration{}),
+			Type:       reflect.TypeOf(AccessRuleConfigurationLegacyJhsCIDRConfiguration{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(FirewallRuleConfigurationLegacyJhsASNConfiguration{}),
+			Type:       reflect.TypeOf(AccessRuleConfigurationLegacyJhsASNConfiguration{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(FirewallRuleConfigurationLegacyJhsCountryConfiguration{}),
+			Type:       reflect.TypeOf(AccessRuleConfigurationLegacyJhsCountryConfiguration{}),
 		},
 	)
 }
 
-type FirewallRuleConfigurationLegacyJhsIPConfiguration struct {
+type AccessRuleConfigurationLegacyJhsIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the rule.
-	Target FirewallRuleConfigurationLegacyJhsIPConfigurationTarget `json:"target"`
+	Target AccessRuleConfigurationLegacyJhsIPConfigurationTarget `json:"target"`
 	// The IP address to match. This address will be compared to the IP address of
 	// incoming requests.
-	Value string                                                `json:"value"`
-	JSON  firewallRuleConfigurationLegacyJhsIPConfigurationJSON `json:"-"`
+	Value string                                              `json:"value"`
+	JSON  accessRuleConfigurationLegacyJhsIPConfigurationJSON `json:"-"`
 }
 
-// firewallRuleConfigurationLegacyJhsIPConfigurationJSON contains the JSON metadata
-// for the struct [FirewallRuleConfigurationLegacyJhsIPConfiguration]
-type firewallRuleConfigurationLegacyJhsIPConfigurationJSON struct {
+// accessRuleConfigurationLegacyJhsIPConfigurationJSON contains the JSON metadata
+// for the struct [AccessRuleConfigurationLegacyJhsIPConfiguration]
+type accessRuleConfigurationLegacyJhsIPConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallRuleConfigurationLegacyJhsIPConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessRuleConfigurationLegacyJhsIPConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallRuleConfigurationLegacyJhsIPConfigurationJSON) RawJSON() string {
+func (r accessRuleConfigurationLegacyJhsIPConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallRuleConfigurationLegacyJhsIPConfiguration) implementsUserFirewallRuleConfiguration() {
-}
+func (r AccessRuleConfigurationLegacyJhsIPConfiguration) implementsUserAccessRuleConfiguration() {}
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the rule.
-type FirewallRuleConfigurationLegacyJhsIPConfigurationTarget string
+type AccessRuleConfigurationLegacyJhsIPConfigurationTarget string
 
 const (
-	FirewallRuleConfigurationLegacyJhsIPConfigurationTargetIP FirewallRuleConfigurationLegacyJhsIPConfigurationTarget = "ip"
+	AccessRuleConfigurationLegacyJhsIPConfigurationTargetIP AccessRuleConfigurationLegacyJhsIPConfigurationTarget = "ip"
 )
 
-func (r FirewallRuleConfigurationLegacyJhsIPConfigurationTarget) IsKnown() bool {
+func (r AccessRuleConfigurationLegacyJhsIPConfigurationTarget) IsKnown() bool {
 	switch r {
-	case FirewallRuleConfigurationLegacyJhsIPConfigurationTargetIP:
+	case AccessRuleConfigurationLegacyJhsIPConfigurationTargetIP:
 		return true
 	}
 	return false
 }
 
-type FirewallRuleConfigurationLegacyJhsIPV6Configuration struct {
+type AccessRuleConfigurationLegacyJhsIPV6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
 	// IPv6 address in the rule.
-	Target FirewallRuleConfigurationLegacyJhsIPV6ConfigurationTarget `json:"target"`
+	Target AccessRuleConfigurationLegacyJhsIPV6ConfigurationTarget `json:"target"`
 	// The IPv6 address to match.
-	Value string                                                  `json:"value"`
-	JSON  firewallRuleConfigurationLegacyJhsIPV6ConfigurationJSON `json:"-"`
+	Value string                                                `json:"value"`
+	JSON  accessRuleConfigurationLegacyJhsIPV6ConfigurationJSON `json:"-"`
 }
 
-// firewallRuleConfigurationLegacyJhsIPV6ConfigurationJSON contains the JSON
-// metadata for the struct [FirewallRuleConfigurationLegacyJhsIPV6Configuration]
-type firewallRuleConfigurationLegacyJhsIPV6ConfigurationJSON struct {
+// accessRuleConfigurationLegacyJhsIPV6ConfigurationJSON contains the JSON metadata
+// for the struct [AccessRuleConfigurationLegacyJhsIPV6Configuration]
+type accessRuleConfigurationLegacyJhsIPV6ConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallRuleConfigurationLegacyJhsIPV6Configuration) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessRuleConfigurationLegacyJhsIPV6Configuration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallRuleConfigurationLegacyJhsIPV6ConfigurationJSON) RawJSON() string {
+func (r accessRuleConfigurationLegacyJhsIPV6ConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallRuleConfigurationLegacyJhsIPV6Configuration) implementsUserFirewallRuleConfiguration() {
-}
+func (r AccessRuleConfigurationLegacyJhsIPV6Configuration) implementsUserAccessRuleConfiguration() {}
 
 // The configuration target. You must set the target to `ip6` when specifying an
 // IPv6 address in the rule.
-type FirewallRuleConfigurationLegacyJhsIPV6ConfigurationTarget string
+type AccessRuleConfigurationLegacyJhsIPV6ConfigurationTarget string
 
 const (
-	FirewallRuleConfigurationLegacyJhsIPV6ConfigurationTargetIp6 FirewallRuleConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
+	AccessRuleConfigurationLegacyJhsIPV6ConfigurationTargetIp6 AccessRuleConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
 )
 
-func (r FirewallRuleConfigurationLegacyJhsIPV6ConfigurationTarget) IsKnown() bool {
+func (r AccessRuleConfigurationLegacyJhsIPV6ConfigurationTarget) IsKnown() bool {
 	switch r {
-	case FirewallRuleConfigurationLegacyJhsIPV6ConfigurationTargetIp6:
+	case AccessRuleConfigurationLegacyJhsIPV6ConfigurationTargetIp6:
 		return true
 	}
 	return false
 }
 
-type FirewallRuleConfigurationLegacyJhsCIDRConfiguration struct {
+type AccessRuleConfigurationLegacyJhsCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target FirewallRuleConfigurationLegacyJhsCIDRConfigurationTarget `json:"target"`
+	Target AccessRuleConfigurationLegacyJhsCIDRConfigurationTarget `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
-	Value string                                                  `json:"value"`
-	JSON  firewallRuleConfigurationLegacyJhsCIDRConfigurationJSON `json:"-"`
+	Value string                                                `json:"value"`
+	JSON  accessRuleConfigurationLegacyJhsCIDRConfigurationJSON `json:"-"`
 }
 
-// firewallRuleConfigurationLegacyJhsCIDRConfigurationJSON contains the JSON
-// metadata for the struct [FirewallRuleConfigurationLegacyJhsCIDRConfiguration]
-type firewallRuleConfigurationLegacyJhsCIDRConfigurationJSON struct {
+// accessRuleConfigurationLegacyJhsCIDRConfigurationJSON contains the JSON metadata
+// for the struct [AccessRuleConfigurationLegacyJhsCIDRConfiguration]
+type accessRuleConfigurationLegacyJhsCIDRConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallRuleConfigurationLegacyJhsCIDRConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessRuleConfigurationLegacyJhsCIDRConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallRuleConfigurationLegacyJhsCIDRConfigurationJSON) RawJSON() string {
+func (r accessRuleConfigurationLegacyJhsCIDRConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallRuleConfigurationLegacyJhsCIDRConfiguration) implementsUserFirewallRuleConfiguration() {
-}
+func (r AccessRuleConfigurationLegacyJhsCIDRConfiguration) implementsUserAccessRuleConfiguration() {}
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type FirewallRuleConfigurationLegacyJhsCIDRConfigurationTarget string
+type AccessRuleConfigurationLegacyJhsCIDRConfigurationTarget string
 
 const (
-	FirewallRuleConfigurationLegacyJhsCIDRConfigurationTargetIPRange FirewallRuleConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
+	AccessRuleConfigurationLegacyJhsCIDRConfigurationTargetIPRange AccessRuleConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
 )
 
-func (r FirewallRuleConfigurationLegacyJhsCIDRConfigurationTarget) IsKnown() bool {
+func (r AccessRuleConfigurationLegacyJhsCIDRConfigurationTarget) IsKnown() bool {
 	switch r {
-	case FirewallRuleConfigurationLegacyJhsCIDRConfigurationTargetIPRange:
+	case AccessRuleConfigurationLegacyJhsCIDRConfigurationTargetIPRange:
 		return true
 	}
 	return false
 }
 
-type FirewallRuleConfigurationLegacyJhsASNConfiguration struct {
+type AccessRuleConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target FirewallRuleConfigurationLegacyJhsASNConfigurationTarget `json:"target"`
+	Target AccessRuleConfigurationLegacyJhsASNConfigurationTarget `json:"target"`
 	// The AS number to match.
-	Value string                                                 `json:"value"`
-	JSON  firewallRuleConfigurationLegacyJhsASNConfigurationJSON `json:"-"`
+	Value string                                               `json:"value"`
+	JSON  accessRuleConfigurationLegacyJhsASNConfigurationJSON `json:"-"`
 }
 
-// firewallRuleConfigurationLegacyJhsASNConfigurationJSON contains the JSON
-// metadata for the struct [FirewallRuleConfigurationLegacyJhsASNConfiguration]
-type firewallRuleConfigurationLegacyJhsASNConfigurationJSON struct {
+// accessRuleConfigurationLegacyJhsASNConfigurationJSON contains the JSON metadata
+// for the struct [AccessRuleConfigurationLegacyJhsASNConfiguration]
+type accessRuleConfigurationLegacyJhsASNConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallRuleConfigurationLegacyJhsASNConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessRuleConfigurationLegacyJhsASNConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallRuleConfigurationLegacyJhsASNConfigurationJSON) RawJSON() string {
+func (r accessRuleConfigurationLegacyJhsASNConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallRuleConfigurationLegacyJhsASNConfiguration) implementsUserFirewallRuleConfiguration() {
-}
+func (r AccessRuleConfigurationLegacyJhsASNConfiguration) implementsUserAccessRuleConfiguration() {}
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type FirewallRuleConfigurationLegacyJhsASNConfigurationTarget string
+type AccessRuleConfigurationLegacyJhsASNConfigurationTarget string
 
 const (
-	FirewallRuleConfigurationLegacyJhsASNConfigurationTargetASN FirewallRuleConfigurationLegacyJhsASNConfigurationTarget = "asn"
+	AccessRuleConfigurationLegacyJhsASNConfigurationTargetASN AccessRuleConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
 
-func (r FirewallRuleConfigurationLegacyJhsASNConfigurationTarget) IsKnown() bool {
+func (r AccessRuleConfigurationLegacyJhsASNConfigurationTarget) IsKnown() bool {
 	switch r {
-	case FirewallRuleConfigurationLegacyJhsASNConfigurationTargetASN:
+	case AccessRuleConfigurationLegacyJhsASNConfigurationTargetASN:
 		return true
 	}
 	return false
 }
 
-type FirewallRuleConfigurationLegacyJhsCountryConfiguration struct {
+type AccessRuleConfigurationLegacyJhsCountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
 	// country code in the rule.
-	Target FirewallRuleConfigurationLegacyJhsCountryConfigurationTarget `json:"target"`
+	Target AccessRuleConfigurationLegacyJhsCountryConfigurationTarget `json:"target"`
 	// The two-letter ISO-3166-1 alpha-2 code to match. For more information, refer to
 	// [IP Access rules: Parameters](https://developers.cloudflare.com/waf/tools/ip-access-rules/parameters/#country).
-	Value string                                                     `json:"value"`
-	JSON  firewallRuleConfigurationLegacyJhsCountryConfigurationJSON `json:"-"`
+	Value string                                                   `json:"value"`
+	JSON  accessRuleConfigurationLegacyJhsCountryConfigurationJSON `json:"-"`
 }
 
-// firewallRuleConfigurationLegacyJhsCountryConfigurationJSON contains the JSON
-// metadata for the struct [FirewallRuleConfigurationLegacyJhsCountryConfiguration]
-type firewallRuleConfigurationLegacyJhsCountryConfigurationJSON struct {
+// accessRuleConfigurationLegacyJhsCountryConfigurationJSON contains the JSON
+// metadata for the struct [AccessRuleConfigurationLegacyJhsCountryConfiguration]
+type accessRuleConfigurationLegacyJhsCountryConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallRuleConfigurationLegacyJhsCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessRuleConfigurationLegacyJhsCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallRuleConfigurationLegacyJhsCountryConfigurationJSON) RawJSON() string {
+func (r accessRuleConfigurationLegacyJhsCountryConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r FirewallRuleConfigurationLegacyJhsCountryConfiguration) implementsUserFirewallRuleConfiguration() {
+func (r AccessRuleConfigurationLegacyJhsCountryConfiguration) implementsUserAccessRuleConfiguration() {
 }
 
 // The configuration target. You must set the target to `country` when specifying a
 // country code in the rule.
-type FirewallRuleConfigurationLegacyJhsCountryConfigurationTarget string
+type AccessRuleConfigurationLegacyJhsCountryConfigurationTarget string
 
 const (
-	FirewallRuleConfigurationLegacyJhsCountryConfigurationTargetCountry FirewallRuleConfigurationLegacyJhsCountryConfigurationTarget = "country"
+	AccessRuleConfigurationLegacyJhsCountryConfigurationTargetCountry AccessRuleConfigurationLegacyJhsCountryConfigurationTarget = "country"
 )
 
-func (r FirewallRuleConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bool {
+func (r AccessRuleConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bool {
 	switch r {
-	case FirewallRuleConfigurationLegacyJhsCountryConfigurationTargetCountry:
+	case AccessRuleConfigurationLegacyJhsCountryConfigurationTargetCountry:
 		return true
 	}
 	return false
 }
 
 // The action to apply to a matched request.
-type FirewallRuleMode string
+type AccessRuleMode string
 
 const (
-	FirewallRuleModeBlock            FirewallRuleMode = "block"
-	FirewallRuleModeChallenge        FirewallRuleMode = "challenge"
-	FirewallRuleModeWhitelist        FirewallRuleMode = "whitelist"
-	FirewallRuleModeJsChallenge      FirewallRuleMode = "js_challenge"
-	FirewallRuleModeManagedChallenge FirewallRuleMode = "managed_challenge"
+	AccessRuleModeBlock            AccessRuleMode = "block"
+	AccessRuleModeChallenge        AccessRuleMode = "challenge"
+	AccessRuleModeWhitelist        AccessRuleMode = "whitelist"
+	AccessRuleModeJsChallenge      AccessRuleMode = "js_challenge"
+	AccessRuleModeManagedChallenge AccessRuleMode = "managed_challenge"
 )
 
-func (r FirewallRuleMode) IsKnown() bool {
+func (r AccessRuleMode) IsKnown() bool {
 	switch r {
-	case FirewallRuleModeBlock, FirewallRuleModeChallenge, FirewallRuleModeWhitelist, FirewallRuleModeJsChallenge, FirewallRuleModeManagedChallenge:
+	case AccessRuleModeBlock, AccessRuleModeChallenge, AccessRuleModeWhitelist, AccessRuleModeJsChallenge, AccessRuleModeManagedChallenge:
 		return true
 	}
 	return false
@@ -678,7 +674,7 @@ func (r FirewallAccessRuleNewParamsMode) IsKnown() bool {
 type FirewallAccessRuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallRule          `json:"result,required,nullable"`
+	Result   AccessRule            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallAccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAccessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -969,7 +965,7 @@ func (r FirewallAccessRuleEditParamsMode) IsKnown() bool {
 type FirewallAccessRuleEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   FirewallRule          `json:"result,required,nullable"`
+	Result   AccessRule            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallAccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAccessRuleEditResponseEnvelopeJSON    `json:"-"`

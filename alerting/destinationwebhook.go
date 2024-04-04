@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // DestinationWebhookService contains methods and other services that help with
@@ -84,7 +86,7 @@ func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query De
 }
 
 // Delete a configured webhook destination.
-func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string, body DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
+func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string, body DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *DestinationWebhookDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", body.AccountID, webhookID)
@@ -217,6 +219,31 @@ func (r *DestinationWebhookUpdateResponse) UnmarshalJSON(data []byte) (err error
 func (r destinationWebhookUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
+
+// Union satisfied by [alerting.DestinationWebhookDeleteResponseUnknown],
+// [alerting.DestinationWebhookDeleteResponseArray] or [shared.UnionString].
+type DestinationWebhookDeleteResponse interface {
+	ImplementsAlertingDestinationWebhookDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DestinationWebhookDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DestinationWebhookDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DestinationWebhookDeleteResponseArray []interface{}
+
+func (r DestinationWebhookDeleteResponseArray) ImplementsAlertingDestinationWebhookDeleteResponse() {}
 
 type DestinationWebhookNewParams struct {
 	// The account id
@@ -351,9 +378,9 @@ type DestinationWebhookDeleteParams struct {
 }
 
 type DestinationWebhookDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef167 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   DestinationWebhookDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationWebhookDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationWebhookDeleteResponseEnvelopeResultInfo `json:"result_info"`

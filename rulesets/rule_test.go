@@ -9,7 +9,6 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/rulesets"
@@ -47,7 +46,7 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			Logging: cloudflare.F(shared.LoggingParam{
+			Logging: cloudflare.F(rulesets.LoggingParam{
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
@@ -127,7 +126,7 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			Logging: cloudflare.F(shared.LoggingParam{
+			Logging: cloudflare.F(rulesets.LoggingParam{
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),

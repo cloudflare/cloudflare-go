@@ -35,7 +35,7 @@ func NewLoadBalancerMonitorService(opts ...option.RequestOption) (r *LoadBalance
 }
 
 // Create a configured monitor.
-func (r *LoadBalancerMonitorService) New(ctx context.Context, body LoadBalancerMonitorNewParams, opts ...option.RequestOption) (res *LoadBalancingMonitor, err error) {
+func (r *LoadBalancerMonitorService) New(ctx context.Context, body LoadBalancerMonitorNewParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorNewResponseEnvelope
 	path := "user/load_balancers/monitors"
@@ -48,7 +48,7 @@ func (r *LoadBalancerMonitorService) New(ctx context.Context, body LoadBalancerM
 }
 
 // Modify a configured monitor.
-func (r *LoadBalancerMonitorService) Update(ctx context.Context, monitorID string, body LoadBalancerMonitorUpdateParams, opts ...option.RequestOption) (res *LoadBalancingMonitor, err error) {
+func (r *LoadBalancerMonitorService) Update(ctx context.Context, monitorID string, body LoadBalancerMonitorUpdateParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorUpdateResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s", monitorID)
@@ -61,7 +61,7 @@ func (r *LoadBalancerMonitorService) Update(ctx context.Context, monitorID strin
 }
 
 // List configured monitors for a user.
-func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancingMonitor], err error) {
+func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[Monitor], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.Re
 }
 
 // List configured monitors for a user.
-func (r *LoadBalancerMonitorService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LoadBalancingMonitor] {
+func (r *LoadBalancerMonitorService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Monitor] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
@@ -97,7 +97,7 @@ func (r *LoadBalancerMonitorService) Delete(ctx context.Context, monitorID strin
 }
 
 // Apply changes to an existing monitor, overwriting the supplied properties.
-func (r *LoadBalancerMonitorService) Edit(ctx context.Context, monitorID string, body LoadBalancerMonitorEditParams, opts ...option.RequestOption) (res *LoadBalancingMonitor, err error) {
+func (r *LoadBalancerMonitorService) Edit(ctx context.Context, monitorID string, body LoadBalancerMonitorEditParams, opts ...option.RequestOption) (res *Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorEditResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s", monitorID)
@@ -110,7 +110,7 @@ func (r *LoadBalancerMonitorService) Edit(ctx context.Context, monitorID string,
 }
 
 // List a single configured monitor for a user.
-func (r *LoadBalancerMonitorService) Get(ctx context.Context, monitorID string, opts ...option.RequestOption) (res *LoadBalancingMonitor, err error) {
+func (r *LoadBalancerMonitorService) Get(ctx context.Context, monitorID string, opts ...option.RequestOption) (res *Monitor, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorGetResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s", monitorID)
@@ -149,7 +149,7 @@ func (r *LoadBalancerMonitorService) References(ctx context.Context, monitorID s
 	return
 }
 
-type LoadBalancingMonitor struct {
+type Monitor struct {
 	ID string `json:"id"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -201,13 +201,12 @@ type LoadBalancingMonitor struct {
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type LoadBalancingMonitorType `json:"type"`
-	JSON loadBalancingMonitorJSON `json:"-"`
+	Type MonitorType `json:"type"`
+	JSON monitorJSON `json:"-"`
 }
 
-// loadBalancingMonitorJSON contains the JSON metadata for the struct
-// [LoadBalancingMonitor]
-type loadBalancingMonitorJSON struct {
+// monitorJSON contains the JSON metadata for the struct [Monitor]
+type monitorJSON struct {
 	ID              apijson.Field
 	AllowInsecure   apijson.Field
 	ConsecutiveDown apijson.Field
@@ -231,30 +230,30 @@ type loadBalancingMonitorJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LoadBalancingMonitor) UnmarshalJSON(data []byte) (err error) {
+func (r *Monitor) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancingMonitorJSON) RawJSON() string {
+func (r monitorJSON) RawJSON() string {
 	return r.raw
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancingMonitorType string
+type MonitorType string
 
 const (
-	LoadBalancingMonitorTypeHTTP     LoadBalancingMonitorType = "http"
-	LoadBalancingMonitorTypeHTTPS    LoadBalancingMonitorType = "https"
-	LoadBalancingMonitorTypeTcp      LoadBalancingMonitorType = "tcp"
-	LoadBalancingMonitorTypeUdpIcmp  LoadBalancingMonitorType = "udp_icmp"
-	LoadBalancingMonitorTypeIcmpPing LoadBalancingMonitorType = "icmp_ping"
-	LoadBalancingMonitorTypeSmtp     LoadBalancingMonitorType = "smtp"
+	MonitorTypeHTTP     MonitorType = "http"
+	MonitorTypeHTTPS    MonitorType = "https"
+	MonitorTypeTcp      MonitorType = "tcp"
+	MonitorTypeUdpIcmp  MonitorType = "udp_icmp"
+	MonitorTypeIcmpPing MonitorType = "icmp_ping"
+	MonitorTypeSmtp     MonitorType = "smtp"
 )
 
-func (r LoadBalancingMonitorType) IsKnown() bool {
+func (r MonitorType) IsKnown() bool {
 	switch r {
-	case LoadBalancingMonitorTypeHTTP, LoadBalancingMonitorTypeHTTPS, LoadBalancingMonitorTypeTcp, LoadBalancingMonitorTypeUdpIcmp, LoadBalancingMonitorTypeIcmpPing, LoadBalancingMonitorTypeSmtp:
+	case MonitorTypeHTTP, MonitorTypeHTTPS, MonitorTypeTcp, MonitorTypeUdpIcmp, MonitorTypeIcmpPing, MonitorTypeSmtp:
 		return true
 	}
 	return false
@@ -412,7 +411,7 @@ func (r LoadBalancerMonitorNewParamsType) IsKnown() bool {
 type LoadBalancerMonitorNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoadBalancingMonitor  `json:"result,required"`
+	Result   Monitor               `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorNewResponseEnvelopeJSON    `json:"-"`
@@ -532,7 +531,7 @@ func (r LoadBalancerMonitorUpdateParamsType) IsKnown() bool {
 type LoadBalancerMonitorUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoadBalancingMonitor  `json:"result,required"`
+	Result   Monitor               `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorUpdateResponseEnvelopeJSON    `json:"-"`
@@ -703,7 +702,7 @@ func (r LoadBalancerMonitorEditParamsType) IsKnown() bool {
 type LoadBalancerMonitorEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoadBalancingMonitor  `json:"result,required"`
+	Result   Monitor               `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorEditResponseEnvelopeJSON    `json:"-"`
@@ -746,7 +745,7 @@ func (r LoadBalancerMonitorEditResponseEnvelopeSuccess) IsKnown() bool {
 type LoadBalancerMonitorGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   LoadBalancingMonitor  `json:"result,required"`
+	Result   Monitor               `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorGetResponseEnvelopeJSON    `json:"-"`
