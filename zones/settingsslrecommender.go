@@ -35,7 +35,7 @@ func NewSettingSSLRecommenderService(opts ...option.RequestOption) (r *SettingSS
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
 // origin servers support.
-func (r *SettingSSLRecommenderService) Edit(ctx context.Context, params SettingSSLRecommenderEditParams, opts ...option.RequestOption) (res *ZoneSettingSSLRecommender, err error) {
+func (r *SettingSSLRecommenderService) Edit(ctx context.Context, params SettingSSLRecommenderEditParams, opts ...option.RequestOption) (res *SSLRecommender, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLRecommenderEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ssl_recommender", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *SettingSSLRecommenderService) Edit(ctx context.Context, params SettingS
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
 // origin servers support.
-func (r *SettingSSLRecommenderService) Get(ctx context.Context, query SettingSSLRecommenderGetParams, opts ...option.RequestOption) (res *ZoneSettingSSLRecommender, err error) {
+func (r *SettingSSLRecommenderService) Get(ctx context.Context, query SettingSSLRecommenderGetParams, opts ...option.RequestOption) (res *SSLRecommender, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLRecommenderGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ssl_recommender", query.ZoneID)
@@ -65,41 +65,40 @@ func (r *SettingSSLRecommenderService) Get(ctx context.Context, query SettingSSL
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
 // origin servers support.
-type ZoneSettingSSLRecommender struct {
+type SSLRecommender struct {
 	// Enrollment value for SSL/TLS Recommender.
-	ID ZoneSettingSSLRecommenderID `json:"id"`
+	ID SSLRecommenderID `json:"id"`
 	// ssl-recommender enrollment setting.
-	Enabled bool                          `json:"enabled"`
-	JSON    zoneSettingSSLRecommenderJSON `json:"-"`
+	Enabled bool               `json:"enabled"`
+	JSON    sslRecommenderJSON `json:"-"`
 }
 
-// zoneSettingSSLRecommenderJSON contains the JSON metadata for the struct
-// [ZoneSettingSSLRecommender]
-type zoneSettingSSLRecommenderJSON struct {
+// sslRecommenderJSON contains the JSON metadata for the struct [SSLRecommender]
+type sslRecommenderJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSSLRecommender) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLRecommender) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingSSLRecommenderJSON) RawJSON() string {
+func (r sslRecommenderJSON) RawJSON() string {
 	return r.raw
 }
 
 // Enrollment value for SSL/TLS Recommender.
-type ZoneSettingSSLRecommenderID string
+type SSLRecommenderID string
 
 const (
-	ZoneSettingSSLRecommenderIDSSLRecommender ZoneSettingSSLRecommenderID = "ssl_recommender"
+	SSLRecommenderIDSSLRecommender SSLRecommenderID = "ssl_recommender"
 )
 
-func (r ZoneSettingSSLRecommenderID) IsKnown() bool {
+func (r SSLRecommenderID) IsKnown() bool {
 	switch r {
-	case ZoneSettingSSLRecommenderIDSSLRecommender:
+	case SSLRecommenderIDSSLRecommender:
 		return true
 	}
 	return false
@@ -108,14 +107,14 @@ func (r ZoneSettingSSLRecommenderID) IsKnown() bool {
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
 // origin servers support.
-type ZoneSettingSSLRecommenderParam struct {
+type SSLRecommenderParam struct {
 	// Enrollment value for SSL/TLS Recommender.
-	ID param.Field[ZoneSettingSSLRecommenderID] `json:"id"`
+	ID param.Field[SSLRecommenderID] `json:"id"`
 	// ssl-recommender enrollment setting.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r ZoneSettingSSLRecommenderParam) MarshalJSON() (data []byte, err error) {
+func (r SSLRecommenderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -125,7 +124,7 @@ type SettingSSLRecommenderEditParams struct {
 	// Enrollment in the SSL/TLS Recommender service which tries to detect and
 	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
 	// origin servers support.
-	Value param.Field[ZoneSettingSSLRecommenderParam] `json:"value,required"`
+	Value param.Field[SSLRecommenderParam] `json:"value,required"`
 }
 
 func (r SettingSSLRecommenderEditParams) MarshalJSON() (data []byte, err error) {
@@ -140,7 +139,7 @@ type SettingSSLRecommenderEditResponseEnvelope struct {
 	// Enrollment in the SSL/TLS Recommender service which tries to detect and
 	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
 	// origin servers support.
-	Result ZoneSettingSSLRecommender                     `json:"result"`
+	Result SSLRecommender                                `json:"result"`
 	JSON   settingSSLRecommenderEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -176,7 +175,7 @@ type SettingSSLRecommenderGetResponseEnvelope struct {
 	// Enrollment in the SSL/TLS Recommender service which tries to detect and
 	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
 	// origin servers support.
-	Result ZoneSettingSSLRecommender                    `json:"result"`
+	Result SSLRecommender                               `json:"result"`
 	JSON   settingSSLRecommenderGetResponseEnvelopeJSON `json:"-"`
 }
 

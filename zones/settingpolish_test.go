@@ -30,9 +30,9 @@ func TestSettingPolishEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.Polish.Edit(context.TODO(), zones.SettingPolishEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value: cloudflare.F(zones.ZoneSettingPolishParam{
-			ID:    cloudflare.F(zones.ZoneSettingPolishIDPolish),
-			Value: cloudflare.F(zones.ZoneSettingPolishValueOff),
+		Value: cloudflare.F(zones.PolishParam{
+			ID:    cloudflare.F(zones.PolishIDPolish),
+			Value: cloudflare.F(zones.PolishValueOff),
 		}),
 	})
 	if err != nil {

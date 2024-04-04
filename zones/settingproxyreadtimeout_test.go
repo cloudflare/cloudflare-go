@@ -30,8 +30,8 @@ func TestSettingProxyReadTimeoutEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.ProxyReadTimeout.Edit(context.TODO(), zones.SettingProxyReadTimeoutEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value: cloudflare.F(zones.ZoneSettingProxyReadTimeoutParam{
-			ID:    cloudflare.F(zones.ZoneSettingProxyReadTimeoutIDProxyReadTimeout),
+		Value: cloudflare.F(zones.ProxyReadTimeoutParam{
+			ID:    cloudflare.F(zones.ProxyReadTimeoutIDProxyReadTimeout),
 			Value: cloudflare.F(0.000000),
 		}),
 	})

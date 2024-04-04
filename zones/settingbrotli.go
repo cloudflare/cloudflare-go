@@ -35,7 +35,7 @@ func NewSettingBrotliService(opts ...option.RequestOption) (r *SettingBrotliServ
 
 // When the client requesting an asset supports the Brotli compression algorithm,
 // Cloudflare will serve a Brotli compressed version of the asset.
-func (r *SettingBrotliService) Edit(ctx context.Context, params SettingBrotliEditParams, opts ...option.RequestOption) (res *ZoneSettingBrotli, err error) {
+func (r *SettingBrotliService) Edit(ctx context.Context, params SettingBrotliEditParams, opts ...option.RequestOption) (res *Brotli, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrotliEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/brotli", params.ZoneID)
@@ -49,7 +49,7 @@ func (r *SettingBrotliService) Edit(ctx context.Context, params SettingBrotliEdi
 
 // When the client requesting an asset supports the Brotli compression algorithm,
 // Cloudflare will serve a Brotli compressed version of the asset.
-func (r *SettingBrotliService) Get(ctx context.Context, query SettingBrotliGetParams, opts ...option.RequestOption) (res *ZoneSettingBrotli, err error) {
+func (r *SettingBrotliService) Get(ctx context.Context, query SettingBrotliGetParams, opts ...option.RequestOption) (res *Brotli, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrotliGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/brotli", query.ZoneID)
@@ -63,22 +63,21 @@ func (r *SettingBrotliService) Get(ctx context.Context, query SettingBrotliGetPa
 
 // When the client requesting an asset supports the Brotli compression algorithm,
 // Cloudflare will serve a Brotli compressed version of the asset.
-type ZoneSettingBrotli struct {
+type Brotli struct {
 	// ID of the zone setting.
-	ID ZoneSettingBrotliID `json:"id,required"`
+	ID BrotliID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingBrotliValue `json:"value,required"`
+	Value BrotliValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingBrotliEditable `json:"editable"`
+	Editable BrotliEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingBrotliJSON `json:"-"`
+	ModifiedOn time.Time  `json:"modified_on,nullable" format:"date-time"`
+	JSON       brotliJSON `json:"-"`
 }
 
-// zoneSettingBrotliJSON contains the JSON metadata for the struct
-// [ZoneSettingBrotli]
-type zoneSettingBrotliJSON struct {
+// brotliJSON contains the JSON metadata for the struct [Brotli]
+type brotliJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -87,40 +86,40 @@ type zoneSettingBrotliJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingBrotli) UnmarshalJSON(data []byte) (err error) {
+func (r *Brotli) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingBrotliJSON) RawJSON() string {
+func (r brotliJSON) RawJSON() string {
 	return r.raw
 }
 
 // ID of the zone setting.
-type ZoneSettingBrotliID string
+type BrotliID string
 
 const (
-	ZoneSettingBrotliIDBrotli ZoneSettingBrotliID = "brotli"
+	BrotliIDBrotli BrotliID = "brotli"
 )
 
-func (r ZoneSettingBrotliID) IsKnown() bool {
+func (r BrotliID) IsKnown() bool {
 	switch r {
-	case ZoneSettingBrotliIDBrotli:
+	case BrotliIDBrotli:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingBrotliValue string
+type BrotliValue string
 
 const (
-	ZoneSettingBrotliValueOff ZoneSettingBrotliValue = "off"
-	ZoneSettingBrotliValueOn  ZoneSettingBrotliValue = "on"
+	BrotliValueOff BrotliValue = "off"
+	BrotliValueOn  BrotliValue = "on"
 )
 
-func (r ZoneSettingBrotliValue) IsKnown() bool {
+func (r BrotliValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingBrotliValueOff, ZoneSettingBrotliValueOn:
+	case BrotliValueOff, BrotliValueOn:
 		return true
 	}
 	return false
@@ -128,16 +127,16 @@ func (r ZoneSettingBrotliValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingBrotliEditable bool
+type BrotliEditable bool
 
 const (
-	ZoneSettingBrotliEditableTrue  ZoneSettingBrotliEditable = true
-	ZoneSettingBrotliEditableFalse ZoneSettingBrotliEditable = false
+	BrotliEditableTrue  BrotliEditable = true
+	BrotliEditableFalse BrotliEditable = false
 )
 
-func (r ZoneSettingBrotliEditable) IsKnown() bool {
+func (r BrotliEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingBrotliEditableTrue, ZoneSettingBrotliEditableFalse:
+	case BrotliEditableTrue, BrotliEditableFalse:
 		return true
 	}
 	return false
@@ -177,7 +176,7 @@ type SettingBrotliEditResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// When the client requesting an asset supports the Brotli compression algorithm,
 	// Cloudflare will serve a Brotli compressed version of the asset.
-	Result ZoneSettingBrotli                     `json:"result"`
+	Result Brotli                                `json:"result"`
 	JSON   settingBrotliEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -212,7 +211,7 @@ type SettingBrotliGetResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// When the client requesting an asset supports the Brotli compression algorithm,
 	// Cloudflare will serve a Brotli compressed version of the asset.
-	Result ZoneSettingBrotli                    `json:"result"`
+	Result Brotli                               `json:"result"`
 	JSON   settingBrotliGetResponseEnvelopeJSON `json:"-"`
 }
 

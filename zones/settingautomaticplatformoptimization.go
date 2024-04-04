@@ -36,7 +36,7 @@ func NewSettingAutomaticPlatformOptimizationService(opts ...option.RequestOption
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
 // fonts.
-func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, params SettingAutomaticPlatformOptimizationEditParams, opts ...option.RequestOption) (res *ZoneSettingAutomaticPlatformOptimization, err error) {
+func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, params SettingAutomaticPlatformOptimizationEditParams, opts ...option.RequestOption) (res *AutomaticPlatformOptimization, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticPlatformOptimizationEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", params.ZoneID)
@@ -51,7 +51,7 @@ func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, 
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
 // fonts.
-func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, query SettingAutomaticPlatformOptimizationGetParams, opts ...option.RequestOption) (res *ZoneSettingAutomaticPlatformOptimization, err error) {
+func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, query SettingAutomaticPlatformOptimizationGetParams, opts ...option.RequestOption) (res *AutomaticPlatformOptimization, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticPlatformOptimizationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", query.ZoneID)
@@ -63,7 +63,7 @@ func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, q
 	return
 }
 
-type ZoneSettingAutomaticPlatformOptimization struct {
+type AutomaticPlatformOptimization struct {
 	// Indicates whether or not
 	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
 	// is enabled.
@@ -80,13 +80,13 @@ type ZoneSettingAutomaticPlatformOptimization struct {
 	// Indicates whether or not
 	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
 	// installed.
-	WpPlugin bool                                         `json:"wp_plugin,required"`
-	JSON     zoneSettingAutomaticPlatformOptimizationJSON `json:"-"`
+	WpPlugin bool                              `json:"wp_plugin,required"`
+	JSON     automaticPlatformOptimizationJSON `json:"-"`
 }
 
-// zoneSettingAutomaticPlatformOptimizationJSON contains the JSON metadata for the
-// struct [ZoneSettingAutomaticPlatformOptimization]
-type zoneSettingAutomaticPlatformOptimizationJSON struct {
+// automaticPlatformOptimizationJSON contains the JSON metadata for the struct
+// [AutomaticPlatformOptimization]
+type automaticPlatformOptimizationJSON struct {
 	CacheByDeviceType apijson.Field
 	Cf                apijson.Field
 	Enabled           apijson.Field
@@ -97,15 +97,15 @@ type zoneSettingAutomaticPlatformOptimizationJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ZoneSettingAutomaticPlatformOptimization) UnmarshalJSON(data []byte) (err error) {
+func (r *AutomaticPlatformOptimization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingAutomaticPlatformOptimizationJSON) RawJSON() string {
+func (r automaticPlatformOptimizationJSON) RawJSON() string {
 	return r.raw
 }
 
-type ZoneSettingAutomaticPlatformOptimizationParam struct {
+type AutomaticPlatformOptimizationParam struct {
 	// Indicates whether or not
 	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
 	// is enabled.
@@ -125,14 +125,14 @@ type ZoneSettingAutomaticPlatformOptimizationParam struct {
 	WpPlugin param.Field[bool] `json:"wp_plugin,required"`
 }
 
-func (r ZoneSettingAutomaticPlatformOptimizationParam) MarshalJSON() (data []byte, err error) {
+func (r AutomaticPlatformOptimizationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type SettingAutomaticPlatformOptimizationEditParams struct {
 	// Identifier
-	ZoneID param.Field[string]                                        `path:"zone_id,required"`
-	Value  param.Field[ZoneSettingAutomaticPlatformOptimizationParam] `json:"value,required"`
+	ZoneID param.Field[string]                             `path:"zone_id,required"`
+	Value  param.Field[AutomaticPlatformOptimizationParam] `json:"value,required"`
 }
 
 func (r SettingAutomaticPlatformOptimizationEditParams) MarshalJSON() (data []byte, err error) {
@@ -144,7 +144,7 @@ type SettingAutomaticPlatformOptimizationEditResponseEnvelope struct {
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                                                         `json:"success,required"`
-	Result  ZoneSettingAutomaticPlatformOptimization                     `json:"result"`
+	Result  AutomaticPlatformOptimization                                `json:"result"`
 	JSON    settingAutomaticPlatformOptimizationEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -178,7 +178,7 @@ type SettingAutomaticPlatformOptimizationGetResponseEnvelope struct {
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                                                        `json:"success,required"`
-	Result  ZoneSettingAutomaticPlatformOptimization                    `json:"result"`
+	Result  AutomaticPlatformOptimization                               `json:"result"`
 	JSON    settingAutomaticPlatformOptimizationGetResponseEnvelopeJSON `json:"-"`
 }
 
