@@ -93,10 +93,6 @@ func (r zoneSettingCiphersJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingCiphers) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingCiphers) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingCiphersID string
 
@@ -128,21 +124,6 @@ func (r ZoneSettingCiphersEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// An allowlist of ciphers for TLS termination. These ciphers must be in the
-// BoringSSL format.
-type ZoneSettingCiphersParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingCiphersID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[[]string] `json:"value,required"`
-}
-
-func (r ZoneSettingCiphersParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingCiphersParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingCipherEditParams struct {
 	// Identifier

@@ -101,10 +101,6 @@ func (r zoneSettingImageResizingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingImageResizing) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingImageResizing) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingImageResizingID string
 
@@ -168,8 +164,6 @@ type ZoneSettingImageResizingParam struct {
 func (r ZoneSettingImageResizingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingImageResizingParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingImageResizingEditParams struct {
 	// Identifier

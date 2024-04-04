@@ -101,10 +101,6 @@ func (r zoneSettingPolishJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingPolish) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingPolish) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingPolishID string
 
@@ -170,8 +166,6 @@ type ZoneSettingPolishParam struct {
 func (r ZoneSettingPolishParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingPolishParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingPolishEditParams struct {
 	// Identifier

@@ -92,10 +92,6 @@ func (r zoneSettingOpportunisticEncryptionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingOpportunisticEncryption) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingOpportunisticEncryption) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingOpportunisticEncryptionID string
 
@@ -143,20 +139,6 @@ func (r ZoneSettingOpportunisticEncryptionEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Enables the Opportunistic Encryption feature for a zone.
-type ZoneSettingOpportunisticEncryptionParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingOpportunisticEncryptionID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingOpportunisticEncryptionValue] `json:"value,required"`
-}
-
-func (r ZoneSettingOpportunisticEncryptionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingOpportunisticEncryptionParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingOpportunisticEncryptionEditParams struct {
 	// Identifier

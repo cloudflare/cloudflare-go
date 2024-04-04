@@ -98,10 +98,6 @@ func (r zoneSettingOriginErrorPagePassThruJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingOriginErrorPagePassThru) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingOriginErrorPagePassThru) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingOriginErrorPagePassThruID string
 
@@ -149,22 +145,6 @@ func (r ZoneSettingOriginErrorPagePassThruEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Cloudflare will proxy customer error pages on any 502,504 errors on origin
-// server instead of showing a default Cloudflare error page. This does not apply
-// to 522 errors and is limited to Enterprise Zones.
-type ZoneSettingOriginErrorPagePassThruParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingOriginErrorPagePassThruID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingOriginErrorPagePassThruValue] `json:"value,required"`
-}
-
-func (r ZoneSettingOriginErrorPagePassThruParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingOriginErrorPagePassThruParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingOriginErrorPagePassThruEditParams struct {
 	// Identifier

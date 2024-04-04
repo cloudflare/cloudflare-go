@@ -92,10 +92,6 @@ func (r zoneSettingSecurityHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingSecurityHeader) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingSecurityHeader) implementsZonesSettingGetResponse() {}
-
 // ID of the zone's security header.
 type ZoneSettingSecurityHeaderID string
 
@@ -181,46 +177,6 @@ func (r ZoneSettingSecurityHeaderEditable) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Cloudflare security header for a zone.
-type ZoneSettingSecurityHeaderParam struct {
-	// ID of the zone's security header.
-	ID param.Field[ZoneSettingSecurityHeaderID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingSecurityHeaderValueParam] `json:"value,required"`
-}
-
-func (r ZoneSettingSecurityHeaderParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingSecurityHeaderParam) implementsZonesSettingEditParamsItemUnion() {}
-
-// Current value of the zone setting.
-type ZoneSettingSecurityHeaderValueParam struct {
-	// Strict Transport Security.
-	StrictTransportSecurity param.Field[ZoneSettingSecurityHeaderValueStrictTransportSecurityParam] `json:"strict_transport_security"`
-}
-
-func (r ZoneSettingSecurityHeaderValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Strict Transport Security.
-type ZoneSettingSecurityHeaderValueStrictTransportSecurityParam struct {
-	// Whether or not strict transport security is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Include all subdomains for strict transport security.
-	IncludeSubdomains param.Field[bool] `json:"include_subdomains"`
-	// Max age in seconds of the strict transport security.
-	MaxAge param.Field[float64] `json:"max_age"`
-	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
-	Nosniff param.Field[bool] `json:"nosniff"`
-}
-
-func (r ZoneSettingSecurityHeaderValueStrictTransportSecurityParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type SettingSecurityHeaderEditParams struct {

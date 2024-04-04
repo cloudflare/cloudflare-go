@@ -92,10 +92,6 @@ func (r zoneSettingNELJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingNEL) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingNEL) implementsZonesSettingGetResponse() {}
-
 // Zone setting identifier.
 type ZoneSettingNELID string
 
@@ -161,8 +157,6 @@ type ZoneSettingNELParam struct {
 func (r ZoneSettingNELParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingNELParam) implementsZonesSettingEditParamsItemUnion() {}
 
 // Current value of the zone setting.
 type ZoneSettingNELValueParam struct {

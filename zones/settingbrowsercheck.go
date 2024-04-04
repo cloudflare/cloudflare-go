@@ -104,10 +104,6 @@ func (r zoneSettingBrowserCheckJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingBrowserCheck) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingBrowserCheck) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingBrowserCheckID string
 
@@ -155,24 +151,6 @@ func (r ZoneSettingBrowserCheckEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
-// headers abused most commonly by spammers and denies access to your page. It will
-// also challenge visitors that do not have a user agent or a non standard user
-// agent (also commonly used by abuse bots, crawlers or visitors).
-// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-type ZoneSettingBrowserCheckParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingBrowserCheckID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingBrowserCheckValue] `json:"value,required"`
-}
-
-func (r ZoneSettingBrowserCheckParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingBrowserCheckParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingBrowserCheckEditParams struct {
 	// Identifier

@@ -110,10 +110,6 @@ func (r zoneSettingHotlinkProtectionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingHotlinkProtection) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingHotlinkProtection) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingHotlinkProtectionID string
 
@@ -161,26 +157,6 @@ func (r ZoneSettingHotlinkProtectionEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// When enabled, the Hotlink Protection option ensures that other sites cannot suck
-// up your bandwidth by building pages that use images hosted on your site. Anytime
-// a request for an image on your site hits Cloudflare, we check to ensure that
-// it's not another site requesting them. People will still be able to download and
-// view images from your page, but other sites won't be able to steal them for use
-// on their own pages.
-// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type ZoneSettingHotlinkProtectionParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingHotlinkProtectionID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingHotlinkProtectionValue] `json:"value,required"`
-}
-
-func (r ZoneSettingHotlinkProtectionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingHotlinkProtectionParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingHotlinkProtectionEditParams struct {
 	// Identifier

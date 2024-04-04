@@ -101,10 +101,6 @@ func (r zoneSettingMobileRedirectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingMobileRedirect) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingMobileRedirect) implementsZonesSettingGetResponse() {}
-
 // Identifier of the zone setting.
 type ZoneSettingMobileRedirectID string
 
@@ -182,39 +178,6 @@ func (r ZoneSettingMobileRedirectEditable) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Automatically redirect visitors on mobile devices to a mobile-optimized
-// subdomain. Refer to
-// [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
-// for more information.
-type ZoneSettingMobileRedirectParam struct {
-	// Identifier of the zone setting.
-	ID param.Field[ZoneSettingMobileRedirectID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingMobileRedirectValueParam] `json:"value,required"`
-}
-
-func (r ZoneSettingMobileRedirectParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingMobileRedirectParam) implementsZonesSettingEditParamsItemUnion() {}
-
-// Current value of the zone setting.
-type ZoneSettingMobileRedirectValueParam struct {
-	// Which subdomain prefix you wish to redirect visitors on mobile devices to
-	// (subdomain must already exist).
-	MobileSubdomain param.Field[string] `json:"mobile_subdomain"`
-	// Whether or not mobile redirect is enabled.
-	Status param.Field[ZoneSettingMobileRedirectValueStatus] `json:"status"`
-	// Whether to drop the current page path and redirect to the mobile subdomain URL
-	// root, or keep the path and redirect to the same page on the mobile subdomain.
-	StripURI param.Field[bool] `json:"strip_uri"`
-}
-
-func (r ZoneSettingMobileRedirectValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type SettingMobileRedirectEditParams struct {

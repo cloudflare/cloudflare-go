@@ -112,10 +112,6 @@ func (r zoneSettingDevelopmentModeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingDevelopmentMode) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingDevelopmentMode) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingDevelopmentModeID string
 
@@ -163,25 +159,6 @@ func (r ZoneSettingDevelopmentModeEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Development Mode temporarily allows you to enter development mode for your
-// websites if you need to make changes to your site. This will bypass Cloudflare's
-// accelerated cache and slow down your site, but is useful if you are making
-// changes to cacheable content (like images, css, or JavaScript) and would like to
-// see those changes right away. Once entered, development mode will last for 3
-// hours and then automatically toggle off.
-type ZoneSettingDevelopmentModeParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingDevelopmentModeID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingDevelopmentModeValue] `json:"value,required"`
-}
-
-func (r ZoneSettingDevelopmentModeParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingDevelopmentModeParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingDevelopmentModeEditParams struct {
 	// Identifier

@@ -101,10 +101,6 @@ func (r zoneSettingMirageJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingMirage) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingMirage) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingMirageID string
 
@@ -152,23 +148,6 @@ func (r ZoneSettingMirageEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Automatically optimize image loading for website visitors on mobile devices.
-// Refer to
-// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
-// more information.
-type ZoneSettingMirageParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingMirageID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingMirageValue] `json:"value,required"`
-}
-
-func (r ZoneSettingMirageParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingMirageParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingMirageEditParams struct {
 	// Identifier

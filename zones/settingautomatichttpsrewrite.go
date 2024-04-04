@@ -92,10 +92,6 @@ func (r zoneSettingAutomaticHTTPSRewritesJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingAutomaticHTTPSRewrites) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingAutomaticHTTPSRewrites) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingAutomaticHTTPSRewritesID string
 
@@ -143,20 +139,6 @@ func (r ZoneSettingAutomaticHTTPSRewritesEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Enable the Automatic HTTPS Rewrites feature for this zone.
-type ZoneSettingAutomaticHTTPSRewritesParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingAutomaticHTTPSRewritesID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingAutomaticHTTPSRewritesValue] `json:"value,required"`
-}
-
-func (r ZoneSettingAutomaticHTTPSRewritesParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingAutomaticHTTPSRewritesParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingAutomaticHTTPSRewriteEditParams struct {
 	// Identifier

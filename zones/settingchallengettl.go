@@ -104,10 +104,6 @@ func (r zoneSettingChallengeTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingChallengeTTL) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingChallengeTTL) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingChallengeTTLID string
 
@@ -167,24 +163,6 @@ func (r ZoneSettingChallengeTTLEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Specify how long a visitor is allowed access to your site after successfully
-// completing a challenge (such as a CAPTCHA). After the TTL has expired the
-// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
-// setting and will attempt to honor any setting above 45 minutes.
-// (https://support.cloudflare.com/hc/en-us/articles/200170136).
-type ZoneSettingChallengeTTLParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingChallengeTTLID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingChallengeTTLValue] `json:"value,required"`
-}
-
-func (r ZoneSettingChallengeTTLParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingChallengeTTLParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingChallengeTTLEditParams struct {
 	// Identifier

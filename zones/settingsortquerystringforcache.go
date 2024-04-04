@@ -98,10 +98,6 @@ func (r zoneSettingSortQueryStringForCacheJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingSortQueryStringForCache) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingSortQueryStringForCache) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingSortQueryStringForCacheID string
 
@@ -149,22 +145,6 @@ func (r ZoneSettingSortQueryStringForCacheEditable) IsKnown() bool {
 	}
 	return false
 }
-
-// Cloudflare will treat files with the same query strings as the same file in
-// cache, regardless of the order of the query strings. This is limited to
-// Enterprise Zones.
-type ZoneSettingSortQueryStringForCacheParam struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingSortQueryStringForCacheID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingSortQueryStringForCacheValue] `json:"value,required"`
-}
-
-func (r ZoneSettingSortQueryStringForCacheParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingSortQueryStringForCacheParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingSortQueryStringForCacheEditParams struct {
 	// Identifier

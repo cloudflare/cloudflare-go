@@ -92,10 +92,6 @@ func (r zoneSettingProxyReadTimeoutJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingProxyReadTimeout) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingProxyReadTimeout) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingProxyReadTimeoutID string
 
@@ -139,8 +135,6 @@ type ZoneSettingProxyReadTimeoutParam struct {
 func (r ZoneSettingProxyReadTimeoutParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ZoneSettingProxyReadTimeoutParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingProxyReadTimeoutEditParams struct {
 	// Identifier

@@ -92,10 +92,6 @@ func (r zoneSettingHTTP2JSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ZoneSettingHTTP2) implementsZonesSettingEditResponse() {}
-
-func (r ZoneSettingHTTP2) implementsZonesSettingGetResponse() {}
-
 // ID of the zone setting.
 type ZoneSettingHTTP2ID string
 
@@ -143,20 +139,6 @@ func (r ZoneSettingHTTP2Editable) IsKnown() bool {
 	}
 	return false
 }
-
-// HTTP2 enabled for this zone.
-type ZoneSettingHTTP2Param struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingHTTP2ID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[ZoneSettingHTTP2Value] `json:"value,required"`
-}
-
-func (r ZoneSettingHTTP2Param) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ZoneSettingHTTP2Param) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingHTTP2EditParams struct {
 	// Identifier
