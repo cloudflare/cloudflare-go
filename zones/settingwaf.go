@@ -42,7 +42,7 @@ func NewSettingWAFService(opts ...option.RequestOption) (r *SettingWAFService) {
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-func (r *SettingWAFService) Edit(ctx context.Context, params SettingWAFEditParams, opts ...option.RequestOption) (res *ZoneSettingWAF, err error) {
+func (r *SettingWAFService) Edit(ctx context.Context, params SettingWAFEditParams, opts ...option.RequestOption) (res *WAF, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWAFEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/waf", params.ZoneID)
@@ -64,7 +64,7 @@ func (r *SettingWAFService) Edit(ctx context.Context, params SettingWAFEditParam
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-func (r *SettingWAFService) Get(ctx context.Context, query SettingWAFGetParams, opts ...option.RequestOption) (res *ZoneSettingWAF, err error) {
+func (r *SettingWAFService) Get(ctx context.Context, query SettingWAFGetParams, opts ...option.RequestOption) (res *WAF, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWAFGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/waf", query.ZoneID)
@@ -86,21 +86,21 @@ func (r *SettingWAFService) Get(ctx context.Context, query SettingWAFGetParams, 
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-type ZoneSettingWAF struct {
+type WAF struct {
 	// ID of the zone setting.
-	ID ZoneSettingWAFID `json:"id,required"`
+	ID WAFID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingWAFValue `json:"value,required"`
+	Value WAFValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingWAFEditable `json:"editable"`
+	Editable WAFEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time          `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingWAFJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	JSON       wafJSON   `json:"-"`
 }
 
-// zoneSettingWAFJSON contains the JSON metadata for the struct [ZoneSettingWAF]
-type zoneSettingWAFJSON struct {
+// wafJSON contains the JSON metadata for the struct [WAF]
+type wafJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -109,40 +109,40 @@ type zoneSettingWAFJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWAF) UnmarshalJSON(data []byte) (err error) {
+func (r *WAF) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingWAFJSON) RawJSON() string {
+func (r wafJSON) RawJSON() string {
 	return r.raw
 }
 
 // ID of the zone setting.
-type ZoneSettingWAFID string
+type WAFID string
 
 const (
-	ZoneSettingWAFIDWAF ZoneSettingWAFID = "waf"
+	WAFIDWAF WAFID = "waf"
 )
 
-func (r ZoneSettingWAFID) IsKnown() bool {
+func (r WAFID) IsKnown() bool {
 	switch r {
-	case ZoneSettingWAFIDWAF:
+	case WAFIDWAF:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingWAFValue string
+type WAFValue string
 
 const (
-	ZoneSettingWAFValueOn  ZoneSettingWAFValue = "on"
-	ZoneSettingWAFValueOff ZoneSettingWAFValue = "off"
+	WAFValueOn  WAFValue = "on"
+	WAFValueOff WAFValue = "off"
 )
 
-func (r ZoneSettingWAFValue) IsKnown() bool {
+func (r WAFValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingWAFValueOn, ZoneSettingWAFValueOff:
+	case WAFValueOn, WAFValueOff:
 		return true
 	}
 	return false
@@ -150,16 +150,16 @@ func (r ZoneSettingWAFValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingWAFEditable bool
+type WAFEditable bool
 
 const (
-	ZoneSettingWAFEditableTrue  ZoneSettingWAFEditable = true
-	ZoneSettingWAFEditableFalse ZoneSettingWAFEditable = false
+	WAFEditableTrue  WAFEditable = true
+	WAFEditableFalse WAFEditable = false
 )
 
-func (r ZoneSettingWAFEditable) IsKnown() bool {
+func (r WAFEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingWAFEditableTrue, ZoneSettingWAFEditableFalse:
+	case WAFEditableTrue, WAFEditableFalse:
 		return true
 	}
 	return false
@@ -207,7 +207,7 @@ type SettingWAFEditResponseEnvelope struct {
 	// Cloudflare's WAF will block any traffic identified as illegitimate before it
 	// reaches your origin web server.
 	// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-	Result ZoneSettingWAF                     `json:"result"`
+	Result WAF                                `json:"result"`
 	JSON   settingWAFEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -250,7 +250,7 @@ type SettingWAFGetResponseEnvelope struct {
 	// Cloudflare's WAF will block any traffic identified as illegitimate before it
 	// reaches your origin web server.
 	// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-	Result ZoneSettingWAF                    `json:"result"`
+	Result WAF                               `json:"result"`
 	JSON   settingWAFGetResponseEnvelopeJSON `json:"-"`
 }
 

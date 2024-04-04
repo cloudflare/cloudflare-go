@@ -30,9 +30,9 @@ func TestSettingNELEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.NEL.Edit(context.TODO(), zones.SettingNELEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value: cloudflare.F(zones.ZoneSettingNELParam{
-			ID: cloudflare.F(zones.ZoneSettingNELIDNEL),
-			Value: cloudflare.F(zones.ZoneSettingNELValueParam{
+		Value: cloudflare.F(zones.NELParam{
+			ID: cloudflare.F(zones.NELIDNEL),
+			Value: cloudflare.F(zones.NELValueParam{
 				Enabled: cloudflare.F(false),
 			}),
 		}),

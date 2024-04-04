@@ -36,7 +36,7 @@ func NewSettingWebsocketService(opts ...option.RequestOption) (r *SettingWebsock
 // Changes Websockets setting. For more information about Websockets, please refer
 // to
 // [Using Cloudflare with WebSockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Using-Cloudflare-with-WebSockets).
-func (r *SettingWebsocketService) Edit(ctx context.Context, params SettingWebsocketEditParams, opts ...option.RequestOption) (res *ZoneSettingWebsockets, err error) {
+func (r *SettingWebsocketService) Edit(ctx context.Context, params SettingWebsocketEditParams, opts ...option.RequestOption) (res *Websocket, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebsocketEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/websockets", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *SettingWebsocketService) Edit(ctx context.Context, params SettingWebsoc
 
 // Gets Websockets setting. For more information about Websockets, please refer to
 // [Using Cloudflare with WebSockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Using-Cloudflare-with-WebSockets).
-func (r *SettingWebsocketService) Get(ctx context.Context, query SettingWebsocketGetParams, opts ...option.RequestOption) (res *ZoneSettingWebsockets, err error) {
+func (r *SettingWebsocketService) Get(ctx context.Context, query SettingWebsocketGetParams, opts ...option.RequestOption) (res *Websocket, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebsocketGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/websockets", query.ZoneID)
@@ -69,22 +69,21 @@ func (r *SettingWebsocketService) Get(ctx context.Context, query SettingWebsocke
 // real-time applications such as live chat and gaming. For more information refer
 // to
 // [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-type ZoneSettingWebsockets struct {
+type Websocket struct {
 	// ID of the zone setting.
-	ID ZoneSettingWebsocketsID `json:"id,required"`
+	ID WebsocketID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingWebsocketsValue `json:"value,required"`
+	Value WebsocketValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingWebsocketsEditable `json:"editable"`
+	Editable WebsocketEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingWebsocketsJSON `json:"-"`
+	ModifiedOn time.Time     `json:"modified_on,nullable" format:"date-time"`
+	JSON       websocketJSON `json:"-"`
 }
 
-// zoneSettingWebsocketsJSON contains the JSON metadata for the struct
-// [ZoneSettingWebsockets]
-type zoneSettingWebsocketsJSON struct {
+// websocketJSON contains the JSON metadata for the struct [Websocket]
+type websocketJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -93,40 +92,40 @@ type zoneSettingWebsocketsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWebsockets) UnmarshalJSON(data []byte) (err error) {
+func (r *Websocket) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zoneSettingWebsocketsJSON) RawJSON() string {
+func (r websocketJSON) RawJSON() string {
 	return r.raw
 }
 
 // ID of the zone setting.
-type ZoneSettingWebsocketsID string
+type WebsocketID string
 
 const (
-	ZoneSettingWebsocketsIDWebsockets ZoneSettingWebsocketsID = "websockets"
+	WebsocketIDWebsockets WebsocketID = "websockets"
 )
 
-func (r ZoneSettingWebsocketsID) IsKnown() bool {
+func (r WebsocketID) IsKnown() bool {
 	switch r {
-	case ZoneSettingWebsocketsIDWebsockets:
+	case WebsocketIDWebsockets:
 		return true
 	}
 	return false
 }
 
 // Current value of the zone setting.
-type ZoneSettingWebsocketsValue string
+type WebsocketValue string
 
 const (
-	ZoneSettingWebsocketsValueOff ZoneSettingWebsocketsValue = "off"
-	ZoneSettingWebsocketsValueOn  ZoneSettingWebsocketsValue = "on"
+	WebsocketValueOff WebsocketValue = "off"
+	WebsocketValueOn  WebsocketValue = "on"
 )
 
-func (r ZoneSettingWebsocketsValue) IsKnown() bool {
+func (r WebsocketValue) IsKnown() bool {
 	switch r {
-	case ZoneSettingWebsocketsValueOff, ZoneSettingWebsocketsValueOn:
+	case WebsocketValueOff, WebsocketValueOn:
 		return true
 	}
 	return false
@@ -134,16 +133,16 @@ func (r ZoneSettingWebsocketsValue) IsKnown() bool {
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingWebsocketsEditable bool
+type WebsocketEditable bool
 
 const (
-	ZoneSettingWebsocketsEditableTrue  ZoneSettingWebsocketsEditable = true
-	ZoneSettingWebsocketsEditableFalse ZoneSettingWebsocketsEditable = false
+	WebsocketEditableTrue  WebsocketEditable = true
+	WebsocketEditableFalse WebsocketEditable = false
 )
 
-func (r ZoneSettingWebsocketsEditable) IsKnown() bool {
+func (r WebsocketEditable) IsKnown() bool {
 	switch r {
-	case ZoneSettingWebsocketsEditableTrue, ZoneSettingWebsocketsEditableFalse:
+	case WebsocketEditableTrue, WebsocketEditableFalse:
 		return true
 	}
 	return false
@@ -188,7 +187,7 @@ type SettingWebsocketEditResponseEnvelope struct {
 	// real-time applications such as live chat and gaming. For more information refer
 	// to
 	// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-	Result ZoneSettingWebsockets                    `json:"result"`
+	Result Websocket                                `json:"result"`
 	JSON   settingWebsocketEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -228,7 +227,7 @@ type SettingWebsocketGetResponseEnvelope struct {
 	// real-time applications such as live chat and gaming. For more information refer
 	// to
 	// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-	Result ZoneSettingWebsockets                   `json:"result"`
+	Result Websocket                               `json:"result"`
 	JSON   settingWebsocketGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -30,9 +30,9 @@ func TestSettingSSLRecommenderEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.SSLRecommender.Edit(context.TODO(), zones.SettingSSLRecommenderEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value: cloudflare.F(zones.ZoneSettingSSLRecommenderParam{
+		Value: cloudflare.F(zones.SSLRecommenderParam{
 			Enabled: cloudflare.F(true),
-			ID:      cloudflare.F(zones.ZoneSettingSSLRecommenderIDSSLRecommender),
+			ID:      cloudflare.F(zones.SSLRecommenderIDSSLRecommender),
 		}),
 	})
 	if err != nil {
