@@ -159,9 +159,9 @@ func (r IPGetParams) URLQuery() (v url.Values) {
 }
 
 type IPGetResponseEnvelope struct {
-	Errors   []IPGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IPGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelSchemasIP                `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []IntelSchemasIP             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    IPGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo IPGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -185,52 +185,6 @@ func (r *IPGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ipGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPGetResponseEnvelopeErrors struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    ipGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ipGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IPGetResponseEnvelopeErrors]
-type ipGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IPGetResponseEnvelopeMessages struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    ipGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ipGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [IPGetResponseEnvelopeMessages]
-type ipGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

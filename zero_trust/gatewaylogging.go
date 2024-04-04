@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -62,8 +63,8 @@ type ZeroTrustGatewayGatewayAccountLoggingSettings struct {
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii bool `json:"redact_pii"`
 	// Logging settings by rule type.
-	SettingsByRuleType ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType `json:"settings_by_rule_type"`
-	JSON               zeroTrustGatewayGatewayAccountLoggingSettingsJSON               `json:"-"`
+	SettingsByRuleType shared.UnnamedSchemaRef28                         `json:"settings_by_rule_type"`
+	JSON               zeroTrustGatewayGatewayAccountLoggingSettingsJSON `json:"-"`
 }
 
 // zeroTrustGatewayGatewayAccountLoggingSettingsJSON contains the JSON metadata for
@@ -83,67 +84,23 @@ func (r zeroTrustGatewayGatewayAccountLoggingSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Logging settings by rule type.
-type ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType struct {
-	// Logging settings for DNS firewall.
-	DNS interface{} `json:"dns"`
-	// Logging settings for HTTP/HTTPS firewall.
-	HTTP interface{} `json:"http"`
-	// Logging settings for Network firewall.
-	L4   interface{}                                                         `json:"l4"`
-	JSON zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON `json:"-"`
-}
-
-// zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON contains the
-// JSON metadata for the struct
-// [ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType]
-type zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON struct {
-	DNS         apijson.Field
-	HTTP        apijson.Field
-	L4          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON) RawJSON() string {
-	return r.raw
-}
-
 type GatewayLoggingUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii param.Field[bool] `json:"redact_pii"`
 	// Logging settings by rule type.
-	SettingsByRuleType param.Field[GatewayLoggingUpdateParamsSettingsByRuleType] `json:"settings_by_rule_type"`
+	SettingsByRuleType param.Field[shared.UnnamedSchemaRef28Param] `json:"settings_by_rule_type"`
 }
 
 func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Logging settings by rule type.
-type GatewayLoggingUpdateParamsSettingsByRuleType struct {
-	// Logging settings for DNS firewall.
-	DNS param.Field[interface{}] `json:"dns"`
-	// Logging settings for HTTP/HTTPS firewall.
-	HTTP param.Field[interface{}] `json:"http"`
-	// Logging settings for Network firewall.
-	L4 param.Field[interface{}] `json:"l4"`
-}
-
-func (r GatewayLoggingUpdateParamsSettingsByRuleType) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type GatewayLoggingUpdateResponseEnvelope struct {
-	Errors   []GatewayLoggingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayLoggingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewayGatewayAccountLoggingSettings  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172                  `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172                  `json:"messages,required"`
+	Result   ZeroTrustGatewayGatewayAccountLoggingSettings `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLoggingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -168,52 +125,6 @@ func (r gatewayLoggingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type GatewayLoggingUpdateResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    gatewayLoggingUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayLoggingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [GatewayLoggingUpdateResponseEnvelopeErrors]
-type gatewayLoggingUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLoggingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLoggingUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayLoggingUpdateResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    gatewayLoggingUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayLoggingUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [GatewayLoggingUpdateResponseEnvelopeMessages]
-type gatewayLoggingUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLoggingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLoggingUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type GatewayLoggingUpdateResponseEnvelopeSuccess bool
 
@@ -234,8 +145,8 @@ type GatewayLoggingGetParams struct {
 }
 
 type GatewayLoggingGetResponseEnvelope struct {
-	Errors   []GatewayLoggingGetResponseEnvelopeErrors     `json:"errors,required"`
-	Messages []GatewayLoggingGetResponseEnvelopeMessages   `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172                  `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172                  `json:"messages,required"`
 	Result   ZeroTrustGatewayGatewayAccountLoggingSettings `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
@@ -258,52 +169,6 @@ func (r *GatewayLoggingGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r gatewayLoggingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayLoggingGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    gatewayLoggingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayLoggingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayLoggingGetResponseEnvelopeErrors]
-type gatewayLoggingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLoggingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLoggingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayLoggingGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    gatewayLoggingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayLoggingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GatewayLoggingGetResponseEnvelopeMessages]
-type gatewayLoggingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLoggingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLoggingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

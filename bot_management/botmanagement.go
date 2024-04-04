@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -837,9 +838,9 @@ func (BotManagementUpdateParamsBotManagementBmSubscriptionConfig) ImplementsBotM
 }
 
 type BotManagementUpdateResponseEnvelope struct {
-	Errors   []BotManagementUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BotManagementUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   BotManagementUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   BotManagementUpdateResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success BotManagementUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    botManagementUpdateResponseEnvelopeJSON    `json:"-"`
@@ -864,52 +865,6 @@ func (r botManagementUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type BotManagementUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    botManagementUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// botManagementUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BotManagementUpdateResponseEnvelopeErrors]
-type botManagementUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BotManagementUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r botManagementUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type BotManagementUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    botManagementUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// botManagementUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [BotManagementUpdateResponseEnvelopeMessages]
-type botManagementUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BotManagementUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r botManagementUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type BotManagementUpdateResponseEnvelopeSuccess bool
 
@@ -931,9 +886,9 @@ type BotManagementGetParams struct {
 }
 
 type BotManagementGetResponseEnvelope struct {
-	Errors   []BotManagementGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BotManagementGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   BotManagementGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   BotManagementGetResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success BotManagementGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    botManagementGetResponseEnvelopeJSON    `json:"-"`
@@ -955,52 +910,6 @@ func (r *BotManagementGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r botManagementGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BotManagementGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    botManagementGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// botManagementGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BotManagementGetResponseEnvelopeErrors]
-type botManagementGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BotManagementGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r botManagementGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type BotManagementGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    botManagementGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// botManagementGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [BotManagementGetResponseEnvelopeMessages]
-type botManagementGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BotManagementGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r botManagementGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

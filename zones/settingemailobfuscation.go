@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -189,8 +190,8 @@ func (r SettingEmailObfuscationEditParamsValue) IsKnown() bool {
 }
 
 type SettingEmailObfuscationEditResponseEnvelope struct {
-	Errors   []SettingEmailObfuscationEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingEmailObfuscationEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Encrypt email adresses on your web page from bots, while keeping them visible to
@@ -218,60 +219,14 @@ func (r settingEmailObfuscationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingEmailObfuscationEditResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingEmailObfuscationEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingEmailObfuscationEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingEmailObfuscationEditResponseEnvelopeErrors]
-type settingEmailObfuscationEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEmailObfuscationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEmailObfuscationEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEmailObfuscationEditResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingEmailObfuscationEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingEmailObfuscationEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingEmailObfuscationEditResponseEnvelopeMessages]
-type settingEmailObfuscationEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEmailObfuscationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEmailObfuscationEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingEmailObfuscationGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingEmailObfuscationGetResponseEnvelope struct {
-	Errors   []SettingEmailObfuscationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingEmailObfuscationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Encrypt email adresses on your web page from bots, while keeping them visible to
@@ -296,51 +251,5 @@ func (r *SettingEmailObfuscationGetResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r settingEmailObfuscationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEmailObfuscationGetResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingEmailObfuscationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingEmailObfuscationGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingEmailObfuscationGetResponseEnvelopeErrors]
-type settingEmailObfuscationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEmailObfuscationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEmailObfuscationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEmailObfuscationGetResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingEmailObfuscationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingEmailObfuscationGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingEmailObfuscationGetResponseEnvelopeMessages]
-type settingEmailObfuscationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEmailObfuscationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEmailObfuscationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

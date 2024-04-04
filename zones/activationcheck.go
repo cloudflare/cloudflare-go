@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -73,9 +74,9 @@ type ActivationCheckTriggerParams struct {
 }
 
 type ActivationCheckTriggerResponseEnvelope struct {
-	Errors   []ActivationCheckTriggerResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ActivationCheckTriggerResponseEnvelopeMessages `json:"messages,required"`
-	Result   ActivationCheckTriggerResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   ActivationCheckTriggerResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ActivationCheckTriggerResponseEnvelopeSuccess `json:"success,required"`
 	JSON    activationCheckTriggerResponseEnvelopeJSON    `json:"-"`
@@ -97,52 +98,6 @@ func (r *ActivationCheckTriggerResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r activationCheckTriggerResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ActivationCheckTriggerResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    activationCheckTriggerResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// activationCheckTriggerResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ActivationCheckTriggerResponseEnvelopeErrors]
-type activationCheckTriggerResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ActivationCheckTriggerResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r activationCheckTriggerResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ActivationCheckTriggerResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    activationCheckTriggerResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// activationCheckTriggerResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [ActivationCheckTriggerResponseEnvelopeMessages]
-type activationCheckTriggerResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ActivationCheckTriggerResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r activationCheckTriggerResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

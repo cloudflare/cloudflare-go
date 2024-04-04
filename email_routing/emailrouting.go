@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -372,9 +373,9 @@ func (r EmailRoutingDisableParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EmailRoutingDisableResponseEnvelope struct {
-	Errors   []EmailRoutingDisableResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EmailRoutingDisableResponseEnvelopeMessages `json:"messages,required"`
-	Result   EmailRoutingDisableResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   EmailRoutingDisableResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success EmailRoutingDisableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingDisableResponseEnvelopeJSON    `json:"-"`
@@ -396,52 +397,6 @@ func (r *EmailRoutingDisableResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r emailRoutingDisableResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingDisableResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    emailRoutingDisableResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// emailRoutingDisableResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [EmailRoutingDisableResponseEnvelopeErrors]
-type emailRoutingDisableResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingDisableResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingDisableResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingDisableResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    emailRoutingDisableResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// emailRoutingDisableResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [EmailRoutingDisableResponseEnvelopeMessages]
-type emailRoutingDisableResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingDisableResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingDisableResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -469,9 +424,9 @@ func (r EmailRoutingEnableParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EmailRoutingEnableResponseEnvelope struct {
-	Errors   []EmailRoutingEnableResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EmailRoutingEnableResponseEnvelopeMessages `json:"messages,required"`
-	Result   EmailRoutingEnableResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   EmailRoutingEnableResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success EmailRoutingEnableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingEnableResponseEnvelopeJSON    `json:"-"`
@@ -496,52 +451,6 @@ func (r emailRoutingEnableResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type EmailRoutingEnableResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    emailRoutingEnableResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// emailRoutingEnableResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [EmailRoutingEnableResponseEnvelopeErrors]
-type emailRoutingEnableResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingEnableResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingEnableResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingEnableResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    emailRoutingEnableResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// emailRoutingEnableResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [EmailRoutingEnableResponseEnvelopeMessages]
-type emailRoutingEnableResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingEnableResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingEnableResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type EmailRoutingEnableResponseEnvelopeSuccess bool
 
@@ -558,9 +467,9 @@ func (r EmailRoutingEnableResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type EmailRoutingGetResponseEnvelope struct {
-	Errors   []EmailRoutingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EmailRoutingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   EmailRoutingGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   EmailRoutingGetResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success EmailRoutingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingGetResponseEnvelopeJSON    `json:"-"`
@@ -582,52 +491,6 @@ func (r *EmailRoutingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r emailRoutingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingGetResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    emailRoutingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// emailRoutingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [EmailRoutingGetResponseEnvelopeErrors]
-type emailRoutingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type EmailRoutingGetResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    emailRoutingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// emailRoutingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [EmailRoutingGetResponseEnvelopeMessages]
-type emailRoutingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailRoutingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

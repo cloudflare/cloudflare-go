@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AddressMapZoneService contains methods and other services that help with
@@ -35,7 +33,7 @@ func NewAddressMapZoneService(opts ...option.RequestOption) (r *AddressMapZoneSe
 }
 
 // Add a zone as a member of a particular address map.
-func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string, params AddressMapZoneUpdateParams, opts ...option.RequestOption) (res *AddressMapZoneUpdateResponse, err error) {
+func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string, params AddressMapZoneUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapZoneUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", params.AccountID, addressMapID, params.ZoneID)
@@ -48,7 +46,7 @@ func (r *AddressMapZoneService) Update(ctx context.Context, addressMapID string,
 }
 
 // Remove a zone as a member of a particular address map.
-func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string, params AddressMapZoneDeleteParams, opts ...option.RequestOption) (res *AddressMapZoneDeleteResponse, err error) {
+func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string, params AddressMapZoneDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapZoneDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", params.AccountID, addressMapID, params.ZoneID)
@@ -59,56 +57,6 @@ func (r *AddressMapZoneService) Delete(ctx context.Context, addressMapID string,
 	res = &env.Result
 	return
 }
-
-// Union satisfied by [addressing.AddressMapZoneUpdateResponseUnknown],
-// [addressing.AddressMapZoneUpdateResponseArray] or [shared.UnionString].
-type AddressMapZoneUpdateResponse interface {
-	ImplementsAddressingAddressMapZoneUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapZoneUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AddressMapZoneUpdateResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AddressMapZoneUpdateResponseArray []interface{}
-
-func (r AddressMapZoneUpdateResponseArray) ImplementsAddressingAddressMapZoneUpdateResponse() {}
-
-// Union satisfied by [addressing.AddressMapZoneDeleteResponseUnknown],
-// [addressing.AddressMapZoneDeleteResponseArray] or [shared.UnionString].
-type AddressMapZoneDeleteResponse interface {
-	ImplementsAddressingAddressMapZoneDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressMapZoneDeleteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AddressMapZoneDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AddressMapZoneDeleteResponseArray []interface{}
-
-func (r AddressMapZoneDeleteResponseArray) ImplementsAddressingAddressMapZoneDeleteResponse() {}
 
 type AddressMapZoneUpdateParams struct {
 	// Identifier
@@ -123,9 +71,9 @@ func (r AddressMapZoneUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapZoneUpdateResponseEnvelope struct {
-	Errors   []AddressMapZoneUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapZoneUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressMapZoneUpdateResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapZoneUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapZoneUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -149,52 +97,6 @@ func (r *AddressMapZoneUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r addressMapZoneUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapZoneUpdateResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    addressMapZoneUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressMapZoneUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AddressMapZoneUpdateResponseEnvelopeErrors]
-type addressMapZoneUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapZoneUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapZoneUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapZoneUpdateResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    addressMapZoneUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressMapZoneUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AddressMapZoneUpdateResponseEnvelopeMessages]
-type addressMapZoneUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapZoneUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapZoneUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -257,9 +159,9 @@ func (r AddressMapZoneDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapZoneDeleteResponseEnvelope struct {
-	Errors   []AddressMapZoneDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressMapZoneDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressMapZoneDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressMapZoneDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressMapZoneDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -283,52 +185,6 @@ func (r *AddressMapZoneDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r addressMapZoneDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapZoneDeleteResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    addressMapZoneDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressMapZoneDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AddressMapZoneDeleteResponseEnvelopeErrors]
-type addressMapZoneDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapZoneDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapZoneDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AddressMapZoneDeleteResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    addressMapZoneDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressMapZoneDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AddressMapZoneDeleteResponseEnvelopeMessages]
-type addressMapZoneDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapZoneDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapZoneDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

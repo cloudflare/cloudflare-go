@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // RequestPriorityService contains methods and other services that help with
@@ -62,7 +60,7 @@ func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier s
 }
 
 // Delete a Priority Intelligence Report
-func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *RequestPriorityDeleteResponse, err error) {
+func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", accountIdentifier, priorityIdentifer)
@@ -159,31 +157,6 @@ func (r CloudforceOnePriorityItemTlp) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [cloudforce_one.RequestPriorityDeleteResponseUnknown],
-// [cloudforce_one.RequestPriorityDeleteResponseArray] or [shared.UnionString].
-type RequestPriorityDeleteResponse interface {
-	ImplementsCloudforceOneRequestPriorityDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RequestPriorityDeleteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RequestPriorityDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type RequestPriorityDeleteResponseArray []interface{}
-
-func (r RequestPriorityDeleteResponseArray) ImplementsCloudforceOneRequestPriorityDeleteResponse() {}
-
 type RequestPriorityNewParams struct {
 	// List of labels
 	Labels param.Field[[]string] `json:"labels,required"`
@@ -219,9 +192,9 @@ func (r RequestPriorityNewParamsTlp) IsKnown() bool {
 }
 
 type RequestPriorityNewResponseEnvelope struct {
-	Errors   []RequestPriorityNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestPriorityNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOnePriorityItem                    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   CloudforceOnePriorityItem    `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityNewResponseEnvelopeJSON    `json:"-"`
@@ -243,52 +216,6 @@ func (r *RequestPriorityNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r requestPriorityNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestPriorityNewResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    requestPriorityNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestPriorityNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RequestPriorityNewResponseEnvelopeErrors]
-type requestPriorityNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestPriorityNewResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    requestPriorityNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestPriorityNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RequestPriorityNewResponseEnvelopeMessages]
-type requestPriorityNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -342,9 +269,9 @@ func (r RequestPriorityUpdateParamsTlp) IsKnown() bool {
 }
 
 type RequestPriorityUpdateResponseEnvelope struct {
-	Errors   []RequestPriorityUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestPriorityUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOneRequestItem                        `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   CloudforceOneRequestItem     `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityUpdateResponseEnvelopeJSON    `json:"-"`
@@ -369,52 +296,6 @@ func (r requestPriorityUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestPriorityUpdateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    requestPriorityUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestPriorityUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RequestPriorityUpdateResponseEnvelopeErrors]
-type requestPriorityUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestPriorityUpdateResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    requestPriorityUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestPriorityUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RequestPriorityUpdateResponseEnvelopeMessages]
-type requestPriorityUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RequestPriorityUpdateResponseEnvelopeSuccess bool
 
@@ -431,9 +312,9 @@ func (r RequestPriorityUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityDeleteResponseEnvelope struct {
-	Errors   []RequestPriorityDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestPriorityDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   RequestPriorityDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171   `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityDeleteResponseEnvelopeJSON    `json:"-"`
@@ -458,52 +339,6 @@ func (r requestPriorityDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestPriorityDeleteResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    requestPriorityDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestPriorityDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RequestPriorityDeleteResponseEnvelopeErrors]
-type requestPriorityDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestPriorityDeleteResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    requestPriorityDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestPriorityDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RequestPriorityDeleteResponseEnvelopeMessages]
-type requestPriorityDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RequestPriorityDeleteResponseEnvelopeSuccess bool
 
@@ -520,9 +355,9 @@ func (r RequestPriorityDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityGetResponseEnvelope struct {
-	Errors   []RequestPriorityGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestPriorityGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOneRequestItem                     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   CloudforceOneRequestItem     `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityGetResponseEnvelopeJSON    `json:"-"`
@@ -547,52 +382,6 @@ func (r requestPriorityGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestPriorityGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    requestPriorityGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestPriorityGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RequestPriorityGetResponseEnvelopeErrors]
-type requestPriorityGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestPriorityGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    requestPriorityGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestPriorityGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RequestPriorityGetResponseEnvelopeMessages]
-type requestPriorityGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type RequestPriorityGetResponseEnvelopeSuccess bool
 
@@ -609,9 +398,9 @@ func (r RequestPriorityGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityQuotaResponseEnvelope struct {
-	Errors   []RequestPriorityQuotaResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RequestPriorityQuotaResponseEnvelopeMessages `json:"messages,required"`
-	Result   CloudforceOneQuota                             `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   CloudforceOneQuota           `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityQuotaResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityQuotaResponseEnvelopeJSON    `json:"-"`
@@ -633,52 +422,6 @@ func (r *RequestPriorityQuotaResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r requestPriorityQuotaResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestPriorityQuotaResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    requestPriorityQuotaResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// requestPriorityQuotaResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RequestPriorityQuotaResponseEnvelopeErrors]
-type requestPriorityQuotaResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityQuotaResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityQuotaResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestPriorityQuotaResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    requestPriorityQuotaResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// requestPriorityQuotaResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RequestPriorityQuotaResponseEnvelopeMessages]
-type requestPriorityQuotaResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestPriorityQuotaResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityQuotaResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -305,9 +305,9 @@ func (r OriginCACertificateNewParamsRequestedValidity) IsKnown() bool {
 }
 
 type OriginCACertificateNewResponseEnvelope struct {
-	Errors   []OriginCACertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginCACertificateNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   OriginCACertificateNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   OriginCACertificateNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originCACertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -329,52 +329,6 @@ func (r *OriginCACertificateNewResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r originCACertificateNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCACertificateNewResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    originCACertificateNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originCACertificateNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [OriginCACertificateNewResponseEnvelopeErrors]
-type originCACertificateNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCACertificateNewResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    originCACertificateNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originCACertificateNewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [OriginCACertificateNewResponseEnvelopeMessages]
-type originCACertificateNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -416,9 +370,9 @@ func (r OriginCACertificateDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type OriginCACertificateDeleteResponseEnvelope struct {
-	Errors   []OriginCACertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginCACertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   OriginCACertificateDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172      `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172      `json:"messages,required"`
+	Result   OriginCACertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originCACertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -443,52 +397,6 @@ func (r originCACertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type OriginCACertificateDeleteResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    originCACertificateDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originCACertificateDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [OriginCACertificateDeleteResponseEnvelopeErrors]
-type originCACertificateDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCACertificateDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    originCACertificateDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originCACertificateDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [OriginCACertificateDeleteResponseEnvelopeMessages]
-type originCACertificateDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type OriginCACertificateDeleteResponseEnvelopeSuccess bool
 
@@ -505,9 +413,9 @@ func (r OriginCACertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OriginCACertificateGetResponseEnvelope struct {
-	Errors   []OriginCACertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginCACertificateGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   OriginCACertificateGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   OriginCACertificateGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originCACertificateGetResponseEnvelopeJSON    `json:"-"`
@@ -529,52 +437,6 @@ func (r *OriginCACertificateGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r originCACertificateGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCACertificateGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    originCACertificateGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originCACertificateGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [OriginCACertificateGetResponseEnvelopeErrors]
-type originCACertificateGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OriginCACertificateGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    originCACertificateGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originCACertificateGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [OriginCACertificateGetResponseEnvelopeMessages]
-type originCACertificateGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginCACertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originCACertificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

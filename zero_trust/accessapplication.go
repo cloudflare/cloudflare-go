@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -509,7 +510,7 @@ type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat `json:"name_id_format"`
+	NameIDFormat shared.UnnamedSchemaRef77 `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -583,9 +584,9 @@ type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes struct
 	// The name of the attribute.
 	Name string `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat `json:"name_format"`
-	Source     ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource     `json:"source"`
-	JSON       zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON       `json:"-"`
+	NameFormat shared.UnnamedSchemaRef75                                                `json:"name_format"`
+	Source     shared.UnnamedSchemaRef76                                                `json:"source"`
+	JSON       zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON `json:"-"`
 }
 
 // zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON
@@ -605,62 +606,6 @@ func (r *ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes) U
 
 func (r zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON) RawJSON() string {
 	return r.raw
-}
-
-// A globally unique name for an identity or service provider.
-type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat string
-
-const (
-	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI         ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-)
-
-func (r ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat) IsKnown() bool {
-	switch r {
-	case ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic, ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI:
-		return true
-	}
-	return false
-}
-
-type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource struct {
-	// The name of the IdP attribute.
-	Name string                                                                         `json:"name"`
-	JSON zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON `json:"-"`
-}
-
-// zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON
-// contains the JSON metadata for the struct
-// [ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource]
-type zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-// The format of the name identifier sent to the SaaS application.
-type ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat string
-
-const (
-	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID    ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "id"
-	ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "email"
-)
-
-func (r ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat) IsKnown() bool {
-	switch r {
-	case ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID, ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail:
-		return true
-	}
-	return false
 }
 
 type ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasApp struct {
@@ -1637,7 +1582,7 @@ type AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat] `json:"name_id_format"`
+	NameIDFormat param.Field[shared.UnnamedSchemaRef77] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1685,54 +1630,12 @@ type AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttr
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat] `json:"name_format"`
-	Source     param.Field[AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource]     `json:"source"`
+	NameFormat param.Field[shared.UnnamedSchemaRef75]      `json:"name_format"`
+	Source     param.Field[shared.UnnamedSchemaRef76Param] `json:"source"`
 }
 
 func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// A globally unique name for an identity or service provider.
-type AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat string
-
-const (
-	AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI         AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-)
-
-func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic, AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource struct {
-	// The name of the IdP attribute.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The format of the name identifier sent to the SaaS application.
-type AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat string
-
-const (
-	AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID    AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "id"
-	AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "email"
-)
-
-func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID, AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasApp struct {
@@ -2281,9 +2184,9 @@ func (AccessApplicationNewParamsBookmarkApplication) ImplementsAccessApplication
 }
 
 type AccessApplicationNewResponseEnvelope struct {
-	Errors   []AccessApplicationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustApps                                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustApps                `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationNewResponseEnvelopeJSON    `json:"-"`
@@ -2305,52 +2208,6 @@ func (r *AccessApplicationNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r accessApplicationNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationNewResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    accessApplicationNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessApplicationNewResponseEnvelopeErrors]
-type accessApplicationNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationNewResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessApplicationNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AccessApplicationNewResponseEnvelopeMessages]
-type accessApplicationNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2592,7 +2449,7 @@ type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasApp struct
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat] `json:"name_id_format"`
+	NameIDFormat param.Field[shared.UnnamedSchemaRef77] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -2640,54 +2497,12 @@ type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomA
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat] `json:"name_format"`
-	Source     param.Field[AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource]     `json:"source"`
+	NameFormat param.Field[shared.UnnamedSchemaRef75]      `json:"name_format"`
+	Source     param.Field[shared.UnnamedSchemaRef76Param] `json:"source"`
 }
 
 func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// A globally unique name for an identity or service provider.
-type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat string
-
-const (
-	AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI         AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-)
-
-func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic, AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource struct {
-	// The name of the IdP attribute.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The format of the name identifier sent to the SaaS application.
-type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat string
-
-const (
-	AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID    AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "id"
-	AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat = "email"
-)
-
-func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormat) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatID, AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasAppNameIDFormatEmail:
-		return true
-	}
-	return false
 }
 
 type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasApp struct {
@@ -3278,9 +3093,9 @@ type AccessApplicationUpdateParamsBookmarkApplicationAppID interface {
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
-	Errors   []AccessApplicationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustApps                                     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustApps                `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -3302,52 +3117,6 @@ func (r *AccessApplicationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r accessApplicationUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUpdateResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    accessApplicationUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessApplicationUpdateResponseEnvelopeErrors]
-type accessApplicationUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    accessApplicationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessApplicationUpdateResponseEnvelopeMessages]
-type accessApplicationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3388,9 +3157,9 @@ type AccessApplicationDeleteParamsAppID interface {
 }
 
 type AccessApplicationDeleteResponseEnvelope struct {
-	Errors   []AccessApplicationDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApplicationDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Result   AccessApplicationDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -3412,52 +3181,6 @@ func (r *AccessApplicationDeleteResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r accessApplicationDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationDeleteResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    accessApplicationDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessApplicationDeleteResponseEnvelopeErrors]
-type accessApplicationDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationDeleteResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    accessApplicationDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessApplicationDeleteResponseEnvelopeMessages]
-type accessApplicationDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3491,9 +3214,9 @@ type AccessApplicationGetParamsAppID interface {
 }
 
 type AccessApplicationGetResponseEnvelope struct {
-	Errors   []AccessApplicationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustApps                                  `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustApps                `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationGetResponseEnvelopeJSON    `json:"-"`
@@ -3515,52 +3238,6 @@ func (r *AccessApplicationGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r accessApplicationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationGetResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    accessApplicationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessApplicationGetResponseEnvelopeErrors]
-type accessApplicationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationGetResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessApplicationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AccessApplicationGetResponseEnvelopeMessages]
-type accessApplicationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

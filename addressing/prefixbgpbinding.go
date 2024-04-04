@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // PrefixBGPBindingService contains methods and other services that help with
@@ -85,7 +83,7 @@ func (r *PrefixBGPBindingService) ListAutoPaging(ctx context.Context, prefixID s
 }
 
 // Delete a Service Binding
-func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixBGPBindingDeleteParams, opts ...option.RequestOption) (res *PrefixBGPBindingDeleteResponse, err error) {
+func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixBGPBindingDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPBindingDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", body.AccountID, prefixID, bindingID)
@@ -185,31 +183,6 @@ func (r AddressingServiceBindingProvisioningState) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [addressing.PrefixBGPBindingDeleteResponseUnknown],
-// [addressing.PrefixBGPBindingDeleteResponseArray] or [shared.UnionString].
-type PrefixBGPBindingDeleteResponse interface {
-	ImplementsAddressingPrefixBGPBindingDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PrefixBGPBindingDeleteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PrefixBGPBindingDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type PrefixBGPBindingDeleteResponseArray []interface{}
-
-func (r PrefixBGPBindingDeleteResponseArray) ImplementsAddressingPrefixBGPBindingDeleteResponse() {}
-
 type PrefixBGPBindingNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -224,9 +197,9 @@ func (r PrefixBGPBindingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixBGPBindingNewResponseEnvelope struct {
-	Errors   []PrefixBGPBindingNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPBindingNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingServiceBinding                      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AddressingServiceBinding     `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingNewResponseEnvelopeJSON    `json:"-"`
@@ -248,52 +221,6 @@ func (r *PrefixBGPBindingNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r prefixBGPBindingNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPBindingNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    prefixBGPBindingNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixBGPBindingNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixBGPBindingNewResponseEnvelopeErrors]
-type prefixBGPBindingNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPBindingNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPBindingNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPBindingNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    prefixBGPBindingNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixBGPBindingNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixBGPBindingNewResponseEnvelopeMessages]
-type prefixBGPBindingNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPBindingNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPBindingNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -323,9 +250,9 @@ type PrefixBGPBindingDeleteParams struct {
 }
 
 type PrefixBGPBindingDeleteResponseEnvelope struct {
-	Errors   []PrefixBGPBindingDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPBindingDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   PrefixBGPBindingDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171   `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingDeleteResponseEnvelopeJSON    `json:"-"`
@@ -350,52 +277,6 @@ func (r prefixBGPBindingDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PrefixBGPBindingDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    prefixBGPBindingDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixBGPBindingDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [PrefixBGPBindingDeleteResponseEnvelopeErrors]
-type prefixBGPBindingDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPBindingDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPBindingDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPBindingDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    prefixBGPBindingDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixBGPBindingDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [PrefixBGPBindingDeleteResponseEnvelopeMessages]
-type prefixBGPBindingDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPBindingDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPBindingDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PrefixBGPBindingDeleteResponseEnvelopeSuccess bool
 
@@ -417,9 +298,9 @@ type PrefixBGPBindingGetParams struct {
 }
 
 type PrefixBGPBindingGetResponseEnvelope struct {
-	Errors   []PrefixBGPBindingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixBGPBindingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingServiceBinding                      `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AddressingServiceBinding     `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingGetResponseEnvelopeJSON    `json:"-"`
@@ -441,52 +322,6 @@ func (r *PrefixBGPBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r prefixBGPBindingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPBindingGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    prefixBGPBindingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixBGPBindingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixBGPBindingGetResponseEnvelopeErrors]
-type prefixBGPBindingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPBindingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPBindingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixBGPBindingGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    prefixBGPBindingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixBGPBindingGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixBGPBindingGetResponseEnvelopeMessages]
-type prefixBGPBindingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixBGPBindingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixBGPBindingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -185,8 +186,8 @@ func (r SettingHTTP3EditParamsValue) IsKnown() bool {
 }
 
 type SettingHTTP3EditResponseEnvelope struct {
-	Errors   []SettingHTTP3EditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingHTTP3EditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP3 enabled for this zone.
@@ -213,60 +214,14 @@ func (r settingHTTP3EditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingHTTP3EditResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingHTTP3EditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingHTTP3EditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingHTTP3EditResponseEnvelopeErrors]
-type settingHTTP3EditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHTTP3EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHTTP3EditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingHTTP3EditResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingHTTP3EditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingHTTP3EditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingHTTP3EditResponseEnvelopeMessages]
-type settingHTTP3EditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHTTP3EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHTTP3EditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingHTTP3GetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingHTTP3GetResponseEnvelope struct {
-	Errors   []SettingHTTP3GetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingHTTP3GetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP3 enabled for this zone.
@@ -290,51 +245,5 @@ func (r *SettingHTTP3GetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r settingHTTP3GetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingHTTP3GetResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    settingHTTP3GetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingHTTP3GetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingHTTP3GetResponseEnvelopeErrors]
-type settingHTTP3GetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHTTP3GetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHTTP3GetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingHTTP3GetResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingHTTP3GetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingHTTP3GetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingHTTP3GetResponseEnvelopeMessages]
-type settingHTTP3GetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHTTP3GetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHTTP3GetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

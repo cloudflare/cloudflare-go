@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // PrefixService contains methods and other services that help with interacting
@@ -76,7 +74,7 @@ func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListPara
 }
 
 // Delete an unapproved prefix owned by the account.
-func (r *PrefixService) Delete(ctx context.Context, prefixID string, params PrefixDeleteParams, opts ...option.RequestOption) (res *PrefixDeleteResponse, err error) {
+func (r *PrefixService) Delete(ctx context.Context, prefixID string, params PrefixDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
@@ -174,31 +172,6 @@ func (r addressingIpamPrefixesJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [addressing.PrefixDeleteResponseUnknown],
-// [addressing.PrefixDeleteResponseArray] or [shared.UnionString].
-type PrefixDeleteResponse interface {
-	ImplementsAddressingPrefixDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PrefixDeleteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PrefixDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type PrefixDeleteResponseArray []interface{}
-
-func (r PrefixDeleteResponseArray) ImplementsAddressingPrefixDeleteResponse() {}
-
 type PrefixNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -215,9 +188,9 @@ func (r PrefixNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixNewResponseEnvelope struct {
-	Errors   []PrefixNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingIpamPrefixes              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AddressingIpamPrefixes       `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixNewResponseEnvelopeJSON    `json:"-"`
@@ -239,52 +212,6 @@ func (r *PrefixNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r prefixNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixNewResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    prefixNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PrefixNewResponseEnvelopeErrors]
-type prefixNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixNewResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    prefixNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PrefixNewResponseEnvelopeMessages]
-type prefixNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -319,9 +246,9 @@ func (r PrefixDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDeleteResponseEnvelope struct {
-	Errors   []PrefixDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   PrefixDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PrefixDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PrefixDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -345,52 +272,6 @@ func (r *PrefixDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r prefixDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDeleteResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    prefixDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PrefixDeleteResponseEnvelopeErrors]
-type prefixDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDeleteResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    prefixDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PrefixDeleteResponseEnvelopeMessages]
-type prefixDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -452,9 +333,9 @@ func (r PrefixEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixEditResponseEnvelope struct {
-	Errors   []PrefixEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingIpamPrefixes               `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AddressingIpamPrefixes       `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixEditResponseEnvelopeJSON    `json:"-"`
@@ -479,52 +360,6 @@ func (r prefixEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type PrefixEditResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    prefixEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PrefixEditResponseEnvelopeErrors]
-type prefixEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixEditResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    prefixEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PrefixEditResponseEnvelopeMessages]
-type prefixEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type PrefixEditResponseEnvelopeSuccess bool
 
@@ -546,9 +381,9 @@ type PrefixGetParams struct {
 }
 
 type PrefixGetResponseEnvelope struct {
-	Errors   []PrefixGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingIpamPrefixes              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AddressingIpamPrefixes       `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixGetResponseEnvelopeJSON    `json:"-"`
@@ -570,52 +405,6 @@ func (r *PrefixGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r prefixGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    prefixGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [PrefixGetResponseEnvelopeErrors]
-type prefixGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    prefixGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [PrefixGetResponseEnvelopeMessages]
-type prefixGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

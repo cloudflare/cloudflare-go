@@ -81,20 +81,20 @@ func (r annotationOutageGetResponseJSON) RawJSON() string {
 }
 
 type AnnotationOutageGetResponseAnnotation struct {
-	ID               string                                                  `json:"id,required"`
-	ASNs             []int64                                                 `json:"asns,required"`
-	ASNsDetails      []AnnotationOutageGetResponseAnnotationsASNsDetail      `json:"asnsDetails,required"`
-	DataSource       string                                                  `json:"dataSource,required"`
-	EventType        string                                                  `json:"eventType,required"`
-	Locations        []string                                                `json:"locations,required"`
-	LocationsDetails []AnnotationOutageGetResponseAnnotationsLocationsDetail `json:"locationsDetails,required"`
-	Outage           AnnotationOutageGetResponseAnnotationsOutage            `json:"outage,required"`
-	StartDate        string                                                  `json:"startDate,required"`
-	Description      string                                                  `json:"description"`
-	EndDate          string                                                  `json:"endDate"`
-	LinkedURL        string                                                  `json:"linkedUrl"`
-	Scope            string                                                  `json:"scope"`
-	JSON             annotationOutageGetResponseAnnotationJSON               `json:"-"`
+	ID               string                                             `json:"id,required"`
+	ASNs             []int64                                            `json:"asns,required"`
+	ASNsDetails      []AnnotationOutageGetResponseAnnotationsASNsDetail `json:"asnsDetails,required"`
+	DataSource       string                                             `json:"dataSource,required"`
+	EventType        string                                             `json:"eventType,required"`
+	Locations        []string                                           `json:"locations,required"`
+	LocationsDetails []UnnamedSchemaRef106                              `json:"locationsDetails,required"`
+	Outage           AnnotationOutageGetResponseAnnotationsOutage       `json:"outage,required"`
+	StartDate        string                                             `json:"startDate,required"`
+	Description      string                                             `json:"description"`
+	EndDate          string                                             `json:"endDate"`
+	LinkedURL        string                                             `json:"linkedUrl"`
+	Scope            string                                             `json:"scope"`
+	JSON             annotationOutageGetResponseAnnotationJSON          `json:"-"`
 }
 
 // annotationOutageGetResponseAnnotationJSON contains the JSON metadata for the
@@ -126,10 +126,10 @@ func (r annotationOutageGetResponseAnnotationJSON) RawJSON() string {
 }
 
 type AnnotationOutageGetResponseAnnotationsASNsDetail struct {
-	ASN       string                                                     `json:"asn,required"`
-	Name      string                                                     `json:"name,required"`
-	Locations AnnotationOutageGetResponseAnnotationsASNsDetailsLocations `json:"locations"`
-	JSON      annotationOutageGetResponseAnnotationsASNsDetailJSON       `json:"-"`
+	ASN       string                                               `json:"asn,required"`
+	Name      string                                               `json:"name,required"`
+	Locations UnnamedSchemaRef106                                  `json:"locations"`
+	JSON      annotationOutageGetResponseAnnotationsASNsDetailJSON `json:"-"`
 }
 
 // annotationOutageGetResponseAnnotationsASNsDetailJSON contains the JSON metadata
@@ -147,53 +147,6 @@ func (r *AnnotationOutageGetResponseAnnotationsASNsDetail) UnmarshalJSON(data []
 }
 
 func (r annotationOutageGetResponseAnnotationsASNsDetailJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnnotationOutageGetResponseAnnotationsASNsDetailsLocations struct {
-	Code string                                                         `json:"code,required"`
-	Name string                                                         `json:"name,required"`
-	JSON annotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON `json:"-"`
-}
-
-// annotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON contains the JSON
-// metadata for the struct
-// [AnnotationOutageGetResponseAnnotationsASNsDetailsLocations]
-type annotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON struct {
-	Code        apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnnotationOutageGetResponseAnnotationsASNsDetailsLocations) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r annotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnnotationOutageGetResponseAnnotationsLocationsDetail struct {
-	Code string                                                    `json:"code,required"`
-	Name string                                                    `json:"name,required"`
-	JSON annotationOutageGetResponseAnnotationsLocationsDetailJSON `json:"-"`
-}
-
-// annotationOutageGetResponseAnnotationsLocationsDetailJSON contains the JSON
-// metadata for the struct [AnnotationOutageGetResponseAnnotationsLocationsDetail]
-type annotationOutageGetResponseAnnotationsLocationsDetailJSON struct {
-	Code        apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnnotationOutageGetResponseAnnotationsLocationsDetail) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r annotationOutageGetResponseAnnotationsLocationsDetailJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -221,8 +174,8 @@ func (r annotationOutageGetResponseAnnotationsOutageJSON) RawJSON() string {
 }
 
 type AnnotationOutageLocationsResponse struct {
-	Annotations []AnnotationOutageLocationsResponseAnnotation `json:"annotations,required"`
-	JSON        annotationOutageLocationsResponseJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef160                 `json:"annotations,required"`
+	JSON        annotationOutageLocationsResponseJSON `json:"-"`
 }
 
 // annotationOutageLocationsResponseJSON contains the JSON metadata for the struct
@@ -238,31 +191,6 @@ func (r *AnnotationOutageLocationsResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r annotationOutageLocationsResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnnotationOutageLocationsResponseAnnotation struct {
-	ClientCountryAlpha2 string                                          `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                          `json:"clientCountryName,required"`
-	Value               string                                          `json:"value,required"`
-	JSON                annotationOutageLocationsResponseAnnotationJSON `json:"-"`
-}
-
-// annotationOutageLocationsResponseAnnotationJSON contains the JSON metadata for
-// the struct [AnnotationOutageLocationsResponseAnnotation]
-type annotationOutageLocationsResponseAnnotationJSON struct {
-	ClientCountryAlpha2 apijson.Field
-	ClientCountryName   apijson.Field
-	Value               apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AnnotationOutageLocationsResponseAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r annotationOutageLocationsResponseAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

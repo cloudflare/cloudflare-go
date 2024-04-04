@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -315,9 +316,9 @@ func (r OrganizationNewParamsLoginDesign) MarshalJSON() (data []byte, err error)
 }
 
 type OrganizationNewResponseEnvelope struct {
-	Errors   []OrganizationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OrganizationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustOrganizations                    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustOrganizations       `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationNewResponseEnvelopeJSON    `json:"-"`
@@ -339,52 +340,6 @@ func (r *OrganizationNewResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r organizationNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationNewResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    organizationNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// organizationNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [OrganizationNewResponseEnvelopeErrors]
-type organizationNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationNewResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    organizationNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// organizationNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [OrganizationNewResponseEnvelopeMessages]
-type organizationNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -473,9 +428,9 @@ func (r OrganizationUpdateParamsLoginDesign) MarshalJSON() (data []byte, err err
 }
 
 type OrganizationUpdateResponseEnvelope struct {
-	Errors   []OrganizationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OrganizationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustOrganizations                       `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustOrganizations       `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -497,52 +452,6 @@ func (r *OrganizationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r organizationUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationUpdateResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    organizationUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// organizationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [OrganizationUpdateResponseEnvelopeErrors]
-type organizationUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    organizationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// organizationUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [OrganizationUpdateResponseEnvelopeMessages]
-type organizationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -569,9 +478,9 @@ type OrganizationListParams struct {
 }
 
 type OrganizationListResponseEnvelope struct {
-	Errors   []OrganizationListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OrganizationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustOrganizations                     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustOrganizations       `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationListResponseEnvelopeJSON    `json:"-"`
@@ -593,52 +502,6 @@ func (r *OrganizationListResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r organizationListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationListResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    organizationListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// organizationListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [OrganizationListResponseEnvelopeErrors]
-type organizationListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationListResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    organizationListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// organizationListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [OrganizationListResponseEnvelopeMessages]
-type organizationListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OrganizationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

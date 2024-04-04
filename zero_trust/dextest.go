@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -1024,8 +1025,8 @@ func (r digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTim
 }
 
 type DEXTestListResponse struct {
-	Errors   []DEXTestListResponseError       `json:"errors,required"`
-	Messages []DEXTestListResponseMessage     `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
 	Result   DigitalExperienceMonitoringTests `json:"result,required"`
 	// Whether the API call was successful
 	Success    DEXTestListResponseSuccess    `json:"success,required"`
@@ -1050,52 +1051,6 @@ func (r *DEXTestListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dexTestListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXTestListResponseError struct {
-	Code    int64                        `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    dexTestListResponseErrorJSON `json:"-"`
-}
-
-// dexTestListResponseErrorJSON contains the JSON metadata for the struct
-// [DEXTestListResponseError]
-type dexTestListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTestListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTestListResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXTestListResponseMessage struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    dexTestListResponseMessageJSON `json:"-"`
-}
-
-// dexTestListResponseMessageJSON contains the JSON metadata for the struct
-// [DEXTestListResponseMessage]
-type dexTestListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTestListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTestListResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 

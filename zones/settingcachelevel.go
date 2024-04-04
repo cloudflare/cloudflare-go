@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -203,8 +204,8 @@ func (r SettingCacheLevelEditParamsValue) IsKnown() bool {
 }
 
 type SettingCacheLevelEditResponseEnvelope struct {
-	Errors   []SettingCacheLevelEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingCacheLevelEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cache Level functions based off the setting level. The basic setting will cache
@@ -235,60 +236,14 @@ func (r settingCacheLevelEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingCacheLevelEditResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    settingCacheLevelEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingCacheLevelEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingCacheLevelEditResponseEnvelopeErrors]
-type settingCacheLevelEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCacheLevelEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCacheLevelEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingCacheLevelEditResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingCacheLevelEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingCacheLevelEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingCacheLevelEditResponseEnvelopeMessages]
-type settingCacheLevelEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCacheLevelEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCacheLevelEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingCacheLevelGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingCacheLevelGetResponseEnvelope struct {
-	Errors   []SettingCacheLevelGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingCacheLevelGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cache Level functions based off the setting level. The basic setting will cache
@@ -316,51 +271,5 @@ func (r *SettingCacheLevelGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r settingCacheLevelGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingCacheLevelGetResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    settingCacheLevelGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingCacheLevelGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingCacheLevelGetResponseEnvelopeErrors]
-type settingCacheLevelGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCacheLevelGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCacheLevelGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingCacheLevelGetResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingCacheLevelGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingCacheLevelGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingCacheLevelGetResponseEnvelopeMessages]
-type settingCacheLevelGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCacheLevelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingCacheLevelGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

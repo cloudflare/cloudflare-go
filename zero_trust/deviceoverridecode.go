@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -105,9 +106,9 @@ type DeviceOverrideCodeListParams struct {
 }
 
 type DeviceOverrideCodeListResponseEnvelope struct {
-	Errors   []DeviceOverrideCodeListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceOverrideCodeListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceOverrideCodeListResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   DeviceOverrideCodeListResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DeviceOverrideCodeListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DeviceOverrideCodeListResponseEnvelopeResultInfo `json:"result_info"`
@@ -131,52 +132,6 @@ func (r *DeviceOverrideCodeListResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r deviceOverrideCodeListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceOverrideCodeListResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    deviceOverrideCodeListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceOverrideCodeListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DeviceOverrideCodeListResponseEnvelopeErrors]
-type deviceOverrideCodeListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceOverrideCodeListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceOverrideCodeListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceOverrideCodeListResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    deviceOverrideCodeListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceOverrideCodeListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DeviceOverrideCodeListResponseEnvelopeMessages]
-type deviceOverrideCodeListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceOverrideCodeListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceOverrideCodeListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

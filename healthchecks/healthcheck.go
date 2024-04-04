@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -525,9 +526,9 @@ func (r HealthcheckNewParamsTcpConfigMethod) IsKnown() bool {
 }
 
 type HealthcheckNewResponseEnvelope struct {
-	Errors   []HealthcheckNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HealthcheckNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Healthcheck                              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   Healthcheck                  `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckNewResponseEnvelopeJSON    `json:"-"`
@@ -549,52 +550,6 @@ func (r *HealthcheckNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r healthcheckNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckNewResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    healthcheckNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// healthcheckNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [HealthcheckNewResponseEnvelopeErrors]
-type healthcheckNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckNewResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    healthcheckNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// healthcheckNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HealthcheckNewResponseEnvelopeMessages]
-type healthcheckNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -760,9 +715,9 @@ func (r HealthcheckUpdateParamsTcpConfigMethod) IsKnown() bool {
 }
 
 type HealthcheckUpdateResponseEnvelope struct {
-	Errors   []HealthcheckUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HealthcheckUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   Healthcheck                                 `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   Healthcheck                  `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckUpdateResponseEnvelopeJSON    `json:"-"`
@@ -784,52 +739,6 @@ func (r *HealthcheckUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r healthcheckUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    healthcheckUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// healthcheckUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [HealthcheckUpdateResponseEnvelopeErrors]
-type healthcheckUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    healthcheckUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// healthcheckUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HealthcheckUpdateResponseEnvelopeMessages]
-type healthcheckUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -864,9 +773,9 @@ func (r HealthcheckDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type HealthcheckDeleteResponseEnvelope struct {
-	Errors   []HealthcheckDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HealthcheckDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   HealthcheckDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   HealthcheckDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckDeleteResponseEnvelopeJSON    `json:"-"`
@@ -888,52 +797,6 @@ func (r *HealthcheckDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r healthcheckDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckDeleteResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    healthcheckDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// healthcheckDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [HealthcheckDeleteResponseEnvelopeErrors]
-type healthcheckDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckDeleteResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    healthcheckDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// healthcheckDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HealthcheckDeleteResponseEnvelopeMessages]
-type healthcheckDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1099,9 +962,9 @@ func (r HealthcheckEditParamsTcpConfigMethod) IsKnown() bool {
 }
 
 type HealthcheckEditResponseEnvelope struct {
-	Errors   []HealthcheckEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HealthcheckEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   Healthcheck                               `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   Healthcheck                  `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckEditResponseEnvelopeJSON    `json:"-"`
@@ -1126,52 +989,6 @@ func (r healthcheckEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type HealthcheckEditResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    healthcheckEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// healthcheckEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [HealthcheckEditResponseEnvelopeErrors]
-type healthcheckEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckEditResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    healthcheckEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// healthcheckEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HealthcheckEditResponseEnvelopeMessages]
-type healthcheckEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type HealthcheckEditResponseEnvelopeSuccess bool
 
@@ -1193,9 +1010,9 @@ type HealthcheckGetParams struct {
 }
 
 type HealthcheckGetResponseEnvelope struct {
-	Errors   []HealthcheckGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HealthcheckGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   Healthcheck                              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   Healthcheck                  `json:"result,required"`
 	// Whether the API call was successful
 	Success HealthcheckGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    healthcheckGetResponseEnvelopeJSON    `json:"-"`
@@ -1217,52 +1034,6 @@ func (r *HealthcheckGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r healthcheckGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    healthcheckGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// healthcheckGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [HealthcheckGetResponseEnvelopeErrors]
-type healthcheckGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type HealthcheckGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    healthcheckGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// healthcheckGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HealthcheckGetResponseEnvelopeMessages]
-type healthcheckGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r healthcheckGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

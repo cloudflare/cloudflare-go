@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/r2"
@@ -35,7 +36,7 @@ func TestSippyUpdateWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Destination: cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsDestination{
 				AccessKeyID:     cloudflare.F("string"),
-				Provider:        cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsDestinationProviderR2),
+				Provider:        cloudflare.F(shared.UnnamedSchemaRef85R2),
 				SecretAccessKey: cloudflare.F("string"),
 			}),
 			Source: cloudflare.F(r2.SippyUpdateParamsR2EnableSippyAwsSource{

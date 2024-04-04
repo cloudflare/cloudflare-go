@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -184,8 +185,8 @@ func (r SettingZeroRTTEditParamsValue) IsKnown() bool {
 }
 
 type SettingZeroRTTEditResponseEnvelope struct {
-	Errors   []SettingZeroRTTEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingZeroRTTEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.
@@ -212,60 +213,14 @@ func (r settingZeroRTTEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingZeroRTTEditResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingZeroRTTEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingZeroRTTEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingZeroRTTEditResponseEnvelopeErrors]
-type settingZeroRTTEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingZeroRTTEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingZeroRTTEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingZeroRTTEditResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    settingZeroRTTEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingZeroRTTEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingZeroRTTEditResponseEnvelopeMessages]
-type settingZeroRTTEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingZeroRTTEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingZeroRTTEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingZeroRTTGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingZeroRTTGetResponseEnvelope struct {
-	Errors   []SettingZeroRTTGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingZeroRTTGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.
@@ -289,51 +244,5 @@ func (r *SettingZeroRTTGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r settingZeroRTTGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingZeroRTTGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingZeroRTTGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingZeroRTTGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingZeroRTTGetResponseEnvelopeErrors]
-type settingZeroRTTGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingZeroRTTGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingZeroRTTGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingZeroRTTGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingZeroRTTGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingZeroRTTGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingZeroRTTGetResponseEnvelopeMessages]
-type settingZeroRTTGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingZeroRTTGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingZeroRTTGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

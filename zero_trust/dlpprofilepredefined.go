@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -67,8 +68,8 @@ type DLPPredefinedProfile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type DLPPredefinedProfileType `json:"type"`
-	JSON dlpPredefinedProfileJSON `json:"-"`
+	Type shared.UnnamedSchemaRef97 `json:"type"`
+	JSON dlpPredefinedProfileJSON  `json:"-"`
 }
 
 // dlpPredefinedProfileJSON contains the JSON metadata for the struct
@@ -180,21 +181,6 @@ func (r dlpPredefinedProfileEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of the profile.
-type DLPPredefinedProfileType string
-
-const (
-	DLPPredefinedProfileTypePredefined DLPPredefinedProfileType = "predefined"
-)
-
-func (r DLPPredefinedProfileType) IsKnown() bool {
-	switch r {
-	case DLPPredefinedProfileTypePredefined:
-		return true
-	}
-	return false
-}
-
 type DLPProfilePredefinedUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -252,9 +238,9 @@ type DLPProfilePredefinedGetParams struct {
 }
 
 type DLPProfilePredefinedGetResponseEnvelope struct {
-	Errors   []DLPProfilePredefinedGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfilePredefinedGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DLPPredefinedProfile                              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DLPPredefinedProfile         `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfilePredefinedGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfilePredefinedGetResponseEnvelopeJSON    `json:"-"`
@@ -276,52 +262,6 @@ func (r *DLPProfilePredefinedGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r dlpProfilePredefinedGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfilePredefinedGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    dlpProfilePredefinedGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dlpProfilePredefinedGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DLPProfilePredefinedGetResponseEnvelopeErrors]
-type dlpProfilePredefinedGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfilePredefinedGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfilePredefinedGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfilePredefinedGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    dlpProfilePredefinedGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dlpProfilePredefinedGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DLPProfilePredefinedGetResponseEnvelopeMessages]
-type dlpProfilePredefinedGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfilePredefinedGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfilePredefinedGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

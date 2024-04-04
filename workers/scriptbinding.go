@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -160,9 +161,9 @@ type ScriptBindingGetParams struct {
 }
 
 type ScriptBindingGetResponseEnvelope struct {
-	Errors   []ScriptBindingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScriptBindingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersBinding                           `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []WorkersBinding             `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptBindingGetResponseEnvelopeJSON    `json:"-"`
@@ -184,52 +185,6 @@ func (r *ScriptBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r scriptBindingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptBindingGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    scriptBindingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// scriptBindingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ScriptBindingGetResponseEnvelopeErrors]
-type scriptBindingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptBindingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptBindingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptBindingGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    scriptBindingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// scriptBindingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ScriptBindingGetResponseEnvelopeMessages]
-type scriptBindingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptBindingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptBindingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

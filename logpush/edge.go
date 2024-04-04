@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -108,9 +109,9 @@ func (r EdgeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type EdgeNewResponseEnvelope struct {
-	Errors   []EdgeNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EdgeNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   InstantLogpushJob                 `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   InstantLogpushJob            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success EdgeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    edgeNewResponseEnvelopeJSON    `json:"-"`
@@ -135,52 +136,6 @@ func (r edgeNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type EdgeNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    edgeNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// edgeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [EdgeNewResponseEnvelopeErrors]
-type edgeNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EdgeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r edgeNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type EdgeNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    edgeNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// edgeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [EdgeNewResponseEnvelopeMessages]
-type edgeNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EdgeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r edgeNewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type EdgeNewResponseEnvelopeSuccess bool
 
@@ -202,9 +157,9 @@ type EdgeGetParams struct {
 }
 
 type EdgeGetResponseEnvelope struct {
-	Errors   []EdgeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EdgeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []InstantLogpushJob               `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []InstantLogpushJob          `json:"result,required"`
 	// Whether the API call was successful
 	Success EdgeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    edgeGetResponseEnvelopeJSON    `json:"-"`
@@ -226,52 +181,6 @@ func (r *EdgeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r edgeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type EdgeGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    edgeGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// edgeGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [EdgeGetResponseEnvelopeErrors]
-type edgeGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EdgeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r edgeGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type EdgeGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    edgeGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// edgeGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [EdgeGetResponseEnvelopeMessages]
-type edgeGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EdgeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r edgeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

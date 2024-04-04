@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -153,8 +154,8 @@ func (r SettingProxyReadTimeoutEditParams) MarshalJSON() (data []byte, err error
 }
 
 type SettingProxyReadTimeoutEditResponseEnvelope struct {
-	Errors   []SettingProxyReadTimeoutEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingProxyReadTimeoutEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Maximum time between two read operations from origin.
@@ -181,60 +182,14 @@ func (r settingProxyReadTimeoutEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingProxyReadTimeoutEditResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingProxyReadTimeoutEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingProxyReadTimeoutEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingProxyReadTimeoutEditResponseEnvelopeErrors]
-type settingProxyReadTimeoutEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingProxyReadTimeoutEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingProxyReadTimeoutEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingProxyReadTimeoutEditResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingProxyReadTimeoutEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingProxyReadTimeoutEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingProxyReadTimeoutEditResponseEnvelopeMessages]
-type settingProxyReadTimeoutEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingProxyReadTimeoutEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingProxyReadTimeoutEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingProxyReadTimeoutGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingProxyReadTimeoutGetResponseEnvelope struct {
-	Errors   []SettingProxyReadTimeoutGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingProxyReadTimeoutGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Maximum time between two read operations from origin.
@@ -258,51 +213,5 @@ func (r *SettingProxyReadTimeoutGetResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r settingProxyReadTimeoutGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingProxyReadTimeoutGetResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingProxyReadTimeoutGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingProxyReadTimeoutGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingProxyReadTimeoutGetResponseEnvelopeErrors]
-type settingProxyReadTimeoutGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingProxyReadTimeoutGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingProxyReadTimeoutGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingProxyReadTimeoutGetResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingProxyReadTimeoutGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingProxyReadTimeoutGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingProxyReadTimeoutGetResponseEnvelopeMessages]
-type settingProxyReadTimeoutGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingProxyReadTimeoutGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingProxyReadTimeoutGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

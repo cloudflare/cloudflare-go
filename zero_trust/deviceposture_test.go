@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
@@ -36,7 +37,7 @@ func TestDevicePostureNewWithOptionalParams(t *testing.T) {
 		Expiration:  cloudflare.F("1h"),
 		Input: cloudflare.F[zero_trust.DevicePostureNewParamsInput](zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequest(zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequest{
 			Exists:          cloudflare.F(true),
-			OperatingSystem: cloudflare.F(zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux),
+			OperatingSystem: cloudflare.F(shared.UnnamedSchemaRef119Linux),
 			Path:            cloudflare.F("/bin/cat"),
 			Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 			Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
@@ -84,7 +85,7 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 			Expiration:  cloudflare.F("1h"),
 			Input: cloudflare.F[zero_trust.DevicePostureUpdateParamsInput](zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest(zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest{
 				Exists:          cloudflare.F(true),
-				OperatingSystem: cloudflare.F(zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux),
+				OperatingSystem: cloudflare.F(shared.UnnamedSchemaRef119Linux),
 				Path:            cloudflare.F("/bin/cat"),
 				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),

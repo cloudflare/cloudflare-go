@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -176,8 +177,8 @@ func (r SettingH2PrioritizationEditParams) MarshalJSON() (data []byte, err error
 }
 
 type SettingH2PrioritizationEditResponseEnvelope struct {
-	Errors   []SettingH2PrioritizationEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingH2PrioritizationEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP/2 Edge Prioritization optimises the delivery of resources served through
@@ -206,60 +207,14 @@ func (r settingH2PrioritizationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingH2PrioritizationEditResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingH2PrioritizationEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingH2PrioritizationEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingH2PrioritizationEditResponseEnvelopeErrors]
-type settingH2PrioritizationEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingH2PrioritizationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingH2PrioritizationEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingH2PrioritizationEditResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingH2PrioritizationEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingH2PrioritizationEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingH2PrioritizationEditResponseEnvelopeMessages]
-type settingH2PrioritizationEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingH2PrioritizationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingH2PrioritizationEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingH2PrioritizationGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingH2PrioritizationGetResponseEnvelope struct {
-	Errors   []SettingH2PrioritizationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingH2PrioritizationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP/2 Edge Prioritization optimises the delivery of resources served through
@@ -285,51 +240,5 @@ func (r *SettingH2PrioritizationGetResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r settingH2PrioritizationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingH2PrioritizationGetResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingH2PrioritizationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingH2PrioritizationGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingH2PrioritizationGetResponseEnvelopeErrors]
-type settingH2PrioritizationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingH2PrioritizationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingH2PrioritizationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingH2PrioritizationGetResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingH2PrioritizationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingH2PrioritizationGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingH2PrioritizationGetResponseEnvelopeMessages]
-type settingH2PrioritizationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingH2PrioritizationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingH2PrioritizationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

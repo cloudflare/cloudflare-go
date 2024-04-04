@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -189,8 +190,8 @@ func (r SettingBrotliEditParamsValue) IsKnown() bool {
 }
 
 type SettingBrotliEditResponseEnvelope struct {
-	Errors   []SettingBrotliEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrotliEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting an asset supports the Brotli compression algorithm,
@@ -218,60 +219,14 @@ func (r settingBrotliEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingBrotliEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingBrotliEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrotliEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingBrotliEditResponseEnvelopeErrors]
-type settingBrotliEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrotliEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrotliEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrotliEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingBrotliEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrotliEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingBrotliEditResponseEnvelopeMessages]
-type settingBrotliEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrotliEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrotliEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingBrotliGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingBrotliGetResponseEnvelope struct {
-	Errors   []SettingBrotliGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrotliGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting an asset supports the Brotli compression algorithm,
@@ -296,51 +251,5 @@ func (r *SettingBrotliGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingBrotliGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrotliGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingBrotliGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrotliGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingBrotliGetResponseEnvelopeErrors]
-type settingBrotliGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrotliGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrotliGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrotliGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingBrotliGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrotliGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingBrotliGetResponseEnvelopeMessages]
-type settingBrotliGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrotliGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrotliGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

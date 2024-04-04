@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -252,7 +253,7 @@ func init() {
 
 type DevicePostureRulesInputTeamsDevicesFileInputRequest struct {
 	// Operating system
-	OperatingSystem DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem shared.UnnamedSchemaRef119 `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
 	// Whether or not file exists
@@ -285,23 +286,6 @@ func (r devicePostureRulesInputTeamsDevicesFileInputRequestJSON) RawJSON() strin
 }
 
 func (r DevicePostureRulesInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureRulesInput() {
-}
-
-// Operating system
-type DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystem string
-
-const (
-	DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
-	DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
-	DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemWindows, DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemLinux, DevicePostureRulesInputTeamsDevicesFileInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
 }
 
 type DevicePostureRulesInputTeamsDevicesUniqueClientIDInputRequest struct {
@@ -517,7 +501,7 @@ func (r DevicePostureRulesInputTeamsDevicesFirewallInputRequestOperatingSystem) 
 
 type DevicePostureRulesInputTeamsDevicesSentineloneInputRequest struct {
 	// Operating system
-	OperatingSystem DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem shared.UnnamedSchemaRef119 `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
 	// SHA-256.
@@ -550,26 +534,9 @@ func (r devicePostureRulesInputTeamsDevicesSentineloneInputRequestJSON) RawJSON(
 func (r DevicePostureRulesInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureRulesInput() {
 }
 
-// Operating system
-type DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystem string
-
-const (
-	DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
-	DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
-	DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows, DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux, DevicePostureRulesInputTeamsDevicesSentineloneInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
-}
-
 type DevicePostureRulesInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system
-	OperatingSystem DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem shared.UnnamedSchemaRef119 `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
 	// SHA-256.
@@ -600,23 +567,6 @@ func (r devicePostureRulesInputTeamsDevicesCarbonblackInputRequestJSON) RawJSON(
 }
 
 func (r DevicePostureRulesInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureRulesInput() {
-}
-
-// Operating system
-type DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
-
-const (
-	DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
-	DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
-	DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows, DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux, DevicePostureRulesInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
 }
 
 type DevicePostureRulesInputTeamsDevicesDiskEncryptionInputRequest struct {
@@ -650,7 +600,7 @@ func (r DevicePostureRulesInputTeamsDevicesDiskEncryptionInputRequest) implement
 
 type DevicePostureRulesInputTeamsDevicesApplicationInputRequest struct {
 	// Operating system
-	OperatingSystem DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem shared.UnnamedSchemaRef119 `json:"operating_system,required"`
 	// Path for the application.
 	Path string `json:"path,required"`
 	// SHA-256.
@@ -681,23 +631,6 @@ func (r devicePostureRulesInputTeamsDevicesApplicationInputRequestJSON) RawJSON(
 }
 
 func (r DevicePostureRulesInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureRulesInput() {
-}
-
-// Operating system
-type DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystem string
-
-const (
-	DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
-	DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
-	DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemWindows, DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemLinux, DevicePostureRulesInputTeamsDevicesApplicationInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
 }
 
 type DevicePostureRulesInputTeamsDevicesClientCertificateInputRequest struct {
@@ -781,7 +714,7 @@ type DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen string `json:"last_seen"`
 	// Operator
-	Operator DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
+	Operator shared.UnnamedSchemaRef87 `json:"operator"`
 	// Os Version
 	OS string `json:"os"`
 	// overall
@@ -793,8 +726,8 @@ type DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Version
 	Version string `json:"version"`
 	// Version Operator
-	VersionOperator DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator `json:"versionOperator"`
-	JSON            devicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestJSON            `json:"-"`
+	VersionOperator shared.UnnamedSchemaRef88                                      `json:"versionOperator"`
+	JSON            devicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestJSON `json:"-"`
 }
 
 // devicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestJSON contains the JSON
@@ -825,25 +758,6 @@ func (r devicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestJSON) RawJSON(
 func (r DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureRulesInput() {
 }
 
-// Operator
-type DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator string
-
-const (
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorLess            DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals    DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater         DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals          DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
-)
-
-func (r DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperator) IsKnown() bool {
-	switch r {
-	case DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorLess, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals:
-		return true
-	}
-	return false
-}
-
 // For more details on state, please refer to the Crowdstrike documentation.
 type DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestState string
 
@@ -856,25 +770,6 @@ const (
 func (r DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestState) IsKnown() bool {
 	switch r {
 	case DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestStateOnline, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestStateOffline, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestStateUnknown:
-		return true
-	}
-	return false
-}
-
-// Version Operator
-type DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
-
-const (
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess            DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals    DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater         DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals          DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
-)
-
-func (r DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperator) IsKnown() bool {
-	switch r {
-	case DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals, DevicePostureRulesInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals:
 		return true
 	}
 	return false
@@ -1328,7 +1223,7 @@ type DevicePostureNewParamsInput interface {
 
 type DevicePostureNewParamsInputTeamsDevicesFileInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// Whether or not file exists
@@ -1344,23 +1239,6 @@ func (r DevicePostureNewParamsInputTeamsDevicesFileInputRequest) MarshalJSON() (
 }
 
 func (r DevicePostureNewParamsInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
-}
-
-// Operating system
-type DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem string
-
-const (
-	DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
-	DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
-	DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows, DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux, DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
 }
 
 type DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
@@ -1512,7 +1390,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSyst
 
 type DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -1528,26 +1406,9 @@ func (r DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest) MarshalJ
 func (r DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
 }
 
-// Operating system
-type DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem string
-
-const (
-	DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
-	DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
-	DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows, DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux, DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
-}
-
 type DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -1561,23 +1422,6 @@ func (r DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest) MarshalJ
 }
 
 func (r DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
-}
-
-// Operating system
-type DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
-
-const (
-	DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
-	DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
-	DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows, DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux, DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
 }
 
 type DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
@@ -1596,7 +1440,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest) imple
 
 type DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system,required"`
 	// Path for the application.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -1610,23 +1454,6 @@ func (r DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest) MarshalJ
 }
 
 func (r DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
-}
-
-// Operating system
-type DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem string
-
-const (
-	DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
-	DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
-	DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows, DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux, DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
 }
 
 type DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest struct {
@@ -1680,7 +1507,7 @@ type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen param.Field[string] `json:"last_seen"`
 	// Operator
-	Operator param.Field[DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator] `json:"operator"`
+	Operator param.Field[shared.UnnamedSchemaRef87] `json:"operator"`
 	// Os Version
 	OS param.Field[string] `json:"os"`
 	// overall
@@ -1692,7 +1519,7 @@ type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Version
 	Version param.Field[string] `json:"version"`
 	// Version Operator
-	VersionOperator param.Field[DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator] `json:"versionOperator"`
+	VersionOperator param.Field[shared.UnnamedSchemaRef88] `json:"versionOperator"`
 }
 
 func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest) MarshalJSON() (data []byte, err error) {
@@ -1700,25 +1527,6 @@ func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest) MarshalJ
 }
 
 func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
-}
-
-// Operator
-type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator string
-
-const (
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLess            DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals    DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater         DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals          DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
-)
-
-func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator) IsKnown() bool {
-	switch r {
-	case DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLess, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals:
-		return true
-	}
-	return false
 }
 
 // For more details on state, please refer to the Crowdstrike documentation.
@@ -1733,25 +1541,6 @@ const (
 func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestState) IsKnown() bool {
 	switch r {
 	case DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestStateOnline, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestStateOffline, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestStateUnknown:
-		return true
-	}
-	return false
-}
-
-// Version Operator
-type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
-
-const (
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess            DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals    DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater         DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals          DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
-)
-
-func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator) IsKnown() bool {
-	switch r {
-	case DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals:
 		return true
 	}
 	return false
@@ -1990,9 +1779,9 @@ func (r DevicePostureNewParamsMatchPlatform) IsKnown() bool {
 }
 
 type DevicePostureNewResponseEnvelope struct {
-	Errors   []DevicePostureNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePostureNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DevicePostureRules                         `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DevicePostureRules           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureNewResponseEnvelopeJSON    `json:"-"`
@@ -2014,52 +1803,6 @@ func (r *DevicePostureNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r devicePostureNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePostureNewResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    devicePostureNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePostureNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DevicePostureNewResponseEnvelopeErrors]
-type devicePostureNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePostureNewResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    devicePostureNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePostureNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DevicePostureNewResponseEnvelopeMessages]
-type devicePostureNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2160,7 +1903,7 @@ type DevicePostureUpdateParamsInput interface {
 
 type DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// Whether or not file exists
@@ -2176,23 +1919,6 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest) MarshalJSON(
 }
 
 func (r DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
-}
-
-// Operating system
-type DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem string
-
-const (
-	DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows, DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux, DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
@@ -2344,7 +2070,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingS
 
 type DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -2360,26 +2086,9 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest) Marsh
 func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
 }
 
-// Operating system
-type DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem string
-
-const (
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows, DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux, DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
-}
-
 type DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -2393,23 +2102,6 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest) Marsh
 }
 
 func (r DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
-}
-
-// Operating system
-type DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
-
-const (
-	DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows, DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux, DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
@@ -2428,7 +2120,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest) im
 
 type DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system,required"`
 	// Path for the application.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -2442,23 +2134,6 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest) Marsh
 }
 
 func (r DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
-}
-
-// Operating system
-type DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem string
-
-const (
-	DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
-)
-
-func (r DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem) IsKnown() bool {
-	switch r {
-	case DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows, DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux, DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac:
-		return true
-	}
-	return false
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest struct {
@@ -2512,7 +2187,7 @@ type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen param.Field[string] `json:"last_seen"`
 	// Operator
-	Operator param.Field[DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator] `json:"operator"`
+	Operator param.Field[shared.UnnamedSchemaRef87] `json:"operator"`
 	// Os Version
 	OS param.Field[string] `json:"os"`
 	// overall
@@ -2524,7 +2199,7 @@ type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Version
 	Version param.Field[string] `json:"version"`
 	// Version Operator
-	VersionOperator param.Field[DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator] `json:"versionOperator"`
+	VersionOperator param.Field[shared.UnnamedSchemaRef88] `json:"versionOperator"`
 }
 
 func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest) MarshalJSON() (data []byte, err error) {
@@ -2532,25 +2207,6 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest) Marsh
 }
 
 func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
-}
-
-// Operator
-type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator string
-
-const (
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLess            DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals    DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater         DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals          DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
-)
-
-func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator) IsKnown() bool {
-	switch r {
-	case DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorEquals:
-		return true
-	}
-	return false
 }
 
 // For more details on state, please refer to the Crowdstrike documentation.
@@ -2565,25 +2221,6 @@ const (
 func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestState) IsKnown() bool {
 	switch r {
 	case DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestStateOnline, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestStateOffline, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestStateUnknown:
-		return true
-	}
-	return false
-}
-
-// Version Operator
-type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
-
-const (
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess            DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals    DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater         DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals          DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
-)
-
-func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator) IsKnown() bool {
-	switch r {
-	case DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorEquals:
 		return true
 	}
 	return false
@@ -2822,9 +2459,9 @@ func (r DevicePostureUpdateParamsMatchPlatform) IsKnown() bool {
 }
 
 type DevicePostureUpdateResponseEnvelope struct {
-	Errors   []DevicePostureUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePostureUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DevicePostureRules                            `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DevicePostureRules           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureUpdateResponseEnvelopeJSON    `json:"-"`
@@ -2846,52 +2483,6 @@ func (r *DevicePostureUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r devicePostureUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePostureUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    devicePostureUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePostureUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DevicePostureUpdateResponseEnvelopeErrors]
-type devicePostureUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePostureUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    devicePostureUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePostureUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DevicePostureUpdateResponseEnvelopeMessages]
-type devicePostureUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2924,9 +2515,9 @@ func (r DevicePostureDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DevicePostureDeleteResponseEnvelope struct {
-	Errors   []DevicePostureDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePostureDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   DevicePostureDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DevicePostureDeleteResponse  `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureDeleteResponseEnvelopeJSON    `json:"-"`
@@ -2951,52 +2542,6 @@ func (r devicePostureDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DevicePostureDeleteResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    devicePostureDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePostureDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DevicePostureDeleteResponseEnvelopeErrors]
-type devicePostureDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePostureDeleteResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    devicePostureDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePostureDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DevicePostureDeleteResponseEnvelopeMessages]
-type devicePostureDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful.
 type DevicePostureDeleteResponseEnvelopeSuccess bool
 
@@ -3017,9 +2562,9 @@ type DevicePostureGetParams struct {
 }
 
 type DevicePostureGetResponseEnvelope struct {
-	Errors   []DevicePostureGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePostureGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DevicePostureRules                         `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   DevicePostureRules           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureGetResponseEnvelopeJSON    `json:"-"`
@@ -3041,52 +2586,6 @@ func (r *DevicePostureGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r devicePostureGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePostureGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    devicePostureGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePostureGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DevicePostureGetResponseEnvelopeErrors]
-type devicePostureGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePostureGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    devicePostureGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePostureGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DevicePostureGetResponseEnvelopeMessages]
-type devicePostureGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePostureGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

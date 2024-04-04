@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -200,8 +201,8 @@ func (r SettingWebsocketEditParamsValue) IsKnown() bool {
 }
 
 type SettingWebsocketEditResponseEnvelope struct {
-	Errors   []SettingWebsocketEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWebsocketEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// WebSockets are open connections sustained between the client and the origin
@@ -234,60 +235,14 @@ func (r settingWebsocketEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingWebsocketEditResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    settingWebsocketEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingWebsocketEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingWebsocketEditResponseEnvelopeErrors]
-type settingWebsocketEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWebsocketEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWebsocketEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingWebsocketEditResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingWebsocketEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingWebsocketEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingWebsocketEditResponseEnvelopeMessages]
-type settingWebsocketEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWebsocketEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWebsocketEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingWebsocketGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingWebsocketGetResponseEnvelope struct {
-	Errors   []SettingWebsocketGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWebsocketGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// WebSockets are open connections sustained between the client and the origin
@@ -317,51 +272,5 @@ func (r *SettingWebsocketGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r settingWebsocketGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingWebsocketGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingWebsocketGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingWebsocketGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingWebsocketGetResponseEnvelopeErrors]
-type settingWebsocketGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWebsocketGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWebsocketGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingWebsocketGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    settingWebsocketGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingWebsocketGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingWebsocketGetResponseEnvelopeMessages]
-type settingWebsocketGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWebsocketGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWebsocketGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,14 +62,14 @@ func (r *BrandProtectionService) URLInfo(ctx context.Context, params BrandProtec
 
 type IntelPhishingURLInfo struct {
 	// List of categorizations applied to this submission.
-	Categorizations []IntelPhishingURLInfoCategorization `json:"categorizations"`
+	Categorizations []shared.UnnamedSchemaRef13 `json:"categorizations"`
 	// List of model results for completed scans.
-	ModelResults []IntelPhishingURLInfoModelResult `json:"model_results"`
+	ModelResults []shared.UnnamedSchemaRef14 `json:"model_results"`
 	// List of signatures that matched against site content found when crawling the
 	// URL.
-	RuleMatches []IntelPhishingURLInfoRuleMatch `json:"rule_matches"`
+	RuleMatches []shared.UnnamedSchemaRef15 `json:"rule_matches"`
 	// Status of the most recent scan found.
-	ScanStatus IntelPhishingURLInfoScanStatus `json:"scan_status"`
+	ScanStatus shared.UnnamedSchemaRef16 `json:"scan_status"`
 	// For internal use.
 	ScreenshotDownloadSignature string `json:"screenshot_download_signature"`
 	// For internal use.
@@ -100,128 +101,15 @@ func (r intelPhishingURLInfoJSON) RawJSON() string {
 	return r.raw
 }
 
-type IntelPhishingURLInfoCategorization struct {
-	// Name of the category applied.
-	Category string `json:"category"`
-	// Result of human review for this categorization.
-	VerificationStatus string                                 `json:"verification_status"`
-	JSON               intelPhishingURLInfoCategorizationJSON `json:"-"`
-}
-
-// intelPhishingURLInfoCategorizationJSON contains the JSON metadata for the struct
-// [IntelPhishingURLInfoCategorization]
-type intelPhishingURLInfoCategorizationJSON struct {
-	Category           apijson.Field
-	VerificationStatus apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *IntelPhishingURLInfoCategorization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r intelPhishingURLInfoCategorizationJSON) RawJSON() string {
-	return r.raw
-}
-
-type IntelPhishingURLInfoModelResult struct {
-	// Name of the model.
-	ModelName string `json:"model_name"`
-	// Score output by the model for this submission.
-	ModelScore float64                             `json:"model_score"`
-	JSON       intelPhishingURLInfoModelResultJSON `json:"-"`
-}
-
-// intelPhishingURLInfoModelResultJSON contains the JSON metadata for the struct
-// [IntelPhishingURLInfoModelResult]
-type intelPhishingURLInfoModelResultJSON struct {
-	ModelName   apijson.Field
-	ModelScore  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelPhishingURLInfoModelResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r intelPhishingURLInfoModelResultJSON) RawJSON() string {
-	return r.raw
-}
-
-type IntelPhishingURLInfoRuleMatch struct {
-	// For internal use.
-	Banning bool `json:"banning"`
-	// For internal use.
-	Blocking bool `json:"blocking"`
-	// Description of the signature that matched.
-	Description string `json:"description"`
-	// Name of the signature that matched.
-	Name string                            `json:"name"`
-	JSON intelPhishingURLInfoRuleMatchJSON `json:"-"`
-}
-
-// intelPhishingURLInfoRuleMatchJSON contains the JSON metadata for the struct
-// [IntelPhishingURLInfoRuleMatch]
-type intelPhishingURLInfoRuleMatchJSON struct {
-	Banning     apijson.Field
-	Blocking    apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelPhishingURLInfoRuleMatch) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r intelPhishingURLInfoRuleMatchJSON) RawJSON() string {
-	return r.raw
-}
-
-// Status of the most recent scan found.
-type IntelPhishingURLInfoScanStatus struct {
-	// Timestamp of when the submission was processed.
-	LastProcessed string `json:"last_processed"`
-	// For internal use.
-	ScanComplete bool `json:"scan_complete"`
-	// Status code that the crawler received when loading the submitted URL.
-	StatusCode int64 `json:"status_code"`
-	// ID of the most recent submission.
-	SubmissionID int64                              `json:"submission_id"`
-	JSON         intelPhishingURLInfoScanStatusJSON `json:"-"`
-}
-
-// intelPhishingURLInfoScanStatusJSON contains the JSON metadata for the struct
-// [IntelPhishingURLInfoScanStatus]
-type intelPhishingURLInfoScanStatusJSON struct {
-	LastProcessed apijson.Field
-	ScanComplete  apijson.Field
-	StatusCode    apijson.Field
-	SubmissionID  apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *IntelPhishingURLInfoScanStatus) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r intelPhishingURLInfoScanStatusJSON) RawJSON() string {
-	return r.raw
-}
-
 type IntelPhishingURLSubmit struct {
 	// URLs that were excluded from scanning because their domain is in our no-scan
 	// list.
-	ExcludedURLs []IntelPhishingURLSubmitExcludedURL `json:"excluded_urls"`
+	ExcludedURLs []shared.UnnamedSchemaRef10 `json:"excluded_urls"`
 	// URLs that were skipped because the same URL is currently being scanned
-	SkippedURLs []IntelPhishingURLSubmitSkippedURL `json:"skipped_urls"`
+	SkippedURLs []shared.UnnamedSchemaRef11 `json:"skipped_urls"`
 	// URLs that were successfully submitted for scanning.
-	SubmittedURLs []IntelPhishingURLSubmitSubmittedURL `json:"submitted_urls"`
-	JSON          intelPhishingURLSubmitJSON           `json:"-"`
+	SubmittedURLs []shared.UnnamedSchemaRef12 `json:"submitted_urls"`
+	JSON          intelPhishingURLSubmitJSON  `json:"-"`
 }
 
 // intelPhishingURLSubmitJSON contains the JSON metadata for the struct
@@ -242,78 +130,6 @@ func (r intelPhishingURLSubmitJSON) RawJSON() string {
 	return r.raw
 }
 
-type IntelPhishingURLSubmitExcludedURL struct {
-	// URL that was excluded.
-	URL  string                                `json:"url"`
-	JSON intelPhishingURLSubmitExcludedURLJSON `json:"-"`
-}
-
-// intelPhishingURLSubmitExcludedURLJSON contains the JSON metadata for the struct
-// [IntelPhishingURLSubmitExcludedURL]
-type intelPhishingURLSubmitExcludedURLJSON struct {
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelPhishingURLSubmitExcludedURL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r intelPhishingURLSubmitExcludedURLJSON) RawJSON() string {
-	return r.raw
-}
-
-type IntelPhishingURLSubmitSkippedURL struct {
-	// URL that was skipped.
-	URL string `json:"url"`
-	// ID of the submission of that URL that is currently scanning.
-	URLID int64                                `json:"url_id"`
-	JSON  intelPhishingURLSubmitSkippedURLJSON `json:"-"`
-}
-
-// intelPhishingURLSubmitSkippedURLJSON contains the JSON metadata for the struct
-// [IntelPhishingURLSubmitSkippedURL]
-type intelPhishingURLSubmitSkippedURLJSON struct {
-	URL         apijson.Field
-	URLID       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelPhishingURLSubmitSkippedURL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r intelPhishingURLSubmitSkippedURLJSON) RawJSON() string {
-	return r.raw
-}
-
-type IntelPhishingURLSubmitSubmittedURL struct {
-	// URL that was submitted.
-	URL string `json:"url"`
-	// ID assigned to this URL submission. Used to retrieve scanning results.
-	URLID int64                                  `json:"url_id"`
-	JSON  intelPhishingURLSubmitSubmittedURLJSON `json:"-"`
-}
-
-// intelPhishingURLSubmitSubmittedURLJSON contains the JSON metadata for the struct
-// [IntelPhishingURLSubmitSubmittedURL]
-type intelPhishingURLSubmitSubmittedURLJSON struct {
-	URL         apijson.Field
-	URLID       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelPhishingURLSubmitSubmittedURL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r intelPhishingURLSubmitSubmittedURLJSON) RawJSON() string {
-	return r.raw
-}
-
 type BrandProtectionSubmitParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -326,9 +142,9 @@ func (r BrandProtectionSubmitParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BrandProtectionSubmitResponseEnvelope struct {
-	Errors   []BrandProtectionSubmitResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BrandProtectionSubmitResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelPhishingURLSubmit                          `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   IntelPhishingURLSubmit       `json:"result,required"`
 	// Whether the API call was successful
 	Success BrandProtectionSubmitResponseEnvelopeSuccess `json:"success,required"`
 	JSON    brandProtectionSubmitResponseEnvelopeJSON    `json:"-"`
@@ -350,52 +166,6 @@ func (r *BrandProtectionSubmitResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r brandProtectionSubmitResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BrandProtectionSubmitResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    brandProtectionSubmitResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// brandProtectionSubmitResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [BrandProtectionSubmitResponseEnvelopeErrors]
-type brandProtectionSubmitResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BrandProtectionSubmitResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r brandProtectionSubmitResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type BrandProtectionSubmitResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    brandProtectionSubmitResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// brandProtectionSubmitResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [BrandProtectionSubmitResponseEnvelopeMessages]
-type brandProtectionSubmitResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BrandProtectionSubmitResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r brandProtectionSubmitResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -445,9 +215,9 @@ func (r BrandProtectionURLInfoParamsURLIDParam) URLQuery() (v url.Values) {
 }
 
 type BrandProtectionURLInfoResponseEnvelope struct {
-	Errors   []BrandProtectionURLInfoResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BrandProtectionURLInfoResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelPhishingURLInfo                             `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   IntelPhishingURLInfo         `json:"result,required"`
 	// Whether the API call was successful
 	Success BrandProtectionURLInfoResponseEnvelopeSuccess `json:"success,required"`
 	JSON    brandProtectionURLInfoResponseEnvelopeJSON    `json:"-"`
@@ -469,52 +239,6 @@ func (r *BrandProtectionURLInfoResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r brandProtectionURLInfoResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BrandProtectionURLInfoResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    brandProtectionURLInfoResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// brandProtectionURLInfoResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [BrandProtectionURLInfoResponseEnvelopeErrors]
-type brandProtectionURLInfoResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BrandProtectionURLInfoResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r brandProtectionURLInfoResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type BrandProtectionURLInfoResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    brandProtectionURLInfoResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// brandProtectionURLInfoResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [BrandProtectionURLInfoResponseEnvelopeMessages]
-type brandProtectionURLInfoResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BrandProtectionURLInfoResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r brandProtectionURLInfoResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

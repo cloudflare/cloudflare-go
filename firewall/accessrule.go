@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // AccessRuleService contains methods and other services that help with interacting
@@ -41,7 +39,7 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 //
 // Note: To create an IP Access rule that applies to a single zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *AccessRuleNewResponse, err error) {
+func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleNewResponseEnvelope
 	var accountOrZone string
@@ -125,7 +123,7 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 // Updates an IP Access rule defined.
 //
 // Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *AccessRuleEditResponse, err error) {
+func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleEditResponseEnvelope
 	var accountOrZone string
@@ -147,7 +145,7 @@ func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, pa
 }
 
 // Fetches the details of an IP Access rule defined.
-func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *AccessRuleGetResponse, err error) {
+func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessRuleGetResponseEnvelope
 	var accountOrZone string
@@ -166,23 +164,6 @@ func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, que
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [firewall.AccessRuleNewResponseUnknown] or
-// [shared.UnionString].
-type AccessRuleNewResponse interface {
-	ImplementsFirewallAccessRuleNewResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleNewResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type AccessRuleListResponse = interface{}
@@ -207,40 +188,6 @@ func (r *AccessRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// Union satisfied by [firewall.AccessRuleEditResponseUnknown] or
-// [shared.UnionString].
-type AccessRuleEditResponse interface {
-	ImplementsFirewallAccessRuleEditResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleEditResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [firewall.AccessRuleGetResponseUnknown] or
-// [shared.UnionString].
-type AccessRuleGetResponse interface {
-	ImplementsFirewallAccessRuleGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleGetResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type AccessRuleNewParams struct {
@@ -450,9 +397,9 @@ func (r AccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type AccessRuleNewResponseEnvelope struct {
-	Errors   []AccessRuleNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessRuleNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessRuleNewResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -474,52 +421,6 @@ func (r *AccessRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accessRuleNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessRuleNewResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    accessRuleNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessRuleNewResponseEnvelopeErrors]
-type accessRuleNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessRuleNewResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    accessRuleNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessRuleNewResponseEnvelopeMessages]
-type accessRuleNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -721,9 +622,9 @@ func (r AccessRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessRuleDeleteResponseEnvelope struct {
-	Errors   []AccessRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessRuleDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AccessRuleDeleteResponse     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -745,52 +646,6 @@ func (r *AccessRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r accessRuleDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessRuleDeleteResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    accessRuleDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessRuleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessRuleDeleteResponseEnvelopeErrors]
-type accessRuleDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessRuleDeleteResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    accessRuleDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessRuleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessRuleDeleteResponseEnvelopeMessages]
-type accessRuleDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1016,9 +871,9 @@ func (r AccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type AccessRuleEditResponseEnvelope struct {
-	Errors   []AccessRuleEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessRuleEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessRuleEditResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
@@ -1040,52 +895,6 @@ func (r *AccessRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r accessRuleEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessRuleEditResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    accessRuleEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessRuleEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessRuleEditResponseEnvelopeErrors]
-type accessRuleEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessRuleEditResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    accessRuleEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessRuleEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessRuleEditResponseEnvelopeMessages]
-type accessRuleEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1112,9 +921,9 @@ type AccessRuleGetParams struct {
 }
 
 type AccessRuleGetResponseEnvelope struct {
-	Errors   []AccessRuleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessRuleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessRuleGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`
@@ -1136,52 +945,6 @@ func (r *AccessRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accessRuleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessRuleGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    accessRuleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessRuleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessRuleGetResponseEnvelopeErrors]
-type accessRuleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessRuleGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    accessRuleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessRuleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessRuleGetResponseEnvelopeMessages]
-type accessRuleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -251,8 +252,8 @@ func (r SettingBrowserCacheTTLEditParamsValue) IsKnown() bool {
 }
 
 type SettingBrowserCacheTTLEditResponseEnvelope struct {
-	Errors   []SettingBrowserCacheTTLEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrowserCacheTTLEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
@@ -282,60 +283,14 @@ func (r settingBrowserCacheTTLEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingBrowserCacheTTLEditResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingBrowserCacheTTLEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrowserCacheTTLEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingBrowserCacheTTLEditResponseEnvelopeErrors]
-type settingBrowserCacheTTLEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCacheTTLEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCacheTTLEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrowserCacheTTLEditResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingBrowserCacheTTLEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrowserCacheTTLEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingBrowserCacheTTLEditResponseEnvelopeMessages]
-type settingBrowserCacheTTLEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCacheTTLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCacheTTLEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingBrowserCacheTTLGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingBrowserCacheTTLGetResponseEnvelope struct {
-	Errors   []SettingBrowserCacheTTLGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrowserCacheTTLGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
@@ -362,51 +317,5 @@ func (r *SettingBrowserCacheTTLGetResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r settingBrowserCacheTTLGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrowserCacheTTLGetResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingBrowserCacheTTLGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingBrowserCacheTTLGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingBrowserCacheTTLGetResponseEnvelopeErrors]
-type settingBrowserCacheTTLGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCacheTTLGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCacheTTLGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBrowserCacheTTLGetResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingBrowserCacheTTLGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrowserCacheTTLGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingBrowserCacheTTLGetResponseEnvelopeMessages]
-type settingBrowserCacheTTLGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCacheTTLGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCacheTTLGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

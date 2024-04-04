@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -75,9 +76,9 @@ type AssociationGetParams struct {
 }
 
 type AssociationGetResponseEnvelope struct {
-	Errors   []AssociationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AssociationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []MTLSCertificateAsssociation            `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Result   []MTLSCertificateAsssociation `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AssociationGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AssociationGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -101,52 +102,6 @@ func (r *AssociationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r associationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AssociationGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    associationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// associationGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AssociationGetResponseEnvelopeErrors]
-type associationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AssociationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r associationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AssociationGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    associationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// associationGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AssociationGetResponseEnvelopeMessages]
-type associationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AssociationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r associationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

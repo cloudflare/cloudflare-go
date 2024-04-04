@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -54,8 +55,8 @@ func (r TokenValueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenValueUpdateResponseEnvelope struct {
-	Errors   []TokenValueUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TokenValueUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// The token value.
 	Result TokenValue `json:"result,required"`
 	// Whether the API call was successful
@@ -79,52 +80,6 @@ func (r *TokenValueUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r tokenValueUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TokenValueUpdateResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    tokenValueUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tokenValueUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [TokenValueUpdateResponseEnvelopeErrors]
-type tokenValueUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TokenValueUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tokenValueUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TokenValueUpdateResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    tokenValueUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tokenValueUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [TokenValueUpdateResponseEnvelopeMessages]
-type tokenValueUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TokenValueUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tokenValueUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

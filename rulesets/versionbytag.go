@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -201,7 +202,7 @@ type VersionByTagGetResponseRulesRulesetsBlockRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging VersionByTagGetResponseRulesRulesetsBlockRuleLogging `json:"logging"`
+	Logging shared.Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                            `json:"ref"`
 	JSON versionByTagGetResponseRulesRulesetsBlockRuleJSON `json:"-"`
@@ -305,29 +306,6 @@ func (r versionByTagGetResponseRulesRulesetsBlockRuleActionParametersResponseJSO
 	return r.raw
 }
 
-// An object configuring the rule's logging behavior.
-type VersionByTagGetResponseRulesRulesetsBlockRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                     `json:"enabled,required"`
-	JSON    versionByTagGetResponseRulesRulesetsBlockRuleLoggingJSON `json:"-"`
-}
-
-// versionByTagGetResponseRulesRulesetsBlockRuleLoggingJSON contains the JSON
-// metadata for the struct [VersionByTagGetResponseRulesRulesetsBlockRuleLogging]
-type versionByTagGetResponseRulesRulesetsBlockRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionByTagGetResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionByTagGetResponseRulesRulesetsBlockRuleLoggingJSON) RawJSON() string {
-	return r.raw
-}
-
 type VersionByTagGetResponseRulesRulesetsExecuteRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -348,7 +326,7 @@ type VersionByTagGetResponseRulesRulesetsExecuteRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging VersionByTagGetResponseRulesRulesetsExecuteRuleLogging `json:"logging"`
+	Logging shared.Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                              `json:"ref"`
 	JSON versionByTagGetResponseRulesRulesetsExecuteRuleJSON `json:"-"`
@@ -616,29 +594,6 @@ func (r VersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersOverrides
 	return false
 }
 
-// An object configuring the rule's logging behavior.
-type VersionByTagGetResponseRulesRulesetsExecuteRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                       `json:"enabled,required"`
-	JSON    versionByTagGetResponseRulesRulesetsExecuteRuleLoggingJSON `json:"-"`
-}
-
-// versionByTagGetResponseRulesRulesetsExecuteRuleLoggingJSON contains the JSON
-// metadata for the struct [VersionByTagGetResponseRulesRulesetsExecuteRuleLogging]
-type versionByTagGetResponseRulesRulesetsExecuteRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionByTagGetResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionByTagGetResponseRulesRulesetsExecuteRuleLoggingJSON) RawJSON() string {
-	return r.raw
-}
-
 type VersionByTagGetResponseRulesRulesetsLogRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -659,7 +614,7 @@ type VersionByTagGetResponseRulesRulesetsLogRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging VersionByTagGetResponseRulesRulesetsLogRuleLogging `json:"logging"`
+	Logging shared.Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                          `json:"ref"`
 	JSON versionByTagGetResponseRulesRulesetsLogRuleJSON `json:"-"`
@@ -709,29 +664,6 @@ func (r VersionByTagGetResponseRulesRulesetsLogRuleAction) IsKnown() bool {
 	return false
 }
 
-// An object configuring the rule's logging behavior.
-type VersionByTagGetResponseRulesRulesetsLogRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                   `json:"enabled,required"`
-	JSON    versionByTagGetResponseRulesRulesetsLogRuleLoggingJSON `json:"-"`
-}
-
-// versionByTagGetResponseRulesRulesetsLogRuleLoggingJSON contains the JSON
-// metadata for the struct [VersionByTagGetResponseRulesRulesetsLogRuleLogging]
-type versionByTagGetResponseRulesRulesetsLogRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionByTagGetResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionByTagGetResponseRulesRulesetsLogRuleLoggingJSON) RawJSON() string {
-	return r.raw
-}
-
 type VersionByTagGetResponseRulesRulesetsSkipRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -752,7 +684,7 @@ type VersionByTagGetResponseRulesRulesetsSkipRule struct {
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging VersionByTagGetResponseRulesRulesetsSkipRuleLogging `json:"logging"`
+	Logging shared.Logging `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                           `json:"ref"`
 	JSON versionByTagGetResponseRulesRulesetsSkipRuleJSON `json:"-"`
@@ -914,29 +846,6 @@ func (r VersionByTagGetResponseRulesRulesetsSkipRuleActionParametersRuleset) IsK
 		return true
 	}
 	return false
-}
-
-// An object configuring the rule's logging behavior.
-type VersionByTagGetResponseRulesRulesetsSkipRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                    `json:"enabled,required"`
-	JSON    versionByTagGetResponseRulesRulesetsSkipRuleLoggingJSON `json:"-"`
-}
-
-// versionByTagGetResponseRulesRulesetsSkipRuleLoggingJSON contains the JSON
-// metadata for the struct [VersionByTagGetResponseRulesRulesetsSkipRuleLogging]
-type versionByTagGetResponseRulesRulesetsSkipRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionByTagGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionByTagGetResponseRulesRulesetsSkipRuleLoggingJSON) RawJSON() string {
-	return r.raw
 }
 
 type VersionByTagGetParams struct {

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -193,8 +194,8 @@ func (r SettingMinTLSVersionEditParamsValue) IsKnown() bool {
 }
 
 type SettingMinTLSVersionEditResponseEnvelope struct {
-	Errors   []SettingMinTLSVersionEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingMinTLSVersionEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Only accepts HTTPS requests that use at least the TLS protocol version
@@ -223,60 +224,14 @@ func (r settingMinTLSVersionEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingMinTLSVersionEditResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingMinTLSVersionEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingMinTLSVersionEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingMinTLSVersionEditResponseEnvelopeErrors]
-type settingMinTLSVersionEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMinTLSVersionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMinTLSVersionEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMinTLSVersionEditResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingMinTLSVersionEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingMinTLSVersionEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingMinTLSVersionEditResponseEnvelopeMessages]
-type settingMinTLSVersionEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMinTLSVersionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMinTLSVersionEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingMinTLSVersionGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingMinTLSVersionGetResponseEnvelope struct {
-	Errors   []SettingMinTLSVersionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingMinTLSVersionGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Only accepts HTTPS requests that use at least the TLS protocol version
@@ -302,51 +257,5 @@ func (r *SettingMinTLSVersionGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r settingMinTLSVersionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMinTLSVersionGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingMinTLSVersionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingMinTLSVersionGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingMinTLSVersionGetResponseEnvelopeErrors]
-type settingMinTLSVersionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMinTLSVersionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMinTLSVersionGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMinTLSVersionGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingMinTLSVersionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingMinTLSVersionGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingMinTLSVersionGetResponseEnvelopeMessages]
-type settingMinTLSVersionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMinTLSVersionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMinTLSVersionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

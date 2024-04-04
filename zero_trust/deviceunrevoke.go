@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // DeviceUnrevokeService contains methods and other services that help with
@@ -35,7 +33,7 @@ func NewDeviceUnrevokeService(opts ...option.RequestOption) (r *DeviceUnrevokeSe
 }
 
 // Unrevokes a list of devices.
-func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *DeviceUnrevokeNewResponse, err error) {
+func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceUnrevokeNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/unrevoke", params.AccountID)
@@ -45,23 +43,6 @@ func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNe
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [zero_trust.DeviceUnrevokeNewResponseUnknown] or
-// [shared.UnionString].
-type DeviceUnrevokeNewResponse interface {
-	ImplementsZeroTrustDeviceUnrevokeNewResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DeviceUnrevokeNewResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type DeviceUnrevokeNewParams struct {
@@ -75,9 +56,9 @@ func (r DeviceUnrevokeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceUnrevokeNewResponseEnvelope struct {
-	Errors   []DeviceUnrevokeNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceUnrevokeNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceUnrevokeNewResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceUnrevokeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceUnrevokeNewResponseEnvelopeJSON    `json:"-"`
@@ -99,52 +80,6 @@ func (r *DeviceUnrevokeNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r deviceUnrevokeNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceUnrevokeNewResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    deviceUnrevokeNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceUnrevokeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceUnrevokeNewResponseEnvelopeErrors]
-type deviceUnrevokeNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceUnrevokeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceUnrevokeNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DeviceUnrevokeNewResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    deviceUnrevokeNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceUnrevokeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DeviceUnrevokeNewResponseEnvelopeMessages]
-type deviceUnrevokeNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceUnrevokeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceUnrevokeNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

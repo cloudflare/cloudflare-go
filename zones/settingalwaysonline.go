@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -201,8 +202,8 @@ func (r SettingAlwaysOnlineEditParamsValue) IsKnown() bool {
 }
 
 type SettingAlwaysOnlineEditResponseEnvelope struct {
-	Errors   []SettingAlwaysOnlineEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAlwaysOnlineEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, Cloudflare serves limited copies of web pages available from the
@@ -233,60 +234,14 @@ func (r settingAlwaysOnlineEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingAlwaysOnlineEditResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingAlwaysOnlineEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingAlwaysOnlineEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingAlwaysOnlineEditResponseEnvelopeErrors]
-type settingAlwaysOnlineEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAlwaysOnlineEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysOnlineEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAlwaysOnlineEditResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingAlwaysOnlineEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingAlwaysOnlineEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingAlwaysOnlineEditResponseEnvelopeMessages]
-type settingAlwaysOnlineEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAlwaysOnlineEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysOnlineEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingAlwaysOnlineGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingAlwaysOnlineGetResponseEnvelope struct {
-	Errors   []SettingAlwaysOnlineGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAlwaysOnlineGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, Cloudflare serves limited copies of web pages available from the
@@ -314,51 +269,5 @@ func (r *SettingAlwaysOnlineGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r settingAlwaysOnlineGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAlwaysOnlineGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingAlwaysOnlineGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingAlwaysOnlineGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingAlwaysOnlineGetResponseEnvelopeErrors]
-type settingAlwaysOnlineGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAlwaysOnlineGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysOnlineGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAlwaysOnlineGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingAlwaysOnlineGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingAlwaysOnlineGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingAlwaysOnlineGetResponseEnvelopeMessages]
-type settingAlwaysOnlineGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAlwaysOnlineGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysOnlineGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

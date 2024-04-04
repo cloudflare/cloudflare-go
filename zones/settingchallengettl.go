@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -225,8 +226,8 @@ func (r SettingChallengeTTLEditParamsValue) IsKnown() bool {
 }
 
 type SettingChallengeTTLEditResponseEnvelope struct {
-	Errors   []SettingChallengeTTLEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingChallengeTTLEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Specify how long a visitor is allowed access to your site after successfully
@@ -257,60 +258,14 @@ func (r settingChallengeTTLEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingChallengeTTLEditResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingChallengeTTLEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingChallengeTTLEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingChallengeTTLEditResponseEnvelopeErrors]
-type settingChallengeTTLEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingChallengeTTLEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingChallengeTTLEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingChallengeTTLEditResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingChallengeTTLEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingChallengeTTLEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingChallengeTTLEditResponseEnvelopeMessages]
-type settingChallengeTTLEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingChallengeTTLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingChallengeTTLEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingChallengeTTLGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingChallengeTTLGetResponseEnvelope struct {
-	Errors   []SettingChallengeTTLGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingChallengeTTLGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Specify how long a visitor is allowed access to your site after successfully
@@ -338,51 +293,5 @@ func (r *SettingChallengeTTLGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r settingChallengeTTLGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingChallengeTTLGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingChallengeTTLGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingChallengeTTLGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingChallengeTTLGetResponseEnvelopeErrors]
-type settingChallengeTTLGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingChallengeTTLGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingChallengeTTLGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingChallengeTTLGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingChallengeTTLGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingChallengeTTLGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingChallengeTTLGetResponseEnvelopeMessages]
-type settingChallengeTTLGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingChallengeTTLGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingChallengeTTLGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

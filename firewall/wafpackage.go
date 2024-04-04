@@ -103,9 +103,9 @@ func init() {
 }
 
 type WAFPackageListResponseLegacyJhsAPIResponseCollection struct {
-	Errors   []WAFPackageListResponseLegacyJhsAPIResponseCollectionError   `json:"errors,required"`
-	Messages []WAFPackageListResponseLegacyJhsAPIResponseCollectionMessage `json:"messages,required"`
-	Result   WAFPackageListResponseLegacyJhsAPIResponseCollectionResult    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    WAFPackageListResponseLegacyJhsAPIResponseCollectionSuccess    `json:"success,required"`
 	ResultInfo WAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo `json:"result_info"`
@@ -133,82 +133,6 @@ func (r wafPackageListResponseLegacyJhsAPIResponseCollectionJSON) RawJSON() stri
 }
 
 func (r WAFPackageListResponseLegacyJhsAPIResponseCollection) implementsFirewallWAFPackageListResponse() {
-}
-
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionError struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    wafPackageListResponseLegacyJhsAPIResponseCollectionErrorJSON `json:"-"`
-}
-
-// wafPackageListResponseLegacyJhsAPIResponseCollectionErrorJSON contains the JSON
-// metadata for the struct
-// [WAFPackageListResponseLegacyJhsAPIResponseCollectionError]
-type wafPackageListResponseLegacyJhsAPIResponseCollectionErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageListResponseLegacyJhsAPIResponseCollectionError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageListResponseLegacyJhsAPIResponseCollectionErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionMessage struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    wafPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON `json:"-"`
-}
-
-// wafPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON contains the
-// JSON metadata for the struct
-// [WAFPackageListResponseLegacyJhsAPIResponseCollectionMessage]
-type wafPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageListResponseLegacyJhsAPIResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON) RawJSON() string {
-	return r.raw
-}
-
-// Union satisfied by
-// [firewall.WAFPackageListResponseLegacyJhsAPIResponseCollectionResultUnknown],
-// [firewall.WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray] or
-// [shared.UnionString].
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionResult interface {
-	ImplementsFirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResult()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageListResponseLegacyJhsAPIResponseCollectionResult)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray []interface{}
-
-func (r WAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray) ImplementsFirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResult() {
 }
 
 // Whether the API call was successful
@@ -534,9 +458,9 @@ func init() {
 }
 
 type WAFPackageGetResponseLegacyJhsAPIResponseSingle struct {
-	Errors   []WAFPackageGetResponseLegacyJhsAPIResponseSingleError   `json:"errors,required"`
-	Messages []WAFPackageGetResponseLegacyJhsAPIResponseSingleMessage `json:"messages,required"`
-	Result   WAFPackageGetResponseLegacyJhsAPIResponseSingleResult    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172                          `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172                          `json:"messages,required"`
+	Result   WAFPackageGetResponseLegacyJhsAPIResponseSingleResult `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseLegacyJhsAPIResponseSingleSuccess `json:"success,required"`
 	JSON    wafPackageGetResponseLegacyJhsAPIResponseSingleJSON    `json:"-"`
@@ -562,52 +486,6 @@ func (r wafPackageGetResponseLegacyJhsAPIResponseSingleJSON) RawJSON() string {
 }
 
 func (r WAFPackageGetResponseLegacyJhsAPIResponseSingle) implementsFirewallWAFPackageGetResponse() {}
-
-type WAFPackageGetResponseLegacyJhsAPIResponseSingleError struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    wafPackageGetResponseLegacyJhsAPIResponseSingleErrorJSON `json:"-"`
-}
-
-// wafPackageGetResponseLegacyJhsAPIResponseSingleErrorJSON contains the JSON
-// metadata for the struct [WAFPackageGetResponseLegacyJhsAPIResponseSingleError]
-type wafPackageGetResponseLegacyJhsAPIResponseSingleErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGetResponseLegacyJhsAPIResponseSingleError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGetResponseLegacyJhsAPIResponseSingleErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type WAFPackageGetResponseLegacyJhsAPIResponseSingleMessage struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    wafPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON `json:"-"`
-}
-
-// wafPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON contains the JSON
-// metadata for the struct [WAFPackageGetResponseLegacyJhsAPIResponseSingleMessage]
-type wafPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFPackageGetResponseLegacyJhsAPIResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON) RawJSON() string {
-	return r.raw
-}
 
 // Union satisfied by
 // [firewall.WAFPackageGetResponseLegacyJhsAPIResponseSingleResultUnknown] or

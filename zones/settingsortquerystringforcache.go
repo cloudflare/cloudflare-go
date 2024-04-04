@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -193,8 +194,8 @@ func (r SettingSortQueryStringForCacheEditParamsValue) IsKnown() bool {
 }
 
 type SettingSortQueryStringForCacheEditResponseEnvelope struct {
-	Errors   []SettingSortQueryStringForCacheEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSortQueryStringForCacheEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will treat files with the same query strings as the same file in
@@ -223,62 +224,14 @@ func (r settingSortQueryStringForCacheEditResponseEnvelopeJSON) RawJSON() string
 	return r.raw
 }
 
-type SettingSortQueryStringForCacheEditResponseEnvelopeErrors struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    settingSortQueryStringForCacheEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingSortQueryStringForCacheEditResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [SettingSortQueryStringForCacheEditResponseEnvelopeErrors]
-type settingSortQueryStringForCacheEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSortQueryStringForCacheEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSortQueryStringForCacheEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSortQueryStringForCacheEditResponseEnvelopeMessages struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    settingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingSortQueryStringForCacheEditResponseEnvelopeMessages]
-type settingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSortQueryStringForCacheEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingSortQueryStringForCacheGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingSortQueryStringForCacheGetResponseEnvelope struct {
-	Errors   []SettingSortQueryStringForCacheGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSortQueryStringForCacheGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will treat files with the same query strings as the same file in
@@ -304,53 +257,5 @@ func (r *SettingSortQueryStringForCacheGetResponseEnvelope) UnmarshalJSON(data [
 }
 
 func (r settingSortQueryStringForCacheGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSortQueryStringForCacheGetResponseEnvelopeErrors struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    settingSortQueryStringForCacheGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingSortQueryStringForCacheGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [SettingSortQueryStringForCacheGetResponseEnvelopeErrors]
-type settingSortQueryStringForCacheGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSortQueryStringForCacheGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSortQueryStringForCacheGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingSortQueryStringForCacheGetResponseEnvelopeMessages struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    settingSortQueryStringForCacheGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSortQueryStringForCacheGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingSortQueryStringForCacheGetResponseEnvelopeMessages]
-type settingSortQueryStringForCacheGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSortQueryStringForCacheGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSortQueryStringForCacheGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

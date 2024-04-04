@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -14,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // SnippetService contains methods and other services that help with interacting
@@ -75,7 +73,7 @@ func (r *SnippetService) ListAutoPaging(ctx context.Context, zoneIdentifier stri
 }
 
 // Delete Snippet
-func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *SnippetDeleteResponse, err error) {
+func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
@@ -128,31 +126,6 @@ func (r snippetJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [snippets.SnippetDeleteResponseUnknown],
-// [snippets.SnippetDeleteResponseArray] or [shared.UnionString].
-type SnippetDeleteResponse interface {
-	ImplementsSnippetsSnippetDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SnippetDeleteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SnippetDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type SnippetDeleteResponseArray []interface{}
-
-func (r SnippetDeleteResponseArray) ImplementsSnippetsSnippetDeleteResponse() {}
-
 type SnippetUpdateParams struct {
 	// Content files of uploaded snippet
 	Files    param.Field[string]                      `json:"files"`
@@ -173,8 +146,8 @@ func (r SnippetUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type SnippetUpdateResponseEnvelope struct {
-	Errors   []SnippetUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SnippetUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Snippet Information
 	Result Snippet `json:"result,required"`
 	// Whether the API call was successful
@@ -201,52 +174,6 @@ func (r snippetUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SnippetUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    snippetUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// snippetUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SnippetUpdateResponseEnvelopeErrors]
-type snippetUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SnippetUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    snippetUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// snippetUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SnippetUpdateResponseEnvelopeMessages]
-type snippetUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SnippetUpdateResponseEnvelopeSuccess bool
 
@@ -263,9 +190,9 @@ func (r SnippetUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetDeleteResponseEnvelope struct {
-	Errors   []SnippetDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SnippetDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   SnippetDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171   `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetDeleteResponseEnvelopeJSON    `json:"-"`
@@ -290,52 +217,6 @@ func (r snippetDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SnippetDeleteResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    snippetDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// snippetDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SnippetDeleteResponseEnvelopeErrors]
-type snippetDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SnippetDeleteResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    snippetDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// snippetDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SnippetDeleteResponseEnvelopeMessages]
-type snippetDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SnippetDeleteResponseEnvelopeSuccess bool
 
@@ -352,8 +233,8 @@ func (r SnippetDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SnippetGetResponseEnvelope struct {
-	Errors   []SnippetGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SnippetGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Snippet Information
 	Result Snippet `json:"result,required"`
 	// Whether the API call was successful
@@ -377,52 +258,6 @@ func (r *SnippetGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r snippetGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SnippetGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    snippetGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// snippetGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SnippetGetResponseEnvelopeErrors]
-type snippetGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SnippetGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    snippetGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// snippetGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SnippetGetResponseEnvelopeMessages]
-type snippetGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r snippetGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -214,8 +215,8 @@ func (r SettingRocketLoaderEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingRocketLoaderEditResponseEnvelope struct {
-	Errors   []SettingRocketLoaderEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingRocketLoaderEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
@@ -251,60 +252,14 @@ func (r settingRocketLoaderEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingRocketLoaderEditResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingRocketLoaderEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingRocketLoaderEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingRocketLoaderEditResponseEnvelopeErrors]
-type settingRocketLoaderEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingRocketLoaderEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingRocketLoaderEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingRocketLoaderEditResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingRocketLoaderEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingRocketLoaderEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingRocketLoaderEditResponseEnvelopeMessages]
-type settingRocketLoaderEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingRocketLoaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingRocketLoaderEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingRocketLoaderGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingRocketLoaderGetResponseEnvelope struct {
-	Errors   []SettingRocketLoaderGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingRocketLoaderGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
@@ -337,51 +292,5 @@ func (r *SettingRocketLoaderGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r settingRocketLoaderGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingRocketLoaderGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingRocketLoaderGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingRocketLoaderGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingRocketLoaderGetResponseEnvelopeErrors]
-type settingRocketLoaderGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingRocketLoaderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingRocketLoaderGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingRocketLoaderGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingRocketLoaderGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingRocketLoaderGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingRocketLoaderGetResponseEnvelopeMessages]
-type settingRocketLoaderGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingRocketLoaderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingRocketLoaderGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

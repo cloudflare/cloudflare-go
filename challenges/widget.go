@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -465,8 +466,8 @@ func (r WidgetNewParamsRegion) IsKnown() bool {
 }
 
 type WidgetNewResponseEnvelope struct {
-	Errors   []WidgetNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WidgetNewResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
@@ -492,52 +493,6 @@ func (r *WidgetNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r widgetNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WidgetNewResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    widgetNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// widgetNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WidgetNewResponseEnvelopeErrors]
-type widgetNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WidgetNewResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    widgetNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// widgetNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [WidgetNewResponseEnvelopeMessages]
-type widgetNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -633,8 +588,8 @@ func (r WidgetUpdateParamsClearanceLevel) IsKnown() bool {
 }
 
 type WidgetUpdateResponseEnvelope struct {
-	Errors   []WidgetUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WidgetUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
@@ -658,52 +613,6 @@ func (r *WidgetUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r widgetUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WidgetUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    widgetUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// widgetUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WidgetUpdateResponseEnvelopeErrors]
-type widgetUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WidgetUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    widgetUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// widgetUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WidgetUpdateResponseEnvelopeMessages]
-type widgetUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -769,8 +678,8 @@ type WidgetDeleteParams struct {
 }
 
 type WidgetDeleteResponseEnvelope struct {
-	Errors   []WidgetDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WidgetDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
@@ -797,60 +706,14 @@ func (r widgetDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type WidgetDeleteResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    widgetDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// widgetDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WidgetDeleteResponseEnvelopeErrors]
-type widgetDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WidgetDeleteResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    widgetDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// widgetDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WidgetDeleteResponseEnvelopeMessages]
-type widgetDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type WidgetGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type WidgetGetResponseEnvelope struct {
-	Errors   []WidgetGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WidgetGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
@@ -877,52 +740,6 @@ func (r widgetGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type WidgetGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    widgetGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// widgetGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [WidgetGetResponseEnvelopeErrors]
-type widgetGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WidgetGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    widgetGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// widgetGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [WidgetGetResponseEnvelopeMessages]
-type widgetGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type WidgetRotateSecretParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -937,8 +754,8 @@ func (r WidgetRotateSecretParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WidgetRotateSecretResponseEnvelope struct {
-	Errors   []WidgetRotateSecretResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WidgetRotateSecretResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
@@ -962,51 +779,5 @@ func (r *WidgetRotateSecretResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r widgetRotateSecretResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type WidgetRotateSecretResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    widgetRotateSecretResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// widgetRotateSecretResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WidgetRotateSecretResponseEnvelopeErrors]
-type widgetRotateSecretResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetRotateSecretResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetRotateSecretResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type WidgetRotateSecretResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    widgetRotateSecretResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// widgetRotateSecretResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WidgetRotateSecretResponseEnvelopeMessages]
-type widgetRotateSecretResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WidgetRotateSecretResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetRotateSecretResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -675,9 +676,9 @@ func (r FirewallAccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type FirewallAccessRuleNewResponseEnvelope struct {
-	Errors   []FirewallAccessRuleNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallAccessRuleNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallRule                                    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   FirewallRule                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallAccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAccessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -699,52 +700,6 @@ func (r *FirewallAccessRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r firewallAccessRuleNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAccessRuleNewResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    firewallAccessRuleNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallAccessRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FirewallAccessRuleNewResponseEnvelopeErrors]
-type firewallAccessRuleNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAccessRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAccessRuleNewResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    firewallAccessRuleNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallAccessRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [FirewallAccessRuleNewResponseEnvelopeMessages]
-type firewallAccessRuleNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAccessRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -939,9 +894,9 @@ func (r FirewallAccessRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FirewallAccessRuleDeleteResponseEnvelope struct {
-	Errors   []FirewallAccessRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallAccessRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallAccessRuleDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172     `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172     `json:"messages,required"`
+	Result   FirewallAccessRuleDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallAccessRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAccessRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -963,52 +918,6 @@ func (r *FirewallAccessRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r firewallAccessRuleDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAccessRuleDeleteResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    firewallAccessRuleDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallAccessRuleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [FirewallAccessRuleDeleteResponseEnvelopeErrors]
-type firewallAccessRuleDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAccessRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAccessRuleDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    firewallAccessRuleDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallAccessRuleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [FirewallAccessRuleDeleteResponseEnvelopeMessages]
-type firewallAccessRuleDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAccessRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1058,9 +967,9 @@ func (r FirewallAccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type FirewallAccessRuleEditResponseEnvelope struct {
-	Errors   []FirewallAccessRuleEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallAccessRuleEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallRule                                     `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   FirewallRule                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallAccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAccessRuleEditResponseEnvelopeJSON    `json:"-"`
@@ -1082,52 +991,6 @@ func (r *FirewallAccessRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r firewallAccessRuleEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAccessRuleEditResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    firewallAccessRuleEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallAccessRuleEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FirewallAccessRuleEditResponseEnvelopeErrors]
-type firewallAccessRuleEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAccessRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAccessRuleEditResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    firewallAccessRuleEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallAccessRuleEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [FirewallAccessRuleEditResponseEnvelopeMessages]
-type firewallAccessRuleEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAccessRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

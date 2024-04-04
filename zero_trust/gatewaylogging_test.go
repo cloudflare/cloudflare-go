@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
@@ -31,7 +32,7 @@ func TestGatewayLoggingUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Gateway.Logging.Update(context.TODO(), zero_trust.GatewayLoggingUpdateParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		RedactPii: cloudflare.F(true),
-		SettingsByRuleType: cloudflare.F(zero_trust.GatewayLoggingUpdateParamsSettingsByRuleType{
+		SettingsByRuleType: cloudflare.F(shared.UnnamedSchemaRef28Param{
 			DNS:  cloudflare.F[any](map[string]interface{}{}),
 			HTTP: cloudflare.F[any](map[string]interface{}{}),
 			L4:   cloudflare.F[any](map[string]interface{}{}),

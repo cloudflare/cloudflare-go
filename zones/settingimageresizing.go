@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -185,8 +186,8 @@ func (r SettingImageResizingEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SettingImageResizingEditResponseEnvelope struct {
-	Errors   []SettingImageResizingEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingImageResizingEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Image Resizing provides on-demand resizing, conversion and optimisation for
@@ -216,60 +217,14 @@ func (r settingImageResizingEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingImageResizingEditResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingImageResizingEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingImageResizingEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingImageResizingEditResponseEnvelopeErrors]
-type settingImageResizingEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImageResizingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImageResizingEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingImageResizingEditResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingImageResizingEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingImageResizingEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingImageResizingEditResponseEnvelopeMessages]
-type settingImageResizingEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImageResizingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImageResizingEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingImageResizingGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingImageResizingGetResponseEnvelope struct {
-	Errors   []SettingImageResizingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingImageResizingGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Image Resizing provides on-demand resizing, conversion and optimisation for
@@ -296,51 +251,5 @@ func (r *SettingImageResizingGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r settingImageResizingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingImageResizingGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingImageResizingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingImageResizingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingImageResizingGetResponseEnvelopeErrors]
-type settingImageResizingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImageResizingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImageResizingGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingImageResizingGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingImageResizingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingImageResizingGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingImageResizingGetResponseEnvelopeMessages]
-type settingImageResizingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImageResizingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImageResizingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

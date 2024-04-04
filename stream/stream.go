@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -441,9 +442,9 @@ type StreamGetParams struct {
 }
 
 type StreamGetResponseEnvelope struct {
-	Errors   []StreamGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamVideos                        `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   StreamVideos                 `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamGetResponseEnvelopeJSON    `json:"-"`
@@ -465,52 +466,6 @@ func (r *StreamGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r streamGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type StreamGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    streamGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [StreamGetResponseEnvelopeErrors]
-type streamGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type StreamGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    streamGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [StreamGetResponseEnvelopeMessages]
-type streamGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -49,8 +50,8 @@ type OutgoingStatusGetParams struct {
 }
 
 type OutgoingStatusGetResponseEnvelope struct {
-	Errors   []OutgoingStatusGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OutgoingStatusGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// The zone transfer status of a primary zone
 	Result SecondaryDNSEnableTransfer `json:"result,required"`
 	// Whether the API call was successful
@@ -74,52 +75,6 @@ func (r *OutgoingStatusGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r outgoingStatusGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type OutgoingStatusGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    outgoingStatusGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// outgoingStatusGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [OutgoingStatusGetResponseEnvelopeErrors]
-type outgoingStatusGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OutgoingStatusGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r outgoingStatusGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type OutgoingStatusGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    outgoingStatusGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// outgoingStatusGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [OutgoingStatusGetResponseEnvelopeMessages]
-type outgoingStatusGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OutgoingStatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r outgoingStatusGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

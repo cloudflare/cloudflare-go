@@ -52,7 +52,7 @@ func (r *CustomNameserverService) Update(ctx context.Context, params CustomNames
 }
 
 // Get metadata for account-level custom nameservers on a zone.
-func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *CustomNameserverGetResponse, err error) {
+func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_ns", query.ZoneID)
@@ -89,31 +89,6 @@ type CustomNameserverUpdateResponseArray []interface{}
 
 func (r CustomNameserverUpdateResponseArray) ImplementsZonesCustomNameserverUpdateResponse() {}
 
-// Union satisfied by [zones.CustomNameserverGetResponseUnknown],
-// [zones.CustomNameserverGetResponseArray] or [shared.UnionString].
-type CustomNameserverGetResponse interface {
-	ImplementsZonesCustomNameserverGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomNameserverGetResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CustomNameserverGetResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type CustomNameserverGetResponseArray []interface{}
-
-func (r CustomNameserverGetResponseArray) ImplementsZonesCustomNameserverGetResponse() {}
-
 type CustomNameserverUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -128,9 +103,9 @@ func (r CustomNameserverUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverUpdateResponseEnvelope struct {
-	Errors   []CustomNameserverUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomNameserverUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomNameserverUpdateResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   CustomNameserverUpdateResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -154,52 +129,6 @@ func (r *CustomNameserverUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r customNameserverUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverUpdateResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    customNameserverUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customNameserverUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomNameserverUpdateResponseEnvelopeErrors]
-type customNameserverUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverUpdateResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    customNameserverUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customNameserverUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [CustomNameserverUpdateResponseEnvelopeMessages]
-type customNameserverUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -255,9 +184,9 @@ type CustomNameserverGetParams struct {
 }
 
 type CustomNameserverGetResponseEnvelope struct {
-	Errors   []CustomNameserverGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomNameserverGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomNameserverGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success CustomNameserverGetResponseEnvelopeSuccess `json:"success,required"`
 	// Whether zone uses account-level custom nameservers.
@@ -287,52 +216,6 @@ func (r *CustomNameserverGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r customNameserverGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    customNameserverGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customNameserverGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [CustomNameserverGetResponseEnvelopeErrors]
-type customNameserverGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomNameserverGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    customNameserverGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customNameserverGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomNameserverGetResponseEnvelopeMessages]
-type customNameserverGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomNameserverGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customNameserverGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

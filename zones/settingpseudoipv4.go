@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -187,8 +188,8 @@ func (r SettingPseudoIPV4EditParamsValue) IsKnown() bool {
 }
 
 type SettingPseudoIPV4EditResponseEnvelope struct {
-	Errors   []SettingPseudoIPV4EditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPseudoIPV4EditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The value set for the Pseudo IPv4 setting.
@@ -215,60 +216,14 @@ func (r settingPseudoIPV4EditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingPseudoIPV4EditResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    settingPseudoIPV4EditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingPseudoIPV4EditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingPseudoIPV4EditResponseEnvelopeErrors]
-type settingPseudoIPV4EditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPseudoIPV4EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPseudoIPV4EditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPseudoIPV4EditResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingPseudoIPV4EditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPseudoIPV4EditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingPseudoIPV4EditResponseEnvelopeMessages]
-type settingPseudoIPV4EditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPseudoIPV4EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPseudoIPV4EditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingPseudoIPV4GetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingPseudoIPV4GetResponseEnvelope struct {
-	Errors   []SettingPseudoIPV4GetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPseudoIPV4GetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The value set for the Pseudo IPv4 setting.
@@ -292,51 +247,5 @@ func (r *SettingPseudoIPV4GetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r settingPseudoIPV4GetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPseudoIPV4GetResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    settingPseudoIPV4GetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingPseudoIPV4GetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingPseudoIPV4GetResponseEnvelopeErrors]
-type settingPseudoIPV4GetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPseudoIPV4GetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPseudoIPV4GetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPseudoIPV4GetResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingPseudoIPV4GetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPseudoIPV4GetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingPseudoIPV4GetResponseEnvelopeMessages]
-type settingPseudoIPV4GetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPseudoIPV4GetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPseudoIPV4GetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
