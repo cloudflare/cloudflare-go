@@ -33,10 +33,10 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		rulesets.PhaseUpdateParamsRulesetPhaseHTTPRequestFirewallCustom,
 		rulesets.PhaseUpdateParams{
-			Rules: cloudflare.F([]rulesets.PhaseUpdateParamsRuleUnion{rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
-				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
-					Response: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
+			Rules: cloudflare.F([]rulesets.RequestRuleUnionParam{rulesets.BlockRuleParam{
+				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
+					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
 						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 						ContentType: cloudflare.F("application/json"),
 						StatusCode:  cloudflare.F(int64(400)),
@@ -50,10 +50,10 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}, rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
-				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
-					Response: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
+			}, rulesets.BlockRuleParam{
+				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
+					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
 						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 						ContentType: cloudflare.F("application/json"),
 						StatusCode:  cloudflare.F(int64(400)),
@@ -67,10 +67,10 @@ func TestPhaseUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
-			}, rulesets.PhaseUpdateParamsRulesRulesetsBlockRule{
-				Action: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
-				ActionParameters: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
-					Response: cloudflare.F(rulesets.PhaseUpdateParamsRulesRulesetsBlockRuleActionParametersResponse{
+			}, rulesets.BlockRuleParam{
+				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
+					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
 						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 						ContentType: cloudflare.F("application/json"),
 						StatusCode:  cloudflare.F(int64(400)),
