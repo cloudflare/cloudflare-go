@@ -32,13 +32,13 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 	_, err := client.Rulesets.Rules.New(
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
-		rulesets.RuleNewParamsRulesetsBlockRule{
+		rulesets.RuleNewParamsBlockRule{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
 			ID:        cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-			Action:    cloudflare.F(rulesets.RuleNewParamsRulesetsBlockRuleActionBlock),
-			ActionParameters: cloudflare.F(rulesets.RuleNewParamsRulesetsBlockRuleActionParameters{
-				Response: cloudflare.F(rulesets.RuleNewParamsRulesetsBlockRuleActionParametersResponse{
+			Action:    cloudflare.F(rulesets.RuleNewParamsBlockRuleActionBlock),
+			ActionParameters: cloudflare.F(rulesets.RuleNewParamsBlockRuleActionParameters{
+				Response: cloudflare.F(rulesets.RuleNewParamsBlockRuleActionParametersResponse{
 					Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 					ContentType: cloudflare.F("application/json"),
 					StatusCode:  cloudflare.F(int64(400)),
@@ -112,13 +112,13 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		"3a03d665bac047339bb530ecb439a90d",
-		rulesets.RuleEditParamsRulesetsBlockRule{
+		rulesets.RuleEditParamsBlockRule{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
 			ID:        cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-			Action:    cloudflare.F(rulesets.RuleEditParamsRulesetsBlockRuleActionBlock),
-			ActionParameters: cloudflare.F(rulesets.RuleEditParamsRulesetsBlockRuleActionParameters{
-				Response: cloudflare.F(rulesets.RuleEditParamsRulesetsBlockRuleActionParametersResponse{
+			Action:    cloudflare.F(rulesets.RuleEditParamsBlockRuleActionBlock),
+			ActionParameters: cloudflare.F(rulesets.RuleEditParamsBlockRuleActionParameters{
+				Response: cloudflare.F(rulesets.RuleEditParamsBlockRuleActionParametersResponse{
 					Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
 					ContentType: cloudflare.F("application/json"),
 					StatusCode:  cloudflare.F(int64(400)),
