@@ -240,8 +240,8 @@ func (r siteLANNewResponseLANsRoutedSubnetsNatJSON) RawJSON() string {
 type SiteLANNewResponseLANsStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                           `json:"address,required"`
-	DhcpRelay  SiteLANNewResponseLANsStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLANNewResponseLANsStaticAddressingDhcpServer `json:"dhcp_server"`
+	DHCPRelay  SiteLANNewResponseLANsStaticAddressingDHCPRelay  `json:"dhcp_relay"`
+	DHCPServer SiteLANNewResponseLANsStaticAddressingDHCPServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
@@ -253,8 +253,8 @@ type SiteLANNewResponseLANsStaticAddressing struct {
 // struct [SiteLANNewResponseLANsStaticAddressing]
 type siteLANNewResponseLANsStaticAddressingJSON struct {
 	Address          apijson.Field
-	DhcpRelay        apijson.Field
-	DhcpServer       apijson.Field
+	DHCPRelay        apijson.Field
+	DHCPServer       apijson.Field
 	SecondaryAddress apijson.Field
 	VirtualAddress   apijson.Field
 	raw              string
@@ -269,56 +269,56 @@ func (r siteLANNewResponseLANsStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANNewResponseLANsStaticAddressingDhcpRelay struct {
+type SiteLANNewResponseLANsStaticAddressingDHCPRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                            `json:"server_addresses"`
-	JSON            siteLANNewResponseLANsStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANNewResponseLANsStaticAddressingDHCPRelayJSON `json:"-"`
 }
 
-// siteLANNewResponseLANsStaticAddressingDhcpRelayJSON contains the JSON metadata
-// for the struct [SiteLANNewResponseLANsStaticAddressingDhcpRelay]
-type siteLANNewResponseLANsStaticAddressingDhcpRelayJSON struct {
+// siteLANNewResponseLANsStaticAddressingDHCPRelayJSON contains the JSON metadata
+// for the struct [SiteLANNewResponseLANsStaticAddressingDHCPRelay]
+type siteLANNewResponseLANsStaticAddressingDHCPRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLANNewResponseLANsStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseLANsStaticAddressingDHCPRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANNewResponseLANsStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANNewResponseLANsStaticAddressingDHCPRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANNewResponseLANsStaticAddressingDhcpServer struct {
+type SiteLANNewResponseLANsStaticAddressingDHCPServer struct {
 	// A valid IPv4 address.
-	DhcpPoolEnd string `json:"dhcp_pool_end"`
+	DHCPPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
-	DhcpPoolStart string `json:"dhcp_pool_start"`
+	DHCPPoolStart string `json:"dhcp_pool_start"`
 	// A valid IPv4 address.
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                    `json:"reservations"`
-	JSON         siteLANNewResponseLANsStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANNewResponseLANsStaticAddressingDHCPServerJSON `json:"-"`
 }
 
-// siteLANNewResponseLANsStaticAddressingDhcpServerJSON contains the JSON metadata
-// for the struct [SiteLANNewResponseLANsStaticAddressingDhcpServer]
-type siteLANNewResponseLANsStaticAddressingDhcpServerJSON struct {
-	DhcpPoolEnd   apijson.Field
-	DhcpPoolStart apijson.Field
+// siteLANNewResponseLANsStaticAddressingDHCPServerJSON contains the JSON metadata
+// for the struct [SiteLANNewResponseLANsStaticAddressingDHCPServer]
+type siteLANNewResponseLANsStaticAddressingDHCPServerJSON struct {
+	DHCPPoolEnd   apijson.Field
+	DHCPPoolStart apijson.Field
 	DNSServer     apijson.Field
 	Reservations  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLANNewResponseLANsStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANNewResponseLANsStaticAddressingDHCPServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANNewResponseLANsStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANNewResponseLANsStaticAddressingDHCPServerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -465,8 +465,8 @@ func (r siteLANUpdateResponseLANRoutedSubnetsNatJSON) RawJSON() string {
 type SiteLANUpdateResponseLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                             `json:"address,required"`
-	DhcpRelay  SiteLANUpdateResponseLANStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLANUpdateResponseLANStaticAddressingDhcpServer `json:"dhcp_server"`
+	DHCPRelay  SiteLANUpdateResponseLANStaticAddressingDHCPRelay  `json:"dhcp_relay"`
+	DHCPServer SiteLANUpdateResponseLANStaticAddressingDHCPServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
@@ -478,8 +478,8 @@ type SiteLANUpdateResponseLANStaticAddressing struct {
 // struct [SiteLANUpdateResponseLANStaticAddressing]
 type siteLANUpdateResponseLANStaticAddressingJSON struct {
 	Address          apijson.Field
-	DhcpRelay        apijson.Field
-	DhcpServer       apijson.Field
+	DHCPRelay        apijson.Field
+	DHCPServer       apijson.Field
 	SecondaryAddress apijson.Field
 	VirtualAddress   apijson.Field
 	raw              string
@@ -494,56 +494,56 @@ func (r siteLANUpdateResponseLANStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANUpdateResponseLANStaticAddressingDhcpRelay struct {
+type SiteLANUpdateResponseLANStaticAddressingDHCPRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                              `json:"server_addresses"`
-	JSON            siteLANUpdateResponseLANStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANUpdateResponseLANStaticAddressingDHCPRelayJSON `json:"-"`
 }
 
-// siteLANUpdateResponseLANStaticAddressingDhcpRelayJSON contains the JSON metadata
-// for the struct [SiteLANUpdateResponseLANStaticAddressingDhcpRelay]
-type siteLANUpdateResponseLANStaticAddressingDhcpRelayJSON struct {
+// siteLANUpdateResponseLANStaticAddressingDHCPRelayJSON contains the JSON metadata
+// for the struct [SiteLANUpdateResponseLANStaticAddressingDHCPRelay]
+type siteLANUpdateResponseLANStaticAddressingDHCPRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLANUpdateResponseLANStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseLANStaticAddressingDHCPRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANUpdateResponseLANStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANUpdateResponseLANStaticAddressingDHCPRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANUpdateResponseLANStaticAddressingDhcpServer struct {
+type SiteLANUpdateResponseLANStaticAddressingDHCPServer struct {
 	// A valid IPv4 address.
-	DhcpPoolEnd string `json:"dhcp_pool_end"`
+	DHCPPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
-	DhcpPoolStart string `json:"dhcp_pool_start"`
+	DHCPPoolStart string `json:"dhcp_pool_start"`
 	// A valid IPv4 address.
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                      `json:"reservations"`
-	JSON         siteLANUpdateResponseLANStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANUpdateResponseLANStaticAddressingDHCPServerJSON `json:"-"`
 }
 
-// siteLANUpdateResponseLANStaticAddressingDhcpServerJSON contains the JSON
-// metadata for the struct [SiteLANUpdateResponseLANStaticAddressingDhcpServer]
-type siteLANUpdateResponseLANStaticAddressingDhcpServerJSON struct {
-	DhcpPoolEnd   apijson.Field
-	DhcpPoolStart apijson.Field
+// siteLANUpdateResponseLANStaticAddressingDHCPServerJSON contains the JSON
+// metadata for the struct [SiteLANUpdateResponseLANStaticAddressingDHCPServer]
+type siteLANUpdateResponseLANStaticAddressingDHCPServerJSON struct {
+	DHCPPoolEnd   apijson.Field
+	DHCPPoolStart apijson.Field
 	DNSServer     apijson.Field
 	Reservations  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLANUpdateResponseLANStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANUpdateResponseLANStaticAddressingDHCPServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANUpdateResponseLANStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANUpdateResponseLANStaticAddressingDHCPServerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -690,8 +690,8 @@ func (r siteLANListResponseLANsRoutedSubnetsNatJSON) RawJSON() string {
 type SiteLANListResponseLANsStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                            `json:"address,required"`
-	DhcpRelay  SiteLANListResponseLANsStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLANListResponseLANsStaticAddressingDhcpServer `json:"dhcp_server"`
+	DHCPRelay  SiteLANListResponseLANsStaticAddressingDHCPRelay  `json:"dhcp_relay"`
+	DHCPServer SiteLANListResponseLANsStaticAddressingDHCPServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
@@ -703,8 +703,8 @@ type SiteLANListResponseLANsStaticAddressing struct {
 // struct [SiteLANListResponseLANsStaticAddressing]
 type siteLANListResponseLANsStaticAddressingJSON struct {
 	Address          apijson.Field
-	DhcpRelay        apijson.Field
-	DhcpServer       apijson.Field
+	DHCPRelay        apijson.Field
+	DHCPServer       apijson.Field
 	SecondaryAddress apijson.Field
 	VirtualAddress   apijson.Field
 	raw              string
@@ -719,56 +719,56 @@ func (r siteLANListResponseLANsStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANListResponseLANsStaticAddressingDhcpRelay struct {
+type SiteLANListResponseLANsStaticAddressingDHCPRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                             `json:"server_addresses"`
-	JSON            siteLANListResponseLANsStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANListResponseLANsStaticAddressingDHCPRelayJSON `json:"-"`
 }
 
-// siteLANListResponseLANsStaticAddressingDhcpRelayJSON contains the JSON metadata
-// for the struct [SiteLANListResponseLANsStaticAddressingDhcpRelay]
-type siteLANListResponseLANsStaticAddressingDhcpRelayJSON struct {
+// siteLANListResponseLANsStaticAddressingDHCPRelayJSON contains the JSON metadata
+// for the struct [SiteLANListResponseLANsStaticAddressingDHCPRelay]
+type siteLANListResponseLANsStaticAddressingDHCPRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLANListResponseLANsStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseLANsStaticAddressingDHCPRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANListResponseLANsStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANListResponseLANsStaticAddressingDHCPRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANListResponseLANsStaticAddressingDhcpServer struct {
+type SiteLANListResponseLANsStaticAddressingDHCPServer struct {
 	// A valid IPv4 address.
-	DhcpPoolEnd string `json:"dhcp_pool_end"`
+	DHCPPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
-	DhcpPoolStart string `json:"dhcp_pool_start"`
+	DHCPPoolStart string `json:"dhcp_pool_start"`
 	// A valid IPv4 address.
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                     `json:"reservations"`
-	JSON         siteLANListResponseLANsStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANListResponseLANsStaticAddressingDHCPServerJSON `json:"-"`
 }
 
-// siteLANListResponseLANsStaticAddressingDhcpServerJSON contains the JSON metadata
-// for the struct [SiteLANListResponseLANsStaticAddressingDhcpServer]
-type siteLANListResponseLANsStaticAddressingDhcpServerJSON struct {
-	DhcpPoolEnd   apijson.Field
-	DhcpPoolStart apijson.Field
+// siteLANListResponseLANsStaticAddressingDHCPServerJSON contains the JSON metadata
+// for the struct [SiteLANListResponseLANsStaticAddressingDHCPServer]
+type siteLANListResponseLANsStaticAddressingDHCPServerJSON struct {
+	DHCPPoolEnd   apijson.Field
+	DHCPPoolStart apijson.Field
 	DNSServer     apijson.Field
 	Reservations  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLANListResponseLANsStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANListResponseLANsStaticAddressingDHCPServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANListResponseLANsStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANListResponseLANsStaticAddressingDHCPServerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -917,8 +917,8 @@ func (r siteLANDeleteResponseDeletedLANRoutedSubnetsNatJSON) RawJSON() string {
 type SiteLANDeleteResponseDeletedLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                                    `json:"address,required"`
-	DhcpRelay  SiteLANDeleteResponseDeletedLANStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLANDeleteResponseDeletedLANStaticAddressingDhcpServer `json:"dhcp_server"`
+	DHCPRelay  SiteLANDeleteResponseDeletedLANStaticAddressingDHCPRelay  `json:"dhcp_relay"`
+	DHCPServer SiteLANDeleteResponseDeletedLANStaticAddressingDHCPServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
@@ -930,8 +930,8 @@ type SiteLANDeleteResponseDeletedLANStaticAddressing struct {
 // for the struct [SiteLANDeleteResponseDeletedLANStaticAddressing]
 type siteLANDeleteResponseDeletedLANStaticAddressingJSON struct {
 	Address          apijson.Field
-	DhcpRelay        apijson.Field
-	DhcpServer       apijson.Field
+	DHCPRelay        apijson.Field
+	DHCPServer       apijson.Field
 	SecondaryAddress apijson.Field
 	VirtualAddress   apijson.Field
 	raw              string
@@ -946,58 +946,58 @@ func (r siteLANDeleteResponseDeletedLANStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANDeleteResponseDeletedLANStaticAddressingDhcpRelay struct {
+type SiteLANDeleteResponseDeletedLANStaticAddressingDHCPRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                                     `json:"server_addresses"`
-	JSON            siteLANDeleteResponseDeletedLANStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANDeleteResponseDeletedLANStaticAddressingDHCPRelayJSON `json:"-"`
 }
 
-// siteLANDeleteResponseDeletedLANStaticAddressingDhcpRelayJSON contains the JSON
+// siteLANDeleteResponseDeletedLANStaticAddressingDHCPRelayJSON contains the JSON
 // metadata for the struct
-// [SiteLANDeleteResponseDeletedLANStaticAddressingDhcpRelay]
-type siteLANDeleteResponseDeletedLANStaticAddressingDhcpRelayJSON struct {
+// [SiteLANDeleteResponseDeletedLANStaticAddressingDHCPRelay]
+type siteLANDeleteResponseDeletedLANStaticAddressingDHCPRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLANDeleteResponseDeletedLANStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseDeletedLANStaticAddressingDHCPRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANDeleteResponseDeletedLANStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANDeleteResponseDeletedLANStaticAddressingDHCPRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANDeleteResponseDeletedLANStaticAddressingDhcpServer struct {
+type SiteLANDeleteResponseDeletedLANStaticAddressingDHCPServer struct {
 	// A valid IPv4 address.
-	DhcpPoolEnd string `json:"dhcp_pool_end"`
+	DHCPPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
-	DhcpPoolStart string `json:"dhcp_pool_start"`
+	DHCPPoolStart string `json:"dhcp_pool_start"`
 	// A valid IPv4 address.
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                             `json:"reservations"`
-	JSON         siteLANDeleteResponseDeletedLANStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANDeleteResponseDeletedLANStaticAddressingDHCPServerJSON `json:"-"`
 }
 
-// siteLANDeleteResponseDeletedLANStaticAddressingDhcpServerJSON contains the JSON
+// siteLANDeleteResponseDeletedLANStaticAddressingDHCPServerJSON contains the JSON
 // metadata for the struct
-// [SiteLANDeleteResponseDeletedLANStaticAddressingDhcpServer]
-type siteLANDeleteResponseDeletedLANStaticAddressingDhcpServerJSON struct {
-	DhcpPoolEnd   apijson.Field
-	DhcpPoolStart apijson.Field
+// [SiteLANDeleteResponseDeletedLANStaticAddressingDHCPServer]
+type siteLANDeleteResponseDeletedLANStaticAddressingDHCPServerJSON struct {
+	DHCPPoolEnd   apijson.Field
+	DHCPPoolStart apijson.Field
 	DNSServer     apijson.Field
 	Reservations  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLANDeleteResponseDeletedLANStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANDeleteResponseDeletedLANStaticAddressingDHCPServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANDeleteResponseDeletedLANStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANDeleteResponseDeletedLANStaticAddressingDHCPServerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1144,8 +1144,8 @@ func (r siteLANGetResponseLANRoutedSubnetsNatJSON) RawJSON() string {
 type SiteLANGetResponseLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    string                                          `json:"address,required"`
-	DhcpRelay  SiteLANGetResponseLANStaticAddressingDhcpRelay  `json:"dhcp_relay"`
-	DhcpServer SiteLANGetResponseLANStaticAddressingDhcpServer `json:"dhcp_server"`
+	DHCPRelay  SiteLANGetResponseLANStaticAddressingDHCPRelay  `json:"dhcp_relay"`
+	DHCPServer SiteLANGetResponseLANStaticAddressingDHCPServer `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress string `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
@@ -1157,8 +1157,8 @@ type SiteLANGetResponseLANStaticAddressing struct {
 // struct [SiteLANGetResponseLANStaticAddressing]
 type siteLANGetResponseLANStaticAddressingJSON struct {
 	Address          apijson.Field
-	DhcpRelay        apijson.Field
-	DhcpServer       apijson.Field
+	DHCPRelay        apijson.Field
+	DHCPServer       apijson.Field
 	SecondaryAddress apijson.Field
 	VirtualAddress   apijson.Field
 	raw              string
@@ -1173,56 +1173,56 @@ func (r siteLANGetResponseLANStaticAddressingJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANGetResponseLANStaticAddressingDhcpRelay struct {
+type SiteLANGetResponseLANStaticAddressingDHCPRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses []string                                           `json:"server_addresses"`
-	JSON            siteLANGetResponseLANStaticAddressingDhcpRelayJSON `json:"-"`
+	JSON            siteLANGetResponseLANStaticAddressingDHCPRelayJSON `json:"-"`
 }
 
-// siteLANGetResponseLANStaticAddressingDhcpRelayJSON contains the JSON metadata
-// for the struct [SiteLANGetResponseLANStaticAddressingDhcpRelay]
-type siteLANGetResponseLANStaticAddressingDhcpRelayJSON struct {
+// siteLANGetResponseLANStaticAddressingDHCPRelayJSON contains the JSON metadata
+// for the struct [SiteLANGetResponseLANStaticAddressingDHCPRelay]
+type siteLANGetResponseLANStaticAddressingDHCPRelayJSON struct {
 	ServerAddresses apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *SiteLANGetResponseLANStaticAddressingDhcpRelay) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseLANStaticAddressingDHCPRelay) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANGetResponseLANStaticAddressingDhcpRelayJSON) RawJSON() string {
+func (r siteLANGetResponseLANStaticAddressingDHCPRelayJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteLANGetResponseLANStaticAddressingDhcpServer struct {
+type SiteLANGetResponseLANStaticAddressingDHCPServer struct {
 	// A valid IPv4 address.
-	DhcpPoolEnd string `json:"dhcp_pool_end"`
+	DHCPPoolEnd string `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
-	DhcpPoolStart string `json:"dhcp_pool_start"`
+	DHCPPoolStart string `json:"dhcp_pool_start"`
 	// A valid IPv4 address.
 	DNSServer string `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations map[string]string                                   `json:"reservations"`
-	JSON         siteLANGetResponseLANStaticAddressingDhcpServerJSON `json:"-"`
+	JSON         siteLANGetResponseLANStaticAddressingDHCPServerJSON `json:"-"`
 }
 
-// siteLANGetResponseLANStaticAddressingDhcpServerJSON contains the JSON metadata
-// for the struct [SiteLANGetResponseLANStaticAddressingDhcpServer]
-type siteLANGetResponseLANStaticAddressingDhcpServerJSON struct {
-	DhcpPoolEnd   apijson.Field
-	DhcpPoolStart apijson.Field
+// siteLANGetResponseLANStaticAddressingDHCPServerJSON contains the JSON metadata
+// for the struct [SiteLANGetResponseLANStaticAddressingDHCPServer]
+type siteLANGetResponseLANStaticAddressingDHCPServerJSON struct {
+	DHCPPoolEnd   apijson.Field
+	DHCPPoolStart apijson.Field
 	DNSServer     apijson.Field
 	Reservations  apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SiteLANGetResponseLANStaticAddressingDhcpServer) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteLANGetResponseLANStaticAddressingDHCPServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r siteLANGetResponseLANStaticAddressingDhcpServerJSON) RawJSON() string {
+func (r siteLANGetResponseLANStaticAddressingDHCPServerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1292,8 +1292,8 @@ func (r SiteLANNewParamsLANRoutedSubnetsNat) MarshalJSON() (data []byte, err err
 type SiteLANNewParamsLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    param.Field[string]                                        `json:"address,required"`
-	DhcpRelay  param.Field[SiteLANNewParamsLANStaticAddressingDhcpRelay]  `json:"dhcp_relay"`
-	DhcpServer param.Field[SiteLANNewParamsLANStaticAddressingDhcpServer] `json:"dhcp_server"`
+	DHCPRelay  param.Field[SiteLANNewParamsLANStaticAddressingDHCPRelay]  `json:"dhcp_relay"`
+	DHCPServer param.Field[SiteLANNewParamsLANStaticAddressingDHCPServer] `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress param.Field[string] `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
@@ -1304,27 +1304,27 @@ func (r SiteLANNewParamsLANStaticAddressing) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLANNewParamsLANStaticAddressingDhcpRelay struct {
+type SiteLANNewParamsLANStaticAddressingDHCPRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses param.Field[[]string] `json:"server_addresses"`
 }
 
-func (r SiteLANNewParamsLANStaticAddressingDhcpRelay) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParamsLANStaticAddressingDHCPRelay) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLANNewParamsLANStaticAddressingDhcpServer struct {
+type SiteLANNewParamsLANStaticAddressingDHCPServer struct {
 	// A valid IPv4 address.
-	DhcpPoolEnd param.Field[string] `json:"dhcp_pool_end"`
+	DHCPPoolEnd param.Field[string] `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
-	DhcpPoolStart param.Field[string] `json:"dhcp_pool_start"`
+	DHCPPoolStart param.Field[string] `json:"dhcp_pool_start"`
 	// A valid IPv4 address.
 	DNSServer param.Field[string] `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations param.Field[map[string]string] `json:"reservations"`
 }
 
-func (r SiteLANNewParamsLANStaticAddressingDhcpServer) MarshalJSON() (data []byte, err error) {
+func (r SiteLANNewParamsLANStaticAddressingDHCPServer) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1434,8 +1434,8 @@ func (r SiteLANUpdateParamsLANRoutedSubnetsNat) MarshalJSON() (data []byte, err 
 type SiteLANUpdateParamsLANStaticAddressing struct {
 	// A valid CIDR notation representing an IP range.
 	Address    param.Field[string]                                           `json:"address,required"`
-	DhcpRelay  param.Field[SiteLANUpdateParamsLANStaticAddressingDhcpRelay]  `json:"dhcp_relay"`
-	DhcpServer param.Field[SiteLANUpdateParamsLANStaticAddressingDhcpServer] `json:"dhcp_server"`
+	DHCPRelay  param.Field[SiteLANUpdateParamsLANStaticAddressingDHCPRelay]  `json:"dhcp_relay"`
+	DHCPServer param.Field[SiteLANUpdateParamsLANStaticAddressingDHCPServer] `json:"dhcp_server"`
 	// A valid CIDR notation representing an IP range.
 	SecondaryAddress param.Field[string] `json:"secondary_address"`
 	// A valid CIDR notation representing an IP range.
@@ -1446,27 +1446,27 @@ func (r SiteLANUpdateParamsLANStaticAddressing) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLANUpdateParamsLANStaticAddressingDhcpRelay struct {
+type SiteLANUpdateParamsLANStaticAddressingDHCPRelay struct {
 	// List of DHCP server IPs.
 	ServerAddresses param.Field[[]string] `json:"server_addresses"`
 }
 
-func (r SiteLANUpdateParamsLANStaticAddressingDhcpRelay) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParamsLANStaticAddressingDHCPRelay) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SiteLANUpdateParamsLANStaticAddressingDhcpServer struct {
+type SiteLANUpdateParamsLANStaticAddressingDHCPServer struct {
 	// A valid IPv4 address.
-	DhcpPoolEnd param.Field[string] `json:"dhcp_pool_end"`
+	DHCPPoolEnd param.Field[string] `json:"dhcp_pool_end"`
 	// A valid IPv4 address.
-	DhcpPoolStart param.Field[string] `json:"dhcp_pool_start"`
+	DHCPPoolStart param.Field[string] `json:"dhcp_pool_start"`
 	// A valid IPv4 address.
 	DNSServer param.Field[string] `json:"dns_server"`
 	// Mapping of MAC addresses to IP addresses
 	Reservations param.Field[map[string]string] `json:"reservations"`
 }
 
-func (r SiteLANUpdateParamsLANStaticAddressingDhcpServer) MarshalJSON() (data []byte, err error) {
+func (r SiteLANUpdateParamsLANStaticAddressingDHCPServer) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
