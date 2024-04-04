@@ -37,7 +37,7 @@ func NewWatermarkService(opts ...option.RequestOption) (r *WatermarkService) {
 
 // Creates watermark profiles using a single `HTTP POST multipart/form-data`
 // request.
-func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *WatermarkNewResponse, err error) {
+func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, opts ...option.RequestOption) (res *WatermarkNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", params.AccountID)
@@ -73,7 +73,7 @@ func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkLi
 }
 
 // Deletes a watermark profile.
-func (r *WatermarkService) Delete(ctx context.Context, identifier string, params WatermarkDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef49, err error) {
+func (r *WatermarkService) Delete(ctx context.Context, identifier string, params WatermarkDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef49Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", params.AccountID, identifier)
@@ -86,7 +86,7 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, params
 }
 
 // Retrieves details for a single watermark profile.
-func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *WatermarkGetResponse, err error) {
+func (r *WatermarkService) Get(ctx context.Context, identifier string, query WatermarkGetParams, opts ...option.RequestOption) (res *WatermarkGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", query.AccountID, identifier)
@@ -161,13 +161,13 @@ func (r streamWatermarksJSON) RawJSON() string {
 }
 
 // Union satisfied by [stream.WatermarkNewResponseUnknown] or [shared.UnionString].
-type WatermarkNewResponse interface {
-	ImplementsStreamWatermarkNewResponse()
+type WatermarkNewResponseUnion interface {
+	ImplementsStreamWatermarkNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WatermarkNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*WatermarkNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -177,13 +177,13 @@ func init() {
 }
 
 // Union satisfied by [stream.WatermarkGetResponseUnknown] or [shared.UnionString].
-type WatermarkGetResponse interface {
-	ImplementsStreamWatermarkGetResponse()
+type WatermarkGetResponseUnion interface {
+	ImplementsStreamWatermarkGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WatermarkGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*WatermarkGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -223,9 +223,9 @@ func (r WatermarkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WatermarkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   WatermarkNewResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   WatermarkNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkNewResponseEnvelopeJSON    `json:"-"`
@@ -281,9 +281,9 @@ func (r WatermarkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WatermarkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef49 `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef49Union `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -329,9 +329,9 @@ type WatermarkGetParams struct {
 }
 
 type WatermarkGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   WatermarkGetResponse  `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   WatermarkGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkGetResponseEnvelopeJSON    `json:"-"`

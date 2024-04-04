@@ -156,7 +156,7 @@ func (r ZoneSettingAutomaticHTTPSRewritesParam) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingAutomaticHTTPSRewritesParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingAutomaticHTTPSRewritesParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingAutomaticHTTPSRewriteEditParams struct {
 	// Identifier

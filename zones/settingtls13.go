@@ -157,7 +157,7 @@ func (r ZoneSettingTLS1_3Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingTLS1_3Param) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingTLS1_3Param) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingTLS1_3EditParams struct {
 	// Identifier

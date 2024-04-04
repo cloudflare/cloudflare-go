@@ -173,7 +173,7 @@ func (r ZoneSettingCacheLevelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingCacheLevelParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingCacheLevelParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingCacheLevelEditParams struct {
 	// Identifier

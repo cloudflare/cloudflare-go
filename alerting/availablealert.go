@@ -33,7 +33,7 @@ func NewAvailableAlertService(opts ...option.RequestOption) (r *AvailableAlertSe
 }
 
 // Gets a list of all alert types for which an account is eligible.
-func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef116, err error) {
+func (r *AvailableAlertService) List(ctx context.Context, query AvailableAlertListParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef116Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailableAlertListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/available_alerts", query.AccountID)
@@ -51,9 +51,9 @@ type AvailableAlertListParams struct {
 }
 
 type AvailableAlertListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef116 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef116Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AvailableAlertListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AvailableAlertListResponseEnvelopeResultInfo `json:"result_info"`

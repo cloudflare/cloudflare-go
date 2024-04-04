@@ -37,7 +37,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 }
 
 // Create a zone subscription, either plan or add-ons.
-func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponse, err error) {
+func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
@@ -50,7 +50,7 @@ func (r *SubscriptionService) New(ctx context.Context, identifier string, body S
 }
 
 // Updates an account subscription.
-func (r *SubscriptionService) Update(ctx context.Context, accountIdentifier string, subscriptionIdentifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponse, err error) {
+func (r *SubscriptionService) Update(ctx context.Context, accountIdentifier string, subscriptionIdentifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/subscriptions/%s", accountIdentifier, subscriptionIdentifier)
@@ -99,7 +99,7 @@ func (r *SubscriptionService) Delete(ctx context.Context, accountIdentifier stri
 }
 
 // Lists zone subscription details.
-func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionGetResponse, err error) {
+func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SubscriptionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/subscription", identifier)
@@ -113,13 +113,13 @@ func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts .
 
 // Union satisfied by [subscriptions.SubscriptionNewResponseUnknown] or
 // [shared.UnionString].
-type SubscriptionNewResponse interface {
-	ImplementsSubscriptionsSubscriptionNewResponse()
+type SubscriptionNewResponseUnion interface {
+	ImplementsSubscriptionsSubscriptionNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*SubscriptionNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -130,13 +130,13 @@ func init() {
 
 // Union satisfied by [subscriptions.SubscriptionUpdateResponseUnknown] or
 // [shared.UnionString].
-type SubscriptionUpdateResponse interface {
-	ImplementsSubscriptionsSubscriptionUpdateResponse()
+type SubscriptionUpdateResponseUnion interface {
+	ImplementsSubscriptionsSubscriptionUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*SubscriptionUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -359,13 +359,13 @@ func (r subscriptionListResponseZoneJSON) RawJSON() string {
 
 // Union satisfied by [subscriptions.SubscriptionGetResponseUnknown] or
 // [shared.UnionString].
-type SubscriptionGetResponse interface {
-	ImplementsSubscriptionsSubscriptionGetResponse()
+type SubscriptionGetResponseUnion interface {
+	ImplementsSubscriptionsSubscriptionGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*SubscriptionGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -464,9 +464,9 @@ func (r SubscriptionNewParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   SubscriptionNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   SubscriptionNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
@@ -596,9 +596,9 @@ func (r SubscriptionUpdateParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   SubscriptionUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   SubscriptionUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -690,9 +690,9 @@ func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   SubscriptionGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   SubscriptionGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionGetResponseEnvelopeJSON    `json:"-"`

@@ -160,7 +160,7 @@ func (r ZoneSettingEmailObfuscationParam) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingEmailObfuscationParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingEmailObfuscationParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingEmailObfuscationEditParams struct {
 	// Identifier

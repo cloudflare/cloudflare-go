@@ -180,7 +180,7 @@ func (r ZoneSettingHotlinkProtectionParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingHotlinkProtectionParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingHotlinkProtectionParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingHotlinkProtectionEditParams struct {
 	// Identifier

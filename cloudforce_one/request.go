@@ -91,7 +91,7 @@ func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier s
 }
 
 // Delete a Request
-func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171, err error) {
+func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
@@ -692,9 +692,9 @@ func (r RequestListParamsStatus) IsKnown() bool {
 }
 
 type RequestDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171Union `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestDeleteResponseEnvelopeJSON    `json:"-"`

@@ -169,7 +169,7 @@ func (r ZoneSettingImageResizingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingImageResizingParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingImageResizingParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingImageResizingEditParams struct {
 	// Identifier

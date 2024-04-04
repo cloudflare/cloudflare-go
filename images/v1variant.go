@@ -60,7 +60,7 @@ func (r *V1VariantService) List(ctx context.Context, query V1VariantListParams, 
 }
 
 // Deleting a variant purges the cache for all images associated with the variant.
-func (r *V1VariantService) Delete(ctx context.Context, variantID string, params V1VariantDeleteParams, opts ...option.RequestOption) (res *V1VariantDeleteResponse, err error) {
+func (r *V1VariantService) Delete(ctx context.Context, variantID string, params V1VariantDeleteParams, opts ...option.RequestOption) (res *V1VariantDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1VariantDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/variants/%s", params.AccountID, variantID)
@@ -357,13 +357,13 @@ func (r V1ImageVariantsVariantsHeroOptionsMetadata) IsKnown() bool {
 
 // Union satisfied by [images.V1VariantDeleteResponseUnknown] or
 // [shared.UnionString].
-type V1VariantDeleteResponse interface {
-	ImplementsImagesV1VariantDeleteResponse()
+type V1VariantDeleteResponseUnion interface {
+	ImplementsImagesV1VariantDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*V1VariantDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*V1VariantDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -543,9 +543,9 @@ func (r V1VariantDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type V1VariantDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   V1VariantDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   V1VariantDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantDeleteResponseEnvelopeJSON    `json:"-"`

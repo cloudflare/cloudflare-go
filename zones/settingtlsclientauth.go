@@ -160,7 +160,7 @@ func (r ZoneSettingTLSClientAuthParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingTLSClientAuthParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingTLSClientAuthParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingTLSClientAuthEditParams struct {
 	// Identifier

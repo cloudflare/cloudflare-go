@@ -35,7 +35,7 @@ func NewCaptionService(opts ...option.RequestOption) (r *CaptionService) {
 
 // Uploads the caption or subtitle file to the endpoint for a specific BCP47
 // language. One caption or subtitle file per language is allowed.
-func (r *CaptionService) Update(ctx context.Context, identifier string, language string, params CaptionUpdateParams, opts ...option.RequestOption) (res *CaptionUpdateResponse, err error) {
+func (r *CaptionService) Update(ctx context.Context, identifier string, language string, params CaptionUpdateParams, opts ...option.RequestOption) (res *CaptionUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
@@ -48,7 +48,7 @@ func (r *CaptionService) Update(ctx context.Context, identifier string, language
 }
 
 // Removes the captions or subtitles from a video.
-func (r *CaptionService) Delete(ctx context.Context, identifier string, language string, params CaptionDeleteParams, opts ...option.RequestOption) (res *CaptionDeleteResponse, err error) {
+func (r *CaptionService) Delete(ctx context.Context, identifier string, language string, params CaptionDeleteParams, opts ...option.RequestOption) (res *CaptionDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
@@ -99,13 +99,13 @@ func (r streamCaptionsJSON) RawJSON() string {
 
 // Union satisfied by [stream.CaptionUpdateResponseUnknown] or
 // [shared.UnionString].
-type CaptionUpdateResponse interface {
-	ImplementsStreamCaptionUpdateResponse()
+type CaptionUpdateResponseUnion interface {
+	ImplementsStreamCaptionUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CaptionUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*CaptionUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -116,13 +116,13 @@ func init() {
 
 // Union satisfied by [stream.CaptionDeleteResponseUnknown],
 // [stream.CaptionDeleteResponseArray] or [shared.UnionString].
-type CaptionDeleteResponse interface {
-	ImplementsStreamCaptionDeleteResponse()
+type CaptionDeleteResponseUnion interface {
+	ImplementsStreamCaptionDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CaptionDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*CaptionDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -137,7 +137,7 @@ func init() {
 
 type CaptionDeleteResponseArray []interface{}
 
-func (r CaptionDeleteResponseArray) ImplementsStreamCaptionDeleteResponse() {}
+func (r CaptionDeleteResponseArray) ImplementsStreamCaptionDeleteResponseUnion() {}
 
 type CaptionUpdateParams struct {
 	// Identifier
@@ -151,9 +151,9 @@ func (r CaptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CaptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CaptionUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   CaptionUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -204,9 +204,9 @@ func (r CaptionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CaptionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   CaptionDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   CaptionDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionDeleteResponseEnvelopeJSON    `json:"-"`

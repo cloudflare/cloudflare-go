@@ -142,7 +142,7 @@ func (r ZoneSettingCiphersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingCiphersParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingCiphersParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingCipherEditParams struct {
 	// Identifier

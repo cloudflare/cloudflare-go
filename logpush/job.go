@@ -109,7 +109,7 @@ func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, op
 }
 
 // Deletes a Logpush job.
-func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef161, err error) {
+func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef161Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobDeleteResponseEnvelope
 	var accountOrZone string
@@ -522,9 +522,9 @@ func (r JobDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type JobDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef161 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef161Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobDeleteResponseEnvelopeJSON    `json:"-"`

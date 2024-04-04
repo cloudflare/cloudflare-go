@@ -196,7 +196,7 @@ func (r ZoneSettingServerSideExcludeParam) MarshalJSON() (data []byte, err error
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingServerSideExcludeParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingServerSideExcludeParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingServerSideExcludeEditParams struct {
 	// Identifier

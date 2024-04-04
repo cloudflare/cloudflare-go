@@ -33,7 +33,7 @@ func NewProfileService(opts ...option.RequestOption) (r *ProfileService) {
 }
 
 // Gets the current billing profile for the account.
-func (r *ProfileService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *ProfileGetResponse, err error) {
+func (r *ProfileService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *ProfileGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProfileGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/billing/profile", accountIdentifier)
@@ -46,13 +46,13 @@ func (r *ProfileService) Get(ctx context.Context, accountIdentifier interface{},
 }
 
 // Union satisfied by [billing.ProfileGetResponseUnknown] or [shared.UnionString].
-type ProfileGetResponse interface {
-	ImplementsBillingProfileGetResponse()
+type ProfileGetResponseUnion interface {
+	ImplementsBillingProfileGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProfileGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProfileGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -62,9 +62,9 @@ func init() {
 }
 
 type ProfileGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ProfileGetResponse    `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   ProfileGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ProfileGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    profileGetResponseEnvelopeJSON    `json:"-"`

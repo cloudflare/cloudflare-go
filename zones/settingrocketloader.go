@@ -192,7 +192,7 @@ func (r ZoneSettingRocketLoaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingRocketLoaderParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingRocketLoaderParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingRocketLoaderEditParams struct {
 	// Identifier

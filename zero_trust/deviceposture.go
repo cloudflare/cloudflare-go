@@ -158,6 +158,140 @@ func (r devicePostureRulesJSON) RawJSON() string {
 }
 
 // The value to be checked against.
+type DevicePostureRulesInput struct {
+	// Whether or not file exists
+	Exists bool `json:"exists"`
+	// Operating system
+	OperatingSystem shared.UnnamedSchemaRef119 `json:"operating_system"`
+	// File path.
+	Path string `json:"path"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint string `json:"thumbprint"`
+	// List ID.
+	ID string `json:"id"`
+	// Domain
+	Domain string `json:"domain"`
+	// Operator
+	Operator DevicePostureRulesInputOperator `json:"operator"`
+	// Operating System Distribution Name (linux only)
+	OSDistroName string `json:"os_distro_name"`
+	// Version of OS Distribution (linux only)
+	OSDistroRevision string `json:"os_distro_revision"`
+	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only)
+	OSVersionExtra string `json:"os_version_extra"`
+	// Version of OS
+	Version string `json:"version"`
+	// Enabled
+	Enabled    bool        `json:"enabled"`
+	CheckDisks interface{} `json:"checkDisks,required"`
+	// Whether to check all disks for encryption.
+	RequireAll bool `json:"requireAll"`
+	// UUID of Cloudflare managed certificate.
+	CertificateID string `json:"certificate_id"`
+	// Common Name that is protected by the certificate
+	Cn string `json:"cn"`
+	// Compliance Status
+	ComplianceStatus DevicePostureRulesInputComplianceStatus `json:"compliance_status"`
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id"`
+	// For more details on last seen, please refer to the Crowdstrike documentation.
+	LastSeen string `json:"last_seen"`
+	// Os Version
+	OS string `json:"os"`
+	// overall
+	Overall string `json:"overall"`
+	// SensorConfig
+	SensorConfig string `json:"sensor_config"`
+	// For more details on state, please refer to the Crowdstrike documentation.
+	State DevicePostureRulesInputState `json:"state"`
+	// Version Operator
+	VersionOperator shared.UnnamedSchemaRef88 `json:"versionOperator"`
+	// Count Operator
+	CountOperator DevicePostureRulesInputCountOperator `json:"countOperator"`
+	// The Number of Issues.
+	IssueCount string `json:"issue_count"`
+	// For more details on eid last seen, refer to the Tanium documentation.
+	EidLastSeen string `json:"eid_last_seen"`
+	// For more details on risk level, refer to the Tanium documentation.
+	RiskLevel DevicePostureRulesInputRiskLevel `json:"risk_level"`
+	// Score Operator
+	ScoreOperator DevicePostureRulesInputScoreOperator `json:"scoreOperator"`
+	// For more details on total score, refer to the Tanium documentation.
+	TotalScore float64 `json:"total_score"`
+	// The Number of active threats.
+	ActiveThreats float64 `json:"active_threats"`
+	// Whether device is infected.
+	Infected bool `json:"infected"`
+	// Whether device is active.
+	IsActive bool `json:"is_active"`
+	// Network status of device.
+	NetworkStatus DevicePostureRulesInputNetworkStatus `json:"network_status"`
+	JSON          devicePostureRulesInputJSON          `json:"-"`
+	union         DevicePostureRulesInputUnion
+}
+
+// devicePostureRulesInputJSON contains the JSON metadata for the struct
+// [DevicePostureRulesInput]
+type devicePostureRulesInputJSON struct {
+	Exists           apijson.Field
+	OperatingSystem  apijson.Field
+	Path             apijson.Field
+	Sha256           apijson.Field
+	Thumbprint       apijson.Field
+	ID               apijson.Field
+	Domain           apijson.Field
+	Operator         apijson.Field
+	OSDistroName     apijson.Field
+	OSDistroRevision apijson.Field
+	OSVersionExtra   apijson.Field
+	Version          apijson.Field
+	Enabled          apijson.Field
+	CheckDisks       apijson.Field
+	RequireAll       apijson.Field
+	CertificateID    apijson.Field
+	Cn               apijson.Field
+	ComplianceStatus apijson.Field
+	ConnectionID     apijson.Field
+	LastSeen         apijson.Field
+	OS               apijson.Field
+	Overall          apijson.Field
+	SensorConfig     apijson.Field
+	State            apijson.Field
+	VersionOperator  apijson.Field
+	CountOperator    apijson.Field
+	IssueCount       apijson.Field
+	EidLastSeen      apijson.Field
+	RiskLevel        apijson.Field
+	ScoreOperator    apijson.Field
+	TotalScore       apijson.Field
+	ActiveThreats    apijson.Field
+	Infected         apijson.Field
+	IsActive         apijson.Field
+	NetworkStatus    apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r devicePostureRulesInputJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *DevicePostureRulesInput) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r DevicePostureRulesInput) AsUnion() DevicePostureRulesInputUnion {
+	return r.union
+}
+
+// The value to be checked against.
 //
 // Union satisfied by
 // [zero_trust.DevicePostureRulesInputTeamsDevicesFileInputRequest],
@@ -176,13 +310,13 @@ func (r devicePostureRulesJSON) RawJSON() string {
 // [zero_trust.DevicePostureRulesInputTeamsDevicesKolideInputRequest],
 // [zero_trust.DevicePostureRulesInputTeamsDevicesTaniumInputRequest] or
 // [zero_trust.DevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequest].
-type DevicePostureRulesInput interface {
+type DevicePostureRulesInputUnion interface {
 	implementsZeroTrustDevicePostureRulesInput()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DevicePostureRulesInput)(nil)).Elem(),
+		reflect.TypeOf((*DevicePostureRulesInputUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1047,6 +1181,136 @@ func (r DevicePostureRulesInputTeamsDevicesSentineloneS2sInputRequestOperator) I
 	return false
 }
 
+// Operator
+type DevicePostureRulesInputOperator string
+
+const (
+	DevicePostureRulesInputOperatorLess            DevicePostureRulesInputOperator = "<"
+	DevicePostureRulesInputOperatorLessOrEquals    DevicePostureRulesInputOperator = "<="
+	DevicePostureRulesInputOperatorGreater         DevicePostureRulesInputOperator = ">"
+	DevicePostureRulesInputOperatorGreaterOrEquals DevicePostureRulesInputOperator = ">="
+	DevicePostureRulesInputOperatorEquals          DevicePostureRulesInputOperator = "=="
+)
+
+func (r DevicePostureRulesInputOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureRulesInputOperatorLess, DevicePostureRulesInputOperatorLessOrEquals, DevicePostureRulesInputOperatorGreater, DevicePostureRulesInputOperatorGreaterOrEquals, DevicePostureRulesInputOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Compliance Status
+type DevicePostureRulesInputComplianceStatus string
+
+const (
+	DevicePostureRulesInputComplianceStatusCompliant     DevicePostureRulesInputComplianceStatus = "compliant"
+	DevicePostureRulesInputComplianceStatusNoncompliant  DevicePostureRulesInputComplianceStatus = "noncompliant"
+	DevicePostureRulesInputComplianceStatusUnknown       DevicePostureRulesInputComplianceStatus = "unknown"
+	DevicePostureRulesInputComplianceStatusNotapplicable DevicePostureRulesInputComplianceStatus = "notapplicable"
+	DevicePostureRulesInputComplianceStatusIngraceperiod DevicePostureRulesInputComplianceStatus = "ingraceperiod"
+	DevicePostureRulesInputComplianceStatusError         DevicePostureRulesInputComplianceStatus = "error"
+)
+
+func (r DevicePostureRulesInputComplianceStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureRulesInputComplianceStatusCompliant, DevicePostureRulesInputComplianceStatusNoncompliant, DevicePostureRulesInputComplianceStatusUnknown, DevicePostureRulesInputComplianceStatusNotapplicable, DevicePostureRulesInputComplianceStatusIngraceperiod, DevicePostureRulesInputComplianceStatusError:
+		return true
+	}
+	return false
+}
+
+// For more details on state, please refer to the Crowdstrike documentation.
+type DevicePostureRulesInputState string
+
+const (
+	DevicePostureRulesInputStateOnline  DevicePostureRulesInputState = "online"
+	DevicePostureRulesInputStateOffline DevicePostureRulesInputState = "offline"
+	DevicePostureRulesInputStateUnknown DevicePostureRulesInputState = "unknown"
+)
+
+func (r DevicePostureRulesInputState) IsKnown() bool {
+	switch r {
+	case DevicePostureRulesInputStateOnline, DevicePostureRulesInputStateOffline, DevicePostureRulesInputStateUnknown:
+		return true
+	}
+	return false
+}
+
+// Count Operator
+type DevicePostureRulesInputCountOperator string
+
+const (
+	DevicePostureRulesInputCountOperatorLess            DevicePostureRulesInputCountOperator = "<"
+	DevicePostureRulesInputCountOperatorLessOrEquals    DevicePostureRulesInputCountOperator = "<="
+	DevicePostureRulesInputCountOperatorGreater         DevicePostureRulesInputCountOperator = ">"
+	DevicePostureRulesInputCountOperatorGreaterOrEquals DevicePostureRulesInputCountOperator = ">="
+	DevicePostureRulesInputCountOperatorEquals          DevicePostureRulesInputCountOperator = "=="
+)
+
+func (r DevicePostureRulesInputCountOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureRulesInputCountOperatorLess, DevicePostureRulesInputCountOperatorLessOrEquals, DevicePostureRulesInputCountOperatorGreater, DevicePostureRulesInputCountOperatorGreaterOrEquals, DevicePostureRulesInputCountOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// For more details on risk level, refer to the Tanium documentation.
+type DevicePostureRulesInputRiskLevel string
+
+const (
+	DevicePostureRulesInputRiskLevelLow      DevicePostureRulesInputRiskLevel = "low"
+	DevicePostureRulesInputRiskLevelMedium   DevicePostureRulesInputRiskLevel = "medium"
+	DevicePostureRulesInputRiskLevelHigh     DevicePostureRulesInputRiskLevel = "high"
+	DevicePostureRulesInputRiskLevelCritical DevicePostureRulesInputRiskLevel = "critical"
+)
+
+func (r DevicePostureRulesInputRiskLevel) IsKnown() bool {
+	switch r {
+	case DevicePostureRulesInputRiskLevelLow, DevicePostureRulesInputRiskLevelMedium, DevicePostureRulesInputRiskLevelHigh, DevicePostureRulesInputRiskLevelCritical:
+		return true
+	}
+	return false
+}
+
+// Score Operator
+type DevicePostureRulesInputScoreOperator string
+
+const (
+	DevicePostureRulesInputScoreOperatorLess            DevicePostureRulesInputScoreOperator = "<"
+	DevicePostureRulesInputScoreOperatorLessOrEquals    DevicePostureRulesInputScoreOperator = "<="
+	DevicePostureRulesInputScoreOperatorGreater         DevicePostureRulesInputScoreOperator = ">"
+	DevicePostureRulesInputScoreOperatorGreaterOrEquals DevicePostureRulesInputScoreOperator = ">="
+	DevicePostureRulesInputScoreOperatorEquals          DevicePostureRulesInputScoreOperator = "=="
+)
+
+func (r DevicePostureRulesInputScoreOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureRulesInputScoreOperatorLess, DevicePostureRulesInputScoreOperatorLessOrEquals, DevicePostureRulesInputScoreOperatorGreater, DevicePostureRulesInputScoreOperatorGreaterOrEquals, DevicePostureRulesInputScoreOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Network status of device.
+type DevicePostureRulesInputNetworkStatus string
+
+const (
+	DevicePostureRulesInputNetworkStatusConnected     DevicePostureRulesInputNetworkStatus = "connected"
+	DevicePostureRulesInputNetworkStatusDisconnected  DevicePostureRulesInputNetworkStatus = "disconnected"
+	DevicePostureRulesInputNetworkStatusDisconnecting DevicePostureRulesInputNetworkStatus = "disconnecting"
+	DevicePostureRulesInputNetworkStatusConnecting    DevicePostureRulesInputNetworkStatus = "connecting"
+)
+
+func (r DevicePostureRulesInputNetworkStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureRulesInputNetworkStatusConnected, DevicePostureRulesInputNetworkStatusDisconnected, DevicePostureRulesInputNetworkStatusDisconnecting, DevicePostureRulesInputNetworkStatusConnecting:
+		return true
+	}
+	return false
+}
+
 type DevicePostureRulesMatch struct {
 	Platform DevicePostureRulesMatchPlatform `json:"platform"`
 	JSON     devicePostureRulesMatchJSON     `json:"-"`
@@ -1153,7 +1417,7 @@ type DevicePostureNewParams struct {
 	// remains valid until it is overwritten by new data from the WARP client.
 	Expiration param.Field[string] `json:"expiration"`
 	// The value to be checked against.
-	Input param.Field[DevicePostureNewParamsInput] `json:"input"`
+	Input param.Field[DevicePostureNewParamsInputUnion] `json:"input"`
 	// The conditions that the client must match to run the rule.
 	Match param.Field[[]DevicePostureNewParamsMatch] `json:"match"`
 	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
@@ -1199,6 +1463,86 @@ func (r DevicePostureNewParamsType) IsKnown() bool {
 }
 
 // The value to be checked against.
+type DevicePostureNewParamsInput struct {
+	// Whether or not file exists
+	Exists param.Field[bool] `json:"exists"`
+	// Operating system
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system"`
+	// File path.
+	Path param.Field[string] `json:"path"`
+	// SHA-256.
+	Sha256 param.Field[string] `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint param.Field[string] `json:"thumbprint"`
+	// List ID.
+	ID param.Field[string] `json:"id"`
+	// Domain
+	Domain param.Field[string] `json:"domain"`
+	// Operator
+	Operator param.Field[DevicePostureNewParamsInputOperator] `json:"operator"`
+	// Operating System Distribution Name (linux only)
+	OSDistroName param.Field[string] `json:"os_distro_name"`
+	// Version of OS Distribution (linux only)
+	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
+	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only)
+	OSVersionExtra param.Field[string] `json:"os_version_extra"`
+	// Version of OS
+	Version param.Field[string] `json:"version"`
+	// Enabled
+	Enabled    param.Field[bool]        `json:"enabled"`
+	CheckDisks param.Field[interface{}] `json:"checkDisks,required"`
+	// Whether to check all disks for encryption.
+	RequireAll param.Field[bool] `json:"requireAll"`
+	// UUID of Cloudflare managed certificate.
+	CertificateID param.Field[string] `json:"certificate_id"`
+	// Common Name that is protected by the certificate
+	Cn param.Field[string] `json:"cn"`
+	// Compliance Status
+	ComplianceStatus param.Field[DevicePostureNewParamsInputComplianceStatus] `json:"compliance_status"`
+	// Posture Integration ID.
+	ConnectionID param.Field[string] `json:"connection_id"`
+	// For more details on last seen, please refer to the Crowdstrike documentation.
+	LastSeen param.Field[string] `json:"last_seen"`
+	// Os Version
+	OS param.Field[string] `json:"os"`
+	// overall
+	Overall param.Field[string] `json:"overall"`
+	// SensorConfig
+	SensorConfig param.Field[string] `json:"sensor_config"`
+	// For more details on state, please refer to the Crowdstrike documentation.
+	State param.Field[DevicePostureNewParamsInputState] `json:"state"`
+	// Version Operator
+	VersionOperator param.Field[shared.UnnamedSchemaRef88] `json:"versionOperator"`
+	// Count Operator
+	CountOperator param.Field[DevicePostureNewParamsInputCountOperator] `json:"countOperator"`
+	// The Number of Issues.
+	IssueCount param.Field[string] `json:"issue_count"`
+	// For more details on eid last seen, refer to the Tanium documentation.
+	EidLastSeen param.Field[string] `json:"eid_last_seen"`
+	// For more details on risk level, refer to the Tanium documentation.
+	RiskLevel param.Field[DevicePostureNewParamsInputRiskLevel] `json:"risk_level"`
+	// Score Operator
+	ScoreOperator param.Field[DevicePostureNewParamsInputScoreOperator] `json:"scoreOperator"`
+	// For more details on total score, refer to the Tanium documentation.
+	TotalScore param.Field[float64] `json:"total_score"`
+	// The Number of active threats.
+	ActiveThreats param.Field[float64] `json:"active_threats"`
+	// Whether device is infected.
+	Infected param.Field[bool] `json:"infected"`
+	// Whether device is active.
+	IsActive param.Field[bool] `json:"is_active"`
+	// Network status of device.
+	NetworkStatus param.Field[DevicePostureNewParamsInputNetworkStatus] `json:"network_status"`
+}
+
+func (r DevicePostureNewParamsInput) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureNewParamsInput) implementsZeroTrustDevicePostureNewParamsInputUnion() {}
+
+// The value to be checked against.
 //
 // Satisfied by
 // [zero_trust.DevicePostureNewParamsInputTeamsDevicesFileInputRequest],
@@ -1216,9 +1560,10 @@ func (r DevicePostureNewParamsType) IsKnown() bool {
 // [zero_trust.DevicePostureNewParamsInputTeamsDevicesIntuneInputRequest],
 // [zero_trust.DevicePostureNewParamsInputTeamsDevicesKolideInputRequest],
 // [zero_trust.DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest],
-// [zero_trust.DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest].
-type DevicePostureNewParamsInput interface {
-	implementsZeroTrustDevicePostureNewParamsInput()
+// [zero_trust.DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest],
+// [DevicePostureNewParamsInput].
+type DevicePostureNewParamsInputUnion interface {
+	implementsZeroTrustDevicePostureNewParamsInputUnion()
 }
 
 type DevicePostureNewParamsInputTeamsDevicesFileInputRequest struct {
@@ -1238,7 +1583,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesFileInputRequest) MarshalJSON() (
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 type DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
@@ -1252,7 +1597,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // Operating System
@@ -1283,7 +1628,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequest) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // Operating System
@@ -1321,7 +1666,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequest) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // Operating System
@@ -1369,7 +1714,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest) MarshalJSON
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // Operating System
@@ -1403,7 +1748,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 type DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest struct {
@@ -1421,7 +1766,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 type DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
@@ -1435,7 +1780,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 type DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest struct {
@@ -1453,7 +1798,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 type DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest struct {
@@ -1467,7 +1812,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 type DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequest struct {
@@ -1481,7 +1826,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequest) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // Compliance Status
@@ -1526,7 +1871,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // For more details on state, please refer to the Crowdstrike documentation.
@@ -1557,7 +1902,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesIntuneInputRequest) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesIntuneInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesIntuneInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // Compliance Status
@@ -1593,7 +1938,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesKolideInputRequest) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesKolideInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesKolideInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // Count Operator
@@ -1634,7 +1979,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // Operator to evaluate risk_level or eid_last_seen.
@@ -1712,7 +2057,7 @@ func (r DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest) implementsZeroTrustDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest) implementsZeroTrustDevicePostureNewParamsInputUnion() {
 }
 
 // Network status of device.
@@ -1747,6 +2092,136 @@ const (
 func (r DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator) IsKnown() bool {
 	switch r {
 	case DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLess, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals, DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Operator
+type DevicePostureNewParamsInputOperator string
+
+const (
+	DevicePostureNewParamsInputOperatorLess            DevicePostureNewParamsInputOperator = "<"
+	DevicePostureNewParamsInputOperatorLessOrEquals    DevicePostureNewParamsInputOperator = "<="
+	DevicePostureNewParamsInputOperatorGreater         DevicePostureNewParamsInputOperator = ">"
+	DevicePostureNewParamsInputOperatorGreaterOrEquals DevicePostureNewParamsInputOperator = ">="
+	DevicePostureNewParamsInputOperatorEquals          DevicePostureNewParamsInputOperator = "=="
+)
+
+func (r DevicePostureNewParamsInputOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputOperatorLess, DevicePostureNewParamsInputOperatorLessOrEquals, DevicePostureNewParamsInputOperatorGreater, DevicePostureNewParamsInputOperatorGreaterOrEquals, DevicePostureNewParamsInputOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Compliance Status
+type DevicePostureNewParamsInputComplianceStatus string
+
+const (
+	DevicePostureNewParamsInputComplianceStatusCompliant     DevicePostureNewParamsInputComplianceStatus = "compliant"
+	DevicePostureNewParamsInputComplianceStatusNoncompliant  DevicePostureNewParamsInputComplianceStatus = "noncompliant"
+	DevicePostureNewParamsInputComplianceStatusUnknown       DevicePostureNewParamsInputComplianceStatus = "unknown"
+	DevicePostureNewParamsInputComplianceStatusNotapplicable DevicePostureNewParamsInputComplianceStatus = "notapplicable"
+	DevicePostureNewParamsInputComplianceStatusIngraceperiod DevicePostureNewParamsInputComplianceStatus = "ingraceperiod"
+	DevicePostureNewParamsInputComplianceStatusError         DevicePostureNewParamsInputComplianceStatus = "error"
+)
+
+func (r DevicePostureNewParamsInputComplianceStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputComplianceStatusCompliant, DevicePostureNewParamsInputComplianceStatusNoncompliant, DevicePostureNewParamsInputComplianceStatusUnknown, DevicePostureNewParamsInputComplianceStatusNotapplicable, DevicePostureNewParamsInputComplianceStatusIngraceperiod, DevicePostureNewParamsInputComplianceStatusError:
+		return true
+	}
+	return false
+}
+
+// For more details on state, please refer to the Crowdstrike documentation.
+type DevicePostureNewParamsInputState string
+
+const (
+	DevicePostureNewParamsInputStateOnline  DevicePostureNewParamsInputState = "online"
+	DevicePostureNewParamsInputStateOffline DevicePostureNewParamsInputState = "offline"
+	DevicePostureNewParamsInputStateUnknown DevicePostureNewParamsInputState = "unknown"
+)
+
+func (r DevicePostureNewParamsInputState) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputStateOnline, DevicePostureNewParamsInputStateOffline, DevicePostureNewParamsInputStateUnknown:
+		return true
+	}
+	return false
+}
+
+// Count Operator
+type DevicePostureNewParamsInputCountOperator string
+
+const (
+	DevicePostureNewParamsInputCountOperatorLess            DevicePostureNewParamsInputCountOperator = "<"
+	DevicePostureNewParamsInputCountOperatorLessOrEquals    DevicePostureNewParamsInputCountOperator = "<="
+	DevicePostureNewParamsInputCountOperatorGreater         DevicePostureNewParamsInputCountOperator = ">"
+	DevicePostureNewParamsInputCountOperatorGreaterOrEquals DevicePostureNewParamsInputCountOperator = ">="
+	DevicePostureNewParamsInputCountOperatorEquals          DevicePostureNewParamsInputCountOperator = "=="
+)
+
+func (r DevicePostureNewParamsInputCountOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputCountOperatorLess, DevicePostureNewParamsInputCountOperatorLessOrEquals, DevicePostureNewParamsInputCountOperatorGreater, DevicePostureNewParamsInputCountOperatorGreaterOrEquals, DevicePostureNewParamsInputCountOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// For more details on risk level, refer to the Tanium documentation.
+type DevicePostureNewParamsInputRiskLevel string
+
+const (
+	DevicePostureNewParamsInputRiskLevelLow      DevicePostureNewParamsInputRiskLevel = "low"
+	DevicePostureNewParamsInputRiskLevelMedium   DevicePostureNewParamsInputRiskLevel = "medium"
+	DevicePostureNewParamsInputRiskLevelHigh     DevicePostureNewParamsInputRiskLevel = "high"
+	DevicePostureNewParamsInputRiskLevelCritical DevicePostureNewParamsInputRiskLevel = "critical"
+)
+
+func (r DevicePostureNewParamsInputRiskLevel) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputRiskLevelLow, DevicePostureNewParamsInputRiskLevelMedium, DevicePostureNewParamsInputRiskLevelHigh, DevicePostureNewParamsInputRiskLevelCritical:
+		return true
+	}
+	return false
+}
+
+// Score Operator
+type DevicePostureNewParamsInputScoreOperator string
+
+const (
+	DevicePostureNewParamsInputScoreOperatorLess            DevicePostureNewParamsInputScoreOperator = "<"
+	DevicePostureNewParamsInputScoreOperatorLessOrEquals    DevicePostureNewParamsInputScoreOperator = "<="
+	DevicePostureNewParamsInputScoreOperatorGreater         DevicePostureNewParamsInputScoreOperator = ">"
+	DevicePostureNewParamsInputScoreOperatorGreaterOrEquals DevicePostureNewParamsInputScoreOperator = ">="
+	DevicePostureNewParamsInputScoreOperatorEquals          DevicePostureNewParamsInputScoreOperator = "=="
+)
+
+func (r DevicePostureNewParamsInputScoreOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputScoreOperatorLess, DevicePostureNewParamsInputScoreOperatorLessOrEquals, DevicePostureNewParamsInputScoreOperatorGreater, DevicePostureNewParamsInputScoreOperatorGreaterOrEquals, DevicePostureNewParamsInputScoreOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Network status of device.
+type DevicePostureNewParamsInputNetworkStatus string
+
+const (
+	DevicePostureNewParamsInputNetworkStatusConnected     DevicePostureNewParamsInputNetworkStatus = "connected"
+	DevicePostureNewParamsInputNetworkStatusDisconnected  DevicePostureNewParamsInputNetworkStatus = "disconnected"
+	DevicePostureNewParamsInputNetworkStatusDisconnecting DevicePostureNewParamsInputNetworkStatus = "disconnecting"
+	DevicePostureNewParamsInputNetworkStatusConnecting    DevicePostureNewParamsInputNetworkStatus = "connecting"
+)
+
+func (r DevicePostureNewParamsInputNetworkStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureNewParamsInputNetworkStatusConnected, DevicePostureNewParamsInputNetworkStatusDisconnected, DevicePostureNewParamsInputNetworkStatusDisconnecting, DevicePostureNewParamsInputNetworkStatusConnecting:
 		return true
 	}
 	return false
@@ -1833,7 +2308,7 @@ type DevicePostureUpdateParams struct {
 	// remains valid until it is overwritten by new data from the WARP client.
 	Expiration param.Field[string] `json:"expiration"`
 	// The value to be checked against.
-	Input param.Field[DevicePostureUpdateParamsInput] `json:"input"`
+	Input param.Field[DevicePostureUpdateParamsInputUnion] `json:"input"`
 	// The conditions that the client must match to run the rule.
 	Match param.Field[[]DevicePostureUpdateParamsMatch] `json:"match"`
 	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
@@ -1879,6 +2354,86 @@ func (r DevicePostureUpdateParamsType) IsKnown() bool {
 }
 
 // The value to be checked against.
+type DevicePostureUpdateParamsInput struct {
+	// Whether or not file exists
+	Exists param.Field[bool] `json:"exists"`
+	// Operating system
+	OperatingSystem param.Field[shared.UnnamedSchemaRef119] `json:"operating_system"`
+	// File path.
+	Path param.Field[string] `json:"path"`
+	// SHA-256.
+	Sha256 param.Field[string] `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint param.Field[string] `json:"thumbprint"`
+	// List ID.
+	ID param.Field[string] `json:"id"`
+	// Domain
+	Domain param.Field[string] `json:"domain"`
+	// Operator
+	Operator param.Field[DevicePostureUpdateParamsInputOperator] `json:"operator"`
+	// Operating System Distribution Name (linux only)
+	OSDistroName param.Field[string] `json:"os_distro_name"`
+	// Version of OS Distribution (linux only)
+	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
+	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only)
+	OSVersionExtra param.Field[string] `json:"os_version_extra"`
+	// Version of OS
+	Version param.Field[string] `json:"version"`
+	// Enabled
+	Enabled    param.Field[bool]        `json:"enabled"`
+	CheckDisks param.Field[interface{}] `json:"checkDisks,required"`
+	// Whether to check all disks for encryption.
+	RequireAll param.Field[bool] `json:"requireAll"`
+	// UUID of Cloudflare managed certificate.
+	CertificateID param.Field[string] `json:"certificate_id"`
+	// Common Name that is protected by the certificate
+	Cn param.Field[string] `json:"cn"`
+	// Compliance Status
+	ComplianceStatus param.Field[DevicePostureUpdateParamsInputComplianceStatus] `json:"compliance_status"`
+	// Posture Integration ID.
+	ConnectionID param.Field[string] `json:"connection_id"`
+	// For more details on last seen, please refer to the Crowdstrike documentation.
+	LastSeen param.Field[string] `json:"last_seen"`
+	// Os Version
+	OS param.Field[string] `json:"os"`
+	// overall
+	Overall param.Field[string] `json:"overall"`
+	// SensorConfig
+	SensorConfig param.Field[string] `json:"sensor_config"`
+	// For more details on state, please refer to the Crowdstrike documentation.
+	State param.Field[DevicePostureUpdateParamsInputState] `json:"state"`
+	// Version Operator
+	VersionOperator param.Field[shared.UnnamedSchemaRef88] `json:"versionOperator"`
+	// Count Operator
+	CountOperator param.Field[DevicePostureUpdateParamsInputCountOperator] `json:"countOperator"`
+	// The Number of Issues.
+	IssueCount param.Field[string] `json:"issue_count"`
+	// For more details on eid last seen, refer to the Tanium documentation.
+	EidLastSeen param.Field[string] `json:"eid_last_seen"`
+	// For more details on risk level, refer to the Tanium documentation.
+	RiskLevel param.Field[DevicePostureUpdateParamsInputRiskLevel] `json:"risk_level"`
+	// Score Operator
+	ScoreOperator param.Field[DevicePostureUpdateParamsInputScoreOperator] `json:"scoreOperator"`
+	// For more details on total score, refer to the Tanium documentation.
+	TotalScore param.Field[float64] `json:"total_score"`
+	// The Number of active threats.
+	ActiveThreats param.Field[float64] `json:"active_threats"`
+	// Whether device is infected.
+	Infected param.Field[bool] `json:"infected"`
+	// Whether device is active.
+	IsActive param.Field[bool] `json:"is_active"`
+	// Network status of device.
+	NetworkStatus param.Field[DevicePostureUpdateParamsInputNetworkStatus] `json:"network_status"`
+}
+
+func (r DevicePostureUpdateParamsInput) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureUpdateParamsInput) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {}
+
+// The value to be checked against.
 //
 // Satisfied by
 // [zero_trust.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest],
@@ -1896,9 +2451,10 @@ func (r DevicePostureUpdateParamsType) IsKnown() bool {
 // [zero_trust.DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequest],
 // [zero_trust.DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest],
 // [zero_trust.DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest],
-// [zero_trust.DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest].
-type DevicePostureUpdateParamsInput interface {
-	implementsZeroTrustDevicePostureUpdateParamsInput()
+// [zero_trust.DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest],
+// [DevicePostureUpdateParamsInput].
+type DevicePostureUpdateParamsInputUnion interface {
+	implementsZeroTrustDevicePostureUpdateParamsInputUnion()
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest struct {
@@ -1918,7 +2474,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
@@ -1932,7 +2488,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // Operating System
@@ -1963,7 +2519,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequest) Mars
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // Operating System
@@ -2001,7 +2557,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequest) Marshal
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // Operating System
@@ -2049,7 +2605,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest) MarshalJ
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // Operating System
@@ -2083,7 +2639,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest struct {
@@ -2101,7 +2657,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
@@ -2115,7 +2671,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest struct {
@@ -2133,7 +2689,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest struct {
@@ -2147,7 +2703,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest)
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 type DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequest struct {
@@ -2161,7 +2717,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequest) Mars
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // Compliance Status
@@ -2206,7 +2762,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // For more details on state, please refer to the Crowdstrike documentation.
@@ -2237,7 +2793,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequest) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // Compliance Status
@@ -2273,7 +2829,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // Count Operator
@@ -2314,7 +2870,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // Operator to evaluate risk_level or eid_last_seen.
@@ -2392,7 +2948,7 @@ func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest) implementsZeroTrustDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest) implementsZeroTrustDevicePostureUpdateParamsInputUnion() {
 }
 
 // Network status of device.
@@ -2427,6 +2983,136 @@ const (
 func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator) IsKnown() bool {
 	switch r {
 	case DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLess, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorLessOrEquals, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreater, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorGreaterOrEquals, DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Operator
+type DevicePostureUpdateParamsInputOperator string
+
+const (
+	DevicePostureUpdateParamsInputOperatorLess            DevicePostureUpdateParamsInputOperator = "<"
+	DevicePostureUpdateParamsInputOperatorLessOrEquals    DevicePostureUpdateParamsInputOperator = "<="
+	DevicePostureUpdateParamsInputOperatorGreater         DevicePostureUpdateParamsInputOperator = ">"
+	DevicePostureUpdateParamsInputOperatorGreaterOrEquals DevicePostureUpdateParamsInputOperator = ">="
+	DevicePostureUpdateParamsInputOperatorEquals          DevicePostureUpdateParamsInputOperator = "=="
+)
+
+func (r DevicePostureUpdateParamsInputOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputOperatorLess, DevicePostureUpdateParamsInputOperatorLessOrEquals, DevicePostureUpdateParamsInputOperatorGreater, DevicePostureUpdateParamsInputOperatorGreaterOrEquals, DevicePostureUpdateParamsInputOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Compliance Status
+type DevicePostureUpdateParamsInputComplianceStatus string
+
+const (
+	DevicePostureUpdateParamsInputComplianceStatusCompliant     DevicePostureUpdateParamsInputComplianceStatus = "compliant"
+	DevicePostureUpdateParamsInputComplianceStatusNoncompliant  DevicePostureUpdateParamsInputComplianceStatus = "noncompliant"
+	DevicePostureUpdateParamsInputComplianceStatusUnknown       DevicePostureUpdateParamsInputComplianceStatus = "unknown"
+	DevicePostureUpdateParamsInputComplianceStatusNotapplicable DevicePostureUpdateParamsInputComplianceStatus = "notapplicable"
+	DevicePostureUpdateParamsInputComplianceStatusIngraceperiod DevicePostureUpdateParamsInputComplianceStatus = "ingraceperiod"
+	DevicePostureUpdateParamsInputComplianceStatusError         DevicePostureUpdateParamsInputComplianceStatus = "error"
+)
+
+func (r DevicePostureUpdateParamsInputComplianceStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputComplianceStatusCompliant, DevicePostureUpdateParamsInputComplianceStatusNoncompliant, DevicePostureUpdateParamsInputComplianceStatusUnknown, DevicePostureUpdateParamsInputComplianceStatusNotapplicable, DevicePostureUpdateParamsInputComplianceStatusIngraceperiod, DevicePostureUpdateParamsInputComplianceStatusError:
+		return true
+	}
+	return false
+}
+
+// For more details on state, please refer to the Crowdstrike documentation.
+type DevicePostureUpdateParamsInputState string
+
+const (
+	DevicePostureUpdateParamsInputStateOnline  DevicePostureUpdateParamsInputState = "online"
+	DevicePostureUpdateParamsInputStateOffline DevicePostureUpdateParamsInputState = "offline"
+	DevicePostureUpdateParamsInputStateUnknown DevicePostureUpdateParamsInputState = "unknown"
+)
+
+func (r DevicePostureUpdateParamsInputState) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputStateOnline, DevicePostureUpdateParamsInputStateOffline, DevicePostureUpdateParamsInputStateUnknown:
+		return true
+	}
+	return false
+}
+
+// Count Operator
+type DevicePostureUpdateParamsInputCountOperator string
+
+const (
+	DevicePostureUpdateParamsInputCountOperatorLess            DevicePostureUpdateParamsInputCountOperator = "<"
+	DevicePostureUpdateParamsInputCountOperatorLessOrEquals    DevicePostureUpdateParamsInputCountOperator = "<="
+	DevicePostureUpdateParamsInputCountOperatorGreater         DevicePostureUpdateParamsInputCountOperator = ">"
+	DevicePostureUpdateParamsInputCountOperatorGreaterOrEquals DevicePostureUpdateParamsInputCountOperator = ">="
+	DevicePostureUpdateParamsInputCountOperatorEquals          DevicePostureUpdateParamsInputCountOperator = "=="
+)
+
+func (r DevicePostureUpdateParamsInputCountOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputCountOperatorLess, DevicePostureUpdateParamsInputCountOperatorLessOrEquals, DevicePostureUpdateParamsInputCountOperatorGreater, DevicePostureUpdateParamsInputCountOperatorGreaterOrEquals, DevicePostureUpdateParamsInputCountOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// For more details on risk level, refer to the Tanium documentation.
+type DevicePostureUpdateParamsInputRiskLevel string
+
+const (
+	DevicePostureUpdateParamsInputRiskLevelLow      DevicePostureUpdateParamsInputRiskLevel = "low"
+	DevicePostureUpdateParamsInputRiskLevelMedium   DevicePostureUpdateParamsInputRiskLevel = "medium"
+	DevicePostureUpdateParamsInputRiskLevelHigh     DevicePostureUpdateParamsInputRiskLevel = "high"
+	DevicePostureUpdateParamsInputRiskLevelCritical DevicePostureUpdateParamsInputRiskLevel = "critical"
+)
+
+func (r DevicePostureUpdateParamsInputRiskLevel) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputRiskLevelLow, DevicePostureUpdateParamsInputRiskLevelMedium, DevicePostureUpdateParamsInputRiskLevelHigh, DevicePostureUpdateParamsInputRiskLevelCritical:
+		return true
+	}
+	return false
+}
+
+// Score Operator
+type DevicePostureUpdateParamsInputScoreOperator string
+
+const (
+	DevicePostureUpdateParamsInputScoreOperatorLess            DevicePostureUpdateParamsInputScoreOperator = "<"
+	DevicePostureUpdateParamsInputScoreOperatorLessOrEquals    DevicePostureUpdateParamsInputScoreOperator = "<="
+	DevicePostureUpdateParamsInputScoreOperatorGreater         DevicePostureUpdateParamsInputScoreOperator = ">"
+	DevicePostureUpdateParamsInputScoreOperatorGreaterOrEquals DevicePostureUpdateParamsInputScoreOperator = ">="
+	DevicePostureUpdateParamsInputScoreOperatorEquals          DevicePostureUpdateParamsInputScoreOperator = "=="
+)
+
+func (r DevicePostureUpdateParamsInputScoreOperator) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputScoreOperatorLess, DevicePostureUpdateParamsInputScoreOperatorLessOrEquals, DevicePostureUpdateParamsInputScoreOperatorGreater, DevicePostureUpdateParamsInputScoreOperatorGreaterOrEquals, DevicePostureUpdateParamsInputScoreOperatorEquals:
+		return true
+	}
+	return false
+}
+
+// Network status of device.
+type DevicePostureUpdateParamsInputNetworkStatus string
+
+const (
+	DevicePostureUpdateParamsInputNetworkStatusConnected     DevicePostureUpdateParamsInputNetworkStatus = "connected"
+	DevicePostureUpdateParamsInputNetworkStatusDisconnected  DevicePostureUpdateParamsInputNetworkStatus = "disconnected"
+	DevicePostureUpdateParamsInputNetworkStatusDisconnecting DevicePostureUpdateParamsInputNetworkStatus = "disconnecting"
+	DevicePostureUpdateParamsInputNetworkStatusConnecting    DevicePostureUpdateParamsInputNetworkStatus = "connecting"
+)
+
+func (r DevicePostureUpdateParamsInputNetworkStatus) IsKnown() bool {
+	switch r {
+	case DevicePostureUpdateParamsInputNetworkStatusConnected, DevicePostureUpdateParamsInputNetworkStatusDisconnected, DevicePostureUpdateParamsInputNetworkStatusDisconnecting, DevicePostureUpdateParamsInputNetworkStatusConnecting:
 		return true
 	}
 	return false

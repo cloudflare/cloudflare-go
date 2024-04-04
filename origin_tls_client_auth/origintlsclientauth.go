@@ -44,7 +44,7 @@ func NewOriginTLSClientAuthService(opts ...option.RequestOption) (r *OriginTLSCl
 // important to keep only one certificate active. Also, make sure to enable
 // zone-level authenticated origin pulls by making a PUT call to settings endpoint
 // to see the uploaded certificate in use.
-func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSClientAuthNewParams, opts ...option.RequestOption) (res *OriginTLSClientAuthNewResponse, err error) {
+func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSClientAuthNewParams, opts ...option.RequestOption) (res *OriginTLSClientAuthNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", params.ZoneID)
@@ -80,7 +80,7 @@ func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query O
 }
 
 // Delete Certificate
-func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, params OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponse, err error) {
+func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, params OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", params.ZoneID, certificateID)
@@ -93,7 +93,7 @@ func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID s
 }
 
 // Get Certificate Details
-func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID string, query OriginTLSClientAuthGetParams, opts ...option.RequestOption) (res *OriginTLSClientAuthGetResponse, err error) {
+func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID string, query OriginTLSClientAuthGetParams, opts ...option.RequestOption) (res *OriginTLSClientAuthGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", query.ZoneID, certificateID)
@@ -108,13 +108,13 @@ func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID stri
 // Union satisfied by
 // [origin_tls_client_auth.OriginTLSClientAuthNewResponseUnknown] or
 // [shared.UnionString].
-type OriginTLSClientAuthNewResponse interface {
-	ImplementsOriginTLSClientAuthOriginTLSClientAuthNewResponse()
+type OriginTLSClientAuthNewResponseUnion interface {
+	ImplementsOriginTLSClientAuthOriginTLSClientAuthNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginTLSClientAuthNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*OriginTLSClientAuthNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -157,13 +157,13 @@ func (r originTLSClientAuthListResponseJSON) RawJSON() string {
 // Union satisfied by
 // [origin_tls_client_auth.OriginTLSClientAuthDeleteResponseUnknown] or
 // [shared.UnionString].
-type OriginTLSClientAuthDeleteResponse interface {
-	ImplementsOriginTLSClientAuthOriginTLSClientAuthDeleteResponse()
+type OriginTLSClientAuthDeleteResponseUnion interface {
+	ImplementsOriginTLSClientAuthOriginTLSClientAuthDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginTLSClientAuthDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*OriginTLSClientAuthDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -175,13 +175,13 @@ func init() {
 // Union satisfied by
 // [origin_tls_client_auth.OriginTLSClientAuthGetResponseUnknown] or
 // [shared.UnionString].
-type OriginTLSClientAuthGetResponse interface {
-	ImplementsOriginTLSClientAuthOriginTLSClientAuthGetResponse()
+type OriginTLSClientAuthGetResponseUnion interface {
+	ImplementsOriginTLSClientAuthOriginTLSClientAuthGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginTLSClientAuthGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*OriginTLSClientAuthGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -204,9 +204,9 @@ func (r OriginTLSClientAuthNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OriginTLSClientAuthNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   OriginTLSClientAuthNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   OriginTLSClientAuthNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originTLSClientAuthNewResponseEnvelopeJSON    `json:"-"`
@@ -262,9 +262,9 @@ func (r OriginTLSClientAuthDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type OriginTLSClientAuthDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   OriginTLSClientAuthDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
+	Result   OriginTLSClientAuthDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originTLSClientAuthDeleteResponseEnvelopeJSON    `json:"-"`
@@ -310,9 +310,9 @@ type OriginTLSClientAuthGetParams struct {
 }
 
 type OriginTLSClientAuthGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   OriginTLSClientAuthGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   OriginTLSClientAuthGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginTLSClientAuthGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originTLSClientAuthGetResponseEnvelopeJSON    `json:"-"`

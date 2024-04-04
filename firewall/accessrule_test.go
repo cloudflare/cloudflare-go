@@ -29,10 +29,10 @@ func TestAccessRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.AccessRules.New(context.TODO(), firewall.AccessRuleNewParams{
-		Configuration: cloudflare.F[firewall.AccessRuleNewParamsConfiguration](firewall.AccessRuleNewParamsConfigurationLegacyJhsIPConfiguration(firewall.AccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
+		Configuration: cloudflare.F[firewall.AccessRuleNewParamsConfigurationUnion](firewall.AccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
 			Target: cloudflare.F(firewall.AccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
-		})),
+		}),
 		Mode:      cloudflare.F(firewall.AccessRuleNewParamsModeChallenge),
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
@@ -141,10 +141,10 @@ func TestAccessRuleEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		map[string]interface{}{},
 		firewall.AccessRuleEditParams{
-			Configuration: cloudflare.F[firewall.AccessRuleEditParamsConfiguration](firewall.AccessRuleEditParamsConfigurationLegacyJhsIPConfiguration(firewall.AccessRuleEditParamsConfigurationLegacyJhsIPConfiguration{
+			Configuration: cloudflare.F[firewall.AccessRuleEditParamsConfigurationUnion](firewall.AccessRuleEditParamsConfigurationLegacyJhsIPConfiguration{
 				Target: cloudflare.F(firewall.AccessRuleEditParamsConfigurationLegacyJhsIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
-			})),
+			}),
 			Mode:      cloudflare.F(firewall.AccessRuleEditParamsModeChallenge),
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),

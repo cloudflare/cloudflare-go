@@ -35,7 +35,7 @@ func NewRouteService(opts ...option.RequestOption) (r *RouteService) {
 }
 
 // Creates a route that maps a URL pattern to a Worker.
-func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponse, err error) {
+func (r *RouteService) New(ctx context.Context, params RouteNewParams, opts ...option.RequestOption) (res *RouteNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes", params.ZoneID)
@@ -84,7 +84,7 @@ func (r *RouteService) ListAutoPaging(ctx context.Context, query RouteListParams
 }
 
 // Deletes a route.
-func (r *RouteService) Delete(ctx context.Context, routeID string, params RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponse, err error) {
+func (r *RouteService) Delete(ctx context.Context, routeID string, params RouteDeleteParams, opts ...option.RequestOption) (res *RouteDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RouteDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", params.ZoneID, routeID)
@@ -136,13 +136,13 @@ func (r workersRouteJSON) RawJSON() string {
 }
 
 // Union satisfied by [workers.RouteNewResponseUnknown] or [shared.UnionString].
-type RouteNewResponse interface {
-	ImplementsWorkersRouteNewResponse()
+type RouteNewResponseUnion interface {
+	ImplementsWorkersRouteNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RouteNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*RouteNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -152,13 +152,13 @@ func init() {
 }
 
 // Union satisfied by [workers.RouteDeleteResponseUnknown] or [shared.UnionString].
-type RouteDeleteResponse interface {
-	ImplementsWorkersRouteDeleteResponse()
+type RouteDeleteResponseUnion interface {
+	ImplementsWorkersRouteDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RouteDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*RouteDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -182,7 +182,7 @@ func (r RouteNewParams) MarshalJSON() (data []byte, err error) {
 type RouteNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteNewResponse      `json:"result,required"`
+	Result   RouteNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeNewResponseEnvelopeJSON    `json:"-"`
@@ -293,9 +293,9 @@ func (r RouteDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RouteDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   RouteDeleteResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   RouteDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    routeDeleteResponseEnvelopeJSON    `json:"-"`

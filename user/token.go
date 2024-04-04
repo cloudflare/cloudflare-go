@@ -55,7 +55,7 @@ func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...opt
 }
 
 // Update an existing token.
-func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponse, err error) {
+func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TokenUpdateResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
@@ -104,7 +104,7 @@ func (r *TokenService) Delete(ctx context.Context, tokenID interface{}, body Tok
 }
 
 // Get information about a specific token.
-func (r *TokenService) Get(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenGetResponse, err error) {
+func (r *TokenService) Get(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TokenGetResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
@@ -152,13 +152,13 @@ func (r tokenNewResponseJSON) RawJSON() string {
 }
 
 // Union satisfied by [user.TokenUpdateResponseUnknown] or [shared.UnionString].
-type TokenUpdateResponse interface {
-	ImplementsUserTokenUpdateResponse()
+type TokenUpdateResponseUnion interface {
+	ImplementsUserTokenUpdateResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TokenUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*TokenUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -192,13 +192,13 @@ func (r tokenDeleteResponseJSON) RawJSON() string {
 }
 
 // Union satisfied by [user.TokenGetResponseUnknown] or [shared.UnionString].
-type TokenGetResponse interface {
-	ImplementsUserTokenGetResponse()
+type TokenGetResponseUnion interface {
+	ImplementsUserTokenGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*TokenGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*TokenGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -471,9 +471,9 @@ func (r TokenUpdateParamsConditionRequestIP) MarshalJSON() (data []byte, err err
 }
 
 type TokenUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TokenUpdateResponse   `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   TokenUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenUpdateResponseEnvelopeJSON    `json:"-"`
@@ -600,7 +600,7 @@ func (r TokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type TokenGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   TokenGetResponse      `json:"result,required"`
+	Result   TokenGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success TokenGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenGetResponseEnvelopeJSON    `json:"-"`

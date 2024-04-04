@@ -35,7 +35,7 @@ func NewProjectDeploymentHistoryLogService(opts ...option.RequestOption) (r *Pro
 }
 
 // Fetch deployment logs for a project.
-func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentHistoryLogGetParams, opts ...option.RequestOption) (res *ProjectDeploymentHistoryLogGetResponse, err error) {
+func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentHistoryLogGetParams, opts ...option.RequestOption) (res *ProjectDeploymentHistoryLogGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentHistoryLogGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/history/logs", query.AccountID, projectName, deploymentID)
@@ -49,13 +49,13 @@ func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectNam
 
 // Union satisfied by [pages.ProjectDeploymentHistoryLogGetResponseUnknown],
 // [pages.ProjectDeploymentHistoryLogGetResponseArray] or [shared.UnionString].
-type ProjectDeploymentHistoryLogGetResponse interface {
-	ImplementsPagesProjectDeploymentHistoryLogGetResponse()
+type ProjectDeploymentHistoryLogGetResponseUnion interface {
+	ImplementsPagesProjectDeploymentHistoryLogGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectDeploymentHistoryLogGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProjectDeploymentHistoryLogGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -70,7 +70,7 @@ func init() {
 
 type ProjectDeploymentHistoryLogGetResponseArray []interface{}
 
-func (r ProjectDeploymentHistoryLogGetResponseArray) ImplementsPagesProjectDeploymentHistoryLogGetResponse() {
+func (r ProjectDeploymentHistoryLogGetResponseArray) ImplementsPagesProjectDeploymentHistoryLogGetResponseUnion() {
 }
 
 type ProjectDeploymentHistoryLogGetParams struct {
@@ -79,9 +79,9 @@ type ProjectDeploymentHistoryLogGetParams struct {
 }
 
 type ProjectDeploymentHistoryLogGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   ProjectDeploymentHistoryLogGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo                       `json:"errors,required"`
+	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Result   ProjectDeploymentHistoryLogGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentHistoryLogGetResponseEnvelopeJSON    `json:"-"`

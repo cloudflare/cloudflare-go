@@ -76,7 +76,7 @@ func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListPara
 }
 
 // Delete an unapproved prefix owned by the account.
-func (r *PrefixService) Delete(ctx context.Context, prefixID string, params PrefixDeleteParams, opts ...option.RequestOption) (res *PrefixDeleteResponse, err error) {
+func (r *PrefixService) Delete(ctx context.Context, prefixID string, params PrefixDeleteParams, opts ...option.RequestOption) (res *PrefixDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
@@ -176,13 +176,13 @@ func (r addressingIpamPrefixesJSON) RawJSON() string {
 
 // Union satisfied by [addressing.PrefixDeleteResponseUnknown],
 // [addressing.PrefixDeleteResponseArray] or [shared.UnionString].
-type PrefixDeleteResponse interface {
-	ImplementsAddressingPrefixDeleteResponse()
+type PrefixDeleteResponseUnion interface {
+	ImplementsAddressingPrefixDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PrefixDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*PrefixDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -197,7 +197,7 @@ func init() {
 
 type PrefixDeleteResponseArray []interface{}
 
-func (r PrefixDeleteResponseArray) ImplementsAddressingPrefixDeleteResponse() {}
+func (r PrefixDeleteResponseArray) ImplementsAddressingPrefixDeleteResponseUnion() {}
 
 type PrefixNewParams struct {
 	// Identifier
@@ -273,9 +273,9 @@ func (r PrefixDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   PrefixDeleteResponse  `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   PrefixDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PrefixDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PrefixDeleteResponseEnvelopeResultInfo `json:"result_info"`

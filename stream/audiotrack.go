@@ -35,7 +35,7 @@ func NewAudioTrackService(opts ...option.RequestOption) (r *AudioTrackService) {
 
 // Deletes additional audio tracks on a video. Deleting a default audio track is
 // not allowed. You must assign another audio track as default prior to deletion.
-func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audioIdentifier string, body AudioTrackDeleteParams, opts ...option.RequestOption) (res *AudioTrackDeleteResponse, err error) {
+func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audioIdentifier string, body AudioTrackDeleteParams, opts ...option.RequestOption) (res *AudioTrackDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AudioTrackDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", body.AccountID, identifier, audioIdentifier)
@@ -139,13 +139,13 @@ func (r StreamAudioStatus) IsKnown() bool {
 
 // Union satisfied by [stream.AudioTrackDeleteResponseUnknown] or
 // [shared.UnionString].
-type AudioTrackDeleteResponse interface {
-	ImplementsStreamAudioTrackDeleteResponse()
+type AudioTrackDeleteResponseUnion interface {
+	ImplementsStreamAudioTrackDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AudioTrackDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*AudioTrackDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -160,9 +160,9 @@ type AudioTrackDeleteParams struct {
 }
 
 type AudioTrackDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   AudioTrackDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   AudioTrackDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AudioTrackDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    audioTrackDeleteResponseEnvelopeJSON    `json:"-"`

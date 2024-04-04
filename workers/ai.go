@@ -42,7 +42,7 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 //
 // Model specific inputs available in
 // [Cloudflare Docs](https://developers.cloudflare.com/workers-ai/models/).
-func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParams, opts ...option.RequestOption) (res *AIRunResponse, err error) {
+func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParams, opts ...option.RequestOption) (res *AIRunResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AIRunResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/ai/run/%s", params.getAccountID(), modelName)
@@ -61,13 +61,13 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 // [workers.AIRunResponseObjectDetection], [workers.AIRunResponseObject],
 // [shared.UnionString], [workers.AIRunResponseTranslation],
 // [workers.AIRunResponseSummarization] or [workers.AIRunResponseImageToText].
-type AIRunResponse interface {
-	ImplementsWorkersAIRunResponse()
+type AIRunResponseUnion interface {
+	ImplementsWorkersAIRunResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AIRunResponse)(nil)).Elem(),
+		reflect.TypeOf((*AIRunResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -122,11 +122,11 @@ func init() {
 
 type AIRunResponseTextClassification []shared.UnnamedSchemaRef135
 
-func (r AIRunResponseTextClassification) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseTextClassification) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseSentenceSimilarity []float64
 
-func (r AIRunResponseSentenceSimilarity) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseSentenceSimilarity) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseTextEmbeddings struct {
 	Data  [][]float64                     `json:"data"`
@@ -151,7 +151,7 @@ func (r aiRunResponseTextEmbeddingsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseTextEmbeddings) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseTextEmbeddings) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseSpeechRecognition struct {
 	Text      string                             `json:"text,required"`
@@ -180,15 +180,15 @@ func (r aiRunResponseSpeechRecognitionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseSpeechRecognition) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseSpeechRecognition) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseImageClassification []shared.UnnamedSchemaRef135
 
-func (r AIRunResponseImageClassification) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseImageClassification) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseObjectDetection []AIRunResponseObjectDetection
 
-func (r AIRunResponseObjectDetection) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseObjectDetection) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseObject struct {
 	Response string                  `json:"response"`
@@ -211,7 +211,7 @@ func (r aiRunResponseObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseObject) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseObject) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseTranslation struct {
 	TranslatedText string                       `json:"translated_text"`
@@ -234,7 +234,7 @@ func (r aiRunResponseTranslationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseTranslation) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseTranslation) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseSummarization struct {
 	Summary string                         `json:"summary"`
@@ -257,7 +257,7 @@ func (r aiRunResponseSummarizationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseSummarization) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseSummarization) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseImageToText struct {
 	Description string                       `json:"description"`
@@ -280,7 +280,7 @@ func (r aiRunResponseImageToTextJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AIRunResponseImageToText) ImplementsWorkersAIRunResponse() {}
+func (r AIRunResponseImageToText) ImplementsWorkersAIRunResponseUnion() {}
 
 // This interface is a union satisfied by one of the following:
 // [AIRunParamsTextClassification], [AIRunParamsTextToImage],
@@ -352,8 +352,8 @@ func (AIRunParamsSentenceSimilarity) ImplementsAIRunParams() {
 }
 
 type AIRunParamsTextEmbeddings struct {
-	AccountID param.Field[string]                          `path:"account_id,required"`
-	Text      param.Field[shared.UnnamedSchemaRef121Param] `json:"text,required"`
+	AccountID param.Field[string]                               `path:"account_id,required"`
+	Text      param.Field[shared.UnnamedSchemaRef121UnionParam] `json:"text,required"`
 }
 
 func (r AIRunParamsTextEmbeddings) MarshalJSON() (data []byte, err error) {
@@ -507,7 +507,7 @@ func (AIRunParamsImageToText) ImplementsAIRunParams() {
 }
 
 type AIRunResponseEnvelope struct {
-	Result AIRunResponse             `json:"result" format:"binary"`
+	Result AIRunResponseUnion        `json:"result" format:"binary"`
 	JSON   aiRunResponseEnvelopeJSON `json:"-"`
 }
 

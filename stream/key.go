@@ -50,7 +50,7 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 }
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
-func (r *KeyService) Delete(ctx context.Context, identifier string, params KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponse, err error) {
+func (r *KeyService) Delete(ctx context.Context, identifier string, params KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/keys/%s", params.AccountID, identifier)
@@ -106,13 +106,13 @@ func (r streamKeysJSON) RawJSON() string {
 }
 
 // Union satisfied by [stream.KeyDeleteResponseUnknown] or [shared.UnionString].
-type KeyDeleteResponse interface {
-	ImplementsStreamKeyDeleteResponse()
+type KeyDeleteResponseUnion interface {
+	ImplementsStreamKeyDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*KeyDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*KeyDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -209,9 +209,9 @@ func (r KeyDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type KeyDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   KeyDeleteResponse     `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   KeyDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyDeleteResponseEnvelopeJSON    `json:"-"`

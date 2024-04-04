@@ -157,7 +157,7 @@ func (r ZoneSettingPseudoIPV4Param) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingPseudoIPV4Param) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingPseudoIPV4Param) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingPseudoIPV4EditParams struct {
 	// Identifier

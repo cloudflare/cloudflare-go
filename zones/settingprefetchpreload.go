@@ -160,7 +160,7 @@ func (r ZoneSettingPrefetchPreloadParam) MarshalJSON() (data []byte, err error) 
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingPrefetchPreloadParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingPrefetchPreloadParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingPrefetchPreloadEditParams struct {
 	// Identifier

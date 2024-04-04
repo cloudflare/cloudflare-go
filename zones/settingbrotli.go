@@ -160,7 +160,7 @@ func (r ZoneSettingBrotliParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingBrotliParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingBrotliParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingBrotliEditParams struct {
 	// Identifier

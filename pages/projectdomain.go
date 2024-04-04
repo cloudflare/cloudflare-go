@@ -36,7 +36,7 @@ func NewProjectDomainService(opts ...option.RequestOption) (r *ProjectDomainServ
 }
 
 // Add a new domain for the Pages project.
-func (r *ProjectDomainService) New(ctx context.Context, projectName string, params ProjectDomainNewParams, opts ...option.RequestOption) (res *ProjectDomainNewResponse, err error) {
+func (r *ProjectDomainService) New(ctx context.Context, projectName string, params ProjectDomainNewParams, opts ...option.RequestOption) (res *ProjectDomainNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", params.AccountID, projectName)
@@ -80,7 +80,7 @@ func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, d
 }
 
 // Retry the validation status of a single domain.
-func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, params ProjectDomainEditParams, opts ...option.RequestOption) (res *ProjectDomainEditResponse, err error) {
+func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, params ProjectDomainEditParams, opts ...option.RequestOption) (res *ProjectDomainEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", params.AccountID, projectName, domainName)
@@ -93,7 +93,7 @@ func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, dom
 }
 
 // Fetch a single domain.
-func (r *ProjectDomainService) Get(ctx context.Context, projectName string, domainName string, query ProjectDomainGetParams, opts ...option.RequestOption) (res *ProjectDomainGetResponse, err error) {
+func (r *ProjectDomainService) Get(ctx context.Context, projectName string, domainName string, query ProjectDomainGetParams, opts ...option.RequestOption) (res *ProjectDomainGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", query.AccountID, projectName, domainName)
@@ -107,13 +107,13 @@ func (r *ProjectDomainService) Get(ctx context.Context, projectName string, doma
 
 // Union satisfied by [pages.ProjectDomainNewResponseUnknown],
 // [pages.ProjectDomainNewResponseArray] or [shared.UnionString].
-type ProjectDomainNewResponse interface {
-	ImplementsPagesProjectDomainNewResponse()
+type ProjectDomainNewResponseUnion interface {
+	ImplementsPagesProjectDomainNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectDomainNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProjectDomainNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -128,7 +128,7 @@ func init() {
 
 type ProjectDomainNewResponseArray []interface{}
 
-func (r ProjectDomainNewResponseArray) ImplementsPagesProjectDomainNewResponse() {}
+func (r ProjectDomainNewResponseArray) ImplementsPagesProjectDomainNewResponseUnion() {}
 
 type ProjectDomainListResponse = interface{}
 
@@ -136,13 +136,13 @@ type ProjectDomainDeleteResponse = interface{}
 
 // Union satisfied by [pages.ProjectDomainEditResponseUnknown],
 // [pages.ProjectDomainEditResponseArray] or [shared.UnionString].
-type ProjectDomainEditResponse interface {
-	ImplementsPagesProjectDomainEditResponse()
+type ProjectDomainEditResponseUnion interface {
+	ImplementsPagesProjectDomainEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectDomainEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProjectDomainEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -157,17 +157,17 @@ func init() {
 
 type ProjectDomainEditResponseArray []interface{}
 
-func (r ProjectDomainEditResponseArray) ImplementsPagesProjectDomainEditResponse() {}
+func (r ProjectDomainEditResponseArray) ImplementsPagesProjectDomainEditResponseUnion() {}
 
 // Union satisfied by [pages.ProjectDomainGetResponseUnknown],
 // [pages.ProjectDomainGetResponseArray] or [shared.UnionString].
-type ProjectDomainGetResponse interface {
-	ImplementsPagesProjectDomainGetResponse()
+type ProjectDomainGetResponseUnion interface {
+	ImplementsPagesProjectDomainGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectDomainGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*ProjectDomainGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -182,7 +182,7 @@ func init() {
 
 type ProjectDomainGetResponseArray []interface{}
 
-func (r ProjectDomainGetResponseArray) ImplementsPagesProjectDomainGetResponse() {}
+func (r ProjectDomainGetResponseArray) ImplementsPagesProjectDomainGetResponseUnion() {}
 
 type ProjectDomainNewParams struct {
 	// Identifier
@@ -195,9 +195,9 @@ func (r ProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDomainNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   ProjectDomainNewResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   ProjectDomainNewResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainNewResponseEnvelopeJSON    `json:"-"`
@@ -263,9 +263,9 @@ func (r ProjectDomainEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectDomainEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   ProjectDomainEditResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   ProjectDomainEditResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainEditResponseEnvelopeJSON    `json:"-"`
@@ -311,9 +311,9 @@ type ProjectDomainGetParams struct {
 }
 
 type ProjectDomainGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   ProjectDomainGetResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   ProjectDomainGetResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainGetResponseEnvelopeJSON    `json:"-"`

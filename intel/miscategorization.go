@@ -35,7 +35,7 @@ func NewMiscategorizationService(opts ...option.RequestOption) (r *Miscategoriza
 }
 
 // Create Miscategorization
-func (r *MiscategorizationService) New(ctx context.Context, params MiscategorizationNewParams, opts ...option.RequestOption) (res *MiscategorizationNewResponse, err error) {
+func (r *MiscategorizationService) New(ctx context.Context, params MiscategorizationNewParams, opts ...option.RequestOption) (res *MiscategorizationNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MiscategorizationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/miscategorization", params.AccountID)
@@ -49,13 +49,13 @@ func (r *MiscategorizationService) New(ctx context.Context, params Miscategoriza
 
 // Union satisfied by [intel.MiscategorizationNewResponseUnknown] or
 // [shared.UnionString].
-type MiscategorizationNewResponse interface {
-	ImplementsIntelMiscategorizationNewResponse()
+type MiscategorizationNewResponseUnion interface {
+	ImplementsIntelMiscategorizationNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*MiscategorizationNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*MiscategorizationNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -106,9 +106,9 @@ func (r MiscategorizationNewParamsIndicatorType) IsKnown() bool {
 }
 
 type MiscategorizationNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   MiscategorizationNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   MiscategorizationNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success MiscategorizationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    miscategorizationNewResponseEnvelopeJSON    `json:"-"`

@@ -168,7 +168,7 @@ func (r ZoneSettingEarlyHintsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingEarlyHintsParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingEarlyHintsParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingEarlyHintEditParams struct {
 	// Identifier

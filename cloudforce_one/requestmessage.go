@@ -62,7 +62,7 @@ func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier st
 }
 
 // Delete a Request Message
-func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171, err error) {
+func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", accountIdentifier, requestIdentifier, messageIdentifer)
@@ -256,9 +256,9 @@ func (r RequestMessageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestMessageDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171Union `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageDeleteResponseEnvelopeJSON    `json:"-"`

@@ -45,7 +45,7 @@ func (r *ScriptTailService) New(ctx context.Context, scriptName string, params S
 }
 
 // Deletes a tail from a Worker.
-func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, params ScriptTailDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171, err error) {
+func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id string, params ScriptTailDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef171Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptTailDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", params.AccountID, scriptName, id)
@@ -184,9 +184,9 @@ func (r ScriptTailDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef171 `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef171Union `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptTailDeleteResponseEnvelopeJSON    `json:"-"`

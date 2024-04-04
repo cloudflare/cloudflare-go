@@ -164,7 +164,7 @@ func (r ZoneSettingSortQueryStringForCacheParam) MarshalJSON() (data []byte, err
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingSortQueryStringForCacheParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingSortQueryStringForCacheParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingSortQueryStringForCacheEditParams struct {
 	// Identifier

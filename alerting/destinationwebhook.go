@@ -86,7 +86,7 @@ func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query De
 }
 
 // Delete a configured webhook destination.
-func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string, body DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *DestinationWebhookDeleteResponse, err error) {
+func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string, body DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *DestinationWebhookDeleteResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", body.AccountID, webhookID)
@@ -222,13 +222,13 @@ func (r destinationWebhookUpdateResponseJSON) RawJSON() string {
 
 // Union satisfied by [alerting.DestinationWebhookDeleteResponseUnknown],
 // [alerting.DestinationWebhookDeleteResponseArray] or [shared.UnionString].
-type DestinationWebhookDeleteResponse interface {
-	ImplementsAlertingDestinationWebhookDeleteResponse()
+type DestinationWebhookDeleteResponseUnion interface {
+	ImplementsAlertingDestinationWebhookDeleteResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DestinationWebhookDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*DestinationWebhookDeleteResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -243,7 +243,8 @@ func init() {
 
 type DestinationWebhookDeleteResponseArray []interface{}
 
-func (r DestinationWebhookDeleteResponseArray) ImplementsAlertingDestinationWebhookDeleteResponse() {}
+func (r DestinationWebhookDeleteResponseArray) ImplementsAlertingDestinationWebhookDeleteResponseUnion() {
+}
 
 type DestinationWebhookNewParams struct {
 	// The account id
@@ -378,9 +379,9 @@ type DestinationWebhookDeleteParams struct {
 }
 
 type DestinationWebhookDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   DestinationWebhookDeleteResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Result   DestinationWebhookDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationWebhookDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationWebhookDeleteResponseEnvelopeResultInfo `json:"result_info"`

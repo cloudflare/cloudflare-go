@@ -107,7 +107,7 @@ type SettingTLSUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The tls setting value.
-	Value param.Field[SettingTLSUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingTLSUpdateParamsValueUnion] `json:"value,required"`
 }
 
 func (r SettingTLSUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -135,13 +135,13 @@ func (r SettingTLSUpdateParamsSettingID) IsKnown() bool {
 //
 // Satisfied by [shared.UnionFloat], [shared.UnionString],
 // [hostnames.SettingTLSUpdateParamsValueArray].
-type SettingTLSUpdateParamsValue interface {
-	ImplementsHostnamesSettingTLSUpdateParamsValue()
+type SettingTLSUpdateParamsValueUnion interface {
+	ImplementsHostnamesSettingTLSUpdateParamsValueUnion()
 }
 
 type SettingTLSUpdateParamsValueArray []string
 
-func (r SettingTLSUpdateParamsValueArray) ImplementsHostnamesSettingTLSUpdateParamsValue() {}
+func (r SettingTLSUpdateParamsValueArray) ImplementsHostnamesSettingTLSUpdateParamsValueUnion() {}
 
 type SettingTLSUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo     `json:"errors,required"`

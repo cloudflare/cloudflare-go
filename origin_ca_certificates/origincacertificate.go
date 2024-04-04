@@ -40,7 +40,7 @@ func NewOriginCACertificateService(opts ...option.RequestOption) (r *OriginCACer
 
 // Create an Origin CA certificate. Use your Origin CA Key as your User Service Key
 // when calling this endpoint ([see above](#requests)).
-func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *OriginCACertificateNewResponse, err error) {
+func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *OriginCACertificateNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateNewResponseEnvelope
 	path := "certificates"
@@ -97,7 +97,7 @@ func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID s
 // Get an existing Origin CA certificate by its serial number. Use your Origin CA
 // Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateGetResponse, err error) {
+func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateGetResponseEnvelope
 	path := fmt.Sprintf("certificates/%s", certificateID)
@@ -193,13 +193,13 @@ func (r OriginCACertificateRequestedValidity) IsKnown() bool {
 // Union satisfied by
 // [origin_ca_certificates.OriginCACertificateNewResponseUnknown] or
 // [shared.UnionString].
-type OriginCACertificateNewResponse interface {
-	ImplementsOriginCACertificatesOriginCACertificateNewResponse()
+type OriginCACertificateNewResponseUnion interface {
+	ImplementsOriginCACertificatesOriginCACertificateNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginCACertificateNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*OriginCACertificateNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -233,13 +233,13 @@ func (r originCACertificateDeleteResponseJSON) RawJSON() string {
 // Union satisfied by
 // [origin_ca_certificates.OriginCACertificateGetResponseUnknown] or
 // [shared.UnionString].
-type OriginCACertificateGetResponse interface {
-	ImplementsOriginCACertificatesOriginCACertificateGetResponse()
+type OriginCACertificateGetResponseUnion interface {
+	ImplementsOriginCACertificatesOriginCACertificateGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginCACertificateGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*OriginCACertificateGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -305,9 +305,9 @@ func (r OriginCACertificateNewParamsRequestedValidity) IsKnown() bool {
 }
 
 type OriginCACertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   OriginCACertificateNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   OriginCACertificateNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originCACertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -413,9 +413,9 @@ func (r OriginCACertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type OriginCACertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   OriginCACertificateGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   OriginCACertificateGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originCACertificateGetResponseEnvelopeJSON    `json:"-"`

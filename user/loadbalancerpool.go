@@ -127,7 +127,7 @@ func (r *LoadBalancerPoolService) Get(ctx context.Context, poolID string, opts .
 }
 
 // Fetch the latest pool health status for a single pool.
-func (r *LoadBalancerPoolService) Health(ctx context.Context, poolID string, opts ...option.RequestOption) (res *LoadBalancerPoolHealthResponse, err error) {
+func (r *LoadBalancerPoolService) Health(ctx context.Context, poolID string, opts ...option.RequestOption) (res *LoadBalancerPoolHealthResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolHealthResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s/health", poolID)
@@ -610,13 +610,13 @@ func (r loadBalancerPoolDeleteResponseJSON) RawJSON() string {
 //
 // Union satisfied by [user.LoadBalancerPoolHealthResponseUnknown] or
 // [shared.UnionString].
-type LoadBalancerPoolHealthResponse interface {
-	ImplementsUserLoadBalancerPoolHealthResponse()
+type LoadBalancerPoolHealthResponseUnion interface {
+	ImplementsUserLoadBalancerPoolHealthResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*LoadBalancerPoolHealthResponse)(nil)).Elem(),
+		reflect.TypeOf((*LoadBalancerPoolHealthResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -1756,7 +1756,7 @@ type LoadBalancerPoolHealthResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	Result LoadBalancerPoolHealthResponse `json:"result,required"`
+	Result LoadBalancerPoolHealthResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolHealthResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolHealthResponseEnvelopeJSON    `json:"-"`

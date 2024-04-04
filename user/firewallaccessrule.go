@@ -167,19 +167,56 @@ func (r AccessRuleAllowedMode) IsKnown() bool {
 }
 
 // The rule configuration.
+type AccessRuleConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the rule.
+	Target AccessRuleConfigurationTarget `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value string                      `json:"value"`
+	JSON  accessRuleConfigurationJSON `json:"-"`
+	union AccessRuleConfigurationUnion
+}
+
+// accessRuleConfigurationJSON contains the JSON metadata for the struct
+// [AccessRuleConfiguration]
+type accessRuleConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r accessRuleConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessRuleConfiguration) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r AccessRuleConfiguration) AsUnion() AccessRuleConfigurationUnion {
+	return r.union
+}
+
+// The rule configuration.
 //
 // Union satisfied by [user.AccessRuleConfigurationLegacyJhsIPConfiguration],
 // [user.AccessRuleConfigurationLegacyJhsIPV6Configuration],
 // [user.AccessRuleConfigurationLegacyJhsCIDRConfiguration],
 // [user.AccessRuleConfigurationLegacyJhsASNConfiguration] or
 // [user.AccessRuleConfigurationLegacyJhsCountryConfiguration].
-type AccessRuleConfiguration interface {
+type AccessRuleConfigurationUnion interface {
 	implementsUserAccessRuleConfiguration()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleConfiguration)(nil)).Elem(),
+		reflect.TypeOf((*AccessRuleConfigurationUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -428,6 +465,26 @@ func (r AccessRuleConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bo
 	return false
 }
 
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the rule.
+type AccessRuleConfigurationTarget string
+
+const (
+	AccessRuleConfigurationTargetIP      AccessRuleConfigurationTarget = "ip"
+	AccessRuleConfigurationTargetIp6     AccessRuleConfigurationTarget = "ip6"
+	AccessRuleConfigurationTargetIPRange AccessRuleConfigurationTarget = "ip_range"
+	AccessRuleConfigurationTargetASN     AccessRuleConfigurationTarget = "asn"
+	AccessRuleConfigurationTargetCountry AccessRuleConfigurationTarget = "country"
+)
+
+func (r AccessRuleConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleConfigurationTargetIP, AccessRuleConfigurationTargetIp6, AccessRuleConfigurationTargetIPRange, AccessRuleConfigurationTargetASN, AccessRuleConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
 // The action to apply to a matched request.
 type AccessRuleMode string
 
@@ -471,7 +528,7 @@ func (r firewallAccessRuleDeleteResponseJSON) RawJSON() string {
 
 type FirewallAccessRuleNewParams struct {
 	// The rule configuration.
-	Configuration param.Field[FirewallAccessRuleNewParamsConfiguration] `json:"configuration,required"`
+	Configuration param.Field[FirewallAccessRuleNewParamsConfigurationUnion] `json:"configuration,required"`
 	// The action to apply to a matched request.
 	Mode param.Field[FirewallAccessRuleNewParamsMode] `json:"mode,required"`
 	// An informative summary of the rule, typically used as a reminder or explanation.
@@ -483,15 +540,33 @@ func (r FirewallAccessRuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 // The rule configuration.
+type FirewallAccessRuleNewParamsConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the rule.
+	Target param.Field[FirewallAccessRuleNewParamsConfigurationTarget] `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r FirewallAccessRuleNewParamsConfiguration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r FirewallAccessRuleNewParamsConfiguration) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {
+}
+
+// The rule configuration.
 //
 // Satisfied by
 // [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration],
 // [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration],
 // [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration],
 // [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration],
-// [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration].
-type FirewallAccessRuleNewParamsConfiguration interface {
-	implementsUserFirewallAccessRuleNewParamsConfiguration()
+// [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration],
+// [FirewallAccessRuleNewParamsConfiguration].
+type FirewallAccessRuleNewParamsConfigurationUnion interface {
+	implementsUserFirewallAccessRuleNewParamsConfigurationUnion()
 }
 
 type FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration struct {
@@ -507,7 +582,7 @@ func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration) Marsha
 	return apijson.MarshalRoot(r)
 }
 
-func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration) implementsUserFirewallAccessRuleNewParamsConfiguration() {
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
@@ -538,7 +613,7 @@ func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration) Mars
 	return apijson.MarshalRoot(r)
 }
 
-func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration) implementsUserFirewallAccessRuleNewParamsConfiguration() {
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `ip6` when specifying an
@@ -570,7 +645,7 @@ func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) Mars
 	return apijson.MarshalRoot(r)
 }
 
-func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) implementsUserFirewallAccessRuleNewParamsConfiguration() {
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
@@ -601,7 +676,7 @@ func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration) implementsUserFirewallAccessRuleNewParamsConfiguration() {
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
@@ -633,7 +708,7 @@ func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration) M
 	return apijson.MarshalRoot(r)
 }
 
-func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration) implementsUserFirewallAccessRuleNewParamsConfiguration() {
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {
 }
 
 // The configuration target. You must set the target to `country` when specifying a
@@ -647,6 +722,26 @@ const (
 func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTarget) IsKnown() bool {
 	switch r {
 	case FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the rule.
+type FirewallAccessRuleNewParamsConfigurationTarget string
+
+const (
+	FirewallAccessRuleNewParamsConfigurationTargetIP      FirewallAccessRuleNewParamsConfigurationTarget = "ip"
+	FirewallAccessRuleNewParamsConfigurationTargetIp6     FirewallAccessRuleNewParamsConfigurationTarget = "ip6"
+	FirewallAccessRuleNewParamsConfigurationTargetIPRange FirewallAccessRuleNewParamsConfigurationTarget = "ip_range"
+	FirewallAccessRuleNewParamsConfigurationTargetASN     FirewallAccessRuleNewParamsConfigurationTarget = "asn"
+	FirewallAccessRuleNewParamsConfigurationTargetCountry FirewallAccessRuleNewParamsConfigurationTarget = "country"
+)
+
+func (r FirewallAccessRuleNewParamsConfigurationTarget) IsKnown() bool {
+	switch r {
+	case FirewallAccessRuleNewParamsConfigurationTargetIP, FirewallAccessRuleNewParamsConfigurationTargetIp6, FirewallAccessRuleNewParamsConfigurationTargetIPRange, FirewallAccessRuleNewParamsConfigurationTargetASN, FirewallAccessRuleNewParamsConfigurationTargetCountry:
 		return true
 	}
 	return false

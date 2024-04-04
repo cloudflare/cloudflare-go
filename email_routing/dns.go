@@ -56,7 +56,7 @@ type EmailDNSRecord struct {
 	Priority float64 `json:"priority"`
 	// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
 	// for 'automatic'.
-	TTL EmailDNSRecordTTL `json:"ttl"`
+	TTL EmailDNSRecordTTLUnion `json:"ttl"`
 	// DNS record type.
 	Type EmailDNSRecordType `json:"type"`
 	JSON emailDNSRecordJSON `json:"-"`
@@ -86,13 +86,13 @@ func (r emailDNSRecordJSON) RawJSON() string {
 //
 // Union satisfied by [shared.UnionFloat] or
 // [email_routing.EmailDNSRecordTTLNumber].
-type EmailDNSRecordTTL interface {
-	ImplementsEmailRoutingEmailDNSRecordTTL()
+type EmailDNSRecordTTLUnion interface {
+	ImplementsEmailRoutingEmailDNSRecordTTLUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*EmailDNSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*EmailDNSRecordTTLUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,

@@ -199,7 +199,7 @@ func (r ZoneSettingMobileRedirectParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingMobileRedirectParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingMobileRedirectParam) implementsZonesSettingEditParamsItemUnion() {}
 
 // Current value of the zone setting.
 type ZoneSettingMobileRedirectValueParam struct {

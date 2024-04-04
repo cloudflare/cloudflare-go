@@ -33,7 +33,7 @@ func NewDeviceUnrevokeService(opts ...option.RequestOption) (r *DeviceUnrevokeSe
 }
 
 // Unrevokes a list of devices.
-func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
+func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173Union, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceUnrevokeNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/unrevoke", params.AccountID)
@@ -56,9 +56,9 @@ func (r DeviceUnrevokeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceUnrevokeNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   shared.UnnamedSchemaRef173 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173Union `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceUnrevokeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceUnrevokeNewResponseEnvelopeJSON    `json:"-"`

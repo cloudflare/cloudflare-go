@@ -42,7 +42,7 @@ func NewCustomCertificateService(opts ...option.RequestOption) (r *CustomCertifi
 }
 
 // Upload a new SSL certificate for a zone.
-func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponse, err error) {
+func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates", params.ZoneID)
@@ -97,7 +97,7 @@ func (r *CustomCertificateService) Delete(ctx context.Context, customCertificate
 // Upload a new private key and/or PEM/CRT for the SSL certificate. Note: PATCHing
 // a configuration for sni_custom certificates will result in a new resource id
 // being returned, and the previous one being deleted.
-func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponse, err error) {
+func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", params.ZoneID, customCertificateID)
@@ -110,7 +110,7 @@ func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID
 }
 
 // SSL Configuration Details
-func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateGetResponse, err error) {
+func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", query.ZoneID, customCertificateID)
@@ -266,13 +266,13 @@ func (r CustomCertificateGeoRestrictionsLabel) IsKnown() bool {
 
 // Union satisfied by [custom_certificates.CustomCertificateNewResponseUnknown] or
 // [shared.UnionString].
-type CustomCertificateNewResponse interface {
-	ImplementsCustomCertificatesCustomCertificateNewResponse()
+type CustomCertificateNewResponseUnion interface {
+	ImplementsCustomCertificatesCustomCertificateNewResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateNewResponse)(nil)).Elem(),
+		reflect.TypeOf((*CustomCertificateNewResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -305,13 +305,13 @@ func (r customCertificateDeleteResponseJSON) RawJSON() string {
 
 // Union satisfied by [custom_certificates.CustomCertificateEditResponseUnknown] or
 // [shared.UnionString].
-type CustomCertificateEditResponse interface {
-	ImplementsCustomCertificatesCustomCertificateEditResponse()
+type CustomCertificateEditResponseUnion interface {
+	ImplementsCustomCertificatesCustomCertificateEditResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*CustomCertificateEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -322,13 +322,13 @@ func init() {
 
 // Union satisfied by [custom_certificates.CustomCertificateGetResponseUnknown] or
 // [shared.UnionString].
-type CustomCertificateGetResponse interface {
-	ImplementsCustomCertificatesCustomCertificateGetResponse()
+type CustomCertificateGetResponseUnion interface {
+	ImplementsCustomCertificatesCustomCertificateGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*CustomCertificateGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -425,9 +425,9 @@ func (r CustomCertificateNewParamsType) IsKnown() bool {
 }
 
 type CustomCertificateNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   CustomCertificateNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   CustomCertificateNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -645,9 +645,9 @@ func (r CustomCertificateEditParamsGeoRestrictionsLabel) IsKnown() bool {
 }
 
 type CustomCertificateEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   CustomCertificateEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   CustomCertificateEditResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -693,9 +693,9 @@ type CustomCertificateGetParams struct {
 }
 
 type CustomCertificateGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   CustomCertificateGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   CustomCertificateGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateGetResponseEnvelopeJSON    `json:"-"`

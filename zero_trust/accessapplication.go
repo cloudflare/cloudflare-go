@@ -65,7 +65,7 @@ func (r *AccessApplicationService) New(ctx context.Context, params AccessApplica
 }
 
 // Updates an Access application.
-func (r *AccessApplicationService) Update(ctx context.Context, appID AccessApplicationUpdateParamsSelfHostedApplicationAppID, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *ZeroTrustApps, err error) {
+func (r *AccessApplicationService) Update(ctx context.Context, appID AccessApplicationUpdateParamsSelfHostedApplicationAppIDUnion, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *ZeroTrustApps, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationUpdateResponseEnvelope
 	var accountOrZone string
@@ -119,7 +119,7 @@ func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, query Acc
 }
 
 // Deletes an application from Access.
-func (r *AccessApplicationService) Delete(ctx context.Context, appID AccessApplicationDeleteParamsAppID, body AccessApplicationDeleteParams, opts ...option.RequestOption) (res *AccessApplicationDeleteResponse, err error) {
+func (r *AccessApplicationService) Delete(ctx context.Context, appID AccessApplicationDeleteParamsAppIDUnion, body AccessApplicationDeleteParams, opts ...option.RequestOption) (res *AccessApplicationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationDeleteResponseEnvelope
 	var accountOrZone string
@@ -141,7 +141,7 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AccessAppli
 }
 
 // Fetches information about an Access application.
-func (r *AccessApplicationService) Get(ctx context.Context, appID AccessApplicationGetParamsAppID, query AccessApplicationGetParams, opts ...option.RequestOption) (res *ZeroTrustApps, err error) {
+func (r *AccessApplicationService) Get(ctx context.Context, appID AccessApplicationGetParamsAppIDUnion, query AccessApplicationGetParams, opts ...option.RequestOption) (res *ZeroTrustApps, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationGetResponseEnvelope
 	var accountOrZone string
@@ -163,7 +163,7 @@ func (r *AccessApplicationService) Get(ctx context.Context, appID AccessApplicat
 }
 
 // Revokes all tokens issued for an application.
-func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AccessApplicationRevokeTokensParamsAppID, body AccessApplicationRevokeTokensParams, opts ...option.RequestOption) (res *AccessApplicationRevokeTokensResponse, err error) {
+func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AccessApplicationRevokeTokensParamsAppIDUnion, body AccessApplicationRevokeTokensParams, opts ...option.RequestOption) (res *AccessApplicationRevokeTokensResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationRevokeTokensResponseEnvelope
 	var accountOrZone string
@@ -184,6 +184,120 @@ func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID Acces
 	return
 }
 
+type ZeroTrustApps struct {
+	// Audience tag.
+	Aud       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// UUID
+	ID        string    `json:"id"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// When set to true, users can authenticate to this application using their WARP
+	// session. When set to false this application will always require direct IdP
+	// authentication. This setting always overrides the organization setting for WARP
+	// authentication.
+	AllowAuthenticateViaWARP bool        `json:"allow_authenticate_via_warp"`
+	AllowedIDPs              interface{} `json:"allowed_idps,required"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible bool `json:"app_launcher_visible"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CorsHeaders            interface{} `json:"cors_headers,required"`
+	// The custom error message shown to a user when they are denied access to the
+	// application.
+	CustomDenyMessage string `json:"custom_deny_message"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string      `json:"custom_non_identity_deny_url"`
+	CustomPages              interface{} `json:"custom_pages,required"`
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain string `json:"domain"`
+	// Enables the binding cookie, which increases security against compromised
+	// authorization tokens and CSRF attacks.
+	EnableBindingCookie bool `json:"enable_binding_cookie"`
+	// Enables the HttpOnly cookie attribute, which increases security against XSS
+	// attacks.
+	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL string `json:"logo_url"`
+	// The name of the application.
+	Name string `json:"name"`
+	// Enables cookie paths to scope an application's JWT to the application path. If
+	// disabled, the JWT will scope to the hostname by default
+	PathCookieAttribute bool `json:"path_cookie_attribute"`
+	// Sets the SameSite cookie setting, which provides increased security against CSRF
+	// attacks.
+	SameSiteCookieAttribute string      `json:"same_site_cookie_attribute"`
+	SelfHostedDomains       interface{} `json:"self_hosted_domains,required"`
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
+	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h.
+	SessionDuration string `json:"session_duration"`
+	// Enables automatic authentication through cloudflared.
+	SkipInterstitial bool        `json:"skip_interstitial"`
+	Tags             interface{} `json:"tags,required"`
+	// The application type.
+	Type    string            `json:"type"`
+	SaasApp interface{}       `json:"saas_app,required"`
+	JSON    zeroTrustAppsJSON `json:"-"`
+	union   ZeroTrustAppsUnion
+}
+
+// zeroTrustAppsJSON contains the JSON metadata for the struct [ZeroTrustApps]
+type zeroTrustAppsJSON struct {
+	Aud                      apijson.Field
+	CreatedAt                apijson.Field
+	ID                       apijson.Field
+	UpdatedAt                apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
+	AllowedIDPs              apijson.Field
+	AppLauncherVisible       apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CorsHeaders              apijson.Field
+	CustomDenyMessage        apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	EnableBindingCookie      apijson.Field
+	HTTPOnlyCookieAttribute  apijson.Field
+	LogoURL                  apijson.Field
+	Name                     apijson.Field
+	PathCookieAttribute      apijson.Field
+	SameSiteCookieAttribute  apijson.Field
+	SelfHostedDomains        apijson.Field
+	ServiceAuth401Redirect   apijson.Field
+	SessionDuration          apijson.Field
+	SkipInterstitial         apijson.Field
+	Tags                     apijson.Field
+	Type                     apijson.Field
+	SaasApp                  apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r zeroTrustAppsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ZeroTrustApps) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ZeroTrustApps) AsUnion() ZeroTrustAppsUnion {
+	return r.union
+}
+
 // Union satisfied by [zero_trust.ZeroTrustAppsSelfHostedApplication],
 // [zero_trust.ZeroTrustAppsSaaSApplication],
 // [zero_trust.ZeroTrustAppsBrowserSSHApplication],
@@ -192,13 +306,13 @@ func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID Acces
 // [zero_trust.ZeroTrustAppsDeviceEnrollmentPermissionsApplication],
 // [zero_trust.ZeroTrustAppsBrowserIsolationPermissionsApplication] or
 // [zero_trust.ZeroTrustAppsBookmarkApplication].
-type ZeroTrustApps interface {
+type ZeroTrustAppsUnion interface {
 	implementsZeroTrustZeroTrustApps()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZeroTrustApps)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustAppsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -473,16 +587,108 @@ func (r zeroTrustAppsSaaSApplicationJSON) RawJSON() string {
 
 func (r ZeroTrustAppsSaaSApplication) implementsZeroTrustZeroTrustApps() {}
 
+type ZeroTrustAppsSaaSApplicationSaasApp struct {
+	// Optional identifier indicating the authentication protocol used for the saas
+	// app. Required for OIDC. Default if unset is "saml"
+	AuthType ZeroTrustAppsSaaSApplicationSaasAppAuthType `json:"auth_type"`
+	// The service provider's endpoint that is responsible for receiving and parsing a
+	// SAML assertion.
+	ConsumerServiceURL string      `json:"consumer_service_url"`
+	CreatedAt          time.Time   `json:"created_at" format:"date-time"`
+	CustomAttributes   interface{} `json:"custom_attributes,required"`
+	// The URL that the user will be redirected to after a successful login for IDP
+	// initiated logins.
+	DefaultRelayState string `json:"default_relay_state"`
+	// The unique identifier for your SaaS application.
+	IDPEntityID string `json:"idp_entity_id"`
+	// The format of the name identifier sent to the SaaS application.
+	NameIDFormat shared.UnnamedSchemaRef77 `json:"name_id_format"`
+	// A [JSONata](https://jsonata.org/) expression that transforms an application's
+	// user identities into a NameID value for its SAML assertion. This expression
+	// should evaluate to a singular string. The output of this expression can override
+	// the `name_id_format` setting.
+	NameIDTransformJsonata string `json:"name_id_transform_jsonata"`
+	// The Access public certificate that will be used to verify your identity.
+	PublicKey string `json:"public_key"`
+	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
+	// user identities into attribute assertions in the SAML response. The expression
+	// can transform id, email, name, and groups values. It can also transform fields
+	// listed in the saml_attributes or oidc_fields of the identity provider used to
+	// authenticate. The output of this expression must be a JSON object.
+	SamlAttributeTransformJsonata string `json:"saml_attribute_transform_jsonata"`
+	// A globally unique name for an identity or service provider.
+	SpEntityID string `json:"sp_entity_id"`
+	// The endpoint where your SaaS application will send login requests.
+	SSOEndpoint string    `json:"sso_endpoint"`
+	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
+	// The URL where this applications tile redirects users
+	AppLauncherURL string `json:"app_launcher_url"`
+	// The application client id
+	ClientID string `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret string      `json:"client_secret"`
+	GrantTypes   interface{} `json:"grant_types,required"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex string                                  `json:"group_filter_regex"`
+	RedirectURIs     interface{}                             `json:"redirect_uris,required"`
+	Scopes           interface{}                             `json:"scopes,required"`
+	JSON             zeroTrustAppsSaaSApplicationSaasAppJSON `json:"-"`
+	union            ZeroTrustAppsSaaSApplicationSaasAppUnion
+}
+
+// zeroTrustAppsSaaSApplicationSaasAppJSON contains the JSON metadata for the
+// struct [ZeroTrustAppsSaaSApplicationSaasApp]
+type zeroTrustAppsSaaSApplicationSaasAppJSON struct {
+	AuthType                      apijson.Field
+	ConsumerServiceURL            apijson.Field
+	CreatedAt                     apijson.Field
+	CustomAttributes              apijson.Field
+	DefaultRelayState             apijson.Field
+	IDPEntityID                   apijson.Field
+	NameIDFormat                  apijson.Field
+	NameIDTransformJsonata        apijson.Field
+	PublicKey                     apijson.Field
+	SamlAttributeTransformJsonata apijson.Field
+	SpEntityID                    apijson.Field
+	SSOEndpoint                   apijson.Field
+	UpdatedAt                     apijson.Field
+	AppLauncherURL                apijson.Field
+	ClientID                      apijson.Field
+	ClientSecret                  apijson.Field
+	GrantTypes                    apijson.Field
+	GroupFilterRegex              apijson.Field
+	RedirectURIs                  apijson.Field
+	Scopes                        apijson.Field
+	raw                           string
+	ExtraFields                   map[string]apijson.Field
+}
+
+func (r zeroTrustAppsSaaSApplicationSaasAppJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ZeroTrustAppsSaaSApplicationSaasApp) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ZeroTrustAppsSaaSApplicationSaasApp) AsUnion() ZeroTrustAppsSaaSApplicationSaasAppUnion {
+	return r.union
+}
+
 // Union satisfied by
 // [zero_trust.ZeroTrustAppsSaaSApplicationSaasAppAccessSamlSaasApp] or
 // [zero_trust.ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasApp].
-type ZeroTrustAppsSaaSApplicationSaasApp interface {
+type ZeroTrustAppsSaaSApplicationSaasAppUnion interface {
 	implementsZeroTrustZeroTrustAppsSaaSApplicationSaasApp()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZeroTrustAppsSaaSApplicationSaasApp)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustAppsSaaSApplicationSaasAppUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -707,6 +913,23 @@ const (
 func (r ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScope) IsKnown() bool {
 	switch r {
 	case ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeOpenid, ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeGroups, ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeEmail, ZeroTrustAppsSaaSApplicationSaasAppAccessOidcSaasAppScopeProfile:
+		return true
+	}
+	return false
+}
+
+// Optional identifier indicating the authentication protocol used for the saas
+// app. Required for OIDC. Default if unset is "saml"
+type ZeroTrustAppsSaaSApplicationSaasAppAuthType string
+
+const (
+	ZeroTrustAppsSaaSApplicationSaasAppAuthTypeSaml ZeroTrustAppsSaaSApplicationSaasAppAuthType = "saml"
+	ZeroTrustAppsSaaSApplicationSaasAppAuthTypeOidc ZeroTrustAppsSaaSApplicationSaasAppAuthType = "oidc"
+)
+
+func (r ZeroTrustAppsSaaSApplicationSaasAppAuthType) IsKnown() bool {
+	switch r {
+	case ZeroTrustAppsSaaSApplicationSaasAppAuthTypeSaml, ZeroTrustAppsSaaSApplicationSaasAppAuthTypeOidc:
 		return true
 	}
 	return false
@@ -1536,8 +1759,8 @@ type AccessApplicationNewParamsSaaSApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
-	Name    param.Field[string]                                           `json:"name"`
-	SaasApp param.Field[AccessApplicationNewParamsSaaSApplicationSaasApp] `json:"saas_app"`
+	Name    param.Field[string]                                                `json:"name"`
+	SaasApp param.Field[AccessApplicationNewParamsSaaSApplicationSaasAppUnion] `json:"saas_app"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -1561,11 +1784,64 @@ func (AccessApplicationNewParamsSaaSApplication) ImplementsAccessApplicationNewP
 
 }
 
+type AccessApplicationNewParamsSaaSApplicationSaasApp struct {
+	// Optional identifier indicating the authentication protocol used for the saas
+	// app. Required for OIDC. Default if unset is "saml"
+	AuthType param.Field[AccessApplicationNewParamsSaaSApplicationSaasAppAuthType] `json:"auth_type"`
+	// The service provider's endpoint that is responsible for receiving and parsing a
+	// SAML assertion.
+	ConsumerServiceURL param.Field[string]      `json:"consumer_service_url"`
+	CustomAttributes   param.Field[interface{}] `json:"custom_attributes,required"`
+	// The URL that the user will be redirected to after a successful login for IDP
+	// initiated logins.
+	DefaultRelayState param.Field[string] `json:"default_relay_state"`
+	// The unique identifier for your SaaS application.
+	IDPEntityID param.Field[string] `json:"idp_entity_id"`
+	// The format of the name identifier sent to the SaaS application.
+	NameIDFormat param.Field[shared.UnnamedSchemaRef77] `json:"name_id_format"`
+	// A [JSONata](https://jsonata.org/) expression that transforms an application's
+	// user identities into a NameID value for its SAML assertion. This expression
+	// should evaluate to a singular string. The output of this expression can override
+	// the `name_id_format` setting.
+	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
+	// The Access public certificate that will be used to verify your identity.
+	PublicKey param.Field[string] `json:"public_key"`
+	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
+	// user identities into attribute assertions in the SAML response. The expression
+	// can transform id, email, name, and groups values. It can also transform fields
+	// listed in the saml_attributes or oidc_fields of the identity provider used to
+	// authenticate. The output of this expression must be a JSON object.
+	SamlAttributeTransformJsonata param.Field[string] `json:"saml_attribute_transform_jsonata"`
+	// A globally unique name for an identity or service provider.
+	SpEntityID param.Field[string] `json:"sp_entity_id"`
+	// The endpoint where your SaaS application will send login requests.
+	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
+	// The URL where this applications tile redirects users
+	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
+	// The application client id
+	ClientID param.Field[string] `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	GrantTypes   param.Field[interface{}] `json:"grant_types,required"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex param.Field[string]      `json:"group_filter_regex"`
+	RedirectURIs     param.Field[interface{}] `json:"redirect_uris,required"`
+	Scopes           param.Field[interface{}] `json:"scopes,required"`
+}
+
+func (r AccessApplicationNewParamsSaaSApplicationSaasApp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsSaaSApplicationSaasApp) implementsZeroTrustAccessApplicationNewParamsSaaSApplicationSaasAppUnion() {
+}
+
 // Satisfied by
 // [zero_trust.AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasApp],
-// [zero_trust.AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasApp].
-type AccessApplicationNewParamsSaaSApplicationSaasApp interface {
-	implementsZeroTrustAccessApplicationNewParamsSaaSApplicationSaasApp()
+// [zero_trust.AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasApp],
+// [AccessApplicationNewParamsSaaSApplicationSaasApp].
+type AccessApplicationNewParamsSaaSApplicationSaasAppUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsSaaSApplicationSaasAppUnion()
 }
 
 type AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasApp struct {
@@ -1606,7 +1882,7 @@ func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasApp) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustAccessApplicationNewParamsSaaSApplicationSaasApp() {
+func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustAccessApplicationNewParamsSaaSApplicationSaasAppUnion() {
 }
 
 // Optional identifier indicating the authentication protocol used for the saas
@@ -1665,7 +1941,7 @@ func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasApp) Marsh
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustAccessApplicationNewParamsSaaSApplicationSaasApp() {
+func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustAccessApplicationNewParamsSaaSApplicationSaasAppUnion() {
 }
 
 // Identifier of the authentication protocol used for the saas app. Required for
@@ -1712,6 +1988,23 @@ const (
 func (r AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasAppScope) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasAppScopeOpenid, AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasAppScopeGroups, AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasAppScopeEmail, AccessApplicationNewParamsSaaSApplicationSaasAppAccessOidcSaasAppScopeProfile:
+		return true
+	}
+	return false
+}
+
+// Optional identifier indicating the authentication protocol used for the saas
+// app. Required for OIDC. Default if unset is "saml"
+type AccessApplicationNewParamsSaaSApplicationSaasAppAuthType string
+
+const (
+	AccessApplicationNewParamsSaaSApplicationSaasAppAuthTypeSaml AccessApplicationNewParamsSaaSApplicationSaasAppAuthType = "saml"
+	AccessApplicationNewParamsSaaSApplicationSaasAppAuthTypeOidc AccessApplicationNewParamsSaaSApplicationSaasAppAuthType = "oidc"
+)
+
+func (r AccessApplicationNewParamsSaaSApplicationSaasAppAuthType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsSaaSApplicationSaasAppAuthTypeSaml, AccessApplicationNewParamsSaaSApplicationSaasAppAuthTypeOidc:
 		return true
 	}
 	return false
@@ -2328,8 +2621,8 @@ func (AccessApplicationUpdateParamsSelfHostedApplication) ImplementsAccessApplic
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUpdateParamsSelfHostedApplicationAppID interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsSelfHostedApplicationAppID()
+type AccessApplicationUpdateParamsSelfHostedApplicationAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationUpdateParamsSelfHostedApplicationAppIDUnion()
 }
 
 type AccessApplicationUpdateParamsSelfHostedApplicationCorsHeaders struct {
@@ -2396,8 +2689,8 @@ type AccessApplicationUpdateParamsSaaSApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
-	Name    param.Field[string]                                              `json:"name"`
-	SaasApp param.Field[AccessApplicationUpdateParamsSaaSApplicationSaasApp] `json:"saas_app"`
+	Name    param.Field[string]                                                   `json:"name"`
+	SaasApp param.Field[AccessApplicationUpdateParamsSaaSApplicationSaasAppUnion] `json:"saas_app"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
@@ -2424,15 +2717,68 @@ func (AccessApplicationUpdateParamsSaaSApplication) ImplementsAccessApplicationU
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUpdateParamsSaaSApplicationAppID interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationAppID()
+type AccessApplicationUpdateParamsSaaSApplicationAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationAppIDUnion()
+}
+
+type AccessApplicationUpdateParamsSaaSApplicationSaasApp struct {
+	// Optional identifier indicating the authentication protocol used for the saas
+	// app. Required for OIDC. Default if unset is "saml"
+	AuthType param.Field[AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthType] `json:"auth_type"`
+	// The service provider's endpoint that is responsible for receiving and parsing a
+	// SAML assertion.
+	ConsumerServiceURL param.Field[string]      `json:"consumer_service_url"`
+	CustomAttributes   param.Field[interface{}] `json:"custom_attributes,required"`
+	// The URL that the user will be redirected to after a successful login for IDP
+	// initiated logins.
+	DefaultRelayState param.Field[string] `json:"default_relay_state"`
+	// The unique identifier for your SaaS application.
+	IDPEntityID param.Field[string] `json:"idp_entity_id"`
+	// The format of the name identifier sent to the SaaS application.
+	NameIDFormat param.Field[shared.UnnamedSchemaRef77] `json:"name_id_format"`
+	// A [JSONata](https://jsonata.org/) expression that transforms an application's
+	// user identities into a NameID value for its SAML assertion. This expression
+	// should evaluate to a singular string. The output of this expression can override
+	// the `name_id_format` setting.
+	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
+	// The Access public certificate that will be used to verify your identity.
+	PublicKey param.Field[string] `json:"public_key"`
+	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
+	// user identities into attribute assertions in the SAML response. The expression
+	// can transform id, email, name, and groups values. It can also transform fields
+	// listed in the saml_attributes or oidc_fields of the identity provider used to
+	// authenticate. The output of this expression must be a JSON object.
+	SamlAttributeTransformJsonata param.Field[string] `json:"saml_attribute_transform_jsonata"`
+	// A globally unique name for an identity or service provider.
+	SpEntityID param.Field[string] `json:"sp_entity_id"`
+	// The endpoint where your SaaS application will send login requests.
+	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
+	// The URL where this applications tile redirects users
+	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
+	// The application client id
+	ClientID param.Field[string] `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret param.Field[string]      `json:"client_secret"`
+	GrantTypes   param.Field[interface{}] `json:"grant_types,required"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex param.Field[string]      `json:"group_filter_regex"`
+	RedirectURIs     param.Field[interface{}] `json:"redirect_uris,required"`
+	Scopes           param.Field[interface{}] `json:"scopes,required"`
+}
+
+func (r AccessApplicationUpdateParamsSaaSApplicationSaasApp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsSaaSApplicationSaasApp) implementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationSaasAppUnion() {
 }
 
 // Satisfied by
 // [zero_trust.AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasApp],
-// [zero_trust.AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasApp].
-type AccessApplicationUpdateParamsSaaSApplicationSaasApp interface {
-	implementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationSaasApp()
+// [zero_trust.AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasApp],
+// [AccessApplicationUpdateParamsSaaSApplicationSaasApp].
+type AccessApplicationUpdateParamsSaaSApplicationSaasAppUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationSaasAppUnion()
 }
 
 type AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasApp struct {
@@ -2473,7 +2819,7 @@ func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasApp) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationSaasApp() {
+func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationSaasAppUnion() {
 }
 
 // Optional identifier indicating the authentication protocol used for the saas
@@ -2532,7 +2878,7 @@ func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasApp) Ma
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationSaasApp() {
+func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationSaasAppUnion() {
 }
 
 // Identifier of the authentication protocol used for the saas app. Required for
@@ -2579,6 +2925,23 @@ const (
 func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasAppScope) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasAppScopeOpenid, AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasAppScopeGroups, AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasAppScopeEmail, AccessApplicationUpdateParamsSaaSApplicationSaasAppAccessOidcSaasAppScopeProfile:
+		return true
+	}
+	return false
+}
+
+// Optional identifier indicating the authentication protocol used for the saas
+// app. Required for OIDC. Default if unset is "saml"
+type AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthType string
+
+const (
+	AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthTypeSaml AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthType = "saml"
+	AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthTypeOidc AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthType = "oidc"
+)
+
+func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthTypeSaml, AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthTypeOidc:
 		return true
 	}
 	return false
@@ -2669,8 +3032,8 @@ func (AccessApplicationUpdateParamsBrowserSSHApplication) ImplementsAccessApplic
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUpdateParamsBrowserSSHApplicationAppID interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBrowserSSHApplicationAppID()
+type AccessApplicationUpdateParamsBrowserSSHApplicationAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationUpdateParamsBrowserSSHApplicationAppIDUnion()
 }
 
 type AccessApplicationUpdateParamsBrowserSSHApplicationCorsHeaders struct {
@@ -2804,8 +3167,8 @@ func (AccessApplicationUpdateParamsBrowserVncApplication) ImplementsAccessApplic
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUpdateParamsBrowserVncApplicationAppID interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBrowserVncApplicationAppID()
+type AccessApplicationUpdateParamsBrowserVncApplicationAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationUpdateParamsBrowserVncApplicationAppIDUnion()
 }
 
 type AccessApplicationUpdateParamsBrowserVncApplicationCorsHeaders struct {
@@ -2892,8 +3255,8 @@ func (AccessApplicationUpdateParamsAppLauncherApplication) ImplementsAccessAppli
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUpdateParamsAppLauncherApplicationAppID interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsAppLauncherApplicationAppID()
+type AccessApplicationUpdateParamsAppLauncherApplicationAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationUpdateParamsAppLauncherApplicationAppIDUnion()
 }
 
 // The application type.
@@ -2957,8 +3320,8 @@ func (AccessApplicationUpdateParamsDeviceEnrollmentPermissionsApplication) Imple
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUpdateParamsDeviceEnrollmentPermissionsApplicationAppID interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsDeviceEnrollmentPermissionsApplicationAppID()
+type AccessApplicationUpdateParamsDeviceEnrollmentPermissionsApplicationAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationUpdateParamsDeviceEnrollmentPermissionsApplicationAppIDUnion()
 }
 
 // The application type.
@@ -3022,8 +3385,8 @@ func (AccessApplicationUpdateParamsBrowserIsolationPermissionsApplication) Imple
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUpdateParamsBrowserIsolationPermissionsApplicationAppID interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBrowserIsolationPermissionsApplicationAppID()
+type AccessApplicationUpdateParamsBrowserIsolationPermissionsApplicationAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationUpdateParamsBrowserIsolationPermissionsApplicationAppIDUnion()
 }
 
 // The application type.
@@ -3088,8 +3451,8 @@ func (AccessApplicationUpdateParamsBookmarkApplication) ImplementsAccessApplicat
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationUpdateParamsBookmarkApplicationAppID interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBookmarkApplicationAppID()
+type AccessApplicationUpdateParamsBookmarkApplicationAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationUpdateParamsBookmarkApplicationAppIDUnion()
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
@@ -3152,8 +3515,8 @@ type AccessApplicationDeleteParams struct {
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationDeleteParamsAppID interface {
-	ImplementsZeroTrustAccessApplicationDeleteParamsAppID()
+type AccessApplicationDeleteParamsAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationDeleteParamsAppIDUnion()
 }
 
 type AccessApplicationDeleteResponseEnvelope struct {
@@ -3209,8 +3572,8 @@ type AccessApplicationGetParams struct {
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationGetParamsAppID interface {
-	ImplementsZeroTrustAccessApplicationGetParamsAppID()
+type AccessApplicationGetParamsAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationGetParamsAppIDUnion()
 }
 
 type AccessApplicationGetResponseEnvelope struct {
@@ -3266,8 +3629,8 @@ type AccessApplicationRevokeTokensParams struct {
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessApplicationRevokeTokensParamsAppID interface {
-	ImplementsZeroTrustAccessApplicationRevokeTokensParamsAppID()
+type AccessApplicationRevokeTokensParamsAppIDUnion interface {
+	ImplementsZeroTrustAccessApplicationRevokeTokensParamsAppIDUnion()
 }
 
 type AccessApplicationRevokeTokensResponseEnvelope struct {

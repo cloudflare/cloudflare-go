@@ -172,7 +172,7 @@ func (r ZoneSettingSecurityLevelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingSecurityLevelParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingSecurityLevelParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingSecurityLevelEditParams struct {
 	// Identifier

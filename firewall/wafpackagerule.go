@@ -86,7 +86,7 @@ func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, rule
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *WAFPackageRuleGetResponse, err error) {
+func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *WAFPackageRuleGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageRuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", query.ZoneID, packageID, ruleID)
@@ -102,17 +102,72 @@ func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleI
 // score that will determine if a request is considered malicious. You can
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
+type WAFManagedRulesRule struct {
+	// The public description of the WAF rule.
+	Description string `json:"description,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	// The unique identifier of the WAF rule.
+	ID string `json:"id,required"`
+	// The unique identifier of a WAF package.
+	PackageID string `json:"package_id,required"`
+	// The order in which the individual WAF rule is executed within its rule group.
+	Priority     string      `json:"priority,required"`
+	AllowedModes interface{} `json:"allowed_modes"`
+	// When set to `on`, the current WAF rule will be used when evaluating the request.
+	// Applies to anomaly detection WAF rules.
+	Mode        WAFManagedRulesRuleMode `json:"mode,required"`
+	DefaultMode interface{}             `json:"default_mode,required"`
+	JSON        wafManagedRulesRuleJSON `json:"-"`
+	union       WAFManagedRulesRuleUnion
+}
+
+// wafManagedRulesRuleJSON contains the JSON metadata for the struct
+// [WAFManagedRulesRule]
+type wafManagedRulesRuleJSON struct {
+	Description  apijson.Field
+	Group        apijson.Field
+	ID           apijson.Field
+	PackageID    apijson.Field
+	Priority     apijson.Field
+	AllowedModes apijson.Field
+	Mode         apijson.Field
+	DefaultMode  apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r wafManagedRulesRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *WAFManagedRulesRule) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r WAFManagedRulesRule) AsUnion() WAFManagedRulesRuleUnion {
+	return r.union
+}
+
+// When triggered, anomaly detection WAF rules contribute to an overall threat
+// score that will determine if a request is considered malicious. You can
+// configure the total scoring threshold through the 'sensitivity' property of the
+// WAF package.
 //
 // Union satisfied by [firewall.WAFManagedRulesRuleWAFManagedRulesAnomalyRule],
 // [firewall.WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRule] or
 // [firewall.WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRule].
-type WAFManagedRulesRule interface {
+type WAFManagedRulesRuleUnion interface {
 	implementsFirewallWAFManagedRulesRule()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFManagedRulesRule)(nil)).Elem(),
+		reflect.TypeOf((*WAFManagedRulesRuleUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -403,6 +458,83 @@ func (r WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode) IsKnown() bo
 	return false
 }
 
+// When set to `on`, the current WAF rule will be used when evaluating the request.
+// Applies to anomaly detection WAF rules.
+type WAFManagedRulesRuleMode string
+
+const (
+	WAFManagedRulesRuleModeOn        WAFManagedRulesRuleMode = "on"
+	WAFManagedRulesRuleModeOff       WAFManagedRulesRuleMode = "off"
+	WAFManagedRulesRuleModeDefault   WAFManagedRulesRuleMode = "default"
+	WAFManagedRulesRuleModeDisable   WAFManagedRulesRuleMode = "disable"
+	WAFManagedRulesRuleModeSimulate  WAFManagedRulesRuleMode = "simulate"
+	WAFManagedRulesRuleModeBlock     WAFManagedRulesRuleMode = "block"
+	WAFManagedRulesRuleModeChallenge WAFManagedRulesRuleMode = "challenge"
+)
+
+func (r WAFManagedRulesRuleMode) IsKnown() bool {
+	switch r {
+	case WAFManagedRulesRuleModeOn, WAFManagedRulesRuleModeOff, WAFManagedRulesRuleModeDefault, WAFManagedRulesRuleModeDisable, WAFManagedRulesRuleModeSimulate, WAFManagedRulesRuleModeBlock, WAFManagedRulesRuleModeChallenge:
+		return true
+	}
+	return false
+}
+
+// When triggered, anomaly detection WAF rules contribute to an overall threat
+// score that will determine if a request is considered malicious. You can
+// configure the total scoring threshold through the 'sensitivity' property of the
+// WAF package.
+type WAFPackageRuleEditResponse struct {
+	// The public description of the WAF rule.
+	Description string `json:"description,required"`
+	// The rule group to which the current WAF rule belongs.
+	Group shared.UnnamedSchemaRef120 `json:"group,required"`
+	// The unique identifier of the WAF rule.
+	ID string `json:"id,required"`
+	// The unique identifier of a WAF package.
+	PackageID string `json:"package_id,required"`
+	// The order in which the individual WAF rule is executed within its rule group.
+	Priority     string      `json:"priority,required"`
+	AllowedModes interface{} `json:"allowed_modes"`
+	// When set to `on`, the current WAF rule will be used when evaluating the request.
+	// Applies to anomaly detection WAF rules.
+	Mode        WAFPackageRuleEditResponseMode `json:"mode,required"`
+	DefaultMode interface{}                    `json:"default_mode,required"`
+	JSON        wafPackageRuleEditResponseJSON `json:"-"`
+	union       WAFPackageRuleEditResponseUnion
+}
+
+// wafPackageRuleEditResponseJSON contains the JSON metadata for the struct
+// [WAFPackageRuleEditResponse]
+type wafPackageRuleEditResponseJSON struct {
+	Description  apijson.Field
+	Group        apijson.Field
+	ID           apijson.Field
+	PackageID    apijson.Field
+	Priority     apijson.Field
+	AllowedModes apijson.Field
+	Mode         apijson.Field
+	DefaultMode  apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r wafPackageRuleEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *WAFPackageRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r WAFPackageRuleEditResponse) AsUnion() WAFPackageRuleEditResponseUnion {
+	return r.union
+}
+
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
 // configure the total scoring threshold through the 'sensitivity' property of the
@@ -412,13 +544,13 @@ func (r WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode) IsKnown() bo
 // [firewall.WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule],
 // [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule] or
 // [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule].
-type WAFPackageRuleEditResponse interface {
+type WAFPackageRuleEditResponseUnion interface {
 	implementsFirewallWAFPackageRuleEditResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageRuleEditResponse)(nil)).Elem(),
+		reflect.TypeOf((*WAFPackageRuleEditResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -712,15 +844,37 @@ func (r WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleMode) IsKno
 	return false
 }
 
+// When set to `on`, the current WAF rule will be used when evaluating the request.
+// Applies to anomaly detection WAF rules.
+type WAFPackageRuleEditResponseMode string
+
+const (
+	WAFPackageRuleEditResponseModeOn        WAFPackageRuleEditResponseMode = "on"
+	WAFPackageRuleEditResponseModeOff       WAFPackageRuleEditResponseMode = "off"
+	WAFPackageRuleEditResponseModeDefault   WAFPackageRuleEditResponseMode = "default"
+	WAFPackageRuleEditResponseModeDisable   WAFPackageRuleEditResponseMode = "disable"
+	WAFPackageRuleEditResponseModeSimulate  WAFPackageRuleEditResponseMode = "simulate"
+	WAFPackageRuleEditResponseModeBlock     WAFPackageRuleEditResponseMode = "block"
+	WAFPackageRuleEditResponseModeChallenge WAFPackageRuleEditResponseMode = "challenge"
+)
+
+func (r WAFPackageRuleEditResponseMode) IsKnown() bool {
+	switch r {
+	case WAFPackageRuleEditResponseModeOn, WAFPackageRuleEditResponseModeOff, WAFPackageRuleEditResponseModeDefault, WAFPackageRuleEditResponseModeDisable, WAFPackageRuleEditResponseModeSimulate, WAFPackageRuleEditResponseModeBlock, WAFPackageRuleEditResponseModeChallenge:
+		return true
+	}
+	return false
+}
+
 // Union satisfied by [firewall.WAFPackageRuleGetResponseUnknown] or
 // [shared.UnionString].
-type WAFPackageRuleGetResponse interface {
-	ImplementsFirewallWAFPackageRuleGetResponse()
+type WAFPackageRuleGetResponseUnion interface {
+	ImplementsFirewallWAFPackageRuleGetResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageRuleGetResponse)(nil)).Elem(),
+		reflect.TypeOf((*WAFPackageRuleGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -917,9 +1071,9 @@ type WAFPackageRuleGetParams struct {
 }
 
 type WAFPackageRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   WAFPackageRuleGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   WAFPackageRuleGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafPackageRuleGetResponseEnvelopeJSON    `json:"-"`

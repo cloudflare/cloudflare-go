@@ -164,7 +164,7 @@ func (r ZoneSettingIPGeolocationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingIPGeolocationParam) implementsZonesSettingEditParamsItem() {}
+func (r ZoneSettingIPGeolocationParam) implementsZonesSettingEditParamsItemUnion() {}
 
 type SettingIPGeolocationEditParams struct {
 	// Identifier
