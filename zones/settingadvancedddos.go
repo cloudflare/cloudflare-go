@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -156,8 +157,8 @@ type SettingAdvancedDDoSGetParams struct {
 }
 
 type SettingAdvancedDDoSGetResponseEnvelope struct {
-	Errors   []SettingAdvancedDDoSGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAdvancedDDoSGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Advanced protection from Distributed Denial of Service (DDoS) attacks on your
@@ -183,51 +184,5 @@ func (r *SettingAdvancedDDoSGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r settingAdvancedDDoSGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAdvancedDDoSGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    settingAdvancedDDoSGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingAdvancedDDoSGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingAdvancedDDoSGetResponseEnvelopeErrors]
-type settingAdvancedDDoSGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAdvancedDDoSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAdvancedDDoSGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAdvancedDDoSGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingAdvancedDDoSGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingAdvancedDDoSGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingAdvancedDDoSGetResponseEnvelopeMessages]
-type settingAdvancedDDoSGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAdvancedDDoSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAdvancedDDoSGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

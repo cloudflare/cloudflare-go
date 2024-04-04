@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -139,8 +140,8 @@ func (r SettingAutomaticPlatformOptimizationEditParams) MarshalJSON() (data []by
 }
 
 type SettingAutomaticPlatformOptimizationEditResponseEnvelope struct {
-	Errors   []SettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                                                         `json:"success,required"`
 	Result  ZoneSettingAutomaticPlatformOptimization                     `json:"result"`
@@ -167,62 +168,14 @@ func (r settingAutomaticPlatformOptimizationEditResponseEnvelopeJSON) RawJSON() 
 	return r.raw
 }
 
-type SettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors struct {
-	Code    int64                                                              `json:"code,required"`
-	Message string                                                             `json:"message,required"`
-	JSON    settingAutomaticPlatformOptimizationEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingAutomaticPlatformOptimizationEditResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [SettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors]
-type settingAutomaticPlatformOptimizationEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAutomaticPlatformOptimizationEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages struct {
-	Code    int64                                                                `json:"code,required"`
-	Message string                                                               `json:"message,required"`
-	JSON    settingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages]
-type settingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingAutomaticPlatformOptimizationGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingAutomaticPlatformOptimizationGetResponseEnvelope struct {
-	Errors   []SettingAutomaticPlatformOptimizationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAutomaticPlatformOptimizationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                                                        `json:"success,required"`
 	Result  ZoneSettingAutomaticPlatformOptimization                    `json:"result"`
@@ -246,53 +199,5 @@ func (r *SettingAutomaticPlatformOptimizationGetResponseEnvelope) UnmarshalJSON(
 }
 
 func (r settingAutomaticPlatformOptimizationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAutomaticPlatformOptimizationGetResponseEnvelopeErrors struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    settingAutomaticPlatformOptimizationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingAutomaticPlatformOptimizationGetResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [SettingAutomaticPlatformOptimizationGetResponseEnvelopeErrors]
-type settingAutomaticPlatformOptimizationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAutomaticPlatformOptimizationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAutomaticPlatformOptimizationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAutomaticPlatformOptimizationGetResponseEnvelopeMessages struct {
-	Code    int64                                                               `json:"code,required"`
-	Message string                                                              `json:"message,required"`
-	JSON    settingAutomaticPlatformOptimizationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingAutomaticPlatformOptimizationGetResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [SettingAutomaticPlatformOptimizationGetResponseEnvelopeMessages]
-type settingAutomaticPlatformOptimizationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAutomaticPlatformOptimizationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAutomaticPlatformOptimizationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

@@ -84,7 +84,7 @@ func (r verifiedBotTopBotsResponseJSON) RawJSON() string {
 }
 
 type VerifiedBotTopBotsResponseMeta struct {
-	DateRange      []VerifiedBotTopBotsResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                        `json:"dateRange,required"`
 	ConfidenceInfo VerifiedBotTopBotsResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           verifiedBotTopBotsResponseMetaJSON           `json:"-"`
 }
@@ -106,35 +106,10 @@ func (r verifiedBotTopBotsResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type VerifiedBotTopBotsResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
-	JSON      verifiedBotTopBotsResponseMetaDateRangeJSON `json:"-"`
-}
-
-// verifiedBotTopBotsResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [VerifiedBotTopBotsResponseMetaDateRange]
-type verifiedBotTopBotsResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VerifiedBotTopBotsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verifiedBotTopBotsResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type VerifiedBotTopBotsResponseMetaConfidenceInfo struct {
-	Annotations []VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                    `json:"level"`
-	JSON        verifiedBotTopBotsResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                            `json:"annotations"`
+	Level       int64                                            `json:"level"`
+	JSON        verifiedBotTopBotsResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // verifiedBotTopBotsResponseMetaConfidenceInfoJSON contains the JSON metadata for
@@ -151,39 +126,6 @@ func (r *VerifiedBotTopBotsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte
 }
 
 func (r verifiedBotTopBotsResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                     `json:"dataSource,required"`
-	Description     string                                                     `json:"description,required"`
-	EventType       string                                                     `json:"eventType,required"`
-	IsInstantaneous interface{}                                                `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                     `json:"linkedUrl"`
-	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
-	JSON            verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation]
-type verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *VerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -238,7 +180,7 @@ func (r verifiedBotTopCategoriesResponseJSON) RawJSON() string {
 }
 
 type VerifiedBotTopCategoriesResponseMeta struct {
-	DateRange      []VerifiedBotTopCategoriesResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                              `json:"dateRange,required"`
 	ConfidenceInfo VerifiedBotTopCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           verifiedBotTopCategoriesResponseMetaJSON           `json:"-"`
 }
@@ -260,35 +202,10 @@ func (r verifiedBotTopCategoriesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type VerifiedBotTopCategoriesResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                         `json:"startTime,required" format:"date-time"`
-	JSON      verifiedBotTopCategoriesResponseMetaDateRangeJSON `json:"-"`
-}
-
-// verifiedBotTopCategoriesResponseMetaDateRangeJSON contains the JSON metadata for
-// the struct [VerifiedBotTopCategoriesResponseMetaDateRange]
-type verifiedBotTopCategoriesResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VerifiedBotTopCategoriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verifiedBotTopCategoriesResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type VerifiedBotTopCategoriesResponseMetaConfidenceInfo struct {
-	Annotations []VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                          `json:"level"`
-	JSON        verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                                  `json:"annotations"`
+	Level       int64                                                  `json:"level"`
+	JSON        verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON contains the JSON
@@ -305,40 +222,6 @@ func (r *VerifiedBotTopCategoriesResponseMetaConfidenceInfo) UnmarshalJSON(data 
 }
 
 func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                           `json:"dataSource,required"`
-	Description     string                                                           `json:"description,required"`
-	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                           `json:"linkedUrl"`
-	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
-	JSON            verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation]
-type verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *VerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

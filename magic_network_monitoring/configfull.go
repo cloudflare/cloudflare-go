@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -48,9 +49,9 @@ type ConfigFullGetParams struct {
 }
 
 type ConfigFullGetResponseEnvelope struct {
-	Errors   []ConfigFullGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConfigFullGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicNetworkMonitoringConfig            `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   MagicNetworkMonitoringConfig `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigFullGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configFullGetResponseEnvelopeJSON    `json:"-"`
@@ -72,52 +73,6 @@ func (r *ConfigFullGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r configFullGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigFullGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    configFullGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// configFullGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ConfigFullGetResponseEnvelopeErrors]
-type configFullGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigFullGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configFullGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigFullGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    configFullGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// configFullGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConfigFullGetResponseEnvelopeMessages]
-type configFullGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigFullGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configFullGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

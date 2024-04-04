@@ -152,9 +152,9 @@ func (r EmailDNSRecordType) IsKnown() bool {
 }
 
 type DNSGetResponseEnvelope struct {
-	Errors   []DNSGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []EmailDNSRecord                 `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []EmailDNSRecord             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DNSGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DNSGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -178,52 +178,6 @@ func (r *DNSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dnsGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    dnsGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dnsGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DNSGetResponseEnvelopeErrors]
-type dnsGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSGetResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    dnsGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dnsGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [DNSGetResponseEnvelopeMessages]
-type dnsGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

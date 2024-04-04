@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -312,9 +313,9 @@ func (r VerificationEditParamsValidationMethod) IsKnown() bool {
 }
 
 type VerificationEditResponseEnvelope struct {
-	Errors   []VerificationEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []VerificationEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   VerificationEditResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   VerificationEditResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success VerificationEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    verificationEditResponseEnvelopeJSON    `json:"-"`
@@ -336,52 +337,6 @@ func (r *VerificationEditResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r verificationEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type VerificationEditResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    verificationEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// verificationEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [VerificationEditResponseEnvelopeErrors]
-type verificationEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VerificationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verificationEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type VerificationEditResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    verificationEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// verificationEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [VerificationEditResponseEnvelopeMessages]
-type verificationEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VerificationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verificationEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

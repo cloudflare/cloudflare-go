@@ -49,7 +49,7 @@ func (r *SubscriptionService) Update(ctx context.Context, identifier string, bod
 }
 
 // Deletes a user's subscription.
-func (r *SubscriptionService) Delete(ctx context.Context, identifier string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
+func (r *SubscriptionService) Delete(ctx context.Context, identifier string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef3, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/subscriptions/%s", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -97,28 +97,6 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
-}
-
-type SubscriptionDeleteResponse struct {
-	// Subscription identifier tag.
-	SubscriptionID string                         `json:"subscription_id"`
-	JSON           subscriptionDeleteResponseJSON `json:"-"`
-}
-
-// subscriptionDeleteResponseJSON contains the JSON metadata for the struct
-// [SubscriptionDeleteResponse]
-type subscriptionDeleteResponseJSON struct {
-	SubscriptionID apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *SubscriptionDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionDeleteResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 // Union satisfied by [user.SubscriptionEditResponseUnknown] or
@@ -440,9 +418,9 @@ func (r SubscriptionUpdateParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []SubscriptionUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SubscriptionUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SubscriptionUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SubscriptionUpdateResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
@@ -464,52 +442,6 @@ func (r *SubscriptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r subscriptionUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SubscriptionUpdateResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    subscriptionUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// subscriptionUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SubscriptionUpdateResponseEnvelopeErrors]
-type subscriptionUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SubscriptionUpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    subscriptionUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// subscriptionUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SubscriptionUpdateResponseEnvelopeMessages]
-type subscriptionUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -626,9 +558,9 @@ func (r SubscriptionEditParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionEditResponseEnvelope struct {
-	Errors   []SubscriptionEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SubscriptionEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   SubscriptionEditResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   SubscriptionEditResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionEditResponseEnvelopeJSON    `json:"-"`
@@ -653,52 +585,6 @@ func (r subscriptionEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SubscriptionEditResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    subscriptionEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// subscriptionEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SubscriptionEditResponseEnvelopeErrors]
-type subscriptionEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SubscriptionEditResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    subscriptionEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// subscriptionEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SubscriptionEditResponseEnvelopeMessages]
-type subscriptionEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type SubscriptionEditResponseEnvelopeSuccess bool
 
@@ -715,9 +601,9 @@ func (r SubscriptionEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []SubscriptionGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SubscriptionGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []SubscriptionGetResponse                 `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []SubscriptionGetResponse    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SubscriptionGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SubscriptionGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -741,52 +627,6 @@ func (r *SubscriptionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 func (r subscriptionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SubscriptionGetResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    subscriptionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// subscriptionGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SubscriptionGetResponseEnvelopeErrors]
-type subscriptionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SubscriptionGetResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    subscriptionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// subscriptionGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SubscriptionGetResponseEnvelopeMessages]
-type subscriptionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

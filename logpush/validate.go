@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -134,9 +135,9 @@ func (r ValidateDestinationParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateDestinationResponseEnvelope struct {
-	Errors   []ValidateDestinationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ValidateDestinationResponseEnvelopeMessages `json:"messages,required"`
-	Result   ValidateDestinationResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ValidateDestinationResponse  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ValidateDestinationResponseEnvelopeSuccess `json:"success,required"`
 	JSON    validateDestinationResponseEnvelopeJSON    `json:"-"`
@@ -158,52 +159,6 @@ func (r *ValidateDestinationResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r validateDestinationResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ValidateDestinationResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    validateDestinationResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// validateDestinationResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ValidateDestinationResponseEnvelopeErrors]
-type validateDestinationResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ValidateDestinationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r validateDestinationResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ValidateDestinationResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    validateDestinationResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// validateDestinationResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ValidateDestinationResponseEnvelopeMessages]
-type validateDestinationResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ValidateDestinationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r validateDestinationResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -240,9 +195,9 @@ func (r ValidateOriginParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ValidateOriginResponseEnvelope struct {
-	Errors   []ValidateOriginResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ValidateOriginResponseEnvelopeMessages `json:"messages,required"`
-	Result   ValidateOriginResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ValidateOriginResponse       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ValidateOriginResponseEnvelopeSuccess `json:"success,required"`
 	JSON    validateOriginResponseEnvelopeJSON    `json:"-"`
@@ -264,52 +219,6 @@ func (r *ValidateOriginResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r validateOriginResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ValidateOriginResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    validateOriginResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// validateOriginResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ValidateOriginResponseEnvelopeErrors]
-type validateOriginResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ValidateOriginResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r validateOriginResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ValidateOriginResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    validateOriginResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// validateOriginResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ValidateOriginResponseEnvelopeMessages]
-type validateOriginResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ValidateOriginResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r validateOriginResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -652,11 +652,11 @@ func (r loadBalancerPoolPreviewResponseJSON) RawJSON() string {
 }
 
 type LoadBalancerPoolReferencesResponse struct {
-	ReferenceType LoadBalancerPoolReferencesResponseReferenceType `json:"reference_type"`
-	ResourceID    string                                          `json:"resource_id"`
-	ResourceName  string                                          `json:"resource_name"`
-	ResourceType  string                                          `json:"resource_type"`
-	JSON          loadBalancerPoolReferencesResponseJSON          `json:"-"`
+	ReferenceType shared.UnnamedSchemaRef146             `json:"reference_type"`
+	ResourceID    string                                 `json:"resource_id"`
+	ResourceName  string                                 `json:"resource_name"`
+	ResourceType  string                                 `json:"resource_type"`
+	JSON          loadBalancerPoolReferencesResponseJSON `json:"-"`
 }
 
 // loadBalancerPoolReferencesResponseJSON contains the JSON metadata for the struct
@@ -676,22 +676,6 @@ func (r *LoadBalancerPoolReferencesResponse) UnmarshalJSON(data []byte) (err err
 
 func (r loadBalancerPoolReferencesResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type LoadBalancerPoolReferencesResponseReferenceType string
-
-const (
-	LoadBalancerPoolReferencesResponseReferenceTypeStar     LoadBalancerPoolReferencesResponseReferenceType = "*"
-	LoadBalancerPoolReferencesResponseReferenceTypeReferral LoadBalancerPoolReferencesResponseReferenceType = "referral"
-	LoadBalancerPoolReferencesResponseReferenceTypeReferrer LoadBalancerPoolReferencesResponseReferenceType = "referrer"
-)
-
-func (r LoadBalancerPoolReferencesResponseReferenceType) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolReferencesResponseReferenceTypeStar, LoadBalancerPoolReferencesResponseReferenceTypeReferral, LoadBalancerPoolReferencesResponseReferenceTypeReferrer:
-		return true
-	}
-	return false
 }
 
 type LoadBalancerPoolNewParams struct {
@@ -974,9 +958,9 @@ func (r LoadBalancerPoolNewParamsOriginSteeringPolicy) IsKnown() bool {
 }
 
 type LoadBalancerPoolNewResponseEnvelope struct {
-	Errors   []LoadBalancerPoolNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPoolNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LoadBalancingPool                             `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   LoadBalancingPool            `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolNewResponseEnvelopeJSON    `json:"-"`
@@ -998,52 +982,6 @@ func (r *LoadBalancerPoolNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r loadBalancerPoolNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    loadBalancerPoolNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPoolNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolNewResponseEnvelopeErrors]
-type loadBalancerPoolNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    loadBalancerPoolNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPoolNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolNewResponseEnvelopeMessages]
-type loadBalancerPoolNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1342,9 +1280,9 @@ func (r LoadBalancerPoolUpdateParamsOriginSteeringPolicy) IsKnown() bool {
 }
 
 type LoadBalancerPoolUpdateResponseEnvelope struct {
-	Errors   []LoadBalancerPoolUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPoolUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   LoadBalancingPool                                `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   LoadBalancingPool            `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1366,52 +1304,6 @@ func (r *LoadBalancerPoolUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r loadBalancerPoolUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolUpdateResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    loadBalancerPoolUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPoolUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolUpdateResponseEnvelopeErrors]
-type loadBalancerPoolUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolUpdateResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    loadBalancerPoolUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPoolUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [LoadBalancerPoolUpdateResponseEnvelopeMessages]
-type loadBalancerPoolUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1454,9 +1346,9 @@ func (r LoadBalancerPoolDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type LoadBalancerPoolDeleteResponseEnvelope struct {
-	Errors   []LoadBalancerPoolDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPoolDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   LoadBalancerPoolDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   LoadBalancerPoolDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1478,52 +1370,6 @@ func (r *LoadBalancerPoolDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r loadBalancerPoolDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    loadBalancerPoolDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPoolDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolDeleteResponseEnvelopeErrors]
-type loadBalancerPoolDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    loadBalancerPoolDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPoolDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [LoadBalancerPoolDeleteResponseEnvelopeMessages]
-type loadBalancerPoolDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1822,9 +1668,9 @@ func (r LoadBalancerPoolEditParamsOriginsHeader) MarshalJSON() (data []byte, err
 }
 
 type LoadBalancerPoolEditResponseEnvelope struct {
-	Errors   []LoadBalancerPoolEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPoolEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   LoadBalancingPool                              `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   LoadBalancingPool            `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolEditResponseEnvelopeJSON    `json:"-"`
@@ -1849,52 +1695,6 @@ func (r loadBalancerPoolEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type LoadBalancerPoolEditResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    loadBalancerPoolEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPoolEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolEditResponseEnvelopeErrors]
-type loadBalancerPoolEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolEditResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    loadBalancerPoolEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPoolEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolEditResponseEnvelopeMessages]
-type loadBalancerPoolEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type LoadBalancerPoolEditResponseEnvelopeSuccess bool
 
@@ -1911,9 +1711,9 @@ func (r LoadBalancerPoolEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerPoolGetResponseEnvelope struct {
-	Errors   []LoadBalancerPoolGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPoolGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   LoadBalancingPool                             `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   LoadBalancingPool            `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolGetResponseEnvelopeJSON    `json:"-"`
@@ -1938,52 +1738,6 @@ func (r loadBalancerPoolGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type LoadBalancerPoolGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    loadBalancerPoolGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPoolGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolGetResponseEnvelopeErrors]
-type loadBalancerPoolGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    loadBalancerPoolGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPoolGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolGetResponseEnvelopeMessages]
-type loadBalancerPoolGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolGetResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type LoadBalancerPoolGetResponseEnvelopeSuccess bool
 
@@ -2000,8 +1754,8 @@ func (r LoadBalancerPoolGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerPoolHealthResponseEnvelope struct {
-	Errors   []LoadBalancerPoolHealthResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPoolHealthResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	Result LoadBalancerPoolHealthResponse `json:"result,required"`
@@ -2026,52 +1780,6 @@ func (r *LoadBalancerPoolHealthResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r loadBalancerPoolHealthResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolHealthResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    loadBalancerPoolHealthResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPoolHealthResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolHealthResponseEnvelopeErrors]
-type loadBalancerPoolHealthResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolHealthResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolHealthResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolHealthResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    loadBalancerPoolHealthResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPoolHealthResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [LoadBalancerPoolHealthResponseEnvelopeMessages]
-type loadBalancerPoolHealthResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolHealthResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolHealthResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2168,9 +1876,9 @@ func (r LoadBalancerPoolPreviewParamsType) IsKnown() bool {
 }
 
 type LoadBalancerPoolPreviewResponseEnvelope struct {
-	Errors   []LoadBalancerPoolPreviewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPoolPreviewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LoadBalancerPoolPreviewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Result   LoadBalancerPoolPreviewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolPreviewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolPreviewResponseEnvelopeJSON    `json:"-"`
@@ -2195,52 +1903,6 @@ func (r loadBalancerPoolPreviewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type LoadBalancerPoolPreviewResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    loadBalancerPoolPreviewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPoolPreviewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolPreviewResponseEnvelopeErrors]
-type loadBalancerPoolPreviewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolPreviewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolPreviewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolPreviewResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    loadBalancerPoolPreviewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPoolPreviewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [LoadBalancerPoolPreviewResponseEnvelopeMessages]
-type loadBalancerPoolPreviewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolPreviewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolPreviewResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type LoadBalancerPoolPreviewResponseEnvelopeSuccess bool
 
@@ -2257,8 +1919,8 @@ func (r LoadBalancerPoolPreviewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerPoolReferencesResponseEnvelope struct {
-	Errors   []LoadBalancerPoolReferencesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerPoolReferencesResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// List of resources that reference a given pool.
 	Result []LoadBalancerPoolReferencesResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
@@ -2284,52 +1946,6 @@ func (r *LoadBalancerPoolReferencesResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r loadBalancerPoolReferencesResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolReferencesResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    loadBalancerPoolReferencesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerPoolReferencesResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [LoadBalancerPoolReferencesResponseEnvelopeErrors]
-type loadBalancerPoolReferencesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolReferencesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolReferencesResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LoadBalancerPoolReferencesResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    loadBalancerPoolReferencesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerPoolReferencesResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [LoadBalancerPoolReferencesResponseEnvelopeMessages]
-type loadBalancerPoolReferencesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolReferencesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPoolReferencesResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -2564,9 +2564,9 @@ func (r ProjectNewParamsDeploymentConfigsProductionVectorizeBindingsVectorize) M
 }
 
 type ProjectNewResponseEnvelope struct {
-	Errors   []ProjectNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ProjectNewResponse           `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectNewResponseEnvelopeJSON    `json:"-"`
@@ -2588,52 +2588,6 @@ func (r *ProjectNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r projectNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectNewResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    projectNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ProjectNewResponseEnvelopeErrors]
-type projectNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectNewResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    projectNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ProjectNewResponseEnvelopeMessages]
-type projectNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2678,9 +2632,9 @@ func (r ProjectEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ProjectEditResponseEnvelope struct {
-	Errors   []ProjectEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   ProjectEditResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ProjectEditResponse          `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectEditResponseEnvelopeJSON    `json:"-"`
@@ -2705,52 +2659,6 @@ func (r projectEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ProjectEditResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    projectEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ProjectEditResponseEnvelopeErrors]
-type projectEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectEditResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    projectEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ProjectEditResponseEnvelopeMessages]
-type projectEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type ProjectEditResponseEnvelopeSuccess bool
 
@@ -2772,9 +2680,9 @@ type ProjectGetParams struct {
 }
 
 type ProjectGetResponseEnvelope struct {
-	Errors   []ProjectGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ProjectGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   PagesProjects                        `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   PagesProjects                `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectGetResponseEnvelopeJSON    `json:"-"`
@@ -2796,52 +2704,6 @@ func (r *ProjectGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r projectGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    projectGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// projectGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ProjectGetResponseEnvelopeErrors]
-type projectGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ProjectGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    projectGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// projectGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ProjectGetResponseEnvelopeMessages]
-type projectGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -6,14 +6,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // ConsumerService contains methods and other services that help with interacting
@@ -60,7 +58,7 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 }
 
 // Deletes the consumer for a queue.
-func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, params ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponse, err error) {
+func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, params ConsumerDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef167, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConsumerDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", params.AccountID, queueID, consumerID)
@@ -86,13 +84,13 @@ func (r *ConsumerService) Get(ctx context.Context, queueID string, query Consume
 }
 
 type ConsumerNewResponse struct {
-	CreatedOn       interface{}                 `json:"created_on"`
-	DeadLetterQueue string                      `json:"dead_letter_queue"`
-	Environment     interface{}                 `json:"environment"`
-	QueueName       interface{}                 `json:"queue_name"`
-	ScriptName      interface{}                 `json:"script_name"`
-	Settings        ConsumerNewResponseSettings `json:"settings"`
-	JSON            consumerNewResponseJSON     `json:"-"`
+	CreatedOn       interface{}               `json:"created_on"`
+	DeadLetterQueue string                    `json:"dead_letter_queue"`
+	Environment     interface{}               `json:"environment"`
+	QueueName       interface{}               `json:"queue_name"`
+	ScriptName      interface{}               `json:"script_name"`
+	Settings        shared.UnnamedSchemaRef41 `json:"settings"`
+	JSON            consumerNewResponseJSON   `json:"-"`
 }
 
 // consumerNewResponseJSON contains the JSON metadata for the struct
@@ -113,32 +111,6 @@ func (r *ConsumerNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r consumerNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerNewResponseSettings struct {
-	// The maximum number of messages to include in a batch
-	BatchSize     float64                         `json:"batch_size"`
-	MaxRetries    float64                         `json:"max_retries"`
-	MaxWaitTimeMs float64                         `json:"max_wait_time_ms"`
-	JSON          consumerNewResponseSettingsJSON `json:"-"`
-}
-
-// consumerNewResponseSettingsJSON contains the JSON metadata for the struct
-// [ConsumerNewResponseSettings]
-type consumerNewResponseSettingsJSON struct {
-	BatchSize     apijson.Field
-	MaxRetries    apijson.Field
-	MaxWaitTimeMs apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ConsumerNewResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerNewResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -198,38 +170,13 @@ func (r consumerUpdateResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [queues.ConsumerDeleteResponseUnknown],
-// [queues.ConsumerDeleteResponseArray] or [shared.UnionString].
-type ConsumerDeleteResponse interface {
-	ImplementsQueuesConsumerDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ConsumerDeleteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConsumerDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type ConsumerDeleteResponseArray []interface{}
-
-func (r ConsumerDeleteResponseArray) ImplementsQueuesConsumerDeleteResponse() {}
-
 type ConsumerGetResponse struct {
-	CreatedOn   interface{}                 `json:"created_on"`
-	Environment interface{}                 `json:"environment"`
-	QueueName   interface{}                 `json:"queue_name"`
-	Service     interface{}                 `json:"service"`
-	Settings    ConsumerGetResponseSettings `json:"settings"`
-	JSON        consumerGetResponseJSON     `json:"-"`
+	CreatedOn   interface{}               `json:"created_on"`
+	Environment interface{}               `json:"environment"`
+	QueueName   interface{}               `json:"queue_name"`
+	Service     interface{}               `json:"service"`
+	Settings    shared.UnnamedSchemaRef41 `json:"settings"`
+	JSON        consumerGetResponseJSON   `json:"-"`
 }
 
 // consumerGetResponseJSON contains the JSON metadata for the struct
@@ -252,32 +199,6 @@ func (r consumerGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConsumerGetResponseSettings struct {
-	// The maximum number of messages to include in a batch
-	BatchSize     float64                         `json:"batch_size"`
-	MaxRetries    float64                         `json:"max_retries"`
-	MaxWaitTimeMs float64                         `json:"max_wait_time_ms"`
-	JSON          consumerGetResponseSettingsJSON `json:"-"`
-}
-
-// consumerGetResponseSettingsJSON contains the JSON metadata for the struct
-// [ConsumerGetResponseSettings]
-type consumerGetResponseSettingsJSON struct {
-	BatchSize     apijson.Field
-	MaxRetries    apijson.Field
-	MaxWaitTimeMs apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ConsumerGetResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerGetResponseSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConsumerNewParams struct {
 	// Identifier
 	AccountID param.Field[string]      `path:"account_id,required"`
@@ -289,14 +210,14 @@ func (r ConsumerNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerNewResponseEnvelope struct {
-	CreatedOn       interface{}                           `json:"created_on,required"`
-	DeadLetterQueue interface{}                           `json:"dead_letter_queue,required"`
-	Errors          []ConsumerNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages        []ConsumerNewResponseEnvelopeMessages `json:"messages,required"`
-	QueueName       interface{}                           `json:"queue_name,required"`
-	Result          ConsumerNewResponse                   `json:"result,required,nullable"`
-	ScriptName      interface{}                           `json:"script_name,required"`
-	Settings        interface{}                           `json:"settings,required"`
+	CreatedOn       interface{}                  `json:"created_on,required"`
+	DeadLetterQueue interface{}                  `json:"dead_letter_queue,required"`
+	Errors          []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages        []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	QueueName       interface{}                  `json:"queue_name,required"`
+	Result          ConsumerNewResponse          `json:"result,required,nullable"`
+	ScriptName      interface{}                  `json:"script_name,required"`
+	Settings        interface{}                  `json:"settings,required"`
 	// Whether the API call was successful
 	Success    ConsumerNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -325,52 +246,6 @@ func (r *ConsumerNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r consumerNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerNewResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    consumerNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// consumerNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConsumerNewResponseEnvelopeErrors]
-type consumerNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerNewResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    consumerNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// consumerNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConsumerNewResponseEnvelopeMessages]
-type consumerNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -431,14 +306,14 @@ func (r ConsumerUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerUpdateResponseEnvelope struct {
-	CreatedOn       interface{}                              `json:"created_on,required"`
-	DeadLetterQueue interface{}                              `json:"dead_letter_queue,required"`
-	Errors          []ConsumerUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages        []ConsumerUpdateResponseEnvelopeMessages `json:"messages,required"`
-	QueueName       interface{}                              `json:"queue_name,required"`
-	Result          ConsumerUpdateResponse                   `json:"result,required,nullable"`
-	ScriptName      interface{}                              `json:"script_name,required"`
-	Settings        interface{}                              `json:"settings,required"`
+	CreatedOn       interface{}                  `json:"created_on,required"`
+	DeadLetterQueue interface{}                  `json:"dead_letter_queue,required"`
+	Errors          []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages        []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	QueueName       interface{}                  `json:"queue_name,required"`
+	Result          ConsumerUpdateResponse       `json:"result,required,nullable"`
+	ScriptName      interface{}                  `json:"script_name,required"`
+	Settings        interface{}                  `json:"settings,required"`
 	// Whether the API call was successful
 	Success    ConsumerUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -467,52 +342,6 @@ func (r *ConsumerUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r consumerUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerUpdateResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    consumerUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// consumerUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ConsumerUpdateResponseEnvelopeErrors]
-type consumerUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerUpdateResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    consumerUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// consumerUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConsumerUpdateResponseEnvelopeMessages]
-type consumerUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -573,9 +402,9 @@ func (r ConsumerDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ConsumerDeleteResponseEnvelope struct {
-	Errors   []ConsumerDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ConsumerDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ConsumerDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef167   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ConsumerDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -599,52 +428,6 @@ func (r *ConsumerDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r consumerDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerDeleteResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    consumerDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// consumerDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ConsumerDeleteResponseEnvelopeErrors]
-type consumerDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerDeleteResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    consumerDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// consumerDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConsumerDeleteResponseEnvelopeMessages]
-type consumerDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -700,12 +483,12 @@ type ConsumerGetParams struct {
 }
 
 type ConsumerGetResponseEnvelope struct {
-	CreatedOn interface{}                           `json:"created_on,required"`
-	Errors    []ConsumerGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages  []ConsumerGetResponseEnvelopeMessages `json:"messages,required"`
-	QueueName interface{}                           `json:"queue_name,required"`
-	Result    []ConsumerGetResponse                 `json:"result,required,nullable"`
-	Settings  interface{}                           `json:"settings,required"`
+	CreatedOn interface{}                  `json:"created_on,required"`
+	Errors    []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages  []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	QueueName interface{}                  `json:"queue_name,required"`
+	Result    []ConsumerGetResponse        `json:"result,required,nullable"`
+	Settings  interface{}                  `json:"settings,required"`
 	// Whether the API call was successful
 	Success    ConsumerGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -732,52 +515,6 @@ func (r *ConsumerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r consumerGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    consumerGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// consumerGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ConsumerGetResponseEnvelopeErrors]
-type consumerGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerGetResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    consumerGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// consumerGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ConsumerGetResponseEnvelopeMessages]
-type consumerGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

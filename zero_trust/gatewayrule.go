@@ -1093,9 +1093,9 @@ func (r GatewayRuleNewParamsSchedule) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleNewResponseEnvelope struct {
-	Errors   []GatewayRuleNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayRuleNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewayRules                    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustGatewayRules        `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -1117,52 +1117,6 @@ func (r *GatewayRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r gatewayRuleNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayRuleNewResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    gatewayRuleNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayRuleNewResponseEnvelopeErrors]
-type gatewayRuleNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayRuleNewResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    gatewayRuleNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GatewayRuleNewResponseEnvelopeMessages]
-type gatewayRuleNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1542,9 +1496,9 @@ func (r GatewayRuleUpdateParamsSchedule) MarshalJSON() (data []byte, err error) 
 }
 
 type GatewayRuleUpdateResponseEnvelope struct {
-	Errors   []GatewayRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewayRules                       `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustGatewayRules        `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1566,52 +1520,6 @@ func (r *GatewayRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r gatewayRuleUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayRuleUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    gatewayRuleUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayRuleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayRuleUpdateResponseEnvelopeErrors]
-type gatewayRuleUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayRuleUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    gatewayRuleUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayRuleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GatewayRuleUpdateResponseEnvelopeMessages]
-type gatewayRuleUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1644,9 +1552,9 @@ func (r GatewayRuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayRuleDeleteResponseEnvelope struct {
-	Errors   []GatewayRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   GatewayRuleDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   GatewayRuleDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -1671,52 +1579,6 @@ func (r gatewayRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type GatewayRuleDeleteResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    gatewayRuleDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayRuleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayRuleDeleteResponseEnvelopeErrors]
-type gatewayRuleDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayRuleDeleteResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    gatewayRuleDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayRuleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GatewayRuleDeleteResponseEnvelopeMessages]
-type gatewayRuleDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type GatewayRuleDeleteResponseEnvelopeSuccess bool
 
@@ -1737,9 +1599,9 @@ type GatewayRuleGetParams struct {
 }
 
 type GatewayRuleGetResponseEnvelope struct {
-	Errors   []GatewayRuleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayRuleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewayRules                    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustGatewayRules        `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleGetResponseEnvelopeJSON    `json:"-"`
@@ -1761,52 +1623,6 @@ func (r *GatewayRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r gatewayRuleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayRuleGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    gatewayRuleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayRuleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayRuleGetResponseEnvelopeErrors]
-type gatewayRuleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayRuleGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    gatewayRuleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayRuleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GatewayRuleGetResponseEnvelopeMessages]
-type gatewayRuleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

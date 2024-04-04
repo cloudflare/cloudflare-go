@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -152,9 +153,9 @@ func (r BillingHistoryGetParamsOrder) IsKnown() bool {
 }
 
 type BillingHistoryGetResponseEnvelope struct {
-	Errors   []BillingHistoryGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BillingHistoryGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []BillingHistory                            `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []BillingHistory             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    BillingHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo BillingHistoryGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -178,52 +179,6 @@ func (r *BillingHistoryGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r billingHistoryGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BillingHistoryGetResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    billingHistoryGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// billingHistoryGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [BillingHistoryGetResponseEnvelopeErrors]
-type billingHistoryGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingHistoryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r billingHistoryGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type BillingHistoryGetResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    billingHistoryGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// billingHistoryGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [BillingHistoryGetResponseEnvelopeMessages]
-type billingHistoryGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingHistoryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r billingHistoryGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

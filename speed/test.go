@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -467,8 +468,8 @@ func (r ObservatoryPageTestScheduleFrequency) IsKnown() bool {
 }
 
 type TestListResponse struct {
-	Errors   []TestListResponseError   `json:"errors,required"`
-	Messages []TestListResponseMessage `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful.
 	Success    bool                       `json:"success,required"`
 	ResultInfo TestListResponseResultInfo `json:"result_info"`
@@ -491,52 +492,6 @@ func (r *TestListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r testListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type TestListResponseError struct {
-	Code    int64                     `json:"code,required"`
-	Message string                    `json:"message,required"`
-	JSON    testListResponseErrorJSON `json:"-"`
-}
-
-// testListResponseErrorJSON contains the JSON metadata for the struct
-// [TestListResponseError]
-type testListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TestListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r testListResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type TestListResponseMessage struct {
-	Code    int64                       `json:"code,required"`
-	Message string                      `json:"message,required"`
-	JSON    testListResponseMessageJSON `json:"-"`
-}
-
-// testListResponseMessageJSON contains the JSON metadata for the struct
-// [TestListResponseMessage]
-type testListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TestListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r testListResponseMessageJSON) RawJSON() string {
 	return r.raw
 }
 

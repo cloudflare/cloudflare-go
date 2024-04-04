@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -96,9 +97,9 @@ func (r SeatEditParamsBody) MarshalJSON() (data []byte, err error) {
 }
 
 type SeatEditResponseEnvelope struct {
-	Errors   []SeatEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SeatEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustSeats                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []ZeroTrustSeats             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SeatEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SeatEditResponseEnvelopeResultInfo `json:"result_info"`
@@ -122,52 +123,6 @@ func (r *SeatEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r seatEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SeatEditResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    seatEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// seatEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [SeatEditResponseEnvelopeErrors]
-type seatEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SeatEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r seatEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SeatEditResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    seatEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// seatEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [SeatEditResponseEnvelopeMessages]
-type seatEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SeatEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r seatEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -136,7 +136,7 @@ func (r attackLayer3SummaryBitrateResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryBitrateResponseMeta struct {
-	DateRange      []AttackLayer3SummaryBitrateResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                                `json:"dateRange,required"`
 	LastUpdated    string                                               `json:"lastUpdated,required"`
 	Normalization  string                                               `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryBitrateResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -162,35 +162,10 @@ func (r attackLayer3SummaryBitrateResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackLayer3SummaryBitrateResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                           `json:"startTime,required" format:"date-time"`
-	JSON      attackLayer3SummaryBitrateResponseMetaDateRangeJSON `json:"-"`
-}
-
-// attackLayer3SummaryBitrateResponseMetaDateRangeJSON contains the JSON metadata
-// for the struct [AttackLayer3SummaryBitrateResponseMetaDateRange]
-type attackLayer3SummaryBitrateResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryBitrateResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryBitrateResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer3SummaryBitrateResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                            `json:"level"`
-	JSON        attackLayer3SummaryBitrateResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                                    `json:"annotations"`
+	Level       int64                                                    `json:"level"`
+	JSON        attackLayer3SummaryBitrateResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // attackLayer3SummaryBitrateResponseMetaConfidenceInfoJSON contains the JSON
@@ -207,40 +182,6 @@ func (r *AttackLayer3SummaryBitrateResponseMetaConfidenceInfo) UnmarshalJSON(dat
 }
 
 func (r attackLayer3SummaryBitrateResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                             `json:"dataSource,required"`
-	Description     string                                                             `json:"description,required"`
-	EventType       string                                                             `json:"eventType,required"`
-	IsInstantaneous interface{}                                                        `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                          `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                             `json:"linkedUrl"`
-	StartTime       time.Time                                                          `json:"startTime" format:"date-time"`
-	JSON            attackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// attackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [AttackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotation]
-type attackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -297,7 +238,7 @@ func (r attackLayer3SummaryDurationResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryDurationResponseMeta struct {
-	DateRange      []AttackLayer3SummaryDurationResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                                 `json:"dateRange,required"`
 	LastUpdated    string                                                `json:"lastUpdated,required"`
 	Normalization  string                                                `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryDurationResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -323,35 +264,10 @@ func (r attackLayer3SummaryDurationResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackLayer3SummaryDurationResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
-	JSON      attackLayer3SummaryDurationResponseMetaDateRangeJSON `json:"-"`
-}
-
-// attackLayer3SummaryDurationResponseMetaDateRangeJSON contains the JSON metadata
-// for the struct [AttackLayer3SummaryDurationResponseMetaDateRange]
-type attackLayer3SummaryDurationResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryDurationResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryDurationResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer3SummaryDurationResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                             `json:"level"`
-	JSON        attackLayer3SummaryDurationResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                                     `json:"annotations"`
+	Level       int64                                                     `json:"level"`
+	JSON        attackLayer3SummaryDurationResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // attackLayer3SummaryDurationResponseMetaConfidenceInfoJSON contains the JSON
@@ -368,40 +284,6 @@ func (r *AttackLayer3SummaryDurationResponseMetaConfidenceInfo) UnmarshalJSON(da
 }
 
 func (r attackLayer3SummaryDurationResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                              `json:"dataSource,required"`
-	Description     string                                                              `json:"description,required"`
-	EventType       string                                                              `json:"eventType,required"`
-	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                              `json:"linkedUrl"`
-	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
-	JSON            attackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// attackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [AttackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotation]
-type attackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -460,7 +342,7 @@ func (r attackLayer3SummaryGetResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryGetResponseMeta struct {
-	DateRange      []AttackLayer3SummaryGetResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                            `json:"dateRange,required"`
 	ConfidenceInfo AttackLayer3SummaryGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
 	JSON           attackLayer3SummaryGetResponseMetaJSON           `json:"-"`
 }
@@ -482,35 +364,10 @@ func (r attackLayer3SummaryGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackLayer3SummaryGetResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
-	JSON      attackLayer3SummaryGetResponseMetaDateRangeJSON `json:"-"`
-}
-
-// attackLayer3SummaryGetResponseMetaDateRangeJSON contains the JSON metadata for
-// the struct [AttackLayer3SummaryGetResponseMetaDateRange]
-type attackLayer3SummaryGetResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryGetResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer3SummaryGetResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3SummaryGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                        `json:"level"`
-	JSON        attackLayer3SummaryGetResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                                `json:"annotations"`
+	Level       int64                                                `json:"level"`
+	JSON        attackLayer3SummaryGetResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // attackLayer3SummaryGetResponseMetaConfidenceInfoJSON contains the JSON metadata
@@ -527,40 +384,6 @@ func (r *AttackLayer3SummaryGetResponseMetaConfidenceInfo) UnmarshalJSON(data []
 }
 
 func (r attackLayer3SummaryGetResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3SummaryGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                         `json:"dataSource,required"`
-	Description     string                                                         `json:"description,required"`
-	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                         `json:"linkedUrl"`
-	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
-	JSON            attackLayer3SummaryGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// attackLayer3SummaryGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct
-// [AttackLayer3SummaryGetResponseMetaConfidenceInfoAnnotation]
-type attackLayer3SummaryGetResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -615,7 +438,7 @@ func (r attackLayer3SummaryIPVersionResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryIPVersionResponseMeta struct {
-	DateRange      []AttackLayer3SummaryIPVersionResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                                  `json:"dateRange,required"`
 	LastUpdated    string                                                 `json:"lastUpdated,required"`
 	Normalization  string                                                 `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -641,35 +464,10 @@ func (r attackLayer3SummaryIPVersionResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackLayer3SummaryIPVersionResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                             `json:"startTime,required" format:"date-time"`
-	JSON      attackLayer3SummaryIPVersionResponseMetaDateRangeJSON `json:"-"`
-}
-
-// attackLayer3SummaryIPVersionResponseMetaDateRangeJSON contains the JSON metadata
-// for the struct [AttackLayer3SummaryIPVersionResponseMetaDateRange]
-type attackLayer3SummaryIPVersionResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryIPVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryIPVersionResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer3SummaryIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                              `json:"level"`
-	JSON        attackLayer3SummaryIPVersionResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                                      `json:"annotations"`
+	Level       int64                                                      `json:"level"`
+	JSON        attackLayer3SummaryIPVersionResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // attackLayer3SummaryIPVersionResponseMetaConfidenceInfoJSON contains the JSON
@@ -686,40 +484,6 @@ func (r *AttackLayer3SummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(d
 }
 
 func (r attackLayer3SummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                               `json:"dataSource,required"`
-	Description     string                                                               `json:"description,required"`
-	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                               `json:"linkedUrl"`
-	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
-	JSON            attackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// attackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON contains
-// the JSON metadata for the struct
-// [AttackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotation]
-type attackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -770,7 +534,7 @@ func (r attackLayer3SummaryProtocolResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryProtocolResponseMeta struct {
-	DateRange      []AttackLayer3SummaryProtocolResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                                 `json:"dateRange,required"`
 	LastUpdated    string                                                `json:"lastUpdated,required"`
 	Normalization  string                                                `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryProtocolResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -796,35 +560,10 @@ func (r attackLayer3SummaryProtocolResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackLayer3SummaryProtocolResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
-	JSON      attackLayer3SummaryProtocolResponseMetaDateRangeJSON `json:"-"`
-}
-
-// attackLayer3SummaryProtocolResponseMetaDateRangeJSON contains the JSON metadata
-// for the struct [AttackLayer3SummaryProtocolResponseMetaDateRange]
-type attackLayer3SummaryProtocolResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryProtocolResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryProtocolResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer3SummaryProtocolResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                             `json:"level"`
-	JSON        attackLayer3SummaryProtocolResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                                     `json:"annotations"`
+	Level       int64                                                     `json:"level"`
+	JSON        attackLayer3SummaryProtocolResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // attackLayer3SummaryProtocolResponseMetaConfidenceInfoJSON contains the JSON
@@ -841,40 +580,6 @@ func (r *AttackLayer3SummaryProtocolResponseMetaConfidenceInfo) UnmarshalJSON(da
 }
 
 func (r attackLayer3SummaryProtocolResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                              `json:"dataSource,required"`
-	Description     string                                                              `json:"description,required"`
-	EventType       string                                                              `json:"eventType,required"`
-	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                              `json:"linkedUrl"`
-	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
-	JSON            attackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// attackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [AttackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotation]
-type attackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -929,7 +634,7 @@ func (r attackLayer3SummaryVectorResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3SummaryVectorResponseMeta struct {
-	DateRange      []AttackLayer3SummaryVectorResponseMetaDateRange    `json:"dateRange,required"`
+	DateRange      []UnnamedSchemaRef175                               `json:"dateRange,required"`
 	LastUpdated    string                                              `json:"lastUpdated,required"`
 	Normalization  string                                              `json:"normalization,required"`
 	ConfidenceInfo AttackLayer3SummaryVectorResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -955,35 +660,10 @@ func (r attackLayer3SummaryVectorResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type AttackLayer3SummaryVectorResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                          `json:"startTime,required" format:"date-time"`
-	JSON      attackLayer3SummaryVectorResponseMetaDateRangeJSON `json:"-"`
-}
-
-// attackLayer3SummaryVectorResponseMetaDateRangeJSON contains the JSON metadata
-// for the struct [AttackLayer3SummaryVectorResponseMetaDateRange]
-type attackLayer3SummaryVectorResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryVectorResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryVectorResponseMetaDateRangeJSON) RawJSON() string {
-	return r.raw
-}
-
 type AttackLayer3SummaryVectorResponseMetaConfidenceInfo struct {
-	Annotations []AttackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                           `json:"level"`
-	JSON        attackLayer3SummaryVectorResponseMetaConfidenceInfoJSON         `json:"-"`
+	Annotations []UnnamedSchemaRef174                                   `json:"annotations"`
+	Level       int64                                                   `json:"level"`
+	JSON        attackLayer3SummaryVectorResponseMetaConfidenceInfoJSON `json:"-"`
 }
 
 // attackLayer3SummaryVectorResponseMetaConfidenceInfoJSON contains the JSON
@@ -1000,40 +680,6 @@ func (r *AttackLayer3SummaryVectorResponseMetaConfidenceInfo) UnmarshalJSON(data
 }
 
 func (r attackLayer3SummaryVectorResponseMetaConfidenceInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                            `json:"dataSource,required"`
-	Description     string                                                            `json:"description,required"`
-	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                            `json:"linkedUrl"`
-	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`
-	JSON            attackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
-}
-
-// attackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotationJSON contains the
-// JSON metadata for the struct
-// [AttackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotation]
-type attackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotationJSON struct {
-	DataSource      apijson.Field
-	Description     apijson.Field
-	EventType       apijson.Field
-	IsInstantaneous apijson.Field
-	EndTime         apijson.Field
-	LinkedURL       apijson.Field
-	StartTime       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AttackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer3SummaryVectorResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
 	return r.raw
 }
 

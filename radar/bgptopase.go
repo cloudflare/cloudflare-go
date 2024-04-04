@@ -85,8 +85,8 @@ func (r bgpTopAseGetResponseJSON) RawJSON() string {
 }
 
 type BGPTopAseGetResponseMeta struct {
-	DateRange []BGPTopAseGetResponseMetaDateRange `json:"dateRange,required"`
-	JSON      bgpTopAseGetResponseMetaJSON        `json:"-"`
+	DateRange []UnnamedSchemaRef175        `json:"dateRange,required"`
+	JSON      bgpTopAseGetResponseMetaJSON `json:"-"`
 }
 
 // bgpTopAseGetResponseMetaJSON contains the JSON metadata for the struct
@@ -102,31 +102,6 @@ func (r *BGPTopAseGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpTopAseGetResponseMetaJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPTopAseGetResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                             `json:"startTime,required" format:"date-time"`
-	JSON      bgpTopAseGetResponseMetaDateRangeJSON `json:"-"`
-}
-
-// bgpTopAseGetResponseMetaDateRangeJSON contains the JSON metadata for the struct
-// [BGPTopAseGetResponseMetaDateRange]
-type bgpTopAseGetResponseMetaDateRangeJSON struct {
-	EndTime     apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPTopAseGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpTopAseGetResponseMetaDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -159,7 +134,7 @@ func (r bgpTopAseGetResponseTop0JSON) RawJSON() string {
 
 type BGPTopAsePrefixesResponse struct {
 	ASNs []BGPTopAsePrefixesResponseASN `json:"asns,required"`
-	Meta BGPTopAsePrefixesResponseMeta  `json:"meta,required"`
+	Meta UnnamedSchemaRef130            `json:"meta,required"`
 	JSON bgpTopAsePrefixesResponseJSON  `json:"-"`
 }
 
@@ -204,31 +179,6 @@ func (r *BGPTopAsePrefixesResponseASN) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r bgpTopAsePrefixesResponseASNJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPTopAsePrefixesResponseMeta struct {
-	DataTime   string                            `json:"data_time,required"`
-	QueryTime  string                            `json:"query_time,required"`
-	TotalPeers int64                             `json:"total_peers,required"`
-	JSON       bgpTopAsePrefixesResponseMetaJSON `json:"-"`
-}
-
-// bgpTopAsePrefixesResponseMetaJSON contains the JSON metadata for the struct
-// [BGPTopAsePrefixesResponseMeta]
-type bgpTopAsePrefixesResponseMetaJSON struct {
-	DataTime    apijson.Field
-	QueryTime   apijson.Field
-	TotalPeers  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPTopAsePrefixesResponseMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpTopAsePrefixesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 

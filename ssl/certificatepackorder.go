@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -288,9 +289,9 @@ func (r CertificatePackOrderNewParamsValidityDays) IsKnown() bool {
 }
 
 type CertificatePackOrderNewResponseEnvelope struct {
-	Errors   []CertificatePackOrderNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificatePackOrderNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CertificatePackOrderNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Result   CertificatePackOrderNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificatePackOrderNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificatePackOrderNewResponseEnvelopeJSON    `json:"-"`
@@ -312,52 +313,6 @@ func (r *CertificatePackOrderNewResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r certificatePackOrderNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackOrderNewResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    certificatePackOrderNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// certificatePackOrderNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CertificatePackOrderNewResponseEnvelopeErrors]
-type certificatePackOrderNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackOrderNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackOrderNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CertificatePackOrderNewResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    certificatePackOrderNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// certificatePackOrderNewResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [CertificatePackOrderNewResponseEnvelopeMessages]
-type certificatePackOrderNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CertificatePackOrderNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certificatePackOrderNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

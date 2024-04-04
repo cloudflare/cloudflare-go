@@ -78,9 +78,9 @@ type TunnelTokenGetParams struct {
 }
 
 type TunnelTokenGetResponseEnvelope struct {
-	Errors   []TunnelTokenGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TunnelTokenGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelTokenGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   TunnelTokenGetResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelTokenGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelTokenGetResponseEnvelopeJSON    `json:"-"`
@@ -102,52 +102,6 @@ func (r *TunnelTokenGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r tunnelTokenGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type TunnelTokenGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    tunnelTokenGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelTokenGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [TunnelTokenGetResponseEnvelopeErrors]
-type tunnelTokenGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelTokenGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelTokenGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type TunnelTokenGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    tunnelTokenGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelTokenGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [TunnelTokenGetResponseEnvelopeMessages]
-type tunnelTokenGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelTokenGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelTokenGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

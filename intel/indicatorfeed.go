@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -273,9 +274,9 @@ func (r IndicatorFeedNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndicatorFeedNewResponseEnvelope struct {
-	Errors   []IndicatorFeedNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndicatorFeedNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   IndicatorFeedNewResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedNewResponseEnvelopeJSON    `json:"-"`
@@ -297,52 +298,6 @@ func (r *IndicatorFeedNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r indicatorFeedNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedNewResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    indicatorFeedNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indicatorFeedNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IndicatorFeedNewResponseEnvelopeErrors]
-type indicatorFeedNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedNewResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    indicatorFeedNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indicatorFeedNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IndicatorFeedNewResponseEnvelopeMessages]
-type indicatorFeedNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -373,9 +328,9 @@ func (r IndicatorFeedUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndicatorFeedUpdateResponseEnvelope struct {
-	Errors   []IndicatorFeedUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndicatorFeedUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   IndicatorFeedUpdateResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedUpdateResponseEnvelopeJSON    `json:"-"`
@@ -397,52 +352,6 @@ func (r *IndicatorFeedUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r indicatorFeedUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    indicatorFeedUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indicatorFeedUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IndicatorFeedUpdateResponseEnvelopeErrors]
-type indicatorFeedUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    indicatorFeedUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indicatorFeedUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [IndicatorFeedUpdateResponseEnvelopeMessages]
-type indicatorFeedUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -477,9 +386,9 @@ type IndicatorFeedGetParams struct {
 }
 
 type IndicatorFeedGetResponseEnvelope struct {
-	Errors   []IndicatorFeedGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IndicatorFeedGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IndicatorFeedGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   IndicatorFeedGetResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedGetResponseEnvelopeJSON    `json:"-"`
@@ -501,52 +410,6 @@ func (r *IndicatorFeedGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r indicatorFeedGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    indicatorFeedGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// indicatorFeedGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IndicatorFeedGetResponseEnvelopeErrors]
-type indicatorFeedGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type IndicatorFeedGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    indicatorFeedGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// indicatorFeedGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IndicatorFeedGetResponseEnvelopeMessages]
-type indicatorFeedGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IndicatorFeedGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r indicatorFeedGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

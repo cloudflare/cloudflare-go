@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -189,8 +190,8 @@ func (r SettingTls1_3EditParamsValue) IsKnown() bool {
 }
 
 type SettingTls1_3EditResponseEnvelope struct {
-	Errors   []SettingTls1_3EditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTls1_3EditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables Crypto TLS 1.3 feature for a zone.
@@ -217,60 +218,14 @@ func (r settingTls1_3EditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingTls1_3EditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingTls1_3EditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTls1_3EditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingTls1_3EditResponseEnvelopeErrors]
-type settingTls1_3EditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTls1_3EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTls1_3EditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTls1_3EditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingTls1_3EditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTls1_3EditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingTls1_3EditResponseEnvelopeMessages]
-type settingTls1_3EditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTls1_3EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTls1_3EditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingTLS1_3GetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingTls1_3GetResponseEnvelope struct {
-	Errors   []SettingTls1_3GetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTls1_3GetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables Crypto TLS 1.3 feature for a zone.
@@ -294,51 +249,5 @@ func (r *SettingTls1_3GetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingTls1_3GetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTls1_3GetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingTls1_3GetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingTls1_3GetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingTls1_3GetResponseEnvelopeErrors]
-type settingTls1_3GetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTls1_3GetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTls1_3GetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingTls1_3GetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingTls1_3GetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTls1_3GetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingTls1_3GetResponseEnvelopeMessages]
-type settingTls1_3GetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTls1_3GetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingTls1_3GetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

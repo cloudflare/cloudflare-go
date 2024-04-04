@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -109,9 +110,9 @@ func (r V2ListParamsSortOrder) IsKnown() bool {
 }
 
 type V2ListResponseEnvelope struct {
-	Errors   []V2ListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []V2ListResponseEnvelopeMessages `json:"messages,required"`
-	Result   V2ListResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   V2ListResponse               `json:"result,required"`
 	// Whether the API call was successful
 	Success V2ListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v2ListResponseEnvelopeJSON    `json:"-"`
@@ -133,52 +134,6 @@ func (r *V2ListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r v2ListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type V2ListResponseEnvelopeErrors struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    v2ListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// v2ListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [V2ListResponseEnvelopeErrors]
-type v2ListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V2ListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v2ListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type V2ListResponseEnvelopeMessages struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    v2ListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// v2ListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [V2ListResponseEnvelopeMessages]
-type v2ListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V2ListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v2ListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -195,9 +196,9 @@ func (r RuleNewParamsAction) IsKnown() bool {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []RuleNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomRule                 `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []WaitingroomRule            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -221,52 +222,6 @@ func (r *RuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleNewResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    ruleNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RuleNewResponseEnvelopeErrors]
-type ruleNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleNewResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    ruleNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RuleNewResponseEnvelopeMessages]
-type ruleNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -357,9 +312,9 @@ func (r RuleUpdateParamsBodyAction) IsKnown() bool {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomRule                    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []WaitingroomRule            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -383,52 +338,6 @@ func (r *RuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleUpdateResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    ruleUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RuleUpdateResponseEnvelopeErrors]
-type ruleUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleUpdateResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    ruleUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RuleUpdateResponseEnvelopeMessages]
-type ruleUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -494,9 +403,9 @@ func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []RuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomRule                    `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []WaitingroomRule            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -520,52 +429,6 @@ func (r *RuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleDeleteResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    ruleDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RuleDeleteResponseEnvelopeErrors]
-type ruleDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleDeleteResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    ruleDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RuleDeleteResponseEnvelopeMessages]
-type ruleDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -673,9 +536,9 @@ func (r RuleEditParamsPositionObject) MarshalJSON() (data []byte, err error) {
 func (r RuleEditParamsPositionObject) implementsWaitingRoomsRuleEditParamsPosition() {}
 
 type RuleEditResponseEnvelope struct {
-	Errors   []RuleEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingroomRule                  `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []WaitingroomRule            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`
@@ -699,52 +562,6 @@ func (r *RuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleEditResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    ruleEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RuleEditResponseEnvelopeErrors]
-type ruleEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleEditResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    ruleEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RuleEditResponseEnvelopeMessages]
-type ruleEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

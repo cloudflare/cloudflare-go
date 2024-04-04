@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -110,9 +111,9 @@ func (r DomainHistoryGetParams) URLQuery() (v url.Values) {
 }
 
 type DomainHistoryGetResponseEnvelope struct {
-	Errors   []DomainHistoryGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DomainHistoryGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelDomainHistory                       `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []IntelDomainHistory         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DomainHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DomainHistoryGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -136,52 +137,6 @@ func (r *DomainHistoryGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r domainHistoryGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainHistoryGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    domainHistoryGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// domainHistoryGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DomainHistoryGetResponseEnvelopeErrors]
-type domainHistoryGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainHistoryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainHistoryGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainHistoryGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    domainHistoryGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// domainHistoryGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DomainHistoryGetResponseEnvelopeMessages]
-type domainHistoryGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainHistoryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainHistoryGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

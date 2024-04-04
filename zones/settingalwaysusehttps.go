@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -193,8 +194,8 @@ func (r SettingAlwaysUseHTTPSEditParamsValue) IsKnown() bool {
 }
 
 type SettingAlwaysUseHTTPSEditResponseEnvelope struct {
-	Errors   []SettingAlwaysUseHTTPSEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAlwaysUseHTTPSEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Reply to all requests for URLs that use "http" with a 301 redirect to the
@@ -223,60 +224,14 @@ func (r settingAlwaysUseHTTPSEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingAlwaysUseHTTPSEditResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingAlwaysUseHTTPSEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingAlwaysUseHTTPSEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingAlwaysUseHTTPSEditResponseEnvelopeErrors]
-type settingAlwaysUseHTTPSEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAlwaysUseHTTPSEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysUseHTTPSEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAlwaysUseHTTPSEditResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingAlwaysUseHTTPSEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingAlwaysUseHTTPSEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingAlwaysUseHTTPSEditResponseEnvelopeMessages]
-type settingAlwaysUseHTTPSEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAlwaysUseHTTPSEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysUseHTTPSEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingAlwaysUseHTTPSGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingAlwaysUseHTTPSGetResponseEnvelope struct {
-	Errors   []SettingAlwaysUseHTTPSGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAlwaysUseHTTPSGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Reply to all requests for URLs that use "http" with a 301 redirect to the
@@ -302,51 +257,5 @@ func (r *SettingAlwaysUseHTTPSGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 }
 
 func (r settingAlwaysUseHTTPSGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAlwaysUseHTTPSGetResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingAlwaysUseHTTPSGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingAlwaysUseHTTPSGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingAlwaysUseHTTPSGetResponseEnvelopeErrors]
-type settingAlwaysUseHTTPSGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAlwaysUseHTTPSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysUseHTTPSGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingAlwaysUseHTTPSGetResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingAlwaysUseHTTPSGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingAlwaysUseHTTPSGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingAlwaysUseHTTPSGetResponseEnvelopeMessages]
-type settingAlwaysUseHTTPSGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAlwaysUseHTTPSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysUseHTTPSGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

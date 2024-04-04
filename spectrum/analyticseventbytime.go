@@ -187,9 +187,9 @@ func (r AnalyticsEventBytimeGetParamsTimeDelta) IsKnown() bool {
 }
 
 type AnalyticsEventBytimeGetResponseEnvelope struct {
-	Errors   []AnalyticsEventBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AnalyticsEventBytimeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AnalyticsEventBytimeGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Result   AnalyticsEventBytimeGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AnalyticsEventBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsEventBytimeGetResponseEnvelopeJSON    `json:"-"`
@@ -211,52 +211,6 @@ func (r *AnalyticsEventBytimeGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r analyticsEventBytimeGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsEventBytimeGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    analyticsEventBytimeGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// analyticsEventBytimeGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AnalyticsEventBytimeGetResponseEnvelopeErrors]
-type analyticsEventBytimeGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsEventBytimeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsEventBytimeGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AnalyticsEventBytimeGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    analyticsEventBytimeGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// analyticsEventBytimeGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AnalyticsEventBytimeGetResponseEnvelopeMessages]
-type analyticsEventBytimeGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsEventBytimeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsEventBytimeGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

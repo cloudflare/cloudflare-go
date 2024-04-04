@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -188,9 +189,9 @@ type AccessApplicationUserPolicyCheckListParamsAppID interface {
 }
 
 type AccessApplicationUserPolicyCheckListResponseEnvelope struct {
-	Errors   []AccessApplicationUserPolicyCheckListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationUserPolicyCheckListResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApplicationUserPolicyCheckListResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172                 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172                 `json:"messages,required"`
+	Result   AccessApplicationUserPolicyCheckListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationUserPolicyCheckListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeJSON    `json:"-"`
@@ -212,54 +213,6 @@ func (r *AccessApplicationUserPolicyCheckListResponseEnvelope) UnmarshalJSON(dat
 }
 
 func (r accessApplicationUserPolicyCheckListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUserPolicyCheckListResponseEnvelopeErrors struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationUserPolicyCheckListResponseEnvelopeErrors]
-type accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUserPolicyCheckListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUserPolicyCheckListResponseEnvelopeMessages struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUserPolicyCheckListResponseEnvelopeMessages]
-type accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUserPolicyCheckListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -49,8 +49,8 @@ func (r *TrafficAnomalyLocationService) Get(ctx context.Context, query TrafficAn
 }
 
 type TrafficAnomalyLocationGetResponse struct {
-	TrafficAnomalies []TrafficAnomalyLocationGetResponseTrafficAnomaly `json:"trafficAnomalies,required"`
-	JSON             trafficAnomalyLocationGetResponseJSON             `json:"-"`
+	TrafficAnomalies []UnnamedSchemaRef160                 `json:"trafficAnomalies,required"`
+	JSON             trafficAnomalyLocationGetResponseJSON `json:"-"`
 }
 
 // trafficAnomalyLocationGetResponseJSON contains the JSON metadata for the struct
@@ -66,31 +66,6 @@ func (r *TrafficAnomalyLocationGetResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r trafficAnomalyLocationGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type TrafficAnomalyLocationGetResponseTrafficAnomaly struct {
-	ClientCountryAlpha2 string                                              `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                              `json:"clientCountryName,required"`
-	Value               string                                              `json:"value,required"`
-	JSON                trafficAnomalyLocationGetResponseTrafficAnomalyJSON `json:"-"`
-}
-
-// trafficAnomalyLocationGetResponseTrafficAnomalyJSON contains the JSON metadata
-// for the struct [TrafficAnomalyLocationGetResponseTrafficAnomaly]
-type trafficAnomalyLocationGetResponseTrafficAnomalyJSON struct {
-	ClientCountryAlpha2 apijson.Field
-	ClientCountryName   apijson.Field
-	Value               apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *TrafficAnomalyLocationGetResponseTrafficAnomaly) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r trafficAnomalyLocationGetResponseTrafficAnomalyJSON) RawJSON() string {
 	return r.raw
 }
 

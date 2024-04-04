@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -216,9 +217,9 @@ func (r CachePurgeParamsCachePurgeFilesFilesCachePurgeURLAndHeaders) ImplementsC
 }
 
 type CachePurgeResponseEnvelope struct {
-	Errors   []CachePurgeResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CachePurgeResponseEnvelopeMessages `json:"messages,required"`
-	Result   CachePurgeResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   CachePurgeResponse           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success CachePurgeResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cachePurgeResponseEnvelopeJSON    `json:"-"`
@@ -240,52 +241,6 @@ func (r *CachePurgeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r cachePurgeResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CachePurgeResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    cachePurgeResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cachePurgeResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [CachePurgeResponseEnvelopeErrors]
-type cachePurgeResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CachePurgeResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cachePurgeResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CachePurgeResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    cachePurgeResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cachePurgeResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [CachePurgeResponseEnvelopeMessages]
-type cachePurgeResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CachePurgeResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cachePurgeResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

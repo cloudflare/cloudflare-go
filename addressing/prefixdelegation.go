@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -153,9 +154,9 @@ func (r PrefixDelegationNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDelegationNewResponseEnvelope struct {
-	Errors   []PrefixDelegationNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixDelegationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingIpamDelegations                     `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AddressingIpamDelegations    `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixDelegationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixDelegationNewResponseEnvelopeJSON    `json:"-"`
@@ -177,52 +178,6 @@ func (r *PrefixDelegationNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r prefixDelegationNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    prefixDelegationNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixDelegationNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PrefixDelegationNewResponseEnvelopeErrors]
-type prefixDelegationNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    prefixDelegationNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixDelegationNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PrefixDelegationNewResponseEnvelopeMessages]
-type prefixDelegationNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -257,9 +212,9 @@ func (r PrefixDelegationDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixDelegationDeleteResponseEnvelope struct {
-	Errors   []PrefixDelegationDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PrefixDelegationDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   PrefixDelegationDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   PrefixDelegationDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixDelegationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixDelegationDeleteResponseEnvelopeJSON    `json:"-"`
@@ -281,52 +236,6 @@ func (r *PrefixDelegationDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 }
 
 func (r prefixDelegationDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    prefixDelegationDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// prefixDelegationDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [PrefixDelegationDeleteResponseEnvelopeErrors]
-type prefixDelegationDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type PrefixDelegationDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    prefixDelegationDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// prefixDelegationDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [PrefixDelegationDeleteResponseEnvelopeMessages]
-type prefixDelegationDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDelegationDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDelegationDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

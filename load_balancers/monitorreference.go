@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -45,11 +46,11 @@ func (r *MonitorReferenceService) Get(ctx context.Context, monitorID string, que
 }
 
 type MonitorReferenceGetResponse struct {
-	ReferenceType MonitorReferenceGetResponseReferenceType `json:"reference_type"`
-	ResourceID    string                                   `json:"resource_id"`
-	ResourceName  string                                   `json:"resource_name"`
-	ResourceType  string                                   `json:"resource_type"`
-	JSON          monitorReferenceGetResponseJSON          `json:"-"`
+	ReferenceType shared.UnnamedSchemaRef146      `json:"reference_type"`
+	ResourceID    string                          `json:"resource_id"`
+	ResourceName  string                          `json:"resource_name"`
+	ResourceType  string                          `json:"resource_type"`
+	JSON          monitorReferenceGetResponseJSON `json:"-"`
 }
 
 // monitorReferenceGetResponseJSON contains the JSON metadata for the struct
@@ -71,30 +72,14 @@ func (r monitorReferenceGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type MonitorReferenceGetResponseReferenceType string
-
-const (
-	MonitorReferenceGetResponseReferenceTypeStar     MonitorReferenceGetResponseReferenceType = "*"
-	MonitorReferenceGetResponseReferenceTypeReferral MonitorReferenceGetResponseReferenceType = "referral"
-	MonitorReferenceGetResponseReferenceTypeReferrer MonitorReferenceGetResponseReferenceType = "referrer"
-)
-
-func (r MonitorReferenceGetResponseReferenceType) IsKnown() bool {
-	switch r {
-	case MonitorReferenceGetResponseReferenceTypeStar, MonitorReferenceGetResponseReferenceTypeReferral, MonitorReferenceGetResponseReferenceTypeReferrer:
-		return true
-	}
-	return false
-}
-
 type MonitorReferenceGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type MonitorReferenceGetResponseEnvelope struct {
-	Errors   []MonitorReferenceGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MonitorReferenceGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// List of resources that reference a given monitor.
 	Result []MonitorReferenceGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
@@ -120,52 +105,6 @@ func (r *MonitorReferenceGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r monitorReferenceGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type MonitorReferenceGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    monitorReferenceGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// monitorReferenceGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MonitorReferenceGetResponseEnvelopeErrors]
-type monitorReferenceGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorReferenceGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorReferenceGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type MonitorReferenceGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    monitorReferenceGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// monitorReferenceGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MonitorReferenceGetResponseEnvelopeMessages]
-type monitorReferenceGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorReferenceGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorReferenceGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

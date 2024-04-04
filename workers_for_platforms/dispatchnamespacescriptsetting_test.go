@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/workers_for_platforms"
@@ -34,7 +35,7 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Errors: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsError{{
+			Errors: cloudflare.F([]shared.UnnamedSchemaRef172Param{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {
@@ -44,7 +45,7 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Messages: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsMessage{{
+			Messages: cloudflare.F([]shared.UnnamedSchemaRef172Param{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {

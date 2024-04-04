@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -189,8 +190,8 @@ func (r SettingPrefetchPreloadEditParamsValue) IsKnown() bool {
 }
 
 type SettingPrefetchPreloadEditResponseEnvelope struct {
-	Errors   []SettingPrefetchPreloadEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPrefetchPreloadEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will prefetch any URLs that are included in the response headers.
@@ -218,60 +219,14 @@ func (r settingPrefetchPreloadEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingPrefetchPreloadEditResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingPrefetchPreloadEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingPrefetchPreloadEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingPrefetchPreloadEditResponseEnvelopeErrors]
-type settingPrefetchPreloadEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPrefetchPreloadEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPrefetchPreloadEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPrefetchPreloadEditResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingPrefetchPreloadEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPrefetchPreloadEditResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingPrefetchPreloadEditResponseEnvelopeMessages]
-type settingPrefetchPreloadEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPrefetchPreloadEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPrefetchPreloadEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingPrefetchPreloadGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingPrefetchPreloadGetResponseEnvelope struct {
-	Errors   []SettingPrefetchPreloadGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPrefetchPreloadGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will prefetch any URLs that are included in the response headers.
@@ -296,51 +251,5 @@ func (r *SettingPrefetchPreloadGetResponseEnvelope) UnmarshalJSON(data []byte) (
 }
 
 func (r settingPrefetchPreloadGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPrefetchPreloadGetResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingPrefetchPreloadGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingPrefetchPreloadGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingPrefetchPreloadGetResponseEnvelopeErrors]
-type settingPrefetchPreloadGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPrefetchPreloadGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPrefetchPreloadGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingPrefetchPreloadGetResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingPrefetchPreloadGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPrefetchPreloadGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingPrefetchPreloadGetResponseEnvelopeMessages]
-type settingPrefetchPreloadGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPrefetchPreloadGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPrefetchPreloadGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

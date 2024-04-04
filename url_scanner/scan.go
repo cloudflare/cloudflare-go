@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -82,6 +83,31 @@ func (r *ScanService) Screenshot(ctx context.Context, accountID string, scanID s
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan/%s/screenshot", accountID, scanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
+}
+
+type UnnamedSchemaRef134 struct {
+	ID              int64                   `json:"id,required"`
+	Name            string                  `json:"name,required"`
+	SuperCategoryID int64                   `json:"super_category_id"`
+	JSON            unnamedSchemaRef134JSON `json:"-"`
+}
+
+// unnamedSchemaRef134JSON contains the JSON metadata for the struct
+// [UnnamedSchemaRef134]
+type unnamedSchemaRef134JSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *UnnamedSchemaRef134) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r unnamedSchemaRef134JSON) RawJSON() string {
+	return r.raw
 }
 
 type ScanNewResponse struct {
@@ -510,7 +536,7 @@ type ScanGetResponseScanPage struct {
 	Country               string                                     `json:"country,required"`
 	CountryLocationAlpha2 string                                     `json:"countryLocationAlpha2,required"`
 	Domain                string                                     `json:"domain,required"`
-	Headers               []ScanGetResponseScanPageHeader            `json:"headers,required"`
+	Headers               []shared.UnnamedSchemaRef155               `json:"headers,required"`
 	IP                    string                                     `json:"ip,required"`
 	Js                    ScanGetResponseScanPageJs                  `json:"js,required"`
 	SecurityViolations    []ScanGetResponseScanPageSecurityViolation `json:"securityViolations,required"`
@@ -621,29 +647,6 @@ func (r *ScanGetResponseScanPageCooky) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scanGetResponseScanPageCookyJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanGetResponseScanPageHeader struct {
-	Name  string                            `json:"name,required"`
-	Value string                            `json:"value,required"`
-	JSON  scanGetResponseScanPageHeaderJSON `json:"-"`
-}
-
-// scanGetResponseScanPageHeaderJSON contains the JSON metadata for the struct
-// [ScanGetResponseScanPageHeader]
-type scanGetResponseScanPageHeaderJSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanGetResponseScanPageHeader) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseScanPageHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1113,8 +1116,8 @@ func (r scanGetResponseScanDomainsExampleComJSON) RawJSON() string {
 
 type ScanGetResponseScanDomainsExampleComCategories struct {
 	Inherited ScanGetResponseScanDomainsExampleComCategoriesInherited `json:"inherited,required"`
-	Content   []ScanGetResponseScanDomainsExampleComCategoriesContent `json:"content"`
-	Risks     []ScanGetResponseScanDomainsExampleComCategoriesRisk    `json:"risks"`
+	Content   []UnnamedSchemaRef134                                   `json:"content"`
+	Risks     []UnnamedSchemaRef134                                   `json:"risks"`
 	JSON      scanGetResponseScanDomainsExampleComCategoriesJSON      `json:"-"`
 }
 
@@ -1137,10 +1140,10 @@ func (r scanGetResponseScanDomainsExampleComCategoriesJSON) RawJSON() string {
 }
 
 type ScanGetResponseScanDomainsExampleComCategoriesInherited struct {
-	Content []ScanGetResponseScanDomainsExampleComCategoriesInheritedContent `json:"content"`
-	From    string                                                           `json:"from"`
-	Risks   []ScanGetResponseScanDomainsExampleComCategoriesInheritedRisk    `json:"risks"`
-	JSON    scanGetResponseScanDomainsExampleComCategoriesInheritedJSON      `json:"-"`
+	Content []UnnamedSchemaRef134                                       `json:"content"`
+	From    string                                                      `json:"from"`
+	Risks   []UnnamedSchemaRef134                                       `json:"risks"`
+	JSON    scanGetResponseScanDomainsExampleComCategoriesInheritedJSON `json:"-"`
 }
 
 // scanGetResponseScanDomainsExampleComCategoriesInheritedJSON contains the JSON
@@ -1159,108 +1162,6 @@ func (r *ScanGetResponseScanDomainsExampleComCategoriesInherited) UnmarshalJSON(
 }
 
 func (r scanGetResponseScanDomainsExampleComCategoriesInheritedJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanGetResponseScanDomainsExampleComCategoriesInheritedContent struct {
-	ID              int64                                                              `json:"id,required"`
-	Name            string                                                             `json:"name,required"`
-	SuperCategoryID int64                                                              `json:"super_category_id"`
-	JSON            scanGetResponseScanDomainsExampleComCategoriesInheritedContentJSON `json:"-"`
-}
-
-// scanGetResponseScanDomainsExampleComCategoriesInheritedContentJSON contains the
-// JSON metadata for the struct
-// [ScanGetResponseScanDomainsExampleComCategoriesInheritedContent]
-type scanGetResponseScanDomainsExampleComCategoriesInheritedContentJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ScanGetResponseScanDomainsExampleComCategoriesInheritedContent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseScanDomainsExampleComCategoriesInheritedContentJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanGetResponseScanDomainsExampleComCategoriesInheritedRisk struct {
-	ID              int64                                                           `json:"id,required"`
-	Name            string                                                          `json:"name,required"`
-	SuperCategoryID int64                                                           `json:"super_category_id"`
-	JSON            scanGetResponseScanDomainsExampleComCategoriesInheritedRiskJSON `json:"-"`
-}
-
-// scanGetResponseScanDomainsExampleComCategoriesInheritedRiskJSON contains the
-// JSON metadata for the struct
-// [ScanGetResponseScanDomainsExampleComCategoriesInheritedRisk]
-type scanGetResponseScanDomainsExampleComCategoriesInheritedRiskJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ScanGetResponseScanDomainsExampleComCategoriesInheritedRisk) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseScanDomainsExampleComCategoriesInheritedRiskJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanGetResponseScanDomainsExampleComCategoriesContent struct {
-	ID              int64                                                     `json:"id,required"`
-	Name            string                                                    `json:"name,required"`
-	SuperCategoryID int64                                                     `json:"super_category_id"`
-	JSON            scanGetResponseScanDomainsExampleComCategoriesContentJSON `json:"-"`
-}
-
-// scanGetResponseScanDomainsExampleComCategoriesContentJSON contains the JSON
-// metadata for the struct [ScanGetResponseScanDomainsExampleComCategoriesContent]
-type scanGetResponseScanDomainsExampleComCategoriesContentJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ScanGetResponseScanDomainsExampleComCategoriesContent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseScanDomainsExampleComCategoriesContentJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanGetResponseScanDomainsExampleComCategoriesRisk struct {
-	ID              int64                                                  `json:"id,required"`
-	Name            string                                                 `json:"name,required"`
-	SuperCategoryID int64                                                  `json:"super_category_id"`
-	JSON            scanGetResponseScanDomainsExampleComCategoriesRiskJSON `json:"-"`
-}
-
-// scanGetResponseScanDomainsExampleComCategoriesRiskJSON contains the JSON
-// metadata for the struct [ScanGetResponseScanDomainsExampleComCategoriesRisk]
-type scanGetResponseScanDomainsExampleComCategoriesRiskJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ScanGetResponseScanDomainsExampleComCategoriesRisk) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanGetResponseScanDomainsExampleComCategoriesRiskJSON) RawJSON() string {
 	return r.raw
 }
 

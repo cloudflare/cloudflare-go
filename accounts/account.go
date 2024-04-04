@@ -288,9 +288,9 @@ func (r AccountUpdateParamsSettingsDefaultNameservers) IsKnown() bool {
 }
 
 type AccountUpdateResponseEnvelope struct {
-	Errors   []AccountUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccountUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AccountUpdateResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
@@ -312,52 +312,6 @@ func (r *AccountUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accountUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccountUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    accountUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accountUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccountUpdateResponseEnvelopeErrors]
-type accountUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccountUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    accountUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accountUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccountUpdateResponseEnvelopeMessages]
-type accountUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -416,9 +370,9 @@ type AccountGetParams struct {
 }
 
 type AccountGetResponseEnvelope struct {
-	Errors   []AccountGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccountGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   AccountGetResponse           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountGetResponseEnvelopeJSON    `json:"-"`
@@ -440,52 +394,6 @@ func (r *AccountGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accountGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccountGetResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    accountGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accountGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [AccountGetResponseEnvelopeErrors]
-type accountGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccountGetResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    accountGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accountGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [AccountGetResponseEnvelopeMessages]
-type accountGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accountGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

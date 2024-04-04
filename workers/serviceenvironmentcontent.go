@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -67,9 +68,9 @@ type ServiceEnvironmentContentUpdateParams struct {
 	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name.
 	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[ServiceEnvironmentContentUpdateParamsMetadata] `json:"metadata"`
-	CfWorkerBodyPart       param.Field[string]                                        `header:"CF-WORKER-BODY-PART"`
-	CfWorkerMainModulePart param.Field[string]                                        `header:"CF-WORKER-MAIN-MODULE-PART"`
+	Metadata               param.Field[shared.UnnamedSchemaRef51Param] `json:"metadata"`
+	CfWorkerBodyPart       param.Field[string]                         `header:"CF-WORKER-BODY-PART"`
+	CfWorkerMainModulePart param.Field[string]                         `header:"CF-WORKER-MAIN-MODULE-PART"`
 }
 
 func (r ServiceEnvironmentContentUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -87,25 +88,10 @@ func (r ServiceEnvironmentContentUpdateParams) MarshalMultipart() (data []byte, 
 	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// JSON encoded metadata about the uploaded parts and Worker configuration.
-type ServiceEnvironmentContentUpdateParamsMetadata struct {
-	// Name of the part in the multipart request that contains the script (e.g. the
-	// file adding a listener to the `fetch` event). Indicates a
-	// `service worker syntax` Worker.
-	BodyPart param.Field[string] `json:"body_part"`
-	// Name of the part in the multipart request that contains the main module (e.g.
-	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
-	MainModule param.Field[string] `json:"main_module"`
-}
-
-func (r ServiceEnvironmentContentUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ServiceEnvironmentContentUpdateResponseEnvelope struct {
-	Errors   []ServiceEnvironmentContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ServiceEnvironmentContentUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersScript                                             `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   WorkersScript                `json:"result,required"`
 	// Whether the API call was successful
 	Success ServiceEnvironmentContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    serviceEnvironmentContentUpdateResponseEnvelopeJSON    `json:"-"`
@@ -127,53 +113,6 @@ func (r *ServiceEnvironmentContentUpdateResponseEnvelope) UnmarshalJSON(data []b
 }
 
 func (r serviceEnvironmentContentUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ServiceEnvironmentContentUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    serviceEnvironmentContentUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// serviceEnvironmentContentUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [ServiceEnvironmentContentUpdateResponseEnvelopeErrors]
-type serviceEnvironmentContentUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentContentUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentContentUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ServiceEnvironmentContentUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    serviceEnvironmentContentUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// serviceEnvironmentContentUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [ServiceEnvironmentContentUpdateResponseEnvelopeMessages]
-type serviceEnvironmentContentUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentContentUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentContentUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

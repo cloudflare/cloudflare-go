@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -186,7 +187,7 @@ type GRETunnelNewResponseGRETunnelsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate GRETunnelNewResponseGRETunnelsHealthCheckRate `json:"rate"`
+	Rate shared.UnnamedSchemaRef83 `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -194,7 +195,7 @@ type GRETunnelNewResponseGRETunnelsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type GRETunnelNewResponseGRETunnelsHealthCheckType `json:"type"`
+	Type shared.UnnamedSchemaRef84                     `json:"type"`
 	JSON greTunnelNewResponseGRETunnelsHealthCheckJSON `json:"-"`
 }
 
@@ -234,39 +235,6 @@ const (
 func (r GRETunnelNewResponseGRETunnelsHealthCheckDirection) IsKnown() bool {
 	switch r {
 	case GRETunnelNewResponseGRETunnelsHealthCheckDirectionUnidirectional, GRETunnelNewResponseGRETunnelsHealthCheckDirectionBidirectional:
-		return true
-	}
-	return false
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type GRETunnelNewResponseGRETunnelsHealthCheckRate string
-
-const (
-	GRETunnelNewResponseGRETunnelsHealthCheckRateLow  GRETunnelNewResponseGRETunnelsHealthCheckRate = "low"
-	GRETunnelNewResponseGRETunnelsHealthCheckRateMid  GRETunnelNewResponseGRETunnelsHealthCheckRate = "mid"
-	GRETunnelNewResponseGRETunnelsHealthCheckRateHigh GRETunnelNewResponseGRETunnelsHealthCheckRate = "high"
-)
-
-func (r GRETunnelNewResponseGRETunnelsHealthCheckRate) IsKnown() bool {
-	switch r {
-	case GRETunnelNewResponseGRETunnelsHealthCheckRateLow, GRETunnelNewResponseGRETunnelsHealthCheckRateMid, GRETunnelNewResponseGRETunnelsHealthCheckRateHigh:
-		return true
-	}
-	return false
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type GRETunnelNewResponseGRETunnelsHealthCheckType string
-
-const (
-	GRETunnelNewResponseGRETunnelsHealthCheckTypeReply   GRETunnelNewResponseGRETunnelsHealthCheckType = "reply"
-	GRETunnelNewResponseGRETunnelsHealthCheckTypeRequest GRETunnelNewResponseGRETunnelsHealthCheckType = "request"
-)
-
-func (r GRETunnelNewResponseGRETunnelsHealthCheckType) IsKnown() bool {
-	switch r {
-	case GRETunnelNewResponseGRETunnelsHealthCheckTypeReply, GRETunnelNewResponseGRETunnelsHealthCheckTypeRequest:
 		return true
 	}
 	return false
@@ -382,7 +350,7 @@ type GRETunnelListResponseGRETunnelsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate GRETunnelListResponseGRETunnelsHealthCheckRate `json:"rate"`
+	Rate shared.UnnamedSchemaRef83 `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -390,7 +358,7 @@ type GRETunnelListResponseGRETunnelsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type GRETunnelListResponseGRETunnelsHealthCheckType `json:"type"`
+	Type shared.UnnamedSchemaRef84                      `json:"type"`
 	JSON greTunnelListResponseGRETunnelsHealthCheckJSON `json:"-"`
 }
 
@@ -430,39 +398,6 @@ const (
 func (r GRETunnelListResponseGRETunnelsHealthCheckDirection) IsKnown() bool {
 	switch r {
 	case GRETunnelListResponseGRETunnelsHealthCheckDirectionUnidirectional, GRETunnelListResponseGRETunnelsHealthCheckDirectionBidirectional:
-		return true
-	}
-	return false
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type GRETunnelListResponseGRETunnelsHealthCheckRate string
-
-const (
-	GRETunnelListResponseGRETunnelsHealthCheckRateLow  GRETunnelListResponseGRETunnelsHealthCheckRate = "low"
-	GRETunnelListResponseGRETunnelsHealthCheckRateMid  GRETunnelListResponseGRETunnelsHealthCheckRate = "mid"
-	GRETunnelListResponseGRETunnelsHealthCheckRateHigh GRETunnelListResponseGRETunnelsHealthCheckRate = "high"
-)
-
-func (r GRETunnelListResponseGRETunnelsHealthCheckRate) IsKnown() bool {
-	switch r {
-	case GRETunnelListResponseGRETunnelsHealthCheckRateLow, GRETunnelListResponseGRETunnelsHealthCheckRateMid, GRETunnelListResponseGRETunnelsHealthCheckRateHigh:
-		return true
-	}
-	return false
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type GRETunnelListResponseGRETunnelsHealthCheckType string
-
-const (
-	GRETunnelListResponseGRETunnelsHealthCheckTypeReply   GRETunnelListResponseGRETunnelsHealthCheckType = "reply"
-	GRETunnelListResponseGRETunnelsHealthCheckTypeRequest GRETunnelListResponseGRETunnelsHealthCheckType = "request"
-)
-
-func (r GRETunnelListResponseGRETunnelsHealthCheckType) IsKnown() bool {
-	switch r {
-	case GRETunnelListResponseGRETunnelsHealthCheckTypeReply, GRETunnelListResponseGRETunnelsHealthCheckTypeRequest:
 		return true
 	}
 	return false
@@ -523,9 +458,9 @@ func (r GRETunnelNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelNewResponseEnvelope struct {
-	Errors   []GRETunnelNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   GRETunnelNewResponse         `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -547,52 +482,6 @@ func (r *GRETunnelNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r greTunnelNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelNewResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    greTunnelNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [GRETunnelNewResponseEnvelopeErrors]
-type greTunnelNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelNewResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    greTunnelNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelNewResponseEnvelopeMessages]
-type greTunnelNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -650,7 +539,7 @@ type GRETunnelUpdateParamsHealthCheck struct {
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[GRETunnelUpdateParamsHealthCheckRate] `json:"rate"`
+	Rate param.Field[shared.UnnamedSchemaRef83] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -658,7 +547,7 @@ type GRETunnelUpdateParamsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[GRETunnelUpdateParamsHealthCheckType] `json:"type"`
+	Type param.Field[shared.UnnamedSchemaRef84] `json:"type"`
 }
 
 func (r GRETunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -686,43 +575,10 @@ func (r GRETunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
 	return false
 }
 
-// How frequent the health check is run. The default value is `mid`.
-type GRETunnelUpdateParamsHealthCheckRate string
-
-const (
-	GRETunnelUpdateParamsHealthCheckRateLow  GRETunnelUpdateParamsHealthCheckRate = "low"
-	GRETunnelUpdateParamsHealthCheckRateMid  GRETunnelUpdateParamsHealthCheckRate = "mid"
-	GRETunnelUpdateParamsHealthCheckRateHigh GRETunnelUpdateParamsHealthCheckRate = "high"
-)
-
-func (r GRETunnelUpdateParamsHealthCheckRate) IsKnown() bool {
-	switch r {
-	case GRETunnelUpdateParamsHealthCheckRateLow, GRETunnelUpdateParamsHealthCheckRateMid, GRETunnelUpdateParamsHealthCheckRateHigh:
-		return true
-	}
-	return false
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type GRETunnelUpdateParamsHealthCheckType string
-
-const (
-	GRETunnelUpdateParamsHealthCheckTypeReply   GRETunnelUpdateParamsHealthCheckType = "reply"
-	GRETunnelUpdateParamsHealthCheckTypeRequest GRETunnelUpdateParamsHealthCheckType = "request"
-)
-
-func (r GRETunnelUpdateParamsHealthCheckType) IsKnown() bool {
-	switch r {
-	case GRETunnelUpdateParamsHealthCheckTypeReply, GRETunnelUpdateParamsHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type GRETunnelUpdateResponseEnvelope struct {
-	Errors   []GRETunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelUpdateResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   GRETunnelUpdateResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelUpdateResponseEnvelopeJSON    `json:"-"`
@@ -747,52 +603,6 @@ func (r greTunnelUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type GRETunnelUpdateResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    greTunnelUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GRETunnelUpdateResponseEnvelopeErrors]
-type greTunnelUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelUpdateResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    greTunnelUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelUpdateResponseEnvelopeMessages]
-type greTunnelUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type GRETunnelUpdateResponseEnvelopeSuccess bool
 
@@ -814,9 +624,9 @@ type GRETunnelListParams struct {
 }
 
 type GRETunnelListResponseEnvelope struct {
-	Errors   []GRETunnelListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelListResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelListResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   GRETunnelListResponse        `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelListResponseEnvelopeJSON    `json:"-"`
@@ -838,52 +648,6 @@ func (r *GRETunnelListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r greTunnelListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelListResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    greTunnelListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GRETunnelListResponseEnvelopeErrors]
-type greTunnelListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelListResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    greTunnelListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelListResponseEnvelopeMessages]
-type greTunnelListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelListResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -913,9 +677,9 @@ func (r GRETunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelDeleteResponseEnvelope struct {
-	Errors   []GRETunnelDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   GRETunnelDeleteResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -940,52 +704,6 @@ func (r greTunnelDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type GRETunnelDeleteResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    greTunnelDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GRETunnelDeleteResponseEnvelopeErrors]
-type greTunnelDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelDeleteResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    greTunnelDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelDeleteResponseEnvelopeMessages]
-type greTunnelDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type GRETunnelDeleteResponseEnvelopeSuccess bool
 
@@ -1007,9 +725,9 @@ type GRETunnelGetParams struct {
 }
 
 type GRETunnelGetResponseEnvelope struct {
-	Errors   []GRETunnelGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GRETunnelGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   GRETunnelGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   GRETunnelGetResponse         `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelGetResponseEnvelopeJSON    `json:"-"`
@@ -1031,52 +749,6 @@ func (r *GRETunnelGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r greTunnelGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelGetResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    greTunnelGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// greTunnelGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [GRETunnelGetResponseEnvelopeErrors]
-type greTunnelGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type GRETunnelGetResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    greTunnelGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// greTunnelGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GRETunnelGetResponseEnvelopeMessages]
-type greTunnelGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

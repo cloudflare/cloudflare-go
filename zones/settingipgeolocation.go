@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -193,8 +194,8 @@ func (r SettingIPGeolocationEditParamsValue) IsKnown() bool {
 }
 
 type SettingIPGeolocationEditResponseEnvelope struct {
-	Errors   []SettingIPGeolocationEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingIPGeolocationEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
@@ -223,60 +224,14 @@ func (r settingIPGeolocationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingIPGeolocationEditResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingIPGeolocationEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingIPGeolocationEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingIPGeolocationEditResponseEnvelopeErrors]
-type settingIPGeolocationEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPGeolocationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingIPGeolocationEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingIPGeolocationEditResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingIPGeolocationEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingIPGeolocationEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingIPGeolocationEditResponseEnvelopeMessages]
-type settingIPGeolocationEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPGeolocationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingIPGeolocationEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingIPGeolocationGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingIPGeolocationGetResponseEnvelope struct {
-	Errors   []SettingIPGeolocationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingIPGeolocationGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
@@ -302,51 +257,5 @@ func (r *SettingIPGeolocationGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r settingIPGeolocationGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingIPGeolocationGetResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    settingIPGeolocationGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingIPGeolocationGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingIPGeolocationGetResponseEnvelopeErrors]
-type settingIPGeolocationGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPGeolocationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingIPGeolocationGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingIPGeolocationGetResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingIPGeolocationGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingIPGeolocationGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingIPGeolocationGetResponseEnvelopeMessages]
-type settingIPGeolocationGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPGeolocationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingIPGeolocationGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

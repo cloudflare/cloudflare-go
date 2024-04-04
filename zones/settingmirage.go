@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -197,8 +198,8 @@ func (r SettingMirageEditParamsValue) IsKnown() bool {
 }
 
 type SettingMirageEditResponseEnvelope struct {
-	Errors   []SettingMirageEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingMirageEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically optimize image loading for website visitors on mobile devices.
@@ -228,60 +229,14 @@ func (r settingMirageEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingMirageEditResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingMirageEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingMirageEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingMirageEditResponseEnvelopeErrors]
-type settingMirageEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMirageEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMirageEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMirageEditResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingMirageEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingMirageEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingMirageEditResponseEnvelopeMessages]
-type settingMirageEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMirageEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMirageEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingMirageGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingMirageGetResponseEnvelope struct {
-	Errors   []SettingMirageGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingMirageGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically optimize image loading for website visitors on mobile devices.
@@ -308,51 +263,5 @@ func (r *SettingMirageGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 func (r settingMirageGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMirageGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingMirageGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingMirageGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingMirageGetResponseEnvelopeErrors]
-type settingMirageGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMirageGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMirageGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingMirageGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingMirageGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingMirageGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingMirageGetResponseEnvelopeMessages]
-type settingMirageGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMirageGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingMirageGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

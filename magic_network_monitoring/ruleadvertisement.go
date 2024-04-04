@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -78,9 +79,9 @@ func (r RuleAdvertisementEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleAdvertisementEditResponseEnvelope struct {
-	Errors   []RuleAdvertisementEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleAdvertisementEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicNetworkMonitoringRuleAdvertisable          `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172           `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172           `json:"messages,required"`
+	Result   MagicNetworkMonitoringRuleAdvertisable `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleAdvertisementEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleAdvertisementEditResponseEnvelopeJSON    `json:"-"`
@@ -102,52 +103,6 @@ func (r *RuleAdvertisementEditResponseEnvelope) UnmarshalJSON(data []byte) (err 
 }
 
 func (r ruleAdvertisementEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleAdvertisementEditResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    ruleAdvertisementEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleAdvertisementEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RuleAdvertisementEditResponseEnvelopeErrors]
-type ruleAdvertisementEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleAdvertisementEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleAdvertisementEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RuleAdvertisementEditResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    ruleAdvertisementEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleAdvertisementEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RuleAdvertisementEditResponseEnvelopeMessages]
-type ruleAdvertisementEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleAdvertisementEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleAdvertisementEditResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

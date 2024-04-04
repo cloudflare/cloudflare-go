@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -192,8 +193,8 @@ func (r SettingWebPEditParamsValue) IsKnown() bool {
 }
 
 type SettingWebPEditResponseEnvelope struct {
-	Errors   []SettingWebPEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWebPEditResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting the image supports the WebP image codec, and WebP
@@ -222,60 +223,14 @@ func (r settingWebPEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type SettingWebPEditResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    settingWebPEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingWebPEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingWebPEditResponseEnvelopeErrors]
-type settingWebPEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWebPEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWebPEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingWebPEditResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    settingWebPEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingWebPEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingWebPEditResponseEnvelopeMessages]
-type settingWebPEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWebPEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWebPEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 type SettingWebPGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingWebPGetResponseEnvelope struct {
-	Errors   []SettingWebPGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWebPGetResponseEnvelopeMessages `json:"messages,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When the client requesting the image supports the WebP image codec, and WebP
@@ -301,51 +256,5 @@ func (r *SettingWebPGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 func (r settingWebPGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingWebPGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    settingWebPGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// settingWebPGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingWebPGetResponseEnvelopeErrors]
-type settingWebPGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWebPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWebPGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingWebPGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    settingWebPGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingWebPGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingWebPGetResponseEnvelopeMessages]
-type settingWebPGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWebPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingWebPGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }

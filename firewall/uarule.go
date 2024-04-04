@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/tidwall/gjson"
 )
 
 // UARuleService contains methods and other services that help with interacting
@@ -37,7 +35,7 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 }
 
 // Creates a new User Agent Blocking rule in a zone.
-func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *UARuleNewResponse, err error) {
+func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
@@ -50,7 +48,7 @@ func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UAR
 }
 
 // Updates an existing User Agent Blocking rule.
-func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *UARuleUpdateResponse, err error) {
+func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
@@ -101,7 +99,7 @@ func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a User Agent Blocking rule.
-func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *UARuleGetResponse, err error) {
+func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef173, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UARuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
@@ -111,39 +109,6 @@ func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id strin
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [firewall.UARuleNewResponseUnknown] or [shared.UnionString].
-type UARuleNewResponse interface {
-	ImplementsFirewallUARuleNewResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UARuleNewResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [firewall.UARuleUpdateResponseUnknown] or
-// [shared.UnionString].
-type UARuleUpdateResponse interface {
-	ImplementsFirewallUARuleUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UARuleUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type UARuleListResponse struct {
@@ -248,22 +213,6 @@ func (r uaRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [firewall.UARuleGetResponseUnknown] or [shared.UnionString].
-type UARuleGetResponse interface {
-	ImplementsFirewallUARuleGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UARuleGetResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type UARuleNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -273,9 +222,9 @@ func (r UARuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UARuleNewResponseEnvelope struct {
-	Errors   []UARuleNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UARuleNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   UARuleNewResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -297,52 +246,6 @@ func (r *UARuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r uaRuleNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type UARuleNewResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    uaRuleNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// uaRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [UARuleNewResponseEnvelopeErrors]
-type uaRuleNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UARuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uaRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UARuleNewResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    uaRuleNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// uaRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [UARuleNewResponseEnvelopeMessages]
-type uaRuleNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UARuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uaRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -370,9 +273,9 @@ func (r UARuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UARuleUpdateResponseEnvelope struct {
-	Errors   []UARuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UARuleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   UARuleUpdateResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -394,52 +297,6 @@ func (r *UARuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r uaRuleUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type UARuleUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    uaRuleUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// uaRuleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [UARuleUpdateResponseEnvelopeErrors]
-type uaRuleUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UARuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uaRuleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UARuleUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    uaRuleUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// uaRuleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [UARuleUpdateResponseEnvelopeMessages]
-type uaRuleUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UARuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uaRuleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -489,9 +346,9 @@ func (r UARuleDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UARuleDeleteResponseEnvelope struct {
-	Errors   []UARuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UARuleDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   UARuleDeleteResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   UARuleDeleteResponse         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -516,52 +373,6 @@ func (r uaRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type UARuleDeleteResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    uaRuleDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// uaRuleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [UARuleDeleteResponseEnvelopeErrors]
-type uaRuleDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UARuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uaRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UARuleDeleteResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    uaRuleDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// uaRuleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [UARuleDeleteResponseEnvelopeMessages]
-type uaRuleDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UARuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uaRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type UARuleDeleteResponseEnvelopeSuccess bool
 
@@ -578,9 +389,9 @@ func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleGetResponseEnvelope struct {
-	Errors   []UARuleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UARuleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   UARuleGetResponse                   `json:"result,required,nullable"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   shared.UnnamedSchemaRef173   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success UARuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleGetResponseEnvelopeJSON    `json:"-"`
@@ -602,52 +413,6 @@ func (r *UARuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r uaRuleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type UARuleGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    uaRuleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// uaRuleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [UARuleGetResponseEnvelopeErrors]
-type uaRuleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UARuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uaRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type UARuleGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    uaRuleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// uaRuleGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [UARuleGetResponseEnvelopeMessages]
-type uaRuleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UARuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uaRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

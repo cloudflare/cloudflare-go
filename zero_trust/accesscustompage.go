@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -267,9 +268,9 @@ func (r AccessCustomPageNewParamsType) IsKnown() bool {
 }
 
 type AccessCustomPageNewResponseEnvelope struct {
-	Errors   []AccessCustomPageNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCustomPageNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustCustomPageWithoutHTML                `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   ZeroTrustCustomPageWithoutHTML `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageNewResponseEnvelopeJSON    `json:"-"`
@@ -291,52 +292,6 @@ func (r *AccessCustomPageNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r accessCustomPageNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCustomPageNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    accessCustomPageNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessCustomPageNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessCustomPageNewResponseEnvelopeErrors]
-type accessCustomPageNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCustomPageNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    accessCustomPageNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessCustomPageNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AccessCustomPageNewResponseEnvelopeMessages]
-type accessCustomPageNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -387,9 +342,9 @@ func (r AccessCustomPageUpdateParamsType) IsKnown() bool {
 }
 
 type AccessCustomPageUpdateResponseEnvelope struct {
-	Errors   []AccessCustomPageUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCustomPageUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustCustomPageWithoutHTML                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   ZeroTrustCustomPageWithoutHTML `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageUpdateResponseEnvelopeJSON    `json:"-"`
@@ -414,52 +369,6 @@ func (r accessCustomPageUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessCustomPageUpdateResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessCustomPageUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessCustomPageUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessCustomPageUpdateResponseEnvelopeErrors]
-type accessCustomPageUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCustomPageUpdateResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessCustomPageUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessCustomPageUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessCustomPageUpdateResponseEnvelopeMessages]
-type accessCustomPageUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type AccessCustomPageUpdateResponseEnvelopeSuccess bool
 
@@ -476,9 +385,9 @@ func (r AccessCustomPageUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessCustomPageDeleteResponseEnvelope struct {
-	Errors   []AccessCustomPageDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCustomPageDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessCustomPageDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172   `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172   `json:"messages,required"`
+	Result   AccessCustomPageDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageDeleteResponseEnvelopeJSON    `json:"-"`
@@ -503,52 +412,6 @@ func (r accessCustomPageDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessCustomPageDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    accessCustomPageDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessCustomPageDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AccessCustomPageDeleteResponseEnvelopeErrors]
-type accessCustomPageDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCustomPageDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessCustomPageDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessCustomPageDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessCustomPageDeleteResponseEnvelopeMessages]
-type accessCustomPageDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type AccessCustomPageDeleteResponseEnvelopeSuccess bool
 
@@ -565,9 +428,9 @@ func (r AccessCustomPageDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessCustomPageGetResponseEnvelope struct {
-	Errors   []AccessCustomPageGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCustomPageGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustCustomPage                           `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustCustomPage          `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCustomPageGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageGetResponseEnvelopeJSON    `json:"-"`
@@ -589,52 +452,6 @@ func (r *AccessCustomPageGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r accessCustomPageGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCustomPageGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    accessCustomPageGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessCustomPageGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessCustomPageGetResponseEnvelopeErrors]
-type accessCustomPageGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCustomPageGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    accessCustomPageGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessCustomPageGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AccessCustomPageGetResponseEnvelopeMessages]
-type accessCustomPageGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCustomPageGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCustomPageGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

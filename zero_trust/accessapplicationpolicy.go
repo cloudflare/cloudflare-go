@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -662,8 +663,8 @@ func (r ZeroTrustPoliciesExcludeAccessCertificateRule) implementsZeroTrustZeroTr
 
 // Matches an Access group.
 type ZeroTrustPoliciesExcludeAccessAccessGroupRule struct {
-	Group ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON  `json:"-"`
+	Group shared.UnnamedSchemaRef131                        `json:"group,required"`
+	JSON  zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON `json:"-"`
 }
 
 // zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON contains the JSON metadata for
@@ -683,28 +684,6 @@ func (r zeroTrustPoliciesExcludeAccessAccessGroupRuleJSON) RawJSON() string {
 }
 
 func (r ZeroTrustPoliciesExcludeAccessAccessGroupRule) implementsZeroTrustZeroTrustPoliciesExclude() {
-}
-
-type ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                                 `json:"id,required"`
-	JSON zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON `json:"-"`
-}
-
-// zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON contains the JSON
-// metadata for the struct [ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup]
-type zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustPoliciesExcludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustPoliciesExcludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
-	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -1614,8 +1593,8 @@ func (r ZeroTrustPoliciesIncludeAccessCertificateRule) implementsZeroTrustZeroTr
 
 // Matches an Access group.
 type ZeroTrustPoliciesIncludeAccessAccessGroupRule struct {
-	Group ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON  `json:"-"`
+	Group shared.UnnamedSchemaRef131                        `json:"group,required"`
+	JSON  zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON `json:"-"`
 }
 
 // zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON contains the JSON metadata for
@@ -1635,28 +1614,6 @@ func (r zeroTrustPoliciesIncludeAccessAccessGroupRuleJSON) RawJSON() string {
 }
 
 func (r ZeroTrustPoliciesIncludeAccessAccessGroupRule) implementsZeroTrustZeroTrustPoliciesInclude() {
-}
-
-type ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                                 `json:"id,required"`
-	JSON zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON `json:"-"`
-}
-
-// zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON contains the JSON
-// metadata for the struct [ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup]
-type zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustPoliciesIncludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustPoliciesIncludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
-	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -2566,8 +2523,8 @@ func (r ZeroTrustPoliciesRequireAccessCertificateRule) implementsZeroTrustZeroTr
 
 // Matches an Access group.
 type ZeroTrustPoliciesRequireAccessAccessGroupRule struct {
-	Group ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  zeroTrustPoliciesRequireAccessAccessGroupRuleJSON  `json:"-"`
+	Group shared.UnnamedSchemaRef131                        `json:"group,required"`
+	JSON  zeroTrustPoliciesRequireAccessAccessGroupRuleJSON `json:"-"`
 }
 
 // zeroTrustPoliciesRequireAccessAccessGroupRuleJSON contains the JSON metadata for
@@ -2587,28 +2544,6 @@ func (r zeroTrustPoliciesRequireAccessAccessGroupRuleJSON) RawJSON() string {
 }
 
 func (r ZeroTrustPoliciesRequireAccessAccessGroupRule) implementsZeroTrustZeroTrustPoliciesRequire() {
-}
-
-type ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                                 `json:"id,required"`
-	JSON zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON `json:"-"`
-}
-
-// zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON contains the JSON
-// metadata for the struct [ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup]
-type zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustPoliciesRequireAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustPoliciesRequireAccessAccessGroupRuleGroupJSON) RawJSON() string {
-	return r.raw
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -3369,7 +3304,7 @@ func (r AccessApplicationPolicyNewParamsIncludeAccessCertificateRule) implements
 
 // Matches an Access group.
 type AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRule struct {
-	Group param.Field[AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRuleGroup] `json:"group,required"`
+	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -3377,15 +3312,6 @@ func (r AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRule) MarshalJSO
 }
 
 func (r AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyNewParamsInclude() {
-}
-
-type AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r AccessApplicationPolicyNewParamsIncludeAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -3797,7 +3723,7 @@ func (r AccessApplicationPolicyNewParamsExcludeAccessCertificateRule) implements
 
 // Matches an Access group.
 type AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRule struct {
-	Group param.Field[AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRuleGroup] `json:"group,required"`
+	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -3805,15 +3731,6 @@ func (r AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRule) MarshalJSO
 }
 
 func (r AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyNewParamsExclude() {
-}
-
-type AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r AccessApplicationPolicyNewParamsExcludeAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -4211,7 +4128,7 @@ func (r AccessApplicationPolicyNewParamsRequireAccessCertificateRule) implements
 
 // Matches an Access group.
 type AccessApplicationPolicyNewParamsRequireAccessAccessGroupRule struct {
-	Group param.Field[AccessApplicationPolicyNewParamsRequireAccessAccessGroupRuleGroup] `json:"group,required"`
+	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyNewParamsRequireAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -4219,15 +4136,6 @@ func (r AccessApplicationPolicyNewParamsRequireAccessAccessGroupRule) MarshalJSO
 }
 
 func (r AccessApplicationPolicyNewParamsRequireAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyNewParamsRequire() {
-}
-
-type AccessApplicationPolicyNewParamsRequireAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r AccessApplicationPolicyNewParamsRequireAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -4468,9 +4376,9 @@ func (r AccessApplicationPolicyNewParamsRequireAccessDevicePostureRuleDevicePost
 }
 
 type AccessApplicationPolicyNewResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustPolicies                                    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustPolicies            `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyNewResponseEnvelopeJSON    `json:"-"`
@@ -4492,52 +4400,6 @@ func (r *AccessApplicationPolicyNewResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r accessApplicationPolicyNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyNewResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    accessApplicationPolicyNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationPolicyNewResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessApplicationPolicyNewResponseEnvelopeErrors]
-type accessApplicationPolicyNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyNewResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    accessApplicationPolicyNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationPolicyNewResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyNewResponseEnvelopeMessages]
-type accessApplicationPolicyNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -4775,7 +4637,7 @@ func (r AccessApplicationPolicyUpdateParamsIncludeAccessCertificateRule) impleme
 
 // Matches an Access group.
 type AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRule struct {
-	Group param.Field[AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRuleGroup] `json:"group,required"`
+	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -4783,15 +4645,6 @@ func (r AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRule) Marshal
 }
 
 func (r AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateParamsInclude() {
-}
-
-type AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsIncludeAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -5203,7 +5056,7 @@ func (r AccessApplicationPolicyUpdateParamsExcludeAccessCertificateRule) impleme
 
 // Matches an Access group.
 type AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRule struct {
-	Group param.Field[AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRuleGroup] `json:"group,required"`
+	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -5211,15 +5064,6 @@ func (r AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRule) Marshal
 }
 
 func (r AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateParamsExclude() {
-}
-
-type AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsExcludeAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -5617,7 +5461,7 @@ func (r AccessApplicationPolicyUpdateParamsRequireAccessCertificateRule) impleme
 
 // Matches an Access group.
 type AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRule struct {
-	Group param.Field[AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRuleGroup] `json:"group,required"`
+	Group param.Field[shared.UnnamedSchemaRef131Param] `json:"group,required"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRule) MarshalJSON() (data []byte, err error) {
@@ -5625,15 +5469,6 @@ func (r AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRule) Marshal
 }
 
 func (r AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateParamsRequire() {
-}
-
-type AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsRequireAccessAccessGroupRuleGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Matches an Azure group. Requires an Azure identity provider.
@@ -5874,9 +5709,9 @@ func (r AccessApplicationPolicyUpdateParamsRequireAccessDevicePostureRuleDeviceP
 }
 
 type AccessApplicationPolicyUpdateResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustPolicies                                       `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustPolicies            `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -5898,52 +5733,6 @@ func (r *AccessApplicationPolicyUpdateResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r accessApplicationPolicyUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    accessApplicationPolicyUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationPolicyUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyUpdateResponseEnvelopeErrors]
-type accessApplicationPolicyUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    accessApplicationPolicyUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationPolicyUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyUpdateResponseEnvelopeMessages]
-type accessApplicationPolicyUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -5977,9 +5766,9 @@ type AccessApplicationPolicyDeleteParams struct {
 }
 
 type AccessApplicationPolicyDeleteResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessApplicationPolicyDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172          `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172          `json:"messages,required"`
+	Result   AccessApplicationPolicyDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyDeleteResponseEnvelopeJSON    `json:"-"`
@@ -6001,52 +5790,6 @@ func (r *AccessApplicationPolicyDeleteResponseEnvelope) UnmarshalJSON(data []byt
 }
 
 func (r accessApplicationPolicyDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyDeleteResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    accessApplicationPolicyDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationPolicyDeleteResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyDeleteResponseEnvelopeErrors]
-type accessApplicationPolicyDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    accessApplicationPolicyDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationPolicyDeleteResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyDeleteResponseEnvelopeMessages]
-type accessApplicationPolicyDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6073,9 +5816,9 @@ type AccessApplicationPolicyGetParams struct {
 }
 
 type AccessApplicationPolicyGetResponseEnvelope struct {
-	Errors   []AccessApplicationPolicyGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessApplicationPolicyGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustPolicies                                    `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   ZeroTrustPolicies            `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessApplicationPolicyGetResponseEnvelopeJSON    `json:"-"`
@@ -6097,52 +5840,6 @@ func (r *AccessApplicationPolicyGetResponseEnvelope) UnmarshalJSON(data []byte) 
 }
 
 func (r accessApplicationPolicyGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyGetResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    accessApplicationPolicyGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessApplicationPolicyGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessApplicationPolicyGetResponseEnvelopeErrors]
-type accessApplicationPolicyGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationPolicyGetResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    accessApplicationPolicyGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessApplicationPolicyGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessApplicationPolicyGetResponseEnvelopeMessages]
-type accessApplicationPolicyGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationPolicyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationPolicyGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

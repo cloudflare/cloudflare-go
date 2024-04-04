@@ -129,7 +129,7 @@ type CustomCertificate struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod CustomCertificateBundleMethod `json:"bundle_method,required"`
+	BundleMethod shared.UnnamedSchemaRef78 `json:"bundle_method,required"`
 	// When the certificate from the authority expires.
 	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
 	Hosts     []string  `json:"hosts,required"`
@@ -199,26 +199,6 @@ func (r *CustomCertificate) UnmarshalJSON(data []byte) (err error) {
 
 func (r customCertificateJSON) RawJSON() string {
 	return r.raw
-}
-
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomCertificateBundleMethod string
-
-const (
-	CustomCertificateBundleMethodUbiquitous CustomCertificateBundleMethod = "ubiquitous"
-	CustomCertificateBundleMethodOptimal    CustomCertificateBundleMethod = "optimal"
-	CustomCertificateBundleMethodForce      CustomCertificateBundleMethod = "force"
-)
-
-func (r CustomCertificateBundleMethod) IsKnown() bool {
-	switch r {
-	case CustomCertificateBundleMethodUbiquitous, CustomCertificateBundleMethodOptimal, CustomCertificateBundleMethodForce:
-		return true
-	}
-	return false
 }
 
 // Status of the zone's custom SSL.
@@ -368,7 +348,7 @@ type CustomCertificateNewParams struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[CustomCertificateNewParamsBundleMethod] `json:"bundle_method"`
+	BundleMethod param.Field[shared.UnnamedSchemaRef78] `json:"bundle_method"`
 	// Specify the region where your private key can be held locally for optimal TLS
 	// performance. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -394,26 +374,6 @@ type CustomCertificateNewParams struct {
 
 func (r CustomCertificateNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomCertificateNewParamsBundleMethod string
-
-const (
-	CustomCertificateNewParamsBundleMethodUbiquitous CustomCertificateNewParamsBundleMethod = "ubiquitous"
-	CustomCertificateNewParamsBundleMethodOptimal    CustomCertificateNewParamsBundleMethod = "optimal"
-	CustomCertificateNewParamsBundleMethodForce      CustomCertificateNewParamsBundleMethod = "force"
-)
-
-func (r CustomCertificateNewParamsBundleMethod) IsKnown() bool {
-	switch r {
-	case CustomCertificateNewParamsBundleMethodUbiquitous, CustomCertificateNewParamsBundleMethodOptimal, CustomCertificateNewParamsBundleMethodForce:
-		return true
-	}
-	return false
 }
 
 // Specify the region where your private key can be held locally for optimal TLS
@@ -465,9 +425,9 @@ func (r CustomCertificateNewParamsType) IsKnown() bool {
 }
 
 type CustomCertificateNewResponseEnvelope struct {
-	Errors   []CustomCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomCertificateNewResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   CustomCertificateNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -489,52 +449,6 @@ func (r *CustomCertificateNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r customCertificateNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateNewResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    customCertificateNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customCertificateNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomCertificateNewResponseEnvelopeErrors]
-type customCertificateNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateNewResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    customCertificateNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customCertificateNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomCertificateNewResponseEnvelopeMessages]
-type customCertificateNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -621,9 +535,9 @@ func (r CustomCertificateDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomCertificateDeleteResponseEnvelope struct {
-	Errors   []CustomCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomCertificateDeleteResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172    `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172    `json:"messages,required"`
+	Result   CustomCertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -645,52 +559,6 @@ func (r *CustomCertificateDeleteResponseEnvelope) UnmarshalJSON(data []byte) (er
 }
 
 func (r customCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateDeleteResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    customCertificateDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customCertificateDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomCertificateDeleteResponseEnvelopeErrors]
-type customCertificateDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateDeleteResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    customCertificateDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customCertificateDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [CustomCertificateDeleteResponseEnvelopeMessages]
-type customCertificateDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -716,7 +584,7 @@ type CustomCertificateEditParams struct {
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[CustomCertificateEditParamsBundleMethod] `json:"bundle_method"`
+	BundleMethod param.Field[shared.UnnamedSchemaRef78] `json:"bundle_method"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate"`
 	// Specify the region where your private key can be held locally for optimal TLS
@@ -743,26 +611,6 @@ type CustomCertificateEditParams struct {
 
 func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomCertificateEditParamsBundleMethod string
-
-const (
-	CustomCertificateEditParamsBundleMethodUbiquitous CustomCertificateEditParamsBundleMethod = "ubiquitous"
-	CustomCertificateEditParamsBundleMethodOptimal    CustomCertificateEditParamsBundleMethod = "optimal"
-	CustomCertificateEditParamsBundleMethodForce      CustomCertificateEditParamsBundleMethod = "force"
-)
-
-func (r CustomCertificateEditParamsBundleMethod) IsKnown() bool {
-	switch r {
-	case CustomCertificateEditParamsBundleMethodUbiquitous, CustomCertificateEditParamsBundleMethodOptimal, CustomCertificateEditParamsBundleMethodForce:
-		return true
-	}
-	return false
 }
 
 // Specify the region where your private key can be held locally for optimal TLS
@@ -797,9 +645,9 @@ func (r CustomCertificateEditParamsGeoRestrictionsLabel) IsKnown() bool {
 }
 
 type CustomCertificateEditResponseEnvelope struct {
-	Errors   []CustomCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomCertificateEditResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172  `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172  `json:"messages,required"`
+	Result   CustomCertificateEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -824,52 +672,6 @@ func (r customCertificateEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type CustomCertificateEditResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    customCertificateEditResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customCertificateEditResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomCertificateEditResponseEnvelopeErrors]
-type customCertificateEditResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateEditResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateEditResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    customCertificateEditResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customCertificateEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomCertificateEditResponseEnvelopeMessages]
-type customCertificateEditResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateEditResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
 // Whether the API call was successful
 type CustomCertificateEditResponseEnvelopeSuccess bool
 
@@ -891,9 +693,9 @@ type CustomCertificateGetParams struct {
 }
 
 type CustomCertificateGetResponseEnvelope struct {
-	Errors   []CustomCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomCertificateGetResponse                   `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   CustomCertificateGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customCertificateGetResponseEnvelopeJSON    `json:"-"`
@@ -915,52 +717,6 @@ func (r *CustomCertificateGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 func (r customCertificateGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateGetResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    customCertificateGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customCertificateGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomCertificateGetResponseEnvelopeErrors]
-type customCertificateGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomCertificateGetResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    customCertificateGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customCertificateGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomCertificateGetResponseEnvelopeMessages]
-type customCertificateGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 

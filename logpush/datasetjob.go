@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -252,9 +253,9 @@ type DatasetJobGetParams struct {
 }
 
 type DatasetJobGetResponseEnvelope struct {
-	Errors   []DatasetJobGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DatasetJobGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LogpushJob                            `json:"result,required"`
+	Errors   []shared.UnnamedSchemaRef172 `json:"errors,required"`
+	Messages []shared.UnnamedSchemaRef172 `json:"messages,required"`
+	Result   []LogpushJob                 `json:"result,required"`
 	// Whether the API call was successful
 	Success DatasetJobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    datasetJobGetResponseEnvelopeJSON    `json:"-"`
@@ -276,52 +277,6 @@ func (r *DatasetJobGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r datasetJobGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatasetJobGetResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    datasetJobGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// datasetJobGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DatasetJobGetResponseEnvelopeErrors]
-type datasetJobGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatasetJobGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r datasetJobGetResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatasetJobGetResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    datasetJobGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// datasetJobGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DatasetJobGetResponseEnvelopeMessages]
-type datasetJobGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatasetJobGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r datasetJobGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
