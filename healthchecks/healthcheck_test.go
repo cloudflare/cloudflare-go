@@ -56,8 +56,8 @@ func TestHealthcheckNewWithOptionalParams(t *testing.T) {
 		Interval:  cloudflare.F(int64(0)),
 		Retries:   cloudflare.F(int64(0)),
 		Suspended: cloudflare.F(true),
-		TcpConfig: cloudflare.F(healthchecks.TcpConfigurationParam{
-			Method: cloudflare.F(healthchecks.TcpConfigurationMethodConnectionEstablished),
+		TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
+			Method: cloudflare.F(healthchecks.TCPConfigurationMethodConnectionEstablished),
 			Port:   cloudflare.F(int64(0)),
 		}),
 		Timeout: cloudflare.F(int64(0)),
@@ -117,8 +117,8 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 			Interval:  cloudflare.F(int64(0)),
 			Retries:   cloudflare.F(int64(0)),
 			Suspended: cloudflare.F(true),
-			TcpConfig: cloudflare.F(healthchecks.TcpConfigurationParam{
-				Method: cloudflare.F(healthchecks.TcpConfigurationMethodConnectionEstablished),
+			TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
+				Method: cloudflare.F(healthchecks.TCPConfigurationMethodConnectionEstablished),
 				Port:   cloudflare.F(int64(0)),
 			}),
 			Timeout: cloudflare.F(int64(0)),
@@ -236,8 +236,8 @@ func TestHealthcheckEditWithOptionalParams(t *testing.T) {
 			Interval:  cloudflare.F(int64(0)),
 			Retries:   cloudflare.F(int64(0)),
 			Suspended: cloudflare.F(true),
-			TcpConfig: cloudflare.F(healthchecks.TcpConfigurationParam{
-				Method: cloudflare.F(healthchecks.TcpConfigurationMethodConnectionEstablished),
+			TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
+				Method: cloudflare.F(healthchecks.TCPConfigurationMethodConnectionEstablished),
 				Port:   cloudflare.F(int64(0)),
 			}),
 			Timeout: cloudflare.F(int64(0)),

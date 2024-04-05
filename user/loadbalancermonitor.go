@@ -245,7 +245,7 @@ type MonitorType string
 const (
 	MonitorTypeHTTP     MonitorType = "http"
 	MonitorTypeHTTPS    MonitorType = "https"
-	MonitorTypeTcp      MonitorType = "tcp"
+	MonitorTypeTCP      MonitorType = "tcp"
 	MonitorTypeUdpIcmp  MonitorType = "udp_icmp"
 	MonitorTypeIcmpPing MonitorType = "icmp_ping"
 	MonitorTypeSmtp     MonitorType = "smtp"
@@ -253,7 +253,7 @@ const (
 
 func (r MonitorType) IsKnown() bool {
 	switch r {
-	case MonitorTypeHTTP, MonitorTypeHTTPS, MonitorTypeTcp, MonitorTypeUdpIcmp, MonitorTypeIcmpPing, MonitorTypeSmtp:
+	case MonitorTypeHTTP, MonitorTypeHTTPS, MonitorTypeTCP, MonitorTypeUdpIcmp, MonitorTypeIcmpPing, MonitorTypeSmtp:
 		return true
 	}
 	return false
@@ -394,7 +394,7 @@ type LoadBalancerMonitorNewParamsType string
 const (
 	LoadBalancerMonitorNewParamsTypeHTTP     LoadBalancerMonitorNewParamsType = "http"
 	LoadBalancerMonitorNewParamsTypeHTTPS    LoadBalancerMonitorNewParamsType = "https"
-	LoadBalancerMonitorNewParamsTypeTcp      LoadBalancerMonitorNewParamsType = "tcp"
+	LoadBalancerMonitorNewParamsTypeTCP      LoadBalancerMonitorNewParamsType = "tcp"
 	LoadBalancerMonitorNewParamsTypeUdpIcmp  LoadBalancerMonitorNewParamsType = "udp_icmp"
 	LoadBalancerMonitorNewParamsTypeIcmpPing LoadBalancerMonitorNewParamsType = "icmp_ping"
 	LoadBalancerMonitorNewParamsTypeSmtp     LoadBalancerMonitorNewParamsType = "smtp"
@@ -402,7 +402,7 @@ const (
 
 func (r LoadBalancerMonitorNewParamsType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorNewParamsTypeHTTP, LoadBalancerMonitorNewParamsTypeHTTPS, LoadBalancerMonitorNewParamsTypeTcp, LoadBalancerMonitorNewParamsTypeUdpIcmp, LoadBalancerMonitorNewParamsTypeIcmpPing, LoadBalancerMonitorNewParamsTypeSmtp:
+	case LoadBalancerMonitorNewParamsTypeHTTP, LoadBalancerMonitorNewParamsTypeHTTPS, LoadBalancerMonitorNewParamsTypeTCP, LoadBalancerMonitorNewParamsTypeUdpIcmp, LoadBalancerMonitorNewParamsTypeIcmpPing, LoadBalancerMonitorNewParamsTypeSmtp:
 		return true
 	}
 	return false
@@ -514,7 +514,7 @@ type LoadBalancerMonitorUpdateParamsType string
 const (
 	LoadBalancerMonitorUpdateParamsTypeHTTP     LoadBalancerMonitorUpdateParamsType = "http"
 	LoadBalancerMonitorUpdateParamsTypeHTTPS    LoadBalancerMonitorUpdateParamsType = "https"
-	LoadBalancerMonitorUpdateParamsTypeTcp      LoadBalancerMonitorUpdateParamsType = "tcp"
+	LoadBalancerMonitorUpdateParamsTypeTCP      LoadBalancerMonitorUpdateParamsType = "tcp"
 	LoadBalancerMonitorUpdateParamsTypeUdpIcmp  LoadBalancerMonitorUpdateParamsType = "udp_icmp"
 	LoadBalancerMonitorUpdateParamsTypeIcmpPing LoadBalancerMonitorUpdateParamsType = "icmp_ping"
 	LoadBalancerMonitorUpdateParamsTypeSmtp     LoadBalancerMonitorUpdateParamsType = "smtp"
@@ -522,7 +522,7 @@ const (
 
 func (r LoadBalancerMonitorUpdateParamsType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorUpdateParamsTypeHTTP, LoadBalancerMonitorUpdateParamsTypeHTTPS, LoadBalancerMonitorUpdateParamsTypeTcp, LoadBalancerMonitorUpdateParamsTypeUdpIcmp, LoadBalancerMonitorUpdateParamsTypeIcmpPing, LoadBalancerMonitorUpdateParamsTypeSmtp:
+	case LoadBalancerMonitorUpdateParamsTypeHTTP, LoadBalancerMonitorUpdateParamsTypeHTTPS, LoadBalancerMonitorUpdateParamsTypeTCP, LoadBalancerMonitorUpdateParamsTypeUdpIcmp, LoadBalancerMonitorUpdateParamsTypeIcmpPing, LoadBalancerMonitorUpdateParamsTypeSmtp:
 		return true
 	}
 	return false
@@ -685,7 +685,7 @@ type LoadBalancerMonitorEditParamsType string
 const (
 	LoadBalancerMonitorEditParamsTypeHTTP     LoadBalancerMonitorEditParamsType = "http"
 	LoadBalancerMonitorEditParamsTypeHTTPS    LoadBalancerMonitorEditParamsType = "https"
-	LoadBalancerMonitorEditParamsTypeTcp      LoadBalancerMonitorEditParamsType = "tcp"
+	LoadBalancerMonitorEditParamsTypeTCP      LoadBalancerMonitorEditParamsType = "tcp"
 	LoadBalancerMonitorEditParamsTypeUdpIcmp  LoadBalancerMonitorEditParamsType = "udp_icmp"
 	LoadBalancerMonitorEditParamsTypeIcmpPing LoadBalancerMonitorEditParamsType = "icmp_ping"
 	LoadBalancerMonitorEditParamsTypeSmtp     LoadBalancerMonitorEditParamsType = "smtp"
@@ -693,7 +693,7 @@ const (
 
 func (r LoadBalancerMonitorEditParamsType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorEditParamsTypeHTTP, LoadBalancerMonitorEditParamsTypeHTTPS, LoadBalancerMonitorEditParamsTypeTcp, LoadBalancerMonitorEditParamsTypeUdpIcmp, LoadBalancerMonitorEditParamsTypeIcmpPing, LoadBalancerMonitorEditParamsTypeSmtp:
+	case LoadBalancerMonitorEditParamsTypeHTTP, LoadBalancerMonitorEditParamsTypeHTTPS, LoadBalancerMonitorEditParamsTypeTCP, LoadBalancerMonitorEditParamsTypeUdpIcmp, LoadBalancerMonitorEditParamsTypeIcmpPing, LoadBalancerMonitorEditParamsTypeSmtp:
 		return true
 	}
 	return false
@@ -848,7 +848,7 @@ type LoadBalancerMonitorPreviewParamsType string
 const (
 	LoadBalancerMonitorPreviewParamsTypeHTTP     LoadBalancerMonitorPreviewParamsType = "http"
 	LoadBalancerMonitorPreviewParamsTypeHTTPS    LoadBalancerMonitorPreviewParamsType = "https"
-	LoadBalancerMonitorPreviewParamsTypeTcp      LoadBalancerMonitorPreviewParamsType = "tcp"
+	LoadBalancerMonitorPreviewParamsTypeTCP      LoadBalancerMonitorPreviewParamsType = "tcp"
 	LoadBalancerMonitorPreviewParamsTypeUdpIcmp  LoadBalancerMonitorPreviewParamsType = "udp_icmp"
 	LoadBalancerMonitorPreviewParamsTypeIcmpPing LoadBalancerMonitorPreviewParamsType = "icmp_ping"
 	LoadBalancerMonitorPreviewParamsTypeSmtp     LoadBalancerMonitorPreviewParamsType = "smtp"
@@ -856,7 +856,7 @@ const (
 
 func (r LoadBalancerMonitorPreviewParamsType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorPreviewParamsTypeHTTP, LoadBalancerMonitorPreviewParamsTypeHTTPS, LoadBalancerMonitorPreviewParamsTypeTcp, LoadBalancerMonitorPreviewParamsTypeUdpIcmp, LoadBalancerMonitorPreviewParamsTypeIcmpPing, LoadBalancerMonitorPreviewParamsTypeSmtp:
+	case LoadBalancerMonitorPreviewParamsTypeHTTP, LoadBalancerMonitorPreviewParamsTypeHTTPS, LoadBalancerMonitorPreviewParamsTypeTCP, LoadBalancerMonitorPreviewParamsTypeUdpIcmp, LoadBalancerMonitorPreviewParamsTypeIcmpPing, LoadBalancerMonitorPreviewParamsTypeSmtp:
 		return true
 	}
 	return false

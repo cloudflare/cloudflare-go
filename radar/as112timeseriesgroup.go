@@ -274,7 +274,7 @@ func (r as112TimeseriesGroupProtocolResponseJSON) RawJSON() string {
 }
 
 type AS112TimeseriesGroupProtocolResponseSerie0 struct {
-	Tcp  []string                                       `json:"tcp,required"`
+	TCP  []string                                       `json:"tcp,required"`
 	Udp  []string                                       `json:"udp,required"`
 	JSON as112TimeseriesGroupProtocolResponseSerie0JSON `json:"-"`
 }
@@ -282,7 +282,7 @@ type AS112TimeseriesGroupProtocolResponseSerie0 struct {
 // as112TimeseriesGroupProtocolResponseSerie0JSON contains the JSON metadata for
 // the struct [AS112TimeseriesGroupProtocolResponseSerie0]
 type as112TimeseriesGroupProtocolResponseSerie0JSON struct {
-	Tcp         apijson.Field
+	TCP         apijson.Field
 	Udp         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

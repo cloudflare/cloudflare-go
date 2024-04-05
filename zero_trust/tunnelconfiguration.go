@@ -138,7 +138,7 @@ type TunnelConfigurationUpdateParamsConfigIngressOriginRequest struct {
 	ProxyType param.Field[string] `json:"proxyType"`
 	// The timeout after which a TCP keepalive packet is sent on a connection between
 	// Tunnel and the origin server.
-	TcpKeepAlive param.Field[int64] `json:"tcpKeepAlive"`
+	TCPKeepAlive param.Field[int64] `json:"tcpKeepAlive"`
 	// Timeout for completing a TLS handshake to your origin server, if you have chosen
 	// to connect Tunnel to an HTTPS server.
 	TLSTimeout param.Field[int64] `json:"tlsTimeout"`
@@ -201,7 +201,7 @@ type TunnelConfigurationUpdateParamsConfigOriginRequest struct {
 	ProxyType param.Field[string] `json:"proxyType"`
 	// The timeout after which a TCP keepalive packet is sent on a connection between
 	// Tunnel and the origin server.
-	TcpKeepAlive param.Field[int64] `json:"tcpKeepAlive"`
+	TCPKeepAlive param.Field[int64] `json:"tcpKeepAlive"`
 	// Timeout for completing a TLS handshake to your origin server, if you have chosen
 	// to connect Tunnel to an HTTPS server.
 	TLSTimeout param.Field[int64] `json:"tlsTimeout"`

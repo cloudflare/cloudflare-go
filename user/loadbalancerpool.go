@@ -963,7 +963,7 @@ type LoadBalancerPoolPreviewParamsType string
 const (
 	LoadBalancerPoolPreviewParamsTypeHTTP     LoadBalancerPoolPreviewParamsType = "http"
 	LoadBalancerPoolPreviewParamsTypeHTTPS    LoadBalancerPoolPreviewParamsType = "https"
-	LoadBalancerPoolPreviewParamsTypeTcp      LoadBalancerPoolPreviewParamsType = "tcp"
+	LoadBalancerPoolPreviewParamsTypeTCP      LoadBalancerPoolPreviewParamsType = "tcp"
 	LoadBalancerPoolPreviewParamsTypeUdpIcmp  LoadBalancerPoolPreviewParamsType = "udp_icmp"
 	LoadBalancerPoolPreviewParamsTypeIcmpPing LoadBalancerPoolPreviewParamsType = "icmp_ping"
 	LoadBalancerPoolPreviewParamsTypeSmtp     LoadBalancerPoolPreviewParamsType = "smtp"
@@ -971,7 +971,7 @@ const (
 
 func (r LoadBalancerPoolPreviewParamsType) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolPreviewParamsTypeHTTP, LoadBalancerPoolPreviewParamsTypeHTTPS, LoadBalancerPoolPreviewParamsTypeTcp, LoadBalancerPoolPreviewParamsTypeUdpIcmp, LoadBalancerPoolPreviewParamsTypeIcmpPing, LoadBalancerPoolPreviewParamsTypeSmtp:
+	case LoadBalancerPoolPreviewParamsTypeHTTP, LoadBalancerPoolPreviewParamsTypeHTTPS, LoadBalancerPoolPreviewParamsTypeTCP, LoadBalancerPoolPreviewParamsTypeUdpIcmp, LoadBalancerPoolPreviewParamsTypeIcmpPing, LoadBalancerPoolPreviewParamsTypeSmtp:
 		return true
 	}
 	return false
