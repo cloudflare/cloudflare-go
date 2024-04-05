@@ -137,7 +137,8 @@ func (r BindingItem) AsUnion() BindingItemUnion {
 // [workers.BindingItemWorkersServiceBinding],
 // [workers.BindingItemWorkersDoBinding], [workers.BindingItemWorkersR2Binding],
 // [workers.BindingItemWorkersQueueBinding], [workers.BindingItemWorkersD1Binding],
-// [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
+// [workers.BindingItemWorkersDispatchNamespaceBinding] or
+// [workers.BindingItemWorkersMTLSCERTBinding].
 type BindingItemUnion interface {
 	implementsWorkersBindingItem()
 }
@@ -172,11 +173,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceBinding{}),
+			Type:       reflect.TypeOf(BindingItemWorkersDispatchNamespaceBinding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MTLSCERTBinding{}),
+			Type:       reflect.TypeOf(BindingItemWorkersMTLSCERTBinding{}),
 		},
 	)
 }
@@ -466,6 +467,155 @@ func (r BindingItemWorkersD1BindingType) IsKnown() bool {
 	return false
 }
 
+type BindingItemWorkersDispatchNamespaceBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace to bind to
+	Namespace string `json:"namespace,required"`
+	// The class of resource that the binding provides.
+	Type BindingItemWorkersDispatchNamespaceBindingType `json:"type,required"`
+	// Outbound worker
+	Outbound BindingItemWorkersDispatchNamespaceBindingOutbound `json:"outbound"`
+	JSON     bindingItemWorkersDispatchNamespaceBindingJSON     `json:"-"`
+}
+
+// bindingItemWorkersDispatchNamespaceBindingJSON contains the JSON metadata for
+// the struct [BindingItemWorkersDispatchNamespaceBinding]
+type bindingItemWorkersDispatchNamespaceBindingJSON struct {
+	Name        apijson.Field
+	Namespace   apijson.Field
+	Type        apijson.Field
+	Outbound    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingItemWorkersDispatchNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingItemWorkersDispatchNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingItemWorkersDispatchNamespaceBinding) implementsWorkersBindingItem() {}
+
+// The class of resource that the binding provides.
+type BindingItemWorkersDispatchNamespaceBindingType string
+
+const (
+	BindingItemWorkersDispatchNamespaceBindingTypeDispatchNamespace BindingItemWorkersDispatchNamespaceBindingType = "dispatch_namespace"
+)
+
+func (r BindingItemWorkersDispatchNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case BindingItemWorkersDispatchNamespaceBindingTypeDispatchNamespace:
+		return true
+	}
+	return false
+}
+
+// Outbound worker
+type BindingItemWorkersDispatchNamespaceBindingOutbound struct {
+	// Pass information from the Dispatch Worker to the Outbound Worker through the
+	// parameters
+	Params []string `json:"params"`
+	// Outbound worker
+	Worker BindingItemWorkersDispatchNamespaceBindingOutboundWorker `json:"worker"`
+	JSON   bindingItemWorkersDispatchNamespaceBindingOutboundJSON   `json:"-"`
+}
+
+// bindingItemWorkersDispatchNamespaceBindingOutboundJSON contains the JSON
+// metadata for the struct [BindingItemWorkersDispatchNamespaceBindingOutbound]
+type bindingItemWorkersDispatchNamespaceBindingOutboundJSON struct {
+	Params      apijson.Field
+	Worker      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingItemWorkersDispatchNamespaceBindingOutbound) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingItemWorkersDispatchNamespaceBindingOutboundJSON) RawJSON() string {
+	return r.raw
+}
+
+// Outbound worker
+type BindingItemWorkersDispatchNamespaceBindingOutboundWorker struct {
+	// Environment of the outbound worker
+	Environment string `json:"environment"`
+	// Name of the outbound worker
+	Service string                                                       `json:"service"`
+	JSON    bindingItemWorkersDispatchNamespaceBindingOutboundWorkerJSON `json:"-"`
+}
+
+// bindingItemWorkersDispatchNamespaceBindingOutboundWorkerJSON contains the JSON
+// metadata for the struct
+// [BindingItemWorkersDispatchNamespaceBindingOutboundWorker]
+type bindingItemWorkersDispatchNamespaceBindingOutboundWorkerJSON struct {
+	Environment apijson.Field
+	Service     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingItemWorkersDispatchNamespaceBindingOutboundWorker) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingItemWorkersDispatchNamespaceBindingOutboundWorkerJSON) RawJSON() string {
+	return r.raw
+}
+
+type BindingItemWorkersMTLSCERTBinding struct {
+	Certificate interface{} `json:"certificate,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type BindingItemWorkersMTLSCERTBindingType `json:"type,required"`
+	// ID of the certificate to bind to
+	CertificateID string                                `json:"certificate_id"`
+	JSON          bindingItemWorkersMtlscertBindingJSON `json:"-"`
+}
+
+// bindingItemWorkersMtlscertBindingJSON contains the JSON metadata for the struct
+// [BindingItemWorkersMTLSCERTBinding]
+type bindingItemWorkersMtlscertBindingJSON struct {
+	Certificate   apijson.Field
+	Name          apijson.Field
+	Type          apijson.Field
+	CertificateID apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *BindingItemWorkersMTLSCERTBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingItemWorkersMtlscertBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingItemWorkersMTLSCERTBinding) implementsWorkersBindingItem() {}
+
+// The class of resource that the binding provides.
+type BindingItemWorkersMTLSCERTBindingType string
+
+const (
+	BindingItemWorkersMTLSCERTBindingTypeMTLSCertificate BindingItemWorkersMTLSCERTBindingType = "mtls_certificate"
+)
+
+func (r BindingItemWorkersMTLSCERTBindingType) IsKnown() bool {
+	switch r {
+	case BindingItemWorkersMTLSCERTBindingTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
+
 // The class of resource that the binding provides.
 type BindingItemType string
 
@@ -528,8 +678,8 @@ func (r BindingItemParam) implementsWorkersBindingItemUnionParam() {}
 // [workers.BindingItemWorkersR2BindingParam],
 // [workers.BindingItemWorkersQueueBindingParam],
 // [workers.BindingItemWorkersD1BindingParam],
-// [workers.DispatchNamespaceBindingParam], [workers.MTLSCERTBindingParam],
-// [BindingItemParam].
+// [workers.BindingItemWorkersDispatchNamespaceBindingParam],
+// [workers.BindingItemWorkersMTLSCERTBindingParam], [BindingItemParam].
 type BindingItemUnionParam interface {
 	implementsWorkersBindingItemUnionParam()
 }
@@ -618,6 +768,60 @@ func (r BindingItemWorkersD1BindingParam) MarshalJSON() (data []byte, err error)
 
 func (r BindingItemWorkersD1BindingParam) implementsWorkersBindingItemUnionParam() {}
 
+type BindingItemWorkersDispatchNamespaceBindingParam struct {
+	// Namespace to bind to
+	Namespace param.Field[string] `json:"namespace,required"`
+	// The class of resource that the binding provides.
+	Type param.Field[BindingItemWorkersDispatchNamespaceBindingType] `json:"type,required"`
+	// Outbound worker
+	Outbound param.Field[BindingItemWorkersDispatchNamespaceBindingOutboundParam] `json:"outbound"`
+}
+
+func (r BindingItemWorkersDispatchNamespaceBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BindingItemWorkersDispatchNamespaceBindingParam) implementsWorkersBindingItemUnionParam() {}
+
+// Outbound worker
+type BindingItemWorkersDispatchNamespaceBindingOutboundParam struct {
+	// Pass information from the Dispatch Worker to the Outbound Worker through the
+	// parameters
+	Params param.Field[[]string] `json:"params"`
+	// Outbound worker
+	Worker param.Field[BindingItemWorkersDispatchNamespaceBindingOutboundWorkerParam] `json:"worker"`
+}
+
+func (r BindingItemWorkersDispatchNamespaceBindingOutboundParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Outbound worker
+type BindingItemWorkersDispatchNamespaceBindingOutboundWorkerParam struct {
+	// Environment of the outbound worker
+	Environment param.Field[string] `json:"environment"`
+	// Name of the outbound worker
+	Service param.Field[string] `json:"service"`
+}
+
+func (r BindingItemWorkersDispatchNamespaceBindingOutboundWorkerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type BindingItemWorkersMTLSCERTBindingParam struct {
+	Certificate param.Field[interface{}] `json:"certificate,required"`
+	// The class of resource that the binding provides.
+	Type param.Field[BindingItemWorkersMTLSCERTBindingType] `json:"type,required"`
+	// ID of the certificate to bind to
+	CertificateID param.Field[string] `json:"certificate_id"`
+}
+
+func (r BindingItemWorkersMTLSCERTBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BindingItemWorkersMTLSCERTBindingParam) implementsWorkersBindingItemUnionParam() {}
+
 type CompatibilityFlagsItem = string
 
 type CompatibilityFlagsItemParam = string
@@ -633,7 +837,7 @@ type SettingsItem struct {
 	Logpush bool `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations SettingsItemMigrations `json:"migrations"`
-	Placement  PlacementConfiguration `json:"placement"`
+	Placement  SettingsItemPlacement  `json:"placement"`
 	// Tags to help you manage your Workers
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -714,7 +918,8 @@ func (r SettingsItemMigrations) AsUnion() SettingsItemMigrationsUnion {
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Union satisfied by [workers.SingleStepMigration] or [workers.SteppedMigration].
+// Union satisfied by [workers.SettingsItemMigrationsWorkersSingleStepMigrations]
+// or [workers.SettingsItemMigrationsWorkersSteppedMigrations].
 type SettingsItemMigrationsUnion interface {
 	implementsWorkersSettingsItemMigrations()
 }
@@ -725,13 +930,260 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SingleStepMigration{}),
+			Type:       reflect.TypeOf(SettingsItemMigrationsWorkersSingleStepMigrations{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SteppedMigration{}),
+			Type:       reflect.TypeOf(SettingsItemMigrationsWorkersSteppedMigrations{}),
 		},
 	)
+}
+
+// A single set of migrations to apply.
+type SettingsItemMigrationsWorkersSingleStepMigrations struct {
+	// A list of classes to delete Durable Object namespaces from.
+	DeletedClasses []string `json:"deleted_classes"`
+	// A list of classes to create Durable Object namespaces from.
+	NewClasses []string `json:"new_classes"`
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag string `json:"old_tag"`
+	// A list of classes with Durable Object namespaces that were renamed.
+	RenamedClasses []SettingsItemMigrationsWorkersSingleStepMigrationsRenamedClass `json:"renamed_classes"`
+	// A list of transfers for Durable Object namespaces from a different Worker and
+	// class to a class defined in this Worker.
+	TransferredClasses []SettingsItemMigrationsWorkersSingleStepMigrationsTransferredClass `json:"transferred_classes"`
+	JSON               settingsItemMigrationsWorkersSingleStepMigrationsJSON               `json:"-"`
+}
+
+// settingsItemMigrationsWorkersSingleStepMigrationsJSON contains the JSON metadata
+// for the struct [SettingsItemMigrationsWorkersSingleStepMigrations]
+type settingsItemMigrationsWorkersSingleStepMigrationsJSON struct {
+	DeletedClasses     apijson.Field
+	NewClasses         apijson.Field
+	NewTag             apijson.Field
+	OldTag             apijson.Field
+	RenamedClasses     apijson.Field
+	TransferredClasses apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *SettingsItemMigrationsWorkersSingleStepMigrations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsItemMigrationsWorkersSingleStepMigrationsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingsItemMigrationsWorkersSingleStepMigrations) implementsWorkersSettingsItemMigrations() {
+}
+
+type SettingsItemMigrationsWorkersSingleStepMigrationsRenamedClass struct {
+	From string                                                            `json:"from"`
+	To   string                                                            `json:"to"`
+	JSON settingsItemMigrationsWorkersSingleStepMigrationsRenamedClassJSON `json:"-"`
+}
+
+// settingsItemMigrationsWorkersSingleStepMigrationsRenamedClassJSON contains the
+// JSON metadata for the struct
+// [SettingsItemMigrationsWorkersSingleStepMigrationsRenamedClass]
+type settingsItemMigrationsWorkersSingleStepMigrationsRenamedClassJSON struct {
+	From        apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingsItemMigrationsWorkersSingleStepMigrationsRenamedClass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsItemMigrationsWorkersSingleStepMigrationsRenamedClassJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingsItemMigrationsWorkersSingleStepMigrationsTransferredClass struct {
+	From       string                                                                `json:"from"`
+	FromScript string                                                                `json:"from_script"`
+	To         string                                                                `json:"to"`
+	JSON       settingsItemMigrationsWorkersSingleStepMigrationsTransferredClassJSON `json:"-"`
+}
+
+// settingsItemMigrationsWorkersSingleStepMigrationsTransferredClassJSON contains
+// the JSON metadata for the struct
+// [SettingsItemMigrationsWorkersSingleStepMigrationsTransferredClass]
+type settingsItemMigrationsWorkersSingleStepMigrationsTransferredClassJSON struct {
+	From        apijson.Field
+	FromScript  apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingsItemMigrationsWorkersSingleStepMigrationsTransferredClass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsItemMigrationsWorkersSingleStepMigrationsTransferredClassJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingsItemMigrationsWorkersSteppedMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag string `json:"old_tag"`
+	// Migrations to apply in order.
+	Steps []SettingsItemMigrationsWorkersSteppedMigrationsStep `json:"steps"`
+	JSON  settingsItemMigrationsWorkersSteppedMigrationsJSON   `json:"-"`
+}
+
+// settingsItemMigrationsWorkersSteppedMigrationsJSON contains the JSON metadata
+// for the struct [SettingsItemMigrationsWorkersSteppedMigrations]
+type settingsItemMigrationsWorkersSteppedMigrationsJSON struct {
+	NewTag      apijson.Field
+	OldTag      apijson.Field
+	Steps       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingsItemMigrationsWorkersSteppedMigrations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsItemMigrationsWorkersSteppedMigrationsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r SettingsItemMigrationsWorkersSteppedMigrations) implementsWorkersSettingsItemMigrations() {}
+
+type SettingsItemMigrationsWorkersSteppedMigrationsStep struct {
+	// A list of classes to delete Durable Object namespaces from.
+	DeletedClasses []string `json:"deleted_classes"`
+	// A list of classes to create Durable Object namespaces from.
+	NewClasses []string `json:"new_classes"`
+	// A list of classes with Durable Object namespaces that were renamed.
+	RenamedClasses []SettingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClass `json:"renamed_classes"`
+	// A list of transfers for Durable Object namespaces from a different Worker and
+	// class to a class defined in this Worker.
+	TransferredClasses []SettingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClass `json:"transferred_classes"`
+	JSON               settingsItemMigrationsWorkersSteppedMigrationsStepJSON                `json:"-"`
+}
+
+// settingsItemMigrationsWorkersSteppedMigrationsStepJSON contains the JSON
+// metadata for the struct [SettingsItemMigrationsWorkersSteppedMigrationsStep]
+type settingsItemMigrationsWorkersSteppedMigrationsStepJSON struct {
+	DeletedClasses     apijson.Field
+	NewClasses         apijson.Field
+	RenamedClasses     apijson.Field
+	TransferredClasses apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *SettingsItemMigrationsWorkersSteppedMigrationsStep) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsItemMigrationsWorkersSteppedMigrationsStepJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
+	From string                                                              `json:"from"`
+	To   string                                                              `json:"to"`
+	JSON settingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON `json:"-"`
+}
+
+// settingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON contains the
+// JSON metadata for the struct
+// [SettingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClass]
+type settingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON struct {
+	From        apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
+	From       string                                                                  `json:"from"`
+	FromScript string                                                                  `json:"from_script"`
+	To         string                                                                  `json:"to"`
+	JSON       settingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON `json:"-"`
+}
+
+// settingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON contains
+// the JSON metadata for the struct
+// [SettingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClass]
+type settingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON struct {
+	From        apijson.Field
+	FromScript  apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingsItemPlacement struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Only `"smart"` is currently supported
+	Mode SettingsItemPlacementMode `json:"mode"`
+	JSON settingsItemPlacementJSON `json:"-"`
+}
+
+// settingsItemPlacementJSON contains the JSON metadata for the struct
+// [SettingsItemPlacement]
+type settingsItemPlacementJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingsItemPlacement) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsItemPlacementJSON) RawJSON() string {
+	return r.raw
+}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Only `"smart"` is currently supported
+type SettingsItemPlacementMode string
+
+const (
+	SettingsItemPlacementModeSmart SettingsItemPlacementMode = "smart"
+)
+
+func (r SettingsItemPlacementMode) IsKnown() bool {
+	switch r {
+	case SettingsItemPlacementModeSmart:
+		return true
+	}
+	return false
 }
 
 type SettingsItemParam struct {
@@ -745,7 +1197,7 @@ type SettingsItemParam struct {
 	Logpush param.Field[bool] `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations param.Field[SettingsItemMigrationsUnionParam] `json:"migrations"`
-	Placement  param.Field[PlacementConfigurationParam]      `json:"placement"`
+	Placement  param.Field[SettingsItemPlacementParam]       `json:"placement"`
 	// Tags to help you manage your Workers
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -780,10 +1232,118 @@ func (r SettingsItemMigrationsParam) implementsWorkersSettingsItemMigrationsUnio
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Satisfied by [workers.SingleStepMigrationParam],
-// [workers.SteppedMigrationParam], [SettingsItemMigrationsParam].
+// Satisfied by [workers.SettingsItemMigrationsWorkersSingleStepMigrationsParam],
+// [workers.SettingsItemMigrationsWorkersSteppedMigrationsParam],
+// [SettingsItemMigrationsParam].
 type SettingsItemMigrationsUnionParam interface {
 	implementsWorkersSettingsItemMigrationsUnionParam()
+}
+
+// A single set of migrations to apply.
+type SettingsItemMigrationsWorkersSingleStepMigrationsParam struct {
+	// A list of classes to delete Durable Object namespaces from.
+	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
+	// A list of classes to create Durable Object namespaces from.
+	NewClasses param.Field[[]string] `json:"new_classes"`
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag param.Field[string] `json:"old_tag"`
+	// A list of classes with Durable Object namespaces that were renamed.
+	RenamedClasses param.Field[[]SettingsItemMigrationsWorkersSingleStepMigrationsRenamedClassParam] `json:"renamed_classes"`
+	// A list of transfers for Durable Object namespaces from a different Worker and
+	// class to a class defined in this Worker.
+	TransferredClasses param.Field[[]SettingsItemMigrationsWorkersSingleStepMigrationsTransferredClassParam] `json:"transferred_classes"`
+}
+
+func (r SettingsItemMigrationsWorkersSingleStepMigrationsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingsItemMigrationsWorkersSingleStepMigrationsParam) implementsWorkersSettingsItemMigrationsUnionParam() {
+}
+
+type SettingsItemMigrationsWorkersSingleStepMigrationsRenamedClassParam struct {
+	From param.Field[string] `json:"from"`
+	To   param.Field[string] `json:"to"`
+}
+
+func (r SettingsItemMigrationsWorkersSingleStepMigrationsRenamedClassParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingsItemMigrationsWorkersSingleStepMigrationsTransferredClassParam struct {
+	From       param.Field[string] `json:"from"`
+	FromScript param.Field[string] `json:"from_script"`
+	To         param.Field[string] `json:"to"`
+}
+
+func (r SettingsItemMigrationsWorkersSingleStepMigrationsTransferredClassParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingsItemMigrationsWorkersSteppedMigrationsParam struct {
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag param.Field[string] `json:"old_tag"`
+	// Migrations to apply in order.
+	Steps param.Field[[]SettingsItemMigrationsWorkersSteppedMigrationsStepParam] `json:"steps"`
+}
+
+func (r SettingsItemMigrationsWorkersSteppedMigrationsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SettingsItemMigrationsWorkersSteppedMigrationsParam) implementsWorkersSettingsItemMigrationsUnionParam() {
+}
+
+type SettingsItemMigrationsWorkersSteppedMigrationsStepParam struct {
+	// A list of classes to delete Durable Object namespaces from.
+	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
+	// A list of classes to create Durable Object namespaces from.
+	NewClasses param.Field[[]string] `json:"new_classes"`
+	// A list of classes with Durable Object namespaces that were renamed.
+	RenamedClasses param.Field[[]SettingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClassParam] `json:"renamed_classes"`
+	// A list of transfers for Durable Object namespaces from a different Worker and
+	// class to a class defined in this Worker.
+	TransferredClasses param.Field[[]SettingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClassParam] `json:"transferred_classes"`
+}
+
+func (r SettingsItemMigrationsWorkersSteppedMigrationsStepParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClassParam struct {
+	From param.Field[string] `json:"from"`
+	To   param.Field[string] `json:"to"`
+}
+
+func (r SettingsItemMigrationsWorkersSteppedMigrationsStepsRenamedClassParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClassParam struct {
+	From       param.Field[string] `json:"from"`
+	FromScript param.Field[string] `json:"from_script"`
+	To         param.Field[string] `json:"to"`
+}
+
+func (r SettingsItemMigrationsWorkersSteppedMigrationsStepsTransferredClassParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingsItemPlacementParam struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Only `"smart"` is currently supported
+	Mode param.Field[SettingsItemPlacementMode] `json:"mode"`
+}
+
+func (r SettingsItemPlacementParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ScriptVersionSettingEditParams struct {

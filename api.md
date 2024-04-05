@@ -2398,25 +2398,6 @@ Methods:
 
 # Workers
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#DispatchNamespaceBindingParam">DispatchNamespaceBindingParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#MigrationStepParam">MigrationStepParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#MTLSCERTBindingParam">MTLSCERTBindingParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#PlacementConfigurationParam">PlacementConfigurationParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#SingleStepMigrationParam">SingleStepMigrationParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#SteppedMigrationParam">SteppedMigrationParam</a>
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#Binding">Binding</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#DispatchNamespaceBinding">DispatchNamespaceBinding</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#MigrationStep">MigrationStep</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#MTLSCERTBinding">MTLSCERTBinding</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#PlacementConfiguration">PlacementConfiguration</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#SingleStepMigration">SingleStepMigration</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#SteppedMigration">SteppedMigration</a>
-
 ## AI
 
 Response Types:
@@ -4329,9 +4310,13 @@ Methods:
 
 ##### Bindings
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms">workers_for_platforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms#DispatchNamespaceScriptBindingGetResponse">DispatchNamespaceScriptBindingGetResponse</a>
+
 Methods:
 
-- <code title="get /accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/bindings">client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Bindings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms#DispatchNamespaceScriptBindingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dispatchNamespace <a href="https://pkg.go.dev/builtin#string">string</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms">workers_for_platforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms#DispatchNamespaceScriptBindingGetParams">DispatchNamespaceScriptBindingGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#Binding">Binding</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/bindings">client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Bindings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms#DispatchNamespaceScriptBindingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dispatchNamespace <a href="https://pkg.go.dev/builtin#string">string</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms">workers_for_platforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms#DispatchNamespaceScriptBindingGetParams">DispatchNamespaceScriptBindingGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms">workers_for_platforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers_for_platforms#DispatchNamespaceScriptBindingGetResponse">DispatchNamespaceScriptBindingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # ZeroTrust
 
