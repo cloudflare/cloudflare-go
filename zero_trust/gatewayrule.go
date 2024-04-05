@@ -254,7 +254,7 @@ type Rule struct {
 	// ascending order of this value.
 	Precedence int64 `json:"precedence"`
 	// Additional settings that modify the rule's action.
-	RuleSettings RuleSettings `json:"rule_settings"`
+	RuleSettings RuleSetting `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
 	Schedule Schedule `json:"schedule"`
@@ -365,7 +365,7 @@ type RuleParam struct {
 	// ascending order of this value.
 	Precedence param.Field[int64] `json:"precedence"`
 	// Additional settings that modify the rule's action.
-	RuleSettings param.Field[RuleSettingsParam] `json:"rule_settings"`
+	RuleSettings param.Field[RuleSettingParam] `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
 	Schedule param.Field[ScheduleParam] `json:"schedule"`
@@ -378,16 +378,16 @@ func (r RuleParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Additional settings that modify the rule's action.
-type RuleSettings struct {
+type RuleSetting struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
 	AddHeaders interface{} `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass bool `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
-	AuditSSH RuleSettingsAuditSSH `json:"audit_ssh"`
+	AuditSSH RuleSettingAuditSSH `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls RuleSettingsBisoAdminControls `json:"biso_admin_controls"`
+	BisoAdminControls RuleSettingBisoAdminControls `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -396,16 +396,16 @@ type RuleSettings struct {
 	// Set by children MSP accounts to bypass their parent's rules.
 	BypassParentRule bool `json:"bypass_parent_rule"`
 	// Configure how session check behaves.
-	CheckSession RuleSettingsCheckSession `json:"check_session"`
+	CheckSession RuleSettingCheckSession `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 	// route to the address closest to their origin. Only valid when a rule's action is
 	// set to 'resolve'.
-	DNSResolvers RuleSettingsDNSResolvers `json:"dns_resolvers"`
+	DNSResolvers RuleSettingDNSResolvers `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
-	Egress RuleSettingsEgress `json:"egress"`
+	Egress RuleSettingEgress `json:"egress"`
 	// INSECURE - disable DNSSEC validation (for Allow actions).
 	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
 	// Set to true to enable IPs in DNS resolver category blocks. By default categories
@@ -415,27 +415,27 @@ type RuleSettings struct {
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address and port.
-	L4override RuleSettingsL4override `json:"l4override"`
+	L4override RuleSettingL4override `json:"l4override"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
-	NotificationSettings RuleSettingsNotificationSettings `json:"notification_settings"`
+	NotificationSettings RuleSettingNotificationSettings `json:"notification_settings"`
 	// Override matching DNS queries with a hostname.
 	OverrideHost string `json:"override_host"`
 	// Override matching DNS queries with an IP or set of IPs.
 	OverrideIPs []string `json:"override_ips"`
 	// Configure DLP payload logging.
-	PayloadLog RuleSettingsPayloadLog `json:"payload_log"`
+	PayloadLog RuleSettingPayloadLog `json:"payload_log"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
 	// rule's action is set to 'resolve'.
 	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCERT RuleSettingsUntrustedCERT `json:"untrusted_cert"`
-	JSON          ruleSettingsJSON          `json:"-"`
+	UntrustedCERT RuleSettingUntrustedCERT `json:"untrusted_cert"`
+	JSON          ruleSettingJSON          `json:"-"`
 }
 
-// ruleSettingsJSON contains the JSON metadata for the struct [RuleSettings]
-type ruleSettingsJSON struct {
+// ruleSettingJSON contains the JSON metadata for the struct [RuleSetting]
+type ruleSettingJSON struct {
 	AddHeaders                      apijson.Field
 	AllowChildBypass                apijson.Field
 	AuditSSH                        apijson.Field
@@ -460,39 +460,39 @@ type ruleSettingsJSON struct {
 	ExtraFields                     map[string]apijson.Field
 }
 
-func (r *RuleSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSetting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsJSON) RawJSON() string {
+func (r ruleSettingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Settings for the Audit SSH action.
-type RuleSettingsAuditSSH struct {
+type RuleSettingAuditSSH struct {
 	// Enable to turn on SSH command logging.
-	CommandLogging bool                     `json:"command_logging"`
-	JSON           ruleSettingsAuditSSHJSON `json:"-"`
+	CommandLogging bool                    `json:"command_logging"`
+	JSON           ruleSettingAuditSSHJSON `json:"-"`
 }
 
-// ruleSettingsAuditSSHJSON contains the JSON metadata for the struct
-// [RuleSettingsAuditSSH]
-type ruleSettingsAuditSSHJSON struct {
+// ruleSettingAuditSSHJSON contains the JSON metadata for the struct
+// [RuleSettingAuditSSH]
+type ruleSettingAuditSSHJSON struct {
 	CommandLogging apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingAuditSSH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsAuditSSHJSON) RawJSON() string {
+func (r ruleSettingAuditSSHJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configure how browser isolation behaves.
-type RuleSettingsBisoAdminControls struct {
+type RuleSettingBisoAdminControls struct {
 	// Set to true to enable copy-pasting.
 	Dcp bool `json:"dcp"`
 	// Set to true to enable downloading.
@@ -502,13 +502,13 @@ type RuleSettingsBisoAdminControls struct {
 	// Set to true to enable printing.
 	Dp bool `json:"dp"`
 	// Set to true to enable uploading.
-	Du   bool                              `json:"du"`
-	JSON ruleSettingsBisoAdminControlsJSON `json:"-"`
+	Du   bool                             `json:"du"`
+	JSON ruleSettingBisoAdminControlsJSON `json:"-"`
 }
 
-// ruleSettingsBisoAdminControlsJSON contains the JSON metadata for the struct
-// [RuleSettingsBisoAdminControls]
-type ruleSettingsBisoAdminControlsJSON struct {
+// ruleSettingBisoAdminControlsJSON contains the JSON metadata for the struct
+// [RuleSettingBisoAdminControls]
+type ruleSettingBisoAdminControlsJSON struct {
 	Dcp         apijson.Field
 	Dd          apijson.Field
 	Dk          apijson.Field
@@ -518,37 +518,37 @@ type ruleSettingsBisoAdminControlsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSettingsBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsBisoAdminControlsJSON) RawJSON() string {
+func (r ruleSettingBisoAdminControlsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configure how session check behaves.
-type RuleSettingsCheckSession struct {
+type RuleSettingCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
 	Duration string `json:"duration"`
 	// Set to true to enable session enforcement.
-	Enforce bool                         `json:"enforce"`
-	JSON    ruleSettingsCheckSessionJSON `json:"-"`
+	Enforce bool                        `json:"enforce"`
+	JSON    ruleSettingCheckSessionJSON `json:"-"`
 }
 
-// ruleSettingsCheckSessionJSON contains the JSON metadata for the struct
-// [RuleSettingsCheckSession]
-type ruleSettingsCheckSessionJSON struct {
+// ruleSettingCheckSessionJSON contains the JSON metadata for the struct
+// [RuleSettingCheckSession]
+type ruleSettingCheckSessionJSON struct {
 	Duration    apijson.Field
 	Enforce     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSettingsCheckSession) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingCheckSession) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsCheckSessionJSON) RawJSON() string {
+func (r ruleSettingCheckSessionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -556,33 +556,33 @@ func (r ruleSettingsCheckSessionJSON) RawJSON() string {
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin. Only valid when a rule's action is
 // set to 'resolve'.
-type RuleSettingsDNSResolvers struct {
-	IPV4 []DNSResolverSettingsV4      `json:"ipv4"`
-	IPV6 []DNSResolverSettingsV6      `json:"ipv6"`
-	JSON ruleSettingsDNSResolversJSON `json:"-"`
+type RuleSettingDNSResolvers struct {
+	IPV4 []DNSResolverSettingsV4     `json:"ipv4"`
+	IPV6 []DNSResolverSettingsV6     `json:"ipv6"`
+	JSON ruleSettingDNSResolversJSON `json:"-"`
 }
 
-// ruleSettingsDNSResolversJSON contains the JSON metadata for the struct
-// [RuleSettingsDNSResolvers]
-type ruleSettingsDNSResolversJSON struct {
+// ruleSettingDNSResolversJSON contains the JSON metadata for the struct
+// [RuleSettingDNSResolvers]
+type ruleSettingDNSResolversJSON struct {
 	IPV4        apijson.Field
 	IPV6        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingDNSResolvers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsDNSResolversJSON) RawJSON() string {
+func (r ruleSettingDNSResolversJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs.
-type RuleSettingsEgress struct {
+type RuleSettingEgress struct {
 	// The IPv4 address to be used for egress.
 	IPV4 string `json:"ipv4"`
 	// The fallback IPv4 address to be used for egress in the event of an error
@@ -590,13 +590,13 @@ type RuleSettingsEgress struct {
 	// WARP IPs.
 	IPV4Fallback string `json:"ipv4_fallback"`
 	// The IPv6 range to be used for egress.
-	IPV6 string                 `json:"ipv6"`
-	JSON ruleSettingsEgressJSON `json:"-"`
+	IPV6 string                `json:"ipv6"`
+	JSON ruleSettingEgressJSON `json:"-"`
 }
 
-// ruleSettingsEgressJSON contains the JSON metadata for the struct
-// [RuleSettingsEgress]
-type ruleSettingsEgressJSON struct {
+// ruleSettingEgressJSON contains the JSON metadata for the struct
+// [RuleSettingEgress]
+type ruleSettingEgressJSON struct {
 	IPV4         apijson.Field
 	IPV4Fallback apijson.Field
 	IPV6         apijson.Field
@@ -604,56 +604,56 @@ type ruleSettingsEgressJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *RuleSettingsEgress) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingEgress) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsEgressJSON) RawJSON() string {
+func (r ruleSettingEgressJSON) RawJSON() string {
 	return r.raw
 }
 
 // Send matching traffic to the supplied destination IP address and port.
-type RuleSettingsL4override struct {
+type RuleSettingL4override struct {
 	// IPv4 or IPv6 address.
 	IP string `json:"ip"`
 	// A port number to use for TCP/UDP overrides.
-	Port int64                      `json:"port"`
-	JSON ruleSettingsL4overrideJSON `json:"-"`
+	Port int64                     `json:"port"`
+	JSON ruleSettingL4overrideJSON `json:"-"`
 }
 
-// ruleSettingsL4overrideJSON contains the JSON metadata for the struct
-// [RuleSettingsL4override]
-type ruleSettingsL4overrideJSON struct {
+// ruleSettingL4overrideJSON contains the JSON metadata for the struct
+// [RuleSettingL4override]
+type ruleSettingL4overrideJSON struct {
 	IP          apijson.Field
 	Port        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingL4override) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsL4overrideJSON) RawJSON() string {
+func (r ruleSettingL4overrideJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configure a notification to display on the user's device when this rule is
 // matched.
-type RuleSettingsNotificationSettings struct {
+type RuleSettingNotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
 	// notification will open a block page.
-	SupportURL string                               `json:"support_url"`
-	JSON       ruleSettingsNotificationSettingsJSON `json:"-"`
+	SupportURL string                              `json:"support_url"`
+	JSON       ruleSettingNotificationSettingsJSON `json:"-"`
 }
 
-// ruleSettingsNotificationSettingsJSON contains the JSON metadata for the struct
-// [RuleSettingsNotificationSettings]
-type ruleSettingsNotificationSettingsJSON struct {
+// ruleSettingNotificationSettingsJSON contains the JSON metadata for the struct
+// [RuleSettingNotificationSettings]
+type ruleSettingNotificationSettingsJSON struct {
 	Enabled     apijson.Field
 	Msg         apijson.Field
 	SupportURL  apijson.Field
@@ -661,90 +661,90 @@ type ruleSettingsNotificationSettingsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSettingsNotificationSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingNotificationSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsNotificationSettingsJSON) RawJSON() string {
+func (r ruleSettingNotificationSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configure DLP payload logging.
-type RuleSettingsPayloadLog struct {
+type RuleSettingPayloadLog struct {
 	// Set to true to enable DLP payload logging for this rule.
-	Enabled bool                       `json:"enabled"`
-	JSON    ruleSettingsPayloadLogJSON `json:"-"`
+	Enabled bool                      `json:"enabled"`
+	JSON    ruleSettingPayloadLogJSON `json:"-"`
 }
 
-// ruleSettingsPayloadLogJSON contains the JSON metadata for the struct
-// [RuleSettingsPayloadLog]
-type ruleSettingsPayloadLogJSON struct {
+// ruleSettingPayloadLogJSON contains the JSON metadata for the struct
+// [RuleSettingPayloadLog]
+type ruleSettingPayloadLogJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingPayloadLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsPayloadLogJSON) RawJSON() string {
+func (r ruleSettingPayloadLogJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type RuleSettingsUntrustedCERT struct {
+type RuleSettingUntrustedCERT struct {
 	// The action performed when an untrusted certificate is seen. The default action
 	// is an error with HTTP code 526.
-	Action RuleSettingsUntrustedCERTAction `json:"action"`
-	JSON   ruleSettingsUntrustedCERTJSON   `json:"-"`
+	Action RuleSettingUntrustedCERTAction `json:"action"`
+	JSON   ruleSettingUntrustedCERTJSON   `json:"-"`
 }
 
-// ruleSettingsUntrustedCERTJSON contains the JSON metadata for the struct
-// [RuleSettingsUntrustedCERT]
-type ruleSettingsUntrustedCERTJSON struct {
+// ruleSettingUntrustedCERTJSON contains the JSON metadata for the struct
+// [RuleSettingUntrustedCERT]
+type ruleSettingUntrustedCERTJSON struct {
 	Action      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSettingsUntrustedCERT) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingUntrustedCERT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingsUntrustedCERTJSON) RawJSON() string {
+func (r ruleSettingUntrustedCERTJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action performed when an untrusted certificate is seen. The default action
 // is an error with HTTP code 526.
-type RuleSettingsUntrustedCERTAction string
+type RuleSettingUntrustedCERTAction string
 
 const (
-	RuleSettingsUntrustedCERTActionPassThrough RuleSettingsUntrustedCERTAction = "pass_through"
-	RuleSettingsUntrustedCERTActionBlock       RuleSettingsUntrustedCERTAction = "block"
-	RuleSettingsUntrustedCERTActionError       RuleSettingsUntrustedCERTAction = "error"
+	RuleSettingUntrustedCERTActionPassThrough RuleSettingUntrustedCERTAction = "pass_through"
+	RuleSettingUntrustedCERTActionBlock       RuleSettingUntrustedCERTAction = "block"
+	RuleSettingUntrustedCERTActionError       RuleSettingUntrustedCERTAction = "error"
 )
 
-func (r RuleSettingsUntrustedCERTAction) IsKnown() bool {
+func (r RuleSettingUntrustedCERTAction) IsKnown() bool {
 	switch r {
-	case RuleSettingsUntrustedCERTActionPassThrough, RuleSettingsUntrustedCERTActionBlock, RuleSettingsUntrustedCERTActionError:
+	case RuleSettingUntrustedCERTActionPassThrough, RuleSettingUntrustedCERTActionBlock, RuleSettingUntrustedCERTActionError:
 		return true
 	}
 	return false
 }
 
 // Additional settings that modify the rule's action.
-type RuleSettingsParam struct {
+type RuleSettingParam struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
 	AddHeaders param.Field[interface{}] `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
-	AuditSSH param.Field[RuleSettingsAuditSSHParam] `json:"audit_ssh"`
+	AuditSSH param.Field[RuleSettingAuditSSHParam] `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls param.Field[RuleSettingsBisoAdminControlsParam] `json:"biso_admin_controls"`
+	BisoAdminControls param.Field[RuleSettingBisoAdminControlsParam] `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled param.Field[bool] `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -753,16 +753,16 @@ type RuleSettingsParam struct {
 	// Set by children MSP accounts to bypass their parent's rules.
 	BypassParentRule param.Field[bool] `json:"bypass_parent_rule"`
 	// Configure how session check behaves.
-	CheckSession param.Field[RuleSettingsCheckSessionParam] `json:"check_session"`
+	CheckSession param.Field[RuleSettingCheckSessionParam] `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 	// route to the address closest to their origin. Only valid when a rule's action is
 	// set to 'resolve'.
-	DNSResolvers param.Field[RuleSettingsDNSResolversParam] `json:"dns_resolvers"`
+	DNSResolvers param.Field[RuleSettingDNSResolversParam] `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
-	Egress param.Field[RuleSettingsEgressParam] `json:"egress"`
+	Egress param.Field[RuleSettingEgressParam] `json:"egress"`
 	// INSECURE - disable DNSSEC validation (for Allow actions).
 	InsecureDisableDNSSECValidation param.Field[bool] `json:"insecure_disable_dnssec_validation"`
 	// Set to true to enable IPs in DNS resolver category blocks. By default categories
@@ -772,40 +772,40 @@ type RuleSettingsParam struct {
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds param.Field[bool] `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address and port.
-	L4override param.Field[RuleSettingsL4overrideParam] `json:"l4override"`
+	L4override param.Field[RuleSettingL4overrideParam] `json:"l4override"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
-	NotificationSettings param.Field[RuleSettingsNotificationSettingsParam] `json:"notification_settings"`
+	NotificationSettings param.Field[RuleSettingNotificationSettingsParam] `json:"notification_settings"`
 	// Override matching DNS queries with a hostname.
 	OverrideHost param.Field[string] `json:"override_host"`
 	// Override matching DNS queries with an IP or set of IPs.
 	OverrideIPs param.Field[[]string] `json:"override_ips"`
 	// Configure DLP payload logging.
-	PayloadLog param.Field[RuleSettingsPayloadLogParam] `json:"payload_log"`
+	PayloadLog param.Field[RuleSettingPayloadLogParam] `json:"payload_log"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
 	// rule's action is set to 'resolve'.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCERT param.Field[RuleSettingsUntrustedCERTParam] `json:"untrusted_cert"`
+	UntrustedCERT param.Field[RuleSettingUntrustedCERTParam] `json:"untrusted_cert"`
 }
 
-func (r RuleSettingsParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Settings for the Audit SSH action.
-type RuleSettingsAuditSSHParam struct {
+type RuleSettingAuditSSHParam struct {
 	// Enable to turn on SSH command logging.
 	CommandLogging param.Field[bool] `json:"command_logging"`
 }
 
-func (r RuleSettingsAuditSSHParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure how browser isolation behaves.
-type RuleSettingsBisoAdminControlsParam struct {
+type RuleSettingBisoAdminControlsParam struct {
 	// Set to true to enable copy-pasting.
 	Dcp param.Field[bool] `json:"dcp"`
 	// Set to true to enable downloading.
@@ -818,19 +818,19 @@ type RuleSettingsBisoAdminControlsParam struct {
 	Du param.Field[bool] `json:"du"`
 }
 
-func (r RuleSettingsBisoAdminControlsParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingBisoAdminControlsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure how session check behaves.
-type RuleSettingsCheckSessionParam struct {
+type RuleSettingCheckSessionParam struct {
 	// Configure how fresh the session needs to be to be considered valid.
 	Duration param.Field[string] `json:"duration"`
 	// Set to true to enable session enforcement.
 	Enforce param.Field[bool] `json:"enforce"`
 }
 
-func (r RuleSettingsCheckSessionParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingCheckSessionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -838,19 +838,19 @@ func (r RuleSettingsCheckSessionParam) MarshalJSON() (data []byte, err error) {
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin. Only valid when a rule's action is
 // set to 'resolve'.
-type RuleSettingsDNSResolversParam struct {
+type RuleSettingDNSResolversParam struct {
 	IPV4 param.Field[[]DNSResolverSettingsV4Param] `json:"ipv4"`
 	IPV6 param.Field[[]DNSResolverSettingsV6Param] `json:"ipv6"`
 }
 
-func (r RuleSettingsDNSResolversParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingDNSResolversParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs.
-type RuleSettingsEgressParam struct {
+type RuleSettingEgressParam struct {
 	// The IPv4 address to be used for egress.
 	IPV4 param.Field[string] `json:"ipv4"`
 	// The fallback IPv4 address to be used for egress in the event of an error
@@ -861,25 +861,25 @@ type RuleSettingsEgressParam struct {
 	IPV6 param.Field[string] `json:"ipv6"`
 }
 
-func (r RuleSettingsEgressParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingEgressParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Send matching traffic to the supplied destination IP address and port.
-type RuleSettingsL4overrideParam struct {
+type RuleSettingL4overrideParam struct {
 	// IPv4 or IPv6 address.
 	IP param.Field[string] `json:"ip"`
 	// A port number to use for TCP/UDP overrides.
 	Port param.Field[int64] `json:"port"`
 }
 
-func (r RuleSettingsL4overrideParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingL4overrideParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure a notification to display on the user's device when this rule is
 // matched.
-type RuleSettingsNotificationSettingsParam struct {
+type RuleSettingNotificationSettingsParam struct {
 	// Set notification on
 	Enabled param.Field[bool] `json:"enabled"`
 	// Customize the message shown in the notification.
@@ -889,28 +889,28 @@ type RuleSettingsNotificationSettingsParam struct {
 	SupportURL param.Field[string] `json:"support_url"`
 }
 
-func (r RuleSettingsNotificationSettingsParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingNotificationSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure DLP payload logging.
-type RuleSettingsPayloadLogParam struct {
+type RuleSettingPayloadLogParam struct {
 	// Set to true to enable DLP payload logging for this rule.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r RuleSettingsPayloadLogParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingPayloadLogParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type RuleSettingsUntrustedCERTParam struct {
+type RuleSettingUntrustedCERTParam struct {
 	// The action performed when an untrusted certificate is seen. The default action
 	// is an error with HTTP code 526.
-	Action param.Field[RuleSettingsUntrustedCERTAction] `json:"action"`
+	Action param.Field[RuleSettingUntrustedCERTAction] `json:"action"`
 }
 
-func (r RuleSettingsUntrustedCERTParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingUntrustedCERTParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1046,7 +1046,7 @@ type GatewayRuleNewParams struct {
 	// ascending order of this value.
 	Precedence param.Field[int64] `json:"precedence"`
 	// Additional settings that modify the rule's action.
-	RuleSettings param.Field[RuleSettingsParam] `json:"rule_settings"`
+	RuleSettings param.Field[RuleSettingParam] `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
 	Schedule param.Field[ScheduleParam] `json:"schedule"`
@@ -1154,7 +1154,7 @@ type GatewayRuleUpdateParams struct {
 	// ascending order of this value.
 	Precedence param.Field[int64] `json:"precedence"`
 	// Additional settings that modify the rule's action.
-	RuleSettings param.Field[RuleSettingsParam] `json:"rule_settings"`
+	RuleSettings param.Field[RuleSettingParam] `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
 	Schedule param.Field[ScheduleParam] `json:"schedule"`

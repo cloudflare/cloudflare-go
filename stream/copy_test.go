@@ -32,7 +32,7 @@ func TestCopyNewWithOptionalParams(t *testing.T) {
 	_, err := client.Stream.Copy.New(context.TODO(), stream.CopyNewParams{
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		URL:            cloudflare.F("https://example.com/myvideo.mp4"),
-		AllowedOrigins: cloudflare.F([]string{"example.com"}),
+		AllowedOrigins: cloudflare.F([]stream.AllowedOriginsItemParam{"example.com"}),
 		Creator:        cloudflare.F("creator-id_abcde12345"),
 		Meta: cloudflare.F[any](map[string]interface{}{
 			"name": "video12345.mp4",

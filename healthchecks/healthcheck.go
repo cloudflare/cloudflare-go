@@ -124,6 +124,38 @@ func (r *HealthcheckService) Get(ctx context.Context, healthcheckID string, quer
 	return
 }
 
+// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
+// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
+// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
+// SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
+// and ENTERPRISE customers only).
+type CheckRegionItem string
+
+const (
+	CheckRegionItemWnam       CheckRegionItem = "WNAM"
+	CheckRegionItemEnam       CheckRegionItem = "ENAM"
+	CheckRegionItemWeu        CheckRegionItem = "WEU"
+	CheckRegionItemEeu        CheckRegionItem = "EEU"
+	CheckRegionItemNsam       CheckRegionItem = "NSAM"
+	CheckRegionItemSsam       CheckRegionItem = "SSAM"
+	CheckRegionItemOc         CheckRegionItem = "OC"
+	CheckRegionItemMe         CheckRegionItem = "ME"
+	CheckRegionItemNaf        CheckRegionItem = "NAF"
+	CheckRegionItemSaf        CheckRegionItem = "SAF"
+	CheckRegionItemIn         CheckRegionItem = "IN"
+	CheckRegionItemSeas       CheckRegionItem = "SEAS"
+	CheckRegionItemNeas       CheckRegionItem = "NEAS"
+	CheckRegionItemAllRegions CheckRegionItem = "ALL_REGIONS"
+)
+
+func (r CheckRegionItem) IsKnown() bool {
+	switch r {
+	case CheckRegionItemWnam, CheckRegionItemEnam, CheckRegionItemWeu, CheckRegionItemEeu, CheckRegionItemNsam, CheckRegionItemSsam, CheckRegionItemOc, CheckRegionItemMe, CheckRegionItemNaf, CheckRegionItemSaf, CheckRegionItemIn, CheckRegionItemSeas, CheckRegionItemNeas, CheckRegionItemAllRegions:
+		return true
+	}
+	return false
+}
+
 type Healthcheck struct {
 	// Identifier
 	ID string `json:"id"`
@@ -429,7 +461,7 @@ type HealthcheckNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]HealthcheckNewParamsCheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegionItem] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
@@ -460,38 +492,6 @@ type HealthcheckNewParams struct {
 
 func (r HealthcheckNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
-// SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
-// and ENTERPRISE customers only).
-type HealthcheckNewParamsCheckRegion string
-
-const (
-	HealthcheckNewParamsCheckRegionWnam       HealthcheckNewParamsCheckRegion = "WNAM"
-	HealthcheckNewParamsCheckRegionEnam       HealthcheckNewParamsCheckRegion = "ENAM"
-	HealthcheckNewParamsCheckRegionWeu        HealthcheckNewParamsCheckRegion = "WEU"
-	HealthcheckNewParamsCheckRegionEeu        HealthcheckNewParamsCheckRegion = "EEU"
-	HealthcheckNewParamsCheckRegionNsam       HealthcheckNewParamsCheckRegion = "NSAM"
-	HealthcheckNewParamsCheckRegionSsam       HealthcheckNewParamsCheckRegion = "SSAM"
-	HealthcheckNewParamsCheckRegionOc         HealthcheckNewParamsCheckRegion = "OC"
-	HealthcheckNewParamsCheckRegionMe         HealthcheckNewParamsCheckRegion = "ME"
-	HealthcheckNewParamsCheckRegionNaf        HealthcheckNewParamsCheckRegion = "NAF"
-	HealthcheckNewParamsCheckRegionSaf        HealthcheckNewParamsCheckRegion = "SAF"
-	HealthcheckNewParamsCheckRegionIn         HealthcheckNewParamsCheckRegion = "IN"
-	HealthcheckNewParamsCheckRegionSeas       HealthcheckNewParamsCheckRegion = "SEAS"
-	HealthcheckNewParamsCheckRegionNeas       HealthcheckNewParamsCheckRegion = "NEAS"
-	HealthcheckNewParamsCheckRegionAllRegions HealthcheckNewParamsCheckRegion = "ALL_REGIONS"
-)
-
-func (r HealthcheckNewParamsCheckRegion) IsKnown() bool {
-	switch r {
-	case HealthcheckNewParamsCheckRegionWnam, HealthcheckNewParamsCheckRegionEnam, HealthcheckNewParamsCheckRegionWeu, HealthcheckNewParamsCheckRegionEeu, HealthcheckNewParamsCheckRegionNsam, HealthcheckNewParamsCheckRegionSsam, HealthcheckNewParamsCheckRegionOc, HealthcheckNewParamsCheckRegionMe, HealthcheckNewParamsCheckRegionNaf, HealthcheckNewParamsCheckRegionSaf, HealthcheckNewParamsCheckRegionIn, HealthcheckNewParamsCheckRegionSeas, HealthcheckNewParamsCheckRegionNeas, HealthcheckNewParamsCheckRegionAllRegions:
-		return true
-	}
-	return false
 }
 
 type HealthcheckNewResponseEnvelope struct {
@@ -547,7 +547,7 @@ type HealthcheckUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]HealthcheckUpdateParamsCheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegionItem] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
@@ -578,38 +578,6 @@ type HealthcheckUpdateParams struct {
 
 func (r HealthcheckUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
-// SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
-// and ENTERPRISE customers only).
-type HealthcheckUpdateParamsCheckRegion string
-
-const (
-	HealthcheckUpdateParamsCheckRegionWnam       HealthcheckUpdateParamsCheckRegion = "WNAM"
-	HealthcheckUpdateParamsCheckRegionEnam       HealthcheckUpdateParamsCheckRegion = "ENAM"
-	HealthcheckUpdateParamsCheckRegionWeu        HealthcheckUpdateParamsCheckRegion = "WEU"
-	HealthcheckUpdateParamsCheckRegionEeu        HealthcheckUpdateParamsCheckRegion = "EEU"
-	HealthcheckUpdateParamsCheckRegionNsam       HealthcheckUpdateParamsCheckRegion = "NSAM"
-	HealthcheckUpdateParamsCheckRegionSsam       HealthcheckUpdateParamsCheckRegion = "SSAM"
-	HealthcheckUpdateParamsCheckRegionOc         HealthcheckUpdateParamsCheckRegion = "OC"
-	HealthcheckUpdateParamsCheckRegionMe         HealthcheckUpdateParamsCheckRegion = "ME"
-	HealthcheckUpdateParamsCheckRegionNaf        HealthcheckUpdateParamsCheckRegion = "NAF"
-	HealthcheckUpdateParamsCheckRegionSaf        HealthcheckUpdateParamsCheckRegion = "SAF"
-	HealthcheckUpdateParamsCheckRegionIn         HealthcheckUpdateParamsCheckRegion = "IN"
-	HealthcheckUpdateParamsCheckRegionSeas       HealthcheckUpdateParamsCheckRegion = "SEAS"
-	HealthcheckUpdateParamsCheckRegionNeas       HealthcheckUpdateParamsCheckRegion = "NEAS"
-	HealthcheckUpdateParamsCheckRegionAllRegions HealthcheckUpdateParamsCheckRegion = "ALL_REGIONS"
-)
-
-func (r HealthcheckUpdateParamsCheckRegion) IsKnown() bool {
-	switch r {
-	case HealthcheckUpdateParamsCheckRegionWnam, HealthcheckUpdateParamsCheckRegionEnam, HealthcheckUpdateParamsCheckRegionWeu, HealthcheckUpdateParamsCheckRegionEeu, HealthcheckUpdateParamsCheckRegionNsam, HealthcheckUpdateParamsCheckRegionSsam, HealthcheckUpdateParamsCheckRegionOc, HealthcheckUpdateParamsCheckRegionMe, HealthcheckUpdateParamsCheckRegionNaf, HealthcheckUpdateParamsCheckRegionSaf, HealthcheckUpdateParamsCheckRegionIn, HealthcheckUpdateParamsCheckRegionSeas, HealthcheckUpdateParamsCheckRegionNeas, HealthcheckUpdateParamsCheckRegionAllRegions:
-		return true
-	}
-	return false
 }
 
 type HealthcheckUpdateResponseEnvelope struct {
@@ -723,7 +691,7 @@ type HealthcheckEditParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]HealthcheckEditParamsCheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegionItem] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
@@ -754,38 +722,6 @@ type HealthcheckEditParams struct {
 
 func (r HealthcheckEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
-// SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
-// and ENTERPRISE customers only).
-type HealthcheckEditParamsCheckRegion string
-
-const (
-	HealthcheckEditParamsCheckRegionWnam       HealthcheckEditParamsCheckRegion = "WNAM"
-	HealthcheckEditParamsCheckRegionEnam       HealthcheckEditParamsCheckRegion = "ENAM"
-	HealthcheckEditParamsCheckRegionWeu        HealthcheckEditParamsCheckRegion = "WEU"
-	HealthcheckEditParamsCheckRegionEeu        HealthcheckEditParamsCheckRegion = "EEU"
-	HealthcheckEditParamsCheckRegionNsam       HealthcheckEditParamsCheckRegion = "NSAM"
-	HealthcheckEditParamsCheckRegionSsam       HealthcheckEditParamsCheckRegion = "SSAM"
-	HealthcheckEditParamsCheckRegionOc         HealthcheckEditParamsCheckRegion = "OC"
-	HealthcheckEditParamsCheckRegionMe         HealthcheckEditParamsCheckRegion = "ME"
-	HealthcheckEditParamsCheckRegionNaf        HealthcheckEditParamsCheckRegion = "NAF"
-	HealthcheckEditParamsCheckRegionSaf        HealthcheckEditParamsCheckRegion = "SAF"
-	HealthcheckEditParamsCheckRegionIn         HealthcheckEditParamsCheckRegion = "IN"
-	HealthcheckEditParamsCheckRegionSeas       HealthcheckEditParamsCheckRegion = "SEAS"
-	HealthcheckEditParamsCheckRegionNeas       HealthcheckEditParamsCheckRegion = "NEAS"
-	HealthcheckEditParamsCheckRegionAllRegions HealthcheckEditParamsCheckRegion = "ALL_REGIONS"
-)
-
-func (r HealthcheckEditParamsCheckRegion) IsKnown() bool {
-	switch r {
-	case HealthcheckEditParamsCheckRegionWnam, HealthcheckEditParamsCheckRegionEnam, HealthcheckEditParamsCheckRegionWeu, HealthcheckEditParamsCheckRegionEeu, HealthcheckEditParamsCheckRegionNsam, HealthcheckEditParamsCheckRegionSsam, HealthcheckEditParamsCheckRegionOc, HealthcheckEditParamsCheckRegionMe, HealthcheckEditParamsCheckRegionNaf, HealthcheckEditParamsCheckRegionSaf, HealthcheckEditParamsCheckRegionIn, HealthcheckEditParamsCheckRegionSeas, HealthcheckEditParamsCheckRegionNeas, HealthcheckEditParamsCheckRegionAllRegions:
-		return true
-	}
-	return false
 }
 
 type HealthcheckEditResponseEnvelope struct {

@@ -49,7 +49,7 @@ type Clip struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
-	AllowedOrigins []string `json:"allowedOrigins"`
+	AllowedOrigins []AllowedOriginsItem `json:"allowedOrigins"`
 	// The unique video identifier (UID).
 	ClippedFromVideoUid string `json:"clippedFromVideoUID"`
 	// The date and time the clip was created.
@@ -193,7 +193,7 @@ type ClipNewParams struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
-	AllowedOrigins param.Field[[]string] `json:"allowedOrigins"`
+	AllowedOrigins param.Field[[]AllowedOriginsItemParam] `json:"allowedOrigins"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `json:"creator"`
 	// The maximum duration in seconds for a video upload. Can be set for a video that
