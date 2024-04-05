@@ -46,7 +46,7 @@ func NewTunnelService(opts ...option.RequestOption) (r *TunnelService) {
 }
 
 // Creates a new Argo Tunnel in an account.
-func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ...option.RequestOption) (res *TunnelArgoTunnel, err error) {
+func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ...option.RequestOption) (res *Tunnel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels", params.AccountID)
@@ -82,7 +82,7 @@ func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListPar
 }
 
 // Deletes an Argo Tunnel from an account.
-func (r *TunnelService) Delete(ctx context.Context, tunnelID string, params TunnelDeleteParams, opts ...option.RequestOption) (res *TunnelArgoTunnel, err error) {
+func (r *TunnelService) Delete(ctx context.Context, tunnelID string, params TunnelDeleteParams, opts ...option.RequestOption) (res *Tunnel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", params.AccountID, tunnelID)
@@ -108,7 +108,7 @@ func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params Tunnel
 }
 
 // Fetches a single Argo Tunnel.
-func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGetParams, opts ...option.RequestOption) (res *TunnelArgoTunnel, err error) {
+func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGetParams, opts ...option.RequestOption) (res *Tunnel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", query.AccountID, tunnelID)
@@ -120,24 +120,23 @@ func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGe
 	return
 }
 
-type TunnelArgoTunnel struct {
+type Tunnel struct {
 	// UUID of the tunnel.
 	ID string `json:"id,required"`
 	// The tunnel connections between your origin and Cloudflare's edge.
-	Connections []TunnelArgoTunnelConnection `json:"connections,required"`
+	Connections []TunnelConnection `json:"connections,required"`
 	// Timestamp of when the tunnel was created.
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// A user-friendly name for the tunnel.
 	Name string `json:"name,required"`
 	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
 	// deleted.
-	DeletedAt time.Time            `json:"deleted_at,nullable" format:"date-time"`
-	JSON      tunnelArgoTunnelJSON `json:"-"`
+	DeletedAt time.Time  `json:"deleted_at,nullable" format:"date-time"`
+	JSON      tunnelJSON `json:"-"`
 }
 
-// tunnelArgoTunnelJSON contains the JSON metadata for the struct
-// [TunnelArgoTunnel]
-type tunnelArgoTunnelJSON struct {
+// tunnelJSON contains the JSON metadata for the struct [Tunnel]
+type tunnelJSON struct {
 	ID          apijson.Field
 	Connections apijson.Field
 	CreatedAt   apijson.Field
@@ -147,15 +146,15 @@ type tunnelArgoTunnelJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *Tunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelArgoTunnelJSON) RawJSON() string {
+func (r tunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-type TunnelArgoTunnelConnection struct {
+type TunnelConnection struct {
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
 	// Cloudflare continues to track connections for several minutes after they
@@ -164,13 +163,13 @@ type TunnelArgoTunnelConnection struct {
 	// tracked. If `false`, the connection is actively serving traffic.
 	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// UUID of the Cloudflare Tunnel connection.
-	UUID string                         `json:"uuid"`
-	JSON tunnelArgoTunnelConnectionJSON `json:"-"`
+	UUID string               `json:"uuid"`
+	JSON tunnelConnectionJSON `json:"-"`
 }
 
-// tunnelArgoTunnelConnectionJSON contains the JSON metadata for the struct
-// [TunnelArgoTunnelConnection]
-type tunnelArgoTunnelConnectionJSON struct {
+// tunnelConnectionJSON contains the JSON metadata for the struct
+// [TunnelConnection]
+type tunnelConnectionJSON struct {
 	ColoName           apijson.Field
 	IsPendingReconnect apijson.Field
 	UUID               apijson.Field
@@ -178,12 +177,168 @@ type tunnelArgoTunnelConnectionJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelArgoTunnelConnectionJSON) RawJSON() string {
+func (r tunnelConnectionJSON) RawJSON() string {
 	return r.raw
+}
+
+type TunnelParam struct {
+	// The tunnel connections between your origin and Cloudflare's edge.
+	Connections param.Field[[]TunnelConnectionParam] `json:"connections,required"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt param.Field[time.Time] `json:"created_at,required" format:"date-time"`
+	// A user-friendly name for the tunnel.
+	Name param.Field[string] `json:"name,required"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt param.Field[time.Time] `json:"deleted_at" format:"date-time"`
+}
+
+func (r TunnelParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type TunnelConnectionParam struct {
+	// The Cloudflare data center used for this connection.
+	ColoName param.Field[string] `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect param.Field[bool] `json:"is_pending_reconnect"`
+}
+
+func (r TunnelConnectionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+type WARPConnectorTunnel struct {
+	// UUID of the tunnel.
+	ID string `json:"id"`
+	// Cloudflare account ID
+	AccountTag string `json:"account_tag"`
+	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	Connections []WARPConnectorTunnelConnection `json:"connections"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// Metadata associated with the tunnel.
+	Metadata interface{} `json:"metadata"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType WARPConnectorTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorTunnelJSON    `json:"-"`
+}
+
+// warpConnectorTunnelJSON contains the JSON metadata for the struct
+// [WARPConnectorTunnel]
+type warpConnectorTunnelJSON struct {
+	ID              apijson.Field
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *WARPConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r WARPConnectorTunnel) implementsSharedUnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8() {}
+
+type WARPConnectorTunnelConnection struct {
+	// UUID of the Cloudflare Tunnel connection.
+	ID string `json:"id"`
+	// UUID of the cloudflared instance.
+	ClientID interface{} `json:"client_id"`
+	// The cloudflared version used to establish this connection.
+	ClientVersion string `json:"client_version"`
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// Timestamp of when the connection was established.
+	OpenedAt time.Time `json:"opened_at" format:"date-time"`
+	// The public IP address of the host running cloudflared.
+	OriginIP string `json:"origin_ip"`
+	// UUID of the Cloudflare Tunnel connection.
+	UUID string                            `json:"uuid"`
+	JSON warpConnectorTunnelConnectionJSON `json:"-"`
+}
+
+// warpConnectorTunnelConnectionJSON contains the JSON metadata for the struct
+// [WARPConnectorTunnelConnection]
+type warpConnectorTunnelConnectionJSON struct {
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WARPConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorTunnelConnectionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of tunnel.
+type WARPConnectorTunnelTunType string
+
+const (
+	WARPConnectorTunnelTunTypeCfdTunnel     WARPConnectorTunnelTunType = "cfd_tunnel"
+	WARPConnectorTunnelTunTypeWARPConnector WARPConnectorTunnelTunType = "warp_connector"
+	WARPConnectorTunnelTunTypeIPSec         WARPConnectorTunnelTunType = "ip_sec"
+	WARPConnectorTunnelTunTypeGRE           WARPConnectorTunnelTunType = "gre"
+	WARPConnectorTunnelTunTypeCni           WARPConnectorTunnelTunType = "cni"
+)
+
+func (r WARPConnectorTunnelTunType) IsKnown() bool {
+	switch r {
+	case WARPConnectorTunnelTunTypeCfdTunnel, WARPConnectorTunnelTunTypeWARPConnector, WARPConnectorTunnelTunTypeIPSec, WARPConnectorTunnelTunTypeGRE, WARPConnectorTunnelTunTypeCni:
+		return true
+	}
+	return false
 }
 
 type TunnelNewParams struct {
@@ -203,7 +358,7 @@ func (r TunnelNewParams) MarshalJSON() (data []byte, err error) {
 type TunnelNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   TunnelArgoTunnel                                          `json:"result,required"`
+	Result   Tunnel                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -289,7 +444,7 @@ func (r TunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 type TunnelDeleteResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   TunnelArgoTunnel                                          `json:"result,required"`
+	Result   Tunnel                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -395,7 +550,7 @@ type TunnelGetParams struct {
 type TunnelGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   TunnelArgoTunnel                                          `json:"result,required"`
+	Result   Tunnel                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelGetResponseEnvelopeJSON    `json:"-"`

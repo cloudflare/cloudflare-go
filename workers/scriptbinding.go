@@ -83,7 +83,7 @@ func (r WorkersBinding) AsUnion() WorkersBindingUnion {
 	return r.union
 }
 
-// Union satisfied by [workers.WorkersBindingWorkersKVNamespaceBinding] or
+// Union satisfied by [workers.KVNamespaceBinding] or
 // [workers.WorkersBindingWorkersWasmModuleBinding].
 type WorkersBindingUnion interface {
 	implementsWorkersWorkersBinding()
@@ -95,58 +95,13 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(WorkersBindingWorkersKVNamespaceBinding{}),
+			Type:       reflect.TypeOf(KVNamespaceBinding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(WorkersBindingWorkersWasmModuleBinding{}),
 		},
 	)
-}
-
-type WorkersBindingWorkersKVNamespaceBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id,required"`
-	// The class of resource that the binding provides.
-	Type WorkersBindingWorkersKVNamespaceBindingType `json:"type,required"`
-	JSON workersBindingWorkersKVNamespaceBindingJSON `json:"-"`
-}
-
-// workersBindingWorkersKVNamespaceBindingJSON contains the JSON metadata for the
-// struct [WorkersBindingWorkersKVNamespaceBinding]
-type workersBindingWorkersKVNamespaceBindingJSON struct {
-	Name        apijson.Field
-	NamespaceID apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkersBindingWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r workersBindingWorkersKVNamespaceBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r WorkersBindingWorkersKVNamespaceBinding) implementsWorkersWorkersBinding() {}
-
-// The class of resource that the binding provides.
-type WorkersBindingWorkersKVNamespaceBindingType string
-
-const (
-	WorkersBindingWorkersKVNamespaceBindingTypeKVNamespace WorkersBindingWorkersKVNamespaceBindingType = "kv_namespace"
-)
-
-func (r WorkersBindingWorkersKVNamespaceBindingType) IsKnown() bool {
-	switch r {
-	case WorkersBindingWorkersKVNamespaceBindingTypeKVNamespace:
-		return true
-	}
-	return false
 }
 
 type WorkersBindingWorkersWasmModuleBinding struct {

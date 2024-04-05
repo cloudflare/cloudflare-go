@@ -35,8 +35,8 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		Name:               cloudflare.F("IPsec_1"),
 		CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 		Description:        cloudflare.F("Tunnel for ISP X"),
-		HealthCheck: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheck{
-			Direction: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckDirectionBidirectional),
+		HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
+			Direction: cloudflare.F(magic_transit.HealthCheckDirectionBidirectional),
 			Enabled:   cloudflare.F(true),
 			Rate:      cloudflare.F(magic_transit.UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Low),
 			Target:    cloudflare.F("203.0.113.1"),
@@ -78,8 +78,8 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 			Name:               cloudflare.F("IPsec_1"),
 			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 			Description:        cloudflare.F("Tunnel for ISP X"),
-			HealthCheck: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheck{
-				Direction: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckDirectionBidirectional),
+			HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
+				Direction: cloudflare.F(magic_transit.HealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),
 				Rate:      cloudflare.F(magic_transit.UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5Low),
 				Target:    cloudflare.F("203.0.113.1"),

@@ -112,6 +112,51 @@ func (r *RouteService) Get(ctx context.Context, routeIdentifier string, query Ro
 	return
 }
 
+type ColoNamesItem = string
+
+type ColoNamesItemParam = string
+
+type ColoRegionsItem = string
+
+type ColoRegionsItemParam = string
+
+// Used only for ECMP routes.
+type Scope struct {
+	// List of colo names for the ECMP scope.
+	ColoNames []ColoNamesItem `json:"colo_names"`
+	// List of colo regions for the ECMP scope.
+	ColoRegions []ColoRegionsItem `json:"colo_regions"`
+	JSON        scopeJSON         `json:"-"`
+}
+
+// scopeJSON contains the JSON metadata for the struct [Scope]
+type scopeJSON struct {
+	ColoNames   apijson.Field
+	ColoRegions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Scope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Used only for ECMP routes.
+type ScopeParam struct {
+	// List of colo names for the ECMP scope.
+	ColoNames param.Field[[]ColoNamesItemParam] `json:"colo_names"`
+	// List of colo regions for the ECMP scope.
+	ColoRegions param.Field[[]ColoRegionsItemParam] `json:"colo_regions"`
+}
+
+func (r ScopeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type RouteNewResponse struct {
 	Routes []RouteNewResponseRoute `json:"routes"`
 	JSON   routeNewResponseJSON    `json:"-"`
@@ -149,7 +194,7 @@ type RouteNewResponseRoute struct {
 	// When the route was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Used only for ECMP routes.
-	Scope RouteNewResponseRoutesScope `json:"scope"`
+	Scope Scope `json:"scope"`
 	// Optional weight of the ECMP scope - if provided.
 	Weight int64                     `json:"weight"`
 	JSON   routeNewResponseRouteJSON `json:"-"`
@@ -176,32 +221,6 @@ func (r *RouteNewResponseRoute) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r routeNewResponseRouteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Used only for ECMP routes.
-type RouteNewResponseRoutesScope struct {
-	// List of colo names for the ECMP scope.
-	ColoNames []string `json:"colo_names"`
-	// List of colo regions for the ECMP scope.
-	ColoRegions []string                        `json:"colo_regions"`
-	JSON        routeNewResponseRoutesScopeJSON `json:"-"`
-}
-
-// routeNewResponseRoutesScopeJSON contains the JSON metadata for the struct
-// [RouteNewResponseRoutesScope]
-type routeNewResponseRoutesScopeJSON struct {
-	ColoNames   apijson.Field
-	ColoRegions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteNewResponseRoutesScope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeNewResponseRoutesScopeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -265,7 +284,7 @@ type RouteListResponseRoute struct {
 	// When the route was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Used only for ECMP routes.
-	Scope RouteListResponseRoutesScope `json:"scope"`
+	Scope Scope `json:"scope"`
 	// Optional weight of the ECMP scope - if provided.
 	Weight int64                      `json:"weight"`
 	JSON   routeListResponseRouteJSON `json:"-"`
@@ -292,32 +311,6 @@ func (r *RouteListResponseRoute) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r routeListResponseRouteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Used only for ECMP routes.
-type RouteListResponseRoutesScope struct {
-	// List of colo names for the ECMP scope.
-	ColoNames []string `json:"colo_names"`
-	// List of colo regions for the ECMP scope.
-	ColoRegions []string                         `json:"colo_regions"`
-	JSON        routeListResponseRoutesScopeJSON `json:"-"`
-}
-
-// routeListResponseRoutesScopeJSON contains the JSON metadata for the struct
-// [RouteListResponseRoutesScope]
-type routeListResponseRoutesScopeJSON struct {
-	ColoNames   apijson.Field
-	ColoRegions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RouteListResponseRoutesScope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r routeListResponseRoutesScopeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -453,24 +446,12 @@ type RouteUpdateParams struct {
 	// An optional human provided description of the static route.
 	Description param.Field[string] `json:"description"`
 	// Used only for ECMP routes.
-	Scope param.Field[RouteUpdateParamsScope] `json:"scope"`
+	Scope param.Field[ScopeParam] `json:"scope"`
 	// Optional weight of the ECMP scope - if provided.
 	Weight param.Field[int64] `json:"weight"`
 }
 
 func (r RouteUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Used only for ECMP routes.
-type RouteUpdateParamsScope struct {
-	// List of colo names for the ECMP scope.
-	ColoNames param.Field[[]string] `json:"colo_names"`
-	// List of colo regions for the ECMP scope.
-	ColoRegions param.Field[[]string] `json:"colo_regions"`
-}
-
-func (r RouteUpdateParamsScope) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

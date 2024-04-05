@@ -38,7 +38,7 @@ func NewDispatchNamespaceScriptContentService(opts ...option.RequestOption) (r *
 }
 
 // Put script content for a script uploaded to a Workers for Platforms namespace.
-func (r *DispatchNamespaceScriptContentService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *workers.WorkersScript, err error) {
+func (r *DispatchNamespaceScriptContentService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *workers.Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptContentUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", params.AccountID, dispatchNamespace, scriptName)
@@ -93,7 +93,7 @@ func (r DispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []b
 type DispatchNamespaceScriptContentUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   workers.WorkersScript                                     `json:"result,required"`
+	Result   workers.Script                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptContentUpdateResponseEnvelopeJSON    `json:"-"`

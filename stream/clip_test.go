@@ -33,7 +33,7 @@ func TestClipNewWithOptionalParams(t *testing.T) {
 		ClippedFromVideoUid:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		EndTimeSeconds:        cloudflare.F(int64(0)),
 		StartTimeSeconds:      cloudflare.F(int64(0)),
-		AllowedOrigins:        cloudflare.F([]string{"example.com"}),
+		AllowedOrigins:        cloudflare.F([]stream.AllowedOriginsItemParam{"example.com"}),
 		Creator:               cloudflare.F("creator-id_abcde12345"),
 		MaxDurationSeconds:    cloudflare.F(int64(1)),
 		RequireSignedURLs:     cloudflare.F(true),

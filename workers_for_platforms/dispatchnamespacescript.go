@@ -47,7 +47,7 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 }
 
 // Upload a worker module to a Workers for Platforms namespace.
-func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *workers.WorkersScript, err error) {
+func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *workers.Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", params.getAccountID(), dispatchNamespace, scriptName)
@@ -90,7 +90,7 @@ type WorkersForPlatformsNamespaceScript struct {
 	DispatchNamespace string `json:"dispatch_namespace"`
 	// When the script was last modified.
 	ModifiedOn time.Time                              `json:"modified_on" format:"date-time"`
-	Script     workers.WorkersScript                  `json:"script"`
+	Script     workers.Script                         `json:"script"`
 	JSON       workersForPlatformsNamespaceScriptJSON `json:"-"`
 }
 
@@ -180,11 +180,11 @@ type DispatchNamespaceScriptUpdateParamsVariant0Metadata struct {
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations param.Field[DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion] `json:"migrations"`
-	Placement  param.Field[DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacement]       `json:"placement"`
+	Placement  param.Field[workers.PlacementConfigurationParam]                                `json:"placement"`
 	// List of strings to use as tags for this Worker
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]DispatchNamespaceScriptUpdateParamsVariant0MetadataTailConsumer] `json:"tail_consumers"`
+	TailConsumers param.Field[[]workers.ConsumerScriptParam] `json:"tail_consumers"`
 	// Usage model to apply to invocations.
 	UsageModel param.Field[DispatchNamespaceScriptUpdateParamsVariant0MetadataUsageModel] `json:"usage_model"`
 	// Key-value pairs to use as tags for this version of this Worker
@@ -218,150 +218,11 @@ func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations) implement
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations],
-// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations],
+// Satisfied by [workers.SingleStepMigrationParam],
+// [workers.SteppedMigrationParam],
 // [DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrations].
 type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion interface {
 	implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion()
-}
-
-// A single set of migrations to apply.
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations struct {
-	// A list of classes to delete Durable Object namespaces from.
-	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
-	// A list of classes to create Durable Object namespaces from.
-	NewClasses param.Field[[]string] `json:"new_classes"`
-	// Tag to set as the latest migration tag.
-	NewTag param.Field[string] `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag param.Field[string] `json:"old_tag"`
-	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses param.Field[[]DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass] `json:"renamed_classes"`
-	// A list of transfers for Durable Object namespaces from a different Worker and
-	// class to a class defined in this Worker.
-	TransferredClasses param.Field[[]DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass] `json:"transferred_classes"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion() {
-}
-
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass struct {
-	From param.Field[string] `json:"from"`
-	To   param.Field[string] `json:"to"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass struct {
-	From       param.Field[string] `json:"from"`
-	FromScript param.Field[string] `json:"from_script"`
-	To         param.Field[string] `json:"to"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag param.Field[string] `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag param.Field[string] `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps param.Field[[]DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep] `json:"steps"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion() {
-}
-
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep struct {
-	// A list of classes to delete Durable Object namespaces from.
-	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
-	// A list of classes to create Durable Object namespaces from.
-	NewClasses param.Field[[]string] `json:"new_classes"`
-	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses param.Field[[]DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass] `json:"renamed_classes"`
-	// A list of transfers for Durable Object namespaces from a different Worker and
-	// class to a class defined in this Worker.
-	TransferredClasses param.Field[[]DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass] `json:"transferred_classes"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
-	From param.Field[string] `json:"from"`
-	To   param.Field[string] `json:"to"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
-	From       param.Field[string] `json:"from"`
-	FromScript param.Field[string] `json:"from_script"`
-	To         param.Field[string] `json:"to"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacement struct {
-	// Enables
-	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	// Only `"smart"` is currently supported
-	Mode param.Field[DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacementMode] `json:"mode"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacement) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Enables
-// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-// Only `"smart"` is currently supported
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacementMode string
-
-const (
-	DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacementModeSmart DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacementMode = "smart"
-)
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacementMode) IsKnown() bool {
-	switch r {
-	case DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacementModeSmart:
-		return true
-	}
-	return false
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type DispatchNamespaceScriptUpdateParamsVariant0MetadataTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service param.Field[string] `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment param.Field[string] `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace param.Field[string] `json:"namespace"`
-}
-
-func (r DispatchNamespaceScriptUpdateParamsVariant0MetadataTailConsumer) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Usage model to apply to invocations.
@@ -403,7 +264,7 @@ func (DispatchNamespaceScriptUpdateParamsVariant1) ImplementsDispatchNamespaceSc
 type DispatchNamespaceScriptUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   workers.WorkersScript                                     `json:"result,required"`
+	Result   workers.Script                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptUpdateResponseEnvelopeJSON    `json:"-"`

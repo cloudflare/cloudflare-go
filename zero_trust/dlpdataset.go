@@ -36,7 +36,7 @@ func NewDLPDatasetService(opts ...option.RequestOption) (r *DLPDatasetService) {
 }
 
 // Create a new dataset.
-func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams, opts ...option.RequestOption) (res *DLPDatasetCreation, err error) {
+func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams, opts ...option.RequestOption) (res *DatasetCreation, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets", params.AccountID)
@@ -49,7 +49,7 @@ func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams,
 }
 
 // Update details about a dataset.
-func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params DLPDatasetUpdateParams, opts ...option.RequestOption) (res *DLPDataset, err error) {
+func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params DLPDatasetUpdateParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", params.AccountID, datasetID)
@@ -62,7 +62,7 @@ func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params
 }
 
 // Fetch all datasets with information about available versions.
-func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPDataset], err error) {
+func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Dataset], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,7 +80,7 @@ func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams
 }
 
 // Fetch all datasets with information about available versions.
-func (r *DLPDatasetService) ListAutoPaging(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DLPDataset] {
+func (r *DLPDatasetService) ListAutoPaging(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Dataset] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -96,7 +96,7 @@ func (r *DLPDatasetService) Delete(ctx context.Context, datasetID string, body D
 }
 
 // Fetch a specific dataset with information about available versions.
-func (r *DLPDatasetService) Get(ctx context.Context, datasetID string, query DLPDatasetGetParams, opts ...option.RequestOption) (res *DLPDataset, err error) {
+func (r *DLPDatasetService) Get(ctx context.Context, datasetID string, query DLPDatasetGetParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", query.AccountID, datasetID)
@@ -108,21 +108,21 @@ func (r *DLPDatasetService) Get(ctx context.Context, datasetID string, query DLP
 	return
 }
 
-type DLPDataset struct {
-	ID          string             `json:"id,required" format:"uuid"`
-	CreatedAt   time.Time          `json:"created_at,required" format:"date-time"`
-	Name        string             `json:"name,required"`
-	NumCells    int64              `json:"num_cells,required"`
-	Secret      bool               `json:"secret,required"`
-	Status      DLPDatasetStatus   `json:"status,required"`
-	UpdatedAt   time.Time          `json:"updated_at,required" format:"date-time"`
-	Uploads     []DLPDatasetUpload `json:"uploads,required"`
-	Description string             `json:"description,nullable"`
-	JSON        dlpDatasetJSON     `json:"-"`
+type Dataset struct {
+	ID          string          `json:"id,required" format:"uuid"`
+	CreatedAt   time.Time       `json:"created_at,required" format:"date-time"`
+	Name        string          `json:"name,required"`
+	NumCells    int64           `json:"num_cells,required"`
+	Secret      bool            `json:"secret,required"`
+	Status      DatasetStatus   `json:"status,required"`
+	UpdatedAt   time.Time       `json:"updated_at,required" format:"date-time"`
+	Uploads     []DatasetUpload `json:"uploads,required"`
+	Description string          `json:"description,nullable"`
+	JSON        datasetJSON     `json:"-"`
 }
 
-// dlpDatasetJSON contains the JSON metadata for the struct [DLPDataset]
-type dlpDatasetJSON struct {
+// datasetJSON contains the JSON metadata for the struct [Dataset]
+type datasetJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Name        apijson.Field
@@ -136,41 +136,40 @@ type dlpDatasetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPDataset) UnmarshalJSON(data []byte) (err error) {
+func (r *Dataset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpDatasetJSON) RawJSON() string {
+func (r datasetJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetStatus string
+type DatasetStatus string
 
 const (
-	DLPDatasetStatusEmpty     DLPDatasetStatus = "empty"
-	DLPDatasetStatusUploading DLPDatasetStatus = "uploading"
-	DLPDatasetStatusFailed    DLPDatasetStatus = "failed"
-	DLPDatasetStatusComplete  DLPDatasetStatus = "complete"
+	DatasetStatusEmpty     DatasetStatus = "empty"
+	DatasetStatusUploading DatasetStatus = "uploading"
+	DatasetStatusFailed    DatasetStatus = "failed"
+	DatasetStatusComplete  DatasetStatus = "complete"
 )
 
-func (r DLPDatasetStatus) IsKnown() bool {
+func (r DatasetStatus) IsKnown() bool {
 	switch r {
-	case DLPDatasetStatusEmpty, DLPDatasetStatusUploading, DLPDatasetStatusFailed, DLPDatasetStatusComplete:
+	case DatasetStatusEmpty, DatasetStatusUploading, DatasetStatusFailed, DatasetStatusComplete:
 		return true
 	}
 	return false
 }
 
-type DLPDatasetUpload struct {
-	NumCells int64                   `json:"num_cells,required"`
-	Status   DLPDatasetUploadsStatus `json:"status,required"`
-	Version  int64                   `json:"version,required"`
-	JSON     dlpDatasetUploadJSON    `json:"-"`
+type DatasetUpload struct {
+	NumCells int64                `json:"num_cells,required"`
+	Status   DatasetUploadsStatus `json:"status,required"`
+	Version  int64                `json:"version,required"`
+	JSON     datasetUploadJSON    `json:"-"`
 }
 
-// dlpDatasetUploadJSON contains the JSON metadata for the struct
-// [DLPDatasetUpload]
-type dlpDatasetUploadJSON struct {
+// datasetUploadJSON contains the JSON metadata for the struct [DatasetUpload]
+type datasetUploadJSON struct {
 	NumCells    apijson.Field
 	Status      apijson.Field
 	Version     apijson.Field
@@ -178,47 +177,46 @@ type dlpDatasetUploadJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPDatasetUpload) UnmarshalJSON(data []byte) (err error) {
+func (r *DatasetUpload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpDatasetUploadJSON) RawJSON() string {
+func (r datasetUploadJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetUploadsStatus string
+type DatasetUploadsStatus string
 
 const (
-	DLPDatasetUploadsStatusEmpty     DLPDatasetUploadsStatus = "empty"
-	DLPDatasetUploadsStatusUploading DLPDatasetUploadsStatus = "uploading"
-	DLPDatasetUploadsStatusFailed    DLPDatasetUploadsStatus = "failed"
-	DLPDatasetUploadsStatusComplete  DLPDatasetUploadsStatus = "complete"
+	DatasetUploadsStatusEmpty     DatasetUploadsStatus = "empty"
+	DatasetUploadsStatusUploading DatasetUploadsStatus = "uploading"
+	DatasetUploadsStatusFailed    DatasetUploadsStatus = "failed"
+	DatasetUploadsStatusComplete  DatasetUploadsStatus = "complete"
 )
 
-func (r DLPDatasetUploadsStatus) IsKnown() bool {
+func (r DatasetUploadsStatus) IsKnown() bool {
 	switch r {
-	case DLPDatasetUploadsStatusEmpty, DLPDatasetUploadsStatusUploading, DLPDatasetUploadsStatusFailed, DLPDatasetUploadsStatusComplete:
+	case DatasetUploadsStatusEmpty, DatasetUploadsStatusUploading, DatasetUploadsStatusFailed, DatasetUploadsStatusComplete:
 		return true
 	}
 	return false
 }
 
-type DLPDatasetArray []DLPDataset
+type DatasetArray []Dataset
 
-type DLPDatasetCreation struct {
-	Dataset  DLPDataset `json:"dataset,required"`
-	MaxCells int64      `json:"max_cells,required"`
+type DatasetCreation struct {
+	Dataset  Dataset `json:"dataset,required"`
+	MaxCells int64   `json:"max_cells,required"`
 	// The version to use when uploading the dataset.
 	Version int64 `json:"version,required"`
 	// The secret to use for Exact Data Match datasets. This is not present in Custom
 	// Wordlists.
-	Secret string                 `json:"secret" format:"password"`
-	JSON   dlpDatasetCreationJSON `json:"-"`
+	Secret string              `json:"secret" format:"password"`
+	JSON   datasetCreationJSON `json:"-"`
 }
 
-// dlpDatasetCreationJSON contains the JSON metadata for the struct
-// [DLPDatasetCreation]
-type dlpDatasetCreationJSON struct {
+// datasetCreationJSON contains the JSON metadata for the struct [DatasetCreation]
+type datasetCreationJSON struct {
 	Dataset     apijson.Field
 	MaxCells    apijson.Field
 	Version     apijson.Field
@@ -227,11 +225,11 @@ type dlpDatasetCreationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPDatasetCreation) UnmarshalJSON(data []byte) (err error) {
+func (r *DatasetCreation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpDatasetCreationJSON) RawJSON() string {
+func (r datasetCreationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -254,7 +252,7 @@ type DLPDatasetNewResponseEnvelope struct {
 	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	Success    bool                                                      `json:"success,required"`
-	Result     DLPDatasetCreation                                        `json:"result"`
+	Result     DatasetCreation                                           `json:"result"`
 	ResultInfo DLPDatasetNewResponseEnvelopeResultInfo                   `json:"result_info"`
 	JSON       dlpDatasetNewResponseEnvelopeJSON                         `json:"-"`
 }
@@ -324,7 +322,7 @@ type DLPDatasetUpdateResponseEnvelope struct {
 	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	Success    bool                                                      `json:"success,required"`
-	Result     DLPDataset                                                `json:"result"`
+	Result     Dataset                                                   `json:"result"`
 	ResultInfo DLPDatasetUpdateResponseEnvelopeResultInfo                `json:"result_info"`
 	JSON       dlpDatasetUpdateResponseEnvelopeJSON                      `json:"-"`
 }
@@ -396,7 +394,7 @@ type DLPDatasetGetResponseEnvelope struct {
 	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	Success    bool                                                      `json:"success,required"`
-	Result     DLPDataset                                                `json:"result"`
+	Result     Dataset                                                   `json:"result"`
 	ResultInfo DLPDatasetGetResponseEnvelopeResultInfo                   `json:"result_info"`
 	JSON       dlpDatasetGetResponseEnvelopeJSON                         `json:"-"`
 }

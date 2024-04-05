@@ -138,8 +138,8 @@ type GRETunnelNewResponseGRETunnel struct {
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
-	Description string                                    `json:"description"`
-	HealthCheck GRETunnelNewResponseGRETunnelsHealthCheck `json:"health_check"`
+	Description string      `json:"description"`
+	HealthCheck HealthCheck `json:"health_check"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -174,70 +174,6 @@ func (r *GRETunnelNewResponseGRETunnel) UnmarshalJSON(data []byte) (err error) {
 
 func (r greTunnelNewResponseGRETunnelJSON) RawJSON() string {
 	return r.raw
-}
-
-type GRETunnelNewResponseGRETunnelsHealthCheck struct {
-	// The direction of the flow of the healthcheck. Either unidirectional, where the
-	// probe comes to you via the tunnel and the result comes back to Cloudflare via
-	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
-	Direction GRETunnelNewResponseGRETunnelsHealthCheckDirection `json:"direction"`
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
-	Target string `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 `json:"type"`
-	JSON greTunnelNewResponseGRETunnelsHealthCheckJSON    `json:"-"`
-}
-
-// greTunnelNewResponseGRETunnelsHealthCheckJSON contains the JSON metadata for the
-// struct [GRETunnelNewResponseGRETunnelsHealthCheck]
-type greTunnelNewResponseGRETunnelsHealthCheckJSON struct {
-	Direction   apijson.Field
-	Enabled     apijson.Field
-	Rate        apijson.Field
-	Target      apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelNewResponseGRETunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelNewResponseGRETunnelsHealthCheckJSON) RawJSON() string {
-	return r.raw
-}
-
-// The direction of the flow of the healthcheck. Either unidirectional, where the
-// probe comes to you via the tunnel and the result comes back to Cloudflare via
-// the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
-type GRETunnelNewResponseGRETunnelsHealthCheckDirection string
-
-const (
-	GRETunnelNewResponseGRETunnelsHealthCheckDirectionUnidirectional GRETunnelNewResponseGRETunnelsHealthCheckDirection = "unidirectional"
-	GRETunnelNewResponseGRETunnelsHealthCheckDirectionBidirectional  GRETunnelNewResponseGRETunnelsHealthCheckDirection = "bidirectional"
-)
-
-func (r GRETunnelNewResponseGRETunnelsHealthCheckDirection) IsKnown() bool {
-	switch r {
-	case GRETunnelNewResponseGRETunnelsHealthCheckDirectionUnidirectional, GRETunnelNewResponseGRETunnelsHealthCheckDirectionBidirectional:
-		return true
-	}
-	return false
 }
 
 type GRETunnelUpdateResponse struct {
@@ -301,8 +237,8 @@ type GRETunnelListResponseGRETunnel struct {
 	// The date and time the tunnel was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
-	Description string                                     `json:"description"`
-	HealthCheck GRETunnelListResponseGRETunnelsHealthCheck `json:"health_check"`
+	Description string      `json:"description"`
+	HealthCheck HealthCheck `json:"health_check"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -337,70 +273,6 @@ func (r *GRETunnelListResponseGRETunnel) UnmarshalJSON(data []byte) (err error) 
 
 func (r greTunnelListResponseGRETunnelJSON) RawJSON() string {
 	return r.raw
-}
-
-type GRETunnelListResponseGRETunnelsHealthCheck struct {
-	// The direction of the flow of the healthcheck. Either unidirectional, where the
-	// probe comes to you via the tunnel and the result comes back to Cloudflare via
-	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
-	Direction GRETunnelListResponseGRETunnelsHealthCheckDirection `json:"direction"`
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5 `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
-	Target string `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39 `json:"type"`
-	JSON greTunnelListResponseGRETunnelsHealthCheckJSON   `json:"-"`
-}
-
-// greTunnelListResponseGRETunnelsHealthCheckJSON contains the JSON metadata for
-// the struct [GRETunnelListResponseGRETunnelsHealthCheck]
-type greTunnelListResponseGRETunnelsHealthCheckJSON struct {
-	Direction   apijson.Field
-	Enabled     apijson.Field
-	Rate        apijson.Field
-	Target      apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GRETunnelListResponseGRETunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r greTunnelListResponseGRETunnelsHealthCheckJSON) RawJSON() string {
-	return r.raw
-}
-
-// The direction of the flow of the healthcheck. Either unidirectional, where the
-// probe comes to you via the tunnel and the result comes back to Cloudflare via
-// the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
-type GRETunnelListResponseGRETunnelsHealthCheckDirection string
-
-const (
-	GRETunnelListResponseGRETunnelsHealthCheckDirectionUnidirectional GRETunnelListResponseGRETunnelsHealthCheckDirection = "unidirectional"
-	GRETunnelListResponseGRETunnelsHealthCheckDirectionBidirectional  GRETunnelListResponseGRETunnelsHealthCheckDirection = "bidirectional"
-)
-
-func (r GRETunnelListResponseGRETunnelsHealthCheckDirection) IsKnown() bool {
-	switch r {
-	case GRETunnelListResponseGRETunnelsHealthCheckDirectionUnidirectional, GRETunnelListResponseGRETunnelsHealthCheckDirectionBidirectional:
-		return true
-	}
-	return false
 }
 
 type GRETunnelDeleteResponse struct {
@@ -515,8 +387,8 @@ type GRETunnelUpdateParams struct {
 	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
 	Name param.Field[string] `json:"name,required"`
 	// An optional description of the GRE tunnel.
-	Description param.Field[string]                           `json:"description"`
-	HealthCheck param.Field[GRETunnelUpdateParamsHealthCheck] `json:"health_check"`
+	Description param.Field[string]           `json:"description"`
+	HealthCheck param.Field[HealthCheckParam] `json:"health_check"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
 	// is 576.
 	Mtu param.Field[int64] `json:"mtu"`
@@ -526,53 +398,6 @@ type GRETunnelUpdateParams struct {
 
 func (r GRETunnelUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type GRETunnelUpdateParamsHealthCheck struct {
-	// The direction of the flow of the healthcheck. Either unidirectional, where the
-	// probe comes to you via the tunnel and the result comes back to Cloudflare via
-	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
-	Direction param.Field[GRETunnelUpdateParamsHealthCheckDirection] `json:"direction"`
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[UnnamedSchemaRefEebdc868ce7f7ae92e23438caa84e7b5] `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
-	Target param.Field[string] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[UnnamedSchemaRef3b1a76a5e4a139b72ed7d93834773d39] `json:"type"`
-}
-
-func (r GRETunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The direction of the flow of the healthcheck. Either unidirectional, where the
-// probe comes to you via the tunnel and the result comes back to Cloudflare via
-// the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
-type GRETunnelUpdateParamsHealthCheckDirection string
-
-const (
-	GRETunnelUpdateParamsHealthCheckDirectionUnidirectional GRETunnelUpdateParamsHealthCheckDirection = "unidirectional"
-	GRETunnelUpdateParamsHealthCheckDirectionBidirectional  GRETunnelUpdateParamsHealthCheckDirection = "bidirectional"
-)
-
-func (r GRETunnelUpdateParamsHealthCheckDirection) IsKnown() bool {
-	switch r {
-	case GRETunnelUpdateParamsHealthCheckDirectionUnidirectional, GRETunnelUpdateParamsHealthCheckDirectionBidirectional:
-		return true
-	}
-	return false
 }
 
 type GRETunnelUpdateResponseEnvelope struct {

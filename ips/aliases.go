@@ -54,34 +54,6 @@ const UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnelTunTypeGRE 
 // This is an alias to an internal value.
 const UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnelTunTypeCni = shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnelTunTypeCni
 
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-//
-// This is an alias to an internal type.
-type UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnel = shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnel
-
-// This is an alias to an internal type.
-type UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnection = shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnection
-
-// The type of tunnel.
-//
-// This is an alias to an internal type.
-type UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType = shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType
-
-// This is an alias to an internal value.
-const UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeCfdTunnel = shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeCfdTunnel
-
-// This is an alias to an internal value.
-const UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeWARPConnector = shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeWARPConnector
-
-// This is an alias to an internal value.
-const UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeIPSec = shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeIPSec
-
-// This is an alias to an internal value.
-const UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeGRE = shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeGRE
-
-// This is an alias to an internal value.
-const UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeCni = shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeCni
-
 // The type of tunnel.
 //
 // This is an alias to an internal type.

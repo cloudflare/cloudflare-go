@@ -57,7 +57,7 @@ type AnalyticsEventSummaryGetParams struct {
 	// | appID     | Application ID                | 40d67c87c6cd4b889a4fd57805225e85                           |
 	// | coloName  | Colo Name                     | SFO                                                        |
 	// | ipVersion | IP version used by the client | 4, 6.                                                      |
-	Dimensions param.Field[[]AnalyticsEventSummaryGetParamsDimension] `query:"dimensions"`
+	Dimensions param.Field[[]DimensionItem] `query:"dimensions"`
 	// Used to filter rows by one or more dimensions. Filters can be combined using OR
 	// and AND boolean logic. AND takes precedence over OR in all the expressions. The
 	// OR operator is defined using a comma (,) or OR keyword surrounded by whitespace.
@@ -104,23 +104,6 @@ func (r AnalyticsEventSummaryGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type AnalyticsEventSummaryGetParamsDimension string
-
-const (
-	AnalyticsEventSummaryGetParamsDimensionEvent     AnalyticsEventSummaryGetParamsDimension = "event"
-	AnalyticsEventSummaryGetParamsDimensionAppID     AnalyticsEventSummaryGetParamsDimension = "appID"
-	AnalyticsEventSummaryGetParamsDimensionColoName  AnalyticsEventSummaryGetParamsDimension = "coloName"
-	AnalyticsEventSummaryGetParamsDimensionIPVersion AnalyticsEventSummaryGetParamsDimension = "ipVersion"
-)
-
-func (r AnalyticsEventSummaryGetParamsDimension) IsKnown() bool {
-	switch r {
-	case AnalyticsEventSummaryGetParamsDimensionEvent, AnalyticsEventSummaryGetParamsDimensionAppID, AnalyticsEventSummaryGetParamsDimensionColoName, AnalyticsEventSummaryGetParamsDimensionIPVersion:
-		return true
-	}
-	return false
 }
 
 type AnalyticsEventSummaryGetParamsMetric string

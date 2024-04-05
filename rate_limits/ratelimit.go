@@ -110,12 +110,163 @@ func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id st
 	return
 }
 
+// The action to perform when the threshold of matched traffic within the
+// configured period is exceeded.
+type Action struct {
+	// The action to perform.
+	Mode ActionMode `json:"mode"`
+	// A custom content type and reponse to return when the threshold is exceeded. The
+	// custom response configured in this object will override the custom error for the
+	// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+	// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+	// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+	// not provide the "response" object.
+	Response ActionResponse `json:"response"`
+	// The time in seconds during which Cloudflare will perform the mitigation action.
+	// Must be an integer value greater than or equal to the period. Notes: If "mode"
+	// is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the
+	// zone's Challenge Passage time and you should not provide this value.
+	Timeout float64    `json:"timeout"`
+	JSON    actionJSON `json:"-"`
+}
+
+// actionJSON contains the JSON metadata for the struct [Action]
+type actionJSON struct {
+	Mode        apijson.Field
+	Response    apijson.Field
+	Timeout     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Action) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r actionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action to perform.
+type ActionMode string
+
+const (
+	ActionModeSimulate         ActionMode = "simulate"
+	ActionModeBan              ActionMode = "ban"
+	ActionModeChallenge        ActionMode = "challenge"
+	ActionModeJsChallenge      ActionMode = "js_challenge"
+	ActionModeManagedChallenge ActionMode = "managed_challenge"
+)
+
+func (r ActionMode) IsKnown() bool {
+	switch r {
+	case ActionModeSimulate, ActionModeBan, ActionModeChallenge, ActionModeJsChallenge, ActionModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
+// A custom content type and reponse to return when the threshold is exceeded. The
+// custom response configured in this object will override the custom error for the
+// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+// not provide the "response" object.
+type ActionResponse struct {
+	// The response body to return. The value must conform to the configured content
+	// type.
+	Body string `json:"body"`
+	// The content type of the body. Must be one of the following: `text/plain`,
+	// `text/xml`, or `application/json`.
+	ContentType string             `json:"content_type"`
+	JSON        actionResponseJSON `json:"-"`
+}
+
+// actionResponseJSON contains the JSON metadata for the struct [ActionResponse]
+type actionResponseJSON struct {
+	Body        apijson.Field
+	ContentType apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ActionResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r actionResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action to perform when the threshold of matched traffic within the
+// configured period is exceeded.
+type ActionParam struct {
+	// The action to perform.
+	Mode param.Field[ActionMode] `json:"mode"`
+	// A custom content type and reponse to return when the threshold is exceeded. The
+	// custom response configured in this object will override the custom error for the
+	// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+	// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+	// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+	// not provide the "response" object.
+	Response param.Field[ActionResponseParam] `json:"response"`
+	// The time in seconds during which Cloudflare will perform the mitigation action.
+	// Must be an integer value greater than or equal to the period. Notes: If "mode"
+	// is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the
+	// zone's Challenge Passage time and you should not provide this value.
+	Timeout param.Field[float64] `json:"timeout"`
+}
+
+func (r ActionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A custom content type and reponse to return when the threshold is exceeded. The
+// custom response configured in this object will override the custom error for the
+// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+// not provide the "response" object.
+type ActionResponseParam struct {
+	// The response body to return. The value must conform to the configured content
+	// type.
+	Body param.Field[string] `json:"body"`
+	// The content type of the body. Must be one of the following: `text/plain`,
+	// `text/xml`, or `application/json`.
+	ContentType param.Field[string] `json:"content_type"`
+}
+
+func (r ActionResponseParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An HTTP method or `_ALL_` to indicate all methods.
+type MethodsItem string
+
+const (
+	MethodsItemGet    MethodsItem = "GET"
+	MethodsItemPost   MethodsItem = "POST"
+	MethodsItemPut    MethodsItem = "PUT"
+	MethodsItemDelete MethodsItem = "DELETE"
+	MethodsItemPatch  MethodsItem = "PATCH"
+	MethodsItemHead   MethodsItem = "HEAD"
+	MethodsItem_All   MethodsItem = "_ALL_"
+)
+
+func (r MethodsItem) IsKnown() bool {
+	switch r {
+	case MethodsItemGet, MethodsItemPost, MethodsItemPut, MethodsItemDelete, MethodsItemPatch, MethodsItemHead, MethodsItem_All:
+		return true
+	}
+	return false
+}
+
 type RateLimitListResponse struct {
 	// The unique identifier of the rate limit.
 	ID string `json:"id"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
-	Action RateLimitListResponseAction `json:"action"`
+	Action Action `json:"action"`
 	// Criteria specifying when the current rate limit should be bypassed. You can
 	// specify that the rate limit should not apply to one or more URLs.
 	Bypass []RateLimitListResponseBypass `json:"bypass"`
@@ -156,96 +307,6 @@ func (r *RateLimitListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r rateLimitListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The action to perform when the threshold of matched traffic within the
-// configured period is exceeded.
-type RateLimitListResponseAction struct {
-	// The action to perform.
-	Mode RateLimitListResponseActionMode `json:"mode"`
-	// A custom content type and reponse to return when the threshold is exceeded. The
-	// custom response configured in this object will override the custom error for the
-	// zone. This object is optional. Notes: If you omit this object, Cloudflare will
-	// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
-	// or "js_challenge", Cloudflare will use the zone challenge pages and you should
-	// not provide the "response" object.
-	Response RateLimitListResponseActionResponse `json:"response"`
-	// The time in seconds during which Cloudflare will perform the mitigation action.
-	// Must be an integer value greater than or equal to the period. Notes: If "mode"
-	// is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the
-	// zone's Challenge Passage time and you should not provide this value.
-	Timeout float64                         `json:"timeout"`
-	JSON    rateLimitListResponseActionJSON `json:"-"`
-}
-
-// rateLimitListResponseActionJSON contains the JSON metadata for the struct
-// [RateLimitListResponseAction]
-type rateLimitListResponseActionJSON struct {
-	Mode        apijson.Field
-	Response    apijson.Field
-	Timeout     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RateLimitListResponseAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rateLimitListResponseActionJSON) RawJSON() string {
-	return r.raw
-}
-
-// The action to perform.
-type RateLimitListResponseActionMode string
-
-const (
-	RateLimitListResponseActionModeSimulate         RateLimitListResponseActionMode = "simulate"
-	RateLimitListResponseActionModeBan              RateLimitListResponseActionMode = "ban"
-	RateLimitListResponseActionModeChallenge        RateLimitListResponseActionMode = "challenge"
-	RateLimitListResponseActionModeJsChallenge      RateLimitListResponseActionMode = "js_challenge"
-	RateLimitListResponseActionModeManagedChallenge RateLimitListResponseActionMode = "managed_challenge"
-)
-
-func (r RateLimitListResponseActionMode) IsKnown() bool {
-	switch r {
-	case RateLimitListResponseActionModeSimulate, RateLimitListResponseActionModeBan, RateLimitListResponseActionModeChallenge, RateLimitListResponseActionModeJsChallenge, RateLimitListResponseActionModeManagedChallenge:
-		return true
-	}
-	return false
-}
-
-// A custom content type and reponse to return when the threshold is exceeded. The
-// custom response configured in this object will override the custom error for the
-// zone. This object is optional. Notes: If you omit this object, Cloudflare will
-// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
-// or "js_challenge", Cloudflare will use the zone challenge pages and you should
-// not provide the "response" object.
-type RateLimitListResponseActionResponse struct {
-	// The response body to return. The value must conform to the configured content
-	// type.
-	Body string `json:"body"`
-	// The content type of the body. Must be one of the following: `text/plain`,
-	// `text/xml`, or `application/json`.
-	ContentType string                                  `json:"content_type"`
-	JSON        rateLimitListResponseActionResponseJSON `json:"-"`
-}
-
-// rateLimitListResponseActionResponseJSON contains the JSON metadata for the
-// struct [RateLimitListResponseActionResponse]
-type rateLimitListResponseActionResponseJSON struct {
-	Body        apijson.Field
-	ContentType apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RateLimitListResponseActionResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rateLimitListResponseActionResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -361,7 +422,7 @@ type RateLimitListResponseMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods []RateLimitListResponseMatchRequestMethod `json:"methods"`
+	Methods []MethodsItem `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -390,27 +451,6 @@ func (r *RateLimitListResponseMatchRequest) UnmarshalJSON(data []byte) (err erro
 
 func (r rateLimitListResponseMatchRequestJSON) RawJSON() string {
 	return r.raw
-}
-
-// An HTTP method or `_ALL_` to indicate all methods.
-type RateLimitListResponseMatchRequestMethod string
-
-const (
-	RateLimitListResponseMatchRequestMethodGet    RateLimitListResponseMatchRequestMethod = "GET"
-	RateLimitListResponseMatchRequestMethodPost   RateLimitListResponseMatchRequestMethod = "POST"
-	RateLimitListResponseMatchRequestMethodPut    RateLimitListResponseMatchRequestMethod = "PUT"
-	RateLimitListResponseMatchRequestMethodDelete RateLimitListResponseMatchRequestMethod = "DELETE"
-	RateLimitListResponseMatchRequestMethodPatch  RateLimitListResponseMatchRequestMethod = "PATCH"
-	RateLimitListResponseMatchRequestMethodHead   RateLimitListResponseMatchRequestMethod = "HEAD"
-	RateLimitListResponseMatchRequestMethod_All   RateLimitListResponseMatchRequestMethod = "_ALL_"
-)
-
-func (r RateLimitListResponseMatchRequestMethod) IsKnown() bool {
-	switch r {
-	case RateLimitListResponseMatchRequestMethodGet, RateLimitListResponseMatchRequestMethodPost, RateLimitListResponseMatchRequestMethodPut, RateLimitListResponseMatchRequestMethodDelete, RateLimitListResponseMatchRequestMethodPatch, RateLimitListResponseMatchRequestMethodHead, RateLimitListResponseMatchRequestMethod_All:
-		return true
-	}
-	return false
 }
 
 type RateLimitListResponseMatchResponse struct {

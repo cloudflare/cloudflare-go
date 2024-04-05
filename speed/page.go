@@ -56,7 +56,7 @@ func (r *PageService) ListAutoPaging(ctx context.Context, query PageListParams, 
 
 type PageListResponse struct {
 	// A test region with a label.
-	Region PageListResponseRegion `json:"region"`
+	Region LabeledRegion `json:"region"`
 	// The frequency of the test.
 	ScheduleFrequency PageListResponseScheduleFrequency `json:"scheduleFrequency"`
 	Tests             []ObservatoryPageTest             `json:"tests"`
@@ -82,66 +82,6 @@ func (r *PageListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r pageListResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// A test region with a label.
-type PageListResponseRegion struct {
-	Label string `json:"label"`
-	// A test region.
-	Value PageListResponseRegionValue `json:"value"`
-	JSON  pageListResponseRegionJSON  `json:"-"`
-}
-
-// pageListResponseRegionJSON contains the JSON metadata for the struct
-// [PageListResponseRegion]
-type pageListResponseRegionJSON struct {
-	Label       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageListResponseRegion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageListResponseRegionJSON) RawJSON() string {
-	return r.raw
-}
-
-// A test region.
-type PageListResponseRegionValue string
-
-const (
-	PageListResponseRegionValueAsiaEast1           PageListResponseRegionValue = "asia-east1"
-	PageListResponseRegionValueAsiaNortheast1      PageListResponseRegionValue = "asia-northeast1"
-	PageListResponseRegionValueAsiaNortheast2      PageListResponseRegionValue = "asia-northeast2"
-	PageListResponseRegionValueAsiaSouth1          PageListResponseRegionValue = "asia-south1"
-	PageListResponseRegionValueAsiaSoutheast1      PageListResponseRegionValue = "asia-southeast1"
-	PageListResponseRegionValueAustraliaSoutheast1 PageListResponseRegionValue = "australia-southeast1"
-	PageListResponseRegionValueEuropeNorth1        PageListResponseRegionValue = "europe-north1"
-	PageListResponseRegionValueEuropeSouthwest1    PageListResponseRegionValue = "europe-southwest1"
-	PageListResponseRegionValueEuropeWest1         PageListResponseRegionValue = "europe-west1"
-	PageListResponseRegionValueEuropeWest2         PageListResponseRegionValue = "europe-west2"
-	PageListResponseRegionValueEuropeWest3         PageListResponseRegionValue = "europe-west3"
-	PageListResponseRegionValueEuropeWest4         PageListResponseRegionValue = "europe-west4"
-	PageListResponseRegionValueEuropeWest8         PageListResponseRegionValue = "europe-west8"
-	PageListResponseRegionValueEuropeWest9         PageListResponseRegionValue = "europe-west9"
-	PageListResponseRegionValueMeWest1             PageListResponseRegionValue = "me-west1"
-	PageListResponseRegionValueSouthamericaEast1   PageListResponseRegionValue = "southamerica-east1"
-	PageListResponseRegionValueUsCentral1          PageListResponseRegionValue = "us-central1"
-	PageListResponseRegionValueUsEast1             PageListResponseRegionValue = "us-east1"
-	PageListResponseRegionValueUsEast4             PageListResponseRegionValue = "us-east4"
-	PageListResponseRegionValueUsSouth1            PageListResponseRegionValue = "us-south1"
-	PageListResponseRegionValueUsWest1             PageListResponseRegionValue = "us-west1"
-)
-
-func (r PageListResponseRegionValue) IsKnown() bool {
-	switch r {
-	case PageListResponseRegionValueAsiaEast1, PageListResponseRegionValueAsiaNortheast1, PageListResponseRegionValueAsiaNortheast2, PageListResponseRegionValueAsiaSouth1, PageListResponseRegionValueAsiaSoutheast1, PageListResponseRegionValueAustraliaSoutheast1, PageListResponseRegionValueEuropeNorth1, PageListResponseRegionValueEuropeSouthwest1, PageListResponseRegionValueEuropeWest1, PageListResponseRegionValueEuropeWest2, PageListResponseRegionValueEuropeWest3, PageListResponseRegionValueEuropeWest4, PageListResponseRegionValueEuropeWest8, PageListResponseRegionValueEuropeWest9, PageListResponseRegionValueMeWest1, PageListResponseRegionValueSouthamericaEast1, PageListResponseRegionValueUsCentral1, PageListResponseRegionValueUsEast1, PageListResponseRegionValueUsEast4, PageListResponseRegionValueUsSouth1, PageListResponseRegionValueUsWest1:
-		return true
-	}
-	return false
 }
 
 // The frequency of the test.
