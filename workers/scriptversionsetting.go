@@ -135,7 +135,7 @@ func (r BindingItem) AsUnion() BindingItemUnion {
 //
 // Union satisfied by [workers.BindingItemWorkersKVNamespaceBinding],
 // [workers.BindingItemWorkersServiceBinding],
-// [workers.BindingItemWorkersDoBinding], [workers.R2Binding],
+// [workers.BindingItemWorkersDoBinding], [workers.BindingItemWorkersR2Binding],
 // [workers.BindingItemWorkersQueueBinding], [workers.D1Binding],
 // [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
 type BindingItemUnion interface {
@@ -160,7 +160,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(R2Binding{}),
+			Type:       reflect.TypeOf(BindingItemWorkersR2Binding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -328,6 +328,51 @@ func (r BindingItemWorkersDoBindingType) IsKnown() bool {
 	return false
 }
 
+type BindingItemWorkersR2Binding struct {
+	// R2 bucket to bind to
+	BucketName string `json:"bucket_name,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type BindingItemWorkersR2BindingType `json:"type,required"`
+	JSON bindingItemWorkersR2BindingJSON `json:"-"`
+}
+
+// bindingItemWorkersR2BindingJSON contains the JSON metadata for the struct
+// [BindingItemWorkersR2Binding]
+type bindingItemWorkersR2BindingJSON struct {
+	BucketName  apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingItemWorkersR2Binding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingItemWorkersR2BindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingItemWorkersR2Binding) implementsWorkersBindingItem() {}
+
+// The class of resource that the binding provides.
+type BindingItemWorkersR2BindingType string
+
+const (
+	BindingItemWorkersR2BindingTypeR2Bucket BindingItemWorkersR2BindingType = "r2_bucket"
+)
+
+func (r BindingItemWorkersR2BindingType) IsKnown() bool {
+	switch r {
+	case BindingItemWorkersR2BindingTypeR2Bucket:
+		return true
+	}
+	return false
+}
+
 type BindingItemWorkersQueueBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -431,7 +476,8 @@ func (r BindingItemParam) implementsWorkersBindingItemUnionParam() {}
 //
 // Satisfied by [workers.BindingItemWorkersKVNamespaceBindingParam],
 // [workers.BindingItemWorkersServiceBindingParam],
-// [workers.BindingItemWorkersDoBindingParam], [workers.R2BindingParam],
+// [workers.BindingItemWorkersDoBindingParam],
+// [workers.BindingItemWorkersR2BindingParam],
 // [workers.BindingItemWorkersQueueBindingParam], [workers.D1BindingParam],
 // [workers.DispatchNamespaceBindingParam], [workers.MTLSCERTBindingParam],
 // [BindingItemParam].
@@ -481,6 +527,19 @@ func (r BindingItemWorkersDoBindingParam) MarshalJSON() (data []byte, err error)
 }
 
 func (r BindingItemWorkersDoBindingParam) implementsWorkersBindingItemUnionParam() {}
+
+type BindingItemWorkersR2BindingParam struct {
+	// R2 bucket to bind to
+	BucketName param.Field[string] `json:"bucket_name,required"`
+	// The class of resource that the binding provides.
+	Type param.Field[BindingItemWorkersR2BindingType] `json:"type,required"`
+}
+
+func (r BindingItemWorkersR2BindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BindingItemWorkersR2BindingParam) implementsWorkersBindingItemUnionParam() {}
 
 type BindingItemWorkersQueueBindingParam struct {
 	// Name of the Queue to bind to
