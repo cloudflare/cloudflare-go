@@ -103,6 +103,10 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 	return
 }
 
+type HostItem = string
+
+type HostItemParam = string
+
 type CertificatePackListResponse = interface{}
 
 type CertificatePackEditResponse struct {
@@ -117,7 +121,7 @@ type CertificatePackEditResponse struct {
 	CloudflareBranding bool `json:"cloudflare_branding"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []string `json:"hosts"`
+	Hosts []HostItem `json:"hosts"`
 	// Status of certificate pack.
 	Status CertificatePackEditResponseStatus `json:"status"`
 	// Type of certificate pack.
