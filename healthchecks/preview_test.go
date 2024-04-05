@@ -32,7 +32,7 @@ func TestPreviewNewWithOptionalParams(t *testing.T) {
 		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Address:              cloudflare.F("www.example.com"),
 		Name:                 cloudflare.F("server-1"),
-		CheckRegions:         cloudflare.F([]healthchecks.CheckRegionItem{healthchecks.CheckRegionItemWeu, healthchecks.CheckRegionItemEnam}),
+		CheckRegions:         cloudflare.F([]healthchecks.PreviewNewParamsCheckRegion{healthchecks.PreviewNewParamsCheckRegionWeu, healthchecks.PreviewNewParamsCheckRegionEnam}),
 		ConsecutiveFails:     cloudflare.F(int64(0)),
 		ConsecutiveSuccesses: cloudflare.F(int64(0)),
 		Description:          cloudflare.F("Health check for www.example.com"),
