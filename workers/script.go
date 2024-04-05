@@ -313,7 +313,7 @@ type ScriptUpdateParamsVariant0Metadata struct {
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations param.Field[ScriptUpdateParamsVariant0MetadataMigrationsUnion] `json:"migrations"`
-	Placement  param.Field[PlacementConfigurationParam]                       `json:"placement"`
+	Placement  param.Field[ScriptUpdateParamsVariant0MetadataPlacement]       `json:"placement"`
 	// List of strings to use as tags for this Worker
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -351,10 +351,136 @@ func (r ScriptUpdateParamsVariant0MetadataMigrations) implementsWorkersScriptUpd
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Satisfied by [workers.SingleStepMigrationParam],
-// [workers.SteppedMigrationParam], [ScriptUpdateParamsVariant0MetadataMigrations].
+// Satisfied by
+// [workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations],
+// [workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations],
+// [ScriptUpdateParamsVariant0MetadataMigrations].
 type ScriptUpdateParamsVariant0MetadataMigrationsUnion interface {
 	implementsWorkersScriptUpdateParamsVariant0MetadataMigrationsUnion()
+}
+
+// A single set of migrations to apply.
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations struct {
+	// A list of classes to delete Durable Object namespaces from.
+	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
+	// A list of classes to create Durable Object namespaces from.
+	NewClasses param.Field[[]string] `json:"new_classes"`
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag param.Field[string] `json:"old_tag"`
+	// A list of classes with Durable Object namespaces that were renamed.
+	RenamedClasses param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass] `json:"renamed_classes"`
+	// A list of transfers for Durable Object namespaces from a different Worker and
+	// class to a class defined in this Worker.
+	TransferredClasses param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass] `json:"transferred_classes"`
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations) implementsWorkersScriptUpdateParamsVariant0MetadataMigrationsUnion() {
+}
+
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass struct {
+	From param.Field[string] `json:"from"`
+	To   param.Field[string] `json:"to"`
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass struct {
+	From       param.Field[string] `json:"from"`
+	FromScript param.Field[string] `json:"from_script"`
+	To         param.Field[string] `json:"to"`
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag param.Field[string] `json:"old_tag"`
+	// Migrations to apply in order.
+	Steps param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep] `json:"steps"`
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrations) implementsWorkersScriptUpdateParamsVariant0MetadataMigrationsUnion() {
+}
+
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep struct {
+	// A list of classes to delete Durable Object namespaces from.
+	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
+	// A list of classes to create Durable Object namespaces from.
+	NewClasses param.Field[[]string] `json:"new_classes"`
+	// A list of classes with Durable Object namespaces that were renamed.
+	RenamedClasses param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass] `json:"renamed_classes"`
+	// A list of transfers for Durable Object namespaces from a different Worker and
+	// class to a class defined in this Worker.
+	TransferredClasses param.Field[[]ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass] `json:"transferred_classes"`
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStep) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
+	From param.Field[string] `json:"from"`
+	To   param.Field[string] `json:"to"`
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsRenamedClass) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
+	From       param.Field[string] `json:"from"`
+	FromScript param.Field[string] `json:"from_script"`
+	To         param.Field[string] `json:"to"`
+}
+
+func (r ScriptUpdateParamsVariant0MetadataMigrationsWorkersSteppedMigrationsStepsTransferredClass) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScriptUpdateParamsVariant0MetadataPlacement struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Only `"smart"` is currently supported
+	Mode param.Field[ScriptUpdateParamsVariant0MetadataPlacementMode] `json:"mode"`
+}
+
+func (r ScriptUpdateParamsVariant0MetadataPlacement) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Only `"smart"` is currently supported
+type ScriptUpdateParamsVariant0MetadataPlacementMode string
+
+const (
+	ScriptUpdateParamsVariant0MetadataPlacementModeSmart ScriptUpdateParamsVariant0MetadataPlacementMode = "smart"
+)
+
+func (r ScriptUpdateParamsVariant0MetadataPlacementMode) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsVariant0MetadataPlacementModeSmart:
+		return true
+	}
+	return false
 }
 
 // Usage model to apply to invocations.
