@@ -134,9 +134,10 @@ func (r BindingItem) AsUnion() BindingItemUnion {
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by [workers.BindingItemWorkersKVNamespaceBinding],
-// [workers.ServiceBinding], [workers.DurableObjectBinding], [workers.R2Binding],
-// [workers.BindingItemWorkersQueueBinding], [workers.D1Binding],
-// [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
+// [workers.BindingItemWorkersServiceBinding], [workers.DurableObjectBinding],
+// [workers.R2Binding], [workers.BindingItemWorkersQueueBinding],
+// [workers.D1Binding], [workers.DispatchNamespaceBinding] or
+// [workers.MTLSCERTBinding].
 type BindingItemUnion interface {
 	implementsWorkersBindingItem()
 }
@@ -151,7 +152,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ServiceBinding{}),
+			Type:       reflect.TypeOf(BindingItemWorkersServiceBinding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -220,6 +221,54 @@ const (
 func (r BindingItemWorkersKVNamespaceBindingType) IsKnown() bool {
 	switch r {
 	case BindingItemWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
+type BindingItemWorkersServiceBinding struct {
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of Worker to bind to
+	Service string `json:"service,required"`
+	// The class of resource that the binding provides.
+	Type BindingItemWorkersServiceBindingType `json:"type,required"`
+	JSON bindingItemWorkersServiceBindingJSON `json:"-"`
+}
+
+// bindingItemWorkersServiceBindingJSON contains the JSON metadata for the struct
+// [BindingItemWorkersServiceBinding]
+type bindingItemWorkersServiceBindingJSON struct {
+	Environment apijson.Field
+	Name        apijson.Field
+	Service     apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingItemWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingItemWorkersServiceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingItemWorkersServiceBinding) implementsWorkersBindingItem() {}
+
+// The class of resource that the binding provides.
+type BindingItemWorkersServiceBindingType string
+
+const (
+	BindingItemWorkersServiceBindingTypeService BindingItemWorkersServiceBindingType = "service"
+)
+
+func (r BindingItemWorkersServiceBindingType) IsKnown() bool {
+	switch r {
+	case BindingItemWorkersServiceBindingTypeService:
 		return true
 	}
 	return false
@@ -327,10 +376,11 @@ func (r BindingItemParam) implementsWorkersBindingItemUnionParam() {}
 // A binding to allow the Worker to communicate with resources
 //
 // Satisfied by [workers.BindingItemWorkersKVNamespaceBindingParam],
-// [workers.ServiceBindingParam], [workers.DurableObjectBindingParam],
-// [workers.R2BindingParam], [workers.BindingItemWorkersQueueBindingParam],
-// [workers.D1BindingParam], [workers.DispatchNamespaceBindingParam],
-// [workers.MTLSCERTBindingParam], [BindingItemParam].
+// [workers.BindingItemWorkersServiceBindingParam],
+// [workers.DurableObjectBindingParam], [workers.R2BindingParam],
+// [workers.BindingItemWorkersQueueBindingParam], [workers.D1BindingParam],
+// [workers.DispatchNamespaceBindingParam], [workers.MTLSCERTBindingParam],
+// [BindingItemParam].
 type BindingItemUnionParam interface {
 	implementsWorkersBindingItemUnionParam()
 }
@@ -345,6 +395,21 @@ func (r BindingItemWorkersKVNamespaceBindingParam) MarshalJSON() (data []byte, e
 }
 
 func (r BindingItemWorkersKVNamespaceBindingParam) implementsWorkersBindingItemUnionParam() {}
+
+type BindingItemWorkersServiceBindingParam struct {
+	// Optional environment if the Worker utilizes one.
+	Environment param.Field[string] `json:"environment,required"`
+	// Name of Worker to bind to
+	Service param.Field[string] `json:"service,required"`
+	// The class of resource that the binding provides.
+	Type param.Field[BindingItemWorkersServiceBindingType] `json:"type,required"`
+}
+
+func (r BindingItemWorkersServiceBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BindingItemWorkersServiceBindingParam) implementsWorkersBindingItemUnionParam() {}
 
 type BindingItemWorkersQueueBindingParam struct {
 	// Name of the Queue to bind to
