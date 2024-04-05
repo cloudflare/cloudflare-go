@@ -133,8 +133,8 @@ func (r BindingItem) AsUnion() BindingItemUnion {
 
 // A binding to allow the Worker to communicate with resources
 //
-// Union satisfied by [workers.KVNamespaceBinding], [workers.ServiceBinding],
-// [workers.DurableObjectBinding], [workers.R2Binding],
+// Union satisfied by [workers.BindingItemWorkersKVNamespaceBinding],
+// [workers.ServiceBinding], [workers.DurableObjectBinding], [workers.R2Binding],
 // [workers.BindingItemWorkersQueueBinding], [workers.D1Binding],
 // [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
 type BindingItemUnion interface {
@@ -147,7 +147,7 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(KVNamespaceBinding{}),
+			Type:       reflect.TypeOf(BindingItemWorkersKVNamespaceBinding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -178,6 +178,51 @@ func init() {
 			Type:       reflect.TypeOf(MTLSCERTBinding{}),
 		},
 	)
+}
+
+type BindingItemWorkersKVNamespaceBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id,required"`
+	// The class of resource that the binding provides.
+	Type BindingItemWorkersKVNamespaceBindingType `json:"type,required"`
+	JSON bindingItemWorkersKVNamespaceBindingJSON `json:"-"`
+}
+
+// bindingItemWorkersKVNamespaceBindingJSON contains the JSON metadata for the
+// struct [BindingItemWorkersKVNamespaceBinding]
+type bindingItemWorkersKVNamespaceBindingJSON struct {
+	Name        apijson.Field
+	NamespaceID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingItemWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingItemWorkersKVNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingItemWorkersKVNamespaceBinding) implementsWorkersBindingItem() {}
+
+// The class of resource that the binding provides.
+type BindingItemWorkersKVNamespaceBindingType string
+
+const (
+	BindingItemWorkersKVNamespaceBindingTypeKVNamespace BindingItemWorkersKVNamespaceBindingType = "kv_namespace"
+)
+
+func (r BindingItemWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case BindingItemWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
 }
 
 type BindingItemWorkersQueueBinding struct {
@@ -281,14 +326,25 @@ func (r BindingItemParam) implementsWorkersBindingItemUnionParam() {}
 
 // A binding to allow the Worker to communicate with resources
 //
-// Satisfied by [workers.KVNamespaceBindingParam], [workers.ServiceBindingParam],
-// [workers.DurableObjectBindingParam], [workers.R2BindingParam],
-// [workers.BindingItemWorkersQueueBindingParam], [workers.D1BindingParam],
-// [workers.DispatchNamespaceBindingParam], [workers.MTLSCERTBindingParam],
-// [BindingItemParam].
+// Satisfied by [workers.BindingItemWorkersKVNamespaceBindingParam],
+// [workers.ServiceBindingParam], [workers.DurableObjectBindingParam],
+// [workers.R2BindingParam], [workers.BindingItemWorkersQueueBindingParam],
+// [workers.D1BindingParam], [workers.DispatchNamespaceBindingParam],
+// [workers.MTLSCERTBindingParam], [BindingItemParam].
 type BindingItemUnionParam interface {
 	implementsWorkersBindingItemUnionParam()
 }
+
+type BindingItemWorkersKVNamespaceBindingParam struct {
+	// The class of resource that the binding provides.
+	Type param.Field[BindingItemWorkersKVNamespaceBindingType] `json:"type,required"`
+}
+
+func (r BindingItemWorkersKVNamespaceBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BindingItemWorkersKVNamespaceBindingParam) implementsWorkersBindingItemUnionParam() {}
 
 type BindingItemWorkersQueueBindingParam struct {
 	// Name of the Queue to bind to
