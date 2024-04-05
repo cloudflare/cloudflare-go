@@ -222,14 +222,14 @@ type SubnetUnionParam interface {
 type UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 string
 
 const (
-	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Tcp  UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "tcp"
+	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916TCP  UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "tcp"
 	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Udp  UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "udp"
 	UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Icmp UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916 = "icmp"
 )
 
 func (r UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916) IsKnown() bool {
 	switch r {
-	case UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Tcp, UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Udp, UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Icmp:
+	case UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916TCP, UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Udp, UnnamedSchemaRef87fa9e5fe9f6b8d607be1df57340d916Icmp:
 		return true
 	}
 	return false

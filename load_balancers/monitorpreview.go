@@ -135,7 +135,7 @@ type MonitorPreviewNewParamsType string
 const (
 	MonitorPreviewNewParamsTypeHTTP     MonitorPreviewNewParamsType = "http"
 	MonitorPreviewNewParamsTypeHTTPS    MonitorPreviewNewParamsType = "https"
-	MonitorPreviewNewParamsTypeTcp      MonitorPreviewNewParamsType = "tcp"
+	MonitorPreviewNewParamsTypeTCP      MonitorPreviewNewParamsType = "tcp"
 	MonitorPreviewNewParamsTypeUdpIcmp  MonitorPreviewNewParamsType = "udp_icmp"
 	MonitorPreviewNewParamsTypeIcmpPing MonitorPreviewNewParamsType = "icmp_ping"
 	MonitorPreviewNewParamsTypeSmtp     MonitorPreviewNewParamsType = "smtp"
@@ -143,7 +143,7 @@ const (
 
 func (r MonitorPreviewNewParamsType) IsKnown() bool {
 	switch r {
-	case MonitorPreviewNewParamsTypeHTTP, MonitorPreviewNewParamsTypeHTTPS, MonitorPreviewNewParamsTypeTcp, MonitorPreviewNewParamsTypeUdpIcmp, MonitorPreviewNewParamsTypeIcmpPing, MonitorPreviewNewParamsTypeSmtp:
+	case MonitorPreviewNewParamsTypeHTTP, MonitorPreviewNewParamsTypeHTTPS, MonitorPreviewNewParamsTypeTCP, MonitorPreviewNewParamsTypeUdpIcmp, MonitorPreviewNewParamsTypeIcmpPing, MonitorPreviewNewParamsTypeSmtp:
 		return true
 	}
 	return false

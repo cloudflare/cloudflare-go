@@ -39,7 +39,7 @@ func TestAttackLayer3SummaryBitrateWithOptionalParams(t *testing.T) {
 		IPVersion: cloudflare.F([]radar.AttackLayer3SummaryBitrateParamsIPVersion{radar.AttackLayer3SummaryBitrateParamsIPVersionIPv4, radar.AttackLayer3SummaryBitrateParamsIPVersionIPv6}),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3SummaryBitrateParamsProtocol{radar.AttackLayer3SummaryBitrateParamsProtocolUdp, radar.AttackLayer3SummaryBitrateParamsProtocolTcp, radar.AttackLayer3SummaryBitrateParamsProtocolIcmp}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3SummaryBitrateParamsProtocol{radar.AttackLayer3SummaryBitrateParamsProtocolUdp, radar.AttackLayer3SummaryBitrateParamsProtocolTCP, radar.AttackLayer3SummaryBitrateParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -74,7 +74,7 @@ func TestAttackLayer3SummaryDurationWithOptionalParams(t *testing.T) {
 		IPVersion: cloudflare.F([]radar.AttackLayer3SummaryDurationParamsIPVersion{radar.AttackLayer3SummaryDurationParamsIPVersionIPv4, radar.AttackLayer3SummaryDurationParamsIPVersionIPv6}),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3SummaryDurationParamsProtocol{radar.AttackLayer3SummaryDurationParamsProtocolUdp, radar.AttackLayer3SummaryDurationParamsProtocolTcp, radar.AttackLayer3SummaryDurationParamsProtocolIcmp}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3SummaryDurationParamsProtocol{radar.AttackLayer3SummaryDurationParamsProtocolUdp, radar.AttackLayer3SummaryDurationParamsProtocolTCP, radar.AttackLayer3SummaryDurationParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -141,7 +141,7 @@ func TestAttackLayer3SummaryIPVersionWithOptionalParams(t *testing.T) {
 		Format:    cloudflare.F(radar.AttackLayer3SummaryIPVersionParamsFormatJson),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3SummaryIPVersionParamsProtocol{radar.AttackLayer3SummaryIPVersionParamsProtocolUdp, radar.AttackLayer3SummaryIPVersionParamsProtocolTcp, radar.AttackLayer3SummaryIPVersionParamsProtocolIcmp}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3SummaryIPVersionParamsProtocol{radar.AttackLayer3SummaryIPVersionParamsProtocolUdp, radar.AttackLayer3SummaryIPVersionParamsProtocolTCP, radar.AttackLayer3SummaryIPVersionParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -210,7 +210,7 @@ func TestAttackLayer3SummaryVectorWithOptionalParams(t *testing.T) {
 		IPVersion: cloudflare.F([]radar.AttackLayer3SummaryVectorParamsIPVersion{radar.AttackLayer3SummaryVectorParamsIPVersionIPv4, radar.AttackLayer3SummaryVectorParamsIPVersionIPv6}),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3SummaryVectorParamsProtocol{radar.AttackLayer3SummaryVectorParamsProtocolUdp, radar.AttackLayer3SummaryVectorParamsProtocolTcp, radar.AttackLayer3SummaryVectorParamsProtocolIcmp}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3SummaryVectorParamsProtocol{radar.AttackLayer3SummaryVectorParamsProtocolUdp, radar.AttackLayer3SummaryVectorParamsProtocolTCP, radar.AttackLayer3SummaryVectorParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

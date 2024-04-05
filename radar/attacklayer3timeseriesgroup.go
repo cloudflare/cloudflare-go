@@ -325,7 +325,7 @@ func (r attackLayer3TimeseriesGroupGetResponseMetaConfidenceInfoJSON) RawJSON() 
 type AttackLayer3TimeseriesGroupGetResponseSerie0 struct {
 	GRE        []string                                         `json:"gre,required"`
 	Icmp       []string                                         `json:"icmp,required"`
-	Tcp        []string                                         `json:"tcp,required"`
+	TCP        []string                                         `json:"tcp,required"`
 	Timestamps []string                                         `json:"timestamps,required"`
 	Udp        []string                                         `json:"udp,required"`
 	JSON       attackLayer3TimeseriesGroupGetResponseSerie0JSON `json:"-"`
@@ -336,7 +336,7 @@ type AttackLayer3TimeseriesGroupGetResponseSerie0 struct {
 type attackLayer3TimeseriesGroupGetResponseSerie0JSON struct {
 	GRE         apijson.Field
 	Icmp        apijson.Field
-	Tcp         apijson.Field
+	TCP         apijson.Field
 	Timestamps  apijson.Field
 	Udp         apijson.Field
 	raw         string
@@ -423,7 +423,7 @@ func (r attackLayer3TimeseriesGroupProtocolResponseJSON) RawJSON() string {
 type AttackLayer3TimeseriesGroupProtocolResponseSerie0 struct {
 	GRE        []string                                              `json:"GRE,required"`
 	Icmp       []string                                              `json:"ICMP,required"`
-	Tcp        []string                                              `json:"TCP,required"`
+	TCP        []string                                              `json:"TCP,required"`
 	Timestamps []string                                              `json:"timestamps,required"`
 	Udp        []string                                              `json:"UDP,required"`
 	JSON       attackLayer3TimeseriesGroupProtocolResponseSerie0JSON `json:"-"`
@@ -434,7 +434,7 @@ type AttackLayer3TimeseriesGroupProtocolResponseSerie0 struct {
 type attackLayer3TimeseriesGroupProtocolResponseSerie0JSON struct {
 	GRE         apijson.Field
 	Icmp        apijson.Field
-	Tcp         apijson.Field
+	TCP         apijson.Field
 	Timestamps  apijson.Field
 	Udp         apijson.Field
 	raw         string
@@ -658,14 +658,14 @@ type AttackLayer3TimeseriesGroupBitrateParamsProtocol string
 
 const (
 	AttackLayer3TimeseriesGroupBitrateParamsProtocolUdp  AttackLayer3TimeseriesGroupBitrateParamsProtocol = "UDP"
-	AttackLayer3TimeseriesGroupBitrateParamsProtocolTcp  AttackLayer3TimeseriesGroupBitrateParamsProtocol = "TCP"
+	AttackLayer3TimeseriesGroupBitrateParamsProtocolTCP  AttackLayer3TimeseriesGroupBitrateParamsProtocol = "TCP"
 	AttackLayer3TimeseriesGroupBitrateParamsProtocolIcmp AttackLayer3TimeseriesGroupBitrateParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesGroupBitrateParamsProtocolGRE  AttackLayer3TimeseriesGroupBitrateParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TimeseriesGroupBitrateParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupBitrateParamsProtocolUdp, AttackLayer3TimeseriesGroupBitrateParamsProtocolTcp, AttackLayer3TimeseriesGroupBitrateParamsProtocolIcmp, AttackLayer3TimeseriesGroupBitrateParamsProtocolGRE:
+	case AttackLayer3TimeseriesGroupBitrateParamsProtocolUdp, AttackLayer3TimeseriesGroupBitrateParamsProtocolTCP, AttackLayer3TimeseriesGroupBitrateParamsProtocolIcmp, AttackLayer3TimeseriesGroupBitrateParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -857,14 +857,14 @@ type AttackLayer3TimeseriesGroupDurationParamsProtocol string
 
 const (
 	AttackLayer3TimeseriesGroupDurationParamsProtocolUdp  AttackLayer3TimeseriesGroupDurationParamsProtocol = "UDP"
-	AttackLayer3TimeseriesGroupDurationParamsProtocolTcp  AttackLayer3TimeseriesGroupDurationParamsProtocol = "TCP"
+	AttackLayer3TimeseriesGroupDurationParamsProtocolTCP  AttackLayer3TimeseriesGroupDurationParamsProtocol = "TCP"
 	AttackLayer3TimeseriesGroupDurationParamsProtocolIcmp AttackLayer3TimeseriesGroupDurationParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesGroupDurationParamsProtocolGRE  AttackLayer3TimeseriesGroupDurationParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TimeseriesGroupDurationParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupDurationParamsProtocolUdp, AttackLayer3TimeseriesGroupDurationParamsProtocolTcp, AttackLayer3TimeseriesGroupDurationParamsProtocolIcmp, AttackLayer3TimeseriesGroupDurationParamsProtocolGRE:
+	case AttackLayer3TimeseriesGroupDurationParamsProtocolUdp, AttackLayer3TimeseriesGroupDurationParamsProtocolTCP, AttackLayer3TimeseriesGroupDurationParamsProtocolIcmp, AttackLayer3TimeseriesGroupDurationParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -1349,14 +1349,14 @@ type AttackLayer3TimeseriesGroupIPVersionParamsProtocol string
 
 const (
 	AttackLayer3TimeseriesGroupIPVersionParamsProtocolUdp  AttackLayer3TimeseriesGroupIPVersionParamsProtocol = "UDP"
-	AttackLayer3TimeseriesGroupIPVersionParamsProtocolTcp  AttackLayer3TimeseriesGroupIPVersionParamsProtocol = "TCP"
+	AttackLayer3TimeseriesGroupIPVersionParamsProtocolTCP  AttackLayer3TimeseriesGroupIPVersionParamsProtocol = "TCP"
 	AttackLayer3TimeseriesGroupIPVersionParamsProtocolIcmp AttackLayer3TimeseriesGroupIPVersionParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesGroupIPVersionParamsProtocolGRE  AttackLayer3TimeseriesGroupIPVersionParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TimeseriesGroupIPVersionParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupIPVersionParamsProtocolUdp, AttackLayer3TimeseriesGroupIPVersionParamsProtocolTcp, AttackLayer3TimeseriesGroupIPVersionParamsProtocolIcmp, AttackLayer3TimeseriesGroupIPVersionParamsProtocolGRE:
+	case AttackLayer3TimeseriesGroupIPVersionParamsProtocolUdp, AttackLayer3TimeseriesGroupIPVersionParamsProtocolTCP, AttackLayer3TimeseriesGroupIPVersionParamsProtocolIcmp, AttackLayer3TimeseriesGroupIPVersionParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -1731,14 +1731,14 @@ type AttackLayer3TimeseriesGroupVectorParamsProtocol string
 
 const (
 	AttackLayer3TimeseriesGroupVectorParamsProtocolUdp  AttackLayer3TimeseriesGroupVectorParamsProtocol = "UDP"
-	AttackLayer3TimeseriesGroupVectorParamsProtocolTcp  AttackLayer3TimeseriesGroupVectorParamsProtocol = "TCP"
+	AttackLayer3TimeseriesGroupVectorParamsProtocolTCP  AttackLayer3TimeseriesGroupVectorParamsProtocol = "TCP"
 	AttackLayer3TimeseriesGroupVectorParamsProtocolIcmp AttackLayer3TimeseriesGroupVectorParamsProtocol = "ICMP"
 	AttackLayer3TimeseriesGroupVectorParamsProtocolGRE  AttackLayer3TimeseriesGroupVectorParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TimeseriesGroupVectorParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupVectorParamsProtocolUdp, AttackLayer3TimeseriesGroupVectorParamsProtocolTcp, AttackLayer3TimeseriesGroupVectorParamsProtocolIcmp, AttackLayer3TimeseriesGroupVectorParamsProtocolGRE:
+	case AttackLayer3TimeseriesGroupVectorParamsProtocolUdp, AttackLayer3TimeseriesGroupVectorParamsProtocolTCP, AttackLayer3TimeseriesGroupVectorParamsProtocolIcmp, AttackLayer3TimeseriesGroupVectorParamsProtocolGRE:
 		return true
 	}
 	return false

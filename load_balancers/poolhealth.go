@@ -169,7 +169,7 @@ type PoolHealthNewParamsType string
 const (
 	PoolHealthNewParamsTypeHTTP     PoolHealthNewParamsType = "http"
 	PoolHealthNewParamsTypeHTTPS    PoolHealthNewParamsType = "https"
-	PoolHealthNewParamsTypeTcp      PoolHealthNewParamsType = "tcp"
+	PoolHealthNewParamsTypeTCP      PoolHealthNewParamsType = "tcp"
 	PoolHealthNewParamsTypeUdpIcmp  PoolHealthNewParamsType = "udp_icmp"
 	PoolHealthNewParamsTypeIcmpPing PoolHealthNewParamsType = "icmp_ping"
 	PoolHealthNewParamsTypeSmtp     PoolHealthNewParamsType = "smtp"
@@ -177,7 +177,7 @@ const (
 
 func (r PoolHealthNewParamsType) IsKnown() bool {
 	switch r {
-	case PoolHealthNewParamsTypeHTTP, PoolHealthNewParamsTypeHTTPS, PoolHealthNewParamsTypeTcp, PoolHealthNewParamsTypeUdpIcmp, PoolHealthNewParamsTypeIcmpPing, PoolHealthNewParamsTypeSmtp:
+	case PoolHealthNewParamsTypeHTTP, PoolHealthNewParamsTypeHTTPS, PoolHealthNewParamsTypeTCP, PoolHealthNewParamsTypeUdpIcmp, PoolHealthNewParamsTypeIcmpPing, PoolHealthNewParamsTypeSmtp:
 		return true
 	}
 	return false

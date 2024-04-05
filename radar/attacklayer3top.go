@@ -442,14 +442,14 @@ type AttackLayer3TopAttacksParamsProtocol string
 
 const (
 	AttackLayer3TopAttacksParamsProtocolUdp  AttackLayer3TopAttacksParamsProtocol = "UDP"
-	AttackLayer3TopAttacksParamsProtocolTcp  AttackLayer3TopAttacksParamsProtocol = "TCP"
+	AttackLayer3TopAttacksParamsProtocolTCP  AttackLayer3TopAttacksParamsProtocol = "TCP"
 	AttackLayer3TopAttacksParamsProtocolIcmp AttackLayer3TopAttacksParamsProtocol = "ICMP"
 	AttackLayer3TopAttacksParamsProtocolGRE  AttackLayer3TopAttacksParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TopAttacksParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopAttacksParamsProtocolUdp, AttackLayer3TopAttacksParamsProtocolTcp, AttackLayer3TopAttacksParamsProtocolIcmp, AttackLayer3TopAttacksParamsProtocolGRE:
+	case AttackLayer3TopAttacksParamsProtocolUdp, AttackLayer3TopAttacksParamsProtocolTCP, AttackLayer3TopAttacksParamsProtocolIcmp, AttackLayer3TopAttacksParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -579,14 +579,14 @@ type AttackLayer3TopIndustryParamsProtocol string
 
 const (
 	AttackLayer3TopIndustryParamsProtocolUdp  AttackLayer3TopIndustryParamsProtocol = "UDP"
-	AttackLayer3TopIndustryParamsProtocolTcp  AttackLayer3TopIndustryParamsProtocol = "TCP"
+	AttackLayer3TopIndustryParamsProtocolTCP  AttackLayer3TopIndustryParamsProtocol = "TCP"
 	AttackLayer3TopIndustryParamsProtocolIcmp AttackLayer3TopIndustryParamsProtocol = "ICMP"
 	AttackLayer3TopIndustryParamsProtocolGRE  AttackLayer3TopIndustryParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TopIndustryParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopIndustryParamsProtocolUdp, AttackLayer3TopIndustryParamsProtocolTcp, AttackLayer3TopIndustryParamsProtocolIcmp, AttackLayer3TopIndustryParamsProtocolGRE:
+	case AttackLayer3TopIndustryParamsProtocolUdp, AttackLayer3TopIndustryParamsProtocolTCP, AttackLayer3TopIndustryParamsProtocolIcmp, AttackLayer3TopIndustryParamsProtocolGRE:
 		return true
 	}
 	return false
@@ -716,14 +716,14 @@ type AttackLayer3TopVerticalParamsProtocol string
 
 const (
 	AttackLayer3TopVerticalParamsProtocolUdp  AttackLayer3TopVerticalParamsProtocol = "UDP"
-	AttackLayer3TopVerticalParamsProtocolTcp  AttackLayer3TopVerticalParamsProtocol = "TCP"
+	AttackLayer3TopVerticalParamsProtocolTCP  AttackLayer3TopVerticalParamsProtocol = "TCP"
 	AttackLayer3TopVerticalParamsProtocolIcmp AttackLayer3TopVerticalParamsProtocol = "ICMP"
 	AttackLayer3TopVerticalParamsProtocolGRE  AttackLayer3TopVerticalParamsProtocol = "GRE"
 )
 
 func (r AttackLayer3TopVerticalParamsProtocol) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopVerticalParamsProtocolUdp, AttackLayer3TopVerticalParamsProtocolTcp, AttackLayer3TopVerticalParamsProtocolIcmp, AttackLayer3TopVerticalParamsProtocolGRE:
+	case AttackLayer3TopVerticalParamsProtocolUdp, AttackLayer3TopVerticalParamsProtocolTCP, AttackLayer3TopVerticalParamsProtocolIcmp, AttackLayer3TopVerticalParamsProtocolGRE:
 		return true
 	}
 	return false
