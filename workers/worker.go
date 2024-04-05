@@ -119,8 +119,8 @@ func (r Binding) AsUnion() BindingUnion {
 
 // A binding to allow the Worker to communicate with resources
 //
-// Union satisfied by [workers.KVNamespaceBinding], [workers.ServiceBinding],
-// [workers.DurableObjectBinding], [workers.R2Binding],
+// Union satisfied by [workers.BindingWorkersKVNamespaceBinding],
+// [workers.ServiceBinding], [workers.DurableObjectBinding], [workers.R2Binding],
 // [workers.BindingWorkersQueueBinding], [workers.D1Binding],
 // [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
 type BindingUnion interface {
@@ -133,7 +133,7 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(KVNamespaceBinding{}),
+			Type:       reflect.TypeOf(BindingWorkersKVNamespaceBinding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -164,6 +164,51 @@ func init() {
 			Type:       reflect.TypeOf(MTLSCERTBinding{}),
 		},
 	)
+}
+
+type BindingWorkersKVNamespaceBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id,required"`
+	// The class of resource that the binding provides.
+	Type BindingWorkersKVNamespaceBindingType `json:"type,required"`
+	JSON bindingWorkersKVNamespaceBindingJSON `json:"-"`
+}
+
+// bindingWorkersKVNamespaceBindingJSON contains the JSON metadata for the struct
+// [BindingWorkersKVNamespaceBinding]
+type bindingWorkersKVNamespaceBindingJSON struct {
+	Name        apijson.Field
+	NamespaceID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingWorkersKVNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingWorkersKVNamespaceBinding) implementsWorkersBinding() {}
+
+// The class of resource that the binding provides.
+type BindingWorkersKVNamespaceBindingType string
+
+const (
+	BindingWorkersKVNamespaceBindingTypeKVNamespace BindingWorkersKVNamespaceBindingType = "kv_namespace"
+)
+
+func (r BindingWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case BindingWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
 }
 
 type BindingWorkersQueueBinding struct {
@@ -536,72 +581,6 @@ func (r DurableObjectBindingParam) implementsWorkersBindingItemUnionParam() {}
 func (r DurableObjectBindingParam) implementsWorkersBindingItemUnionParam() {}
 
 func (r DurableObjectBindingParam) implementsWorkersBindingItemUnionParam() {}
-
-type KVNamespaceBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id,required"`
-	// The class of resource that the binding provides.
-	Type KVNamespaceBindingType `json:"type,required"`
-	JSON kvNamespaceBindingJSON `json:"-"`
-}
-
-// kvNamespaceBindingJSON contains the JSON metadata for the struct
-// [KVNamespaceBinding]
-type kvNamespaceBindingJSON struct {
-	Name        apijson.Field
-	NamespaceID apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r kvNamespaceBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r KVNamespaceBinding) implementsWorkersBinding() {}
-
-func (r KVNamespaceBinding) implementsWorkersBindingItem() {}
-
-// The class of resource that the binding provides.
-type KVNamespaceBindingType string
-
-const (
-	KVNamespaceBindingTypeKVNamespace KVNamespaceBindingType = "kv_namespace"
-)
-
-func (r KVNamespaceBindingType) IsKnown() bool {
-	switch r {
-	case KVNamespaceBindingTypeKVNamespace:
-		return true
-	}
-	return false
-}
-
-type KVNamespaceBindingParam struct {
-	// The class of resource that the binding provides.
-	Type param.Field[KVNamespaceBindingType] `json:"type,required"`
-}
-
-func (r KVNamespaceBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r KVNamespaceBindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r KVNamespaceBindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r KVNamespaceBindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r KVNamespaceBindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r KVNamespaceBindingParam) implementsWorkersBindingItemUnionParam() {}
 
 type MigrationStep struct {
 	// A list of classes to delete Durable Object namespaces from.

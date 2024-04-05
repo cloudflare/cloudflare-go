@@ -34,12 +34,12 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 		workers.ScriptVersionSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Settings: cloudflare.F(workers.SettingsItemParam{
-				Bindings: cloudflare.F([]workers.BindingItemUnionParam{workers.KVNamespaceBindingParam{
-					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
-				}, workers.KVNamespaceBindingParam{
-					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
-				}, workers.KVNamespaceBindingParam{
-					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
+				Bindings: cloudflare.F([]workers.BindingItemUnionParam{workers.BindingItemWorkersKVNamespaceBindingParam{
+					Type: cloudflare.F(workers.BindingItemWorkersKVNamespaceBindingTypeKVNamespace),
+				}, workers.BindingItemWorkersKVNamespaceBindingParam{
+					Type: cloudflare.F(workers.BindingItemWorkersKVNamespaceBindingTypeKVNamespace),
+				}, workers.BindingItemWorkersKVNamespaceBindingParam{
+					Type: cloudflare.F(workers.BindingItemWorkersKVNamespaceBindingTypeKVNamespace),
 				}}),
 				CompatibilityDate:  cloudflare.F("2022-04-05"),
 				CompatibilityFlags: cloudflare.F([]workers.CompatibilityFlagsItemParam{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
