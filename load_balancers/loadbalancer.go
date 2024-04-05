@@ -184,38 +184,6 @@ func (r AdaptiveRoutingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
-// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
-// regions (ENTERPRISE customers only).
-type CheckRegion string
-
-const (
-	CheckRegionWnam       CheckRegion = "WNAM"
-	CheckRegionEnam       CheckRegion = "ENAM"
-	CheckRegionWeu        CheckRegion = "WEU"
-	CheckRegionEeu        CheckRegion = "EEU"
-	CheckRegionNsam       CheckRegion = "NSAM"
-	CheckRegionSsam       CheckRegion = "SSAM"
-	CheckRegionOc         CheckRegion = "OC"
-	CheckRegionMe         CheckRegion = "ME"
-	CheckRegionNaf        CheckRegion = "NAF"
-	CheckRegionSaf        CheckRegion = "SAF"
-	CheckRegionSas        CheckRegion = "SAS"
-	CheckRegionSeas       CheckRegion = "SEAS"
-	CheckRegionNeas       CheckRegion = "NEAS"
-	CheckRegionAllRegions CheckRegion = "ALL_REGIONS"
-)
-
-func (r CheckRegion) IsKnown() bool {
-	switch r {
-	case CheckRegionWnam, CheckRegionEnam, CheckRegionWeu, CheckRegionEeu, CheckRegionNsam, CheckRegionSsam, CheckRegionOc, CheckRegionMe, CheckRegionNaf, CheckRegionSaf, CheckRegionSas, CheckRegionSeas, CheckRegionNeas, CheckRegionAllRegions:
-		return true
-	}
-	return false
-}
-
 type DefaultPoolsItem = string
 
 type DefaultPoolsItemParam = string
