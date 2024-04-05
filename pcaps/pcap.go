@@ -144,18 +144,6 @@ func (r FilterParam) MarshalJSON() (data []byte, err error) {
 type PCAP struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
-	// The maximum number of bytes to capture. This field only applies to `full` packet
-	// captures.
-	ByteLimit float64 `json:"byte_limit"`
-	// The name of the data center used for the packet capture. This can be a specific
-	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
-	// packet captures.
-	ColoName string `json:"colo_name"`
-	// The full URI for the bucket. This field only applies to `full` packet captures.
-	DestinationConf string `json:"destination_conf"`
-	// An error message that describes why the packet capture failed. This field only
-	// applies to `full` packet captures.
-	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 Filter `json:"filter_v1"`
 	// The status of the packet capture request.
@@ -174,19 +162,15 @@ type PCAP struct {
 
 // pcapJSON contains the JSON metadata for the struct [PCAP]
 type pcapJSON struct {
-	ID              apijson.Field
-	ByteLimit       apijson.Field
-	ColoName        apijson.Field
-	DestinationConf apijson.Field
-	ErrorMessage    apijson.Field
-	FilterV1        apijson.Field
-	Status          apijson.Field
-	Submitted       apijson.Field
-	System          apijson.Field
-	TimeLimit       apijson.Field
-	Type            apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID          apijson.Field
+	FilterV1    apijson.Field
+	Status      apijson.Field
+	Submitted   apijson.Field
+	System      apijson.Field
+	TimeLimit   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *PCAP) UnmarshalJSON(data []byte) (err error) {
@@ -322,8 +306,8 @@ func (r PCAPNewResponse) AsUnion() PCAPNewResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [pcaps.PCAPNewResponseMagicVisibilityPCAPsResponseSimple] or
-// [pcaps.PCAP].
+// Union satisfied by [pcaps.PCAP] or
+// [pcaps.PCAPNewResponseMagicVisibilityPCAPsResponseFull].
 type PCAPNewResponseUnion interface {
 	implementsPCAPsPCAPNewResponse()
 }
@@ -334,90 +318,106 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PCAPNewResponseMagicVisibilityPCAPsResponseSimple{}),
+			Type:       reflect.TypeOf(PCAP{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PCAP{}),
+			Type:       reflect.TypeOf(PCAPNewResponseMagicVisibilityPCAPsResponseFull{}),
 		},
 	)
 }
 
-type PCAPNewResponseMagicVisibilityPCAPsResponseSimple struct {
+type PCAPNewResponseMagicVisibilityPCAPsResponseFull struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
+	// The maximum number of bytes to capture. This field only applies to `full` packet
+	// captures.
+	ByteLimit float64 `json:"byte_limit"`
+	// The name of the data center used for the packet capture. This can be a specific
+	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
+	// packet captures.
+	ColoName string `json:"colo_name"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf string `json:"destination_conf"`
+	// An error message that describes why the packet capture failed. This field only
+	// applies to `full` packet captures.
+	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 Filter `json:"filter_v1"`
 	// The status of the packet capture request.
-	Status PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus `json:"status"`
+	Status PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
-	System PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystem `json:"system"`
+	System PCAPNewResponseMagicVisibilityPCAPsResponseFullSystem `json:"system"`
 	// The packet capture duration in seconds.
 	TimeLimit float64 `json:"time_limit"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type PCAPNewResponseMagicVisibilityPCAPsResponseSimpleType `json:"type"`
-	JSON pcapNewResponseMagicVisibilityPCAPsResponseSimpleJSON `json:"-"`
+	Type PCAPNewResponseMagicVisibilityPCAPsResponseFullType `json:"type"`
+	JSON pcapNewResponseMagicVisibilityPCAPsResponseFullJSON `json:"-"`
 }
 
-// pcapNewResponseMagicVisibilityPCAPsResponseSimpleJSON contains the JSON metadata
-// for the struct [PCAPNewResponseMagicVisibilityPCAPsResponseSimple]
-type pcapNewResponseMagicVisibilityPCAPsResponseSimpleJSON struct {
-	ID          apijson.Field
-	FilterV1    apijson.Field
-	Status      apijson.Field
-	Submitted   apijson.Field
-	System      apijson.Field
-	TimeLimit   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// pcapNewResponseMagicVisibilityPCAPsResponseFullJSON contains the JSON metadata
+// for the struct [PCAPNewResponseMagicVisibilityPCAPsResponseFull]
+type pcapNewResponseMagicVisibilityPCAPsResponseFullJSON struct {
+	ID              apijson.Field
+	ByteLimit       apijson.Field
+	ColoName        apijson.Field
+	DestinationConf apijson.Field
+	ErrorMessage    apijson.Field
+	FilterV1        apijson.Field
+	Status          apijson.Field
+	Submitted       apijson.Field
+	System          apijson.Field
+	TimeLimit       apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PCAPNewResponseMagicVisibilityPCAPsResponseSimple) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPNewResponseMagicVisibilityPCAPsResponseFull) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pcapNewResponseMagicVisibilityPCAPsResponseSimpleJSON) RawJSON() string {
+func (r pcapNewResponseMagicVisibilityPCAPsResponseFullJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PCAPNewResponseMagicVisibilityPCAPsResponseSimple) implementsPCAPsPCAPNewResponse() {}
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseFull) implementsPCAPsPCAPNewResponse() {}
 
 // The status of the packet capture request.
-type PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus string
+type PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus string
 
 const (
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusUnknown           PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus = "unknown"
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusSuccess           PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus = "success"
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusPending           PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus = "pending"
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusRunning           PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus = "running"
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusConversionPending PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus = "conversion_pending"
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusConversionRunning PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus = "conversion_running"
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusComplete          PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus = "complete"
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusFailed            PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus = "failed"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusUnknown           PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus = "unknown"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusSuccess           PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus = "success"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusPending           PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus = "pending"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusRunning           PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus = "running"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusConversionPending PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus = "conversion_pending"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusConversionRunning PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus = "conversion_running"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusComplete          PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus = "complete"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusFailed            PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus = "failed"
 )
 
-func (r PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatus) IsKnown() bool {
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseFullStatus) IsKnown() bool {
 	switch r {
-	case PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusUnknown, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusSuccess, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusPending, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusRunning, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusConversionPending, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusConversionRunning, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusComplete, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleStatusFailed:
+	case PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusUnknown, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusSuccess, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusPending, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusRunning, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusConversionPending, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusConversionRunning, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusComplete, PCAPNewResponseMagicVisibilityPCAPsResponseFullStatusFailed:
 		return true
 	}
 	return false
 }
 
 // The system used to collect packet captures.
-type PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystem string
+type PCAPNewResponseMagicVisibilityPCAPsResponseFullSystem string
 
 const (
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystem = "magic-transit"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit PCAPNewResponseMagicVisibilityPCAPsResponseFullSystem = "magic-transit"
 )
 
-func (r PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystem) IsKnown() bool {
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseFullSystem) IsKnown() bool {
 	switch r {
-	case PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit:
+	case PCAPNewResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit:
 		return true
 	}
 	return false
@@ -425,16 +425,16 @@ func (r PCAPNewResponseMagicVisibilityPCAPsResponseSimpleSystem) IsKnown() bool 
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PCAPNewResponseMagicVisibilityPCAPsResponseSimpleType string
+type PCAPNewResponseMagicVisibilityPCAPsResponseFullType string
 
 const (
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleTypeSimple PCAPNewResponseMagicVisibilityPCAPsResponseSimpleType = "simple"
-	PCAPNewResponseMagicVisibilityPCAPsResponseSimpleTypeFull   PCAPNewResponseMagicVisibilityPCAPsResponseSimpleType = "full"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullTypeSimple PCAPNewResponseMagicVisibilityPCAPsResponseFullType = "simple"
+	PCAPNewResponseMagicVisibilityPCAPsResponseFullTypeFull   PCAPNewResponseMagicVisibilityPCAPsResponseFullType = "full"
 )
 
-func (r PCAPNewResponseMagicVisibilityPCAPsResponseSimpleType) IsKnown() bool {
+func (r PCAPNewResponseMagicVisibilityPCAPsResponseFullType) IsKnown() bool {
 	switch r {
-	case PCAPNewResponseMagicVisibilityPCAPsResponseSimpleTypeSimple, PCAPNewResponseMagicVisibilityPCAPsResponseSimpleTypeFull:
+	case PCAPNewResponseMagicVisibilityPCAPsResponseFullTypeSimple, PCAPNewResponseMagicVisibilityPCAPsResponseFullTypeFull:
 		return true
 	}
 	return false
@@ -560,8 +560,8 @@ func (r PCAPListResponse) AsUnion() PCAPListResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [pcaps.PCAPListResponseMagicVisibilityPCAPsResponseSimple] or
-// [pcaps.PCAP].
+// Union satisfied by [pcaps.PCAP] or
+// [pcaps.PCAPListResponseMagicVisibilityPCAPsResponseFull].
 type PCAPListResponseUnion interface {
 	implementsPCAPsPCAPListResponse()
 }
@@ -572,90 +572,106 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PCAPListResponseMagicVisibilityPCAPsResponseSimple{}),
+			Type:       reflect.TypeOf(PCAP{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PCAP{}),
+			Type:       reflect.TypeOf(PCAPListResponseMagicVisibilityPCAPsResponseFull{}),
 		},
 	)
 }
 
-type PCAPListResponseMagicVisibilityPCAPsResponseSimple struct {
+type PCAPListResponseMagicVisibilityPCAPsResponseFull struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
+	// The maximum number of bytes to capture. This field only applies to `full` packet
+	// captures.
+	ByteLimit float64 `json:"byte_limit"`
+	// The name of the data center used for the packet capture. This can be a specific
+	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
+	// packet captures.
+	ColoName string `json:"colo_name"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf string `json:"destination_conf"`
+	// An error message that describes why the packet capture failed. This field only
+	// applies to `full` packet captures.
+	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 Filter `json:"filter_v1"`
 	// The status of the packet capture request.
-	Status PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus `json:"status"`
+	Status PCAPListResponseMagicVisibilityPCAPsResponseFullStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
-	System PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystem `json:"system"`
+	System PCAPListResponseMagicVisibilityPCAPsResponseFullSystem `json:"system"`
 	// The packet capture duration in seconds.
 	TimeLimit float64 `json:"time_limit"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type PCAPListResponseMagicVisibilityPCAPsResponseSimpleType `json:"type"`
-	JSON pcapListResponseMagicVisibilityPCAPsResponseSimpleJSON `json:"-"`
+	Type PCAPListResponseMagicVisibilityPCAPsResponseFullType `json:"type"`
+	JSON pcapListResponseMagicVisibilityPCAPsResponseFullJSON `json:"-"`
 }
 
-// pcapListResponseMagicVisibilityPCAPsResponseSimpleJSON contains the JSON
-// metadata for the struct [PCAPListResponseMagicVisibilityPCAPsResponseSimple]
-type pcapListResponseMagicVisibilityPCAPsResponseSimpleJSON struct {
-	ID          apijson.Field
-	FilterV1    apijson.Field
-	Status      apijson.Field
-	Submitted   apijson.Field
-	System      apijson.Field
-	TimeLimit   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// pcapListResponseMagicVisibilityPCAPsResponseFullJSON contains the JSON metadata
+// for the struct [PCAPListResponseMagicVisibilityPCAPsResponseFull]
+type pcapListResponseMagicVisibilityPCAPsResponseFullJSON struct {
+	ID              apijson.Field
+	ByteLimit       apijson.Field
+	ColoName        apijson.Field
+	DestinationConf apijson.Field
+	ErrorMessage    apijson.Field
+	FilterV1        apijson.Field
+	Status          apijson.Field
+	Submitted       apijson.Field
+	System          apijson.Field
+	TimeLimit       apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PCAPListResponseMagicVisibilityPCAPsResponseSimple) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPListResponseMagicVisibilityPCAPsResponseFull) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pcapListResponseMagicVisibilityPCAPsResponseSimpleJSON) RawJSON() string {
+func (r pcapListResponseMagicVisibilityPCAPsResponseFullJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PCAPListResponseMagicVisibilityPCAPsResponseSimple) implementsPCAPsPCAPListResponse() {}
+func (r PCAPListResponseMagicVisibilityPCAPsResponseFull) implementsPCAPsPCAPListResponse() {}
 
 // The status of the packet capture request.
-type PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus string
+type PCAPListResponseMagicVisibilityPCAPsResponseFullStatus string
 
 const (
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusUnknown           PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus = "unknown"
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusSuccess           PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus = "success"
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusPending           PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus = "pending"
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusRunning           PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus = "running"
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusConversionPending PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus = "conversion_pending"
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusConversionRunning PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus = "conversion_running"
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusComplete          PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus = "complete"
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusFailed            PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus = "failed"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullStatusUnknown           PCAPListResponseMagicVisibilityPCAPsResponseFullStatus = "unknown"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullStatusSuccess           PCAPListResponseMagicVisibilityPCAPsResponseFullStatus = "success"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullStatusPending           PCAPListResponseMagicVisibilityPCAPsResponseFullStatus = "pending"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullStatusRunning           PCAPListResponseMagicVisibilityPCAPsResponseFullStatus = "running"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullStatusConversionPending PCAPListResponseMagicVisibilityPCAPsResponseFullStatus = "conversion_pending"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullStatusConversionRunning PCAPListResponseMagicVisibilityPCAPsResponseFullStatus = "conversion_running"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullStatusComplete          PCAPListResponseMagicVisibilityPCAPsResponseFullStatus = "complete"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullStatusFailed            PCAPListResponseMagicVisibilityPCAPsResponseFullStatus = "failed"
 )
 
-func (r PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatus) IsKnown() bool {
+func (r PCAPListResponseMagicVisibilityPCAPsResponseFullStatus) IsKnown() bool {
 	switch r {
-	case PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusUnknown, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusSuccess, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusPending, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusRunning, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusConversionPending, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusConversionRunning, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusComplete, PCAPListResponseMagicVisibilityPCAPsResponseSimpleStatusFailed:
+	case PCAPListResponseMagicVisibilityPCAPsResponseFullStatusUnknown, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusSuccess, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusPending, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusRunning, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusConversionPending, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusConversionRunning, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusComplete, PCAPListResponseMagicVisibilityPCAPsResponseFullStatusFailed:
 		return true
 	}
 	return false
 }
 
 // The system used to collect packet captures.
-type PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystem string
+type PCAPListResponseMagicVisibilityPCAPsResponseFullSystem string
 
 const (
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystem = "magic-transit"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit PCAPListResponseMagicVisibilityPCAPsResponseFullSystem = "magic-transit"
 )
 
-func (r PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystem) IsKnown() bool {
+func (r PCAPListResponseMagicVisibilityPCAPsResponseFullSystem) IsKnown() bool {
 	switch r {
-	case PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit:
+	case PCAPListResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit:
 		return true
 	}
 	return false
@@ -663,16 +679,16 @@ func (r PCAPListResponseMagicVisibilityPCAPsResponseSimpleSystem) IsKnown() bool
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PCAPListResponseMagicVisibilityPCAPsResponseSimpleType string
+type PCAPListResponseMagicVisibilityPCAPsResponseFullType string
 
 const (
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleTypeSimple PCAPListResponseMagicVisibilityPCAPsResponseSimpleType = "simple"
-	PCAPListResponseMagicVisibilityPCAPsResponseSimpleTypeFull   PCAPListResponseMagicVisibilityPCAPsResponseSimpleType = "full"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullTypeSimple PCAPListResponseMagicVisibilityPCAPsResponseFullType = "simple"
+	PCAPListResponseMagicVisibilityPCAPsResponseFullTypeFull   PCAPListResponseMagicVisibilityPCAPsResponseFullType = "full"
 )
 
-func (r PCAPListResponseMagicVisibilityPCAPsResponseSimpleType) IsKnown() bool {
+func (r PCAPListResponseMagicVisibilityPCAPsResponseFullType) IsKnown() bool {
 	switch r {
-	case PCAPListResponseMagicVisibilityPCAPsResponseSimpleTypeSimple, PCAPListResponseMagicVisibilityPCAPsResponseSimpleTypeFull:
+	case PCAPListResponseMagicVisibilityPCAPsResponseFullTypeSimple, PCAPListResponseMagicVisibilityPCAPsResponseFullTypeFull:
 		return true
 	}
 	return false
@@ -797,8 +813,8 @@ func (r PCAPGetResponse) AsUnion() PCAPGetResponseUnion {
 	return r.union
 }
 
-// Union satisfied by [pcaps.PCAPGetResponseMagicVisibilityPCAPsResponseSimple] or
-// [pcaps.PCAP].
+// Union satisfied by [pcaps.PCAP] or
+// [pcaps.PCAPGetResponseMagicVisibilityPCAPsResponseFull].
 type PCAPGetResponseUnion interface {
 	implementsPCAPsPCAPGetResponse()
 }
@@ -809,90 +825,106 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PCAPGetResponseMagicVisibilityPCAPsResponseSimple{}),
+			Type:       reflect.TypeOf(PCAP{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PCAP{}),
+			Type:       reflect.TypeOf(PCAPGetResponseMagicVisibilityPCAPsResponseFull{}),
 		},
 	)
 }
 
-type PCAPGetResponseMagicVisibilityPCAPsResponseSimple struct {
+type PCAPGetResponseMagicVisibilityPCAPsResponseFull struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
+	// The maximum number of bytes to capture. This field only applies to `full` packet
+	// captures.
+	ByteLimit float64 `json:"byte_limit"`
+	// The name of the data center used for the packet capture. This can be a specific
+	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
+	// packet captures.
+	ColoName string `json:"colo_name"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf string `json:"destination_conf"`
+	// An error message that describes why the packet capture failed. This field only
+	// applies to `full` packet captures.
+	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
 	FilterV1 Filter `json:"filter_v1"`
 	// The status of the packet capture request.
-	Status PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus `json:"status"`
+	Status PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
-	System PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystem `json:"system"`
+	System PCAPGetResponseMagicVisibilityPCAPsResponseFullSystem `json:"system"`
 	// The packet capture duration in seconds.
 	TimeLimit float64 `json:"time_limit"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type PCAPGetResponseMagicVisibilityPCAPsResponseSimpleType `json:"type"`
-	JSON pcapGetResponseMagicVisibilityPCAPsResponseSimpleJSON `json:"-"`
+	Type PCAPGetResponseMagicVisibilityPCAPsResponseFullType `json:"type"`
+	JSON pcapGetResponseMagicVisibilityPCAPsResponseFullJSON `json:"-"`
 }
 
-// pcapGetResponseMagicVisibilityPCAPsResponseSimpleJSON contains the JSON metadata
-// for the struct [PCAPGetResponseMagicVisibilityPCAPsResponseSimple]
-type pcapGetResponseMagicVisibilityPCAPsResponseSimpleJSON struct {
-	ID          apijson.Field
-	FilterV1    apijson.Field
-	Status      apijson.Field
-	Submitted   apijson.Field
-	System      apijson.Field
-	TimeLimit   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// pcapGetResponseMagicVisibilityPCAPsResponseFullJSON contains the JSON metadata
+// for the struct [PCAPGetResponseMagicVisibilityPCAPsResponseFull]
+type pcapGetResponseMagicVisibilityPCAPsResponseFullJSON struct {
+	ID              apijson.Field
+	ByteLimit       apijson.Field
+	ColoName        apijson.Field
+	DestinationConf apijson.Field
+	ErrorMessage    apijson.Field
+	FilterV1        apijson.Field
+	Status          apijson.Field
+	Submitted       apijson.Field
+	System          apijson.Field
+	TimeLimit       apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PCAPGetResponseMagicVisibilityPCAPsResponseSimple) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPGetResponseMagicVisibilityPCAPsResponseFull) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pcapGetResponseMagicVisibilityPCAPsResponseSimpleJSON) RawJSON() string {
+func (r pcapGetResponseMagicVisibilityPCAPsResponseFullJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PCAPGetResponseMagicVisibilityPCAPsResponseSimple) implementsPCAPsPCAPGetResponse() {}
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseFull) implementsPCAPsPCAPGetResponse() {}
 
 // The status of the packet capture request.
-type PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus string
+type PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus string
 
 const (
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusUnknown           PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus = "unknown"
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusSuccess           PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus = "success"
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusPending           PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus = "pending"
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusRunning           PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus = "running"
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusConversionPending PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus = "conversion_pending"
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusConversionRunning PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus = "conversion_running"
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusComplete          PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus = "complete"
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusFailed            PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus = "failed"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusUnknown           PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus = "unknown"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusSuccess           PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus = "success"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusPending           PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus = "pending"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusRunning           PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus = "running"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusConversionPending PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus = "conversion_pending"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusConversionRunning PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus = "conversion_running"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusComplete          PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus = "complete"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusFailed            PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus = "failed"
 )
 
-func (r PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatus) IsKnown() bool {
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseFullStatus) IsKnown() bool {
 	switch r {
-	case PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusUnknown, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusSuccess, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusPending, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusRunning, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusConversionPending, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusConversionRunning, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusComplete, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleStatusFailed:
+	case PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusUnknown, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusSuccess, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusPending, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusRunning, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusConversionPending, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusConversionRunning, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusComplete, PCAPGetResponseMagicVisibilityPCAPsResponseFullStatusFailed:
 		return true
 	}
 	return false
 }
 
 // The system used to collect packet captures.
-type PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystem string
+type PCAPGetResponseMagicVisibilityPCAPsResponseFullSystem string
 
 const (
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystem = "magic-transit"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit PCAPGetResponseMagicVisibilityPCAPsResponseFullSystem = "magic-transit"
 )
 
-func (r PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystem) IsKnown() bool {
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseFullSystem) IsKnown() bool {
 	switch r {
-	case PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystemMagicTransit:
+	case PCAPGetResponseMagicVisibilityPCAPsResponseFullSystemMagicTransit:
 		return true
 	}
 	return false
@@ -900,16 +932,16 @@ func (r PCAPGetResponseMagicVisibilityPCAPsResponseSimpleSystem) IsKnown() bool 
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PCAPGetResponseMagicVisibilityPCAPsResponseSimpleType string
+type PCAPGetResponseMagicVisibilityPCAPsResponseFullType string
 
 const (
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleTypeSimple PCAPGetResponseMagicVisibilityPCAPsResponseSimpleType = "simple"
-	PCAPGetResponseMagicVisibilityPCAPsResponseSimpleTypeFull   PCAPGetResponseMagicVisibilityPCAPsResponseSimpleType = "full"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeSimple PCAPGetResponseMagicVisibilityPCAPsResponseFullType = "simple"
+	PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeFull   PCAPGetResponseMagicVisibilityPCAPsResponseFullType = "full"
 )
 
-func (r PCAPGetResponseMagicVisibilityPCAPsResponseSimpleType) IsKnown() bool {
+func (r PCAPGetResponseMagicVisibilityPCAPsResponseFullType) IsKnown() bool {
 	switch r {
-	case PCAPGetResponseMagicVisibilityPCAPsResponseSimpleTypeSimple, PCAPGetResponseMagicVisibilityPCAPsResponseSimpleTypeFull:
+	case PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeSimple, PCAPGetResponseMagicVisibilityPCAPsResponseFullTypeFull:
 		return true
 	}
 	return false
