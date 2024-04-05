@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v2/accounts"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
@@ -100,7 +101,7 @@ type InviteListResponse struct {
 	// Organization name.
 	OrganizationName string `json:"organization_name"`
 	// Roles to be assigned to this user.
-	Roles []InviteListResponseRole `json:"roles"`
+	Roles []accounts.Role `json:"roles"`
 	// Current status of the invitation.
 	Status InviteListResponseStatus `json:"status"`
 	JSON   inviteListResponseJSON   `json:"-"`
@@ -128,37 +129,6 @@ func (r *InviteListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r inviteListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type InviteListResponseRole struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role Name.
-	Name string `json:"name,required"`
-	// Access permissions for this User.
-	Permissions []string                   `json:"permissions,required"`
-	JSON        inviteListResponseRoleJSON `json:"-"`
-}
-
-// inviteListResponseRoleJSON contains the JSON metadata for the struct
-// [InviteListResponseRole]
-type inviteListResponseRoleJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *InviteListResponseRole) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r inviteListResponseRoleJSON) RawJSON() string {
 	return r.raw
 }
 

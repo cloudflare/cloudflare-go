@@ -117,6 +117,300 @@ func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string
 	return
 }
 
+// SSL properties for the custom hostname.
+type SSL struct {
+	// Custom hostname SSL identifier tag.
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method"`
+	// The Certificate Authority that will issue the certificate
+	CertificateAuthority SSLCertificateAuthority `json:"certificate_authority"`
+	// If a custom uploaded certificate is used.
+	CustomCertificate string `json:"custom_certificate"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID string `json:"custom_csr_id"`
+	// The key for a custom uploaded certificate.
+	CustomKey string `json:"custom_key"`
+	// The time the custom certificate expires on.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// A list of Hostnames on a custom uploaded certificate.
+	Hosts []interface{} `json:"hosts"`
+	// The issuer on a custom uploaded certificate.
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 `json:"method"`
+	// The serial number on a custom uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// SSL specific settings.
+	Settings SSLSettings `json:"settings"`
+	// The signature on a custom uploaded certificate.
+	Signature string `json:"signature"`
+	// Status of the hostname's SSL certificates.
+	Status SSLStatus `json:"status"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 `json:"type"`
+	// The time the custom certificate was uploaded.
+	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
+	// Domain validation errors that have been received by the certificate authority
+	// (CA).
+	ValidationErrors  []SSLValidationError  `json:"validation_errors"`
+	ValidationRecords []SSLValidationRecord `json:"validation_records"`
+	// Indicates whether the certificate covers a wildcard.
+	Wildcard bool    `json:"wildcard"`
+	JSON     sslJSON `json:"-"`
+}
+
+// sslJSON contains the JSON metadata for the struct [SSL]
+type sslJSON struct {
+	ID                   apijson.Field
+	BundleMethod         apijson.Field
+	CertificateAuthority apijson.Field
+	CustomCertificate    apijson.Field
+	CustomCsrID          apijson.Field
+	CustomKey            apijson.Field
+	ExpiresOn            apijson.Field
+	Hosts                apijson.Field
+	Issuer               apijson.Field
+	Method               apijson.Field
+	SerialNumber         apijson.Field
+	Settings             apijson.Field
+	Signature            apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	UploadedOn           apijson.Field
+	ValidationErrors     apijson.Field
+	ValidationRecords    apijson.Field
+	Wildcard             apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *SSL) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslJSON) RawJSON() string {
+	return r.raw
+}
+
+// The Certificate Authority that will issue the certificate
+type SSLCertificateAuthority string
+
+const (
+	SSLCertificateAuthorityDigicert    SSLCertificateAuthority = "digicert"
+	SSLCertificateAuthorityGoogle      SSLCertificateAuthority = "google"
+	SSLCertificateAuthorityLetsEncrypt SSLCertificateAuthority = "lets_encrypt"
+)
+
+func (r SSLCertificateAuthority) IsKnown() bool {
+	switch r {
+	case SSLCertificateAuthorityDigicert, SSLCertificateAuthorityGoogle, SSLCertificateAuthorityLetsEncrypt:
+		return true
+	}
+	return false
+}
+
+// SSL specific settings.
+type SSLSettings struct {
+	// An allowlist of ciphers for TLS termination. These ciphers must be in the
+	// BoringSSL format.
+	Ciphers []string `json:"ciphers"`
+	// Whether or not Early Hints is enabled.
+	EarlyHints SSLSettingsEarlyHints `json:"early_hints"`
+	// Whether or not HTTP2 is enabled.
+	HTTP2 SSLSettingsHTTP2 `json:"http2"`
+	// The minimum TLS version supported.
+	MinTLSVersion SSLSettingsMinTLSVersion `json:"min_tls_version"`
+	// Whether or not TLS 1.3 is enabled.
+	TLS1_3 SSLSettingsTLS1_3 `json:"tls_1_3"`
+	JSON   sslSettingsJSON   `json:"-"`
+}
+
+// sslSettingsJSON contains the JSON metadata for the struct [SSLSettings]
+type sslSettingsJSON struct {
+	Ciphers       apijson.Field
+	EarlyHints    apijson.Field
+	HTTP2         apijson.Field
+	MinTLSVersion apijson.Field
+	TLS1_3        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *SSLSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether or not Early Hints is enabled.
+type SSLSettingsEarlyHints string
+
+const (
+	SSLSettingsEarlyHintsOn  SSLSettingsEarlyHints = "on"
+	SSLSettingsEarlyHintsOff SSLSettingsEarlyHints = "off"
+)
+
+func (r SSLSettingsEarlyHints) IsKnown() bool {
+	switch r {
+	case SSLSettingsEarlyHintsOn, SSLSettingsEarlyHintsOff:
+		return true
+	}
+	return false
+}
+
+// Whether or not HTTP2 is enabled.
+type SSLSettingsHTTP2 string
+
+const (
+	SSLSettingsHTTP2On  SSLSettingsHTTP2 = "on"
+	SSLSettingsHTTP2Off SSLSettingsHTTP2 = "off"
+)
+
+func (r SSLSettingsHTTP2) IsKnown() bool {
+	switch r {
+	case SSLSettingsHTTP2On, SSLSettingsHTTP2Off:
+		return true
+	}
+	return false
+}
+
+// The minimum TLS version supported.
+type SSLSettingsMinTLSVersion string
+
+const (
+	SSLSettingsMinTLSVersion1_0 SSLSettingsMinTLSVersion = "1.0"
+	SSLSettingsMinTLSVersion1_1 SSLSettingsMinTLSVersion = "1.1"
+	SSLSettingsMinTLSVersion1_2 SSLSettingsMinTLSVersion = "1.2"
+	SSLSettingsMinTLSVersion1_3 SSLSettingsMinTLSVersion = "1.3"
+)
+
+func (r SSLSettingsMinTLSVersion) IsKnown() bool {
+	switch r {
+	case SSLSettingsMinTLSVersion1_0, SSLSettingsMinTLSVersion1_1, SSLSettingsMinTLSVersion1_2, SSLSettingsMinTLSVersion1_3:
+		return true
+	}
+	return false
+}
+
+// Whether or not TLS 1.3 is enabled.
+type SSLSettingsTLS1_3 string
+
+const (
+	SSLSettingsTLS1_3On  SSLSettingsTLS1_3 = "on"
+	SSLSettingsTLS1_3Off SSLSettingsTLS1_3 = "off"
+)
+
+func (r SSLSettingsTLS1_3) IsKnown() bool {
+	switch r {
+	case SSLSettingsTLS1_3On, SSLSettingsTLS1_3Off:
+		return true
+	}
+	return false
+}
+
+// Status of the hostname's SSL certificates.
+type SSLStatus string
+
+const (
+	SSLStatusInitializing         SSLStatus = "initializing"
+	SSLStatusPendingValidation    SSLStatus = "pending_validation"
+	SSLStatusDeleted              SSLStatus = "deleted"
+	SSLStatusPendingIssuance      SSLStatus = "pending_issuance"
+	SSLStatusPendingDeployment    SSLStatus = "pending_deployment"
+	SSLStatusPendingDeletion      SSLStatus = "pending_deletion"
+	SSLStatusPendingExpiration    SSLStatus = "pending_expiration"
+	SSLStatusExpired              SSLStatus = "expired"
+	SSLStatusActive               SSLStatus = "active"
+	SSLStatusInitializingTimedOut SSLStatus = "initializing_timed_out"
+	SSLStatusValidationTimedOut   SSLStatus = "validation_timed_out"
+	SSLStatusIssuanceTimedOut     SSLStatus = "issuance_timed_out"
+	SSLStatusDeploymentTimedOut   SSLStatus = "deployment_timed_out"
+	SSLStatusDeletionTimedOut     SSLStatus = "deletion_timed_out"
+	SSLStatusPendingCleanup       SSLStatus = "pending_cleanup"
+	SSLStatusStagingDeployment    SSLStatus = "staging_deployment"
+	SSLStatusStagingActive        SSLStatus = "staging_active"
+	SSLStatusDeactivating         SSLStatus = "deactivating"
+	SSLStatusInactive             SSLStatus = "inactive"
+	SSLStatusBackupIssued         SSLStatus = "backup_issued"
+	SSLStatusHoldingDeployment    SSLStatus = "holding_deployment"
+)
+
+func (r SSLStatus) IsKnown() bool {
+	switch r {
+	case SSLStatusInitializing, SSLStatusPendingValidation, SSLStatusDeleted, SSLStatusPendingIssuance, SSLStatusPendingDeployment, SSLStatusPendingDeletion, SSLStatusPendingExpiration, SSLStatusExpired, SSLStatusActive, SSLStatusInitializingTimedOut, SSLStatusValidationTimedOut, SSLStatusIssuanceTimedOut, SSLStatusDeploymentTimedOut, SSLStatusDeletionTimedOut, SSLStatusPendingCleanup, SSLStatusStagingDeployment, SSLStatusStagingActive, SSLStatusDeactivating, SSLStatusInactive, SSLStatusBackupIssued, SSLStatusHoldingDeployment:
+		return true
+	}
+	return false
+}
+
+type SSLValidationError struct {
+	// A domain validation error.
+	Message string                 `json:"message"`
+	JSON    sslValidationErrorJSON `json:"-"`
+}
+
+// sslValidationErrorJSON contains the JSON metadata for the struct
+// [SSLValidationError]
+type sslValidationErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLValidationError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslValidationErrorJSON) RawJSON() string {
+	return r.raw
+}
+
+// Certificate's required validation record.
+type SSLValidationRecord struct {
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []interface{} `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TXTName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TXTValue string                  `json:"txt_value"`
+	JSON     sslValidationRecordJSON `json:"-"`
+}
+
+// sslValidationRecordJSON contains the JSON metadata for the struct
+// [SSLValidationRecord]
+type sslValidationRecordJSON struct {
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLValidationRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslValidationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 // A ubiquitous bundle has the highest probability of being verified everywhere,
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
@@ -176,7 +470,7 @@ type CustomHostnameNewResponse struct {
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname,required"`
 	// SSL properties for the custom hostname.
-	SSL  CustomHostnameNewResponseSSL  `json:"ssl,required"`
+	SSL  SSL                           `json:"ssl,required"`
 	JSON customHostnameNewResponseJSON `json:"-"`
 }
 
@@ -198,309 +492,13 @@ func (r customHostnameNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL properties for the custom hostname.
-type CustomHostnameNewResponseSSL struct {
-	// Custom hostname SSL identifier tag.
-	ID string `json:"id"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameNewResponseSSLCertificateAuthority `json:"certificate_authority"`
-	// If a custom uploaded certificate is used.
-	CustomCertificate string `json:"custom_certificate"`
-	// The identifier for the Custom CSR that was used.
-	CustomCsrID string `json:"custom_csr_id"`
-	// The key for a custom uploaded certificate.
-	CustomKey string `json:"custom_key"`
-	// The time the custom certificate expires on.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
-	// The issuer on a custom uploaded certificate.
-	Issuer string `json:"issuer"`
-	// Domain control validation (DCV) method used for this hostname.
-	Method UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 `json:"method"`
-	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameNewResponseSSLSettings `json:"settings"`
-	// The signature on a custom uploaded certificate.
-	Signature string `json:"signature"`
-	// Status of the hostname's SSL certificates.
-	Status CustomHostnameNewResponseSSLStatus `json:"status"`
-	// Level of validation to be used for this hostname. Domain validation (dv) must be
-	// used.
-	Type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 `json:"type"`
-	// The time the custom certificate was uploaded.
-	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
-	// Domain validation errors that have been received by the certificate authority
-	// (CA).
-	ValidationErrors  []CustomHostnameNewResponseSSLValidationError  `json:"validation_errors"`
-	ValidationRecords []CustomHostnameNewResponseSSLValidationRecord `json:"validation_records"`
-	// Indicates whether the certificate covers a wildcard.
-	Wildcard bool                             `json:"wildcard"`
-	JSON     customHostnameNewResponseSSLJSON `json:"-"`
-}
-
-// customHostnameNewResponseSSLJSON contains the JSON metadata for the struct
-// [CustomHostnameNewResponseSSL]
-type customHostnameNewResponseSSLJSON struct {
-	ID                   apijson.Field
-	BundleMethod         apijson.Field
-	CertificateAuthority apijson.Field
-	CustomCertificate    apijson.Field
-	CustomCsrID          apijson.Field
-	CustomKey            apijson.Field
-	ExpiresOn            apijson.Field
-	Hosts                apijson.Field
-	Issuer               apijson.Field
-	Method               apijson.Field
-	SerialNumber         apijson.Field
-	Settings             apijson.Field
-	Signature            apijson.Field
-	Status               apijson.Field
-	Type                 apijson.Field
-	UploadedOn           apijson.Field
-	ValidationErrors     apijson.Field
-	ValidationRecords    apijson.Field
-	Wildcard             apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *CustomHostnameNewResponseSSL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameNewResponseSSLJSON) RawJSON() string {
-	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameNewResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameNewResponseSSLCertificateAuthorityDigicert    CustomHostnameNewResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameNewResponseSSLCertificateAuthorityGoogle      CustomHostnameNewResponseSSLCertificateAuthority = "google"
-	CustomHostnameNewResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameNewResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameNewResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewResponseSSLCertificateAuthorityDigicert, CustomHostnameNewResponseSSLCertificateAuthorityGoogle, CustomHostnameNewResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
-// SSL specific settings.
-type CustomHostnameNewResponseSSLSettings struct {
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
-	// Whether or not Early Hints is enabled.
-	EarlyHints CustomHostnameNewResponseSSLSettingsEarlyHints `json:"early_hints"`
-	// Whether or not HTTP2 is enabled.
-	HTTP2 CustomHostnameNewResponseSSLSettingsHTTP2 `json:"http2"`
-	// The minimum TLS version supported.
-	MinTLSVersion CustomHostnameNewResponseSSLSettingsMinTLSVersion `json:"min_tls_version"`
-	// Whether or not TLS 1.3 is enabled.
-	TLS1_3 CustomHostnameNewResponseSSLSettingsTLS1_3 `json:"tls_1_3"`
-	JSON   customHostnameNewResponseSSLSettingsJSON   `json:"-"`
-}
-
-// customHostnameNewResponseSSLSettingsJSON contains the JSON metadata for the
-// struct [CustomHostnameNewResponseSSLSettings]
-type customHostnameNewResponseSSLSettingsJSON struct {
-	Ciphers       apijson.Field
-	EarlyHints    apijson.Field
-	HTTP2         apijson.Field
-	MinTLSVersion apijson.Field
-	TLS1_3        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *CustomHostnameNewResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameNewResponseSSLSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether or not Early Hints is enabled.
-type CustomHostnameNewResponseSSLSettingsEarlyHints string
-
-const (
-	CustomHostnameNewResponseSSLSettingsEarlyHintsOn  CustomHostnameNewResponseSSLSettingsEarlyHints = "on"
-	CustomHostnameNewResponseSSLSettingsEarlyHintsOff CustomHostnameNewResponseSSLSettingsEarlyHints = "off"
-)
-
-func (r CustomHostnameNewResponseSSLSettingsEarlyHints) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewResponseSSLSettingsEarlyHintsOn, CustomHostnameNewResponseSSLSettingsEarlyHintsOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not HTTP2 is enabled.
-type CustomHostnameNewResponseSSLSettingsHTTP2 string
-
-const (
-	CustomHostnameNewResponseSSLSettingsHTTP2On  CustomHostnameNewResponseSSLSettingsHTTP2 = "on"
-	CustomHostnameNewResponseSSLSettingsHTTP2Off CustomHostnameNewResponseSSLSettingsHTTP2 = "off"
-)
-
-func (r CustomHostnameNewResponseSSLSettingsHTTP2) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewResponseSSLSettingsHTTP2On, CustomHostnameNewResponseSSLSettingsHTTP2Off:
-		return true
-	}
-	return false
-}
-
-// The minimum TLS version supported.
-type CustomHostnameNewResponseSSLSettingsMinTLSVersion string
-
-const (
-	CustomHostnameNewResponseSSLSettingsMinTLSVersion1_0 CustomHostnameNewResponseSSLSettingsMinTLSVersion = "1.0"
-	CustomHostnameNewResponseSSLSettingsMinTLSVersion1_1 CustomHostnameNewResponseSSLSettingsMinTLSVersion = "1.1"
-	CustomHostnameNewResponseSSLSettingsMinTLSVersion1_2 CustomHostnameNewResponseSSLSettingsMinTLSVersion = "1.2"
-	CustomHostnameNewResponseSSLSettingsMinTLSVersion1_3 CustomHostnameNewResponseSSLSettingsMinTLSVersion = "1.3"
-)
-
-func (r CustomHostnameNewResponseSSLSettingsMinTLSVersion) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewResponseSSLSettingsMinTLSVersion1_0, CustomHostnameNewResponseSSLSettingsMinTLSVersion1_1, CustomHostnameNewResponseSSLSettingsMinTLSVersion1_2, CustomHostnameNewResponseSSLSettingsMinTLSVersion1_3:
-		return true
-	}
-	return false
-}
-
-// Whether or not TLS 1.3 is enabled.
-type CustomHostnameNewResponseSSLSettingsTLS1_3 string
-
-const (
-	CustomHostnameNewResponseSSLSettingsTLS1_3On  CustomHostnameNewResponseSSLSettingsTLS1_3 = "on"
-	CustomHostnameNewResponseSSLSettingsTLS1_3Off CustomHostnameNewResponseSSLSettingsTLS1_3 = "off"
-)
-
-func (r CustomHostnameNewResponseSSLSettingsTLS1_3) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewResponseSSLSettingsTLS1_3On, CustomHostnameNewResponseSSLSettingsTLS1_3Off:
-		return true
-	}
-	return false
-}
-
-// Status of the hostname's SSL certificates.
-type CustomHostnameNewResponseSSLStatus string
-
-const (
-	CustomHostnameNewResponseSSLStatusInitializing         CustomHostnameNewResponseSSLStatus = "initializing"
-	CustomHostnameNewResponseSSLStatusPendingValidation    CustomHostnameNewResponseSSLStatus = "pending_validation"
-	CustomHostnameNewResponseSSLStatusDeleted              CustomHostnameNewResponseSSLStatus = "deleted"
-	CustomHostnameNewResponseSSLStatusPendingIssuance      CustomHostnameNewResponseSSLStatus = "pending_issuance"
-	CustomHostnameNewResponseSSLStatusPendingDeployment    CustomHostnameNewResponseSSLStatus = "pending_deployment"
-	CustomHostnameNewResponseSSLStatusPendingDeletion      CustomHostnameNewResponseSSLStatus = "pending_deletion"
-	CustomHostnameNewResponseSSLStatusPendingExpiration    CustomHostnameNewResponseSSLStatus = "pending_expiration"
-	CustomHostnameNewResponseSSLStatusExpired              CustomHostnameNewResponseSSLStatus = "expired"
-	CustomHostnameNewResponseSSLStatusActive               CustomHostnameNewResponseSSLStatus = "active"
-	CustomHostnameNewResponseSSLStatusInitializingTimedOut CustomHostnameNewResponseSSLStatus = "initializing_timed_out"
-	CustomHostnameNewResponseSSLStatusValidationTimedOut   CustomHostnameNewResponseSSLStatus = "validation_timed_out"
-	CustomHostnameNewResponseSSLStatusIssuanceTimedOut     CustomHostnameNewResponseSSLStatus = "issuance_timed_out"
-	CustomHostnameNewResponseSSLStatusDeploymentTimedOut   CustomHostnameNewResponseSSLStatus = "deployment_timed_out"
-	CustomHostnameNewResponseSSLStatusDeletionTimedOut     CustomHostnameNewResponseSSLStatus = "deletion_timed_out"
-	CustomHostnameNewResponseSSLStatusPendingCleanup       CustomHostnameNewResponseSSLStatus = "pending_cleanup"
-	CustomHostnameNewResponseSSLStatusStagingDeployment    CustomHostnameNewResponseSSLStatus = "staging_deployment"
-	CustomHostnameNewResponseSSLStatusStagingActive        CustomHostnameNewResponseSSLStatus = "staging_active"
-	CustomHostnameNewResponseSSLStatusDeactivating         CustomHostnameNewResponseSSLStatus = "deactivating"
-	CustomHostnameNewResponseSSLStatusInactive             CustomHostnameNewResponseSSLStatus = "inactive"
-	CustomHostnameNewResponseSSLStatusBackupIssued         CustomHostnameNewResponseSSLStatus = "backup_issued"
-	CustomHostnameNewResponseSSLStatusHoldingDeployment    CustomHostnameNewResponseSSLStatus = "holding_deployment"
-)
-
-func (r CustomHostnameNewResponseSSLStatus) IsKnown() bool {
-	switch r {
-	case CustomHostnameNewResponseSSLStatusInitializing, CustomHostnameNewResponseSSLStatusPendingValidation, CustomHostnameNewResponseSSLStatusDeleted, CustomHostnameNewResponseSSLStatusPendingIssuance, CustomHostnameNewResponseSSLStatusPendingDeployment, CustomHostnameNewResponseSSLStatusPendingDeletion, CustomHostnameNewResponseSSLStatusPendingExpiration, CustomHostnameNewResponseSSLStatusExpired, CustomHostnameNewResponseSSLStatusActive, CustomHostnameNewResponseSSLStatusInitializingTimedOut, CustomHostnameNewResponseSSLStatusValidationTimedOut, CustomHostnameNewResponseSSLStatusIssuanceTimedOut, CustomHostnameNewResponseSSLStatusDeploymentTimedOut, CustomHostnameNewResponseSSLStatusDeletionTimedOut, CustomHostnameNewResponseSSLStatusPendingCleanup, CustomHostnameNewResponseSSLStatusStagingDeployment, CustomHostnameNewResponseSSLStatusStagingActive, CustomHostnameNewResponseSSLStatusDeactivating, CustomHostnameNewResponseSSLStatusInactive, CustomHostnameNewResponseSSLStatusBackupIssued, CustomHostnameNewResponseSSLStatusHoldingDeployment:
-		return true
-	}
-	return false
-}
-
-type CustomHostnameNewResponseSSLValidationError struct {
-	// A domain validation error.
-	Message string                                          `json:"message"`
-	JSON    customHostnameNewResponseSSLValidationErrorJSON `json:"-"`
-}
-
-// customHostnameNewResponseSSLValidationErrorJSON contains the JSON metadata for
-// the struct [CustomHostnameNewResponseSSLValidationError]
-type customHostnameNewResponseSSLValidationErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameNewResponseSSLValidationError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameNewResponseSSLValidationErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-// Certificate's required validation record.
-type CustomHostnameNewResponseSSLValidationRecord struct {
-	// The set of email addresses that the certificate authority (CA) will use to
-	// complete domain validation.
-	Emails []interface{} `json:"emails"`
-	// The content that the certificate authority (CA) will expect to find at the
-	// http_url during the domain validation.
-	HTTPBody string `json:"http_body"`
-	// The url that will be checked during domain validation.
-	HTTPURL string `json:"http_url"`
-	// The hostname that the certificate authority (CA) will check for a TXT record
-	// during domain validation .
-	TXTName string `json:"txt_name"`
-	// The TXT record that the certificate authority (CA) will check during domain
-	// validation.
-	TXTValue string                                           `json:"txt_value"`
-	JSON     customHostnameNewResponseSSLValidationRecordJSON `json:"-"`
-}
-
-// customHostnameNewResponseSSLValidationRecordJSON contains the JSON metadata for
-// the struct [CustomHostnameNewResponseSSLValidationRecord]
-type customHostnameNewResponseSSLValidationRecordJSON struct {
-	Emails      apijson.Field
-	HTTPBody    apijson.Field
-	HTTPURL     apijson.Field
-	TXTName     apijson.Field
-	TXTValue    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameNewResponseSSLValidationRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameNewResponseSSLValidationRecordJSON) RawJSON() string {
-	return r.raw
-}
-
 type CustomHostnameListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname,required"`
 	// SSL properties for the custom hostname.
-	SSL  CustomHostnameListResponseSSL  `json:"ssl,required"`
+	SSL  SSL                            `json:"ssl,required"`
 	JSON customHostnameListResponseJSON `json:"-"`
 }
 
@@ -522,309 +520,13 @@ func (r customHostnameListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL properties for the custom hostname.
-type CustomHostnameListResponseSSL struct {
-	// Custom hostname SSL identifier tag.
-	ID string `json:"id"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameListResponseSSLCertificateAuthority `json:"certificate_authority"`
-	// If a custom uploaded certificate is used.
-	CustomCertificate string `json:"custom_certificate"`
-	// The identifier for the Custom CSR that was used.
-	CustomCsrID string `json:"custom_csr_id"`
-	// The key for a custom uploaded certificate.
-	CustomKey string `json:"custom_key"`
-	// The time the custom certificate expires on.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
-	// The issuer on a custom uploaded certificate.
-	Issuer string `json:"issuer"`
-	// Domain control validation (DCV) method used for this hostname.
-	Method UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 `json:"method"`
-	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameListResponseSSLSettings `json:"settings"`
-	// The signature on a custom uploaded certificate.
-	Signature string `json:"signature"`
-	// Status of the hostname's SSL certificates.
-	Status CustomHostnameListResponseSSLStatus `json:"status"`
-	// Level of validation to be used for this hostname. Domain validation (dv) must be
-	// used.
-	Type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 `json:"type"`
-	// The time the custom certificate was uploaded.
-	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
-	// Domain validation errors that have been received by the certificate authority
-	// (CA).
-	ValidationErrors  []CustomHostnameListResponseSSLValidationError  `json:"validation_errors"`
-	ValidationRecords []CustomHostnameListResponseSSLValidationRecord `json:"validation_records"`
-	// Indicates whether the certificate covers a wildcard.
-	Wildcard bool                              `json:"wildcard"`
-	JSON     customHostnameListResponseSSLJSON `json:"-"`
-}
-
-// customHostnameListResponseSSLJSON contains the JSON metadata for the struct
-// [CustomHostnameListResponseSSL]
-type customHostnameListResponseSSLJSON struct {
-	ID                   apijson.Field
-	BundleMethod         apijson.Field
-	CertificateAuthority apijson.Field
-	CustomCertificate    apijson.Field
-	CustomCsrID          apijson.Field
-	CustomKey            apijson.Field
-	ExpiresOn            apijson.Field
-	Hosts                apijson.Field
-	Issuer               apijson.Field
-	Method               apijson.Field
-	SerialNumber         apijson.Field
-	Settings             apijson.Field
-	Signature            apijson.Field
-	Status               apijson.Field
-	Type                 apijson.Field
-	UploadedOn           apijson.Field
-	ValidationErrors     apijson.Field
-	ValidationRecords    apijson.Field
-	Wildcard             apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *CustomHostnameListResponseSSL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameListResponseSSLJSON) RawJSON() string {
-	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameListResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameListResponseSSLCertificateAuthorityDigicert    CustomHostnameListResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameListResponseSSLCertificateAuthorityGoogle      CustomHostnameListResponseSSLCertificateAuthority = "google"
-	CustomHostnameListResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameListResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameListResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameListResponseSSLCertificateAuthorityDigicert, CustomHostnameListResponseSSLCertificateAuthorityGoogle, CustomHostnameListResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
-// SSL specific settings.
-type CustomHostnameListResponseSSLSettings struct {
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
-	// Whether or not Early Hints is enabled.
-	EarlyHints CustomHostnameListResponseSSLSettingsEarlyHints `json:"early_hints"`
-	// Whether or not HTTP2 is enabled.
-	HTTP2 CustomHostnameListResponseSSLSettingsHTTP2 `json:"http2"`
-	// The minimum TLS version supported.
-	MinTLSVersion CustomHostnameListResponseSSLSettingsMinTLSVersion `json:"min_tls_version"`
-	// Whether or not TLS 1.3 is enabled.
-	TLS1_3 CustomHostnameListResponseSSLSettingsTLS1_3 `json:"tls_1_3"`
-	JSON   customHostnameListResponseSSLSettingsJSON   `json:"-"`
-}
-
-// customHostnameListResponseSSLSettingsJSON contains the JSON metadata for the
-// struct [CustomHostnameListResponseSSLSettings]
-type customHostnameListResponseSSLSettingsJSON struct {
-	Ciphers       apijson.Field
-	EarlyHints    apijson.Field
-	HTTP2         apijson.Field
-	MinTLSVersion apijson.Field
-	TLS1_3        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *CustomHostnameListResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameListResponseSSLSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether or not Early Hints is enabled.
-type CustomHostnameListResponseSSLSettingsEarlyHints string
-
-const (
-	CustomHostnameListResponseSSLSettingsEarlyHintsOn  CustomHostnameListResponseSSLSettingsEarlyHints = "on"
-	CustomHostnameListResponseSSLSettingsEarlyHintsOff CustomHostnameListResponseSSLSettingsEarlyHints = "off"
-)
-
-func (r CustomHostnameListResponseSSLSettingsEarlyHints) IsKnown() bool {
-	switch r {
-	case CustomHostnameListResponseSSLSettingsEarlyHintsOn, CustomHostnameListResponseSSLSettingsEarlyHintsOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not HTTP2 is enabled.
-type CustomHostnameListResponseSSLSettingsHTTP2 string
-
-const (
-	CustomHostnameListResponseSSLSettingsHTTP2On  CustomHostnameListResponseSSLSettingsHTTP2 = "on"
-	CustomHostnameListResponseSSLSettingsHTTP2Off CustomHostnameListResponseSSLSettingsHTTP2 = "off"
-)
-
-func (r CustomHostnameListResponseSSLSettingsHTTP2) IsKnown() bool {
-	switch r {
-	case CustomHostnameListResponseSSLSettingsHTTP2On, CustomHostnameListResponseSSLSettingsHTTP2Off:
-		return true
-	}
-	return false
-}
-
-// The minimum TLS version supported.
-type CustomHostnameListResponseSSLSettingsMinTLSVersion string
-
-const (
-	CustomHostnameListResponseSSLSettingsMinTLSVersion1_0 CustomHostnameListResponseSSLSettingsMinTLSVersion = "1.0"
-	CustomHostnameListResponseSSLSettingsMinTLSVersion1_1 CustomHostnameListResponseSSLSettingsMinTLSVersion = "1.1"
-	CustomHostnameListResponseSSLSettingsMinTLSVersion1_2 CustomHostnameListResponseSSLSettingsMinTLSVersion = "1.2"
-	CustomHostnameListResponseSSLSettingsMinTLSVersion1_3 CustomHostnameListResponseSSLSettingsMinTLSVersion = "1.3"
-)
-
-func (r CustomHostnameListResponseSSLSettingsMinTLSVersion) IsKnown() bool {
-	switch r {
-	case CustomHostnameListResponseSSLSettingsMinTLSVersion1_0, CustomHostnameListResponseSSLSettingsMinTLSVersion1_1, CustomHostnameListResponseSSLSettingsMinTLSVersion1_2, CustomHostnameListResponseSSLSettingsMinTLSVersion1_3:
-		return true
-	}
-	return false
-}
-
-// Whether or not TLS 1.3 is enabled.
-type CustomHostnameListResponseSSLSettingsTLS1_3 string
-
-const (
-	CustomHostnameListResponseSSLSettingsTLS1_3On  CustomHostnameListResponseSSLSettingsTLS1_3 = "on"
-	CustomHostnameListResponseSSLSettingsTLS1_3Off CustomHostnameListResponseSSLSettingsTLS1_3 = "off"
-)
-
-func (r CustomHostnameListResponseSSLSettingsTLS1_3) IsKnown() bool {
-	switch r {
-	case CustomHostnameListResponseSSLSettingsTLS1_3On, CustomHostnameListResponseSSLSettingsTLS1_3Off:
-		return true
-	}
-	return false
-}
-
-// Status of the hostname's SSL certificates.
-type CustomHostnameListResponseSSLStatus string
-
-const (
-	CustomHostnameListResponseSSLStatusInitializing         CustomHostnameListResponseSSLStatus = "initializing"
-	CustomHostnameListResponseSSLStatusPendingValidation    CustomHostnameListResponseSSLStatus = "pending_validation"
-	CustomHostnameListResponseSSLStatusDeleted              CustomHostnameListResponseSSLStatus = "deleted"
-	CustomHostnameListResponseSSLStatusPendingIssuance      CustomHostnameListResponseSSLStatus = "pending_issuance"
-	CustomHostnameListResponseSSLStatusPendingDeployment    CustomHostnameListResponseSSLStatus = "pending_deployment"
-	CustomHostnameListResponseSSLStatusPendingDeletion      CustomHostnameListResponseSSLStatus = "pending_deletion"
-	CustomHostnameListResponseSSLStatusPendingExpiration    CustomHostnameListResponseSSLStatus = "pending_expiration"
-	CustomHostnameListResponseSSLStatusExpired              CustomHostnameListResponseSSLStatus = "expired"
-	CustomHostnameListResponseSSLStatusActive               CustomHostnameListResponseSSLStatus = "active"
-	CustomHostnameListResponseSSLStatusInitializingTimedOut CustomHostnameListResponseSSLStatus = "initializing_timed_out"
-	CustomHostnameListResponseSSLStatusValidationTimedOut   CustomHostnameListResponseSSLStatus = "validation_timed_out"
-	CustomHostnameListResponseSSLStatusIssuanceTimedOut     CustomHostnameListResponseSSLStatus = "issuance_timed_out"
-	CustomHostnameListResponseSSLStatusDeploymentTimedOut   CustomHostnameListResponseSSLStatus = "deployment_timed_out"
-	CustomHostnameListResponseSSLStatusDeletionTimedOut     CustomHostnameListResponseSSLStatus = "deletion_timed_out"
-	CustomHostnameListResponseSSLStatusPendingCleanup       CustomHostnameListResponseSSLStatus = "pending_cleanup"
-	CustomHostnameListResponseSSLStatusStagingDeployment    CustomHostnameListResponseSSLStatus = "staging_deployment"
-	CustomHostnameListResponseSSLStatusStagingActive        CustomHostnameListResponseSSLStatus = "staging_active"
-	CustomHostnameListResponseSSLStatusDeactivating         CustomHostnameListResponseSSLStatus = "deactivating"
-	CustomHostnameListResponseSSLStatusInactive             CustomHostnameListResponseSSLStatus = "inactive"
-	CustomHostnameListResponseSSLStatusBackupIssued         CustomHostnameListResponseSSLStatus = "backup_issued"
-	CustomHostnameListResponseSSLStatusHoldingDeployment    CustomHostnameListResponseSSLStatus = "holding_deployment"
-)
-
-func (r CustomHostnameListResponseSSLStatus) IsKnown() bool {
-	switch r {
-	case CustomHostnameListResponseSSLStatusInitializing, CustomHostnameListResponseSSLStatusPendingValidation, CustomHostnameListResponseSSLStatusDeleted, CustomHostnameListResponseSSLStatusPendingIssuance, CustomHostnameListResponseSSLStatusPendingDeployment, CustomHostnameListResponseSSLStatusPendingDeletion, CustomHostnameListResponseSSLStatusPendingExpiration, CustomHostnameListResponseSSLStatusExpired, CustomHostnameListResponseSSLStatusActive, CustomHostnameListResponseSSLStatusInitializingTimedOut, CustomHostnameListResponseSSLStatusValidationTimedOut, CustomHostnameListResponseSSLStatusIssuanceTimedOut, CustomHostnameListResponseSSLStatusDeploymentTimedOut, CustomHostnameListResponseSSLStatusDeletionTimedOut, CustomHostnameListResponseSSLStatusPendingCleanup, CustomHostnameListResponseSSLStatusStagingDeployment, CustomHostnameListResponseSSLStatusStagingActive, CustomHostnameListResponseSSLStatusDeactivating, CustomHostnameListResponseSSLStatusInactive, CustomHostnameListResponseSSLStatusBackupIssued, CustomHostnameListResponseSSLStatusHoldingDeployment:
-		return true
-	}
-	return false
-}
-
-type CustomHostnameListResponseSSLValidationError struct {
-	// A domain validation error.
-	Message string                                           `json:"message"`
-	JSON    customHostnameListResponseSSLValidationErrorJSON `json:"-"`
-}
-
-// customHostnameListResponseSSLValidationErrorJSON contains the JSON metadata for
-// the struct [CustomHostnameListResponseSSLValidationError]
-type customHostnameListResponseSSLValidationErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameListResponseSSLValidationError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameListResponseSSLValidationErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-// Certificate's required validation record.
-type CustomHostnameListResponseSSLValidationRecord struct {
-	// The set of email addresses that the certificate authority (CA) will use to
-	// complete domain validation.
-	Emails []interface{} `json:"emails"`
-	// The content that the certificate authority (CA) will expect to find at the
-	// http_url during the domain validation.
-	HTTPBody string `json:"http_body"`
-	// The url that will be checked during domain validation.
-	HTTPURL string `json:"http_url"`
-	// The hostname that the certificate authority (CA) will check for a TXT record
-	// during domain validation .
-	TXTName string `json:"txt_name"`
-	// The TXT record that the certificate authority (CA) will check during domain
-	// validation.
-	TXTValue string                                            `json:"txt_value"`
-	JSON     customHostnameListResponseSSLValidationRecordJSON `json:"-"`
-}
-
-// customHostnameListResponseSSLValidationRecordJSON contains the JSON metadata for
-// the struct [CustomHostnameListResponseSSLValidationRecord]
-type customHostnameListResponseSSLValidationRecordJSON struct {
-	Emails      apijson.Field
-	HTTPBody    apijson.Field
-	HTTPURL     apijson.Field
-	TXTName     apijson.Field
-	TXTValue    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameListResponseSSLValidationRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameListResponseSSLValidationRecordJSON) RawJSON() string {
-	return r.raw
-}
-
 type CustomHostnameEditResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname,required"`
 	// SSL properties for the custom hostname.
-	SSL  CustomHostnameEditResponseSSL  `json:"ssl,required"`
+	SSL  SSL                            `json:"ssl,required"`
 	JSON customHostnameEditResponseJSON `json:"-"`
 }
 
@@ -846,309 +548,13 @@ func (r customHostnameEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL properties for the custom hostname.
-type CustomHostnameEditResponseSSL struct {
-	// Custom hostname SSL identifier tag.
-	ID string `json:"id"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameEditResponseSSLCertificateAuthority `json:"certificate_authority"`
-	// If a custom uploaded certificate is used.
-	CustomCertificate string `json:"custom_certificate"`
-	// The identifier for the Custom CSR that was used.
-	CustomCsrID string `json:"custom_csr_id"`
-	// The key for a custom uploaded certificate.
-	CustomKey string `json:"custom_key"`
-	// The time the custom certificate expires on.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
-	// The issuer on a custom uploaded certificate.
-	Issuer string `json:"issuer"`
-	// Domain control validation (DCV) method used for this hostname.
-	Method UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 `json:"method"`
-	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameEditResponseSSLSettings `json:"settings"`
-	// The signature on a custom uploaded certificate.
-	Signature string `json:"signature"`
-	// Status of the hostname's SSL certificates.
-	Status CustomHostnameEditResponseSSLStatus `json:"status"`
-	// Level of validation to be used for this hostname. Domain validation (dv) must be
-	// used.
-	Type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 `json:"type"`
-	// The time the custom certificate was uploaded.
-	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
-	// Domain validation errors that have been received by the certificate authority
-	// (CA).
-	ValidationErrors  []CustomHostnameEditResponseSSLValidationError  `json:"validation_errors"`
-	ValidationRecords []CustomHostnameEditResponseSSLValidationRecord `json:"validation_records"`
-	// Indicates whether the certificate covers a wildcard.
-	Wildcard bool                              `json:"wildcard"`
-	JSON     customHostnameEditResponseSSLJSON `json:"-"`
-}
-
-// customHostnameEditResponseSSLJSON contains the JSON metadata for the struct
-// [CustomHostnameEditResponseSSL]
-type customHostnameEditResponseSSLJSON struct {
-	ID                   apijson.Field
-	BundleMethod         apijson.Field
-	CertificateAuthority apijson.Field
-	CustomCertificate    apijson.Field
-	CustomCsrID          apijson.Field
-	CustomKey            apijson.Field
-	ExpiresOn            apijson.Field
-	Hosts                apijson.Field
-	Issuer               apijson.Field
-	Method               apijson.Field
-	SerialNumber         apijson.Field
-	Settings             apijson.Field
-	Signature            apijson.Field
-	Status               apijson.Field
-	Type                 apijson.Field
-	UploadedOn           apijson.Field
-	ValidationErrors     apijson.Field
-	ValidationRecords    apijson.Field
-	Wildcard             apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *CustomHostnameEditResponseSSL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameEditResponseSSLJSON) RawJSON() string {
-	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameEditResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameEditResponseSSLCertificateAuthorityDigicert    CustomHostnameEditResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameEditResponseSSLCertificateAuthorityGoogle      CustomHostnameEditResponseSSLCertificateAuthority = "google"
-	CustomHostnameEditResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameEditResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameEditResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditResponseSSLCertificateAuthorityDigicert, CustomHostnameEditResponseSSLCertificateAuthorityGoogle, CustomHostnameEditResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
-// SSL specific settings.
-type CustomHostnameEditResponseSSLSettings struct {
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
-	// Whether or not Early Hints is enabled.
-	EarlyHints CustomHostnameEditResponseSSLSettingsEarlyHints `json:"early_hints"`
-	// Whether or not HTTP2 is enabled.
-	HTTP2 CustomHostnameEditResponseSSLSettingsHTTP2 `json:"http2"`
-	// The minimum TLS version supported.
-	MinTLSVersion CustomHostnameEditResponseSSLSettingsMinTLSVersion `json:"min_tls_version"`
-	// Whether or not TLS 1.3 is enabled.
-	TLS1_3 CustomHostnameEditResponseSSLSettingsTLS1_3 `json:"tls_1_3"`
-	JSON   customHostnameEditResponseSSLSettingsJSON   `json:"-"`
-}
-
-// customHostnameEditResponseSSLSettingsJSON contains the JSON metadata for the
-// struct [CustomHostnameEditResponseSSLSettings]
-type customHostnameEditResponseSSLSettingsJSON struct {
-	Ciphers       apijson.Field
-	EarlyHints    apijson.Field
-	HTTP2         apijson.Field
-	MinTLSVersion apijson.Field
-	TLS1_3        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *CustomHostnameEditResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameEditResponseSSLSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether or not Early Hints is enabled.
-type CustomHostnameEditResponseSSLSettingsEarlyHints string
-
-const (
-	CustomHostnameEditResponseSSLSettingsEarlyHintsOn  CustomHostnameEditResponseSSLSettingsEarlyHints = "on"
-	CustomHostnameEditResponseSSLSettingsEarlyHintsOff CustomHostnameEditResponseSSLSettingsEarlyHints = "off"
-)
-
-func (r CustomHostnameEditResponseSSLSettingsEarlyHints) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditResponseSSLSettingsEarlyHintsOn, CustomHostnameEditResponseSSLSettingsEarlyHintsOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not HTTP2 is enabled.
-type CustomHostnameEditResponseSSLSettingsHTTP2 string
-
-const (
-	CustomHostnameEditResponseSSLSettingsHTTP2On  CustomHostnameEditResponseSSLSettingsHTTP2 = "on"
-	CustomHostnameEditResponseSSLSettingsHTTP2Off CustomHostnameEditResponseSSLSettingsHTTP2 = "off"
-)
-
-func (r CustomHostnameEditResponseSSLSettingsHTTP2) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditResponseSSLSettingsHTTP2On, CustomHostnameEditResponseSSLSettingsHTTP2Off:
-		return true
-	}
-	return false
-}
-
-// The minimum TLS version supported.
-type CustomHostnameEditResponseSSLSettingsMinTLSVersion string
-
-const (
-	CustomHostnameEditResponseSSLSettingsMinTLSVersion1_0 CustomHostnameEditResponseSSLSettingsMinTLSVersion = "1.0"
-	CustomHostnameEditResponseSSLSettingsMinTLSVersion1_1 CustomHostnameEditResponseSSLSettingsMinTLSVersion = "1.1"
-	CustomHostnameEditResponseSSLSettingsMinTLSVersion1_2 CustomHostnameEditResponseSSLSettingsMinTLSVersion = "1.2"
-	CustomHostnameEditResponseSSLSettingsMinTLSVersion1_3 CustomHostnameEditResponseSSLSettingsMinTLSVersion = "1.3"
-)
-
-func (r CustomHostnameEditResponseSSLSettingsMinTLSVersion) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditResponseSSLSettingsMinTLSVersion1_0, CustomHostnameEditResponseSSLSettingsMinTLSVersion1_1, CustomHostnameEditResponseSSLSettingsMinTLSVersion1_2, CustomHostnameEditResponseSSLSettingsMinTLSVersion1_3:
-		return true
-	}
-	return false
-}
-
-// Whether or not TLS 1.3 is enabled.
-type CustomHostnameEditResponseSSLSettingsTLS1_3 string
-
-const (
-	CustomHostnameEditResponseSSLSettingsTLS1_3On  CustomHostnameEditResponseSSLSettingsTLS1_3 = "on"
-	CustomHostnameEditResponseSSLSettingsTLS1_3Off CustomHostnameEditResponseSSLSettingsTLS1_3 = "off"
-)
-
-func (r CustomHostnameEditResponseSSLSettingsTLS1_3) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditResponseSSLSettingsTLS1_3On, CustomHostnameEditResponseSSLSettingsTLS1_3Off:
-		return true
-	}
-	return false
-}
-
-// Status of the hostname's SSL certificates.
-type CustomHostnameEditResponseSSLStatus string
-
-const (
-	CustomHostnameEditResponseSSLStatusInitializing         CustomHostnameEditResponseSSLStatus = "initializing"
-	CustomHostnameEditResponseSSLStatusPendingValidation    CustomHostnameEditResponseSSLStatus = "pending_validation"
-	CustomHostnameEditResponseSSLStatusDeleted              CustomHostnameEditResponseSSLStatus = "deleted"
-	CustomHostnameEditResponseSSLStatusPendingIssuance      CustomHostnameEditResponseSSLStatus = "pending_issuance"
-	CustomHostnameEditResponseSSLStatusPendingDeployment    CustomHostnameEditResponseSSLStatus = "pending_deployment"
-	CustomHostnameEditResponseSSLStatusPendingDeletion      CustomHostnameEditResponseSSLStatus = "pending_deletion"
-	CustomHostnameEditResponseSSLStatusPendingExpiration    CustomHostnameEditResponseSSLStatus = "pending_expiration"
-	CustomHostnameEditResponseSSLStatusExpired              CustomHostnameEditResponseSSLStatus = "expired"
-	CustomHostnameEditResponseSSLStatusActive               CustomHostnameEditResponseSSLStatus = "active"
-	CustomHostnameEditResponseSSLStatusInitializingTimedOut CustomHostnameEditResponseSSLStatus = "initializing_timed_out"
-	CustomHostnameEditResponseSSLStatusValidationTimedOut   CustomHostnameEditResponseSSLStatus = "validation_timed_out"
-	CustomHostnameEditResponseSSLStatusIssuanceTimedOut     CustomHostnameEditResponseSSLStatus = "issuance_timed_out"
-	CustomHostnameEditResponseSSLStatusDeploymentTimedOut   CustomHostnameEditResponseSSLStatus = "deployment_timed_out"
-	CustomHostnameEditResponseSSLStatusDeletionTimedOut     CustomHostnameEditResponseSSLStatus = "deletion_timed_out"
-	CustomHostnameEditResponseSSLStatusPendingCleanup       CustomHostnameEditResponseSSLStatus = "pending_cleanup"
-	CustomHostnameEditResponseSSLStatusStagingDeployment    CustomHostnameEditResponseSSLStatus = "staging_deployment"
-	CustomHostnameEditResponseSSLStatusStagingActive        CustomHostnameEditResponseSSLStatus = "staging_active"
-	CustomHostnameEditResponseSSLStatusDeactivating         CustomHostnameEditResponseSSLStatus = "deactivating"
-	CustomHostnameEditResponseSSLStatusInactive             CustomHostnameEditResponseSSLStatus = "inactive"
-	CustomHostnameEditResponseSSLStatusBackupIssued         CustomHostnameEditResponseSSLStatus = "backup_issued"
-	CustomHostnameEditResponseSSLStatusHoldingDeployment    CustomHostnameEditResponseSSLStatus = "holding_deployment"
-)
-
-func (r CustomHostnameEditResponseSSLStatus) IsKnown() bool {
-	switch r {
-	case CustomHostnameEditResponseSSLStatusInitializing, CustomHostnameEditResponseSSLStatusPendingValidation, CustomHostnameEditResponseSSLStatusDeleted, CustomHostnameEditResponseSSLStatusPendingIssuance, CustomHostnameEditResponseSSLStatusPendingDeployment, CustomHostnameEditResponseSSLStatusPendingDeletion, CustomHostnameEditResponseSSLStatusPendingExpiration, CustomHostnameEditResponseSSLStatusExpired, CustomHostnameEditResponseSSLStatusActive, CustomHostnameEditResponseSSLStatusInitializingTimedOut, CustomHostnameEditResponseSSLStatusValidationTimedOut, CustomHostnameEditResponseSSLStatusIssuanceTimedOut, CustomHostnameEditResponseSSLStatusDeploymentTimedOut, CustomHostnameEditResponseSSLStatusDeletionTimedOut, CustomHostnameEditResponseSSLStatusPendingCleanup, CustomHostnameEditResponseSSLStatusStagingDeployment, CustomHostnameEditResponseSSLStatusStagingActive, CustomHostnameEditResponseSSLStatusDeactivating, CustomHostnameEditResponseSSLStatusInactive, CustomHostnameEditResponseSSLStatusBackupIssued, CustomHostnameEditResponseSSLStatusHoldingDeployment:
-		return true
-	}
-	return false
-}
-
-type CustomHostnameEditResponseSSLValidationError struct {
-	// A domain validation error.
-	Message string                                           `json:"message"`
-	JSON    customHostnameEditResponseSSLValidationErrorJSON `json:"-"`
-}
-
-// customHostnameEditResponseSSLValidationErrorJSON contains the JSON metadata for
-// the struct [CustomHostnameEditResponseSSLValidationError]
-type customHostnameEditResponseSSLValidationErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameEditResponseSSLValidationError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameEditResponseSSLValidationErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-// Certificate's required validation record.
-type CustomHostnameEditResponseSSLValidationRecord struct {
-	// The set of email addresses that the certificate authority (CA) will use to
-	// complete domain validation.
-	Emails []interface{} `json:"emails"`
-	// The content that the certificate authority (CA) will expect to find at the
-	// http_url during the domain validation.
-	HTTPBody string `json:"http_body"`
-	// The url that will be checked during domain validation.
-	HTTPURL string `json:"http_url"`
-	// The hostname that the certificate authority (CA) will check for a TXT record
-	// during domain validation .
-	TXTName string `json:"txt_name"`
-	// The TXT record that the certificate authority (CA) will check during domain
-	// validation.
-	TXTValue string                                            `json:"txt_value"`
-	JSON     customHostnameEditResponseSSLValidationRecordJSON `json:"-"`
-}
-
-// customHostnameEditResponseSSLValidationRecordJSON contains the JSON metadata for
-// the struct [CustomHostnameEditResponseSSLValidationRecord]
-type customHostnameEditResponseSSLValidationRecordJSON struct {
-	Emails      apijson.Field
-	HTTPBody    apijson.Field
-	HTTPURL     apijson.Field
-	TXTName     apijson.Field
-	TXTValue    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameEditResponseSSLValidationRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameEditResponseSSLValidationRecordJSON) RawJSON() string {
-	return r.raw
-}
-
 type CustomHostnameGetResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname string `json:"hostname,required"`
 	// SSL properties for the custom hostname.
-	SSL  CustomHostnameGetResponseSSL  `json:"ssl,required"`
+	SSL  SSL                           `json:"ssl,required"`
 	JSON customHostnameGetResponseJSON `json:"-"`
 }
 
@@ -1167,302 +573,6 @@ func (r *CustomHostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r customHostnameGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// SSL properties for the custom hostname.
-type CustomHostnameGetResponseSSL struct {
-	// Custom hostname SSL identifier tag.
-	ID string `json:"id"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1 `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameGetResponseSSLCertificateAuthority `json:"certificate_authority"`
-	// If a custom uploaded certificate is used.
-	CustomCertificate string `json:"custom_certificate"`
-	// The identifier for the Custom CSR that was used.
-	CustomCsrID string `json:"custom_csr_id"`
-	// The key for a custom uploaded certificate.
-	CustomKey string `json:"custom_key"`
-	// The time the custom certificate expires on.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
-	// The issuer on a custom uploaded certificate.
-	Issuer string `json:"issuer"`
-	// Domain control validation (DCV) method used for this hostname.
-	Method UnnamedSchemaRef78adb375f06c6d462dd92b99e2ecf510 `json:"method"`
-	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameGetResponseSSLSettings `json:"settings"`
-	// The signature on a custom uploaded certificate.
-	Signature string `json:"signature"`
-	// Status of the hostname's SSL certificates.
-	Status CustomHostnameGetResponseSSLStatus `json:"status"`
-	// Level of validation to be used for this hostname. Domain validation (dv) must be
-	// used.
-	Type UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1 `json:"type"`
-	// The time the custom certificate was uploaded.
-	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
-	// Domain validation errors that have been received by the certificate authority
-	// (CA).
-	ValidationErrors  []CustomHostnameGetResponseSSLValidationError  `json:"validation_errors"`
-	ValidationRecords []CustomHostnameGetResponseSSLValidationRecord `json:"validation_records"`
-	// Indicates whether the certificate covers a wildcard.
-	Wildcard bool                             `json:"wildcard"`
-	JSON     customHostnameGetResponseSSLJSON `json:"-"`
-}
-
-// customHostnameGetResponseSSLJSON contains the JSON metadata for the struct
-// [CustomHostnameGetResponseSSL]
-type customHostnameGetResponseSSLJSON struct {
-	ID                   apijson.Field
-	BundleMethod         apijson.Field
-	CertificateAuthority apijson.Field
-	CustomCertificate    apijson.Field
-	CustomCsrID          apijson.Field
-	CustomKey            apijson.Field
-	ExpiresOn            apijson.Field
-	Hosts                apijson.Field
-	Issuer               apijson.Field
-	Method               apijson.Field
-	SerialNumber         apijson.Field
-	Settings             apijson.Field
-	Signature            apijson.Field
-	Status               apijson.Field
-	Type                 apijson.Field
-	UploadedOn           apijson.Field
-	ValidationErrors     apijson.Field
-	ValidationRecords    apijson.Field
-	Wildcard             apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *CustomHostnameGetResponseSSL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameGetResponseSSLJSON) RawJSON() string {
-	return r.raw
-}
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameGetResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameGetResponseSSLCertificateAuthorityDigicert    CustomHostnameGetResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameGetResponseSSLCertificateAuthorityGoogle      CustomHostnameGetResponseSSLCertificateAuthority = "google"
-	CustomHostnameGetResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameGetResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-func (r CustomHostnameGetResponseSSLCertificateAuthority) IsKnown() bool {
-	switch r {
-	case CustomHostnameGetResponseSSLCertificateAuthorityDigicert, CustomHostnameGetResponseSSLCertificateAuthorityGoogle, CustomHostnameGetResponseSSLCertificateAuthorityLetsEncrypt:
-		return true
-	}
-	return false
-}
-
-// SSL specific settings.
-type CustomHostnameGetResponseSSLSettings struct {
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
-	// Whether or not Early Hints is enabled.
-	EarlyHints CustomHostnameGetResponseSSLSettingsEarlyHints `json:"early_hints"`
-	// Whether or not HTTP2 is enabled.
-	HTTP2 CustomHostnameGetResponseSSLSettingsHTTP2 `json:"http2"`
-	// The minimum TLS version supported.
-	MinTLSVersion CustomHostnameGetResponseSSLSettingsMinTLSVersion `json:"min_tls_version"`
-	// Whether or not TLS 1.3 is enabled.
-	TLS1_3 CustomHostnameGetResponseSSLSettingsTLS1_3 `json:"tls_1_3"`
-	JSON   customHostnameGetResponseSSLSettingsJSON   `json:"-"`
-}
-
-// customHostnameGetResponseSSLSettingsJSON contains the JSON metadata for the
-// struct [CustomHostnameGetResponseSSLSettings]
-type customHostnameGetResponseSSLSettingsJSON struct {
-	Ciphers       apijson.Field
-	EarlyHints    apijson.Field
-	HTTP2         apijson.Field
-	MinTLSVersion apijson.Field
-	TLS1_3        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *CustomHostnameGetResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameGetResponseSSLSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether or not Early Hints is enabled.
-type CustomHostnameGetResponseSSLSettingsEarlyHints string
-
-const (
-	CustomHostnameGetResponseSSLSettingsEarlyHintsOn  CustomHostnameGetResponseSSLSettingsEarlyHints = "on"
-	CustomHostnameGetResponseSSLSettingsEarlyHintsOff CustomHostnameGetResponseSSLSettingsEarlyHints = "off"
-)
-
-func (r CustomHostnameGetResponseSSLSettingsEarlyHints) IsKnown() bool {
-	switch r {
-	case CustomHostnameGetResponseSSLSettingsEarlyHintsOn, CustomHostnameGetResponseSSLSettingsEarlyHintsOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not HTTP2 is enabled.
-type CustomHostnameGetResponseSSLSettingsHTTP2 string
-
-const (
-	CustomHostnameGetResponseSSLSettingsHTTP2On  CustomHostnameGetResponseSSLSettingsHTTP2 = "on"
-	CustomHostnameGetResponseSSLSettingsHTTP2Off CustomHostnameGetResponseSSLSettingsHTTP2 = "off"
-)
-
-func (r CustomHostnameGetResponseSSLSettingsHTTP2) IsKnown() bool {
-	switch r {
-	case CustomHostnameGetResponseSSLSettingsHTTP2On, CustomHostnameGetResponseSSLSettingsHTTP2Off:
-		return true
-	}
-	return false
-}
-
-// The minimum TLS version supported.
-type CustomHostnameGetResponseSSLSettingsMinTLSVersion string
-
-const (
-	CustomHostnameGetResponseSSLSettingsMinTLSVersion1_0 CustomHostnameGetResponseSSLSettingsMinTLSVersion = "1.0"
-	CustomHostnameGetResponseSSLSettingsMinTLSVersion1_1 CustomHostnameGetResponseSSLSettingsMinTLSVersion = "1.1"
-	CustomHostnameGetResponseSSLSettingsMinTLSVersion1_2 CustomHostnameGetResponseSSLSettingsMinTLSVersion = "1.2"
-	CustomHostnameGetResponseSSLSettingsMinTLSVersion1_3 CustomHostnameGetResponseSSLSettingsMinTLSVersion = "1.3"
-)
-
-func (r CustomHostnameGetResponseSSLSettingsMinTLSVersion) IsKnown() bool {
-	switch r {
-	case CustomHostnameGetResponseSSLSettingsMinTLSVersion1_0, CustomHostnameGetResponseSSLSettingsMinTLSVersion1_1, CustomHostnameGetResponseSSLSettingsMinTLSVersion1_2, CustomHostnameGetResponseSSLSettingsMinTLSVersion1_3:
-		return true
-	}
-	return false
-}
-
-// Whether or not TLS 1.3 is enabled.
-type CustomHostnameGetResponseSSLSettingsTLS1_3 string
-
-const (
-	CustomHostnameGetResponseSSLSettingsTLS1_3On  CustomHostnameGetResponseSSLSettingsTLS1_3 = "on"
-	CustomHostnameGetResponseSSLSettingsTLS1_3Off CustomHostnameGetResponseSSLSettingsTLS1_3 = "off"
-)
-
-func (r CustomHostnameGetResponseSSLSettingsTLS1_3) IsKnown() bool {
-	switch r {
-	case CustomHostnameGetResponseSSLSettingsTLS1_3On, CustomHostnameGetResponseSSLSettingsTLS1_3Off:
-		return true
-	}
-	return false
-}
-
-// Status of the hostname's SSL certificates.
-type CustomHostnameGetResponseSSLStatus string
-
-const (
-	CustomHostnameGetResponseSSLStatusInitializing         CustomHostnameGetResponseSSLStatus = "initializing"
-	CustomHostnameGetResponseSSLStatusPendingValidation    CustomHostnameGetResponseSSLStatus = "pending_validation"
-	CustomHostnameGetResponseSSLStatusDeleted              CustomHostnameGetResponseSSLStatus = "deleted"
-	CustomHostnameGetResponseSSLStatusPendingIssuance      CustomHostnameGetResponseSSLStatus = "pending_issuance"
-	CustomHostnameGetResponseSSLStatusPendingDeployment    CustomHostnameGetResponseSSLStatus = "pending_deployment"
-	CustomHostnameGetResponseSSLStatusPendingDeletion      CustomHostnameGetResponseSSLStatus = "pending_deletion"
-	CustomHostnameGetResponseSSLStatusPendingExpiration    CustomHostnameGetResponseSSLStatus = "pending_expiration"
-	CustomHostnameGetResponseSSLStatusExpired              CustomHostnameGetResponseSSLStatus = "expired"
-	CustomHostnameGetResponseSSLStatusActive               CustomHostnameGetResponseSSLStatus = "active"
-	CustomHostnameGetResponseSSLStatusInitializingTimedOut CustomHostnameGetResponseSSLStatus = "initializing_timed_out"
-	CustomHostnameGetResponseSSLStatusValidationTimedOut   CustomHostnameGetResponseSSLStatus = "validation_timed_out"
-	CustomHostnameGetResponseSSLStatusIssuanceTimedOut     CustomHostnameGetResponseSSLStatus = "issuance_timed_out"
-	CustomHostnameGetResponseSSLStatusDeploymentTimedOut   CustomHostnameGetResponseSSLStatus = "deployment_timed_out"
-	CustomHostnameGetResponseSSLStatusDeletionTimedOut     CustomHostnameGetResponseSSLStatus = "deletion_timed_out"
-	CustomHostnameGetResponseSSLStatusPendingCleanup       CustomHostnameGetResponseSSLStatus = "pending_cleanup"
-	CustomHostnameGetResponseSSLStatusStagingDeployment    CustomHostnameGetResponseSSLStatus = "staging_deployment"
-	CustomHostnameGetResponseSSLStatusStagingActive        CustomHostnameGetResponseSSLStatus = "staging_active"
-	CustomHostnameGetResponseSSLStatusDeactivating         CustomHostnameGetResponseSSLStatus = "deactivating"
-	CustomHostnameGetResponseSSLStatusInactive             CustomHostnameGetResponseSSLStatus = "inactive"
-	CustomHostnameGetResponseSSLStatusBackupIssued         CustomHostnameGetResponseSSLStatus = "backup_issued"
-	CustomHostnameGetResponseSSLStatusHoldingDeployment    CustomHostnameGetResponseSSLStatus = "holding_deployment"
-)
-
-func (r CustomHostnameGetResponseSSLStatus) IsKnown() bool {
-	switch r {
-	case CustomHostnameGetResponseSSLStatusInitializing, CustomHostnameGetResponseSSLStatusPendingValidation, CustomHostnameGetResponseSSLStatusDeleted, CustomHostnameGetResponseSSLStatusPendingIssuance, CustomHostnameGetResponseSSLStatusPendingDeployment, CustomHostnameGetResponseSSLStatusPendingDeletion, CustomHostnameGetResponseSSLStatusPendingExpiration, CustomHostnameGetResponseSSLStatusExpired, CustomHostnameGetResponseSSLStatusActive, CustomHostnameGetResponseSSLStatusInitializingTimedOut, CustomHostnameGetResponseSSLStatusValidationTimedOut, CustomHostnameGetResponseSSLStatusIssuanceTimedOut, CustomHostnameGetResponseSSLStatusDeploymentTimedOut, CustomHostnameGetResponseSSLStatusDeletionTimedOut, CustomHostnameGetResponseSSLStatusPendingCleanup, CustomHostnameGetResponseSSLStatusStagingDeployment, CustomHostnameGetResponseSSLStatusStagingActive, CustomHostnameGetResponseSSLStatusDeactivating, CustomHostnameGetResponseSSLStatusInactive, CustomHostnameGetResponseSSLStatusBackupIssued, CustomHostnameGetResponseSSLStatusHoldingDeployment:
-		return true
-	}
-	return false
-}
-
-type CustomHostnameGetResponseSSLValidationError struct {
-	// A domain validation error.
-	Message string                                          `json:"message"`
-	JSON    customHostnameGetResponseSSLValidationErrorJSON `json:"-"`
-}
-
-// customHostnameGetResponseSSLValidationErrorJSON contains the JSON metadata for
-// the struct [CustomHostnameGetResponseSSLValidationError]
-type customHostnameGetResponseSSLValidationErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameGetResponseSSLValidationError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameGetResponseSSLValidationErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-// Certificate's required validation record.
-type CustomHostnameGetResponseSSLValidationRecord struct {
-	// The set of email addresses that the certificate authority (CA) will use to
-	// complete domain validation.
-	Emails []interface{} `json:"emails"`
-	// The content that the certificate authority (CA) will expect to find at the
-	// http_url during the domain validation.
-	HTTPBody string `json:"http_body"`
-	// The url that will be checked during domain validation.
-	HTTPURL string `json:"http_url"`
-	// The hostname that the certificate authority (CA) will check for a TXT record
-	// during domain validation .
-	TXTName string `json:"txt_name"`
-	// The TXT record that the certificate authority (CA) will check during domain
-	// validation.
-	TXTValue string                                           `json:"txt_value"`
-	JSON     customHostnameGetResponseSSLValidationRecordJSON `json:"-"`
-}
-
-// customHostnameGetResponseSSLValidationRecordJSON contains the JSON metadata for
-// the struct [CustomHostnameGetResponseSSLValidationRecord]
-type customHostnameGetResponseSSLValidationRecordJSON struct {
-	Emails      apijson.Field
-	HTTPBody    apijson.Field
-	HTTPURL     apijson.Field
-	TXTName     apijson.Field
-	TXTValue    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameGetResponseSSLValidationRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameGetResponseSSLValidationRecordJSON) RawJSON() string {
 	return r.raw
 }
 

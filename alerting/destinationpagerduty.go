@@ -59,7 +59,7 @@ func (r *DestinationPagerdutyService) Delete(ctx context.Context, body Destinati
 }
 
 // Get a list of all configured PagerDuty services.
-func (r *DestinationPagerdutyService) Get(ctx context.Context, query DestinationPagerdutyGetParams, opts ...option.RequestOption) (res *[]AlertingPagerduty, err error) {
+func (r *DestinationPagerdutyService) Get(ctx context.Context, query DestinationPagerdutyGetParams, opts ...option.RequestOption) (res *[]Pagerduty, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationPagerdutyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", query.AccountID)
@@ -84,28 +84,27 @@ func (r *DestinationPagerdutyService) Link(ctx context.Context, tokenID string, 
 	return
 }
 
-type AlertingPagerduty struct {
+type Pagerduty struct {
 	// UUID
 	ID string `json:"id"`
 	// The name of the pagerduty service.
-	Name string                `json:"name"`
-	JSON alertingPagerdutyJSON `json:"-"`
+	Name string        `json:"name"`
+	JSON pagerdutyJSON `json:"-"`
 }
 
-// alertingPagerdutyJSON contains the JSON metadata for the struct
-// [AlertingPagerduty]
-type alertingPagerdutyJSON struct {
+// pagerdutyJSON contains the JSON metadata for the struct [Pagerduty]
+type pagerdutyJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AlertingPagerduty) UnmarshalJSON(data []byte) (err error) {
+func (r *Pagerduty) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r alertingPagerdutyJSON) RawJSON() string {
+func (r pagerdutyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -290,7 +289,7 @@ type DestinationPagerdutyGetParams struct {
 type DestinationPagerdutyGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []AlertingPagerduty                                       `json:"result,required,nullable"`
+	Result   []Pagerduty                                               `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationPagerdutyGetResponseEnvelopeResultInfo `json:"result_info"`

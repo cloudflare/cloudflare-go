@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/load_balancers"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/user"
 )
@@ -30,10 +31,10 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.User.LoadBalancers.Pools.New(context.TODO(), user.LoadBalancerPoolNewParams{
 		Name: cloudflare.F("primary-dc-1"),
-		Origins: cloudflare.F([]user.LoadBalancerPoolNewParamsOrigin{{
+		Origins: cloudflare.F([]load_balancers.OriginParam{{
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
-			Header: cloudflare.F(user.LoadBalancerPoolNewParamsOriginsHeader{
+			Header: cloudflare.F(load_balancers.HeaderParam{
 				Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
@@ -42,7 +43,7 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 		}, {
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
-			Header: cloudflare.F(user.LoadBalancerPoolNewParamsOriginsHeader{
+			Header: cloudflare.F(load_balancers.HeaderParam{
 				Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
@@ -51,7 +52,7 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 		}, {
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
-			Header: cloudflare.F(user.LoadBalancerPoolNewParamsOriginsHeader{
+			Header: cloudflare.F(load_balancers.HeaderParam{
 				Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
@@ -62,28 +63,28 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 		Description:  cloudflare.F("Primary data center - Provider XYZ"),
 		Enabled:      cloudflare.F(false),
 		Latitude:     cloudflare.F(0.000000),
-		LoadShedding: cloudflare.F(user.LoadBalancerPoolNewParamsLoadShedding{
+		LoadShedding: cloudflare.F(load_balancers.LoadSheddingParam{
 			DefaultPercent: cloudflare.F(0.000000),
-			DefaultPolicy:  cloudflare.F(user.LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyRandom),
+			DefaultPolicy:  cloudflare.F(load_balancers.LoadSheddingDefaultPolicyRandom),
 			SessionPercent: cloudflare.F(0.000000),
-			SessionPolicy:  cloudflare.F(user.LoadBalancerPoolNewParamsLoadSheddingSessionPolicyHash),
+			SessionPolicy:  cloudflare.F(load_balancers.LoadSheddingSessionPolicyHash),
 		}),
 		Longitude:         cloudflare.F(0.000000),
 		MinimumOrigins:    cloudflare.F(int64(0)),
 		Monitor:           cloudflare.F[any](map[string]interface{}{}),
 		NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
-		NotificationFilter: cloudflare.F(user.LoadBalancerPoolNewParamsNotificationFilter{
-			Origin: cloudflare.F(user.LoadBalancerPoolNewParamsNotificationFilterOrigin{
+		NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
+			Origin: cloudflare.F(load_balancers.FilterOptionsParam{
 				Disable: cloudflare.F(true),
 				Healthy: cloudflare.F(true),
 			}),
-			Pool: cloudflare.F(user.LoadBalancerPoolNewParamsNotificationFilterPool{
+			Pool: cloudflare.F(load_balancers.FilterOptionsParam{
 				Disable: cloudflare.F(true),
 				Healthy: cloudflare.F(false),
 			}),
 		}),
-		OriginSteering: cloudflare.F(user.LoadBalancerPoolNewParamsOriginSteering{
-			Policy: cloudflare.F(user.LoadBalancerPoolNewParamsOriginSteeringPolicyRandom),
+		OriginSteering: cloudflare.F(load_balancers.OriginSteeringParam{
+			Policy: cloudflare.F(load_balancers.OriginSteeringPolicyRandom),
 		}),
 	})
 	if err != nil {
@@ -114,10 +115,10 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 		"17b5962d775c646f3f9725cbc7a53df4",
 		user.LoadBalancerPoolUpdateParams{
 			Name: cloudflare.F("primary-dc-1"),
-			Origins: cloudflare.F([]user.LoadBalancerPoolUpdateParamsOrigin{{
+			Origins: cloudflare.F([]load_balancers.OriginParam{{
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(user.LoadBalancerPoolUpdateParamsOriginsHeader{
+				Header: cloudflare.F(load_balancers.HeaderParam{
 					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
@@ -126,7 +127,7 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 			}, {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(user.LoadBalancerPoolUpdateParamsOriginsHeader{
+				Header: cloudflare.F(load_balancers.HeaderParam{
 					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
@@ -135,7 +136,7 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 			}, {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(user.LoadBalancerPoolUpdateParamsOriginsHeader{
+				Header: cloudflare.F(load_balancers.HeaderParam{
 					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
@@ -146,28 +147,28 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
 			Latitude:     cloudflare.F(0.000000),
-			LoadShedding: cloudflare.F(user.LoadBalancerPoolUpdateParamsLoadShedding{
+			LoadShedding: cloudflare.F(load_balancers.LoadSheddingParam{
 				DefaultPercent: cloudflare.F(0.000000),
-				DefaultPolicy:  cloudflare.F(user.LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyRandom),
+				DefaultPolicy:  cloudflare.F(load_balancers.LoadSheddingDefaultPolicyRandom),
 				SessionPercent: cloudflare.F(0.000000),
-				SessionPolicy:  cloudflare.F(user.LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicyHash),
+				SessionPolicy:  cloudflare.F(load_balancers.LoadSheddingSessionPolicyHash),
 			}),
 			Longitude:         cloudflare.F(0.000000),
 			MinimumOrigins:    cloudflare.F(int64(0)),
 			Monitor:           cloudflare.F[any](map[string]interface{}{}),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
-			NotificationFilter: cloudflare.F(user.LoadBalancerPoolUpdateParamsNotificationFilter{
-				Origin: cloudflare.F(user.LoadBalancerPoolUpdateParamsNotificationFilterOrigin{
+			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
+				Origin: cloudflare.F(load_balancers.FilterOptionsParam{
 					Disable: cloudflare.F(true),
 					Healthy: cloudflare.F(true),
 				}),
-				Pool: cloudflare.F(user.LoadBalancerPoolUpdateParamsNotificationFilterPool{
+				Pool: cloudflare.F(load_balancers.FilterOptionsParam{
 					Disable: cloudflare.F(true),
 					Healthy: cloudflare.F(false),
 				}),
 			}),
-			OriginSteering: cloudflare.F(user.LoadBalancerPoolUpdateParamsOriginSteering{
-				Policy: cloudflare.F(user.LoadBalancerPoolUpdateParamsOriginSteeringPolicyRandom),
+			OriginSteering: cloudflare.F(load_balancers.OriginSteeringParam{
+				Policy: cloudflare.F(load_balancers.OriginSteeringPolicyRandom),
 			}),
 		},
 	)
@@ -258,34 +259,34 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
 			Latitude:     cloudflare.F(0.000000),
-			LoadShedding: cloudflare.F(user.LoadBalancerPoolEditParamsLoadShedding{
+			LoadShedding: cloudflare.F(load_balancers.LoadSheddingParam{
 				DefaultPercent: cloudflare.F(0.000000),
-				DefaultPolicy:  cloudflare.F(user.LoadBalancerPoolEditParamsLoadSheddingDefaultPolicyRandom),
+				DefaultPolicy:  cloudflare.F(load_balancers.LoadSheddingDefaultPolicyRandom),
 				SessionPercent: cloudflare.F(0.000000),
-				SessionPolicy:  cloudflare.F(user.LoadBalancerPoolEditParamsLoadSheddingSessionPolicyHash),
+				SessionPolicy:  cloudflare.F(load_balancers.LoadSheddingSessionPolicyHash),
 			}),
 			Longitude:         cloudflare.F(0.000000),
 			MinimumOrigins:    cloudflare.F(int64(0)),
 			Monitor:           cloudflare.F[any](map[string]interface{}{}),
 			Name:              cloudflare.F("primary-dc-1"),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
-			NotificationFilter: cloudflare.F(user.LoadBalancerPoolEditParamsNotificationFilter{
-				Origin: cloudflare.F(user.LoadBalancerPoolEditParamsNotificationFilterOrigin{
+			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
+				Origin: cloudflare.F(load_balancers.FilterOptionsParam{
 					Disable: cloudflare.F(true),
 					Healthy: cloudflare.F(true),
 				}),
-				Pool: cloudflare.F(user.LoadBalancerPoolEditParamsNotificationFilterPool{
+				Pool: cloudflare.F(load_balancers.FilterOptionsParam{
 					Disable: cloudflare.F(true),
 					Healthy: cloudflare.F(false),
 				}),
 			}),
-			OriginSteering: cloudflare.F(user.LoadBalancerPoolEditParamsOriginSteering{
-				Policy: cloudflare.F(user.LoadBalancerPoolEditParamsOriginSteeringPolicyRandom),
+			OriginSteering: cloudflare.F(load_balancers.OriginSteeringParam{
+				Policy: cloudflare.F(load_balancers.OriginSteeringPolicyRandom),
 			}),
-			Origins: cloudflare.F([]user.LoadBalancerPoolEditParamsOrigin{{
+			Origins: cloudflare.F([]load_balancers.OriginParam{{
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(user.LoadBalancerPoolEditParamsOriginsHeader{
+				Header: cloudflare.F(load_balancers.HeaderParam{
 					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
@@ -294,7 +295,7 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 			}, {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(user.LoadBalancerPoolEditParamsOriginsHeader{
+				Header: cloudflare.F(load_balancers.HeaderParam{
 					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
@@ -303,7 +304,7 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 			}, {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(user.LoadBalancerPoolEditParamsOriginsHeader{
+				Header: cloudflare.F(load_balancers.HeaderParam{
 					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),

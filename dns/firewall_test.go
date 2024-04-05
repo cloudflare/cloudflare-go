@@ -32,8 +32,8 @@ func TestFirewallNewWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Firewall.New(context.TODO(), dns.FirewallNewParams{
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:        cloudflare.F("My Awesome DNS Firewall cluster"),
-		UpstreamIPs: cloudflare.F([]dns.FirewallNewParamsUpstreamIPUnion{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
-		AttackMitigation: cloudflare.F(dns.FirewallNewParamsAttackMitigation{
+		UpstreamIPs: cloudflare.F([]dns.UpstreamIPsItemsUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
+		AttackMitigation: cloudflare.F(dns.AttackMitigationParam{
 			Enabled:                   cloudflare.F(true),
 			OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
 		}),
@@ -133,13 +133,13 @@ func TestFirewallEditWithOptionalParams(t *testing.T) {
 		dns.FirewallEditParams{
 			AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			DeprecateAnyRequests: cloudflare.F(true),
-			DNSFirewallIPs:       cloudflare.F([]dns.FirewallEditParamsDNSFirewallIPUnion{shared.UnionString("203.0.113.1"), shared.UnionString("203.0.113.254"), shared.UnionString("2001:DB8:AB::CF"), shared.UnionString("2001:DB8:CD::CF")}),
+			DNSFirewallIPs:       cloudflare.F([]dns.FirewallIPsItemUnionParam{shared.UnionString("203.0.113.1"), shared.UnionString("203.0.113.254"), shared.UnionString("2001:DB8:AB::CF"), shared.UnionString("2001:DB8:CD::CF")}),
 			EcsFallback:          cloudflare.F(false),
 			MaximumCacheTTL:      cloudflare.F(900.000000),
 			MinimumCacheTTL:      cloudflare.F(60.000000),
 			Name:                 cloudflare.F("My Awesome DNS Firewall cluster"),
-			UpstreamIPs:          cloudflare.F([]dns.FirewallEditParamsUpstreamIPUnion{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
-			AttackMitigation: cloudflare.F(dns.FirewallEditParamsAttackMitigation{
+			UpstreamIPs:          cloudflare.F([]dns.UpstreamIPsItemsUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
+			AttackMitigation: cloudflare.F(dns.AttackMitigationParam{
 				Enabled:                   cloudflare.F(true),
 				OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
 			}),
