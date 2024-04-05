@@ -1223,13 +1223,8 @@ Methods:
 
 ## CertificatePacks
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#HostItemParam">HostItemParam</a>
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#HostItem">HostItem</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackListResponse">CertificatePackListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl">ssl</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ssl#CertificatePackEditResponse">CertificatePackEditResponse</a>
 
@@ -1855,14 +1850,14 @@ Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#CheckRegionItem">CheckRegionItem</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#HTTPConfigurationParam">HTTPConfigurationParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#TcpConfigurationParam">TcpConfigurationParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#TCPConfigurationParam">TCPConfigurationParam</a>
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#CheckRegionItem">CheckRegionItem</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#Healthcheck">Healthcheck</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#HTTPConfiguration">HTTPConfiguration</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#TcpConfiguration">TcpConfiguration</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#TCPConfiguration">TCPConfiguration</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks">healthchecks</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/healthchecks#HealthcheckDeleteResponse">HealthcheckDeleteResponse</a>
 
 Methods:

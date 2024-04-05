@@ -39,7 +39,7 @@ func TestAttackLayer3TopLocationOriginWithOptionalParams(t *testing.T) {
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationOriginParamsProtocol{radar.AttackLayer3TopLocationOriginParamsProtocolUdp, radar.AttackLayer3TopLocationOriginParamsProtocolTcp, radar.AttackLayer3TopLocationOriginParamsProtocolIcmp}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationOriginParamsProtocol{radar.AttackLayer3TopLocationOriginParamsProtocolUdp, radar.AttackLayer3TopLocationOriginParamsProtocolTCP, radar.AttackLayer3TopLocationOriginParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -74,7 +74,7 @@ func TestAttackLayer3TopLocationTargetWithOptionalParams(t *testing.T) {
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationTargetParamsProtocol{radar.AttackLayer3TopLocationTargetParamsProtocolUdp, radar.AttackLayer3TopLocationTargetParamsProtocolTcp, radar.AttackLayer3TopLocationTargetParamsProtocolIcmp}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationTargetParamsProtocol{radar.AttackLayer3TopLocationTargetParamsProtocolUdp, radar.AttackLayer3TopLocationTargetParamsProtocolTCP, radar.AttackLayer3TopLocationTargetParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

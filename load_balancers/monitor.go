@@ -211,7 +211,7 @@ type MonitorNewParamsType string
 const (
 	MonitorNewParamsTypeHTTP     MonitorNewParamsType = "http"
 	MonitorNewParamsTypeHTTPS    MonitorNewParamsType = "https"
-	MonitorNewParamsTypeTcp      MonitorNewParamsType = "tcp"
+	MonitorNewParamsTypeTCP      MonitorNewParamsType = "tcp"
 	MonitorNewParamsTypeUdpIcmp  MonitorNewParamsType = "udp_icmp"
 	MonitorNewParamsTypeIcmpPing MonitorNewParamsType = "icmp_ping"
 	MonitorNewParamsTypeSmtp     MonitorNewParamsType = "smtp"
@@ -219,7 +219,7 @@ const (
 
 func (r MonitorNewParamsType) IsKnown() bool {
 	switch r {
-	case MonitorNewParamsTypeHTTP, MonitorNewParamsTypeHTTPS, MonitorNewParamsTypeTcp, MonitorNewParamsTypeUdpIcmp, MonitorNewParamsTypeIcmpPing, MonitorNewParamsTypeSmtp:
+	case MonitorNewParamsTypeHTTP, MonitorNewParamsTypeHTTPS, MonitorNewParamsTypeTCP, MonitorNewParamsTypeUdpIcmp, MonitorNewParamsTypeIcmpPing, MonitorNewParamsTypeSmtp:
 		return true
 	}
 	return false
@@ -333,7 +333,7 @@ type MonitorUpdateParamsType string
 const (
 	MonitorUpdateParamsTypeHTTP     MonitorUpdateParamsType = "http"
 	MonitorUpdateParamsTypeHTTPS    MonitorUpdateParamsType = "https"
-	MonitorUpdateParamsTypeTcp      MonitorUpdateParamsType = "tcp"
+	MonitorUpdateParamsTypeTCP      MonitorUpdateParamsType = "tcp"
 	MonitorUpdateParamsTypeUdpIcmp  MonitorUpdateParamsType = "udp_icmp"
 	MonitorUpdateParamsTypeIcmpPing MonitorUpdateParamsType = "icmp_ping"
 	MonitorUpdateParamsTypeSmtp     MonitorUpdateParamsType = "smtp"
@@ -341,7 +341,7 @@ const (
 
 func (r MonitorUpdateParamsType) IsKnown() bool {
 	switch r {
-	case MonitorUpdateParamsTypeHTTP, MonitorUpdateParamsTypeHTTPS, MonitorUpdateParamsTypeTcp, MonitorUpdateParamsTypeUdpIcmp, MonitorUpdateParamsTypeIcmpPing, MonitorUpdateParamsTypeSmtp:
+	case MonitorUpdateParamsTypeHTTP, MonitorUpdateParamsTypeHTTPS, MonitorUpdateParamsTypeTCP, MonitorUpdateParamsTypeUdpIcmp, MonitorUpdateParamsTypeIcmpPing, MonitorUpdateParamsTypeSmtp:
 		return true
 	}
 	return false
@@ -513,7 +513,7 @@ type MonitorEditParamsType string
 const (
 	MonitorEditParamsTypeHTTP     MonitorEditParamsType = "http"
 	MonitorEditParamsTypeHTTPS    MonitorEditParamsType = "https"
-	MonitorEditParamsTypeTcp      MonitorEditParamsType = "tcp"
+	MonitorEditParamsTypeTCP      MonitorEditParamsType = "tcp"
 	MonitorEditParamsTypeUdpIcmp  MonitorEditParamsType = "udp_icmp"
 	MonitorEditParamsTypeIcmpPing MonitorEditParamsType = "icmp_ping"
 	MonitorEditParamsTypeSmtp     MonitorEditParamsType = "smtp"
@@ -521,7 +521,7 @@ const (
 
 func (r MonitorEditParamsType) IsKnown() bool {
 	switch r {
-	case MonitorEditParamsTypeHTTP, MonitorEditParamsTypeHTTPS, MonitorEditParamsTypeTcp, MonitorEditParamsTypeUdpIcmp, MonitorEditParamsTypeIcmpPing, MonitorEditParamsTypeSmtp:
+	case MonitorEditParamsTypeHTTP, MonitorEditParamsTypeHTTPS, MonitorEditParamsTypeTCP, MonitorEditParamsTypeUdpIcmp, MonitorEditParamsTypeIcmpPing, MonitorEditParamsTypeSmtp:
 		return true
 	}
 	return false

@@ -259,7 +259,7 @@ type TracerouteNewParamsOptionsPacketType string
 
 const (
 	TracerouteNewParamsOptionsPacketTypeIcmp    TracerouteNewParamsOptionsPacketType = "icmp"
-	TracerouteNewParamsOptionsPacketTypeTcp     TracerouteNewParamsOptionsPacketType = "tcp"
+	TracerouteNewParamsOptionsPacketTypeTCP     TracerouteNewParamsOptionsPacketType = "tcp"
 	TracerouteNewParamsOptionsPacketTypeUdp     TracerouteNewParamsOptionsPacketType = "udp"
 	TracerouteNewParamsOptionsPacketTypeGRE     TracerouteNewParamsOptionsPacketType = "gre"
 	TracerouteNewParamsOptionsPacketTypeGREIcmp TracerouteNewParamsOptionsPacketType = "gre+icmp"
@@ -267,7 +267,7 @@ const (
 
 func (r TracerouteNewParamsOptionsPacketType) IsKnown() bool {
 	switch r {
-	case TracerouteNewParamsOptionsPacketTypeIcmp, TracerouteNewParamsOptionsPacketTypeTcp, TracerouteNewParamsOptionsPacketTypeUdp, TracerouteNewParamsOptionsPacketTypeGRE, TracerouteNewParamsOptionsPacketTypeGREIcmp:
+	case TracerouteNewParamsOptionsPacketTypeIcmp, TracerouteNewParamsOptionsPacketTypeTCP, TracerouteNewParamsOptionsPacketTypeUdp, TracerouteNewParamsOptionsPacketTypeGRE, TracerouteNewParamsOptionsPacketTypeGREIcmp:
 		return true
 	}
 	return false

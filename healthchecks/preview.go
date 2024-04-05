@@ -123,7 +123,7 @@ type PreviewNewParams struct {
 	// If suspended, no health checks are sent to the origin.
 	Suspended param.Field[bool] `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig param.Field[TcpConfigurationParam] `json:"tcp_config"`
+	TCPConfig param.Field[TCPConfigurationParam] `json:"tcp_config"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are

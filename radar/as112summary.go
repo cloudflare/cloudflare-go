@@ -450,7 +450,7 @@ func (r as112SummaryProtocolResponseMetaConfidenceInfoJSON) RawJSON() string {
 }
 
 type AS112SummaryProtocolResponseSummary0 struct {
-	Tcp  string                                   `json:"tcp,required"`
+	TCP  string                                   `json:"tcp,required"`
 	Udp  string                                   `json:"udp,required"`
 	JSON as112SummaryProtocolResponseSummary0JSON `json:"-"`
 }
@@ -458,7 +458,7 @@ type AS112SummaryProtocolResponseSummary0 struct {
 // as112SummaryProtocolResponseSummary0JSON contains the JSON metadata for the
 // struct [AS112SummaryProtocolResponseSummary0]
 type as112SummaryProtocolResponseSummary0JSON struct {
-	Tcp         apijson.Field
+	TCP         apijson.Field
 	Udp         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

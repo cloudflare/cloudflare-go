@@ -43,7 +43,7 @@ func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 		Metric:        cloudflare.F(radar.AttackLayer3TimeseriesParamsMetricBytes),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesParamsNormalizationMin0Max),
-		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesParamsProtocol{radar.AttackLayer3TimeseriesParamsProtocolUdp, radar.AttackLayer3TimeseriesParamsProtocolTcp, radar.AttackLayer3TimeseriesParamsProtocolIcmp}),
+		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesParamsProtocol{radar.AttackLayer3TimeseriesParamsProtocolUdp, radar.AttackLayer3TimeseriesParamsProtocolTCP, radar.AttackLayer3TimeseriesParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

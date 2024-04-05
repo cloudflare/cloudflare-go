@@ -193,7 +193,7 @@ type Healthcheck struct {
 	// If suspended, no health checks are sent to the origin.
 	Suspended bool `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig TcpConfiguration `json:"tcp_config,nullable"`
+	TCPConfig TCPConfiguration `json:"tcp_config,nullable"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
@@ -219,7 +219,7 @@ type healthcheckJSON struct {
 	Retries              apijson.Field
 	Status               apijson.Field
 	Suspended            apijson.Field
-	TcpConfig            apijson.Field
+	TCPConfig            apijson.Field
 	Timeout              apijson.Field
 	Type                 apijson.Field
 	raw                  string
@@ -377,16 +377,16 @@ func (r HTTPConfigurationParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Parameters specific to TCP health check.
-type TcpConfiguration struct {
+type TCPConfiguration struct {
 	// The TCP connection method to use for the health check.
-	Method TcpConfigurationMethod `json:"method"`
+	Method TCPConfigurationMethod `json:"method"`
 	// Port number to connect to for the health check. Defaults to 80.
 	Port int64                `json:"port"`
 	JSON tcpConfigurationJSON `json:"-"`
 }
 
 // tcpConfigurationJSON contains the JSON metadata for the struct
-// [TcpConfiguration]
+// [TCPConfiguration]
 type tcpConfigurationJSON struct {
 	Method      apijson.Field
 	Port        apijson.Field
@@ -394,7 +394,7 @@ type tcpConfigurationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TcpConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *TCPConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -403,29 +403,29 @@ func (r tcpConfigurationJSON) RawJSON() string {
 }
 
 // The TCP connection method to use for the health check.
-type TcpConfigurationMethod string
+type TCPConfigurationMethod string
 
 const (
-	TcpConfigurationMethodConnectionEstablished TcpConfigurationMethod = "connection_established"
+	TCPConfigurationMethodConnectionEstablished TCPConfigurationMethod = "connection_established"
 )
 
-func (r TcpConfigurationMethod) IsKnown() bool {
+func (r TCPConfigurationMethod) IsKnown() bool {
 	switch r {
-	case TcpConfigurationMethodConnectionEstablished:
+	case TCPConfigurationMethodConnectionEstablished:
 		return true
 	}
 	return false
 }
 
 // Parameters specific to TCP health check.
-type TcpConfigurationParam struct {
+type TCPConfigurationParam struct {
 	// The TCP connection method to use for the health check.
-	Method param.Field[TcpConfigurationMethod] `json:"method"`
+	Method param.Field[TCPConfigurationMethod] `json:"method"`
 	// Port number to connect to for the health check. Defaults to 80.
 	Port param.Field[int64] `json:"port"`
 }
 
-func (r TcpConfigurationParam) MarshalJSON() (data []byte, err error) {
+func (r TCPConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -482,7 +482,7 @@ type HealthcheckNewParams struct {
 	// If suspended, no health checks are sent to the origin.
 	Suspended param.Field[bool] `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig param.Field[TcpConfigurationParam] `json:"tcp_config"`
+	TCPConfig param.Field[TCPConfigurationParam] `json:"tcp_config"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
@@ -568,7 +568,7 @@ type HealthcheckUpdateParams struct {
 	// If suspended, no health checks are sent to the origin.
 	Suspended param.Field[bool] `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig param.Field[TcpConfigurationParam] `json:"tcp_config"`
+	TCPConfig param.Field[TCPConfigurationParam] `json:"tcp_config"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
@@ -712,7 +712,7 @@ type HealthcheckEditParams struct {
 	// If suspended, no health checks are sent to the origin.
 	Suspended param.Field[bool] `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig param.Field[TcpConfigurationParam] `json:"tcp_config"`
+	TCPConfig param.Field[TCPConfigurationParam] `json:"tcp_config"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
