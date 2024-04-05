@@ -2407,7 +2407,6 @@ Params Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#MTLSCERTBindingParam">MTLSCERTBindingParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#PlacementConfigurationParam">PlacementConfigurationParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#R2BindingParam">R2BindingParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#ServiceBindingParam">ServiceBindingParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#SingleStepMigrationParam">SingleStepMigrationParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#SteppedMigrationParam">SteppedMigrationParam</a>
 
@@ -2421,7 +2420,6 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#MTLSCERTBinding">MTLSCERTBinding</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#PlacementConfiguration">PlacementConfiguration</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#R2Binding">R2Binding</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#ServiceBinding">ServiceBinding</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#SingleStepMigration">SingleStepMigration</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/workers#SteppedMigration">SteppedMigration</a>
 
@@ -3121,10 +3119,6 @@ Methods:
 ### BGP
 
 #### Bindings
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/addressing#ServiceBindingParam">ServiceBindingParam</a>
 
 Response Types:
 
