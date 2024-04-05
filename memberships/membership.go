@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // MembershipService contains methods and other services that help with interacting
@@ -107,7 +108,7 @@ type Membership struct {
 	// The unique activation code for the account membership.
 	Code string `json:"code"`
 	// All access permissions for the user at the account.
-	Permissions accounts.MemberPermission `json:"permissions"`
+	Permissions user.Permission `json:"permissions"`
 	// List of role names for the user at the account.
 	Roles []string `json:"roles"`
 	// Status of this membership.

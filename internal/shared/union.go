@@ -16,9 +16,10 @@ func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()              
 func (UnionString) ImplementsCacheCachePurgeParamsCachePurgeFilesFileUnion()               {}
 func (UnionString) ImplementsDNSDNSFirewallDNSFirewallIPsUnion()                           {}
 func (UnionString) ImplementsDNSDNSFirewallUpstreamIPsUnion()                              {}
-func (UnionString) ImplementsDNSFirewallNewParamsUpstreamIPUnion()                         {}
-func (UnionString) ImplementsDNSFirewallEditParamsDNSFirewallIPUnion()                     {}
-func (UnionString) ImplementsDNSFirewallEditParamsUpstreamIPUnion()                        {}
+func (UnionString) ImplementsDNSFirewallIPsItemUnionParam()                                {}
+func (UnionString) ImplementsDNSFirewallIPsItemUnion()                                     {}
+func (UnionString) ImplementsDNSUpstreamIPsItemsUnionParam()                               {}
+func (UnionString) ImplementsDNSUpstreamIPsItemsUnion()                                    {}
 func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                               {}
 func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()                             {}
 func (UnionString) ImplementsWorkersAIRunResponseUnion()                                   {}
@@ -47,9 +48,8 @@ func (UnionString) ImplementsRulesListItemGetResponseUnion()                    
 func (UnionString) ImplementsStreamCaptionDeleteResponseUnion()                            {}
 func (UnionString) ImplementsAlertingAvailableAlertListResponseUnion()                     {}
 func (UnionString) ImplementsAlertingDestinationEligibleGetResponseUnion()                 {}
-func (UnionString) ImplementsAlertingAlertingPoliciesMechanismsIDUnion()                   {}
-func (UnionString) ImplementsAlertingPolicyNewParamsMechanismsIDUnion()                    {}
-func (UnionString) ImplementsAlertingPolicyUpdateParamsMechanismsIDUnion()                 {}
+func (UnionString) ImplementsAlertingMechanismsIDUnionParam()                              {}
+func (UnionString) ImplementsAlertingMechanismsIDUnion()                                   {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                {}
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsSelfHostedApplicationAppIDUnion() {
 }

@@ -337,10 +337,14 @@ func (r ChallengesWidgetListRegion) IsKnown() bool {
 	return false
 }
 
+type ChallengesWidgetListItem = string
+
+type ChallengesWidgetListItemParam = string
+
 type WidgetNewParams struct {
 	// Identifier
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Domains   param.Field[[]string] `json:"domains,required"`
+	AccountID param.Field[string]                          `path:"account_id,required"`
+	Domains   param.Field[[]ChallengesWidgetListItemParam] `json:"domains,required"`
 	// Widget Mode
 	Mode param.Field[WidgetNewParamsMode] `json:"mode,required"`
 	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
@@ -529,8 +533,8 @@ func (r widgetNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type WidgetUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Domains   param.Field[[]string] `json:"domains,required"`
+	AccountID param.Field[string]                          `path:"account_id,required"`
+	Domains   param.Field[[]ChallengesWidgetListItemParam] `json:"domains,required"`
 	// Widget Mode
 	Mode param.Field[WidgetUpdateParamsMode] `json:"mode,required"`
 	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
