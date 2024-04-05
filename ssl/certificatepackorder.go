@@ -57,7 +57,7 @@ type CertificatePackOrderNewResponse struct {
 	CloudflareBranding bool `json:"cloudflare_branding"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []string `json:"hosts"`
+	Hosts []HostItem `json:"hosts"`
 	// Status of certificate pack.
 	Status CertificatePackOrderNewResponseStatus `json:"status"`
 	// Type of certificate pack.
@@ -204,7 +204,7 @@ type CertificatePackOrderNewParams struct {
 	CertificateAuthority param.Field[CertificatePackOrderNewParamsCertificateAuthority] `json:"certificate_authority,required"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts param.Field[[]string] `json:"hosts,required"`
+	Hosts param.Field[[]HostItemParam] `json:"hosts,required"`
 	// Type of certificate pack.
 	Type param.Field[CertificatePackOrderNewParamsType] `json:"type,required"`
 	// Validation Method selected for the order.

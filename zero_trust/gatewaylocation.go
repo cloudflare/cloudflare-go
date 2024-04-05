@@ -35,7 +35,7 @@ func NewGatewayLocationService(opts ...option.RequestOption) (r *GatewayLocation
 }
 
 // Creates a new Zero Trust Gateway location.
-func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocationNewParams, opts ...option.RequestOption) (res *Locations, err error) {
+func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocationNewParams, opts ...option.RequestOption) (res *Location, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/locations", params.AccountID)
@@ -48,7 +48,7 @@ func (r *GatewayLocationService) New(ctx context.Context, params GatewayLocation
 }
 
 // Updates a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Update(ctx context.Context, locationID string, params GatewayLocationUpdateParams, opts ...option.RequestOption) (res *Locations, err error) {
+func (r *GatewayLocationService) Update(ctx context.Context, locationID string, params GatewayLocationUpdateParams, opts ...option.RequestOption) (res *Location, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", params.AccountID, locationID)
@@ -61,7 +61,7 @@ func (r *GatewayLocationService) Update(ctx context.Context, locationID string, 
 }
 
 // Fetches Zero Trust Gateway locations for an account.
-func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Locations], err error) {
+func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Location], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocation
 }
 
 // Fetches Zero Trust Gateway locations for an account.
-func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Locations] {
+func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query GatewayLocationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Location] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -97,7 +97,7 @@ func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, 
 }
 
 // Fetches a single Zero Trust Gateway location.
-func (r *GatewayLocationService) Get(ctx context.Context, locationID string, query GatewayLocationGetParams, opts ...option.RequestOption) (res *Locations, err error) {
+func (r *GatewayLocationService) Get(ctx context.Context, locationID string, query GatewayLocationGetParams, opts ...option.RequestOption) (res *Location, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/locations/%s", query.AccountID, locationID)
@@ -109,7 +109,7 @@ func (r *GatewayLocationService) Get(ctx context.Context, locationID string, que
 	return
 }
 
-type Locations struct {
+type Location struct {
 	ID string `json:"id"`
 	// True if the location is the default location.
 	ClientDefault bool      `json:"client_default"`
@@ -126,13 +126,13 @@ type Locations struct {
 	// The name of the location.
 	Name string `json:"name"`
 	// A list of network ranges that requests from this location would originate from.
-	Networks  []Network     `json:"networks"`
-	UpdatedAt time.Time     `json:"updated_at" format:"date-time"`
-	JSON      locationsJSON `json:"-"`
+	Networks  []Network    `json:"networks"`
+	UpdatedAt time.Time    `json:"updated_at" format:"date-time"`
+	JSON      locationJSON `json:"-"`
 }
 
-// locationsJSON contains the JSON metadata for the struct [Locations]
-type locationsJSON struct {
+// locationJSON contains the JSON metadata for the struct [Location]
+type locationJSON struct {
 	ID            apijson.Field
 	ClientDefault apijson.Field
 	CreatedAt     apijson.Field
@@ -146,11 +146,11 @@ type locationsJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *Locations) UnmarshalJSON(data []byte) (err error) {
+func (r *Location) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r locationsJSON) RawJSON() string {
+func (r locationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -203,7 +203,7 @@ func (r GatewayLocationNewParams) MarshalJSON() (data []byte, err error) {
 type GatewayLocationNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Locations                                                 `json:"result,required"`
+	Result   Location                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationNewResponseEnvelopeJSON    `json:"-"`
@@ -262,7 +262,7 @@ func (r GatewayLocationUpdateParams) MarshalJSON() (data []byte, err error) {
 type GatewayLocationUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Locations                                                 `json:"result,required"`
+	Result   Location                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -365,7 +365,7 @@ type GatewayLocationGetParams struct {
 type GatewayLocationGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Locations                                                 `json:"result,required"`
+	Result   Location                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLocationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLocationGetResponseEnvelopeJSON    `json:"-"`

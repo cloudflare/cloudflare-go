@@ -51,12 +51,12 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
 				Logpush:            cloudflare.F(false),
 				MainModule:         cloudflare.F("worker.js"),
-				Migrations: cloudflare.F[workers.ScriptUpdateParamsVariant0MetadataMigrationsUnion](workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[workers.ScriptUpdateParamsVariant0MetadataMigrationsUnion](workers.SingleStepMigrationParam{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
+					RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -66,7 +66,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]workers.ScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
+					TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -80,8 +80,8 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("string"),
 					}}),
 				}),
-				Placement: cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataPlacement{
-					Mode: cloudflare.F(workers.ScriptUpdateParamsVariant0MetadataPlacementModeSmart),
+				Placement: cloudflare.F(workers.PlacementConfigurationParam{
+					Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string", "string", "string"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{

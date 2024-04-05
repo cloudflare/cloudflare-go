@@ -34,22 +34,22 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 		workers.ScriptVersionSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Settings: cloudflare.F(workers.SettingsItemParam{
-				Bindings: cloudflare.F([]workers.BindingItemUnionParam{workers.BindingItemWorkersKVNamespaceBindingParam{
-					Type: cloudflare.F(workers.BindingItemWorkersKVNamespaceBindingTypeKVNamespace),
-				}, workers.BindingItemWorkersKVNamespaceBindingParam{
-					Type: cloudflare.F(workers.BindingItemWorkersKVNamespaceBindingTypeKVNamespace),
-				}, workers.BindingItemWorkersKVNamespaceBindingParam{
-					Type: cloudflare.F(workers.BindingItemWorkersKVNamespaceBindingTypeKVNamespace),
+				Bindings: cloudflare.F([]workers.BindingItemUnionParam{workers.KVNamespaceBindingParam{
+					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
+				}, workers.KVNamespaceBindingParam{
+					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
+				}, workers.KVNamespaceBindingParam{
+					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
 				}}),
 				CompatibilityDate:  cloudflare.F("2022-04-05"),
 				CompatibilityFlags: cloudflare.F([]workers.CompatibilityFlagsItemParam{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
 				Logpush:            cloudflare.F(false),
-				Migrations: cloudflare.F[workers.SettingsItemMigrationsUnionParam](workers.SettingsItemMigrationsWorkersSingleStepMigrationsParam{
+				Migrations: cloudflare.F[workers.SettingsItemMigrationsUnionParam](workers.SingleStepMigrationParam{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]workers.SettingsItemMigrationsWorkersSingleStepMigrationsRenamedClassParam{{
+					RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -59,7 +59,7 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]workers.SettingsItemMigrationsWorkersSingleStepMigrationsTransferredClassParam{{
+					TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -73,8 +73,8 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("string"),
 					}}),
 				}),
-				Placement: cloudflare.F(workers.SettingsItemPlacementParam{
-					Mode: cloudflare.F(workers.SettingsItemPlacementModeSmart),
+				Placement: cloudflare.F(workers.PlacementConfigurationParam{
+					Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
