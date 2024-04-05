@@ -35,7 +35,7 @@ func NewKeyService(opts ...option.RequestOption) (r *KeyService) {
 // Creates an RSA private key in PEM and JWK formats. Key files are only displayed
 // once after creation. Keys are created, used, and deleted independently of
 // videos, and every key can sign any video.
-func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...option.RequestOption) (res *StreamKeys, err error) {
+func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...option.RequestOption) (res *Keys, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/keys", params.AccountID)
@@ -73,7 +73,7 @@ func (r *KeyService) Get(ctx context.Context, query KeyGetParams, opts ...option
 	return
 }
 
-type StreamKeys struct {
+type Keys struct {
 	// Identifier
 	ID string `json:"id"`
 	// The date and time a signing key was created.
@@ -81,12 +81,12 @@ type StreamKeys struct {
 	// The signing key in JWK format.
 	Jwk string `json:"jwk"`
 	// The signing key in PEM format.
-	Pem  string         `json:"pem"`
-	JSON streamKeysJSON `json:"-"`
+	Pem  string   `json:"pem"`
+	JSON keysJSON `json:"-"`
 }
 
-// streamKeysJSON contains the JSON metadata for the struct [StreamKeys]
-type streamKeysJSON struct {
+// keysJSON contains the JSON metadata for the struct [Keys]
+type keysJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Jwk         apijson.Field
@@ -95,11 +95,11 @@ type streamKeysJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamKeys) UnmarshalJSON(data []byte) (err error) {
+func (r *Keys) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamKeysJSON) RawJSON() string {
+func (r keysJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -140,7 +140,7 @@ func (r KeyNewParams) MarshalJSON() (data []byte, err error) {
 type KeyNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   StreamKeys                                                `json:"result,required"`
+	Result   Keys                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success KeyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keyNewResponseEnvelopeJSON    `json:"-"`

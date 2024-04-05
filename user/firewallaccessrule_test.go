@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/firewall"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/user"
@@ -29,8 +30,8 @@ func TestFirewallAccessRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Firewall.AccessRules.New(context.TODO(), user.FirewallAccessRuleNewParams{
-		Configuration: cloudflare.F[user.FirewallAccessRuleNewParamsConfigurationUnion](user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
-			Target: cloudflare.F(user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP),
+		Configuration: cloudflare.F[user.FirewallAccessRuleNewParamsConfigurationUnion](firewall.IPConfigurationParam{
+			Target: cloudflare.F(firewall.IPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
 		}),
 		Mode:  cloudflare.F(user.FirewallAccessRuleNewParamsModeChallenge),

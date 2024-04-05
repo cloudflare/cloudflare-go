@@ -35,7 +35,7 @@ func NewGatewayProxyEndpointService(opts ...option.RequestOption) (r *GatewayPro
 }
 
 // Creates a new Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayProxyEndpointNewParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
+func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayProxyEndpointNewParams, opts ...option.RequestOption) (res *ProxyEndpoint, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints", params.AccountID)
@@ -48,7 +48,7 @@ func (r *GatewayProxyEndpointService) New(ctx context.Context, params GatewayPro
 }
 
 // Fetches a single Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGatewayProxyEndpoints], err error) {
+func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ProxyEndpoint], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,7 +66,7 @@ func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayPro
 }
 
 // Fetches a single Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGatewayProxyEndpoints] {
+func (r *GatewayProxyEndpointService) ListAutoPaging(ctx context.Context, query GatewayProxyEndpointListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ProxyEndpoint] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -84,7 +84,7 @@ func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointI
 }
 
 // Updates a configured Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointEditParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
+func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID string, params GatewayProxyEndpointEditParams, opts ...option.RequestOption) (res *ProxyEndpoint, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", params.AccountID, proxyEndpointID)
@@ -97,7 +97,7 @@ func (r *GatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID 
 }
 
 // Fetches all Zero Trust Gateway proxy endpoints for an account.
-func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID string, query GatewayProxyEndpointGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
+func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID string, query GatewayProxyEndpointGetParams, opts ...option.RequestOption) (res *ProxyEndpoint, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/proxy_endpoints/%s", query.AccountID, proxyEndpointID)
@@ -113,7 +113,7 @@ type GatewayIPsItem = string
 
 type GatewayIPsItemParam = string
 
-type ZeroTrustGatewayProxyEndpoints struct {
+type ProxyEndpoint struct {
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// A list of CIDRs to restrict ingress connections.
@@ -121,14 +121,13 @@ type ZeroTrustGatewayProxyEndpoints struct {
 	// The name of the proxy endpoint.
 	Name string `json:"name"`
 	// The subdomain to be used as the destination in the proxy client.
-	Subdomain string                             `json:"subdomain"`
-	UpdatedAt time.Time                          `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGatewayProxyEndpointsJSON `json:"-"`
+	Subdomain string            `json:"subdomain"`
+	UpdatedAt time.Time         `json:"updated_at" format:"date-time"`
+	JSON      proxyEndpointJSON `json:"-"`
 }
 
-// zeroTrustGatewayProxyEndpointsJSON contains the JSON metadata for the struct
-// [ZeroTrustGatewayProxyEndpoints]
-type zeroTrustGatewayProxyEndpointsJSON struct {
+// proxyEndpointJSON contains the JSON metadata for the struct [ProxyEndpoint]
+type proxyEndpointJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	IPs         apijson.Field
@@ -139,11 +138,11 @@ type zeroTrustGatewayProxyEndpointsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayProxyEndpoints) UnmarshalJSON(data []byte) (err error) {
+func (r *ProxyEndpoint) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustGatewayProxyEndpointsJSON) RawJSON() string {
+func (r proxyEndpointJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -162,7 +161,7 @@ func (r GatewayProxyEndpointNewParams) MarshalJSON() (data []byte, err error) {
 type GatewayProxyEndpointNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewayProxyEndpoints                            `json:"result,required"`
+	Result   ProxyEndpoint                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayProxyEndpointNewResponseEnvelopeJSON    `json:"-"`
@@ -273,7 +272,7 @@ func (r GatewayProxyEndpointEditParams) MarshalJSON() (data []byte, err error) {
 type GatewayProxyEndpointEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewayProxyEndpoints                            `json:"result,required"`
+	Result   ProxyEndpoint                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayProxyEndpointEditResponseEnvelopeJSON    `json:"-"`
@@ -320,7 +319,7 @@ type GatewayProxyEndpointGetParams struct {
 type GatewayProxyEndpointGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewayProxyEndpoints                            `json:"result,required"`
+	Result   ProxyEndpoint                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayProxyEndpointGetResponseEnvelopeJSON    `json:"-"`

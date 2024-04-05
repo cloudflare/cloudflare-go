@@ -61,7 +61,7 @@ func (r *DestinationWebhookService) Update(ctx context.Context, webhookID string
 }
 
 // Gets a list of all configured webhook destinations.
-func (r *DestinationWebhookService) List(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AlertingWebhooks], err error) {
+func (r *DestinationWebhookService) List(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Webhooks], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *DestinationWebhookService) List(ctx context.Context, query DestinationW
 }
 
 // Gets a list of all configured webhook destinations.
-func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AlertingWebhooks] {
+func (r *DestinationWebhookService) ListAutoPaging(ctx context.Context, query DestinationWebhookListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Webhooks] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -97,7 +97,7 @@ func (r *DestinationWebhookService) Delete(ctx context.Context, webhookID string
 }
 
 // Get details for a single webhooks destination.
-func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, query DestinationWebhookGetParams, opts ...option.RequestOption) (res *AlertingWebhooks, err error) {
+func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, query DestinationWebhookGetParams, opts ...option.RequestOption) (res *Webhooks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DestinationWebhookGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", query.AccountID, webhookID)
@@ -109,7 +109,7 @@ func (r *DestinationWebhookService) Get(ctx context.Context, webhookID string, q
 	return
 }
 
-type AlertingWebhooks struct {
+type Webhooks struct {
 	// The unique identifier of a webhook
 	ID string `json:"id"`
 	// Timestamp of when the webhook destination was created.
@@ -128,15 +128,14 @@ type AlertingWebhooks struct {
 	// destinations. Secrets are not returned in any API response body.
 	Secret string `json:"secret"`
 	// Type of webhook endpoint.
-	Type AlertingWebhooksType `json:"type"`
+	Type WebhooksType `json:"type"`
 	// The POST endpoint to call when dispatching a notification.
-	URL  string               `json:"url"`
-	JSON alertingWebhooksJSON `json:"-"`
+	URL  string       `json:"url"`
+	JSON webhooksJSON `json:"-"`
 }
 
-// alertingWebhooksJSON contains the JSON metadata for the struct
-// [AlertingWebhooks]
-type alertingWebhooksJSON struct {
+// webhooksJSON contains the JSON metadata for the struct [Webhooks]
+type webhooksJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	LastFailure apijson.Field
@@ -149,26 +148,26 @@ type alertingWebhooksJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AlertingWebhooks) UnmarshalJSON(data []byte) (err error) {
+func (r *Webhooks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r alertingWebhooksJSON) RawJSON() string {
+func (r webhooksJSON) RawJSON() string {
 	return r.raw
 }
 
 // Type of webhook endpoint.
-type AlertingWebhooksType string
+type WebhooksType string
 
 const (
-	AlertingWebhooksTypeSlack   AlertingWebhooksType = "slack"
-	AlertingWebhooksTypeGeneric AlertingWebhooksType = "generic"
-	AlertingWebhooksTypeGchat   AlertingWebhooksType = "gchat"
+	WebhooksTypeSlack   WebhooksType = "slack"
+	WebhooksTypeGeneric WebhooksType = "generic"
+	WebhooksTypeGchat   WebhooksType = "gchat"
 )
 
-func (r AlertingWebhooksType) IsKnown() bool {
+func (r WebhooksType) IsKnown() bool {
 	switch r {
-	case AlertingWebhooksTypeSlack, AlertingWebhooksTypeGeneric, AlertingWebhooksTypeGchat:
+	case WebhooksTypeSlack, WebhooksTypeGeneric, WebhooksTypeGchat:
 		return true
 	}
 	return false
@@ -434,7 +433,7 @@ type DestinationWebhookGetParams struct {
 type DestinationWebhookGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   AlertingWebhooks                                          `json:"result,required"`
+	Result   Webhooks                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationWebhookGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationWebhookGetResponseEnvelopeJSON    `json:"-"`

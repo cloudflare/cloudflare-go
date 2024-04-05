@@ -35,7 +35,7 @@ func NewTestService(opts ...option.RequestOption) (r *TestService) {
 }
 
 // Starts a test for a specific webpage, in a specific region.
-func (r *TestService) New(ctx context.Context, url string, params TestNewParams, opts ...option.RequestOption) (res *ObservatoryPageTest, err error) {
+func (r *TestService) New(ctx context.Context, url string, params TestNewParams, opts ...option.RequestOption) (res *Test, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TestNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
@@ -70,7 +70,7 @@ func (r *TestService) Delete(ctx context.Context, url string, params TestDeleteP
 }
 
 // Retrieves the result of a specific test.
-func (r *TestService) Get(ctx context.Context, url string, testID string, query TestGetParams, opts ...option.RequestOption) (res *ObservatoryPageTest, err error) {
+func (r *TestService) Get(ctx context.Context, url string, testID string, query TestGetParams, opts ...option.RequestOption) (res *Test, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TestGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests/%s", query.ZoneID, url, testID)
@@ -82,7 +82,7 @@ func (r *TestService) Get(ctx context.Context, url string, testID string, query 
 	return
 }
 
-type ObservatoryPageTest struct {
+type Test struct {
 	// UUID
 	ID   string    `json:"id"`
 	Date time.Time `json:"date" format:"date-time"`
@@ -93,15 +93,14 @@ type ObservatoryPageTest struct {
 	// A test region with a label.
 	Region LabeledRegion `json:"region"`
 	// The frequency of the test.
-	ScheduleFrequency ObservatoryPageTestScheduleFrequency `json:"scheduleFrequency"`
+	ScheduleFrequency TestScheduleFrequency `json:"scheduleFrequency"`
 	// A URL.
-	URL  string                  `json:"url"`
-	JSON observatoryPageTestJSON `json:"-"`
+	URL  string   `json:"url"`
+	JSON testJSON `json:"-"`
 }
 
-// observatoryPageTestJSON contains the JSON metadata for the struct
-// [ObservatoryPageTest]
-type observatoryPageTestJSON struct {
+// testJSON contains the JSON metadata for the struct [Test]
+type testJSON struct {
 	ID                apijson.Field
 	Date              apijson.Field
 	DesktopReport     apijson.Field
@@ -113,25 +112,25 @@ type observatoryPageTestJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ObservatoryPageTest) UnmarshalJSON(data []byte) (err error) {
+func (r *Test) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observatoryPageTestJSON) RawJSON() string {
+func (r testJSON) RawJSON() string {
 	return r.raw
 }
 
 // The frequency of the test.
-type ObservatoryPageTestScheduleFrequency string
+type TestScheduleFrequency string
 
 const (
-	ObservatoryPageTestScheduleFrequencyDaily  ObservatoryPageTestScheduleFrequency = "DAILY"
-	ObservatoryPageTestScheduleFrequencyWeekly ObservatoryPageTestScheduleFrequency = "WEEKLY"
+	TestScheduleFrequencyDaily  TestScheduleFrequency = "DAILY"
+	TestScheduleFrequencyWeekly TestScheduleFrequency = "WEEKLY"
 )
 
-func (r ObservatoryPageTestScheduleFrequency) IsKnown() bool {
+func (r TestScheduleFrequency) IsKnown() bool {
 	switch r {
-	case ObservatoryPageTestScheduleFrequencyDaily, ObservatoryPageTestScheduleFrequencyWeekly:
+	case TestScheduleFrequencyDaily, TestScheduleFrequencyWeekly:
 		return true
 	}
 	return false
@@ -264,7 +263,7 @@ type TestNewResponseEnvelope struct {
 	Errors   interface{}                 `json:"errors,required"`
 	Messages interface{}                 `json:"messages,required"`
 	Success  interface{}                 `json:"success,required"`
-	Result   ObservatoryPageTest         `json:"result"`
+	Result   Test                        `json:"result"`
 	JSON     testNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -425,7 +424,7 @@ type TestGetResponseEnvelope struct {
 	Errors   interface{}                 `json:"errors,required"`
 	Messages interface{}                 `json:"messages,required"`
 	Success  interface{}                 `json:"success,required"`
-	Result   ObservatoryPageTest         `json:"result"`
+	Result   Test                        `json:"result"`
 	JSON     testGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -42,7 +42,7 @@ func NewAnalyticsReportService(opts ...option.RequestOption) (r *AnalyticsReport
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSAnalyticsReport, err error) {
+func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReportGetParams, opts ...option.RequestOption) (res *Report, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsReportGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_analytics/report", params.ZoneID)
@@ -54,7 +54,7 @@ func (r *AnalyticsReportService) Get(ctx context.Context, params AnalyticsReport
 	return
 }
 
-type DNSAnalyticsReport struct {
+type Report struct {
 	// Array with one row per combination of dimension values.
 	Data []UnnamedSchemaRef6595695ff25b0614667b25f66b7bbaba `json:"data,required"`
 	// Number of seconds between current time and last processed event, in another
@@ -65,19 +65,18 @@ type DNSAnalyticsReport struct {
 	Max interface{} `json:"max,required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{}             `json:"min,required"`
-	Query DNSAnalyticsReportQuery `json:"query,required"`
+	Min   interface{} `json:"min,required"`
+	Query ReportQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Total results for metrics across all data (object mapping metric names to
 	// values).
-	Totals interface{}            `json:"totals,required"`
-	JSON   dnsAnalyticsReportJSON `json:"-"`
+	Totals interface{} `json:"totals,required"`
+	JSON   reportJSON  `json:"-"`
 }
 
-// dnsAnalyticsReportJSON contains the JSON metadata for the struct
-// [DNSAnalyticsReport]
-type dnsAnalyticsReportJSON struct {
+// reportJSON contains the JSON metadata for the struct [Report]
+type reportJSON struct {
 	Data        apijson.Field
 	DataLag     apijson.Field
 	Max         apijson.Field
@@ -89,15 +88,15 @@ type dnsAnalyticsReportJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSAnalyticsReport) UnmarshalJSON(data []byte) (err error) {
+func (r *Report) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsAnalyticsReportJSON) RawJSON() string {
+func (r reportJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSAnalyticsReportQuery struct {
+type ReportQuery struct {
 	// Array of dimension names.
 	Dimensions []string `json:"dimensions,required"`
 	// Limit number of returned metrics.
@@ -112,13 +111,12 @@ type DNSAnalyticsReportQuery struct {
 	Filters string `json:"filters"`
 	// Array of dimensions to sort by, where each dimension may be prefixed by -
 	// (descending) or + (ascending).
-	Sort []string                    `json:"sort"`
-	JSON dnsAnalyticsReportQueryJSON `json:"-"`
+	Sort []string        `json:"sort"`
+	JSON reportQueryJSON `json:"-"`
 }
 
-// dnsAnalyticsReportQueryJSON contains the JSON metadata for the struct
-// [DNSAnalyticsReportQuery]
-type dnsAnalyticsReportQueryJSON struct {
+// reportQueryJSON contains the JSON metadata for the struct [ReportQuery]
+type reportQueryJSON struct {
 	Dimensions  apijson.Field
 	Limit       apijson.Field
 	Metrics     apijson.Field
@@ -130,11 +128,11 @@ type dnsAnalyticsReportQueryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSAnalyticsReportQuery) UnmarshalJSON(data []byte) (err error) {
+func (r *ReportQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsAnalyticsReportQueryJSON) RawJSON() string {
+func (r reportQueryJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -170,7 +168,7 @@ func (r AnalyticsReportGetParams) URLQuery() (v url.Values) {
 type AnalyticsReportGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DNSAnalyticsReport                                        `json:"result,required"`
+	Result   Report                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsReportGetResponseEnvelopeJSON    `json:"-"`

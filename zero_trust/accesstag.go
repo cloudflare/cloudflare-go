@@ -34,7 +34,7 @@ func NewAccessTagService(opts ...option.RequestOption) (r *AccessTagService) {
 }
 
 // Create a tag
-func (r *AccessTagService) New(ctx context.Context, identifier string, body AccessTagNewParams, opts ...option.RequestOption) (res *ZeroTrustTag, err error) {
+func (r *AccessTagService) New(ctx context.Context, identifier string, body AccessTagNewParams, opts ...option.RequestOption) (res *Tag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/tags", identifier)
@@ -47,7 +47,7 @@ func (r *AccessTagService) New(ctx context.Context, identifier string, body Acce
 }
 
 // Update a tag
-func (r *AccessTagService) Update(ctx context.Context, identifier string, tagName string, body AccessTagUpdateParams, opts ...option.RequestOption) (res *ZeroTrustTag, err error) {
+func (r *AccessTagService) Update(ctx context.Context, identifier string, tagName string, body AccessTagUpdateParams, opts ...option.RequestOption) (res *Tag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, tagName)
@@ -60,7 +60,7 @@ func (r *AccessTagService) Update(ctx context.Context, identifier string, tagNam
 }
 
 // List tags
-func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustTag], err error) {
+func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[Tag], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,7 +78,7 @@ func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...
 }
 
 // List tags
-func (r *AccessTagService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustTag] {
+func (r *AccessTagService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Tag] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
 }
 
@@ -96,7 +96,7 @@ func (r *AccessTagService) Delete(ctx context.Context, identifier string, name s
 }
 
 // Get a tag
-func (r *AccessTagService) Get(ctx context.Context, identifier string, name string, opts ...option.RequestOption) (res *ZeroTrustTag, err error) {
+func (r *AccessTagService) Get(ctx context.Context, identifier string, name string, opts ...option.RequestOption) (res *Tag, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessTagGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, name)
@@ -109,18 +109,18 @@ func (r *AccessTagService) Get(ctx context.Context, identifier string, name stri
 }
 
 // A tag
-type ZeroTrustTag struct {
+type Tag struct {
 	// The name of the tag
 	Name string `json:"name,required"`
 	// The number of applications that have this tag
-	AppCount  int64            `json:"app_count"`
-	CreatedAt time.Time        `json:"created_at" format:"date-time"`
-	UpdatedAt time.Time        `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustTagJSON `json:"-"`
+	AppCount  int64     `json:"app_count"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	JSON      tagJSON   `json:"-"`
 }
 
-// zeroTrustTagJSON contains the JSON metadata for the struct [ZeroTrustTag]
-type zeroTrustTagJSON struct {
+// tagJSON contains the JSON metadata for the struct [Tag]
+type tagJSON struct {
 	Name        apijson.Field
 	AppCount    apijson.Field
 	CreatedAt   apijson.Field
@@ -129,11 +129,11 @@ type zeroTrustTagJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustTag) UnmarshalJSON(data []byte) (err error) {
+func (r *Tag) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustTagJSON) RawJSON() string {
+func (r tagJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -172,7 +172,7 @@ type AccessTagNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A tag
-	Result ZeroTrustTag `json:"result,required"`
+	Result Tag `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessTagNewResponseEnvelopeJSON    `json:"-"`
@@ -225,7 +225,7 @@ type AccessTagUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A tag
-	Result ZeroTrustTag `json:"result,required"`
+	Result Tag `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessTagUpdateResponseEnvelopeJSON    `json:"-"`
@@ -312,7 +312,7 @@ type AccessTagGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A tag
-	Result ZeroTrustTag `json:"result,required"`
+	Result Tag `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessTagGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessTagGetResponseEnvelopeJSON    `json:"-"`

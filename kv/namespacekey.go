@@ -35,7 +35,7 @@ func NewNamespaceKeyService(opts ...option.RequestOption) (r *NamespaceKeyServic
 }
 
 // Lists a namespace's keys.
-func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *pagination.CursorLimitPagination[WorkersKVKey], err error) {
+func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *pagination.CursorLimitPagination[Key], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,13 +53,13 @@ func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, para
 }
 
 // Lists a namespace's keys.
-func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) *pagination.CursorLimitPaginationAutoPager[WorkersKVKey] {
+func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) *pagination.CursorLimitPaginationAutoPager[Key] {
 	return pagination.NewCursorLimitPaginationAutoPager(r.List(ctx, namespaceID, params, opts...))
 }
 
 // A name for a value. A value stored under a given key may be retrieved via the
 // same key.
-type WorkersKVKey struct {
+type Key struct {
 	// A key's name. The name may be at most 512 bytes. All printable, non-whitespace
 	// characters are valid. Use percent-encoding to define key names as part of a URL.
 	Name string `json:"name,required"`
@@ -67,12 +67,12 @@ type WorkersKVKey struct {
 	// will expire. This property is omitted for keys that will not expire.
 	Expiration float64 `json:"expiration"`
 	// Arbitrary JSON that is associated with a key.
-	Metadata interface{}      `json:"metadata"`
-	JSON     workersKVKeyJSON `json:"-"`
+	Metadata interface{} `json:"metadata"`
+	JSON     keyJSON     `json:"-"`
 }
 
-// workersKVKeyJSON contains the JSON metadata for the struct [WorkersKVKey]
-type workersKVKeyJSON struct {
+// keyJSON contains the JSON metadata for the struct [Key]
+type keyJSON struct {
 	Name        apijson.Field
 	Expiration  apijson.Field
 	Metadata    apijson.Field
@@ -80,11 +80,11 @@ type workersKVKeyJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersKVKey) UnmarshalJSON(data []byte) (err error) {
+func (r *Key) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersKVKeyJSON) RawJSON() string {
+func (r keyJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -35,7 +35,7 @@ func NewGatewayRuleService(opts ...option.RequestOption) (r *GatewayRuleService)
 }
 
 // Creates a new Zero Trust Gateway rule.
-func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParams, opts ...option.RequestOption) (res *ZeroTrustGatewayRules, err error) {
+func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParams, opts ...option.RequestOption) (res *Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/rules", params.AccountID)
@@ -48,7 +48,7 @@ func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParam
 }
 
 // Updates a configured Zero Trust Gateway rule.
-func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params GatewayRuleUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayRules, err error) {
+func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params GatewayRuleUpdateParams, opts ...option.RequestOption) (res *Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", params.AccountID, ruleID)
@@ -61,7 +61,7 @@ func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params G
 }
 
 // Fetches the Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGatewayRules], err error) {
+func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Rule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListPara
 }
 
 // Fetches the Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGatewayRules] {
+func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Rule] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -97,7 +97,7 @@ func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, params G
 }
 
 // Fetches a single Zero Trust Gateway rule.
-func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query GatewayRuleGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayRules, err error) {
+func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query GatewayRuleGetParams, opts ...option.RequestOption) (res *Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", query.AccountID, ruleID)
@@ -210,21 +210,171 @@ func (r DNSResolverSettingsV6Param) MarshalJSON() (data []byte, err error) {
 }
 
 // The protocol or layer to use.
-type FitlerItem string
+type FilterItem string
 
 const (
-	FitlerItemHTTP   FitlerItem = "http"
-	FitlerItemDNS    FitlerItem = "dns"
-	FitlerItemL4     FitlerItem = "l4"
-	FitlerItemEgress FitlerItem = "egress"
+	FilterItemHTTP   FilterItem = "http"
+	FilterItemDNS    FilterItem = "dns"
+	FilterItemL4     FilterItem = "l4"
+	FilterItemEgress FilterItem = "egress"
 )
 
-func (r FitlerItem) IsKnown() bool {
+func (r FilterItem) IsKnown() bool {
 	switch r {
-	case FitlerItemHTTP, FitlerItemDNS, FitlerItemL4, FitlerItemEgress:
+	case FilterItemHTTP, FilterItemDNS, FilterItemL4, FilterItemEgress:
 		return true
 	}
 	return false
+}
+
+type Rule struct {
+	// The API resource UUID.
+	ID string `json:"id"`
+	// The action to preform when the associated traffic, identity, and device posture
+	// expressions are either absent or evaluate to `true`.
+	Action    RuleAction `json:"action"`
+	CreatedAt time.Time  `json:"created_at" format:"date-time"`
+	// Date of deletion, if any.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The description of the rule.
+	Description string `json:"description"`
+	// The wirefilter expression used for device posture check matching.
+	DevicePosture string `json:"device_posture"`
+	// True if the rule is enabled.
+	Enabled bool `json:"enabled"`
+	// The protocol or layer to evaluate the traffic, identity, and device posture
+	// expressions.
+	Filters []RuleFilter `json:"filters"`
+	// The wirefilter expression used for identity matching.
+	Identity string `json:"identity"`
+	// The name of the rule.
+	Name string `json:"name"`
+	// Precedence sets the order of your rules. Lower values indicate higher
+	// precedence. At each processing phase, applicable rules are evaluated in
+	// ascending order of this value.
+	Precedence int64 `json:"precedence"`
+	// Additional settings that modify the rule's action.
+	RuleSettings RuleSettings `json:"rule_settings"`
+	// The schedule for activating DNS policies. This does not apply to HTTP or network
+	// policies.
+	Schedule Schedule `json:"schedule"`
+	// The wirefilter expression used for traffic matching.
+	Traffic   string    `json:"traffic"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	JSON      ruleJSON  `json:"-"`
+}
+
+// ruleJSON contains the JSON metadata for the struct [Rule]
+type ruleJSON struct {
+	ID            apijson.Field
+	Action        apijson.Field
+	CreatedAt     apijson.Field
+	DeletedAt     apijson.Field
+	Description   apijson.Field
+	DevicePosture apijson.Field
+	Enabled       apijson.Field
+	Filters       apijson.Field
+	Identity      apijson.Field
+	Name          apijson.Field
+	Precedence    apijson.Field
+	RuleSettings  apijson.Field
+	Schedule      apijson.Field
+	Traffic       apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *Rule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleJSON) RawJSON() string {
+	return r.raw
+}
+
+// The action to preform when the associated traffic, identity, and device posture
+// expressions are either absent or evaluate to `true`.
+type RuleAction string
+
+const (
+	RuleActionOn           RuleAction = "on"
+	RuleActionOff          RuleAction = "off"
+	RuleActionAllow        RuleAction = "allow"
+	RuleActionBlock        RuleAction = "block"
+	RuleActionScan         RuleAction = "scan"
+	RuleActionNoscan       RuleAction = "noscan"
+	RuleActionSafesearch   RuleAction = "safesearch"
+	RuleActionYtrestricted RuleAction = "ytrestricted"
+	RuleActionIsolate      RuleAction = "isolate"
+	RuleActionNoisolate    RuleAction = "noisolate"
+	RuleActionOverride     RuleAction = "override"
+	RuleActionL4Override   RuleAction = "l4_override"
+	RuleActionEgress       RuleAction = "egress"
+	RuleActionAuditSSH     RuleAction = "audit_ssh"
+	RuleActionResolve      RuleAction = "resolve"
+)
+
+func (r RuleAction) IsKnown() bool {
+	switch r {
+	case RuleActionOn, RuleActionOff, RuleActionAllow, RuleActionBlock, RuleActionScan, RuleActionNoscan, RuleActionSafesearch, RuleActionYtrestricted, RuleActionIsolate, RuleActionNoisolate, RuleActionOverride, RuleActionL4Override, RuleActionEgress, RuleActionAuditSSH, RuleActionResolve:
+		return true
+	}
+	return false
+}
+
+// The protocol or layer to use.
+type RuleFilter string
+
+const (
+	RuleFilterHTTP   RuleFilter = "http"
+	RuleFilterDNS    RuleFilter = "dns"
+	RuleFilterL4     RuleFilter = "l4"
+	RuleFilterEgress RuleFilter = "egress"
+)
+
+func (r RuleFilter) IsKnown() bool {
+	switch r {
+	case RuleFilterHTTP, RuleFilterDNS, RuleFilterL4, RuleFilterEgress:
+		return true
+	}
+	return false
+}
+
+type RuleParam struct {
+	// The API resource UUID.
+	ID param.Field[string] `json:"id"`
+	// The action to preform when the associated traffic, identity, and device posture
+	// expressions are either absent or evaluate to `true`.
+	Action param.Field[RuleAction] `json:"action"`
+	// The description of the rule.
+	Description param.Field[string] `json:"description"`
+	// The wirefilter expression used for device posture check matching.
+	DevicePosture param.Field[string] `json:"device_posture"`
+	// True if the rule is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The protocol or layer to evaluate the traffic, identity, and device posture
+	// expressions.
+	Filters param.Field[[]RuleFilter] `json:"filters"`
+	// The wirefilter expression used for identity matching.
+	Identity param.Field[string] `json:"identity"`
+	// The name of the rule.
+	Name param.Field[string] `json:"name"`
+	// Precedence sets the order of your rules. Lower values indicate higher
+	// precedence. At each processing phase, applicable rules are evaluated in
+	// ascending order of this value.
+	Precedence param.Field[int64] `json:"precedence"`
+	// Additional settings that modify the rule's action.
+	RuleSettings param.Field[RuleSettingsParam] `json:"rule_settings"`
+	// The schedule for activating DNS policies. This does not apply to HTTP or network
+	// policies.
+	Schedule param.Field[ScheduleParam] `json:"schedule"`
+	// The wirefilter expression used for traffic matching.
+	Traffic param.Field[string] `json:"traffic"`
+}
+
+func (r RuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Additional settings that modify the rule's action.
@@ -873,121 +1023,6 @@ func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ZeroTrustGatewayRules struct {
-	// The API resource UUID.
-	ID string `json:"id"`
-	// The action to preform when the associated traffic, identity, and device posture
-	// expressions are either absent or evaluate to `true`.
-	Action    ZeroTrustGatewayRulesAction `json:"action"`
-	CreatedAt time.Time                   `json:"created_at" format:"date-time"`
-	// Date of deletion, if any.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The description of the rule.
-	Description string `json:"description"`
-	// The wirefilter expression used for device posture check matching.
-	DevicePosture string `json:"device_posture"`
-	// True if the rule is enabled.
-	Enabled bool `json:"enabled"`
-	// The protocol or layer to evaluate the traffic, identity, and device posture
-	// expressions.
-	Filters []ZeroTrustGatewayRulesFilter `json:"filters"`
-	// The wirefilter expression used for identity matching.
-	Identity string `json:"identity"`
-	// The name of the rule.
-	Name string `json:"name"`
-	// Precedence sets the order of your rules. Lower values indicate higher
-	// precedence. At each processing phase, applicable rules are evaluated in
-	// ascending order of this value.
-	Precedence int64 `json:"precedence"`
-	// Additional settings that modify the rule's action.
-	RuleSettings RuleSettings `json:"rule_settings"`
-	// The schedule for activating DNS policies. This does not apply to HTTP or network
-	// policies.
-	Schedule Schedule `json:"schedule"`
-	// The wirefilter expression used for traffic matching.
-	Traffic   string                    `json:"traffic"`
-	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGatewayRulesJSON `json:"-"`
-}
-
-// zeroTrustGatewayRulesJSON contains the JSON metadata for the struct
-// [ZeroTrustGatewayRules]
-type zeroTrustGatewayRulesJSON struct {
-	ID            apijson.Field
-	Action        apijson.Field
-	CreatedAt     apijson.Field
-	DeletedAt     apijson.Field
-	Description   apijson.Field
-	DevicePosture apijson.Field
-	Enabled       apijson.Field
-	Filters       apijson.Field
-	Identity      apijson.Field
-	Name          apijson.Field
-	Precedence    apijson.Field
-	RuleSettings  apijson.Field
-	Schedule      apijson.Field
-	Traffic       apijson.Field
-	UpdatedAt     apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ZeroTrustGatewayRules) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustGatewayRulesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The action to preform when the associated traffic, identity, and device posture
-// expressions are either absent or evaluate to `true`.
-type ZeroTrustGatewayRulesAction string
-
-const (
-	ZeroTrustGatewayRulesActionOn           ZeroTrustGatewayRulesAction = "on"
-	ZeroTrustGatewayRulesActionOff          ZeroTrustGatewayRulesAction = "off"
-	ZeroTrustGatewayRulesActionAllow        ZeroTrustGatewayRulesAction = "allow"
-	ZeroTrustGatewayRulesActionBlock        ZeroTrustGatewayRulesAction = "block"
-	ZeroTrustGatewayRulesActionScan         ZeroTrustGatewayRulesAction = "scan"
-	ZeroTrustGatewayRulesActionNoscan       ZeroTrustGatewayRulesAction = "noscan"
-	ZeroTrustGatewayRulesActionSafesearch   ZeroTrustGatewayRulesAction = "safesearch"
-	ZeroTrustGatewayRulesActionYtrestricted ZeroTrustGatewayRulesAction = "ytrestricted"
-	ZeroTrustGatewayRulesActionIsolate      ZeroTrustGatewayRulesAction = "isolate"
-	ZeroTrustGatewayRulesActionNoisolate    ZeroTrustGatewayRulesAction = "noisolate"
-	ZeroTrustGatewayRulesActionOverride     ZeroTrustGatewayRulesAction = "override"
-	ZeroTrustGatewayRulesActionL4Override   ZeroTrustGatewayRulesAction = "l4_override"
-	ZeroTrustGatewayRulesActionEgress       ZeroTrustGatewayRulesAction = "egress"
-	ZeroTrustGatewayRulesActionAuditSSH     ZeroTrustGatewayRulesAction = "audit_ssh"
-	ZeroTrustGatewayRulesActionResolve      ZeroTrustGatewayRulesAction = "resolve"
-)
-
-func (r ZeroTrustGatewayRulesAction) IsKnown() bool {
-	switch r {
-	case ZeroTrustGatewayRulesActionOn, ZeroTrustGatewayRulesActionOff, ZeroTrustGatewayRulesActionAllow, ZeroTrustGatewayRulesActionBlock, ZeroTrustGatewayRulesActionScan, ZeroTrustGatewayRulesActionNoscan, ZeroTrustGatewayRulesActionSafesearch, ZeroTrustGatewayRulesActionYtrestricted, ZeroTrustGatewayRulesActionIsolate, ZeroTrustGatewayRulesActionNoisolate, ZeroTrustGatewayRulesActionOverride, ZeroTrustGatewayRulesActionL4Override, ZeroTrustGatewayRulesActionEgress, ZeroTrustGatewayRulesActionAuditSSH, ZeroTrustGatewayRulesActionResolve:
-		return true
-	}
-	return false
-}
-
-// The protocol or layer to use.
-type ZeroTrustGatewayRulesFilter string
-
-const (
-	ZeroTrustGatewayRulesFilterHTTP   ZeroTrustGatewayRulesFilter = "http"
-	ZeroTrustGatewayRulesFilterDNS    ZeroTrustGatewayRulesFilter = "dns"
-	ZeroTrustGatewayRulesFilterL4     ZeroTrustGatewayRulesFilter = "l4"
-	ZeroTrustGatewayRulesFilterEgress ZeroTrustGatewayRulesFilter = "egress"
-)
-
-func (r ZeroTrustGatewayRulesFilter) IsKnown() bool {
-	switch r {
-	case ZeroTrustGatewayRulesFilterHTTP, ZeroTrustGatewayRulesFilterDNS, ZeroTrustGatewayRulesFilterL4, ZeroTrustGatewayRulesFilterEgress:
-		return true
-	}
-	return false
-}
-
 type GatewayRuleNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The action to preform when the associated traffic, identity, and device posture
@@ -1003,7 +1038,7 @@ type GatewayRuleNewParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters param.Field[[]FitlerItem] `json:"filters"`
+	Filters param.Field[[]FilterItem] `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity param.Field[string] `json:"identity"`
 	// Precedence sets the order of your rules. Lower values indicate higher
@@ -1056,7 +1091,7 @@ func (r GatewayRuleNewParamsAction) IsKnown() bool {
 type GatewayRuleNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewayRules                                     `json:"result,required"`
+	Result   Rule                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -1111,7 +1146,7 @@ type GatewayRuleUpdateParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters param.Field[[]FitlerItem] `json:"filters"`
+	Filters param.Field[[]FilterItem] `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity param.Field[string] `json:"identity"`
 	// Precedence sets the order of your rules. Lower values indicate higher
@@ -1164,7 +1199,7 @@ func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 type GatewayRuleUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewayRules                                     `json:"result,required"`
+	Result   Rule                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1267,7 +1302,7 @@ type GatewayRuleGetParams struct {
 type GatewayRuleGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewayRules                                     `json:"result,required"`
+	Result   Rule                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayRuleGetResponseEnvelopeJSON    `json:"-"`

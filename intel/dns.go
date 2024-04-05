@@ -35,7 +35,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 }
 
 // Get Passive DNS by IP
-func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...option.RequestOption) (res *IntelPassiveDNSByIP, err error) {
+func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...option.RequestOption) (res *DNS, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/dns", params.AccountID)
@@ -47,7 +47,7 @@ func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...optio
 	return
 }
 
-type IntelPassiveDNSByIP struct {
+type DNS struct {
 	// Total results returned based on your search parameters.
 	Count float64 `json:"count"`
 	// Current page within paginated list of results.
@@ -56,12 +56,11 @@ type IntelPassiveDNSByIP struct {
 	PerPage float64 `json:"per_page"`
 	// Reverse DNS look-ups observed during the time period.
 	ReverseRecords []UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050 `json:"reverse_records"`
-	JSON           intelPassiveDNSByIPJSON                            `json:"-"`
+	JSON           dnsJSON                                            `json:"-"`
 }
 
-// intelPassiveDNSByIPJSON contains the JSON metadata for the struct
-// [IntelPassiveDNSByIP]
-type intelPassiveDNSByIPJSON struct {
+// dnsJSON contains the JSON metadata for the struct [DNS]
+type dnsJSON struct {
 	Count          apijson.Field
 	Page           apijson.Field
 	PerPage        apijson.Field
@@ -70,12 +69,27 @@ type intelPassiveDNSByIPJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *IntelPassiveDNSByIP) UnmarshalJSON(data []byte) (err error) {
+func (r *DNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r intelPassiveDNSByIPJSON) RawJSON() string {
+func (r dnsJSON) RawJSON() string {
 	return r.raw
+}
+
+type DNSParam struct {
+	// Total results returned based on your search parameters.
+	Count param.Field[float64] `json:"count"`
+	// Current page within paginated list of results.
+	Page param.Field[float64] `json:"page"`
+	// Number of results per page of results.
+	PerPage param.Field[float64] `json:"per_page"`
+	// Reverse DNS look-ups observed during the time period.
+	ReverseRecords param.Field[[]UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050Param] `json:"reverse_records"`
+}
+
+func (r DNSParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type UnnamedSchemaRefB5e16cee4f32382c294201aedb9fc050 struct {
@@ -144,7 +158,7 @@ func (r DNSGetParamsStartEndParams) URLQuery() (v url.Values) {
 type DNSGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IntelPassiveDNSByIP                                       `json:"result,required"`
+	Result   DNS                                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsGetResponseEnvelopeJSON    `json:"-"`

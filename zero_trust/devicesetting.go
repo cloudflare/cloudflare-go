@@ -33,7 +33,7 @@ func NewDeviceSettingService(opts ...option.RequestOption) (r *DeviceSettingServ
 }
 
 // Updates the current device settings for a Zero Trust account.
-func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustAccountDeviceSettings, err error) {
+func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingUpdateParams, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceSettingUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/settings", params.AccountID)
@@ -46,7 +46,7 @@ func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingU
 }
 
 // Describes the current device settings for a Zero Trust account.
-func (r *DeviceSettingService) List(ctx context.Context, query DeviceSettingListParams, opts ...option.RequestOption) (res *ZeroTrustAccountDeviceSettings, err error) {
+func (r *DeviceSettingService) List(ctx context.Context, query DeviceSettingListParams, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceSettingListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/devices/settings", query.AccountID)
@@ -58,7 +58,7 @@ func (r *DeviceSettingService) List(ctx context.Context, query DeviceSettingList
 	return
 }
 
-type ZeroTrustAccountDeviceSettings struct {
+type Settings struct {
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -66,13 +66,12 @@ type ZeroTrustAccountDeviceSettings struct {
 	// Enable installation of cloudflare managed root certificate.
 	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
 	// Enable using CGNAT virtual IPv4.
-	UseZtVirtualIP bool                               `json:"use_zt_virtual_ip"`
-	JSON           zeroTrustAccountDeviceSettingsJSON `json:"-"`
+	UseZtVirtualIP bool         `json:"use_zt_virtual_ip"`
+	JSON           settingsJSON `json:"-"`
 }
 
-// zeroTrustAccountDeviceSettingsJSON contains the JSON metadata for the struct
-// [ZeroTrustAccountDeviceSettings]
-type zeroTrustAccountDeviceSettingsJSON struct {
+// settingsJSON contains the JSON metadata for the struct [Settings]
+type settingsJSON struct {
 	GatewayProxyEnabled                apijson.Field
 	GatewayUdpProxyEnabled             apijson.Field
 	RootCertificateInstallationEnabled apijson.Field
@@ -81,12 +80,27 @@ type zeroTrustAccountDeviceSettingsJSON struct {
 	ExtraFields                        map[string]apijson.Field
 }
 
-func (r *ZeroTrustAccountDeviceSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *Settings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustAccountDeviceSettingsJSON) RawJSON() string {
+func (r settingsJSON) RawJSON() string {
 	return r.raw
+}
+
+type SettingsParam struct {
+	// Enable gateway proxy filtering on TCP.
+	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
+	// Enable gateway proxy filtering on UDP.
+	GatewayUdpProxyEnabled param.Field[bool] `json:"gateway_udp_proxy_enabled"`
+	// Enable installation of cloudflare managed root certificate.
+	RootCertificateInstallationEnabled param.Field[bool] `json:"root_certificate_installation_enabled"`
+	// Enable using CGNAT virtual IPv4.
+	UseZtVirtualIP param.Field[bool] `json:"use_zt_virtual_ip"`
+}
+
+func (r SettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type DeviceSettingUpdateParams struct {
@@ -108,7 +122,7 @@ func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 type DeviceSettingUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustAccountDeviceSettings                            `json:"result,required,nullable"`
+	Result   Settings                                                  `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -155,7 +169,7 @@ type DeviceSettingListParams struct {
 type DeviceSettingListResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustAccountDeviceSettings                            `json:"result,required,nullable"`
+	Result   Settings                                                  `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingListResponseEnvelopeJSON    `json:"-"`

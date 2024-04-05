@@ -72,6 +72,63 @@ func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (re
 	return
 }
 
+type User struct {
+	// Address.
+	Address string `json:"address,required"`
+	// City.
+	City string `json:"city,required"`
+	// The country in which the user lives.
+	Country string `json:"country,required,nullable"`
+	// User's first name
+	FirstName string `json:"first_name,required,nullable"`
+	// User's last name
+	LastName string `json:"last_name,required,nullable"`
+	// Name of organization.
+	Organization string `json:"organization,required"`
+	// User's telephone number
+	Phone string `json:"phone,required,nullable"`
+	// State.
+	State string `json:"state,required"`
+	// The zipcode or postal code where the user lives.
+	Zip string `json:"zip,required,nullable"`
+	// Contact Identifier.
+	ID string `json:"id"`
+	// Optional address line for unit, floor, suite, etc.
+	Address2 string `json:"address2"`
+	// The contact email address of the user.
+	Email string `json:"email"`
+	// Contact fax number.
+	Fax  string   `json:"fax"`
+	JSON userJSON `json:"-"`
+}
+
+// userJSON contains the JSON metadata for the struct [User]
+type userJSON struct {
+	Address      apijson.Field
+	City         apijson.Field
+	Country      apijson.Field
+	FirstName    apijson.Field
+	LastName     apijson.Field
+	Organization apijson.Field
+	Phone        apijson.Field
+	State        apijson.Field
+	Zip          apijson.Field
+	ID           apijson.Field
+	Address2     apijson.Field
+	Email        apijson.Field
+	Fax          apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *User) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserEditParams struct {
 	// The country in which the user lives.
 	Country param.Field[string] `json:"country"`

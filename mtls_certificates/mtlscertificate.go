@@ -37,7 +37,7 @@ func NewMTLSCertificateService(opts ...option.RequestOption) (r *MTLSCertificate
 }
 
 // Upload a certificate that you want to use with mTLS-enabled Cloudflare services.
-func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateUpdate, err error) {
+func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", params.AccountID)
@@ -144,7 +144,7 @@ func (r mtlsCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-type MTLSCertificateUpdate struct {
+type MTLSCertificateNewResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
@@ -164,13 +164,13 @@ type MTLSCertificateUpdate struct {
 	// This is the time the certificate was updated.
 	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
 	// This is the time the certificate was uploaded.
-	UploadedOn time.Time                 `json:"uploaded_on" format:"date-time"`
-	JSON       mtlsCertificateUpdateJSON `json:"-"`
+	UploadedOn time.Time                      `json:"uploaded_on" format:"date-time"`
+	JSON       mtlsCertificateNewResponseJSON `json:"-"`
 }
 
-// mtlsCertificateUpdateJSON contains the JSON metadata for the struct
-// [MTLSCertificateUpdate]
-type mtlsCertificateUpdateJSON struct {
+// mtlsCertificateNewResponseJSON contains the JSON metadata for the struct
+// [MTLSCertificateNewResponse]
+type mtlsCertificateNewResponseJSON struct {
 	ID           apijson.Field
 	CA           apijson.Field
 	Certificates apijson.Field
@@ -185,11 +185,11 @@ type mtlsCertificateUpdateJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *MTLSCertificateUpdate) UnmarshalJSON(data []byte) (err error) {
+func (r *MTLSCertificateNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r mtlsCertificateUpdateJSON) RawJSON() string {
+func (r mtlsCertificateNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -213,7 +213,7 @@ func (r MTLSCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type MTLSCertificateNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   MTLSCertificateUpdate                                     `json:"result,required"`
+	Result   MTLSCertificateNewResponse                                `json:"result,required"`
 	// Whether the API call was successful
 	Success MTLSCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mtlsCertificateNewResponseEnvelopeJSON    `json:"-"`

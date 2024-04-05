@@ -567,8 +567,6 @@ func (r kvNamespaceBindingJSON) RawJSON() string {
 
 func (r KVNamespaceBinding) implementsWorkersBinding() {}
 
-func (r KVNamespaceBinding) implementsWorkersWorkersBinding() {}
-
 func (r KVNamespaceBinding) implementsWorkersBindingItem() {}
 
 // The class of resource that the binding provides.

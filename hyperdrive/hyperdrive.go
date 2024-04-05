@@ -3,6 +3,7 @@
 package hyperdrive
 
 import (
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -23,4 +24,26 @@ func NewHyperdriveService(opts ...option.RequestOption) (r *HyperdriveService) {
 	r.Options = opts
 	r.Configs = NewConfigService(opts...)
 	return
+}
+
+type Configuration struct {
+	// The password required to access your origin database. This value is write-only
+	// and never returned by the API.
+	Password string            `json:"password,required"`
+	JSON     configurationJSON `json:"-"`
+}
+
+// configurationJSON contains the JSON metadata for the struct [Configuration]
+type configurationJSON struct {
+	Password    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Configuration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configurationJSON) RawJSON() string {
+	return r.raw
 }

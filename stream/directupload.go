@@ -56,7 +56,7 @@ type DirectUploadNewResponse struct {
 	// The URL an unauthenticated upload can use for a single
 	// `HTTP POST multipart/form-data` request.
 	UploadURL string                      `json:"uploadURL"`
-	Watermark StreamWatermarks            `json:"watermark"`
+	Watermark Watermaks                   `json:"watermark"`
 	JSON      directUploadNewResponseJSON `json:"-"`
 }
 

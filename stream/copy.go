@@ -33,7 +33,7 @@ func NewCopyService(opts ...option.RequestOption) (r *CopyService) {
 }
 
 // Uploads a video to Stream from a provided URL.
-func (r *CopyService) New(ctx context.Context, params CopyNewParams, opts ...option.RequestOption) (res *StreamVideos, err error) {
+func (r *CopyService) New(ctx context.Context, params CopyNewParams, opts ...option.RequestOption) (res *Video, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CopyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/copy", params.AccountID)
@@ -98,7 +98,7 @@ func (r CopyNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 type CopyNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   StreamVideos                                              `json:"result,required"`
+	Result   Video                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success CopyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    copyNewResponseEnvelopeJSON    `json:"-"`

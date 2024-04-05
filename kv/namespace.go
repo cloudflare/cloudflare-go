@@ -45,7 +45,7 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 // Creates a namespace under the given title. A `400` is returned if the account
 // already owns a namespace with this title. A namespace must be explicitly deleted
 // to be replaced.
-func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *WorkersKVNamespace, err error) {
+func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *Namespace, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces", params.AccountID)
@@ -71,7 +71,7 @@ func (r *NamespaceService) Update(ctx context.Context, namespaceID string, param
 }
 
 // Returns the namespaces owned by an account.
-func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WorkersKVNamespace], err error) {
+func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Namespace], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -89,7 +89,7 @@ func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams,
 }
 
 // Returns the namespaces owned by an account.
-func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WorkersKVNamespace] {
+func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Namespace] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -106,20 +106,19 @@ func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, param
 	return
 }
 
-type WorkersKVNamespace struct {
+type Namespace struct {
 	// Namespace identifier tag.
 	ID string `json:"id,required"`
 	// A human-readable string name for a Namespace.
 	Title string `json:"title,required"`
 	// True if keys written on the URL will be URL-decoded before storing. For example,
 	// if set to "true", a key written on the URL as "%3F" will be stored as "?".
-	SupportsURLEncoding bool                   `json:"supports_url_encoding"`
-	JSON                workersKVNamespaceJSON `json:"-"`
+	SupportsURLEncoding bool          `json:"supports_url_encoding"`
+	JSON                namespaceJSON `json:"-"`
 }
 
-// workersKVNamespaceJSON contains the JSON metadata for the struct
-// [WorkersKVNamespace]
-type workersKVNamespaceJSON struct {
+// namespaceJSON contains the JSON metadata for the struct [Namespace]
+type namespaceJSON struct {
 	ID                  apijson.Field
 	Title               apijson.Field
 	SupportsURLEncoding apijson.Field
@@ -127,11 +126,11 @@ type workersKVNamespaceJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *WorkersKVNamespace) UnmarshalJSON(data []byte) (err error) {
+func (r *Namespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersKVNamespaceJSON) RawJSON() string {
+func (r namespaceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -149,7 +148,7 @@ func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
 type NamespaceNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   WorkersKVNamespace                                        `json:"result,required"`
+	Result   Namespace                                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceNewResponseEnvelopeJSON    `json:"-"`

@@ -129,30 +129,47 @@ func (r *TokenService) Verify(ctx context.Context, opts ...option.RequestOption)
 
 type CIDRListItemParam = string
 
-type PolicyWithPermissionGroupsParam struct {
+type Policy struct {
+	// Policy identifier.
+	ID string `json:"id,required"`
 	// Allow or deny operations against the resources.
-	Effect param.Field[PolicyWithPermissionGroupsEffect] `json:"effect,required"`
+	Effect PolicyEffect `json:"effect,required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]PolicyWithPermissionGroupsPermissionGroupParam] `json:"permission_groups,required"`
+	PermissionGroups []PolicyPermissionGroup `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
-	Resources param.Field[interface{}] `json:"resources,required"`
+	Resources interface{} `json:"resources,required"`
+	JSON      policyJSON  `json:"-"`
 }
 
-func (r PolicyWithPermissionGroupsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// policyJSON contains the JSON metadata for the struct [Policy]
+type policyJSON struct {
+	ID               apijson.Field
+	Effect           apijson.Field
+	PermissionGroups apijson.Field
+	Resources        apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *Policy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Allow or deny operations against the resources.
-type PolicyWithPermissionGroupsEffect string
+type PolicyEffect string
 
 const (
-	PolicyWithPermissionGroupsEffectAllow PolicyWithPermissionGroupsEffect = "allow"
-	PolicyWithPermissionGroupsEffectDeny  PolicyWithPermissionGroupsEffect = "deny"
+	PolicyEffectAllow PolicyEffect = "allow"
+	PolicyEffectDeny  PolicyEffect = "deny"
 )
 
-func (r PolicyWithPermissionGroupsEffect) IsKnown() bool {
+func (r PolicyEffect) IsKnown() bool {
 	switch r {
-	case PolicyWithPermissionGroupsEffectAllow, PolicyWithPermissionGroupsEffectDeny:
+	case PolicyEffectAllow, PolicyEffectDeny:
 		return true
 	}
 	return false
@@ -160,16 +177,56 @@ func (r PolicyWithPermissionGroupsEffect) IsKnown() bool {
 
 // A named group of permissions that map to a group of operations against
 // resources.
-type PolicyWithPermissionGroupsPermissionGroupParam struct {
+type PolicyPermissionGroup struct {
+	// Identifier of the group.
+	ID string `json:"id,required"`
+	// Name of the group.
+	Name string                    `json:"name"`
+	JSON policyPermissionGroupJSON `json:"-"`
 }
 
-func (r PolicyWithPermissionGroupsPermissionGroupParam) MarshalJSON() (data []byte, err error) {
+// policyPermissionGroupJSON contains the JSON metadata for the struct
+// [PolicyPermissionGroup]
+type policyPermissionGroupJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PolicyPermissionGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyPermissionGroupJSON) RawJSON() string {
+	return r.raw
+}
+
+type PolicyParam struct {
+	// Allow or deny operations against the resources.
+	Effect param.Field[PolicyEffect] `json:"effect,required"`
+	// A set of permission groups that are specified to the policy.
+	PermissionGroups param.Field[[]PolicyPermissionGroupParam] `json:"permission_groups,required"`
+	// A list of resource names that the policy applies to.
+	Resources param.Field[interface{}] `json:"resources,required"`
+}
+
+func (r PolicyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A named group of permissions that map to a group of operations against
+// resources.
+type PolicyPermissionGroupParam struct {
+}
+
+func (r PolicyPermissionGroupParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type TokenNewResponse struct {
 	// The token value.
-	Value TokenValue           `json:"value"`
+	Value Value                `json:"value"`
 	JSON  tokenNewResponseJSON `json:"-"`
 }
 
@@ -266,8 +323,8 @@ type TokenNewParams struct {
 	// Token name.
 	Name param.Field[string] `json:"name,required"`
 	// List of access policies assigned to the token.
-	Policies  param.Field[[]PolicyWithPermissionGroupsParam] `json:"policies,required"`
-	Condition param.Field[TokenNewParamsCondition]           `json:"condition"`
+	Policies  param.Field[[]PolicyParam]           `json:"policies,required"`
+	Condition param.Field[TokenNewParamsCondition] `json:"condition"`
 	// The expiration time on or after which the JWT MUST NOT be accepted for
 	// processing.
 	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
@@ -347,7 +404,7 @@ type TokenUpdateParams struct {
 	// Token name.
 	Name param.Field[string] `json:"name,required"`
 	// List of access policies assigned to the token.
-	Policies param.Field[[]PolicyWithPermissionGroupsParam] `json:"policies,required"`
+	Policies param.Field[[]PolicyParam] `json:"policies,required"`
 	// Status of the token.
 	Status    param.Field[TokenUpdateParamsStatus]    `json:"status,required"`
 	Condition param.Field[TokenUpdateParamsCondition] `json:"condition"`

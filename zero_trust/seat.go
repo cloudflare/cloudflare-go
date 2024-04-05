@@ -34,7 +34,7 @@ func NewSeatService(opts ...option.RequestOption) (r *SeatService) {
 
 // Removes a user from a Zero Trust seat when both `access_seat` and `gateway_seat`
 // are set to false.
-func (r *SeatService) Edit(ctx context.Context, identifier string, body SeatEditParams, opts ...option.RequestOption) (res *[]ZeroTrustSeats, err error) {
+func (r *SeatService) Edit(ctx context.Context, identifier string, body SeatEditParams, opts ...option.RequestOption) (res *[]Seat, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SeatEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/seats", identifier)
@@ -46,20 +46,20 @@ func (r *SeatService) Edit(ctx context.Context, identifier string, body SeatEdit
 	return
 }
 
-type ZeroTrustSeats struct {
+type Seat struct {
 	// True if the seat is part of Access.
 	AccessSeat bool      `json:"access_seat"`
 	CreatedAt  time.Time `json:"created_at" format:"date-time"`
 	// True if the seat is part of Gateway.
 	GatewaySeat bool `json:"gateway_seat"`
 	// Identifier
-	SeatUid   string             `json:"seat_uid"`
-	UpdatedAt time.Time          `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustSeatsJSON `json:"-"`
+	SeatUid   string    `json:"seat_uid"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	JSON      seatJSON  `json:"-"`
 }
 
-// zeroTrustSeatsJSON contains the JSON metadata for the struct [ZeroTrustSeats]
-type zeroTrustSeatsJSON struct {
+// seatJSON contains the JSON metadata for the struct [Seat]
+type seatJSON struct {
 	AccessSeat  apijson.Field
 	CreatedAt   apijson.Field
 	GatewaySeat apijson.Field
@@ -69,11 +69,11 @@ type zeroTrustSeatsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustSeats) UnmarshalJSON(data []byte) (err error) {
+func (r *Seat) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustSeatsJSON) RawJSON() string {
+func (r seatJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -99,7 +99,7 @@ func (r SeatEditParamsBody) MarshalJSON() (data []byte, err error) {
 type SeatEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []ZeroTrustSeats                                          `json:"result,required,nullable"`
+	Result   []Seat                                                    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SeatEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SeatEditResponseEnvelopeResultInfo `json:"result_info"`

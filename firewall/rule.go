@@ -38,7 +38,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 }
 
 // Create one or more firewall rules.
-func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *[]FirewallFilterRule, err error) {
+func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *[]Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
@@ -51,7 +51,7 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleN
 }
 
 // Updates an existing firewall rule.
-func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id string, body RuleUpdateParams, opts ...option.RequestOption) (res *FirewallFilterRule, err error) {
+func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id string, body RuleUpdateParams, opts ...option.RequestOption) (res *Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
@@ -65,7 +65,7 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id stri
 
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallFilterRule], err error) {
+func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Rule], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -84,12 +84,12 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query Rul
 
 // Fetches firewall rules in a zone. You can filter the results using several
 // optional parameters.
-func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallFilterRule] {
+func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Rule] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing firewall rule.
-func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, body RuleDeleteParams, opts ...option.RequestOption) (res *FirewallFilterRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, body RuleDeleteParams, opts ...option.RequestOption) (res *Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
@@ -102,7 +102,7 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id stri
 }
 
 // Updates the priority of an existing firewall rule.
-func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string, body RuleEditParams, opts ...option.RequestOption) (res *[]FirewallFilterRule, err error) {
+func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string, body RuleEditParams, opts ...option.RequestOption) (res *[]Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
@@ -115,7 +115,7 @@ func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string
 }
 
 // Fetches the details of a firewall rule.
-func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params RuleGetParams, opts ...option.RequestOption) (res *FirewallFilterRule, err error) {
+func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params RuleGetParams, opts ...option.RequestOption) (res *Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, params.PathID)
@@ -127,12 +127,12 @@ func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params Rul
 	return
 }
 
-type FirewallFilterRule struct {
+type Rule struct {
 	// The unique identifier of the firewall rule.
 	ID string `json:"id"`
 	// The action to apply to a matched request. The `log` action is only available on
 	// an Enterprise plan.
-	Action FirewallFilterRuleAction `json:"action"`
+	Action RuleAction `json:"action"`
 	// An informative summary of the firewall rule.
 	Description string                                           `json:"description"`
 	Filter      UnnamedSchemaRefAb48d2d33259c9107401d174735701c7 `json:"filter"`
@@ -141,16 +141,15 @@ type FirewallFilterRule struct {
 	// The priority of the rule. Optional value used to define the processing order. A
 	// lower number indicates a higher priority. If not provided, rules with a defined
 	// priority will be processed before rules without a priority.
-	Priority float64                     `json:"priority"`
-	Products []FirewallFilterRuleProduct `json:"products"`
+	Priority float64       `json:"priority"`
+	Products []RuleProduct `json:"products"`
 	// A short reference tag. Allows you to select related firewall rules.
-	Ref  string                 `json:"ref"`
-	JSON firewallFilterRuleJSON `json:"-"`
+	Ref  string   `json:"ref"`
+	JSON ruleJSON `json:"-"`
 }
 
-// firewallFilterRuleJSON contains the JSON metadata for the struct
-// [FirewallFilterRule]
-type firewallFilterRuleJSON struct {
+// ruleJSON contains the JSON metadata for the struct [Rule]
+type ruleJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -163,55 +162,77 @@ type firewallFilterRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallFilterRule) UnmarshalJSON(data []byte) (err error) {
+func (r *Rule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallFilterRuleJSON) RawJSON() string {
+func (r ruleJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action to apply to a matched request. The `log` action is only available on
 // an Enterprise plan.
-type FirewallFilterRuleAction string
+type RuleAction string
 
 const (
-	FirewallFilterRuleActionBlock            FirewallFilterRuleAction = "block"
-	FirewallFilterRuleActionChallenge        FirewallFilterRuleAction = "challenge"
-	FirewallFilterRuleActionJsChallenge      FirewallFilterRuleAction = "js_challenge"
-	FirewallFilterRuleActionManagedChallenge FirewallFilterRuleAction = "managed_challenge"
-	FirewallFilterRuleActionAllow            FirewallFilterRuleAction = "allow"
-	FirewallFilterRuleActionLog              FirewallFilterRuleAction = "log"
-	FirewallFilterRuleActionBypass           FirewallFilterRuleAction = "bypass"
+	RuleActionBlock            RuleAction = "block"
+	RuleActionChallenge        RuleAction = "challenge"
+	RuleActionJsChallenge      RuleAction = "js_challenge"
+	RuleActionManagedChallenge RuleAction = "managed_challenge"
+	RuleActionAllow            RuleAction = "allow"
+	RuleActionLog              RuleAction = "log"
+	RuleActionBypass           RuleAction = "bypass"
 )
 
-func (r FirewallFilterRuleAction) IsKnown() bool {
+func (r RuleAction) IsKnown() bool {
 	switch r {
-	case FirewallFilterRuleActionBlock, FirewallFilterRuleActionChallenge, FirewallFilterRuleActionJsChallenge, FirewallFilterRuleActionManagedChallenge, FirewallFilterRuleActionAllow, FirewallFilterRuleActionLog, FirewallFilterRuleActionBypass:
+	case RuleActionBlock, RuleActionChallenge, RuleActionJsChallenge, RuleActionManagedChallenge, RuleActionAllow, RuleActionLog, RuleActionBypass:
 		return true
 	}
 	return false
 }
 
 // A list of products to bypass for a request when using the `bypass` action.
-type FirewallFilterRuleProduct string
+type RuleProduct string
 
 const (
-	FirewallFilterRuleProductZoneLockdown  FirewallFilterRuleProduct = "zoneLockdown"
-	FirewallFilterRuleProductUABlock       FirewallFilterRuleProduct = "uaBlock"
-	FirewallFilterRuleProductBic           FirewallFilterRuleProduct = "bic"
-	FirewallFilterRuleProductHot           FirewallFilterRuleProduct = "hot"
-	FirewallFilterRuleProductSecurityLevel FirewallFilterRuleProduct = "securityLevel"
-	FirewallFilterRuleProductRateLimit     FirewallFilterRuleProduct = "rateLimit"
-	FirewallFilterRuleProductWAF           FirewallFilterRuleProduct = "waf"
+	RuleProductZoneLockdown  RuleProduct = "zoneLockdown"
+	RuleProductUABlock       RuleProduct = "uaBlock"
+	RuleProductBic           RuleProduct = "bic"
+	RuleProductHot           RuleProduct = "hot"
+	RuleProductSecurityLevel RuleProduct = "securityLevel"
+	RuleProductRateLimit     RuleProduct = "rateLimit"
+	RuleProductWAF           RuleProduct = "waf"
 )
 
-func (r FirewallFilterRuleProduct) IsKnown() bool {
+func (r RuleProduct) IsKnown() bool {
 	switch r {
-	case FirewallFilterRuleProductZoneLockdown, FirewallFilterRuleProductUABlock, FirewallFilterRuleProductBic, FirewallFilterRuleProductHot, FirewallFilterRuleProductSecurityLevel, FirewallFilterRuleProductRateLimit, FirewallFilterRuleProductWAF:
+	case RuleProductZoneLockdown, RuleProductUABlock, RuleProductBic, RuleProductHot, RuleProductSecurityLevel, RuleProductRateLimit, RuleProductWAF:
 		return true
 	}
 	return false
+}
+
+type RuleParam struct {
+	// The action to apply to a matched request. The `log` action is only available on
+	// an Enterprise plan.
+	Action param.Field[RuleAction] `json:"action"`
+	// An informative summary of the firewall rule.
+	Description param.Field[string]                                                     `json:"description"`
+	Filter      param.Field[UnnamedSchemaRefAb48d2d33259c9107401d174735701c7UnionParam] `json:"filter"`
+	// When true, indicates that the firewall rule is currently paused.
+	Paused param.Field[bool] `json:"paused"`
+	// The priority of the rule. Optional value used to define the processing order. A
+	// lower number indicates a higher priority. If not provided, rules with a defined
+	// priority will be processed before rules without a priority.
+	Priority param.Field[float64]       `json:"priority"`
+	Products param.Field[[]RuleProduct] `json:"products"`
+	// A short reference tag. Allows you to select related firewall rules.
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type UnnamedSchemaRefAb48d2d33259c9107401d174735701c7 struct {
@@ -261,7 +282,7 @@ func (r UnnamedSchemaRefAb48d2d33259c9107401d174735701c7) AsUnion() UnnamedSchem
 	return r.union
 }
 
-// Union satisfied by [filters.FirewallFilter] or
+// Union satisfied by [filters.Filter] or
 // [firewall.UnnamedSchemaRefAb48d2d33259c9107401d174735701c7LegacyJhsDeletedFilter].
 type UnnamedSchemaRefAb48d2d33259c9107401d174735701c7Union interface {
 	implementsFirewallUnnamedSchemaRefAb48d2d33259c9107401d174735701c7()
@@ -273,7 +294,7 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(filters.FirewallFilter{}),
+			Type:       reflect.TypeOf(filters.Filter{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -322,7 +343,7 @@ func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 type RuleNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []FirewallFilterRule                                      `json:"result,required,nullable"`
+	Result   []Rule                                                    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -406,7 +427,7 @@ func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 type RuleUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   FirewallFilterRule                                        `json:"result,required,nullable"`
+	Result   Rule                                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -482,7 +503,7 @@ func (r RuleDeleteParams) MarshalJSON() (data []byte, err error) {
 type RuleDeleteResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   FirewallFilterRule                                        `json:"result,required,nullable"`
+	Result   Rule                                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -533,7 +554,7 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 type RuleEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []FirewallFilterRule                                      `json:"result,required,nullable"`
+	Result   []Rule                                                    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`
@@ -624,7 +645,7 @@ func (r RuleGetParams) URLQuery() (v url.Values) {
 type RuleGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   FirewallFilterRule                                        `json:"result,required,nullable"`
+	Result   Rule                                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`

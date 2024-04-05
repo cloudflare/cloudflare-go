@@ -35,7 +35,7 @@ func NewLoadBalancerAnalyticsEventService(opts ...option.RequestOption) (r *Load
 }
 
 // List origin health changes.
-func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancingAnalytics], err error) {
+func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Analytics], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,21 +53,20 @@ func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query Load
 }
 
 // List origin health changes.
-func (r *LoadBalancerAnalyticsEventService) ListAutoPaging(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LoadBalancingAnalytics] {
+func (r *LoadBalancerAnalyticsEventService) ListAutoPaging(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Analytics] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-type LoadBalancingAnalytics struct {
-	ID        int64                      `json:"id"`
-	Origins   []interface{}              `json:"origins"`
-	Pool      interface{}                `json:"pool"`
-	Timestamp time.Time                  `json:"timestamp" format:"date-time"`
-	JSON      loadBalancingAnalyticsJSON `json:"-"`
+type Analytics struct {
+	ID        int64         `json:"id"`
+	Origins   []interface{} `json:"origins"`
+	Pool      interface{}   `json:"pool"`
+	Timestamp time.Time     `json:"timestamp" format:"date-time"`
+	JSON      analyticsJSON `json:"-"`
 }
 
-// loadBalancingAnalyticsJSON contains the JSON metadata for the struct
-// [LoadBalancingAnalytics]
-type loadBalancingAnalyticsJSON struct {
+// analyticsJSON contains the JSON metadata for the struct [Analytics]
+type analyticsJSON struct {
 	ID          apijson.Field
 	Origins     apijson.Field
 	Pool        apijson.Field
@@ -76,11 +75,11 @@ type loadBalancingAnalyticsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancingAnalytics) UnmarshalJSON(data []byte) (err error) {
+func (r *Analytics) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancingAnalyticsJSON) RawJSON() string {
+func (r analyticsJSON) RawJSON() string {
 	return r.raw
 }
 

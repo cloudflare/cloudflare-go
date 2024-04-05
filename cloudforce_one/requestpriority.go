@@ -34,7 +34,7 @@ func NewRequestPriorityService(opts ...option.RequestOption) (r *RequestPriority
 }
 
 // Create a New Priority Requirement
-func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier string, body RequestPriorityNewParams, opts ...option.RequestOption) (res *CloudforceOnePriorityItem, err error) {
+func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier string, body RequestPriorityNewParams, opts ...option.RequestOption) (res *Priority, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/new", accountIdentifier)
@@ -47,7 +47,7 @@ func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier stri
 }
 
 // Update a Priority Intelligence Requirement
-func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier string, priorityIdentifer string, body RequestPriorityUpdateParams, opts ...option.RequestOption) (res *CloudforceOneRequestItem, err error) {
+func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier string, priorityIdentifer string, body RequestPriorityUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", accountIdentifier, priorityIdentifer)
@@ -73,7 +73,7 @@ func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier s
 }
 
 // Get a Priority Intelligence Requirement
-func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *CloudforceOneRequestItem, err error) {
+func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *Item, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/%s", accountIdentifier, priorityIdentifer)
@@ -86,7 +86,7 @@ func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier stri
 }
 
 // Get Priority Intelligence Requirement Quota
-func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CloudforceOneQuota, err error) {
+func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *Quota, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestPriorityQuotaResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority/quota", accountIdentifier)
@@ -98,7 +98,7 @@ func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier st
 	return
 }
 
-type CloudforceOnePriorityItem struct {
+type Priority struct {
 	// UUID
 	ID string `json:"id,required"`
 	// Priority creation time
@@ -110,15 +110,14 @@ type CloudforceOnePriorityItem struct {
 	// Requirement
 	Requirement string `json:"requirement,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp CloudforceOnePriorityItemTlp `json:"tlp,required"`
+	Tlp PriorityTlp `json:"tlp,required"`
 	// Priority last updated time
-	Updated time.Time                     `json:"updated,required" format:"date-time"`
-	JSON    cloudforceOnePriorityItemJSON `json:"-"`
+	Updated time.Time    `json:"updated,required" format:"date-time"`
+	JSON    priorityJSON `json:"-"`
 }
 
-// cloudforceOnePriorityItemJSON contains the JSON metadata for the struct
-// [CloudforceOnePriorityItem]
-type cloudforceOnePriorityItemJSON struct {
+// priorityJSON contains the JSON metadata for the struct [Priority]
+type priorityJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Labels      apijson.Field
@@ -130,28 +129,28 @@ type cloudforceOnePriorityItemJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CloudforceOnePriorityItem) UnmarshalJSON(data []byte) (err error) {
+func (r *Priority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r cloudforceOnePriorityItemJSON) RawJSON() string {
+func (r priorityJSON) RawJSON() string {
 	return r.raw
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type CloudforceOnePriorityItemTlp string
+type PriorityTlp string
 
 const (
-	CloudforceOnePriorityItemTlpClear       CloudforceOnePriorityItemTlp = "clear"
-	CloudforceOnePriorityItemTlpAmber       CloudforceOnePriorityItemTlp = "amber"
-	CloudforceOnePriorityItemTlpAmberStrict CloudforceOnePriorityItemTlp = "amber-strict"
-	CloudforceOnePriorityItemTlpGreen       CloudforceOnePriorityItemTlp = "green"
-	CloudforceOnePriorityItemTlpRed         CloudforceOnePriorityItemTlp = "red"
+	PriorityTlpClear       PriorityTlp = "clear"
+	PriorityTlpAmber       PriorityTlp = "amber"
+	PriorityTlpAmberStrict PriorityTlp = "amber-strict"
+	PriorityTlpGreen       PriorityTlp = "green"
+	PriorityTlpRed         PriorityTlp = "red"
 )
 
-func (r CloudforceOnePriorityItemTlp) IsKnown() bool {
+func (r PriorityTlp) IsKnown() bool {
 	switch r {
-	case CloudforceOnePriorityItemTlpClear, CloudforceOnePriorityItemTlpAmber, CloudforceOnePriorityItemTlpAmberStrict, CloudforceOnePriorityItemTlpGreen, CloudforceOnePriorityItemTlpRed:
+	case PriorityTlpClear, PriorityTlpAmber, PriorityTlpAmberStrict, PriorityTlpGreen, PriorityTlpRed:
 		return true
 	}
 	return false
@@ -194,7 +193,7 @@ func (r RequestPriorityNewParamsTlp) IsKnown() bool {
 type RequestPriorityNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CloudforceOnePriorityItem                                 `json:"result,required"`
+	Result   Priority                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityNewResponseEnvelopeJSON    `json:"-"`
@@ -271,7 +270,7 @@ func (r RequestPriorityUpdateParamsTlp) IsKnown() bool {
 type RequestPriorityUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CloudforceOneRequestItem                                  `json:"result,required"`
+	Result   Item                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityUpdateResponseEnvelopeJSON    `json:"-"`
@@ -357,7 +356,7 @@ func (r RequestPriorityDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type RequestPriorityGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CloudforceOneRequestItem                                  `json:"result,required"`
+	Result   Item                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityGetResponseEnvelopeJSON    `json:"-"`
@@ -400,7 +399,7 @@ func (r RequestPriorityGetResponseEnvelopeSuccess) IsKnown() bool {
 type RequestPriorityQuotaResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CloudforceOneQuota                                        `json:"result,required"`
+	Result   Quota                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestPriorityQuotaResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestPriorityQuotaResponseEnvelopeJSON    `json:"-"`

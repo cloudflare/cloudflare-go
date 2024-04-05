@@ -35,7 +35,7 @@ func NewHostnameIPFSUniversalPathContentListEntryService(opts ...option.RequestO
 }
 
 // Create IPFS Universal Path Gateway Content List Entry
-func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListEntryNewParams, opts ...option.RequestOption) (res *DistributedWebConfigContentListEntry, err error) {
+func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListEntryNewParams, opts ...option.RequestOption) (res *ContentListItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries", zoneIdentifier, identifier)
@@ -48,7 +48,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Conte
 }
 
 // Edit IPFS Universal Path Gateway Content List Entry
-func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, body HostnameIPFSUniversalPathContentListEntryUpdateParams, opts ...option.RequestOption) (res *DistributedWebConfigContentListEntry, err error) {
+func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, body HostnameIPFSUniversalPathContentListEntryUpdateParams, opts ...option.RequestOption) (res *ContentListItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries/%s", zoneIdentifier, identifier, contentListEntryIdentifier)
@@ -87,7 +87,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Co
 }
 
 // IPFS Universal Path Gateway Content List Entry Details
-func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, opts ...option.RequestOption) (res *DistributedWebConfigContentListEntry, err error) {
+func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, opts ...option.RequestOption) (res *ContentListItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries/%s", zoneIdentifier, identifier, contentListEntryIdentifier)
@@ -100,7 +100,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Conte
 }
 
 // Content list entry to be blocked.
-type DistributedWebConfigContentListEntry struct {
+type ContentListItem struct {
 	// Identifier
 	ID string `json:"id"`
 	// CID or content path of content to block.
@@ -110,13 +110,12 @@ type DistributedWebConfigContentListEntry struct {
 	Description string    `json:"description"`
 	ModifiedOn  time.Time `json:"modified_on" format:"date-time"`
 	// Type of content list entry to block.
-	Type DistributedWebConfigContentListEntryType `json:"type"`
-	JSON distributedWebConfigContentListEntryJSON `json:"-"`
+	Type ContentListItemType `json:"type"`
+	JSON contentListItemJSON `json:"-"`
 }
 
-// distributedWebConfigContentListEntryJSON contains the JSON metadata for the
-// struct [DistributedWebConfigContentListEntry]
-type distributedWebConfigContentListEntryJSON struct {
+// contentListItemJSON contains the JSON metadata for the struct [ContentListItem]
+type contentListItemJSON struct {
 	ID          apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
@@ -127,47 +126,47 @@ type distributedWebConfigContentListEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DistributedWebConfigContentListEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *ContentListItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r distributedWebConfigContentListEntryJSON) RawJSON() string {
+func (r contentListItemJSON) RawJSON() string {
 	return r.raw
 }
 
 // Type of content list entry to block.
-type DistributedWebConfigContentListEntryType string
+type ContentListItemType string
 
 const (
-	DistributedWebConfigContentListEntryTypeCid         DistributedWebConfigContentListEntryType = "cid"
-	DistributedWebConfigContentListEntryTypeContentPath DistributedWebConfigContentListEntryType = "content_path"
+	ContentListItemTypeCid         ContentListItemType = "cid"
+	ContentListItemTypeContentPath ContentListItemType = "content_path"
 )
 
-func (r DistributedWebConfigContentListEntryType) IsKnown() bool {
+func (r ContentListItemType) IsKnown() bool {
 	switch r {
-	case DistributedWebConfigContentListEntryTypeCid, DistributedWebConfigContentListEntryTypeContentPath:
+	case ContentListItemTypeCid, ContentListItemTypeContentPath:
 		return true
 	}
 	return false
 }
 
 // Content list entry to be blocked.
-type DistributedWebConfigContentListEntryParam struct {
+type ContentListItemParam struct {
 	// CID or content path of content to block.
 	Content param.Field[string] `json:"content"`
 	// An optional description of the content list entry.
 	Description param.Field[string] `json:"description"`
 	// Type of content list entry to block.
-	Type param.Field[DistributedWebConfigContentListEntryType] `json:"type"`
+	Type param.Field[ContentListItemType] `json:"type"`
 }
 
-func (r DistributedWebConfigContentListEntryParam) MarshalJSON() (data []byte, err error) {
+func (r ContentListItemParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type HostnameIPFSUniversalPathContentListEntryListResponse struct {
 	// Content list entries.
-	Entries []DistributedWebConfigContentListEntry                    `json:"entries"`
+	Entries []ContentListItem                                         `json:"entries"`
 	JSON    hostnameIPFSUniversalPathContentListEntryListResponseJSON `json:"-"`
 }
 
@@ -243,7 +242,7 @@ type HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Content list entry to be blocked.
-	Result DistributedWebConfigContentListEntry `json:"result,required"`
+	Result ContentListItem `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeJSON    `json:"-"`
@@ -317,7 +316,7 @@ type HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Content list entry to be blocked.
-	Result DistributedWebConfigContentListEntry `json:"result,required"`
+	Result ContentListItem `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeJSON    `json:"-"`
@@ -492,7 +491,7 @@ type HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Content list entry to be blocked.
-	Result DistributedWebConfigContentListEntry `json:"result,required"`
+	Result ContentListItem `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeJSON    `json:"-"`
