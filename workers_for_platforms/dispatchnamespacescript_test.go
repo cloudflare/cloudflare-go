@@ -50,12 +50,12 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
 				Logpush:            cloudflare.F(false),
 				MainModule:         cloudflare.F("worker.js"),
-				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion](workers.SingleStepMigrationParam{
+				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsUnion](workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
+					RenamedClasses: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -65,7 +65,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
+					TransferredClasses: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -79,8 +79,8 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("string"),
 					}}),
 				}),
-				Placement: cloudflare.F(workers.PlacementConfigurationParam{
-					Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
+				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacement{
+					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsVariant0MetadataPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string", "string", "string"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
