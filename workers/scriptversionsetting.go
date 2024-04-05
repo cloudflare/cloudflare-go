@@ -134,10 +134,10 @@ func (r BindingItem) AsUnion() BindingItemUnion {
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by [workers.BindingItemWorkersKVNamespaceBinding],
-// [workers.BindingItemWorkersServiceBinding], [workers.DurableObjectBinding],
-// [workers.R2Binding], [workers.BindingItemWorkersQueueBinding],
-// [workers.D1Binding], [workers.DispatchNamespaceBinding] or
-// [workers.MTLSCERTBinding].
+// [workers.BindingItemWorkersServiceBinding],
+// [workers.BindingItemWorkersDoBinding], [workers.R2Binding],
+// [workers.BindingItemWorkersQueueBinding], [workers.D1Binding],
+// [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
 type BindingItemUnion interface {
 	implementsWorkersBindingItem()
 }
@@ -156,7 +156,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DurableObjectBinding{}),
+			Type:       reflect.TypeOf(BindingItemWorkersDoBinding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -274,6 +274,60 @@ func (r BindingItemWorkersServiceBindingType) IsKnown() bool {
 	return false
 }
 
+type BindingItemWorkersDoBinding struct {
+	// The exported class name of the Durable Object
+	ClassName string `json:"class_name,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type BindingItemWorkersDoBindingType `json:"type,required"`
+	// The environment of the script_name to bind to
+	Environment string `json:"environment"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName string                          `json:"script_name"`
+	JSON       bindingItemWorkersDoBindingJSON `json:"-"`
+}
+
+// bindingItemWorkersDoBindingJSON contains the JSON metadata for the struct
+// [BindingItemWorkersDoBinding]
+type bindingItemWorkersDoBindingJSON struct {
+	ClassName   apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	Environment apijson.Field
+	NamespaceID apijson.Field
+	ScriptName  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingItemWorkersDoBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingItemWorkersDoBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingItemWorkersDoBinding) implementsWorkersBindingItem() {}
+
+// The class of resource that the binding provides.
+type BindingItemWorkersDoBindingType string
+
+const (
+	BindingItemWorkersDoBindingTypeDurableObjectNamespace BindingItemWorkersDoBindingType = "durable_object_namespace"
+)
+
+func (r BindingItemWorkersDoBindingType) IsKnown() bool {
+	switch r {
+	case BindingItemWorkersDoBindingTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
 type BindingItemWorkersQueueBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
@@ -377,7 +431,7 @@ func (r BindingItemParam) implementsWorkersBindingItemUnionParam() {}
 //
 // Satisfied by [workers.BindingItemWorkersKVNamespaceBindingParam],
 // [workers.BindingItemWorkersServiceBindingParam],
-// [workers.DurableObjectBindingParam], [workers.R2BindingParam],
+// [workers.BindingItemWorkersDoBindingParam], [workers.R2BindingParam],
 // [workers.BindingItemWorkersQueueBindingParam], [workers.D1BindingParam],
 // [workers.DispatchNamespaceBindingParam], [workers.MTLSCERTBindingParam],
 // [BindingItemParam].
@@ -410,6 +464,23 @@ func (r BindingItemWorkersServiceBindingParam) MarshalJSON() (data []byte, err e
 }
 
 func (r BindingItemWorkersServiceBindingParam) implementsWorkersBindingItemUnionParam() {}
+
+type BindingItemWorkersDoBindingParam struct {
+	// The exported class name of the Durable Object
+	ClassName param.Field[string] `json:"class_name,required"`
+	// The class of resource that the binding provides.
+	Type param.Field[BindingItemWorkersDoBindingType] `json:"type,required"`
+	// The environment of the script_name to bind to
+	Environment param.Field[string] `json:"environment"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName param.Field[string] `json:"script_name"`
+}
+
+func (r BindingItemWorkersDoBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BindingItemWorkersDoBindingParam) implementsWorkersBindingItemUnionParam() {}
 
 type BindingItemWorkersQueueBindingParam struct {
 	// Name of the Queue to bind to

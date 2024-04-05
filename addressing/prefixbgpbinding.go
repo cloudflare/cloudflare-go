@@ -37,7 +37,7 @@ func NewPrefixBGPBindingService(opts ...option.RequestOption) (r *PrefixBGPBindi
 // service running on Cloudflare's network. **Note:** This API may only be used on
 // prefixes currently configured with a Magic Transit service binding, and only
 // allows creating service bindings for the Cloudflare CDN or Cloudflare Spectrum.
-func (r *PrefixBGPBindingService) New(ctx context.Context, prefixID string, params PrefixBGPBindingNewParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
+func (r *PrefixBGPBindingService) New(ctx context.Context, prefixID string, params PrefixBGPBindingNewParams, opts ...option.RequestOption) (res *PrefixBGPBindingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPBindingNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", params.AccountID, prefixID)
@@ -55,7 +55,7 @@ func (r *PrefixBGPBindingService) New(ctx context.Context, prefixID string, para
 // `192.0.2.0/24` to Cloudflare Magic Transit and `192.0.2.1/32` to the Cloudflare
 // CDN would route traffic for `192.0.2.1` to the CDN, and traffic for all other
 // IPs in the prefix to Cloudflare Magic Transit.
-func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ServiceBinding], err error) {
+func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PrefixBGPBindingListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -78,7 +78,7 @@ func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, que
 // `192.0.2.0/24` to Cloudflare Magic Transit and `192.0.2.1/32` to the Cloudflare
 // CDN would route traffic for `192.0.2.1` to the CDN, and traffic for all other
 // IPs in the prefix to Cloudflare Magic Transit.
-func (r *PrefixBGPBindingService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ServiceBinding] {
+func (r *PrefixBGPBindingService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PrefixBGPBindingListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
@@ -96,7 +96,7 @@ func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, b
 }
 
 // Fetch a single Service Binding
-func (r *PrefixBGPBindingService) Get(ctx context.Context, prefixID string, bindingID string, query PrefixBGPBindingGetParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
+func (r *PrefixBGPBindingService) Get(ctx context.Context, prefixID string, bindingID string, query PrefixBGPBindingGetParams, opts ...option.RequestOption) (res *PrefixBGPBindingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPBindingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", query.AccountID, prefixID, bindingID)
@@ -108,22 +108,23 @@ func (r *PrefixBGPBindingService) Get(ctx context.Context, prefixID string, bind
 	return
 }
 
-type ServiceBinding struct {
+type PrefixBGPBindingNewResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR string `json:"cidr"`
 	// Status of a Service Binding's deployment to the Cloudflare network
-	Provisioning ServiceBindingProvisioning `json:"provisioning"`
+	Provisioning PrefixBGPBindingNewResponseProvisioning `json:"provisioning"`
 	// Identifier
 	ServiceID string `json:"service_id"`
 	// Name of a service running on the Cloudflare network
-	ServiceName string             `json:"service_name"`
-	JSON        serviceBindingJSON `json:"-"`
+	ServiceName string                          `json:"service_name"`
+	JSON        prefixBGPBindingNewResponseJSON `json:"-"`
 }
 
-// serviceBindingJSON contains the JSON metadata for the struct [ServiceBinding]
-type serviceBindingJSON struct {
+// prefixBGPBindingNewResponseJSON contains the JSON metadata for the struct
+// [PrefixBGPBindingNewResponse]
+type prefixBGPBindingNewResponseJSON struct {
 	ID           apijson.Field
 	CIDR         apijson.Field
 	Provisioning apijson.Field
@@ -133,50 +134,200 @@ type serviceBindingJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *ServiceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *PrefixBGPBindingNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r serviceBindingJSON) RawJSON() string {
+func (r prefixBGPBindingNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Status of a Service Binding's deployment to the Cloudflare network
-type ServiceBindingProvisioning struct {
+type PrefixBGPBindingNewResponseProvisioning struct {
 	// When a binding has been deployed to a majority of Cloudflare datacenters, the
 	// binding will become active and can be used with its associated service.
-	State ServiceBindingProvisioningState `json:"state"`
-	JSON  serviceBindingProvisioningJSON  `json:"-"`
+	State PrefixBGPBindingNewResponseProvisioningState `json:"state"`
+	JSON  prefixBGPBindingNewResponseProvisioningJSON  `json:"-"`
 }
 
-// serviceBindingProvisioningJSON contains the JSON metadata for the struct
-// [ServiceBindingProvisioning]
-type serviceBindingProvisioningJSON struct {
+// prefixBGPBindingNewResponseProvisioningJSON contains the JSON metadata for the
+// struct [PrefixBGPBindingNewResponseProvisioning]
+type prefixBGPBindingNewResponseProvisioningJSON struct {
 	State       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ServiceBindingProvisioning) UnmarshalJSON(data []byte) (err error) {
+func (r *PrefixBGPBindingNewResponseProvisioning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r serviceBindingProvisioningJSON) RawJSON() string {
+func (r prefixBGPBindingNewResponseProvisioningJSON) RawJSON() string {
 	return r.raw
 }
 
 // When a binding has been deployed to a majority of Cloudflare datacenters, the
 // binding will become active and can be used with its associated service.
-type ServiceBindingProvisioningState string
+type PrefixBGPBindingNewResponseProvisioningState string
 
 const (
-	ServiceBindingProvisioningStateProvisioning ServiceBindingProvisioningState = "provisioning"
-	ServiceBindingProvisioningStateActive       ServiceBindingProvisioningState = "active"
+	PrefixBGPBindingNewResponseProvisioningStateProvisioning PrefixBGPBindingNewResponseProvisioningState = "provisioning"
+	PrefixBGPBindingNewResponseProvisioningStateActive       PrefixBGPBindingNewResponseProvisioningState = "active"
 )
 
-func (r ServiceBindingProvisioningState) IsKnown() bool {
+func (r PrefixBGPBindingNewResponseProvisioningState) IsKnown() bool {
 	switch r {
-	case ServiceBindingProvisioningStateProvisioning, ServiceBindingProvisioningStateActive:
+	case PrefixBGPBindingNewResponseProvisioningStateProvisioning, PrefixBGPBindingNewResponseProvisioningStateActive:
+		return true
+	}
+	return false
+}
+
+type PrefixBGPBindingListResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	CIDR string `json:"cidr"`
+	// Status of a Service Binding's deployment to the Cloudflare network
+	Provisioning PrefixBGPBindingListResponseProvisioning `json:"provisioning"`
+	// Identifier
+	ServiceID string `json:"service_id"`
+	// Name of a service running on the Cloudflare network
+	ServiceName string                           `json:"service_name"`
+	JSON        prefixBGPBindingListResponseJSON `json:"-"`
+}
+
+// prefixBGPBindingListResponseJSON contains the JSON metadata for the struct
+// [PrefixBGPBindingListResponse]
+type prefixBGPBindingListResponseJSON struct {
+	ID           apijson.Field
+	CIDR         apijson.Field
+	Provisioning apijson.Field
+	ServiceID    apijson.Field
+	ServiceName  apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PrefixBGPBindingListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPBindingListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of a Service Binding's deployment to the Cloudflare network
+type PrefixBGPBindingListResponseProvisioning struct {
+	// When a binding has been deployed to a majority of Cloudflare datacenters, the
+	// binding will become active and can be used with its associated service.
+	State PrefixBGPBindingListResponseProvisioningState `json:"state"`
+	JSON  prefixBGPBindingListResponseProvisioningJSON  `json:"-"`
+}
+
+// prefixBGPBindingListResponseProvisioningJSON contains the JSON metadata for the
+// struct [PrefixBGPBindingListResponseProvisioning]
+type prefixBGPBindingListResponseProvisioningJSON struct {
+	State       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixBGPBindingListResponseProvisioning) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPBindingListResponseProvisioningJSON) RawJSON() string {
+	return r.raw
+}
+
+// When a binding has been deployed to a majority of Cloudflare datacenters, the
+// binding will become active and can be used with its associated service.
+type PrefixBGPBindingListResponseProvisioningState string
+
+const (
+	PrefixBGPBindingListResponseProvisioningStateProvisioning PrefixBGPBindingListResponseProvisioningState = "provisioning"
+	PrefixBGPBindingListResponseProvisioningStateActive       PrefixBGPBindingListResponseProvisioningState = "active"
+)
+
+func (r PrefixBGPBindingListResponseProvisioningState) IsKnown() bool {
+	switch r {
+	case PrefixBGPBindingListResponseProvisioningStateProvisioning, PrefixBGPBindingListResponseProvisioningStateActive:
+		return true
+	}
+	return false
+}
+
+type PrefixBGPBindingGetResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	CIDR string `json:"cidr"`
+	// Status of a Service Binding's deployment to the Cloudflare network
+	Provisioning PrefixBGPBindingGetResponseProvisioning `json:"provisioning"`
+	// Identifier
+	ServiceID string `json:"service_id"`
+	// Name of a service running on the Cloudflare network
+	ServiceName string                          `json:"service_name"`
+	JSON        prefixBGPBindingGetResponseJSON `json:"-"`
+}
+
+// prefixBGPBindingGetResponseJSON contains the JSON metadata for the struct
+// [PrefixBGPBindingGetResponse]
+type prefixBGPBindingGetResponseJSON struct {
+	ID           apijson.Field
+	CIDR         apijson.Field
+	Provisioning apijson.Field
+	ServiceID    apijson.Field
+	ServiceName  apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *PrefixBGPBindingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPBindingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of a Service Binding's deployment to the Cloudflare network
+type PrefixBGPBindingGetResponseProvisioning struct {
+	// When a binding has been deployed to a majority of Cloudflare datacenters, the
+	// binding will become active and can be used with its associated service.
+	State PrefixBGPBindingGetResponseProvisioningState `json:"state"`
+	JSON  prefixBGPBindingGetResponseProvisioningJSON  `json:"-"`
+}
+
+// prefixBGPBindingGetResponseProvisioningJSON contains the JSON metadata for the
+// struct [PrefixBGPBindingGetResponseProvisioning]
+type prefixBGPBindingGetResponseProvisioningJSON struct {
+	State       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixBGPBindingGetResponseProvisioning) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixBGPBindingGetResponseProvisioningJSON) RawJSON() string {
+	return r.raw
+}
+
+// When a binding has been deployed to a majority of Cloudflare datacenters, the
+// binding will become active and can be used with its associated service.
+type PrefixBGPBindingGetResponseProvisioningState string
+
+const (
+	PrefixBGPBindingGetResponseProvisioningStateProvisioning PrefixBGPBindingGetResponseProvisioningState = "provisioning"
+	PrefixBGPBindingGetResponseProvisioningStateActive       PrefixBGPBindingGetResponseProvisioningState = "active"
+)
+
+func (r PrefixBGPBindingGetResponseProvisioningState) IsKnown() bool {
+	switch r {
+	case PrefixBGPBindingGetResponseProvisioningStateProvisioning, PrefixBGPBindingGetResponseProvisioningStateActive:
 		return true
 	}
 	return false
@@ -198,7 +349,7 @@ func (r PrefixBGPBindingNewParams) MarshalJSON() (data []byte, err error) {
 type PrefixBGPBindingNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ServiceBinding                                            `json:"result,required"`
+	Result   PrefixBGPBindingNewResponse                               `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingNewResponseEnvelopeJSON    `json:"-"`
@@ -299,7 +450,7 @@ type PrefixBGPBindingGetParams struct {
 type PrefixBGPBindingGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ServiceBinding                                            `json:"result,required"`
+	Result   PrefixBGPBindingGetResponse                               `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingGetResponseEnvelopeJSON    `json:"-"`
