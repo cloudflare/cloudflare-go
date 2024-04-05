@@ -34,7 +34,7 @@ func NewConnectionService(opts ...option.RequestOption) (r *ConnectionService) {
 }
 
 // Lists all connections detected by Page Shield.
-func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PageShieldConnection], err error) {
+func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Connection], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,35 +52,34 @@ func (r *ConnectionService) List(ctx context.Context, params ConnectionListParam
 }
 
 // Lists all connections detected by Page Shield.
-func (r *ConnectionService) ListAutoPaging(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PageShieldConnection] {
+func (r *ConnectionService) ListAutoPaging(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Connection] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Fetches a connection detected by Page Shield by connection ID.
-func (r *ConnectionService) Get(ctx context.Context, connectionID string, query ConnectionGetParams, opts ...option.RequestOption) (res *PageShieldConnection, err error) {
+func (r *ConnectionService) Get(ctx context.Context, connectionID string, query ConnectionGetParams, opts ...option.RequestOption) (res *Connection, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/connections/%s", query.ZoneID, connectionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type PageShieldConnection struct {
-	ID                      string                   `json:"id"`
-	AddedAt                 string                   `json:"added_at"`
-	DomainReportedMalicious bool                     `json:"domain_reported_malicious"`
-	FirstPageURL            string                   `json:"first_page_url"`
-	FirstSeenAt             string                   `json:"first_seen_at"`
-	Host                    string                   `json:"host"`
-	LastSeenAt              string                   `json:"last_seen_at"`
-	PageURLs                []string                 `json:"page_urls"`
-	URL                     string                   `json:"url"`
-	URLContainsCdnCgiPath   bool                     `json:"url_contains_cdn_cgi_path"`
-	JSON                    pageShieldConnectionJSON `json:"-"`
+type Connection struct {
+	ID                      string         `json:"id"`
+	AddedAt                 string         `json:"added_at"`
+	DomainReportedMalicious bool           `json:"domain_reported_malicious"`
+	FirstPageURL            string         `json:"first_page_url"`
+	FirstSeenAt             string         `json:"first_seen_at"`
+	Host                    string         `json:"host"`
+	LastSeenAt              string         `json:"last_seen_at"`
+	PageURLs                []string       `json:"page_urls"`
+	URL                     string         `json:"url"`
+	URLContainsCdnCgiPath   bool           `json:"url_contains_cdn_cgi_path"`
+	JSON                    connectionJSON `json:"-"`
 }
 
-// pageShieldConnectionJSON contains the JSON metadata for the struct
-// [PageShieldConnection]
-type pageShieldConnectionJSON struct {
+// connectionJSON contains the JSON metadata for the struct [Connection]
+type connectionJSON struct {
 	ID                      apijson.Field
 	AddedAt                 apijson.Field
 	DomainReportedMalicious apijson.Field
@@ -95,11 +94,11 @@ type pageShieldConnectionJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *PageShieldConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *Connection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageShieldConnectionJSON) RawJSON() string {
+func (r connectionJSON) RawJSON() string {
 	return r.raw
 }
 

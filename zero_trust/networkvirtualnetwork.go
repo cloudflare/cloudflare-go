@@ -49,7 +49,7 @@ func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVi
 }
 
 // Lists and filters virtual networks in an account.
-func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TunnelVirtualNetwork], err error) {
+func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Network], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,7 +67,7 @@ func (r *NetworkVirtualNetworkService) List(ctx context.Context, params NetworkV
 }
 
 // Lists and filters virtual networks in an account.
-func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TunnelVirtualNetwork] {
+func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, params NetworkVirtualNetworkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Network] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -97,7 +97,7 @@ func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkI
 	return
 }
 
-type TunnelVirtualNetwork struct {
+type Network struct {
 	// UUID of the virtual network.
 	ID string `json:"id,required"`
 	// Optional remark describing the virtual network.
@@ -110,13 +110,12 @@ type TunnelVirtualNetwork struct {
 	Name string `json:"name,required"`
 	// Timestamp of when the virtual network was deleted. If `null`, the virtual
 	// network has not been deleted.
-	DeletedAt interface{}              `json:"deleted_at"`
-	JSON      tunnelVirtualNetworkJSON `json:"-"`
+	DeletedAt interface{} `json:"deleted_at"`
+	JSON      networkJSON `json:"-"`
 }
 
-// tunnelVirtualNetworkJSON contains the JSON metadata for the struct
-// [TunnelVirtualNetwork]
-type tunnelVirtualNetworkJSON struct {
+// networkJSON contains the JSON metadata for the struct [Network]
+type networkJSON struct {
 	ID               apijson.Field
 	Comment          apijson.Field
 	CreatedAt        apijson.Field
@@ -127,11 +126,11 @@ type tunnelVirtualNetworkJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TunnelVirtualNetwork) UnmarshalJSON(data []byte) (err error) {
+func (r *Network) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelVirtualNetworkJSON) RawJSON() string {
+func (r networkJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -14,8 +14,8 @@ func (UnionString) ImplementsUserLoadBalancerPoolHealthResponseUnion()          
 func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                     {}
 func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()                         {}
 func (UnionString) ImplementsCacheCachePurgeParamsCachePurgeFilesFileUnion()               {}
-func (UnionString) ImplementsDNSDNSFirewallDNSFirewallIPsUnion()                           {}
-func (UnionString) ImplementsDNSDNSFirewallUpstreamIPsUnion()                              {}
+func (UnionString) ImplementsDNSFirewallDNSFirewallIPsUnion()                              {}
+func (UnionString) ImplementsDNSFirewallUpstreamIPsUnion()                                 {}
 func (UnionString) ImplementsDNSFirewallIPsItemUnionParam()                                {}
 func (UnionString) ImplementsDNSFirewallIPsItemUnion()                                     {}
 func (UnionString) ImplementsDNSUpstreamIPsItemsUnionParam()                               {}
@@ -27,15 +27,15 @@ func (UnionString) ImplementsWorkersAIRunParamsTextEmbeddingsTextUnion()        
 func (UnionString) ImplementsSpectrumOriginPortUnionParam()                                {}
 func (UnionString) ImplementsSpectrumOriginPortUnion()                                     {}
 func (UnionString) ImplementsImagesImageVariantsUnion()                                    {}
-func (UnionString) ImplementsIntelIntelSchemasIpipUnion()                                  {}
+func (UnionString) ImplementsIntelIpipUnion()                                              {}
 func (UnionString) ImplementsMagicTransitSubnetUnionParam()                                {}
 func (UnionString) ImplementsMagicTransitSubnetUnion()                                     {}
 func (UnionString) ImplementsRulesListItemGetResponseUnion()                               {}
 func (UnionString) ImplementsStreamCaptionDeleteResponseUnion()                            {}
 func (UnionString) ImplementsAlertingAvailableAlertListResponseUnion()                     {}
 func (UnionString) ImplementsAlertingDestinationEligibleGetResponseUnion()                 {}
-func (UnionString) ImplementsAlertingMechanismsIDUnionParam()                              {}
-func (UnionString) ImplementsAlertingMechanismsIDUnion()                                   {}
+func (UnionString) ImplementsAlertingMechanismIDUnionParam()                               {}
+func (UnionString) ImplementsAlertingMechanismIDUnion()                                    {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                {}
 func (UnionString) ImplementsZeroTrustAppIDUnionParam()                                    {}
 func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()                        {}
@@ -56,7 +56,7 @@ type UnionFloat float64
 
 func (UnionFloat) ImplementsDNSTTLUnionParam()                                {}
 func (UnionFloat) ImplementsDNSTTLUnion()                                     {}
-func (UnionFloat) ImplementsEmailRoutingEmailDNSRecordTTLUnion()              {}
+func (UnionFloat) ImplementsEmailRoutingDNSRecordTTLUnion()                   {}
 func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnionParam()                 {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnion()                      {}

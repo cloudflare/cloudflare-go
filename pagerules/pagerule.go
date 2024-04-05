@@ -279,6 +279,88 @@ func (r PageRuleStatus) IsKnown() bool {
 	return false
 }
 
+type Route struct {
+	// The timestamp of when the override was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The type of route.
+	Name  RouteName  `json:"name"`
+	Value RouteValue `json:"value"`
+	JSON  routeJSON  `json:"-"`
+}
+
+// routeJSON contains the JSON metadata for the struct [Route]
+type routeJSON struct {
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Route) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of route.
+type RouteName string
+
+const (
+	RouteNameForwardURL RouteName = "forward_url"
+)
+
+func (r RouteName) IsKnown() bool {
+	switch r {
+	case RouteNameForwardURL:
+		return true
+	}
+	return false
+}
+
+type RouteValue struct {
+	// The response type for the URL redirect.
+	Type RouteValueType `json:"type"`
+	// The URL to redirect the request to. Notes: ${num} refers to the position of '\*'
+	// in the constraint value.
+	URL  string         `json:"url"`
+	JSON routeValueJSON `json:"-"`
+}
+
+// routeValueJSON contains the JSON metadata for the struct [RouteValue]
+type routeValueJSON struct {
+	Type        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RouteValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r routeValueJSON) RawJSON() string {
+	return r.raw
+}
+
+// The response type for the URL redirect.
+type RouteValueType string
+
+const (
+	RouteValueTypeTemporary RouteValueType = "temporary"
+	RouteValueTypePermanent RouteValueType = "permanent"
+)
+
+func (r RouteValueType) IsKnown() bool {
+	switch r {
+	case RouteValueTypeTemporary, RouteValueTypePermanent:
+		return true
+	}
+	return false
+}
+
 // A request condition target.
 type TargesItemParam struct {
 	// String constraint.

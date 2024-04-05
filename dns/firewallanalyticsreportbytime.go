@@ -40,7 +40,7 @@ func NewFirewallAnalyticsReportBytimeService(opts ...option.RequestOption) (r *F
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSAnalyticsReportByTime, err error) {
+func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *ByTime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAnalyticsReportBytimeGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report/bytime", params.AccountID, dnsFirewallID)
@@ -110,7 +110,7 @@ func (r FirewallAnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
 type FirewallAnalyticsReportBytimeGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DNSAnalyticsReportByTime                                  `json:"result,required"`
+	Result   ByTime                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAnalyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`

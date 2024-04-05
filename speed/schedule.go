@@ -47,8 +47,8 @@ func (r *ScheduleService) New(ctx context.Context, url string, params ScheduleNe
 
 type ScheduleNewResponse struct {
 	// The test schedule.
-	Schedule ObservatorySchedule     `json:"schedule"`
-	Test     ObservatoryPageTest     `json:"test"`
+	Schedule Schedule                `json:"schedule"`
+	Test     Test                    `json:"test"`
 	JSON     scheduleNewResponseJSON `json:"-"`
 }
 

@@ -32,7 +32,7 @@ func NewLoadBalancerPreviewService(opts ...option.RequestOption) (r *LoadBalance
 }
 
 // Get the result of a previous preview operation using the provided preview_id.
-func (r *LoadBalancerPreviewService) Get(ctx context.Context, previewID string, opts ...option.RequestOption) (res *LoadBalancingPreview, err error) {
+func (r *LoadBalancerPreviewService) Get(ctx context.Context, previewID string, opts ...option.RequestOption) (res *Preview, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPreviewGetResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/preview/%s", previewID)
@@ -44,43 +44,41 @@ func (r *LoadBalancerPreviewService) Get(ctx context.Context, previewID string, 
 	return
 }
 
-type LoadBalancingPreview map[string]LoadBalancingPreviewItem
+type Preview map[string]PreviewItem
 
-type LoadBalancingPreviewItem struct {
-	Healthy bool                                    `json:"healthy"`
-	Origins []map[string]LoadBalancingPreviewOrigin `json:"origins"`
-	JSON    loadBalancingPreviewItemJSON            `json:"-"`
+type PreviewItem struct {
+	Healthy bool                       `json:"healthy"`
+	Origins []map[string]PreviewOrigin `json:"origins"`
+	JSON    previewItemJSON            `json:"-"`
 }
 
-// loadBalancingPreviewItemJSON contains the JSON metadata for the struct
-// [LoadBalancingPreviewItem]
-type loadBalancingPreviewItemJSON struct {
+// previewItemJSON contains the JSON metadata for the struct [PreviewItem]
+type previewItemJSON struct {
 	Healthy     apijson.Field
 	Origins     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancingPreviewItem) UnmarshalJSON(data []byte) (err error) {
+func (r *PreviewItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancingPreviewItemJSON) RawJSON() string {
+func (r previewItemJSON) RawJSON() string {
 	return r.raw
 }
 
 // The origin ipv4/ipv6 address or domain name mapped to it's health data.
-type LoadBalancingPreviewOrigin struct {
-	FailureReason string                         `json:"failure_reason"`
-	Healthy       bool                           `json:"healthy"`
-	ResponseCode  float64                        `json:"response_code"`
-	RTT           string                         `json:"rtt"`
-	JSON          loadBalancingPreviewOriginJSON `json:"-"`
+type PreviewOrigin struct {
+	FailureReason string            `json:"failure_reason"`
+	Healthy       bool              `json:"healthy"`
+	ResponseCode  float64           `json:"response_code"`
+	RTT           string            `json:"rtt"`
+	JSON          previewOriginJSON `json:"-"`
 }
 
-// loadBalancingPreviewOriginJSON contains the JSON metadata for the struct
-// [LoadBalancingPreviewOrigin]
-type loadBalancingPreviewOriginJSON struct {
+// previewOriginJSON contains the JSON metadata for the struct [PreviewOrigin]
+type previewOriginJSON struct {
 	FailureReason apijson.Field
 	Healthy       apijson.Field
 	ResponseCode  apijson.Field
@@ -89,11 +87,11 @@ type loadBalancingPreviewOriginJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *LoadBalancingPreviewOrigin) UnmarshalJSON(data []byte) (err error) {
+func (r *PreviewOrigin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancingPreviewOriginJSON) RawJSON() string {
+func (r previewOriginJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -101,7 +99,7 @@ type LoadBalancerPreviewGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Resulting health data from a preview operation.
-	Result LoadBalancingPreview `json:"result,required"`
+	Result Preview `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPreviewGetResponseEnvelopeJSON    `json:"-"`

@@ -33,7 +33,7 @@ func NewGatewayCategoryService(opts ...option.RequestOption) (r *GatewayCategory
 }
 
 // Fetches a list of all categories.
-func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGatewayCategories], err error) {
+func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Category], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -51,11 +51,11 @@ func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategory
 }
 
 // Fetches a list of all categories.
-func (r *GatewayCategoryService) ListAutoPaging(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGatewayCategories] {
+func (r *GatewayCategoryService) ListAutoPaging(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Category] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-type ZeroTrustGatewayCategories struct {
+type Category struct {
 	// The identifier for this category. There is only one category per ID.
 	ID int64 `json:"id"`
 	// True if the category is in beta and subject to change.
@@ -64,19 +64,18 @@ type ZeroTrustGatewayCategories struct {
 	// `blocked` categories are blocked unconditionally for all accounts.
 	// `removalPending` categories can be removed from policies but not added.
 	// `noBlock` categories cannot be blocked.
-	Class ZeroTrustGatewayCategoriesClass `json:"class"`
+	Class CategoryClass `json:"class"`
 	// A short summary of domains in the category.
 	Description string `json:"description"`
 	// The name of the category.
 	Name string `json:"name"`
 	// All subcategories for this category.
-	Subcategories []ZeroTrustGatewayCategoriesSubcategory `json:"subcategories"`
-	JSON          zeroTrustGatewayCategoriesJSON          `json:"-"`
+	Subcategories []CategorySubcategory `json:"subcategories"`
+	JSON          categoryJSON          `json:"-"`
 }
 
-// zeroTrustGatewayCategoriesJSON contains the JSON metadata for the struct
-// [ZeroTrustGatewayCategories]
-type zeroTrustGatewayCategoriesJSON struct {
+// categoryJSON contains the JSON metadata for the struct [Category]
+type categoryJSON struct {
 	ID            apijson.Field
 	Beta          apijson.Field
 	Class         apijson.Field
@@ -87,11 +86,11 @@ type zeroTrustGatewayCategoriesJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayCategories) UnmarshalJSON(data []byte) (err error) {
+func (r *Category) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustGatewayCategoriesJSON) RawJSON() string {
+func (r categoryJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -99,25 +98,25 @@ func (r zeroTrustGatewayCategoriesJSON) RawJSON() string {
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
 // `noBlock` categories cannot be blocked.
-type ZeroTrustGatewayCategoriesClass string
+type CategoryClass string
 
 const (
-	ZeroTrustGatewayCategoriesClassFree           ZeroTrustGatewayCategoriesClass = "free"
-	ZeroTrustGatewayCategoriesClassPremium        ZeroTrustGatewayCategoriesClass = "premium"
-	ZeroTrustGatewayCategoriesClassBlocked        ZeroTrustGatewayCategoriesClass = "blocked"
-	ZeroTrustGatewayCategoriesClassRemovalPending ZeroTrustGatewayCategoriesClass = "removalPending"
-	ZeroTrustGatewayCategoriesClassNoBlock        ZeroTrustGatewayCategoriesClass = "noBlock"
+	CategoryClassFree           CategoryClass = "free"
+	CategoryClassPremium        CategoryClass = "premium"
+	CategoryClassBlocked        CategoryClass = "blocked"
+	CategoryClassRemovalPending CategoryClass = "removalPending"
+	CategoryClassNoBlock        CategoryClass = "noBlock"
 )
 
-func (r ZeroTrustGatewayCategoriesClass) IsKnown() bool {
+func (r CategoryClass) IsKnown() bool {
 	switch r {
-	case ZeroTrustGatewayCategoriesClassFree, ZeroTrustGatewayCategoriesClassPremium, ZeroTrustGatewayCategoriesClassBlocked, ZeroTrustGatewayCategoriesClassRemovalPending, ZeroTrustGatewayCategoriesClassNoBlock:
+	case CategoryClassFree, CategoryClassPremium, CategoryClassBlocked, CategoryClassRemovalPending, CategoryClassNoBlock:
 		return true
 	}
 	return false
 }
 
-type ZeroTrustGatewayCategoriesSubcategory struct {
+type CategorySubcategory struct {
 	// The identifier for this category. There is only one category per ID.
 	ID int64 `json:"id"`
 	// True if the category is in beta and subject to change.
@@ -126,17 +125,17 @@ type ZeroTrustGatewayCategoriesSubcategory struct {
 	// `blocked` categories are blocked unconditionally for all accounts.
 	// `removalPending` categories can be removed from policies but not added.
 	// `noBlock` categories cannot be blocked.
-	Class ZeroTrustGatewayCategoriesSubcategoriesClass `json:"class"`
+	Class CategorySubcategoriesClass `json:"class"`
 	// A short summary of domains in the category.
 	Description string `json:"description"`
 	// The name of the category.
-	Name string                                    `json:"name"`
-	JSON zeroTrustGatewayCategoriesSubcategoryJSON `json:"-"`
+	Name string                  `json:"name"`
+	JSON categorySubcategoryJSON `json:"-"`
 }
 
-// zeroTrustGatewayCategoriesSubcategoryJSON contains the JSON metadata for the
-// struct [ZeroTrustGatewayCategoriesSubcategory]
-type zeroTrustGatewayCategoriesSubcategoryJSON struct {
+// categorySubcategoryJSON contains the JSON metadata for the struct
+// [CategorySubcategory]
+type categorySubcategoryJSON struct {
 	ID          apijson.Field
 	Beta        apijson.Field
 	Class       apijson.Field
@@ -146,11 +145,11 @@ type zeroTrustGatewayCategoriesSubcategoryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayCategoriesSubcategory) UnmarshalJSON(data []byte) (err error) {
+func (r *CategorySubcategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustGatewayCategoriesSubcategoryJSON) RawJSON() string {
+func (r categorySubcategoryJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -158,19 +157,19 @@ func (r zeroTrustGatewayCategoriesSubcategoryJSON) RawJSON() string {
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
 // `noBlock` categories cannot be blocked.
-type ZeroTrustGatewayCategoriesSubcategoriesClass string
+type CategorySubcategoriesClass string
 
 const (
-	ZeroTrustGatewayCategoriesSubcategoriesClassFree           ZeroTrustGatewayCategoriesSubcategoriesClass = "free"
-	ZeroTrustGatewayCategoriesSubcategoriesClassPremium        ZeroTrustGatewayCategoriesSubcategoriesClass = "premium"
-	ZeroTrustGatewayCategoriesSubcategoriesClassBlocked        ZeroTrustGatewayCategoriesSubcategoriesClass = "blocked"
-	ZeroTrustGatewayCategoriesSubcategoriesClassRemovalPending ZeroTrustGatewayCategoriesSubcategoriesClass = "removalPending"
-	ZeroTrustGatewayCategoriesSubcategoriesClassNoBlock        ZeroTrustGatewayCategoriesSubcategoriesClass = "noBlock"
+	CategorySubcategoriesClassFree           CategorySubcategoriesClass = "free"
+	CategorySubcategoriesClassPremium        CategorySubcategoriesClass = "premium"
+	CategorySubcategoriesClassBlocked        CategorySubcategoriesClass = "blocked"
+	CategorySubcategoriesClassRemovalPending CategorySubcategoriesClass = "removalPending"
+	CategorySubcategoriesClassNoBlock        CategorySubcategoriesClass = "noBlock"
 )
 
-func (r ZeroTrustGatewayCategoriesSubcategoriesClass) IsKnown() bool {
+func (r CategorySubcategoriesClass) IsKnown() bool {
 	switch r {
-	case ZeroTrustGatewayCategoriesSubcategoriesClassFree, ZeroTrustGatewayCategoriesSubcategoriesClassPremium, ZeroTrustGatewayCategoriesSubcategoriesClassBlocked, ZeroTrustGatewayCategoriesSubcategoriesClassRemovalPending, ZeroTrustGatewayCategoriesSubcategoriesClassNoBlock:
+	case CategorySubcategoriesClassFree, CategorySubcategoriesClassPremium, CategorySubcategoriesClassBlocked, CategorySubcategoriesClassRemovalPending, CategorySubcategoriesClassNoBlock:
 		return true
 	}
 	return false

@@ -35,7 +35,7 @@ func NewSiteInfoService(opts ...option.RequestOption) (r *SiteInfoService) {
 }
 
 // Creates a new Web Analytics site.
-func (r *SiteInfoService) New(ctx context.Context, params SiteInfoNewParams, opts ...option.RequestOption) (res *RUMSite, err error) {
+func (r *SiteInfoService) New(ctx context.Context, params SiteInfoNewParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteInfoNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info", params.AccountID)
@@ -48,7 +48,7 @@ func (r *SiteInfoService) New(ctx context.Context, params SiteInfoNewParams, opt
 }
 
 // Updates an existing Web Analytics site.
-func (r *SiteInfoService) Update(ctx context.Context, siteID string, params SiteInfoUpdateParams, opts ...option.RequestOption) (res *RUMSite, err error) {
+func (r *SiteInfoService) Update(ctx context.Context, siteID string, params SiteInfoUpdateParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteInfoUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", params.AccountID, siteID)
@@ -61,7 +61,7 @@ func (r *SiteInfoService) Update(ctx context.Context, siteID string, params Site
 }
 
 // Lists all Web Analytics sites of an account.
-func (r *SiteInfoService) List(ctx context.Context, params SiteInfoListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RUMSite], err error) {
+func (r *SiteInfoService) List(ctx context.Context, params SiteInfoListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Site], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *SiteInfoService) List(ctx context.Context, params SiteInfoListParams, o
 }
 
 // Lists all Web Analytics sites of an account.
-func (r *SiteInfoService) ListAutoPaging(ctx context.Context, params SiteInfoListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RUMSite] {
+func (r *SiteInfoService) ListAutoPaging(ctx context.Context, params SiteInfoListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Site] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -97,7 +97,7 @@ func (r *SiteInfoService) Delete(ctx context.Context, siteID string, body SiteIn
 }
 
 // Retrieves a Web Analytics site.
-func (r *SiteInfoService) Get(ctx context.Context, siteID string, query SiteInfoGetParams, opts ...option.RequestOption) (res *RUMSite, err error) {
+func (r *SiteInfoService) Get(ctx context.Context, siteID string, query SiteInfoGetParams, opts ...option.RequestOption) (res *Site, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SiteInfoGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", query.AccountID, siteID)
@@ -109,25 +109,25 @@ func (r *SiteInfoService) Get(ctx context.Context, siteID string, query SiteInfo
 	return
 }
 
-type RUMSite struct {
+type Site struct {
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
 	AutoInstall bool      `json:"auto_install"`
 	Created     time.Time `json:"created" format:"date-time"`
 	// A list of rules.
-	Rules   []RUMRule      `json:"rules"`
-	Ruleset RUMSiteRuleset `json:"ruleset"`
+	Rules   []Rule      `json:"rules"`
+	Ruleset SiteRuleset `json:"ruleset"`
 	// The Web Analytics site identifier.
 	SiteTag string `json:"site_tag"`
 	// The Web Analytics site token.
 	SiteToken string `json:"site_token"`
 	// Encoded JavaScript snippet.
-	Snippet string      `json:"snippet"`
-	JSON    rumSiteJSON `json:"-"`
+	Snippet string   `json:"snippet"`
+	JSON    siteJSON `json:"-"`
 }
 
-// rumSiteJSON contains the JSON metadata for the struct [RUMSite]
-type rumSiteJSON struct {
+// siteJSON contains the JSON metadata for the struct [Site]
+type siteJSON struct {
 	AutoInstall apijson.Field
 	Created     apijson.Field
 	Rules       apijson.Field
@@ -139,27 +139,27 @@ type rumSiteJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RUMSite) UnmarshalJSON(data []byte) (err error) {
+func (r *Site) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r rumSiteJSON) RawJSON() string {
+func (r siteJSON) RawJSON() string {
 	return r.raw
 }
 
-type RUMSiteRuleset struct {
+type SiteRuleset struct {
 	// The Web Analytics ruleset identifier.
 	ID string `json:"id"`
 	// Whether the ruleset is enabled.
 	Enabled  bool   `json:"enabled"`
 	ZoneName string `json:"zone_name"`
 	// The zone identifier.
-	ZoneTag string             `json:"zone_tag"`
-	JSON    rumSiteRulesetJSON `json:"-"`
+	ZoneTag string          `json:"zone_tag"`
+	JSON    siteRulesetJSON `json:"-"`
 }
 
-// rumSiteRulesetJSON contains the JSON metadata for the struct [RUMSiteRuleset]
-type rumSiteRulesetJSON struct {
+// siteRulesetJSON contains the JSON metadata for the struct [SiteRuleset]
+type siteRulesetJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	ZoneName    apijson.Field
@@ -168,11 +168,11 @@ type rumSiteRulesetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RUMSiteRuleset) UnmarshalJSON(data []byte) (err error) {
+func (r *SiteRuleset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r rumSiteRulesetJSON) RawJSON() string {
+func (r siteRulesetJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -218,7 +218,7 @@ type SiteInfoNewResponseEnvelope struct {
 	Errors   interface{}                     `json:"errors,required"`
 	Messages interface{}                     `json:"messages,required"`
 	Success  interface{}                     `json:"success,required"`
-	Result   RUMSite                         `json:"result"`
+	Result   Site                            `json:"result"`
 	JSON     siteInfoNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -261,7 +261,7 @@ type SiteInfoUpdateResponseEnvelope struct {
 	Errors   interface{}                        `json:"errors,required"`
 	Messages interface{}                        `json:"messages,required"`
 	Success  interface{}                        `json:"success,required"`
-	Result   RUMSite                            `json:"result"`
+	Result   Site                               `json:"result"`
 	JSON     siteInfoUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -360,7 +360,7 @@ type SiteInfoGetResponseEnvelope struct {
 	Errors   interface{}                     `json:"errors,required"`
 	Messages interface{}                     `json:"messages,required"`
 	Success  interface{}                     `json:"success,required"`
-	Result   RUMSite                         `json:"result"`
+	Result   Site                            `json:"result"`
 	JSON     siteInfoGetResponseEnvelopeJSON `json:"-"`
 }
 

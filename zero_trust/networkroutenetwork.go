@@ -36,7 +36,7 @@ func NewNetworkRouteNetworkService(opts ...option.RequestOption) (r *NetworkRout
 
 // Routes a private network through a Cloudflare Tunnel. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
-func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkNewParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
+func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkNewParams, opts ...option.RequestOption) (res *Route, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", params.AccountID, ipNetworkEncoded)
@@ -55,7 +55,7 @@ func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded s
 // is missing it will assume Cloudflare Tunnel as default. If tunnel_id is provided
 // it will delete the route from that tunnel, otherwise it will delete the route
 // based on the vnet and tun_type.
-func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkDeleteParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
+func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkDeleteParams, opts ...option.RequestOption) (res *Route, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", params.AccountID, ipNetworkEncoded)
@@ -69,7 +69,7 @@ func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncode
 
 // Updates an existing private network route in an account. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
-func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded string, body NetworkRouteNetworkEditParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
+func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded string, body NetworkRouteNetworkEditParams, opts ...option.RequestOption) (res *Route, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", body.AccountID, ipNetworkEncoded)
@@ -99,7 +99,7 @@ func (r NetworkRouteNetworkNewParams) MarshalJSON() (data []byte, err error) {
 type NetworkRouteNetworkNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   TunnelRoute                                               `json:"result,required"`
+	Result   Route                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -181,7 +181,7 @@ func (r NetworkRouteNetworkDeleteParamsTunType) IsKnown() bool {
 type NetworkRouteNetworkDeleteResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   TunnelRoute                                               `json:"result,required"`
+	Result   Route                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -229,7 +229,7 @@ type NetworkRouteNetworkEditParams struct {
 type NetworkRouteNetworkEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   TunnelRoute                                               `json:"result,required"`
+	Result   Route                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkEditResponseEnvelopeJSON    `json:"-"`

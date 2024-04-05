@@ -56,7 +56,7 @@ func (r *AccessApplicationCAService) New(ctx context.Context, uuid string, body 
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustCA], err error) {
+func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CA], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -83,7 +83,7 @@ func (r *AccessApplicationCAService) List(ctx context.Context, query AccessAppli
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustCA] {
+func (r *AccessApplicationCAService) ListAutoPaging(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CA] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -131,19 +131,19 @@ func (r *AccessApplicationCAService) Get(ctx context.Context, uuid string, query
 	return
 }
 
-type ZeroTrustCA struct {
+type CA struct {
 	// The ID of the CA.
 	ID string `json:"id"`
 	// The Application Audience (AUD) tag. Identifies the application associated with
 	// the CA.
 	Aud string `json:"aud"`
 	// The public key to add to your SSH server configuration.
-	PublicKey string          `json:"public_key"`
-	JSON      zeroTrustCAJSON `json:"-"`
+	PublicKey string `json:"public_key"`
+	JSON      caJSON `json:"-"`
 }
 
-// zeroTrustCAJSON contains the JSON metadata for the struct [ZeroTrustCA]
-type zeroTrustCAJSON struct {
+// caJSON contains the JSON metadata for the struct [CA]
+type caJSON struct {
 	ID          apijson.Field
 	Aud         apijson.Field
 	PublicKey   apijson.Field
@@ -151,11 +151,11 @@ type zeroTrustCAJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustCA) UnmarshalJSON(data []byte) (err error) {
+func (r *CA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustCAJSON) RawJSON() string {
+func (r caJSON) RawJSON() string {
 	return r.raw
 }
 

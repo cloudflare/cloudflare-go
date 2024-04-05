@@ -36,7 +36,7 @@ func NewLiveInputOutputService(opts ...option.RequestOption) (r *LiveInputOutput
 // Creates a new output that can be used to simulcast or restream live video to
 // other RTMP or SRT destinations. Outputs are always linked to a specific live
 // input — one live input can have many outputs.
-func (r *LiveInputOutputService) New(ctx context.Context, liveInputIdentifier string, params LiveInputOutputNewParams, opts ...option.RequestOption) (res *StreamOutput, err error) {
+func (r *LiveInputOutputService) New(ctx context.Context, liveInputIdentifier string, params LiveInputOutputNewParams, opts ...option.RequestOption) (res *Output, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputOutputNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", params.AccountID, liveInputIdentifier)
@@ -49,7 +49,7 @@ func (r *LiveInputOutputService) New(ctx context.Context, liveInputIdentifier st
 }
 
 // Updates the state of an output.
-func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params LiveInputOutputUpdateParams, opts ...option.RequestOption) (res *StreamOutput, err error) {
+func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params LiveInputOutputUpdateParams, opts ...option.RequestOption) (res *Output, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputOutputUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", params.AccountID, liveInputIdentifier, outputIdentifier)
@@ -62,7 +62,7 @@ func (r *LiveInputOutputService) Update(ctx context.Context, liveInputIdentifier
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) (res *pagination.SinglePage[StreamOutput], err error) {
+func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Output], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,7 +80,7 @@ func (r *LiveInputOutputService) List(ctx context.Context, liveInputIdentifier s
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *LiveInputOutputService) ListAutoPaging(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StreamOutput] {
+func (r *LiveInputOutputService) ListAutoPaging(ctx context.Context, liveInputIdentifier string, query LiveInputOutputListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Output] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, liveInputIdentifier, query, opts...))
 }
 
@@ -93,7 +93,7 @@ func (r *LiveInputOutputService) Delete(ctx context.Context, liveInputIdentifier
 	return
 }
 
-type StreamOutput struct {
+type Output struct {
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
 	// even when streaming to the associated live input. Use this to control precisely
@@ -105,12 +105,12 @@ type StreamOutput struct {
 	// A unique identifier for the output.
 	Uid string `json:"uid"`
 	// The URL an output uses to restream.
-	URL  string           `json:"url"`
-	JSON streamOutputJSON `json:"-"`
+	URL  string     `json:"url"`
+	JSON outputJSON `json:"-"`
 }
 
-// streamOutputJSON contains the JSON metadata for the struct [StreamOutput]
-type streamOutputJSON struct {
+// outputJSON contains the JSON metadata for the struct [Output]
+type outputJSON struct {
 	Enabled     apijson.Field
 	StreamKey   apijson.Field
 	Uid         apijson.Field
@@ -119,11 +119,11 @@ type streamOutputJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamOutput) UnmarshalJSON(data []byte) (err error) {
+func (r *Output) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamOutputJSON) RawJSON() string {
+func (r outputJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -149,7 +149,7 @@ func (r LiveInputOutputNewParams) MarshalJSON() (data []byte, err error) {
 type LiveInputOutputNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   StreamOutput                                              `json:"result,required"`
+	Result   Output                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputOutputNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    liveInputOutputNewResponseEnvelopeJSON    `json:"-"`
@@ -207,7 +207,7 @@ func (r LiveInputOutputUpdateParams) MarshalJSON() (data []byte, err error) {
 type LiveInputOutputUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   StreamOutput                                              `json:"result,required"`
+	Result   Output                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputOutputUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    liveInputOutputUpdateResponseEnvelopeJSON    `json:"-"`

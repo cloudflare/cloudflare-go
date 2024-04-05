@@ -38,7 +38,7 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustUsers], err error) {
+func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *pagination.SinglePage[User], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -56,11 +56,11 @@ func (r *AccessUserService) List(ctx context.Context, identifier string, opts ..
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustUsers] {
+func (r *AccessUserService) ListAutoPaging(ctx context.Context, identifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[User] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, identifier, opts...))
 }
 
-type ZeroTrustUsers struct {
+type User struct {
 	// UUID
 	ID string `json:"id"`
 	// True if the user has authenticated with Cloudflare Access.
@@ -79,13 +79,13 @@ type ZeroTrustUsers struct {
 	// The unique API identifier for the Zero Trust seat.
 	SeatUid string `json:"seat_uid"`
 	// The unique API identifier for the user.
-	Uid       string             `json:"uid"`
-	UpdatedAt time.Time          `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustUsersJSON `json:"-"`
+	Uid       string    `json:"uid"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	JSON      userJSON  `json:"-"`
 }
 
-// zeroTrustUsersJSON contains the JSON metadata for the struct [ZeroTrustUsers]
-type zeroTrustUsersJSON struct {
+// userJSON contains the JSON metadata for the struct [User]
+type userJSON struct {
 	ID                  apijson.Field
 	AccessSeat          apijson.Field
 	ActiveDeviceCount   apijson.Field
@@ -101,10 +101,10 @@ type zeroTrustUsersJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ZeroTrustUsers) UnmarshalJSON(data []byte) (err error) {
+func (r *User) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustUsersJSON) RawJSON() string {
+func (r userJSON) RawJSON() string {
 	return r.raw
 }

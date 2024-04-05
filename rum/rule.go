@@ -32,7 +32,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 }
 
 // Creates a new rule in a Web Analytics ruleset.
-func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewParams, opts ...option.RequestOption) (res *RUMRule, err error) {
+func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewParams, opts ...option.RequestOption) (res *Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule", params.AccountID, rulesetID)
@@ -45,7 +45,7 @@ func (r *RuleService) New(ctx context.Context, rulesetID string, params RuleNewP
 }
 
 // Updates a rule in a Web Analytics ruleset.
-func (r *RuleService) Update(ctx context.Context, rulesetID string, ruleID string, params RuleUpdateParams, opts ...option.RequestOption) (res *RUMRule, err error) {
+func (r *RuleService) Update(ctx context.Context, rulesetID string, ruleID string, params RuleUpdateParams, opts ...option.RequestOption) (res *Rule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", params.AccountID, rulesetID, ruleID)
@@ -83,7 +83,7 @@ func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID strin
 	return
 }
 
-type RUMRule struct {
+type Rule struct {
 	// The Web Analytics rule identifier.
 	ID      string    `json:"id"`
 	Created time.Time `json:"created" format:"date-time"`
@@ -94,13 +94,13 @@ type RUMRule struct {
 	// Whether the rule is paused or not.
 	IsPaused bool `json:"is_paused"`
 	// The paths the rule will be applied to.
-	Paths    []string    `json:"paths"`
-	Priority float64     `json:"priority"`
-	JSON     rumRuleJSON `json:"-"`
+	Paths    []string `json:"paths"`
+	Priority float64  `json:"priority"`
+	JSON     ruleJSON `json:"-"`
 }
 
-// rumRuleJSON contains the JSON metadata for the struct [RUMRule]
-type rumRuleJSON struct {
+// ruleJSON contains the JSON metadata for the struct [Rule]
+type ruleJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Host        apijson.Field
@@ -112,17 +112,35 @@ type rumRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RUMRule) UnmarshalJSON(data []byte) (err error) {
+func (r *Rule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r rumRuleJSON) RawJSON() string {
+func (r ruleJSON) RawJSON() string {
 	return r.raw
+}
+
+type RuleParam struct {
+	// The Web Analytics rule identifier.
+	ID param.Field[string] `json:"id"`
+	// The hostname the rule will be applied to.
+	Host param.Field[string] `json:"host"`
+	// Whether the rule includes or excludes traffic from being measured.
+	Inclusive param.Field[bool] `json:"inclusive"`
+	// Whether the rule is paused or not.
+	IsPaused param.Field[bool] `json:"is_paused"`
+	// The paths the rule will be applied to.
+	Paths    param.Field[[]string] `json:"paths"`
+	Priority param.Field[float64]  `json:"priority"`
+}
+
+func (r RuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RuleListResponse struct {
 	// A list of rules.
-	Rules   []RUMRule               `json:"rules"`
+	Rules   []Rule                  `json:"rules"`
 	Ruleset RuleListResponseRuleset `json:"ruleset"`
 	JSON    ruleListResponseJSON    `json:"-"`
 }
@@ -215,7 +233,7 @@ type RuleNewResponseEnvelope struct {
 	Errors   interface{}                 `json:"errors,required"`
 	Messages interface{}                 `json:"messages,required"`
 	Success  interface{}                 `json:"success,required"`
-	Result   RUMRule                     `json:"result"`
+	Result   Rule                        `json:"result"`
 	JSON     ruleNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -257,7 +275,7 @@ type RuleUpdateResponseEnvelope struct {
 	Errors   interface{}                    `json:"errors,required"`
 	Messages interface{}                    `json:"messages,required"`
 	Success  interface{}                    `json:"success,required"`
-	Result   RUMRule                        `json:"result"`
+	Result   Rule                           `json:"result"`
 	JSON     ruleUpdateResponseEnvelopeJSON `json:"-"`
 }
 

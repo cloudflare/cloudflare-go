@@ -156,8 +156,8 @@ type CustomCertificate struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions GeoRestrictions                                 `json:"geo_restrictions"`
-	KeylessServer   keyless_certificates.KeylessCertificateHostname `json:"keyless_server"`
+	GeoRestrictions GeoRestrictions               `json:"geo_restrictions"`
+	KeylessServer   keyless_certificates.Hostname `json:"keyless_server"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the

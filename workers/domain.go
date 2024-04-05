@@ -35,7 +35,7 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 }
 
 // Attaches a Worker to a zone and hostname.
-func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *WorkersDomain, err error) {
+func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/domains", params.AccountID)
@@ -48,7 +48,7 @@ func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, o
 }
 
 // Lists all Worker Domains for an account.
-func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WorkersDomain], err error) {
+func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Domain], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,7 +66,7 @@ func (r *DomainService) List(ctx context.Context, params DomainListParams, opts 
 }
 
 // Lists all Worker Domains for an account.
-func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WorkersDomain] {
+func (r *DomainService) ListAutoPaging(ctx context.Context, params DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Domain] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -80,7 +80,7 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, params Doma
 }
 
 // Gets a Worker domain.
-func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *WorkersDomain, err error) {
+func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/domains/%s", query.AccountID, domainID)
@@ -92,7 +92,7 @@ func (r *DomainService) Get(ctx context.Context, domainID string, query DomainGe
 	return
 }
 
-type WorkersDomain struct {
+type Domain struct {
 	// Identifer of the Worker Domain.
 	ID string `json:"id"`
 	// Worker environment associated with the zone and hostname.
@@ -104,12 +104,12 @@ type WorkersDomain struct {
 	// Identifier of the zone.
 	ZoneID string `json:"zone_id"`
 	// Name of the zone.
-	ZoneName string            `json:"zone_name"`
-	JSON     workersDomainJSON `json:"-"`
+	ZoneName string     `json:"zone_name"`
+	JSON     domainJSON `json:"-"`
 }
 
-// workersDomainJSON contains the JSON metadata for the struct [WorkersDomain]
-type workersDomainJSON struct {
+// domainJSON contains the JSON metadata for the struct [Domain]
+type domainJSON struct {
 	ID          apijson.Field
 	Environment apijson.Field
 	Hostname    apijson.Field
@@ -120,11 +120,11 @@ type workersDomainJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *Domain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersDomainJSON) RawJSON() string {
+func (r domainJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -147,7 +147,7 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 type DomainUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   WorkersDomain                                             `json:"result,required"`
+	Result   Domain                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
@@ -225,7 +225,7 @@ type DomainGetParams struct {
 type DomainGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   WorkersDomain                                             `json:"result,required"`
+	Result   Domain                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`

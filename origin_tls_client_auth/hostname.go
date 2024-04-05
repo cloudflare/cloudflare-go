@@ -39,7 +39,7 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 // even if activated at the zone level. 100 maximum associations on a single
 // certificate are allowed. Note: Use a null value for parameter _enabled_ to
 // invalidate the association.
-func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]OriginTLSClientCertificateID, err error) {
+func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]ID, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", params.ZoneID)
@@ -52,7 +52,7 @@ func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParam
 }
 
 // Get the Hostname Status for Client Authentication
-func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *OriginTLSClientCertificateID, err error) {
+func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *ID, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/%s", query.ZoneID, hostname)
@@ -64,11 +64,11 @@ func (r *HostnameService) Get(ctx context.Context, hostname string, query Hostna
 	return
 }
 
-type OriginTLSClientCertificateID struct {
+type ID struct {
 	// Identifier
 	CERTID string `json:"cert_id"`
 	// Status of the certificate or the association.
-	CERTStatus OriginTLSClientCertificateIDCERTStatus `json:"cert_status"`
+	CERTStatus IDCERTStatus `json:"cert_status"`
 	// The time when the certificate was updated.
 	CERTUpdatedAt time.Time `json:"cert_updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
@@ -92,15 +92,14 @@ type OriginTLSClientCertificateID struct {
 	// The type of hash used for the certificate.
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
-	Status OriginTLSClientCertificateIDStatus `json:"status"`
+	Status IDStatus `json:"status"`
 	// The time when the certificate was updated.
-	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
-	JSON      originTLSClientCertificateIDJSON `json:"-"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	JSON      idJSON    `json:"-"`
 }
 
-// originTLSClientCertificateIDJSON contains the JSON metadata for the struct
-// [OriginTLSClientCertificateID]
-type originTLSClientCertificateIDJSON struct {
+// idJSON contains the JSON metadata for the struct [ID]
+type idJSON struct {
 	CERTID         apijson.Field
 	CERTStatus     apijson.Field
 	CERTUpdatedAt  apijson.Field
@@ -119,51 +118,51 @@ type originTLSClientCertificateIDJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *OriginTLSClientCertificateID) UnmarshalJSON(data []byte) (err error) {
+func (r *ID) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originTLSClientCertificateIDJSON) RawJSON() string {
+func (r idJSON) RawJSON() string {
 	return r.raw
 }
 
 // Status of the certificate or the association.
-type OriginTLSClientCertificateIDCERTStatus string
+type IDCERTStatus string
 
 const (
-	OriginTLSClientCertificateIDCERTStatusInitializing       OriginTLSClientCertificateIDCERTStatus = "initializing"
-	OriginTLSClientCertificateIDCERTStatusPendingDeployment  OriginTLSClientCertificateIDCERTStatus = "pending_deployment"
-	OriginTLSClientCertificateIDCERTStatusPendingDeletion    OriginTLSClientCertificateIDCERTStatus = "pending_deletion"
-	OriginTLSClientCertificateIDCERTStatusActive             OriginTLSClientCertificateIDCERTStatus = "active"
-	OriginTLSClientCertificateIDCERTStatusDeleted            OriginTLSClientCertificateIDCERTStatus = "deleted"
-	OriginTLSClientCertificateIDCERTStatusDeploymentTimedOut OriginTLSClientCertificateIDCERTStatus = "deployment_timed_out"
-	OriginTLSClientCertificateIDCERTStatusDeletionTimedOut   OriginTLSClientCertificateIDCERTStatus = "deletion_timed_out"
+	IDCERTStatusInitializing       IDCERTStatus = "initializing"
+	IDCERTStatusPendingDeployment  IDCERTStatus = "pending_deployment"
+	IDCERTStatusPendingDeletion    IDCERTStatus = "pending_deletion"
+	IDCERTStatusActive             IDCERTStatus = "active"
+	IDCERTStatusDeleted            IDCERTStatus = "deleted"
+	IDCERTStatusDeploymentTimedOut IDCERTStatus = "deployment_timed_out"
+	IDCERTStatusDeletionTimedOut   IDCERTStatus = "deletion_timed_out"
 )
 
-func (r OriginTLSClientCertificateIDCERTStatus) IsKnown() bool {
+func (r IDCERTStatus) IsKnown() bool {
 	switch r {
-	case OriginTLSClientCertificateIDCERTStatusInitializing, OriginTLSClientCertificateIDCERTStatusPendingDeployment, OriginTLSClientCertificateIDCERTStatusPendingDeletion, OriginTLSClientCertificateIDCERTStatusActive, OriginTLSClientCertificateIDCERTStatusDeleted, OriginTLSClientCertificateIDCERTStatusDeploymentTimedOut, OriginTLSClientCertificateIDCERTStatusDeletionTimedOut:
+	case IDCERTStatusInitializing, IDCERTStatusPendingDeployment, IDCERTStatusPendingDeletion, IDCERTStatusActive, IDCERTStatusDeleted, IDCERTStatusDeploymentTimedOut, IDCERTStatusDeletionTimedOut:
 		return true
 	}
 	return false
 }
 
 // Status of the certificate or the association.
-type OriginTLSClientCertificateIDStatus string
+type IDStatus string
 
 const (
-	OriginTLSClientCertificateIDStatusInitializing       OriginTLSClientCertificateIDStatus = "initializing"
-	OriginTLSClientCertificateIDStatusPendingDeployment  OriginTLSClientCertificateIDStatus = "pending_deployment"
-	OriginTLSClientCertificateIDStatusPendingDeletion    OriginTLSClientCertificateIDStatus = "pending_deletion"
-	OriginTLSClientCertificateIDStatusActive             OriginTLSClientCertificateIDStatus = "active"
-	OriginTLSClientCertificateIDStatusDeleted            OriginTLSClientCertificateIDStatus = "deleted"
-	OriginTLSClientCertificateIDStatusDeploymentTimedOut OriginTLSClientCertificateIDStatus = "deployment_timed_out"
-	OriginTLSClientCertificateIDStatusDeletionTimedOut   OriginTLSClientCertificateIDStatus = "deletion_timed_out"
+	IDStatusInitializing       IDStatus = "initializing"
+	IDStatusPendingDeployment  IDStatus = "pending_deployment"
+	IDStatusPendingDeletion    IDStatus = "pending_deletion"
+	IDStatusActive             IDStatus = "active"
+	IDStatusDeleted            IDStatus = "deleted"
+	IDStatusDeploymentTimedOut IDStatus = "deployment_timed_out"
+	IDStatusDeletionTimedOut   IDStatus = "deletion_timed_out"
 )
 
-func (r OriginTLSClientCertificateIDStatus) IsKnown() bool {
+func (r IDStatus) IsKnown() bool {
 	switch r {
-	case OriginTLSClientCertificateIDStatusInitializing, OriginTLSClientCertificateIDStatusPendingDeployment, OriginTLSClientCertificateIDStatusPendingDeletion, OriginTLSClientCertificateIDStatusActive, OriginTLSClientCertificateIDStatusDeleted, OriginTLSClientCertificateIDStatusDeploymentTimedOut, OriginTLSClientCertificateIDStatusDeletionTimedOut:
+	case IDStatusInitializing, IDStatusPendingDeployment, IDStatusPendingDeletion, IDStatusActive, IDStatusDeleted, IDStatusDeploymentTimedOut, IDStatusDeletionTimedOut:
 		return true
 	}
 	return false
@@ -197,7 +196,7 @@ func (r HostnameUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
 type HostnameUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []OriginTLSClientCertificateID                            `json:"result,required,nullable"`
+	Result   []ID                                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    HostnameUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo HostnameUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -278,7 +277,7 @@ type HostnameGetParams struct {
 type HostnameGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   OriginTLSClientCertificateID                              `json:"result,required"`
+	Result   ID                                                        `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`

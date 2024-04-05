@@ -51,7 +51,7 @@ func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateP
 }
 
 // Fetches the Page Shield settings.
-func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, opts ...option.RequestOption) (res *PageShieldSetting, err error) {
+func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, opts ...option.RequestOption) (res *Setting, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield", query.ZoneID)
@@ -63,7 +63,7 @@ func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, 
 	return
 }
 
-type PageShieldSetting struct {
+type Setting struct {
 	// When true, indicates that Page Shield is enabled.
 	Enabled bool `json:"enabled"`
 	// The timestamp of when Page Shield was last updated.
@@ -72,13 +72,12 @@ type PageShieldSetting struct {
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
 	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool                  `json:"use_connection_url_path"`
-	JSON                 pageShieldSettingJSON `json:"-"`
+	UseConnectionURLPath bool        `json:"use_connection_url_path"`
+	JSON                 settingJSON `json:"-"`
 }
 
-// pageShieldSettingJSON contains the JSON metadata for the struct
-// [PageShieldSetting]
-type pageShieldSettingJSON struct {
+// settingJSON contains the JSON metadata for the struct [Setting]
+type settingJSON struct {
 	Enabled                        apijson.Field
 	UpdatedAt                      apijson.Field
 	UseCloudflareReportingEndpoint apijson.Field
@@ -87,11 +86,11 @@ type pageShieldSettingJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *PageShieldSetting) UnmarshalJSON(data []byte) (err error) {
+func (r *Setting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageShieldSettingJSON) RawJSON() string {
+func (r settingJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -194,7 +193,7 @@ type PageShieldGetParams struct {
 type PageShieldGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PageShieldSetting                                         `json:"result,required"`
+	Result   Setting                                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success PageShieldGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageShieldGetResponseEnvelopeJSON    `json:"-"`

@@ -32,7 +32,7 @@ func NewTokenValueService(opts ...option.RequestOption) (r *TokenValueService) {
 }
 
 // Roll the token secret.
-func (r *TokenValueService) Update(ctx context.Context, tokenID interface{}, body TokenValueUpdateParams, opts ...option.RequestOption) (res *TokenValue, err error) {
+func (r *TokenValueService) Update(ctx context.Context, tokenID interface{}, body TokenValueUpdateParams, opts ...option.RequestOption) (res *Value, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TokenValueUpdateResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v/value", tokenID)
@@ -44,7 +44,7 @@ func (r *TokenValueService) Update(ctx context.Context, tokenID interface{}, bod
 	return
 }
 
-type TokenValue = string
+type Value = string
 
 type TokenValueUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
@@ -58,7 +58,7 @@ type TokenValueUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// The token value.
-	Result TokenValue `json:"result,required"`
+	Result Value `json:"result,required"`
 	// Whether the API call was successful
 	Success TokenValueUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tokenValueUpdateResponseEnvelopeJSON    `json:"-"`

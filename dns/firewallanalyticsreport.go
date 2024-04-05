@@ -42,7 +42,7 @@ func NewFirewallAnalyticsReportService(opts ...option.RequestOption) (r *Firewal
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *FirewallAnalyticsReportService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSAnalyticsReport, err error) {
+func (r *FirewallAnalyticsReportService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *Report, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAnalyticsReportGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report", params.AccountID, dnsFirewallID)
@@ -86,7 +86,7 @@ func (r FirewallAnalyticsReportGetParams) URLQuery() (v url.Values) {
 type FirewallAnalyticsReportGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DNSAnalyticsReport                                        `json:"result,required"`
+	Result   Report                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallAnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAnalyticsReportGetResponseEnvelopeJSON    `json:"-"`

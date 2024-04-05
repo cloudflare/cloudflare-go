@@ -39,7 +39,7 @@ func NewWAFPackageGroupService(opts ...option.RequestOption) (r *WAFPackageGroup
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFManagedRulesGroup], err error) {
+func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Group], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -60,7 +60,7 @@ func (r *WAFPackageGroupService) List(ctx context.Context, packageID string, par
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFManagedRulesGroup] {
+func (r *WAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID string, params WAFPackageGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Group] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, packageID, params, opts...))
 }
 
@@ -97,31 +97,30 @@ func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, grou
 	return
 }
 
-type WAFManagedRulesGroup struct {
+type Group struct {
 	// The unique identifier of the rule group.
 	ID string `json:"id,required"`
 	// An informative summary of what the rule group does.
 	Description string `json:"description,required,nullable"`
 	// The state of the rules contained in the rule group. When `on`, the rules in the
 	// group are configurable/usable.
-	Mode WAFManagedRulesGroupMode `json:"mode,required"`
+	Mode GroupMode `json:"mode,required"`
 	// The name of the rule group.
 	Name string `json:"name,required"`
 	// The number of rules in the current rule group.
 	RulesCount float64 `json:"rules_count,required"`
 	// The available states for the rule group.
-	AllowedModes []WAFManagedRulesGroupAllowedMode `json:"allowed_modes"`
+	AllowedModes []GroupAllowedMode `json:"allowed_modes"`
 	// The number of rules within the group that have been modified from their default
 	// configuration.
 	ModifiedRulesCount float64 `json:"modified_rules_count"`
 	// The unique identifier of a WAF package.
-	PackageID string                   `json:"package_id"`
-	JSON      wafManagedRulesGroupJSON `json:"-"`
+	PackageID string    `json:"package_id"`
+	JSON      groupJSON `json:"-"`
 }
 
-// wafManagedRulesGroupJSON contains the JSON metadata for the struct
-// [WAFManagedRulesGroup]
-type wafManagedRulesGroupJSON struct {
+// groupJSON contains the JSON metadata for the struct [Group]
+type groupJSON struct {
 	ID                 apijson.Field
 	Description        apijson.Field
 	Mode               apijson.Field
@@ -134,26 +133,26 @@ type wafManagedRulesGroupJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *WAFManagedRulesGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *Group) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r wafManagedRulesGroupJSON) RawJSON() string {
+func (r groupJSON) RawJSON() string {
 	return r.raw
 }
 
 // The state of the rules contained in the rule group. When `on`, the rules in the
 // group are configurable/usable.
-type WAFManagedRulesGroupMode string
+type GroupMode string
 
 const (
-	WAFManagedRulesGroupModeOn  WAFManagedRulesGroupMode = "on"
-	WAFManagedRulesGroupModeOff WAFManagedRulesGroupMode = "off"
+	GroupModeOn  GroupMode = "on"
+	GroupModeOff GroupMode = "off"
 )
 
-func (r WAFManagedRulesGroupMode) IsKnown() bool {
+func (r GroupMode) IsKnown() bool {
 	switch r {
-	case WAFManagedRulesGroupModeOn, WAFManagedRulesGroupModeOff:
+	case GroupModeOn, GroupModeOff:
 		return true
 	}
 	return false
@@ -161,16 +160,16 @@ func (r WAFManagedRulesGroupMode) IsKnown() bool {
 
 // The state of the rules contained in the rule group. When `on`, the rules in the
 // group are configurable/usable.
-type WAFManagedRulesGroupAllowedMode string
+type GroupAllowedMode string
 
 const (
-	WAFManagedRulesGroupAllowedModeOn  WAFManagedRulesGroupAllowedMode = "on"
-	WAFManagedRulesGroupAllowedModeOff WAFManagedRulesGroupAllowedMode = "off"
+	GroupAllowedModeOn  GroupAllowedMode = "on"
+	GroupAllowedModeOff GroupAllowedMode = "off"
 )
 
-func (r WAFManagedRulesGroupAllowedMode) IsKnown() bool {
+func (r GroupAllowedMode) IsKnown() bool {
 	switch r {
-	case WAFManagedRulesGroupAllowedModeOn, WAFManagedRulesGroupAllowedModeOff:
+	case GroupAllowedModeOn, GroupAllowedModeOff:
 		return true
 	}
 	return false

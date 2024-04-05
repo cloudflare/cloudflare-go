@@ -94,7 +94,7 @@ func (r predefinedProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PredefinedProfile) implementsZeroTrustDLPProfile() {}
+func (r PredefinedProfile) implementsZeroTrustProfile() {}
 
 func (r PredefinedProfile) implementsZeroTrustDLPProfileGetResponse() {}
 

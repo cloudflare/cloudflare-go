@@ -59,7 +59,7 @@ type PageListResponse struct {
 	Region LabeledRegion `json:"region"`
 	// The frequency of the test.
 	ScheduleFrequency PageListResponseScheduleFrequency `json:"scheduleFrequency"`
-	Tests             []ObservatoryPageTest             `json:"tests"`
+	Tests             []Test                            `json:"tests"`
 	// A URL.
 	URL  string               `json:"url"`
 	JSON pageListResponseJSON `json:"-"`

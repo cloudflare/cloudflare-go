@@ -36,7 +36,7 @@ func NewKeylessCertificateService(opts ...option.RequestOption) (r *KeylessCerti
 }
 
 // Create Keyless SSL Configuration
-func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCertificateNewParams, opts ...option.RequestOption) (res *KeylessCertificateHostname, err error) {
+func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCertificateNewParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates", params.ZoneID)
@@ -49,7 +49,7 @@ func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCerti
 }
 
 // List all Keyless SSL configurations for a given zone.
-func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[KeylessCertificateHostname], err error) {
+func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Hostname], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,7 +67,7 @@ func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCerti
 }
 
 // List all Keyless SSL configurations for a given zone.
-func (r *KeylessCertificateService) ListAutoPaging(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[KeylessCertificateHostname] {
+func (r *KeylessCertificateService) ListAutoPaging(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hostname] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -86,7 +86,7 @@ func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertifica
 
 // This will update attributes of a Keyless SSL. Consists of one or more of the
 // following: host,name,port.
-func (r *KeylessCertificateService) Edit(ctx context.Context, keylessCertificateID string, params KeylessCertificateEditParams, opts ...option.RequestOption) (res *KeylessCertificateHostname, err error) {
+func (r *KeylessCertificateService) Edit(ctx context.Context, keylessCertificateID string, params KeylessCertificateEditParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", params.ZoneID, keylessCertificateID)
@@ -99,7 +99,7 @@ func (r *KeylessCertificateService) Edit(ctx context.Context, keylessCertificate
 }
 
 // Get details for one Keyless SSL configuration.
-func (r *KeylessCertificateService) Get(ctx context.Context, keylessCertificateID string, query KeylessCertificateGetParams, opts ...option.RequestOption) (res *KeylessCertificateHostname, err error) {
+func (r *KeylessCertificateService) Get(ctx context.Context, keylessCertificateID string, query KeylessCertificateGetParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", query.ZoneID, keylessCertificateID)
@@ -111,7 +111,7 @@ func (r *KeylessCertificateService) Get(ctx context.Context, keylessCertificateI
 	return
 }
 
-type KeylessCertificateHostname struct {
+type Hostname struct {
 	// Keyless certificate identifier tag.
 	ID string `json:"id,required"`
 	// When the Keyless SSL was created.
@@ -131,15 +131,14 @@ type KeylessCertificateHostname struct {
 	// Keyless SSL server.
 	Port float64 `json:"port,required"`
 	// Status of the Keyless SSL.
-	Status KeylessCertificateHostnameStatus `json:"status,required"`
+	Status HostnameStatus `json:"status,required"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel Tunnel                         `json:"tunnel"`
-	JSON   keylessCertificateHostnameJSON `json:"-"`
+	Tunnel Tunnel       `json:"tunnel"`
+	JSON   hostnameJSON `json:"-"`
 }
 
-// keylessCertificateHostnameJSON contains the JSON metadata for the struct
-// [KeylessCertificateHostname]
-type keylessCertificateHostnameJSON struct {
+// hostnameJSON contains the JSON metadata for the struct [Hostname]
+type hostnameJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Enabled     apijson.Field
@@ -154,28 +153,44 @@ type keylessCertificateHostnameJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeylessCertificateHostname) UnmarshalJSON(data []byte) (err error) {
+func (r *Hostname) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r keylessCertificateHostnameJSON) RawJSON() string {
+func (r hostnameJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r Hostname) ImplementsRulesListItemGetResponseUnion() {}
+
 // Status of the Keyless SSL.
-type KeylessCertificateHostnameStatus string
+type HostnameStatus string
 
 const (
-	KeylessCertificateHostnameStatusActive  KeylessCertificateHostnameStatus = "active"
-	KeylessCertificateHostnameStatusDeleted KeylessCertificateHostnameStatus = "deleted"
+	HostnameStatusActive  HostnameStatus = "active"
+	HostnameStatusDeleted HostnameStatus = "deleted"
 )
 
-func (r KeylessCertificateHostnameStatus) IsKnown() bool {
+func (r HostnameStatus) IsKnown() bool {
 	switch r {
-	case KeylessCertificateHostnameStatusActive, KeylessCertificateHostnameStatusDeleted:
+	case HostnameStatusActive, HostnameStatusDeleted:
 		return true
 	}
 	return false
+}
+
+type HostnameParam struct {
+	// The keyless SSL name.
+	Host param.Field[string] `json:"host,required" format:"hostname"`
+	// The keyless SSL port used to communicate between Cloudflare and the client's
+	// Keyless SSL server.
+	Port param.Field[float64] `json:"port,required"`
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	Tunnel param.Field[TunnelParam] `json:"tunnel"`
+}
+
+func (r HostnameParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
@@ -243,7 +258,7 @@ func (r KeylessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type KeylessCertificateNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   KeylessCertificateHostname                                `json:"result,required"`
+	Result   Hostname                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keylessCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -364,7 +379,7 @@ func (r KeylessCertificateEditParams) MarshalJSON() (data []byte, err error) {
 type KeylessCertificateEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   KeylessCertificateHostname                                `json:"result,required"`
+	Result   Hostname                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keylessCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -412,7 +427,7 @@ type KeylessCertificateGetParams struct {
 type KeylessCertificateGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   KeylessCertificateHostname                                `json:"result,required"`
+	Result   Hostname                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success KeylessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    keylessCertificateGetResponseEnvelopeJSON    `json:"-"`

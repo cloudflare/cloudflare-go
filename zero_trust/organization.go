@@ -34,7 +34,7 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 }
 
 // Sets up a Zero Trust organization for your account or zone.
-func (r *OrganizationService) New(ctx context.Context, params OrganizationNewParams, opts ...option.RequestOption) (res *ZeroTrustOrganizations, err error) {
+func (r *OrganizationService) New(ctx context.Context, params OrganizationNewParams, opts ...option.RequestOption) (res *Organizations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationNewResponseEnvelope
 	var accountOrZone string
@@ -56,7 +56,7 @@ func (r *OrganizationService) New(ctx context.Context, params OrganizationNewPar
 }
 
 // Updates the configuration for your Zero Trust organization.
-func (r *OrganizationService) Update(ctx context.Context, params OrganizationUpdateParams, opts ...option.RequestOption) (res *ZeroTrustOrganizations, err error) {
+func (r *OrganizationService) Update(ctx context.Context, params OrganizationUpdateParams, opts ...option.RequestOption) (res *Organizations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationUpdateResponseEnvelope
 	var accountOrZone string
@@ -78,7 +78,7 @@ func (r *OrganizationService) Update(ctx context.Context, params OrganizationUpd
 }
 
 // Returns the configuration for your Zero Trust organization.
-func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *ZeroTrustOrganizations, err error) {
+func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *Organizations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationListResponseEnvelope
 	var accountOrZone string
@@ -171,7 +171,7 @@ func (r LoginDesignParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ZeroTrustOrganizations struct {
+type Organizations struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
@@ -179,9 +179,9 @@ type ZeroTrustOrganizations struct {
 	AuthDomain string `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login.
-	AutoRedirectToIdentity bool                              `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time                         `json:"created_at" format:"date-time"`
-	CustomPages            ZeroTrustOrganizationsCustomPages `json:"custom_pages"`
+	AutoRedirectToIdentity bool                     `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time                `json:"created_at" format:"date-time"`
+	CustomPages            OrganizationsCustomPages `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
 	IsUiReadOnly bool        `json:"is_ui_read_only"`
@@ -202,13 +202,12 @@ type ZeroTrustOrganizations struct {
 	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WARPAuthSessionDuration string                     `json:"warp_auth_session_duration"`
-	JSON                    zeroTrustOrganizationsJSON `json:"-"`
+	WARPAuthSessionDuration string            `json:"warp_auth_session_duration"`
+	JSON                    organizationsJSON `json:"-"`
 }
 
-// zeroTrustOrganizationsJSON contains the JSON metadata for the struct
-// [ZeroTrustOrganizations]
-type zeroTrustOrganizationsJSON struct {
+// organizationsJSON contains the JSON metadata for the struct [Organizations]
+type organizationsJSON struct {
 	AllowAuthenticateViaWARP       apijson.Field
 	AuthDomain                     apijson.Field
 	AutoRedirectToIdentity         apijson.Field
@@ -226,37 +225,37 @@ type zeroTrustOrganizationsJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *ZeroTrustOrganizations) UnmarshalJSON(data []byte) (err error) {
+func (r *Organizations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustOrganizationsJSON) RawJSON() string {
+func (r organizationsJSON) RawJSON() string {
 	return r.raw
 }
 
-type ZeroTrustOrganizationsCustomPages struct {
+type OrganizationsCustomPages struct {
 	// The uid of the custom page to use when a user is denied access after failing a
 	// non-identity rule.
 	Forbidden string `json:"forbidden"`
 	// The uid of the custom page to use when a user is denied access.
-	IdentityDenied string                                `json:"identity_denied"`
-	JSON           zeroTrustOrganizationsCustomPagesJSON `json:"-"`
+	IdentityDenied string                       `json:"identity_denied"`
+	JSON           organizationsCustomPagesJSON `json:"-"`
 }
 
-// zeroTrustOrganizationsCustomPagesJSON contains the JSON metadata for the struct
-// [ZeroTrustOrganizationsCustomPages]
-type zeroTrustOrganizationsCustomPagesJSON struct {
+// organizationsCustomPagesJSON contains the JSON metadata for the struct
+// [OrganizationsCustomPages]
+type organizationsCustomPagesJSON struct {
 	Forbidden      apijson.Field
 	IdentityDenied apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *ZeroTrustOrganizationsCustomPages) UnmarshalJSON(data []byte) (err error) {
+func (r *OrganizationsCustomPages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustOrganizationsCustomPagesJSON) RawJSON() string {
+func (r organizationsCustomPagesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -317,7 +316,7 @@ func (r OrganizationNewParams) MarshalJSON() (data []byte, err error) {
 type OrganizationNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustOrganizations                                    `json:"result,required"`
+	Result   Organizations                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationNewResponseEnvelopeJSON    `json:"-"`
@@ -412,7 +411,7 @@ func (r OrganizationUpdateParamsCustomPages) MarshalJSON() (data []byte, err err
 type OrganizationUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustOrganizations                                    `json:"result,required"`
+	Result   Organizations                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -462,7 +461,7 @@ type OrganizationListParams struct {
 type OrganizationListResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustOrganizations                                    `json:"result,required"`
+	Result   Organizations                                             `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationListResponseEnvelopeJSON    `json:"-"`

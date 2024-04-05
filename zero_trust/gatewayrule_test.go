@@ -35,7 +35,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Description:   cloudflare.F("Block bad websites based on their host name."),
 		DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 		Enabled:       cloudflare.F(true),
-		Filters:       cloudflare.F([]zero_trust.FitlerItem{zero_trust.FitlerItemHTTP}),
+		Filters:       cloudflare.F([]zero_trust.FilterItem{zero_trust.FilterItemHTTP}),
 		Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
 		Precedence:    cloudflare.F(int64(0)),
 		RuleSettings: cloudflare.F(zero_trust.RuleSettingsParam{
@@ -172,7 +172,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Description:   cloudflare.F("Block bad websites based on their host name."),
 			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 			Enabled:       cloudflare.F(true),
-			Filters:       cloudflare.F([]zero_trust.FitlerItem{zero_trust.FitlerItemHTTP}),
+			Filters:       cloudflare.F([]zero_trust.FilterItem{zero_trust.FilterItemHTTP}),
 			Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
 			Precedence:    cloudflare.F(int64(0)),
 			RuleSettings: cloudflare.F(zero_trust.RuleSettingsParam{

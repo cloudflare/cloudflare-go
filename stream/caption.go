@@ -61,7 +61,7 @@ func (r *CaptionService) Delete(ctx context.Context, identifier string, language
 }
 
 // Lists the available captions or subtitles for a specific video.
-func (r *CaptionService) Get(ctx context.Context, identifier string, query CaptionGetParams, opts ...option.RequestOption) (res *[]StreamCaptions, err error) {
+func (r *CaptionService) Get(ctx context.Context, identifier string, query CaptionGetParams, opts ...option.RequestOption) (res *[]Caption, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions", query.AccountID, identifier)
@@ -73,27 +73,27 @@ func (r *CaptionService) Get(ctx context.Context, identifier string, query Capti
 	return
 }
 
-type StreamCaptions struct {
+type Caption struct {
 	// The language label displayed in the native language to users.
 	Label string `json:"label"`
 	// The language tag in BCP 47 format.
-	Language string             `json:"language"`
-	JSON     streamCaptionsJSON `json:"-"`
+	Language string      `json:"language"`
+	JSON     captionJSON `json:"-"`
 }
 
-// streamCaptionsJSON contains the JSON metadata for the struct [StreamCaptions]
-type streamCaptionsJSON struct {
+// captionJSON contains the JSON metadata for the struct [Caption]
+type captionJSON struct {
 	Label       apijson.Field
 	Language    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamCaptions) UnmarshalJSON(data []byte) (err error) {
+func (r *Caption) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamCaptionsJSON) RawJSON() string {
+func (r captionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -237,7 +237,7 @@ type CaptionGetParams struct {
 type CaptionGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []StreamCaptions                                          `json:"result,required"`
+	Result   []Caption                                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionGetResponseEnvelopeJSON    `json:"-"`

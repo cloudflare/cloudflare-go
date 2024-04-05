@@ -53,7 +53,7 @@ func (r *AddressMapService) New(ctx context.Context, params AddressMapNewParams,
 }
 
 // List all address maps owned by the account.
-func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AddressingAddressMaps], err error) {
+func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AddressMap], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -71,7 +71,7 @@ func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams
 }
 
 // List all address maps owned by the account.
-func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AddressingAddressMaps] {
+func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMapListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AddressMap] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -90,7 +90,7 @@ func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, par
 }
 
 // Modify properties of an address map owned by the account.
-func (r *AddressMapService) Edit(ctx context.Context, addressMapID string, params AddressMapEditParams, opts ...option.RequestOption) (res *AddressingAddressMaps, err error) {
+func (r *AddressMapService) Edit(ctx context.Context, addressMapID string, params AddressMapEditParams, opts ...option.RequestOption) (res *AddressMap, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressMapEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
@@ -115,7 +115,7 @@ func (r *AddressMapService) Get(ctx context.Context, addressMapID string, query 
 	return
 }
 
-type AddressingAddressMaps struct {
+type AddressMap struct {
 	// Identifier
 	ID string `json:"id"`
 	// If set to false, then the Address Map cannot be deleted via API. This is true
@@ -136,14 +136,13 @@ type AddressingAddressMaps struct {
 	Description string `json:"description,nullable"`
 	// Whether the Address Map is enabled or not. Cloudflare's DNS will not respond
 	// with IP addresses on an Address Map until the map is enabled.
-	Enabled    bool                      `json:"enabled,nullable"`
-	ModifiedAt time.Time                 `json:"modified_at" format:"date-time"`
-	JSON       addressingAddressMapsJSON `json:"-"`
+	Enabled    bool           `json:"enabled,nullable"`
+	ModifiedAt time.Time      `json:"modified_at" format:"date-time"`
+	JSON       addressMapJSON `json:"-"`
 }
 
-// addressingAddressMapsJSON contains the JSON metadata for the struct
-// [AddressingAddressMaps]
-type addressingAddressMapsJSON struct {
+// addressMapJSON contains the JSON metadata for the struct [AddressMap]
+type addressMapJSON struct {
 	ID           apijson.Field
 	CanDelete    apijson.Field
 	CanModifyIPs apijson.Field
@@ -156,11 +155,11 @@ type addressingAddressMapsJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AddressingAddressMaps) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressMap) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r addressingAddressMapsJSON) RawJSON() string {
+func (r addressMapJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -589,7 +588,7 @@ func (r AddressMapEditParams) MarshalJSON() (data []byte, err error) {
 type AddressMapEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   AddressingAddressMaps                                     `json:"result,required"`
+	Result   AddressMap                                                `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressMapEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressMapEditResponseEnvelopeJSON    `json:"-"`

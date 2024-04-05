@@ -36,7 +36,7 @@ func NewMemberService(opts ...option.RequestOption) (r *MemberService) {
 }
 
 // Add a user to the list of members for this account.
-func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ...option.RequestOption) (res *MemberWithCode, err error) {
+func (r *MemberService) New(ctx context.Context, params MemberNewParams, opts ...option.RequestOption) (res *MemberWithInviteCode, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MemberNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members", params.AccountID)
@@ -201,20 +201,21 @@ func (r memberUserJSON) RawJSON() string {
 	return r.raw
 }
 
-type MemberWithCode struct {
+type MemberWithInviteCode struct {
 	// Membership identifier tag.
 	ID string `json:"id,required"`
 	// Roles assigned to this member.
-	Roles  []MemberWithCodeRole `json:"roles,required"`
-	Status interface{}          `json:"status,required"`
-	User   MemberWithCodeUser   `json:"user,required"`
+	Roles  []MemberWithInviteCodeRole `json:"roles,required"`
+	Status interface{}                `json:"status,required"`
+	User   MemberWithInviteCodeUser   `json:"user,required"`
 	// The unique activation code for the account membership.
-	Code string             `json:"code"`
-	JSON memberWithCodeJSON `json:"-"`
+	Code string                   `json:"code"`
+	JSON memberWithInviteCodeJSON `json:"-"`
 }
 
-// memberWithCodeJSON contains the JSON metadata for the struct [MemberWithCode]
-type memberWithCodeJSON struct {
+// memberWithInviteCodeJSON contains the JSON metadata for the struct
+// [MemberWithInviteCode]
+type memberWithInviteCodeJSON struct {
 	ID          apijson.Field
 	Roles       apijson.Field
 	Status      apijson.Field
@@ -224,28 +225,28 @@ type memberWithCodeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MemberWithCode) UnmarshalJSON(data []byte) (err error) {
+func (r *MemberWithInviteCode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r memberWithCodeJSON) RawJSON() string {
+func (r memberWithInviteCodeJSON) RawJSON() string {
 	return r.raw
 }
 
-type MemberWithCodeRole struct {
+type MemberWithInviteCodeRole struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
 	// Description of role's permissions.
 	Description string `json:"description,required"`
 	// Role name.
-	Name        string                 `json:"name,required"`
-	Permissions user.Permission        `json:"permissions,required"`
-	JSON        memberWithCodeRoleJSON `json:"-"`
+	Name        string                       `json:"name,required"`
+	Permissions user.Permission              `json:"permissions,required"`
+	JSON        memberWithInviteCodeRoleJSON `json:"-"`
 }
 
-// memberWithCodeRoleJSON contains the JSON metadata for the struct
-// [MemberWithCodeRole]
-type memberWithCodeRoleJSON struct {
+// memberWithInviteCodeRoleJSON contains the JSON metadata for the struct
+// [MemberWithInviteCodeRole]
+type memberWithInviteCodeRoleJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Name        apijson.Field
@@ -254,15 +255,15 @@ type memberWithCodeRoleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MemberWithCodeRole) UnmarshalJSON(data []byte) (err error) {
+func (r *MemberWithInviteCodeRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r memberWithCodeRoleJSON) RawJSON() string {
+func (r memberWithInviteCodeRoleJSON) RawJSON() string {
 	return r.raw
 }
 
-type MemberWithCodeUser struct {
+type MemberWithInviteCodeUser struct {
 	// The contact email address of the user.
 	Email string `json:"email,required"`
 	// Identifier
@@ -273,13 +274,13 @@ type MemberWithCodeUser struct {
 	LastName string `json:"last_name,nullable"`
 	// Indicates whether two-factor authentication is enabled for the user account.
 	// Does not apply to API authentication.
-	TwoFactorAuthenticationEnabled bool                   `json:"two_factor_authentication_enabled"`
-	JSON                           memberWithCodeUserJSON `json:"-"`
+	TwoFactorAuthenticationEnabled bool                         `json:"two_factor_authentication_enabled"`
+	JSON                           memberWithInviteCodeUserJSON `json:"-"`
 }
 
-// memberWithCodeUserJSON contains the JSON metadata for the struct
-// [MemberWithCodeUser]
-type memberWithCodeUserJSON struct {
+// memberWithInviteCodeUserJSON contains the JSON metadata for the struct
+// [MemberWithInviteCodeUser]
+type memberWithInviteCodeUserJSON struct {
 	Email                          apijson.Field
 	ID                             apijson.Field
 	FirstName                      apijson.Field
@@ -289,11 +290,11 @@ type memberWithCodeUserJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *MemberWithCodeUser) UnmarshalJSON(data []byte) (err error) {
+func (r *MemberWithInviteCodeUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r memberWithCodeUserJSON) RawJSON() string {
+func (r memberWithInviteCodeUserJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -400,7 +401,7 @@ func (r MemberNewParamsStatus) IsKnown() bool {
 type MemberNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   MemberWithCode                                            `json:"result,required"`
+	Result   MemberWithInviteCode                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success MemberNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    memberNewResponseEnvelopeJSON    `json:"-"`

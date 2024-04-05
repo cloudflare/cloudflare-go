@@ -35,7 +35,7 @@ func NewNetworkRouteIPService(opts ...option.RequestOption) (r *NetworkRouteIPSe
 }
 
 // Fetches routes that contain the given IP address.
-func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params NetworkRouteIPGetParams, opts ...option.RequestOption) (res *TunnelTeamnet, err error) {
+func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params NetworkRouteIPGetParams, opts ...option.RequestOption) (res *Network, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteIPGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/ip/%s", params.AccountID, ip)
@@ -68,7 +68,7 @@ func (r NetworkRouteIPGetParams) URLQuery() (v url.Values) {
 type NetworkRouteIPGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   TunnelTeamnet                                             `json:"result,required"`
+	Result   Network                                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteIPGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteIPGetResponseEnvelopeJSON    `json:"-"`

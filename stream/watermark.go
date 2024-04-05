@@ -48,7 +48,7 @@ func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, o
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[StreamWatermarks], err error) {
+func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Watermaks], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,7 +66,7 @@ func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, 
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StreamWatermarks] {
+func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Watermaks] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -96,7 +96,7 @@ func (r *WatermarkService) Get(ctx context.Context, identifier string, query Wat
 	return
 }
 
-type StreamWatermarks struct {
+type Watermaks struct {
 	// The date and a time a watermark profile was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The source URL for a downloaded image. If the watermark profile was created via
@@ -128,13 +128,12 @@ type StreamWatermarks struct {
 	// The unique identifier for a watermark profile.
 	Uid string `json:"uid"`
 	// The width of the image in pixels.
-	Width int64                `json:"width"`
-	JSON  streamWatermarksJSON `json:"-"`
+	Width int64         `json:"width"`
+	JSON  watermaksJSON `json:"-"`
 }
 
-// streamWatermarksJSON contains the JSON metadata for the struct
-// [StreamWatermarks]
-type streamWatermarksJSON struct {
+// watermaksJSON contains the JSON metadata for the struct [Watermaks]
+type watermaksJSON struct {
 	Created        apijson.Field
 	DownloadedFrom apijson.Field
 	Height         apijson.Field
@@ -150,11 +149,11 @@ type streamWatermarksJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *StreamWatermarks) UnmarshalJSON(data []byte) (err error) {
+func (r *Watermaks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamWatermarksJSON) RawJSON() string {
+func (r watermaksJSON) RawJSON() string {
 	return r.raw
 }
 

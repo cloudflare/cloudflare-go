@@ -48,7 +48,7 @@ func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, p
 }
 
 // Fetches connection details for a Cloudflare Tunnel.
-func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, query TunnelConnectionGetParams, opts ...option.RequestOption) (res *[]TunnelTunnelClient, err error) {
+func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, query TunnelConnectionGetParams, opts ...option.RequestOption) (res *[]Client, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConnectionGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connections", query.AccountID, tunnelID)
@@ -62,7 +62,7 @@ func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, quer
 
 // A client (typically cloudflared) that maintains connections to a Cloudflare data
 // center.
-type TunnelTunnelClient struct {
+type Client struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
 	// The cloudflared OS architecture used to establish this connection.
@@ -71,19 +71,18 @@ type TunnelTunnelClient struct {
 	// cloudflared with the Zero Trust dashboard.
 	ConfigVersion int64 `json:"config_version"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Conns []TunnelTunnelClientConn `json:"conns"`
+	Conns []ClientConn `json:"conns"`
 	// Features enabled for the Cloudflare Tunnel.
 	Features []string `json:"features"`
 	// Timestamp of when the tunnel connection was started.
 	RunAt time.Time `json:"run_at" format:"date-time"`
 	// The cloudflared version used to establish this connection.
-	Version string                 `json:"version"`
-	JSON    tunnelTunnelClientJSON `json:"-"`
+	Version string     `json:"version"`
+	JSON    clientJSON `json:"-"`
 }
 
-// tunnelTunnelClientJSON contains the JSON metadata for the struct
-// [TunnelTunnelClient]
-type tunnelTunnelClientJSON struct {
+// clientJSON contains the JSON metadata for the struct [Client]
+type clientJSON struct {
 	ID            apijson.Field
 	Arch          apijson.Field
 	ConfigVersion apijson.Field
@@ -95,15 +94,15 @@ type tunnelTunnelClientJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *TunnelTunnelClient) UnmarshalJSON(data []byte) (err error) {
+func (r *Client) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelTunnelClientJSON) RawJSON() string {
+func (r clientJSON) RawJSON() string {
 	return r.raw
 }
 
-type TunnelTunnelClientConn struct {
+type ClientConn struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
 	// UUID of the cloudflared instance.
@@ -122,13 +121,12 @@ type TunnelTunnelClientConn struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	UUID string                     `json:"uuid"`
-	JSON tunnelTunnelClientConnJSON `json:"-"`
+	UUID string         `json:"uuid"`
+	JSON clientConnJSON `json:"-"`
 }
 
-// tunnelTunnelClientConnJSON contains the JSON metadata for the struct
-// [TunnelTunnelClientConn]
-type tunnelTunnelClientConnJSON struct {
+// clientConnJSON contains the JSON metadata for the struct [ClientConn]
+type clientConnJSON struct {
 	ID                 apijson.Field
 	ClientID           apijson.Field
 	ClientVersion      apijson.Field
@@ -141,11 +139,11 @@ type tunnelTunnelClientConnJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TunnelTunnelClientConn) UnmarshalJSON(data []byte) (err error) {
+func (r *ClientConn) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelTunnelClientConnJSON) RawJSON() string {
+func (r clientConnJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -210,7 +208,7 @@ type TunnelConnectionGetParams struct {
 type TunnelConnectionGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []TunnelTunnelClient                                      `json:"result,required,nullable"`
+	Result   []Client                                                  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    TunnelConnectionGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo TunnelConnectionGetResponseEnvelopeResultInfo `json:"result_info"`
