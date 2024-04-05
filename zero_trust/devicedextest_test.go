@@ -30,7 +30,7 @@ func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.DEXTests.New(context.TODO(), zero_trust.DeviceDEXTestNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Data: cloudflare.F(zero_trust.DeviceDEXTestNewParamsData{
+		Data: cloudflare.F(zero_trust.SchemaDataParam{
 			Host:   cloudflare.F("https://dash.cloudflare.com"),
 			Kind:   cloudflare.F("http"),
 			Method: cloudflare.F("GET"),
@@ -68,7 +68,7 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DeviceDEXTestUpdateParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Data: cloudflare.F(zero_trust.DeviceDEXTestUpdateParamsData{
+			Data: cloudflare.F(zero_trust.SchemaDataParam{
 				Host:   cloudflare.F("https://dash.cloudflare.com"),
 				Kind:   cloudflare.F("http"),
 				Method: cloudflare.F("GET"),

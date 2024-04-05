@@ -35,10 +35,10 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Description:   cloudflare.F("Block bad websites based on their host name."),
 		DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 		Enabled:       cloudflare.F(true),
-		Filters:       cloudflare.F([]zero_trust.GatewayRuleNewParamsFilter{zero_trust.GatewayRuleNewParamsFilterHTTP}),
+		Filters:       cloudflare.F([]zero_trust.FitlerItem{zero_trust.FitlerItemHTTP}),
 		Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
 		Precedence:    cloudflare.F(int64(0)),
-		RuleSettings: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettings{
+		RuleSettings: cloudflare.F(zero_trust.RuleSettingsParam{
 			AddHeaders: cloudflare.F[any](map[string]interface{}{
 				"My-Next-Header": map[string]interface{}{
 					"0": "foo",
@@ -49,10 +49,10 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				},
 			}),
 			AllowChildBypass: cloudflare.F(false),
-			AuditSSH: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsAuditSSH{
+			AuditSSH: cloudflare.F(zero_trust.RuleSettingsAuditSSHParam{
 				CommandLogging: cloudflare.F(false),
 			}),
-			BisoAdminControls: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsBisoAdminControls{
+			BisoAdminControls: cloudflare.F(zero_trust.RuleSettingsBisoAdminControlsParam{
 				Dcp: cloudflare.F(false),
 				Dd:  cloudflare.F(false),
 				Dk:  cloudflare.F(false),
@@ -62,12 +62,12 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			BlockPageEnabled: cloudflare.F(true),
 			BlockReason:      cloudflare.F("This website is a security risk"),
 			BypassParentRule: cloudflare.F(false),
-			CheckSession: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsCheckSession{
+			CheckSession: cloudflare.F(zero_trust.RuleSettingsCheckSessionParam{
 				Duration: cloudflare.F("300s"),
 				Enforce:  cloudflare.F(true),
 			}),
-			DNSResolvers: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsDNSResolvers{
-				IPV4: cloudflare.F([]zero_trust.GatewayRuleNewParamsRuleSettingsDNSResolversIPV4{{
+			DNSResolvers: cloudflare.F(zero_trust.RuleSettingsDNSResolversParam{
+				IPV4: cloudflare.F([]zero_trust.DNSResolverSettingsV4Param{{
 					IP:                         cloudflare.F("2.2.2.2"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
@@ -83,7 +83,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 					RouteThroughPrivateNetwork: cloudflare.F(true),
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				}}),
-				IPV6: cloudflare.F([]zero_trust.GatewayRuleNewParamsRuleSettingsDNSResolversIPV6{{
+				IPV6: cloudflare.F([]zero_trust.DNSResolverSettingsV6Param{{
 					IP:                         cloudflare.F("2001:DB8::"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
@@ -100,7 +100,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				}}),
 			}),
-			Egress: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsEgress{
+			Egress: cloudflare.F(zero_trust.RuleSettingsEgressParam{
 				IPV4:         cloudflare.F("192.0.2.2"),
 				IPV4Fallback: cloudflare.F("192.0.2.3"),
 				IPV6:         cloudflare.F("2001:DB8::/64"),
@@ -108,26 +108,26 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			InsecureDisableDNSSECValidation: cloudflare.F(false),
 			IPCategories:                    cloudflare.F(true),
 			IPIndicatorFeeds:                cloudflare.F(true),
-			L4override: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsL4override{
+			L4override: cloudflare.F(zero_trust.RuleSettingsL4overrideParam{
 				IP:   cloudflare.F("1.1.1.1"),
 				Port: cloudflare.F(int64(0)),
 			}),
-			NotificationSettings: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsNotificationSettings{
+			NotificationSettings: cloudflare.F(zero_trust.RuleSettingsNotificationSettingsParam{
 				Enabled:    cloudflare.F(true),
 				Msg:        cloudflare.F("string"),
 				SupportURL: cloudflare.F("string"),
 			}),
 			OverrideHost: cloudflare.F("example.com"),
 			OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
-			PayloadLog: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsPayloadLog{
+			PayloadLog: cloudflare.F(zero_trust.RuleSettingsPayloadLogParam{
 				Enabled: cloudflare.F(true),
 			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
-			UntrustedCERT: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsUntrustedCERT{
-				Action: cloudflare.F(zero_trust.GatewayRuleNewParamsRuleSettingsUntrustedCERTActionError),
+			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingsUntrustedCERTParam{
+				Action: cloudflare.F(zero_trust.RuleSettingsUntrustedCERTActionError),
 			}),
 		}),
-		Schedule: cloudflare.F(zero_trust.GatewayRuleNewParamsSchedule{
+		Schedule: cloudflare.F(zero_trust.ScheduleParam{
 			Fri:      cloudflare.F("08:00-12:30,13:30-17:00"),
 			Mon:      cloudflare.F("08:00-12:30,13:30-17:00"),
 			Sat:      cloudflare.F("08:00-12:30,13:30-17:00"),
@@ -172,10 +172,10 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Description:   cloudflare.F("Block bad websites based on their host name."),
 			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 			Enabled:       cloudflare.F(true),
-			Filters:       cloudflare.F([]zero_trust.GatewayRuleUpdateParamsFilter{zero_trust.GatewayRuleUpdateParamsFilterHTTP}),
+			Filters:       cloudflare.F([]zero_trust.FitlerItem{zero_trust.FitlerItemHTTP}),
 			Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
 			Precedence:    cloudflare.F(int64(0)),
-			RuleSettings: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettings{
+			RuleSettings: cloudflare.F(zero_trust.RuleSettingsParam{
 				AddHeaders: cloudflare.F[any](map[string]interface{}{
 					"My-Next-Header": map[string]interface{}{
 						"0": "foo",
@@ -186,10 +186,10 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					},
 				}),
 				AllowChildBypass: cloudflare.F(false),
-				AuditSSH: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsAuditSSH{
+				AuditSSH: cloudflare.F(zero_trust.RuleSettingsAuditSSHParam{
 					CommandLogging: cloudflare.F(false),
 				}),
-				BisoAdminControls: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsBisoAdminControls{
+				BisoAdminControls: cloudflare.F(zero_trust.RuleSettingsBisoAdminControlsParam{
 					Dcp: cloudflare.F(false),
 					Dd:  cloudflare.F(false),
 					Dk:  cloudflare.F(false),
@@ -199,12 +199,12 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				BlockPageEnabled: cloudflare.F(true),
 				BlockReason:      cloudflare.F("This website is a security risk"),
 				BypassParentRule: cloudflare.F(false),
-				CheckSession: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsCheckSession{
+				CheckSession: cloudflare.F(zero_trust.RuleSettingsCheckSessionParam{
 					Duration: cloudflare.F("300s"),
 					Enforce:  cloudflare.F(true),
 				}),
-				DNSResolvers: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsDNSResolvers{
-					IPV4: cloudflare.F([]zero_trust.GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV4{{
+				DNSResolvers: cloudflare.F(zero_trust.RuleSettingsDNSResolversParam{
+					IPV4: cloudflare.F([]zero_trust.DNSResolverSettingsV4Param{{
 						IP:                         cloudflare.F("2.2.2.2"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
@@ -220,7 +220,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 						RouteThroughPrivateNetwork: cloudflare.F(true),
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					}}),
-					IPV6: cloudflare.F([]zero_trust.GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV6{{
+					IPV6: cloudflare.F([]zero_trust.DNSResolverSettingsV6Param{{
 						IP:                         cloudflare.F("2001:DB8::"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
@@ -237,7 +237,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					}}),
 				}),
-				Egress: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsEgress{
+				Egress: cloudflare.F(zero_trust.RuleSettingsEgressParam{
 					IPV4:         cloudflare.F("192.0.2.2"),
 					IPV4Fallback: cloudflare.F("192.0.2.3"),
 					IPV6:         cloudflare.F("2001:DB8::/64"),
@@ -245,26 +245,26 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				InsecureDisableDNSSECValidation: cloudflare.F(false),
 				IPCategories:                    cloudflare.F(true),
 				IPIndicatorFeeds:                cloudflare.F(true),
-				L4override: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsL4override{
+				L4override: cloudflare.F(zero_trust.RuleSettingsL4overrideParam{
 					IP:   cloudflare.F("1.1.1.1"),
 					Port: cloudflare.F(int64(0)),
 				}),
-				NotificationSettings: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsNotificationSettings{
+				NotificationSettings: cloudflare.F(zero_trust.RuleSettingsNotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
 					Msg:        cloudflare.F("string"),
 					SupportURL: cloudflare.F("string"),
 				}),
 				OverrideHost: cloudflare.F("example.com"),
 				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
-				PayloadLog: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsPayloadLog{
+				PayloadLog: cloudflare.F(zero_trust.RuleSettingsPayloadLogParam{
 					Enabled: cloudflare.F(true),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
-				UntrustedCERT: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsUntrustedCERT{
-					Action: cloudflare.F(zero_trust.GatewayRuleUpdateParamsRuleSettingsUntrustedCERTActionError),
+				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingsUntrustedCERTParam{
+					Action: cloudflare.F(zero_trust.RuleSettingsUntrustedCERTActionError),
 				}),
 			}),
-			Schedule: cloudflare.F(zero_trust.GatewayRuleUpdateParamsSchedule{
+			Schedule: cloudflare.F(zero_trust.ScheduleParam{
 				Fri:      cloudflare.F("08:00-12:30,13:30-17:00"),
 				Mon:      cloudflare.F("08:00-12:30,13:30-17:00"),
 				Sat:      cloudflare.F("08:00-12:30,13:30-17:00"),

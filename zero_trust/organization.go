@@ -121,6 +121,56 @@ func (r *OrganizationService) RevokeUsers(ctx context.Context, params Organizati
 	return
 }
 
+type LoginDesign struct {
+	// The background color on your login page.
+	BackgroundColor string `json:"background_color"`
+	// The text at the bottom of your login page.
+	FooterText string `json:"footer_text"`
+	// The text at the top of your login page.
+	HeaderText string `json:"header_text"`
+	// The URL of the logo on your login page.
+	LogoPath string `json:"logo_path"`
+	// The text color on your login page.
+	TextColor string          `json:"text_color"`
+	JSON      loginDesignJSON `json:"-"`
+}
+
+// loginDesignJSON contains the JSON metadata for the struct [LoginDesign]
+type loginDesignJSON struct {
+	BackgroundColor apijson.Field
+	FooterText      apijson.Field
+	HeaderText      apijson.Field
+	LogoPath        apijson.Field
+	TextColor       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *LoginDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loginDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type LoginDesignParam struct {
+	// The background color on your login page.
+	BackgroundColor param.Field[string] `json:"background_color"`
+	// The text at the bottom of your login page.
+	FooterText param.Field[string] `json:"footer_text"`
+	// The text at the top of your login page.
+	HeaderText param.Field[string] `json:"header_text"`
+	// The URL of the logo on your login page.
+	LogoPath param.Field[string] `json:"logo_path"`
+	// The text color on your login page.
+	TextColor param.Field[string] `json:"text_color"`
+}
+
+func (r LoginDesignParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ZeroTrustOrganizations struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
@@ -134,8 +184,8 @@ type ZeroTrustOrganizations struct {
 	CustomPages            ZeroTrustOrganizationsCustomPages `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly bool                              `json:"is_ui_read_only"`
-	LoginDesign  ZeroTrustOrganizationsLoginDesign `json:"login_design"`
+	IsUiReadOnly bool        `json:"is_ui_read_only"`
+	LoginDesign  LoginDesign `json:"login_design"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
@@ -210,40 +260,6 @@ func (r zeroTrustOrganizationsCustomPagesJSON) RawJSON() string {
 	return r.raw
 }
 
-type ZeroTrustOrganizationsLoginDesign struct {
-	// The background color on your login page.
-	BackgroundColor string `json:"background_color"`
-	// The text at the bottom of your login page.
-	FooterText string `json:"footer_text"`
-	// The text at the top of your login page.
-	HeaderText string `json:"header_text"`
-	// The URL of the logo on your login page.
-	LogoPath string `json:"logo_path"`
-	// The text color on your login page.
-	TextColor string                                `json:"text_color"`
-	JSON      zeroTrustOrganizationsLoginDesignJSON `json:"-"`
-}
-
-// zeroTrustOrganizationsLoginDesignJSON contains the JSON metadata for the struct
-// [ZeroTrustOrganizationsLoginDesign]
-type zeroTrustOrganizationsLoginDesignJSON struct {
-	BackgroundColor apijson.Field
-	FooterText      apijson.Field
-	HeaderText      apijson.Field
-	LogoPath        apijson.Field
-	TextColor       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ZeroTrustOrganizationsLoginDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustOrganizationsLoginDesignJSON) RawJSON() string {
-	return r.raw
-}
-
 type OrganizationRevokeUsersResponse bool
 
 const (
@@ -276,8 +292,8 @@ type OrganizationNewParams struct {
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly param.Field[bool]                             `json:"is_ui_read_only"`
-	LoginDesign  param.Field[OrganizationNewParamsLoginDesign] `json:"login_design"`
+	IsUiReadOnly param.Field[bool]             `json:"is_ui_read_only"`
+	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
@@ -295,23 +311,6 @@ type OrganizationNewParams struct {
 }
 
 func (r OrganizationNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type OrganizationNewParamsLoginDesign struct {
-	// The background color on your login page.
-	BackgroundColor param.Field[string] `json:"background_color"`
-	// The text at the bottom of your login page.
-	FooterText param.Field[string] `json:"footer_text"`
-	// The text at the top of your login page.
-	HeaderText param.Field[string] `json:"header_text"`
-	// The URL of the logo on your login page.
-	LogoPath param.Field[string] `json:"logo_path"`
-	// The text color on your login page.
-	TextColor param.Field[string] `json:"text_color"`
-}
-
-func (r OrganizationNewParamsLoginDesign) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -374,8 +373,8 @@ type OrganizationUpdateParams struct {
 	CustomPages            param.Field[OrganizationUpdateParamsCustomPages] `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly param.Field[bool]                                `json:"is_ui_read_only"`
-	LoginDesign  param.Field[OrganizationUpdateParamsLoginDesign] `json:"login_design"`
+	IsUiReadOnly param.Field[bool]             `json:"is_ui_read_only"`
+	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
@@ -407,23 +406,6 @@ type OrganizationUpdateParamsCustomPages struct {
 }
 
 func (r OrganizationUpdateParamsCustomPages) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type OrganizationUpdateParamsLoginDesign struct {
-	// The background color on your login page.
-	BackgroundColor param.Field[string] `json:"background_color"`
-	// The text at the bottom of your login page.
-	FooterText param.Field[string] `json:"footer_text"`
-	// The text at the top of your login page.
-	HeaderText param.Field[string] `json:"header_text"`
-	// The URL of the logo on your login page.
-	LogoPath param.Field[string] `json:"logo_path"`
-	// The text color on your login page.
-	TextColor param.Field[string] `json:"text_color"`
-}
-
-func (r OrganizationUpdateParamsLoginDesign) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

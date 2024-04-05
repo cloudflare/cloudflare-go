@@ -34,7 +34,7 @@ func NewGatewayListItemService(opts ...option.RequestOption) (r *GatewayListItem
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[[]GatewayListItemListResponse], err error) {
+func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[[]ListsItem], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,31 +52,30 @@ func (r *GatewayListItemService) List(ctx context.Context, listID string, query 
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[[]GatewayListItemListResponse] {
+func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[[]ListsItem] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, listID, query, opts...))
 }
 
-type GatewayListItemListResponse struct {
+type ListsItem struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The value of the item in a list.
-	Value string                          `json:"value"`
-	JSON  gatewayListItemListResponseJSON `json:"-"`
+	Value string        `json:"value"`
+	JSON  listsItemJSON `json:"-"`
 }
 
-// gatewayListItemListResponseJSON contains the JSON metadata for the struct
-// [GatewayListItemListResponse]
-type gatewayListItemListResponseJSON struct {
+// listsItemJSON contains the JSON metadata for the struct [ListsItem]
+type listsItemJSON struct {
 	CreatedAt   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayListItemListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ListsItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r gatewayListItemListResponseJSON) RawJSON() string {
+func (r listsItemJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -29,46 +29,46 @@ func TestAccessGroupNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Groups.New(context.TODO(), zero_trust.AccessGroupNewParams{
-		Include: cloudflare.F([]zero_trust.AccessGroupNewParamsIncludeUnion{zero_trust.AccessGroupNewParamsIncludeAccessEmailRule{
-			Email: cloudflare.F(zero_trust.AccessGroupNewParamsIncludeAccessEmailRuleEmail{
+		Include: cloudflare.F([]zero_trust.IncludeItemUnionParam{zero_trust.EmailRuleParam{
+			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
-		}, zero_trust.AccessGroupNewParamsIncludeAccessEmailRule{
-			Email: cloudflare.F(zero_trust.AccessGroupNewParamsIncludeAccessEmailRuleEmail{
+		}, zero_trust.EmailRuleParam{
+			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
-		}, zero_trust.AccessGroupNewParamsIncludeAccessEmailRule{
-			Email: cloudflare.F(zero_trust.AccessGroupNewParamsIncludeAccessEmailRuleEmail{
+		}, zero_trust.EmailRuleParam{
+			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
 		}}),
 		Name:      cloudflare.F("Allow devs"),
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
-		Exclude: cloudflare.F([]zero_trust.AccessGroupNewParamsExcludeUnion{zero_trust.AccessGroupNewParamsExcludeAccessEmailRule{
-			Email: cloudflare.F(zero_trust.AccessGroupNewParamsExcludeAccessEmailRuleEmail{
+		Exclude: cloudflare.F([]zero_trust.ExcludeItemUnionParam{zero_trust.EmailRuleParam{
+			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
-		}, zero_trust.AccessGroupNewParamsExcludeAccessEmailRule{
-			Email: cloudflare.F(zero_trust.AccessGroupNewParamsExcludeAccessEmailRuleEmail{
+		}, zero_trust.EmailRuleParam{
+			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
-		}, zero_trust.AccessGroupNewParamsExcludeAccessEmailRule{
-			Email: cloudflare.F(zero_trust.AccessGroupNewParamsExcludeAccessEmailRuleEmail{
+		}, zero_trust.EmailRuleParam{
+			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
 		}}),
 		IsDefault: cloudflare.F(true),
-		Require: cloudflare.F([]zero_trust.AccessGroupNewParamsRequireUnion{zero_trust.AccessGroupNewParamsRequireAccessEmailRule{
-			Email: cloudflare.F(zero_trust.AccessGroupNewParamsRequireAccessEmailRuleEmail{
+		Require: cloudflare.F([]zero_trust.RequireItemUnionParam{zero_trust.EmailRuleParam{
+			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
-		}, zero_trust.AccessGroupNewParamsRequireAccessEmailRule{
-			Email: cloudflare.F(zero_trust.AccessGroupNewParamsRequireAccessEmailRuleEmail{
+		}, zero_trust.EmailRuleParam{
+			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
-		}, zero_trust.AccessGroupNewParamsRequireAccessEmailRule{
-			Email: cloudflare.F(zero_trust.AccessGroupNewParamsRequireAccessEmailRuleEmail{
+		}, zero_trust.EmailRuleParam{
+			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
 		}}),
@@ -100,46 +100,46 @@ func TestAccessGroupUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessGroupUpdateParams{
-			Include: cloudflare.F([]zero_trust.AccessGroupUpdateParamsIncludeUnion{zero_trust.AccessGroupUpdateParamsIncludeAccessEmailRule{
-				Email: cloudflare.F(zero_trust.AccessGroupUpdateParamsIncludeAccessEmailRuleEmail{
+			Include: cloudflare.F([]zero_trust.IncludeItemUnionParam{zero_trust.EmailRuleParam{
+				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}, zero_trust.AccessGroupUpdateParamsIncludeAccessEmailRule{
-				Email: cloudflare.F(zero_trust.AccessGroupUpdateParamsIncludeAccessEmailRuleEmail{
+			}, zero_trust.EmailRuleParam{
+				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}, zero_trust.AccessGroupUpdateParamsIncludeAccessEmailRule{
-				Email: cloudflare.F(zero_trust.AccessGroupUpdateParamsIncludeAccessEmailRuleEmail{
+			}, zero_trust.EmailRuleParam{
+				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			}}),
 			Name:      cloudflare.F("Allow devs"),
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
-			Exclude: cloudflare.F([]zero_trust.AccessGroupUpdateParamsExcludeUnion{zero_trust.AccessGroupUpdateParamsExcludeAccessEmailRule{
-				Email: cloudflare.F(zero_trust.AccessGroupUpdateParamsExcludeAccessEmailRuleEmail{
+			Exclude: cloudflare.F([]zero_trust.ExcludeItemUnionParam{zero_trust.EmailRuleParam{
+				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}, zero_trust.AccessGroupUpdateParamsExcludeAccessEmailRule{
-				Email: cloudflare.F(zero_trust.AccessGroupUpdateParamsExcludeAccessEmailRuleEmail{
+			}, zero_trust.EmailRuleParam{
+				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}, zero_trust.AccessGroupUpdateParamsExcludeAccessEmailRule{
-				Email: cloudflare.F(zero_trust.AccessGroupUpdateParamsExcludeAccessEmailRuleEmail{
+			}, zero_trust.EmailRuleParam{
+				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			}}),
 			IsDefault: cloudflare.F(true),
-			Require: cloudflare.F([]zero_trust.AccessGroupUpdateParamsRequireUnion{zero_trust.AccessGroupUpdateParamsRequireAccessEmailRule{
-				Email: cloudflare.F(zero_trust.AccessGroupUpdateParamsRequireAccessEmailRuleEmail{
+			Require: cloudflare.F([]zero_trust.RequireItemUnionParam{zero_trust.EmailRuleParam{
+				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}, zero_trust.AccessGroupUpdateParamsRequireAccessEmailRule{
-				Email: cloudflare.F(zero_trust.AccessGroupUpdateParamsRequireAccessEmailRuleEmail{
+			}, zero_trust.EmailRuleParam{
+				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}, zero_trust.AccessGroupUpdateParamsRequireAccessEmailRule{
-				Email: cloudflare.F(zero_trust.AccessGroupUpdateParamsRequireAccessEmailRuleEmail{
+			}, zero_trust.EmailRuleParam{
+				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
 			}}),

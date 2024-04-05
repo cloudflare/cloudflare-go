@@ -34,9 +34,9 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.DLPProfilePredefinedUpdateParams{
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AllowedMatchCount: cloudflare.F(5.000000),
-			ContextAwareness: cloudflare.F(zero_trust.DLPProfilePredefinedUpdateParamsContextAwareness{
+			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 				Enabled: cloudflare.F(true),
-				Skip: cloudflare.F(zero_trust.DLPProfilePredefinedUpdateParamsContextAwarenessSkip{
+				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
 					Files: cloudflare.F(true),
 				}),
 			}),

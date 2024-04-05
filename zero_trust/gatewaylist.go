@@ -188,7 +188,7 @@ type GatewayListNewResponse struct {
 	// The description of the list.
 	Description string `json:"description"`
 	// The items in the list.
-	Items []GatewayListNewResponseItem `json:"items"`
+	Items []ListsItem `json:"items"`
 	// The name of the list.
 	Name string `json:"name"`
 	// The type of list.
@@ -216,30 +216,6 @@ func (r *GatewayListNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r gatewayListNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayListNewResponseItem struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The value of the item in a list.
-	Value string                         `json:"value"`
-	JSON  gatewayListNewResponseItemJSON `json:"-"`
-}
-
-// gatewayListNewResponseItemJSON contains the JSON metadata for the struct
-// [GatewayListNewResponseItem]
-type gatewayListNewResponseItemJSON struct {
-	CreatedAt   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListNewResponseItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayListNewResponseItemJSON) RawJSON() string {
 	return r.raw
 }
 

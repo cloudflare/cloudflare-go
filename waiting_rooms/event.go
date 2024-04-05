@@ -40,7 +40,7 @@ func NewEventService(opts ...option.RequestOption) (r *EventService) {
 // some of the properties in the event's configuration may either override or
 // inherit from the waiting room's configuration. Note that events cannot overlap
 // with each other, so only one event can be active at a time.
-func (r *EventService) New(ctx context.Context, waitingRoomID string, params EventNewParams, opts ...option.RequestOption) (res *WaitingroomEvent, err error) {
+func (r *EventService) New(ctx context.Context, waitingRoomID string, params EventNewParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events", params.ZoneID, waitingRoomID)
@@ -53,7 +53,7 @@ func (r *EventService) New(ctx context.Context, waitingRoomID string, params Eve
 }
 
 // Updates a configured event for a waiting room.
-func (r *EventService) Update(ctx context.Context, waitingRoomID string, eventID string, params EventUpdateParams, opts ...option.RequestOption) (res *WaitingroomEvent, err error) {
+func (r *EventService) Update(ctx context.Context, waitingRoomID string, eventID string, params EventUpdateParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
@@ -66,7 +66,7 @@ func (r *EventService) Update(ctx context.Context, waitingRoomID string, eventID
 }
 
 // Lists events for a waiting room.
-func (r *EventService) List(ctx context.Context, waitingRoomID string, query EventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingroomEvent], err error) {
+func (r *EventService) List(ctx context.Context, waitingRoomID string, query EventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Event], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -84,7 +84,7 @@ func (r *EventService) List(ctx context.Context, waitingRoomID string, query Eve
 }
 
 // Lists events for a waiting room.
-func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string, query EventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingroomEvent] {
+func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string, query EventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Event] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, waitingRoomID, query, opts...))
 }
 
@@ -102,7 +102,7 @@ func (r *EventService) Delete(ctx context.Context, waitingRoomID string, eventID
 }
 
 // Patches a configured event for a waiting room.
-func (r *EventService) Edit(ctx context.Context, waitingRoomID string, eventID string, params EventEditParams, opts ...option.RequestOption) (res *WaitingroomEvent, err error) {
+func (r *EventService) Edit(ctx context.Context, waitingRoomID string, eventID string, params EventEditParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", params.ZoneID, waitingRoomID, eventID)
@@ -115,7 +115,7 @@ func (r *EventService) Edit(ctx context.Context, waitingRoomID string, eventID s
 }
 
 // Fetches a single configured event for a waiting room.
-func (r *EventService) Get(ctx context.Context, waitingRoomID string, eventID string, query EventGetParams, opts ...option.RequestOption) (res *WaitingroomEvent, err error) {
+func (r *EventService) Get(ctx context.Context, waitingRoomID string, eventID string, query EventGetParams, opts ...option.RequestOption) (res *Event, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%s/events/%s", query.ZoneID, waitingRoomID, eventID)
@@ -127,7 +127,7 @@ func (r *EventService) Get(ctx context.Context, waitingRoomID string, eventID st
 	return
 }
 
-type WaitingroomEvent struct {
+type Event struct {
 	ID        string    `json:"id"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// If set, the event will override the waiting room's `custom_page_html` property
@@ -175,13 +175,12 @@ type WaitingroomEvent struct {
 	// If set, the event will override the waiting room's `total_active_users` property
 	// while it is active. If null, the event will inherit it. This can only be set if
 	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers int64                `json:"total_active_users,nullable"`
-	JSON             waitingroomEventJSON `json:"-"`
+	TotalActiveUsers int64     `json:"total_active_users,nullable"`
+	JSON             eventJSON `json:"-"`
 }
 
-// waitingroomEventJSON contains the JSON metadata for the struct
-// [WaitingroomEvent]
-type waitingroomEventJSON struct {
+// eventJSON contains the JSON metadata for the struct [Event]
+type eventJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
 	CustomPageHTML        apijson.Field
@@ -202,11 +201,11 @@ type waitingroomEventJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *WaitingroomEvent) UnmarshalJSON(data []byte) (err error) {
+func (r *Event) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r waitingroomEventJSON) RawJSON() string {
+func (r eventJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -288,7 +287,7 @@ func (r EventNewParams) MarshalJSON() (data []byte, err error) {
 type EventNewResponseEnvelope struct {
 	Errors   interface{}                  `json:"errors,required"`
 	Messages interface{}                  `json:"messages,required"`
-	Result   WaitingroomEvent             `json:"result,required"`
+	Result   Event                        `json:"result,required"`
 	Success  interface{}                  `json:"success,required"`
 	JSON     eventNewResponseEnvelopeJSON `json:"-"`
 }
@@ -369,7 +368,7 @@ func (r EventUpdateParams) MarshalJSON() (data []byte, err error) {
 type EventUpdateResponseEnvelope struct {
 	Errors   interface{}                     `json:"errors,required"`
 	Messages interface{}                     `json:"messages,required"`
-	Result   WaitingroomEvent                `json:"result,required"`
+	Result   Event                           `json:"result,required"`
 	Success  interface{}                     `json:"success,required"`
 	JSON     eventUpdateResponseEnvelopeJSON `json:"-"`
 }
@@ -492,7 +491,7 @@ func (r EventEditParams) MarshalJSON() (data []byte, err error) {
 type EventEditResponseEnvelope struct {
 	Errors   interface{}                   `json:"errors,required"`
 	Messages interface{}                   `json:"messages,required"`
-	Result   WaitingroomEvent              `json:"result,required"`
+	Result   Event                         `json:"result,required"`
 	Success  interface{}                   `json:"success,required"`
 	JSON     eventEditResponseEnvelopeJSON `json:"-"`
 }
@@ -524,7 +523,7 @@ type EventGetParams struct {
 type EventGetResponseEnvelope struct {
 	Errors   interface{}                  `json:"errors,required"`
 	Messages interface{}                  `json:"messages,required"`
-	Result   WaitingroomEvent             `json:"result,required"`
+	Result   Event                        `json:"result,required"`
 	Success  interface{}                  `json:"success,required"`
 	JSON     eventGetResponseEnvelopeJSON `json:"-"`
 }

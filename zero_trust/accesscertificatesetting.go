@@ -33,7 +33,7 @@ func NewAccessCertificateSettingService(opts ...option.RequestOption) (r *Access
 }
 
 // Updates an mTLS certificate's hostname settings.
-func (r *AccessCertificateSettingService) Update(ctx context.Context, params AccessCertificateSettingUpdateParams, opts ...option.RequestOption) (res *[]ZeroTrustSettings, err error) {
+func (r *AccessCertificateSettingService) Update(ctx context.Context, params AccessCertificateSettingUpdateParams, opts ...option.RequestOption) (res *[]Settings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingUpdateResponseEnvelope
 	var accountOrZone string
@@ -55,7 +55,7 @@ func (r *AccessCertificateSettingService) Update(ctx context.Context, params Acc
 }
 
 // List all mTLS hostname settings for this account or zone.
-func (r *AccessCertificateSettingService) Get(ctx context.Context, query AccessCertificateSettingGetParams, opts ...option.RequestOption) (res *[]ZeroTrustSettings, err error) {
+func (r *AccessCertificateSettingService) Get(ctx context.Context, query AccessCertificateSettingGetParams, opts ...option.RequestOption) (res *[]Settings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingGetResponseEnvelope
 	var accountOrZone string
@@ -76,7 +76,7 @@ func (r *AccessCertificateSettingService) Get(ctx context.Context, query AccessC
 	return
 }
 
-type ZeroTrustSettings struct {
+type Settings struct {
 	// Request client certificates for this hostname in China. Can only be set to true
 	// if this zone is china network enabled.
 	ChinaNetwork bool `json:"china_network,required"`
@@ -85,13 +85,12 @@ type ZeroTrustSettings struct {
 	// allow logging on the origin.
 	ClientCertificateForwarding bool `json:"client_certificate_forwarding,required"`
 	// The hostname that these settings apply to.
-	Hostname string                `json:"hostname,required"`
-	JSON     zeroTrustSettingsJSON `json:"-"`
+	Hostname string       `json:"hostname,required"`
+	JSON     settingsJSON `json:"-"`
 }
 
-// zeroTrustSettingsJSON contains the JSON metadata for the struct
-// [ZeroTrustSettings]
-type zeroTrustSettingsJSON struct {
+// settingsJSON contains the JSON metadata for the struct [Settings]
+type settingsJSON struct {
 	ChinaNetwork                apijson.Field
 	ClientCertificateForwarding apijson.Field
 	Hostname                    apijson.Field
@@ -99,15 +98,15 @@ type zeroTrustSettingsJSON struct {
 	ExtraFields                 map[string]apijson.Field
 }
 
-func (r *ZeroTrustSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *Settings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustSettingsJSON) RawJSON() string {
+func (r settingsJSON) RawJSON() string {
 	return r.raw
 }
 
-type ZeroTrustSettingsParam struct {
+type SettingsParam struct {
 	// Request client certificates for this hostname in China. Can only be set to true
 	// if this zone is china network enabled.
 	ChinaNetwork param.Field[bool] `json:"china_network,required"`
@@ -119,12 +118,12 @@ type ZeroTrustSettingsParam struct {
 	Hostname param.Field[string] `json:"hostname,required"`
 }
 
-func (r ZeroTrustSettingsParam) MarshalJSON() (data []byte, err error) {
+func (r SettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type AccessCertificateSettingUpdateParams struct {
-	Settings param.Field[[]ZeroTrustSettingsParam] `json:"settings,required"`
+	Settings param.Field[[]SettingsParam] `json:"settings,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -138,7 +137,7 @@ func (r AccessCertificateSettingUpdateParams) MarshalJSON() (data []byte, err er
 type AccessCertificateSettingUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []ZeroTrustSettings                                       `json:"result,required,nullable"`
+	Result   []Settings                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessCertificateSettingUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -222,7 +221,7 @@ type AccessCertificateSettingGetParams struct {
 type AccessCertificateSettingGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []ZeroTrustSettings                                       `json:"result,required,nullable"`
+	Result   []Settings                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessCertificateSettingGetResponseEnvelopeResultInfo `json:"result_info"`

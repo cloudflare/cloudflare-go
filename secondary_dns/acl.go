@@ -33,7 +33,7 @@ func NewACLService(opts ...option.RequestOption) (r *ACLService) {
 }
 
 // Create ACL.
-func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
+func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls", params.AccountID)
@@ -46,7 +46,7 @@ func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...optio
 }
 
 // Modify ACL.
-func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
+func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", params.AccountID, aclID)
@@ -59,7 +59,7 @@ func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateP
 }
 
 // List ACLs.
-func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SecondaryDNSACL], err error) {
+func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ACL], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,7 +77,7 @@ func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...opti
 }
 
 // List ACLs.
-func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SecondaryDNSACL] {
+func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ACL] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -95,7 +95,7 @@ func (r *ACLService) Delete(ctx context.Context, aclID string, params ACLDeleteP
 }
 
 // Get ACL.
-func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, opts ...option.RequestOption) (res *SecondaryDNSACL, err error) {
+func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACLGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/acls/%s", query.AccountID, aclID)
@@ -107,7 +107,7 @@ func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, 
 	return
 }
 
-type SecondaryDNSACL struct {
+type ACL struct {
 	ID string `json:"id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
@@ -116,12 +116,12 @@ type SecondaryDNSACL struct {
 	// IPv6 respectively.
 	IPRange string `json:"ip_range,required"`
 	// The name of the acl.
-	Name string              `json:"name,required"`
-	JSON secondaryDnsaclJSON `json:"-"`
+	Name string  `json:"name,required"`
+	JSON aclJSON `json:"-"`
 }
 
-// secondaryDnsaclJSON contains the JSON metadata for the struct [SecondaryDNSACL]
-type secondaryDnsaclJSON struct {
+// aclJSON contains the JSON metadata for the struct [ACL]
+type aclJSON struct {
 	ID          apijson.Field
 	IPRange     apijson.Field
 	Name        apijson.Field
@@ -129,11 +129,11 @@ type secondaryDnsaclJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSACL) UnmarshalJSON(data []byte) (err error) {
+func (r *ACL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r secondaryDnsaclJSON) RawJSON() string {
+func (r aclJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -170,7 +170,7 @@ func (r ACLNewParams) MarshalJSON() (data []byte, err error) {
 type ACLNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SecondaryDNSACL                                           `json:"result,required"`
+	Result   ACL                                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclNewResponseEnvelopeJSON    `json:"-"`
@@ -229,7 +229,7 @@ func (r ACLUpdateParams) MarshalJSON() (data []byte, err error) {
 type ACLUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SecondaryDNSACL                                           `json:"result,required"`
+	Result   ACL                                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclUpdateResponseEnvelopeJSON    `json:"-"`
@@ -332,7 +332,7 @@ type ACLGetParams struct {
 type ACLGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SecondaryDNSACL                                           `json:"result,required"`
+	Result   ACL                                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclGetResponseEnvelopeJSON    `json:"-"`

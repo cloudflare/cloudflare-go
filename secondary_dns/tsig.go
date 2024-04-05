@@ -33,7 +33,7 @@ func NewTSIGService(opts ...option.RequestOption) (r *TSIGService) {
 }
 
 // Create TSIG.
-func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs", params.AccountID)
@@ -46,7 +46,7 @@ func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...opt
 }
 
 // Modify TSIG.
-func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpdateParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", params.AccountID, tsigID)
@@ -59,7 +59,7 @@ func (r *TSIGService) Update(ctx context.Context, tsigID string, params TSIGUpda
 }
 
 // List TSIGs.
-func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SecondaryDNSTSIG], err error) {
+func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TSIG], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,7 +77,7 @@ func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...op
 }
 
 // List TSIGs.
-func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SecondaryDNSTSIG] {
+func (r *TSIGService) ListAutoPaging(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TSIG] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -95,7 +95,7 @@ func (r *TSIGService) Delete(ctx context.Context, tsigID string, params TSIGDele
 }
 
 // Get TSIG.
-func (r *TSIGService) Get(ctx context.Context, tsigID string, query TSIGGetParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *TSIGService) Get(ctx context.Context, tsigID string, query TSIGGetParams, opts ...option.RequestOption) (res *TSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/tsigs/%s", query.AccountID, tsigID)
@@ -107,20 +107,19 @@ func (r *TSIGService) Get(ctx context.Context, tsigID string, query TSIGGetParam
 	return
 }
 
-type SecondaryDNSTSIG struct {
+type TSIG struct {
 	ID string `json:"id,required"`
 	// TSIG algorithm.
 	Algo string `json:"algo,required"`
 	// TSIG key name.
 	Name string `json:"name,required"`
 	// TSIG secret.
-	Secret string               `json:"secret,required"`
-	JSON   secondaryDnstsigJSON `json:"-"`
+	Secret string   `json:"secret,required"`
+	JSON   tsigJSON `json:"-"`
 }
 
-// secondaryDnstsigJSON contains the JSON metadata for the struct
-// [SecondaryDNSTSIG]
-type secondaryDnstsigJSON struct {
+// tsigJSON contains the JSON metadata for the struct [TSIG]
+type tsigJSON struct {
 	ID          apijson.Field
 	Algo        apijson.Field
 	Name        apijson.Field
@@ -129,11 +128,11 @@ type secondaryDnstsigJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSTSIG) UnmarshalJSON(data []byte) (err error) {
+func (r *TSIG) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r secondaryDnstsigJSON) RawJSON() string {
+func (r tsigJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -175,7 +174,7 @@ func (r TSIGNewParams) MarshalJSON() (data []byte, err error) {
 type TSIGNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SecondaryDNSTSIG                                          `json:"result,required"`
+	Result   TSIG                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigNewResponseEnvelopeJSON    `json:"-"`
@@ -232,7 +231,7 @@ func (r TSIGUpdateParams) MarshalJSON() (data []byte, err error) {
 type TSIGUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SecondaryDNSTSIG                                          `json:"result,required"`
+	Result   TSIG                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigUpdateResponseEnvelopeJSON    `json:"-"`
@@ -335,7 +334,7 @@ type TSIGGetParams struct {
 type TSIGGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SecondaryDNSTSIG                                          `json:"result,required"`
+	Result   TSIG                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigGetResponseEnvelopeJSON    `json:"-"`
