@@ -37,7 +37,7 @@ func NewScriptContentService(opts ...option.RequestOption) (r *ScriptContentServ
 }
 
 // Put script content without touching config or metadata
-func (r *ScriptContentService) Update(ctx context.Context, scriptName string, params ScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkersScript, err error) {
+func (r *ScriptContentService) Update(ctx context.Context, scriptName string, params ScriptContentUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptContentUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/content", params.AccountID, scriptName)
@@ -82,7 +82,7 @@ func (r ScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType 
 type ScriptContentUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   WorkersScript                                             `json:"result,required"`
+	Result   Script                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptContentUpdateResponseEnvelopeJSON    `json:"-"`

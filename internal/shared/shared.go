@@ -8,6 +8,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 	"github.com/tidwall/gjson"
 )
 
@@ -162,7 +163,7 @@ func (r UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8) AsUnion() UnnamedSchem
 //
 // Union satisfied by
 // [shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnel] or
-// [shared.UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnel].
+// [zero_trust.WARPConnectorTunnel].
 type UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8Union interface {
 	implementsSharedUnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8()
 }
@@ -177,7 +178,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnel{}),
+			Type:       reflect.TypeOf(zero_trust.WARPConnectorTunnel{}),
 		},
 	)
 }
@@ -310,135 +311,6 @@ const (
 func (r UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnelTunType) IsKnown() bool {
 	switch r {
 	case UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnelTunTypeCfdTunnel, UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnelTunTypeWARPConnector, UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnelTunTypeIPSec, UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnelTunTypeGRE, UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelCfdTunnelTunTypeCni:
-		return true
-	}
-	return false
-}
-
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-type UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnel struct {
-	// UUID of the tunnel.
-	ID string `json:"id"`
-	// Cloudflare account ID
-	AccountTag string `json:"account_tag"`
-	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnection `json:"connections"`
-	// Timestamp of when the tunnel established at least one connection to Cloudflare's
-	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
-	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// Metadata associated with the tunnel.
-	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name"`
-	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
-	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
-	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
-	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
-	// The type of tunnel.
-	TunType UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType `json:"tun_type"`
-	JSON    unnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelJSON    `json:"-"`
-}
-
-// unnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelJSON
-// contains the JSON metadata for the struct
-// [UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnel]
-type unnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelJSON struct {
-	ID              apijson.Field
-	AccountTag      apijson.Field
-	Connections     apijson.Field
-	ConnsActiveAt   apijson.Field
-	ConnsInactiveAt apijson.Field
-	CreatedAt       apijson.Field
-	DeletedAt       apijson.Field
-	Metadata        apijson.Field
-	Name            apijson.Field
-	Status          apijson.Field
-	TunType         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnel) implementsSharedUnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8() {
-}
-
-type UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnection struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	UUID string                                                                                  `json:"uuid"`
-	JSON unnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnectionJSON `json:"-"`
-}
-
-// unnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnectionJSON
-// contains the JSON metadata for the struct
-// [UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnection]
-type unnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnectionJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	UUID               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelConnectionJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of tunnel.
-type UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType string
-
-const (
-	UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeCfdTunnel     UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType = "cfd_tunnel"
-	UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeWARPConnector UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType = "warp_connector"
-	UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeIPSec         UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType = "ip_sec"
-	UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeGRE           UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType = "gre"
-	UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeCni           UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType = "cni"
-)
-
-func (r UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunType) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeCfdTunnel, UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeWARPConnector, UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeIPSec, UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeGRE, UnnamedSchemaRef413ab4522f0bb93f63444799121fe2f8TunnelWARPConnectorTunnelTunTypeCni:
 		return true
 	}
 	return false

@@ -133,8 +133,8 @@ type KeylessCertificateHostname struct {
 	// Status of the Keyless SSL.
 	Status KeylessCertificateHostnameStatus `json:"status,required"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel KeylessCertificateHostnameTunnel `json:"tunnel"`
-	JSON   keylessCertificateHostnameJSON   `json:"-"`
+	Tunnel Tunnel                         `json:"tunnel"`
+	JSON   keylessCertificateHostnameJSON `json:"-"`
 }
 
 // keylessCertificateHostnameJSON contains the JSON metadata for the struct
@@ -179,29 +179,40 @@ func (r KeylessCertificateHostnameStatus) IsKnown() bool {
 }
 
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
-type KeylessCertificateHostnameTunnel struct {
+type Tunnel struct {
 	// Private IP of the Key Server Host
 	PrivateIP string `json:"private_ip,required"`
 	// Cloudflare Tunnel Virtual Network ID
-	VnetID string                               `json:"vnet_id,required"`
-	JSON   keylessCertificateHostnameTunnelJSON `json:"-"`
+	VnetID string     `json:"vnet_id,required"`
+	JSON   tunnelJSON `json:"-"`
 }
 
-// keylessCertificateHostnameTunnelJSON contains the JSON metadata for the struct
-// [KeylessCertificateHostnameTunnel]
-type keylessCertificateHostnameTunnelJSON struct {
+// tunnelJSON contains the JSON metadata for the struct [Tunnel]
+type tunnelJSON struct {
 	PrivateIP   apijson.Field
 	VnetID      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *KeylessCertificateHostnameTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *Tunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r keylessCertificateHostnameTunnelJSON) RawJSON() string {
+func (r tunnelJSON) RawJSON() string {
 	return r.raw
+}
+
+// Configuration for using Keyless SSL through a Cloudflare Tunnel
+type TunnelParam struct {
+	// Private IP of the Key Server Host
+	PrivateIP param.Field[string] `json:"private_ip,required"`
+	// Cloudflare Tunnel Virtual Network ID
+	VnetID param.Field[string] `json:"vnet_id,required"`
+}
+
+func (r TunnelParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type KeylessCertificateNewParams struct {
@@ -222,22 +233,10 @@ type KeylessCertificateNewParams struct {
 	// The keyless SSL name.
 	Name param.Field[string] `json:"name"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel param.Field[KeylessCertificateNewParamsTunnel] `json:"tunnel"`
+	Tunnel param.Field[TunnelParam] `json:"tunnel"`
 }
 
 func (r KeylessCertificateNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configuration for using Keyless SSL through a Cloudflare Tunnel
-type KeylessCertificateNewParamsTunnel struct {
-	// Private IP of the Key Server Host
-	PrivateIP param.Field[string] `json:"private_ip,required"`
-	// Cloudflare Tunnel Virtual Network ID
-	VnetID param.Field[string] `json:"vnet_id,required"`
-}
-
-func (r KeylessCertificateNewParamsTunnel) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -355,22 +354,10 @@ type KeylessCertificateEditParams struct {
 	// Keyless SSL server.
 	Port param.Field[float64] `json:"port"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel param.Field[KeylessCertificateEditParamsTunnel] `json:"tunnel"`
+	Tunnel param.Field[TunnelParam] `json:"tunnel"`
 }
 
 func (r KeylessCertificateEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configuration for using Keyless SSL through a Cloudflare Tunnel
-type KeylessCertificateEditParamsTunnel struct {
-	// Private IP of the Key Server Host
-	PrivateIP param.Field[string] `json:"private_ip,required"`
-	// Cloudflare Tunnel Virtual Network ID
-	VnetID param.Field[string] `json:"vnet_id,required"`
-}
-
-func (r KeylessCertificateEditParamsTunnel) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

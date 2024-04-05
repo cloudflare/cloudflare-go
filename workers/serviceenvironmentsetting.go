@@ -33,9 +33,9 @@ func NewServiceEnvironmentSettingService(opts ...option.RequestOption) (r *Servi
 }
 
 // Patch script metadata, such as bindings
-func (r *ServiceEnvironmentSettingService) Edit(ctx context.Context, serviceName string, environmentName string, params ServiceEnvironmentSettingEditParams, opts ...option.RequestOption) (res *ServiceEnvironmentSettingEditResponse, err error) {
+func (r *ServiceEnvironmentSettingService) Edit(ctx context.Context, serviceName string, environmentName string, params ServiceEnvironmentSettingEditParams, opts ...option.RequestOption) (res *SettingsItem, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ServiceEnvironmentSettingEditResponseEnvelope
+	var env Setting
 	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/settings", params.AccountID, serviceName, environmentName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
@@ -46,9 +46,9 @@ func (r *ServiceEnvironmentSettingService) Edit(ctx context.Context, serviceName
 }
 
 // Get script settings from a worker with an environment
-func (r *ServiceEnvironmentSettingService) Get(ctx context.Context, serviceName string, environmentName string, query ServiceEnvironmentSettingGetParams, opts ...option.RequestOption) (res *ServiceEnvironmentSettingGetResponse, err error) {
+func (r *ServiceEnvironmentSettingService) Get(ctx context.Context, serviceName string, environmentName string, query ServiceEnvironmentSettingGetParams, opts ...option.RequestOption) (res *SettingsItem, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ServiceEnvironmentSettingGetResponseEnvelope
+	var env Setting
 	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/settings", query.AccountID, serviceName, environmentName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -58,150 +58,17 @@ func (r *ServiceEnvironmentSettingService) Get(ctx context.Context, serviceName 
 	return
 }
 
-type ServiceEnvironmentSettingEditResponse struct {
-	// Whether Logpush is turned on for the Worker.
-	Logpush bool `json:"logpush"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ServiceEnvironmentSettingEditResponseTailConsumer `json:"tail_consumers"`
-	JSON          serviceEnvironmentSettingEditResponseJSON           `json:"-"`
-}
-
-// serviceEnvironmentSettingEditResponseJSON contains the JSON metadata for the
-// struct [ServiceEnvironmentSettingEditResponse]
-type serviceEnvironmentSettingEditResponseJSON struct {
-	Logpush       apijson.Field
-	TailConsumers apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentSettingEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentSettingEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type ServiceEnvironmentSettingEditResponseTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace string                                                `json:"namespace"`
-	JSON      serviceEnvironmentSettingEditResponseTailConsumerJSON `json:"-"`
-}
-
-// serviceEnvironmentSettingEditResponseTailConsumerJSON contains the JSON metadata
-// for the struct [ServiceEnvironmentSettingEditResponseTailConsumer]
-type serviceEnvironmentSettingEditResponseTailConsumerJSON struct {
-	Service     apijson.Field
-	Environment apijson.Field
-	Namespace   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentSettingEditResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentSettingEditResponseTailConsumerJSON) RawJSON() string {
-	return r.raw
-}
-
-type ServiceEnvironmentSettingGetResponse struct {
-	// Whether Logpush is turned on for the Worker.
-	Logpush bool `json:"logpush"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ServiceEnvironmentSettingGetResponseTailConsumer `json:"tail_consumers"`
-	JSON          serviceEnvironmentSettingGetResponseJSON           `json:"-"`
-}
-
-// serviceEnvironmentSettingGetResponseJSON contains the JSON metadata for the
-// struct [ServiceEnvironmentSettingGetResponse]
-type serviceEnvironmentSettingGetResponseJSON struct {
-	Logpush       apijson.Field
-	TailConsumers apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentSettingGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type ServiceEnvironmentSettingGetResponseTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace string                                               `json:"namespace"`
-	JSON      serviceEnvironmentSettingGetResponseTailConsumerJSON `json:"-"`
-}
-
-// serviceEnvironmentSettingGetResponseTailConsumerJSON contains the JSON metadata
-// for the struct [ServiceEnvironmentSettingGetResponseTailConsumer]
-type serviceEnvironmentSettingGetResponseTailConsumerJSON struct {
-	Service     apijson.Field
-	Environment apijson.Field
-	Namespace   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentSettingGetResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentSettingGetResponseTailConsumerJSON) RawJSON() string {
-	return r.raw
-}
-
 type ServiceEnvironmentSettingEditParams struct {
 	// Identifier
 	AccountID param.Field[string]                                                         `path:"account_id,required"`
 	Errors    param.Field[[]shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param] `json:"errors,required"`
 	Messages  param.Field[[]shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param] `json:"messages,required"`
-	Result    param.Field[ServiceEnvironmentSettingEditParamsResult]                      `json:"result,required"`
+	Result    param.Field[SettingsItemParam]                                              `json:"result,required"`
 	// Whether the API call was successful
 	Success param.Field[ServiceEnvironmentSettingEditParamsSuccess] `json:"success,required"`
 }
 
 func (r ServiceEnvironmentSettingEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ServiceEnvironmentSettingEditParamsResult struct {
-	// Whether Logpush is turned on for the Worker.
-	Logpush param.Field[bool] `json:"logpush"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]ServiceEnvironmentSettingEditParamsResultTailConsumer] `json:"tail_consumers"`
-}
-
-func (r ServiceEnvironmentSettingEditParamsResult) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type ServiceEnvironmentSettingEditParamsResultTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service param.Field[string] `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment param.Field[string] `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace param.Field[string] `json:"namespace"`
-}
-
-func (r ServiceEnvironmentSettingEditParamsResultTailConsumer) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -220,18 +87,17 @@ func (r ServiceEnvironmentSettingEditParamsSuccess) IsKnown() bool {
 	return false
 }
 
-type ServiceEnvironmentSettingEditResponseEnvelope struct {
+type Setting struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ServiceEnvironmentSettingEditResponse                     `json:"result,required"`
+	Result   SettingsItem                                              `json:"result,required"`
 	// Whether the API call was successful
-	Success ServiceEnvironmentSettingEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    serviceEnvironmentSettingEditResponseEnvelopeJSON    `json:"-"`
+	Success SettingSuccess `json:"success,required"`
+	JSON    settingJSON    `json:"-"`
 }
 
-// serviceEnvironmentSettingEditResponseEnvelopeJSON contains the JSON metadata for
-// the struct [ServiceEnvironmentSettingEditResponseEnvelope]
-type serviceEnvironmentSettingEditResponseEnvelopeJSON struct {
+// settingJSON contains the JSON metadata for the struct [Setting]
+type settingJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -240,24 +106,24 @@ type serviceEnvironmentSettingEditResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ServiceEnvironmentSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *Setting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r serviceEnvironmentSettingEditResponseEnvelopeJSON) RawJSON() string {
+func (r settingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type ServiceEnvironmentSettingEditResponseEnvelopeSuccess bool
+type SettingSuccess bool
 
 const (
-	ServiceEnvironmentSettingEditResponseEnvelopeSuccessTrue ServiceEnvironmentSettingEditResponseEnvelopeSuccess = true
+	SettingSuccessTrue SettingSuccess = true
 )
 
-func (r ServiceEnvironmentSettingEditResponseEnvelopeSuccess) IsKnown() bool {
+func (r SettingSuccess) IsKnown() bool {
 	switch r {
-	case ServiceEnvironmentSettingEditResponseEnvelopeSuccessTrue:
+	case SettingSuccessTrue:
 		return true
 	}
 	return false
@@ -266,47 +132,4 @@ func (r ServiceEnvironmentSettingEditResponseEnvelopeSuccess) IsKnown() bool {
 type ServiceEnvironmentSettingGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type ServiceEnvironmentSettingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ServiceEnvironmentSettingGetResponse                      `json:"result,required"`
-	// Whether the API call was successful
-	Success ServiceEnvironmentSettingGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    serviceEnvironmentSettingGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// serviceEnvironmentSettingGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [ServiceEnvironmentSettingGetResponseEnvelope]
-type serviceEnvironmentSettingGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceEnvironmentSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceEnvironmentSettingGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ServiceEnvironmentSettingGetResponseEnvelopeSuccess bool
-
-const (
-	ServiceEnvironmentSettingGetResponseEnvelopeSuccessTrue ServiceEnvironmentSettingGetResponseEnvelopeSuccess = true
-)
-
-func (r ServiceEnvironmentSettingGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ServiceEnvironmentSettingGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

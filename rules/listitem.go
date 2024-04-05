@@ -218,9 +218,8 @@ func (r listItemDeleteResponseJSON) RawJSON() string {
 // An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 // maximum of /64.
 //
-// Union satisfied by [shared.UnionString],
-// [rules.ListItemGetResponseListsItemRedirect],
-// [rules.ListItemGetResponseListsItemHostname] or [shared.UnionInt].
+// Union satisfied by [shared.UnionString], [rules.Redirect], [rules.Hostname] or
+// [shared.UnionInt].
 type ListItemGetResponseUnion interface {
 	ImplementsRulesListItemGetResponseUnion()
 }
@@ -235,11 +234,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemGetResponseListsItemRedirect{}),
+			Type:       reflect.TypeOf(Redirect{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ListItemGetResponseListsItemHostname{}),
+			Type:       reflect.TypeOf(Hostname{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -247,84 +246,6 @@ func init() {
 		},
 	)
 }
-
-// The definition of the redirect.
-type ListItemGetResponseListsItemRedirect struct {
-	SourceURL           string                                         `json:"source_url,required"`
-	TargetURL           string                                         `json:"target_url,required"`
-	IncludeSubdomains   bool                                           `json:"include_subdomains"`
-	PreservePathSuffix  bool                                           `json:"preserve_path_suffix"`
-	PreserveQueryString bool                                           `json:"preserve_query_string"`
-	StatusCode          ListItemGetResponseListsItemRedirectStatusCode `json:"status_code"`
-	SubpathMatching     bool                                           `json:"subpath_matching"`
-	JSON                listItemGetResponseListsItemRedirectJSON       `json:"-"`
-}
-
-// listItemGetResponseListsItemRedirectJSON contains the JSON metadata for the
-// struct [ListItemGetResponseListsItemRedirect]
-type listItemGetResponseListsItemRedirectJSON struct {
-	SourceURL           apijson.Field
-	TargetURL           apijson.Field
-	IncludeSubdomains   apijson.Field
-	PreservePathSuffix  apijson.Field
-	PreserveQueryString apijson.Field
-	StatusCode          apijson.Field
-	SubpathMatching     apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ListItemGetResponseListsItemRedirect) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemGetResponseListsItemRedirectJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r ListItemGetResponseListsItemRedirect) ImplementsRulesListItemGetResponseUnion() {}
-
-type ListItemGetResponseListsItemRedirectStatusCode int64
-
-const (
-	ListItemGetResponseListsItemRedirectStatusCode301 ListItemGetResponseListsItemRedirectStatusCode = 301
-	ListItemGetResponseListsItemRedirectStatusCode302 ListItemGetResponseListsItemRedirectStatusCode = 302
-	ListItemGetResponseListsItemRedirectStatusCode307 ListItemGetResponseListsItemRedirectStatusCode = 307
-	ListItemGetResponseListsItemRedirectStatusCode308 ListItemGetResponseListsItemRedirectStatusCode = 308
-)
-
-func (r ListItemGetResponseListsItemRedirectStatusCode) IsKnown() bool {
-	switch r {
-	case ListItemGetResponseListsItemRedirectStatusCode301, ListItemGetResponseListsItemRedirectStatusCode302, ListItemGetResponseListsItemRedirectStatusCode307, ListItemGetResponseListsItemRedirectStatusCode308:
-		return true
-	}
-	return false
-}
-
-// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-// 0 to 9, wildcards (\*), and the hyphen (-).
-type ListItemGetResponseListsItemHostname struct {
-	URLHostname string                                   `json:"url_hostname,required"`
-	JSON        listItemGetResponseListsItemHostnameJSON `json:"-"`
-}
-
-// listItemGetResponseListsItemHostnameJSON contains the JSON metadata for the
-// struct [ListItemGetResponseListsItemHostname]
-type listItemGetResponseListsItemHostnameJSON struct {
-	URLHostname apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemGetResponseListsItemHostname) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemGetResponseListsItemHostnameJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r ListItemGetResponseListsItemHostname) ImplementsRulesListItemGetResponseUnion() {}
 
 type ListItemNewParams struct {
 	// Identifier
@@ -343,58 +264,16 @@ type ListItemNewParamsBody struct {
 	Comment param.Field[string] `json:"comment"`
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname param.Field[ListItemNewParamsBodyHostname] `json:"hostname"`
+	Hostname param.Field[HostnameParam] `json:"hostname"`
 	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 	// maximum of /64.
 	IP param.Field[string] `json:"ip"`
 	// The definition of the redirect.
-	Redirect param.Field[ListItemNewParamsBodyRedirect] `json:"redirect"`
+	Redirect param.Field[RedirectParam] `json:"redirect"`
 }
 
 func (r ListItemNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-// 0 to 9, wildcards (\*), and the hyphen (-).
-type ListItemNewParamsBodyHostname struct {
-	URLHostname param.Field[string] `json:"url_hostname,required"`
-}
-
-func (r ListItemNewParamsBodyHostname) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The definition of the redirect.
-type ListItemNewParamsBodyRedirect struct {
-	SourceURL           param.Field[string]                                  `json:"source_url,required"`
-	TargetURL           param.Field[string]                                  `json:"target_url,required"`
-	IncludeSubdomains   param.Field[bool]                                    `json:"include_subdomains"`
-	PreservePathSuffix  param.Field[bool]                                    `json:"preserve_path_suffix"`
-	PreserveQueryString param.Field[bool]                                    `json:"preserve_query_string"`
-	StatusCode          param.Field[ListItemNewParamsBodyRedirectStatusCode] `json:"status_code"`
-	SubpathMatching     param.Field[bool]                                    `json:"subpath_matching"`
-}
-
-func (r ListItemNewParamsBodyRedirect) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ListItemNewParamsBodyRedirectStatusCode int64
-
-const (
-	ListItemNewParamsBodyRedirectStatusCode301 ListItemNewParamsBodyRedirectStatusCode = 301
-	ListItemNewParamsBodyRedirectStatusCode302 ListItemNewParamsBodyRedirectStatusCode = 302
-	ListItemNewParamsBodyRedirectStatusCode307 ListItemNewParamsBodyRedirectStatusCode = 307
-	ListItemNewParamsBodyRedirectStatusCode308 ListItemNewParamsBodyRedirectStatusCode = 308
-)
-
-func (r ListItemNewParamsBodyRedirectStatusCode) IsKnown() bool {
-	switch r {
-	case ListItemNewParamsBodyRedirectStatusCode301, ListItemNewParamsBodyRedirectStatusCode302, ListItemNewParamsBodyRedirectStatusCode307, ListItemNewParamsBodyRedirectStatusCode308:
-		return true
-	}
-	return false
 }
 
 type ListItemNewResponseEnvelope struct {
@@ -457,58 +336,16 @@ type ListItemUpdateParamsBody struct {
 	Comment param.Field[string] `json:"comment"`
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname param.Field[ListItemUpdateParamsBodyHostname] `json:"hostname"`
+	Hostname param.Field[HostnameParam] `json:"hostname"`
 	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 	// maximum of /64.
 	IP param.Field[string] `json:"ip"`
 	// The definition of the redirect.
-	Redirect param.Field[ListItemUpdateParamsBodyRedirect] `json:"redirect"`
+	Redirect param.Field[RedirectParam] `json:"redirect"`
 }
 
 func (r ListItemUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-// 0 to 9, wildcards (\*), and the hyphen (-).
-type ListItemUpdateParamsBodyHostname struct {
-	URLHostname param.Field[string] `json:"url_hostname,required"`
-}
-
-func (r ListItemUpdateParamsBodyHostname) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The definition of the redirect.
-type ListItemUpdateParamsBodyRedirect struct {
-	SourceURL           param.Field[string]                                     `json:"source_url,required"`
-	TargetURL           param.Field[string]                                     `json:"target_url,required"`
-	IncludeSubdomains   param.Field[bool]                                       `json:"include_subdomains"`
-	PreservePathSuffix  param.Field[bool]                                       `json:"preserve_path_suffix"`
-	PreserveQueryString param.Field[bool]                                       `json:"preserve_query_string"`
-	StatusCode          param.Field[ListItemUpdateParamsBodyRedirectStatusCode] `json:"status_code"`
-	SubpathMatching     param.Field[bool]                                       `json:"subpath_matching"`
-}
-
-func (r ListItemUpdateParamsBodyRedirect) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ListItemUpdateParamsBodyRedirectStatusCode int64
-
-const (
-	ListItemUpdateParamsBodyRedirectStatusCode301 ListItemUpdateParamsBodyRedirectStatusCode = 301
-	ListItemUpdateParamsBodyRedirectStatusCode302 ListItemUpdateParamsBodyRedirectStatusCode = 302
-	ListItemUpdateParamsBodyRedirectStatusCode307 ListItemUpdateParamsBodyRedirectStatusCode = 307
-	ListItemUpdateParamsBodyRedirectStatusCode308 ListItemUpdateParamsBodyRedirectStatusCode = 308
-)
-
-func (r ListItemUpdateParamsBodyRedirectStatusCode) IsKnown() bool {
-	switch r {
-	case ListItemUpdateParamsBodyRedirectStatusCode301, ListItemUpdateParamsBodyRedirectStatusCode302, ListItemUpdateParamsBodyRedirectStatusCode307, ListItemUpdateParamsBodyRedirectStatusCode308:
-		return true
-	}
-	return false
 }
 
 type ListItemUpdateResponseEnvelope struct {

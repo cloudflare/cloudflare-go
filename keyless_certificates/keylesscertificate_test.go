@@ -36,7 +36,7 @@ func TestKeylessCertificateNewWithOptionalParams(t *testing.T) {
 		Port:         cloudflare.F(24008.000000),
 		BundleMethod: cloudflare.F(custom_hostnames.UnnamedSchemaRef16aca57bde2963201c7e6e895436c1c1Ubiquitous),
 		Name:         cloudflare.F("example.com Keyless SSL"),
-		Tunnel: cloudflare.F(keyless_certificates.KeylessCertificateNewParamsTunnel{
+		Tunnel: cloudflare.F(keyless_certificates.TunnelParam{
 			PrivateIP: cloudflare.F("10.0.0.1"),
 			VnetID:    cloudflare.F("7365377a-85a4-4390-9480-531ef7dc7a3c"),
 		}),
@@ -130,7 +130,7 @@ func TestKeylessCertificateEditWithOptionalParams(t *testing.T) {
 			Host:    cloudflare.F("example.com"),
 			Name:    cloudflare.F("example.com Keyless SSL"),
 			Port:    cloudflare.F(24008.000000),
-			Tunnel: cloudflare.F(keyless_certificates.KeylessCertificateEditParamsTunnel{
+			Tunnel: cloudflare.F(keyless_certificates.TunnelParam{
 				PrivateIP: cloudflare.F("10.0.0.1"),
 				VnetID:    cloudflare.F("7365377a-85a4-4390-9480-531ef7dc7a3c"),
 			}),

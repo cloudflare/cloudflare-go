@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/workers"
 	"github.com/cloudflare/cloudflare-go/v2/workers_for_platforms"
 )
 
@@ -55,9 +56,9 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Result: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResult{
+			Result: cloudflare.F(workers.SettingsItemParam{
 				Logpush: cloudflare.F(false),
-				TailConsumers: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptSettingEditParamsResultTailConsumer{{
+				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
