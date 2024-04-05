@@ -156,7 +156,7 @@ type CustomCertificate struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions CustomCertificateGeoRestrictions                `json:"geo_restrictions"`
+	GeoRestrictions GeoRestrictions                                 `json:"geo_restrictions"`
 	KeylessServer   keyless_certificates.KeylessCertificateHostname `json:"keyless_server"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
@@ -226,41 +226,55 @@ func (r CustomCertificateStatus) IsKnown() bool {
 // only to U.S. data centers, only to E.U. data centers, or only to highest
 // security data centers. Default distribution is to all Cloudflare datacenters,
 // for optimal performance.
-type CustomCertificateGeoRestrictions struct {
-	Label CustomCertificateGeoRestrictionsLabel `json:"label"`
-	JSON  customCertificateGeoRestrictionsJSON  `json:"-"`
+type GeoRestrictions struct {
+	Label GeoRestrictionsLabel `json:"label"`
+	JSON  geoRestrictionsJSON  `json:"-"`
 }
 
-// customCertificateGeoRestrictionsJSON contains the JSON metadata for the struct
-// [CustomCertificateGeoRestrictions]
-type customCertificateGeoRestrictionsJSON struct {
+// geoRestrictionsJSON contains the JSON metadata for the struct [GeoRestrictions]
+type geoRestrictionsJSON struct {
 	Label       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificateGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+func (r *GeoRestrictions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r customCertificateGeoRestrictionsJSON) RawJSON() string {
+func (r geoRestrictionsJSON) RawJSON() string {
 	return r.raw
 }
 
-type CustomCertificateGeoRestrictionsLabel string
+type GeoRestrictionsLabel string
 
 const (
-	CustomCertificateGeoRestrictionsLabelUs              CustomCertificateGeoRestrictionsLabel = "us"
-	CustomCertificateGeoRestrictionsLabelEu              CustomCertificateGeoRestrictionsLabel = "eu"
-	CustomCertificateGeoRestrictionsLabelHighestSecurity CustomCertificateGeoRestrictionsLabel = "highest_security"
+	GeoRestrictionsLabelUs              GeoRestrictionsLabel = "us"
+	GeoRestrictionsLabelEu              GeoRestrictionsLabel = "eu"
+	GeoRestrictionsLabelHighestSecurity GeoRestrictionsLabel = "highest_security"
 )
 
-func (r CustomCertificateGeoRestrictionsLabel) IsKnown() bool {
+func (r GeoRestrictionsLabel) IsKnown() bool {
 	switch r {
-	case CustomCertificateGeoRestrictionsLabelUs, CustomCertificateGeoRestrictionsLabelEu, CustomCertificateGeoRestrictionsLabelHighestSecurity:
+	case GeoRestrictionsLabelUs, GeoRestrictionsLabelEu, GeoRestrictionsLabelHighestSecurity:
 		return true
 	}
 	return false
+}
+
+// Specify the region where your private key can be held locally for optimal TLS
+// performance. HTTPS connections to any excluded data center will still be fully
+// encrypted, but will incur some latency while Keyless SSL is used to complete the
+// handshake with the nearest allowed data center. Options allow distribution to
+// only to U.S. data centers, only to E.U. data centers, or only to highest
+// security data centers. Default distribution is to all Cloudflare datacenters,
+// for optimal performance.
+type GeoRestrictionsParam struct {
+	Label param.Field[GeoRestrictionsLabel] `json:"label"`
+}
+
+func (r GeoRestrictionsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type CustomCertificateNewParams struct {
@@ -282,7 +296,7 @@ type CustomCertificateNewParams struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions param.Field[CustomCertificateNewParamsGeoRestrictions] `json:"geo_restrictions"`
+	GeoRestrictions param.Field[GeoRestrictionsParam] `json:"geo_restrictions"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -300,37 +314,6 @@ type CustomCertificateNewParams struct {
 
 func (r CustomCertificateNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Specify the region where your private key can be held locally for optimal TLS
-// performance. HTTPS connections to any excluded data center will still be fully
-// encrypted, but will incur some latency while Keyless SSL is used to complete the
-// handshake with the nearest allowed data center. Options allow distribution to
-// only to U.S. data centers, only to E.U. data centers, or only to highest
-// security data centers. Default distribution is to all Cloudflare datacenters,
-// for optimal performance.
-type CustomCertificateNewParamsGeoRestrictions struct {
-	Label param.Field[CustomCertificateNewParamsGeoRestrictionsLabel] `json:"label"`
-}
-
-func (r CustomCertificateNewParamsGeoRestrictions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CustomCertificateNewParamsGeoRestrictionsLabel string
-
-const (
-	CustomCertificateNewParamsGeoRestrictionsLabelUs              CustomCertificateNewParamsGeoRestrictionsLabel = "us"
-	CustomCertificateNewParamsGeoRestrictionsLabelEu              CustomCertificateNewParamsGeoRestrictionsLabel = "eu"
-	CustomCertificateNewParamsGeoRestrictionsLabelHighestSecurity CustomCertificateNewParamsGeoRestrictionsLabel = "highest_security"
-)
-
-func (r CustomCertificateNewParamsGeoRestrictionsLabel) IsKnown() bool {
-	switch r {
-	case CustomCertificateNewParamsGeoRestrictionsLabelUs, CustomCertificateNewParamsGeoRestrictionsLabelEu, CustomCertificateNewParamsGeoRestrictionsLabelHighestSecurity:
-		return true
-	}
-	return false
 }
 
 // The type 'legacy_custom' enables support for legacy clients which do not include
@@ -520,7 +503,7 @@ type CustomCertificateEditParams struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions param.Field[CustomCertificateEditParamsGeoRestrictions] `json:"geo_restrictions"`
+	GeoRestrictions param.Field[GeoRestrictionsParam] `json:"geo_restrictions"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -537,37 +520,6 @@ type CustomCertificateEditParams struct {
 
 func (r CustomCertificateEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Specify the region where your private key can be held locally for optimal TLS
-// performance. HTTPS connections to any excluded data center will still be fully
-// encrypted, but will incur some latency while Keyless SSL is used to complete the
-// handshake with the nearest allowed data center. Options allow distribution to
-// only to U.S. data centers, only to E.U. data centers, or only to highest
-// security data centers. Default distribution is to all Cloudflare datacenters,
-// for optimal performance.
-type CustomCertificateEditParamsGeoRestrictions struct {
-	Label param.Field[CustomCertificateEditParamsGeoRestrictionsLabel] `json:"label"`
-}
-
-func (r CustomCertificateEditParamsGeoRestrictions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CustomCertificateEditParamsGeoRestrictionsLabel string
-
-const (
-	CustomCertificateEditParamsGeoRestrictionsLabelUs              CustomCertificateEditParamsGeoRestrictionsLabel = "us"
-	CustomCertificateEditParamsGeoRestrictionsLabelEu              CustomCertificateEditParamsGeoRestrictionsLabel = "eu"
-	CustomCertificateEditParamsGeoRestrictionsLabelHighestSecurity CustomCertificateEditParamsGeoRestrictionsLabel = "highest_security"
-)
-
-func (r CustomCertificateEditParamsGeoRestrictionsLabel) IsKnown() bool {
-	switch r {
-	case CustomCertificateEditParamsGeoRestrictionsLabelUs, CustomCertificateEditParamsGeoRestrictionsLabelEu, CustomCertificateEditParamsGeoRestrictionsLabelHighestSecurity:
-		return true
-	}
-	return false
 }
 
 type CustomCertificateEditResponseEnvelope struct {

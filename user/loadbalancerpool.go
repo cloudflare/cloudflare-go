@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/load_balancers"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
@@ -185,7 +186,7 @@ type Pool struct {
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude float64 `json:"latitude"`
 	// Configures load shedding policies and percentages for the pool.
-	LoadShedding PoolLoadShedding `json:"load_shedding"`
+	LoadShedding load_balancers.LoadShedding `json:"load_shedding"`
 	// The longitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, latitude must also be set.
 	Longitude float64 `json:"longitude"`
@@ -208,14 +209,14 @@ type Pool struct {
 	NotificationEmail string `json:"notification_email"`
 	// Filter pool and origin health notifications by resource type or health status.
 	// Use null to reset.
-	NotificationFilter PoolNotificationFilter `json:"notification_filter,nullable"`
+	NotificationFilter load_balancers.NotificationFilter `json:"notification_filter,nullable"`
 	// Configures origin steering for the pool. Controls how origins are selected for
 	// new sessions and traffic without session affinity.
-	OriginSteering PoolOriginSteering `json:"origin_steering"`
+	OriginSteering load_balancers.OriginSteering `json:"origin_steering"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins []PoolOrigin `json:"origins"`
-	JSON    poolJSON     `json:"-"`
+	Origins []load_balancers.Origin `json:"origins"`
+	JSON    poolJSON                `json:"-"`
 }
 
 // poolJSON contains the JSON metadata for the struct [Pool]
@@ -279,309 +280,6 @@ func (r PoolCheckRegion) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Configures load shedding policies and percentages for the pool.
-type PoolLoadShedding struct {
-	// The percent of traffic to shed from the pool, according to the default policy.
-	// Applies to new sessions and traffic without session affinity.
-	DefaultPercent float64 `json:"default_percent"`
-	// The default policy to use when load shedding. A random policy randomly sheds a
-	// given percent of requests. A hash policy computes a hash over the
-	// CF-Connecting-IP address and sheds all requests originating from a percent of
-	// IPs.
-	DefaultPolicy PoolLoadSheddingDefaultPolicy `json:"default_policy"`
-	// The percent of existing sessions to shed from the pool, according to the session
-	// policy.
-	SessionPercent float64 `json:"session_percent"`
-	// Only the hash policy is supported for existing sessions (to avoid exponential
-	// decay).
-	SessionPolicy PoolLoadSheddingSessionPolicy `json:"session_policy"`
-	JSON          poolLoadSheddingJSON          `json:"-"`
-}
-
-// poolLoadSheddingJSON contains the JSON metadata for the struct
-// [PoolLoadShedding]
-type poolLoadSheddingJSON struct {
-	DefaultPercent apijson.Field
-	DefaultPolicy  apijson.Field
-	SessionPercent apijson.Field
-	SessionPolicy  apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *PoolLoadShedding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolLoadSheddingJSON) RawJSON() string {
-	return r.raw
-}
-
-// The default policy to use when load shedding. A random policy randomly sheds a
-// given percent of requests. A hash policy computes a hash over the
-// CF-Connecting-IP address and sheds all requests originating from a percent of
-// IPs.
-type PoolLoadSheddingDefaultPolicy string
-
-const (
-	PoolLoadSheddingDefaultPolicyRandom PoolLoadSheddingDefaultPolicy = "random"
-	PoolLoadSheddingDefaultPolicyHash   PoolLoadSheddingDefaultPolicy = "hash"
-)
-
-func (r PoolLoadSheddingDefaultPolicy) IsKnown() bool {
-	switch r {
-	case PoolLoadSheddingDefaultPolicyRandom, PoolLoadSheddingDefaultPolicyHash:
-		return true
-	}
-	return false
-}
-
-// Only the hash policy is supported for existing sessions (to avoid exponential
-// decay).
-type PoolLoadSheddingSessionPolicy string
-
-const (
-	PoolLoadSheddingSessionPolicyHash PoolLoadSheddingSessionPolicy = "hash"
-)
-
-func (r PoolLoadSheddingSessionPolicy) IsKnown() bool {
-	switch r {
-	case PoolLoadSheddingSessionPolicyHash:
-		return true
-	}
-	return false
-}
-
-// Filter pool and origin health notifications by resource type or health status.
-// Use null to reset.
-type PoolNotificationFilter struct {
-	// Filter options for a particular resource type (pool or origin). Use null to
-	// reset.
-	Origin PoolNotificationFilterOrigin `json:"origin,nullable"`
-	// Filter options for a particular resource type (pool or origin). Use null to
-	// reset.
-	Pool PoolNotificationFilterPool `json:"pool,nullable"`
-	JSON poolNotificationFilterJSON `json:"-"`
-}
-
-// poolNotificationFilterJSON contains the JSON metadata for the struct
-// [PoolNotificationFilter]
-type poolNotificationFilterJSON struct {
-	Origin      apijson.Field
-	Pool        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolNotificationFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolNotificationFilterJSON) RawJSON() string {
-	return r.raw
-}
-
-// Filter options for a particular resource type (pool or origin). Use null to
-// reset.
-type PoolNotificationFilterOrigin struct {
-	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable bool `json:"disable"`
-	// If present, send notifications only for this health status (e.g. false for only
-	// DOWN events). Use null to reset (all events).
-	Healthy bool                             `json:"healthy,nullable"`
-	JSON    poolNotificationFilterOriginJSON `json:"-"`
-}
-
-// poolNotificationFilterOriginJSON contains the JSON metadata for the struct
-// [PoolNotificationFilterOrigin]
-type poolNotificationFilterOriginJSON struct {
-	Disable     apijson.Field
-	Healthy     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolNotificationFilterOrigin) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolNotificationFilterOriginJSON) RawJSON() string {
-	return r.raw
-}
-
-// Filter options for a particular resource type (pool or origin). Use null to
-// reset.
-type PoolNotificationFilterPool struct {
-	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable bool `json:"disable"`
-	// If present, send notifications only for this health status (e.g. false for only
-	// DOWN events). Use null to reset (all events).
-	Healthy bool                           `json:"healthy,nullable"`
-	JSON    poolNotificationFilterPoolJSON `json:"-"`
-}
-
-// poolNotificationFilterPoolJSON contains the JSON metadata for the struct
-// [PoolNotificationFilterPool]
-type poolNotificationFilterPoolJSON struct {
-	Disable     apijson.Field
-	Healthy     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolNotificationFilterPool) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolNotificationFilterPoolJSON) RawJSON() string {
-	return r.raw
-}
-
-// Configures origin steering for the pool. Controls how origins are selected for
-// new sessions and traffic without session affinity.
-type PoolOriginSteering struct {
-	// The type of origin steering policy to use.
-	//
-	//   - `"random"`: Select an origin randomly.
-	//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-	//     address.
-	//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-	//     origin weights, as well as each origin's number of outstanding requests.
-	//     Origins with more pending requests are weighted proportionately less relative
-	//     to others.
-	//   - `"least_connections"`: Select an origin by taking into consideration origin
-	//     weights, as well as each origin's number of open connections. Origins with
-	//     more open connections are weighted proportionately less relative to others.
-	//     Supported for HTTP/1 and HTTP/2 connections.
-	Policy PoolOriginSteeringPolicy `json:"policy"`
-	JSON   poolOriginSteeringJSON   `json:"-"`
-}
-
-// poolOriginSteeringJSON contains the JSON metadata for the struct
-// [PoolOriginSteering]
-type poolOriginSteeringJSON struct {
-	Policy      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolOriginSteering) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolOriginSteeringJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of origin steering policy to use.
-//
-//   - `"random"`: Select an origin randomly.
-//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-//     address.
-//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-//     origin weights, as well as each origin's number of outstanding requests.
-//     Origins with more pending requests are weighted proportionately less relative
-//     to others.
-//   - `"least_connections"`: Select an origin by taking into consideration origin
-//     weights, as well as each origin's number of open connections. Origins with
-//     more open connections are weighted proportionately less relative to others.
-//     Supported for HTTP/1 and HTTP/2 connections.
-type PoolOriginSteeringPolicy string
-
-const (
-	PoolOriginSteeringPolicyRandom                   PoolOriginSteeringPolicy = "random"
-	PoolOriginSteeringPolicyHash                     PoolOriginSteeringPolicy = "hash"
-	PoolOriginSteeringPolicyLeastOutstandingRequests PoolOriginSteeringPolicy = "least_outstanding_requests"
-	PoolOriginSteeringPolicyLeastConnections         PoolOriginSteeringPolicy = "least_connections"
-)
-
-func (r PoolOriginSteeringPolicy) IsKnown() bool {
-	switch r {
-	case PoolOriginSteeringPolicyRandom, PoolOriginSteeringPolicyHash, PoolOriginSteeringPolicyLeastOutstandingRequests, PoolOriginSteeringPolicyLeastConnections:
-		return true
-	}
-	return false
-}
-
-type PoolOrigin struct {
-	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
-	// hostname. Hostnames entered here should resolve directly to the origin, and not
-	// be a hostname proxied by Cloudflare. To set an internal/reserved address,
-	// virtual_network_id must also be set.
-	Address string `json:"address"`
-	// This field shows up only if the origin is disabled. This field is set with the
-	// time the origin was disabled.
-	DisabledAt time.Time `json:"disabled_at" format:"date-time"`
-	// Whether to enable (the default) this origin within the pool. Disabled origins
-	// will not receive traffic and are excluded from health checks. The origin will
-	// only be disabled for the current pool.
-	Enabled bool `json:"enabled"`
-	// The request header is used to pass additional information with an HTTP request.
-	// Currently supported header is 'Host'.
-	Header PoolOriginsHeader `json:"header"`
-	// A human-identifiable name for the origin.
-	Name string `json:"name"`
-	// The virtual network subnet ID the origin belongs in. Virtual network must also
-	// belong to the account.
-	VirtualNetworkID string `json:"virtual_network_id"`
-	// The weight of this origin relative to other origins in the pool. Based on the
-	// configured weight the total traffic is distributed among origins within the
-	// pool.
-	//
-	//   - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
-	//     origin's outstanding requests.
-	//   - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
-	//     open connections.
-	Weight float64        `json:"weight"`
-	JSON   poolOriginJSON `json:"-"`
-}
-
-// poolOriginJSON contains the JSON metadata for the struct [PoolOrigin]
-type poolOriginJSON struct {
-	Address          apijson.Field
-	DisabledAt       apijson.Field
-	Enabled          apijson.Field
-	Header           apijson.Field
-	Name             apijson.Field
-	VirtualNetworkID apijson.Field
-	Weight           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PoolOrigin) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolOriginJSON) RawJSON() string {
-	return r.raw
-}
-
-// The request header is used to pass additional information with an HTTP request.
-// Currently supported header is 'Host'.
-type PoolOriginsHeader struct {
-	// The 'Host' header allows to override the hostname set in the HTTP request.
-	// Current support is 1 'Host' header override per origin.
-	Host []string              `json:"Host"`
-	JSON poolOriginsHeaderJSON `json:"-"`
-}
-
-// poolOriginsHeaderJSON contains the JSON metadata for the struct
-// [PoolOriginsHeader]
-type poolOriginsHeaderJSON struct {
-	Host        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolOriginsHeader) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolOriginsHeaderJSON) RawJSON() string {
-	return r.raw
 }
 
 type LoadBalancerPoolDeleteResponse struct {
@@ -682,7 +380,7 @@ type LoadBalancerPoolNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]LoadBalancerPoolNewParamsOrigin] `json:"origins,required"`
+	Origins param.Field[[]load_balancers.OriginParam] `json:"origins,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions param.Field[[]LoadBalancerPoolNewParamsCheckRegion] `json:"check_regions"`
@@ -696,7 +394,7 @@ type LoadBalancerPoolNewParams struct {
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude param.Field[float64] `json:"latitude"`
 	// Configures load shedding policies and percentages for the pool.
-	LoadShedding param.Field[LoadBalancerPoolNewParamsLoadShedding] `json:"load_shedding"`
+	LoadShedding param.Field[load_balancers.LoadSheddingParam] `json:"load_shedding"`
 	// The longitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, latitude must also be set.
 	Longitude param.Field[float64] `json:"longitude"`
@@ -715,58 +413,13 @@ type LoadBalancerPoolNewParams struct {
 	NotificationEmail param.Field[string] `json:"notification_email"`
 	// Filter pool and origin health notifications by resource type or health status.
 	// Use null to reset.
-	NotificationFilter param.Field[LoadBalancerPoolNewParamsNotificationFilter] `json:"notification_filter"`
+	NotificationFilter param.Field[load_balancers.NotificationFilterParam] `json:"notification_filter"`
 	// Configures origin steering for the pool. Controls how origins are selected for
 	// new sessions and traffic without session affinity.
-	OriginSteering param.Field[LoadBalancerPoolNewParamsOriginSteering] `json:"origin_steering"`
+	OriginSteering param.Field[load_balancers.OriginSteeringParam] `json:"origin_steering"`
 }
 
 func (r LoadBalancerPoolNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type LoadBalancerPoolNewParamsOrigin struct {
-	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
-	// hostname. Hostnames entered here should resolve directly to the origin, and not
-	// be a hostname proxied by Cloudflare. To set an internal/reserved address,
-	// virtual_network_id must also be set.
-	Address param.Field[string] `json:"address"`
-	// Whether to enable (the default) this origin within the pool. Disabled origins
-	// will not receive traffic and are excluded from health checks. The origin will
-	// only be disabled for the current pool.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The request header is used to pass additional information with an HTTP request.
-	// Currently supported header is 'Host'.
-	Header param.Field[LoadBalancerPoolNewParamsOriginsHeader] `json:"header"`
-	// A human-identifiable name for the origin.
-	Name param.Field[string] `json:"name"`
-	// The virtual network subnet ID the origin belongs in. Virtual network must also
-	// belong to the account.
-	VirtualNetworkID param.Field[string] `json:"virtual_network_id"`
-	// The weight of this origin relative to other origins in the pool. Based on the
-	// configured weight the total traffic is distributed among origins within the
-	// pool.
-	//
-	//   - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
-	//     origin's outstanding requests.
-	//   - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
-	//     open connections.
-	Weight param.Field[float64] `json:"weight"`
-}
-
-func (r LoadBalancerPoolNewParamsOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The request header is used to pass additional information with an HTTP request.
-// Currently supported header is 'Host'.
-type LoadBalancerPoolNewParamsOriginsHeader struct {
-	// The 'Host' header allows to override the hostname set in the HTTP request.
-	// Current support is 1 'Host' header override per origin.
-	Host param.Field[[]string] `json:"Host"`
-}
-
-func (r LoadBalancerPoolNewParamsOriginsHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -797,159 +450,6 @@ const (
 func (r LoadBalancerPoolNewParamsCheckRegion) IsKnown() bool {
 	switch r {
 	case LoadBalancerPoolNewParamsCheckRegionWnam, LoadBalancerPoolNewParamsCheckRegionEnam, LoadBalancerPoolNewParamsCheckRegionWeu, LoadBalancerPoolNewParamsCheckRegionEeu, LoadBalancerPoolNewParamsCheckRegionNsam, LoadBalancerPoolNewParamsCheckRegionSsam, LoadBalancerPoolNewParamsCheckRegionOc, LoadBalancerPoolNewParamsCheckRegionMe, LoadBalancerPoolNewParamsCheckRegionNaf, LoadBalancerPoolNewParamsCheckRegionSaf, LoadBalancerPoolNewParamsCheckRegionSas, LoadBalancerPoolNewParamsCheckRegionSeas, LoadBalancerPoolNewParamsCheckRegionNeas, LoadBalancerPoolNewParamsCheckRegionAllRegions:
-		return true
-	}
-	return false
-}
-
-// Configures load shedding policies and percentages for the pool.
-type LoadBalancerPoolNewParamsLoadShedding struct {
-	// The percent of traffic to shed from the pool, according to the default policy.
-	// Applies to new sessions and traffic without session affinity.
-	DefaultPercent param.Field[float64] `json:"default_percent"`
-	// The default policy to use when load shedding. A random policy randomly sheds a
-	// given percent of requests. A hash policy computes a hash over the
-	// CF-Connecting-IP address and sheds all requests originating from a percent of
-	// IPs.
-	DefaultPolicy param.Field[LoadBalancerPoolNewParamsLoadSheddingDefaultPolicy] `json:"default_policy"`
-	// The percent of existing sessions to shed from the pool, according to the session
-	// policy.
-	SessionPercent param.Field[float64] `json:"session_percent"`
-	// Only the hash policy is supported for existing sessions (to avoid exponential
-	// decay).
-	SessionPolicy param.Field[LoadBalancerPoolNewParamsLoadSheddingSessionPolicy] `json:"session_policy"`
-}
-
-func (r LoadBalancerPoolNewParamsLoadShedding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The default policy to use when load shedding. A random policy randomly sheds a
-// given percent of requests. A hash policy computes a hash over the
-// CF-Connecting-IP address and sheds all requests originating from a percent of
-// IPs.
-type LoadBalancerPoolNewParamsLoadSheddingDefaultPolicy string
-
-const (
-	LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyRandom LoadBalancerPoolNewParamsLoadSheddingDefaultPolicy = "random"
-	LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyHash   LoadBalancerPoolNewParamsLoadSheddingDefaultPolicy = "hash"
-)
-
-func (r LoadBalancerPoolNewParamsLoadSheddingDefaultPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyRandom, LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyHash:
-		return true
-	}
-	return false
-}
-
-// Only the hash policy is supported for existing sessions (to avoid exponential
-// decay).
-type LoadBalancerPoolNewParamsLoadSheddingSessionPolicy string
-
-const (
-	LoadBalancerPoolNewParamsLoadSheddingSessionPolicyHash LoadBalancerPoolNewParamsLoadSheddingSessionPolicy = "hash"
-)
-
-func (r LoadBalancerPoolNewParamsLoadSheddingSessionPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolNewParamsLoadSheddingSessionPolicyHash:
-		return true
-	}
-	return false
-}
-
-// Filter pool and origin health notifications by resource type or health status.
-// Use null to reset.
-type LoadBalancerPoolNewParamsNotificationFilter struct {
-	// Filter options for a particular resource type (pool or origin). Use null to
-	// reset.
-	Origin param.Field[LoadBalancerPoolNewParamsNotificationFilterOrigin] `json:"origin"`
-	// Filter options for a particular resource type (pool or origin). Use null to
-	// reset.
-	Pool param.Field[LoadBalancerPoolNewParamsNotificationFilterPool] `json:"pool"`
-}
-
-func (r LoadBalancerPoolNewParamsNotificationFilter) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Filter options for a particular resource type (pool or origin). Use null to
-// reset.
-type LoadBalancerPoolNewParamsNotificationFilterOrigin struct {
-	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable param.Field[bool] `json:"disable"`
-	// If present, send notifications only for this health status (e.g. false for only
-	// DOWN events). Use null to reset (all events).
-	Healthy param.Field[bool] `json:"healthy"`
-}
-
-func (r LoadBalancerPoolNewParamsNotificationFilterOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Filter options for a particular resource type (pool or origin). Use null to
-// reset.
-type LoadBalancerPoolNewParamsNotificationFilterPool struct {
-	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable param.Field[bool] `json:"disable"`
-	// If present, send notifications only for this health status (e.g. false for only
-	// DOWN events). Use null to reset (all events).
-	Healthy param.Field[bool] `json:"healthy"`
-}
-
-func (r LoadBalancerPoolNewParamsNotificationFilterPool) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures origin steering for the pool. Controls how origins are selected for
-// new sessions and traffic without session affinity.
-type LoadBalancerPoolNewParamsOriginSteering struct {
-	// The type of origin steering policy to use.
-	//
-	//   - `"random"`: Select an origin randomly.
-	//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-	//     address.
-	//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-	//     origin weights, as well as each origin's number of outstanding requests.
-	//     Origins with more pending requests are weighted proportionately less relative
-	//     to others.
-	//   - `"least_connections"`: Select an origin by taking into consideration origin
-	//     weights, as well as each origin's number of open connections. Origins with
-	//     more open connections are weighted proportionately less relative to others.
-	//     Supported for HTTP/1 and HTTP/2 connections.
-	Policy param.Field[LoadBalancerPoolNewParamsOriginSteeringPolicy] `json:"policy"`
-}
-
-func (r LoadBalancerPoolNewParamsOriginSteering) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of origin steering policy to use.
-//
-//   - `"random"`: Select an origin randomly.
-//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-//     address.
-//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-//     origin weights, as well as each origin's number of outstanding requests.
-//     Origins with more pending requests are weighted proportionately less relative
-//     to others.
-//   - `"least_connections"`: Select an origin by taking into consideration origin
-//     weights, as well as each origin's number of open connections. Origins with
-//     more open connections are weighted proportionately less relative to others.
-//     Supported for HTTP/1 and HTTP/2 connections.
-type LoadBalancerPoolNewParamsOriginSteeringPolicy string
-
-const (
-	LoadBalancerPoolNewParamsOriginSteeringPolicyRandom                   LoadBalancerPoolNewParamsOriginSteeringPolicy = "random"
-	LoadBalancerPoolNewParamsOriginSteeringPolicyHash                     LoadBalancerPoolNewParamsOriginSteeringPolicy = "hash"
-	LoadBalancerPoolNewParamsOriginSteeringPolicyLeastOutstandingRequests LoadBalancerPoolNewParamsOriginSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerPoolNewParamsOriginSteeringPolicyLeastConnections         LoadBalancerPoolNewParamsOriginSteeringPolicy = "least_connections"
-)
-
-func (r LoadBalancerPoolNewParamsOriginSteeringPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolNewParamsOriginSteeringPolicyRandom, LoadBalancerPoolNewParamsOriginSteeringPolicyHash, LoadBalancerPoolNewParamsOriginSteeringPolicyLeastOutstandingRequests, LoadBalancerPoolNewParamsOriginSteeringPolicyLeastConnections:
 		return true
 	}
 	return false
@@ -1004,7 +504,7 @@ type LoadBalancerPoolUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]LoadBalancerPoolUpdateParamsOrigin] `json:"origins,required"`
+	Origins param.Field[[]load_balancers.OriginParam] `json:"origins,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions param.Field[[]LoadBalancerPoolUpdateParamsCheckRegion] `json:"check_regions"`
@@ -1018,7 +518,7 @@ type LoadBalancerPoolUpdateParams struct {
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude param.Field[float64] `json:"latitude"`
 	// Configures load shedding policies and percentages for the pool.
-	LoadShedding param.Field[LoadBalancerPoolUpdateParamsLoadShedding] `json:"load_shedding"`
+	LoadShedding param.Field[load_balancers.LoadSheddingParam] `json:"load_shedding"`
 	// The longitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, latitude must also be set.
 	Longitude param.Field[float64] `json:"longitude"`
@@ -1037,58 +537,13 @@ type LoadBalancerPoolUpdateParams struct {
 	NotificationEmail param.Field[string] `json:"notification_email"`
 	// Filter pool and origin health notifications by resource type or health status.
 	// Use null to reset.
-	NotificationFilter param.Field[LoadBalancerPoolUpdateParamsNotificationFilter] `json:"notification_filter"`
+	NotificationFilter param.Field[load_balancers.NotificationFilterParam] `json:"notification_filter"`
 	// Configures origin steering for the pool. Controls how origins are selected for
 	// new sessions and traffic without session affinity.
-	OriginSteering param.Field[LoadBalancerPoolUpdateParamsOriginSteering] `json:"origin_steering"`
+	OriginSteering param.Field[load_balancers.OriginSteeringParam] `json:"origin_steering"`
 }
 
 func (r LoadBalancerPoolUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type LoadBalancerPoolUpdateParamsOrigin struct {
-	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
-	// hostname. Hostnames entered here should resolve directly to the origin, and not
-	// be a hostname proxied by Cloudflare. To set an internal/reserved address,
-	// virtual_network_id must also be set.
-	Address param.Field[string] `json:"address"`
-	// Whether to enable (the default) this origin within the pool. Disabled origins
-	// will not receive traffic and are excluded from health checks. The origin will
-	// only be disabled for the current pool.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The request header is used to pass additional information with an HTTP request.
-	// Currently supported header is 'Host'.
-	Header param.Field[LoadBalancerPoolUpdateParamsOriginsHeader] `json:"header"`
-	// A human-identifiable name for the origin.
-	Name param.Field[string] `json:"name"`
-	// The virtual network subnet ID the origin belongs in. Virtual network must also
-	// belong to the account.
-	VirtualNetworkID param.Field[string] `json:"virtual_network_id"`
-	// The weight of this origin relative to other origins in the pool. Based on the
-	// configured weight the total traffic is distributed among origins within the
-	// pool.
-	//
-	//   - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
-	//     origin's outstanding requests.
-	//   - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
-	//     open connections.
-	Weight param.Field[float64] `json:"weight"`
-}
-
-func (r LoadBalancerPoolUpdateParamsOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The request header is used to pass additional information with an HTTP request.
-// Currently supported header is 'Host'.
-type LoadBalancerPoolUpdateParamsOriginsHeader struct {
-	// The 'Host' header allows to override the hostname set in the HTTP request.
-	// Current support is 1 'Host' header override per origin.
-	Host param.Field[[]string] `json:"Host"`
-}
-
-func (r LoadBalancerPoolUpdateParamsOriginsHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1119,159 +574,6 @@ const (
 func (r LoadBalancerPoolUpdateParamsCheckRegion) IsKnown() bool {
 	switch r {
 	case LoadBalancerPoolUpdateParamsCheckRegionWnam, LoadBalancerPoolUpdateParamsCheckRegionEnam, LoadBalancerPoolUpdateParamsCheckRegionWeu, LoadBalancerPoolUpdateParamsCheckRegionEeu, LoadBalancerPoolUpdateParamsCheckRegionNsam, LoadBalancerPoolUpdateParamsCheckRegionSsam, LoadBalancerPoolUpdateParamsCheckRegionOc, LoadBalancerPoolUpdateParamsCheckRegionMe, LoadBalancerPoolUpdateParamsCheckRegionNaf, LoadBalancerPoolUpdateParamsCheckRegionSaf, LoadBalancerPoolUpdateParamsCheckRegionSas, LoadBalancerPoolUpdateParamsCheckRegionSeas, LoadBalancerPoolUpdateParamsCheckRegionNeas, LoadBalancerPoolUpdateParamsCheckRegionAllRegions:
-		return true
-	}
-	return false
-}
-
-// Configures load shedding policies and percentages for the pool.
-type LoadBalancerPoolUpdateParamsLoadShedding struct {
-	// The percent of traffic to shed from the pool, according to the default policy.
-	// Applies to new sessions and traffic without session affinity.
-	DefaultPercent param.Field[float64] `json:"default_percent"`
-	// The default policy to use when load shedding. A random policy randomly sheds a
-	// given percent of requests. A hash policy computes a hash over the
-	// CF-Connecting-IP address and sheds all requests originating from a percent of
-	// IPs.
-	DefaultPolicy param.Field[LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy] `json:"default_policy"`
-	// The percent of existing sessions to shed from the pool, according to the session
-	// policy.
-	SessionPercent param.Field[float64] `json:"session_percent"`
-	// Only the hash policy is supported for existing sessions (to avoid exponential
-	// decay).
-	SessionPolicy param.Field[LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy] `json:"session_policy"`
-}
-
-func (r LoadBalancerPoolUpdateParamsLoadShedding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The default policy to use when load shedding. A random policy randomly sheds a
-// given percent of requests. A hash policy computes a hash over the
-// CF-Connecting-IP address and sheds all requests originating from a percent of
-// IPs.
-type LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy string
-
-const (
-	LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyRandom LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy = "random"
-	LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyHash   LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy = "hash"
-)
-
-func (r LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyRandom, LoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyHash:
-		return true
-	}
-	return false
-}
-
-// Only the hash policy is supported for existing sessions (to avoid exponential
-// decay).
-type LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy string
-
-const (
-	LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicyHash LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy = "hash"
-)
-
-func (r LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolUpdateParamsLoadSheddingSessionPolicyHash:
-		return true
-	}
-	return false
-}
-
-// Filter pool and origin health notifications by resource type or health status.
-// Use null to reset.
-type LoadBalancerPoolUpdateParamsNotificationFilter struct {
-	// Filter options for a particular resource type (pool or origin). Use null to
-	// reset.
-	Origin param.Field[LoadBalancerPoolUpdateParamsNotificationFilterOrigin] `json:"origin"`
-	// Filter options for a particular resource type (pool or origin). Use null to
-	// reset.
-	Pool param.Field[LoadBalancerPoolUpdateParamsNotificationFilterPool] `json:"pool"`
-}
-
-func (r LoadBalancerPoolUpdateParamsNotificationFilter) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Filter options for a particular resource type (pool or origin). Use null to
-// reset.
-type LoadBalancerPoolUpdateParamsNotificationFilterOrigin struct {
-	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable param.Field[bool] `json:"disable"`
-	// If present, send notifications only for this health status (e.g. false for only
-	// DOWN events). Use null to reset (all events).
-	Healthy param.Field[bool] `json:"healthy"`
-}
-
-func (r LoadBalancerPoolUpdateParamsNotificationFilterOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Filter options for a particular resource type (pool or origin). Use null to
-// reset.
-type LoadBalancerPoolUpdateParamsNotificationFilterPool struct {
-	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable param.Field[bool] `json:"disable"`
-	// If present, send notifications only for this health status (e.g. false for only
-	// DOWN events). Use null to reset (all events).
-	Healthy param.Field[bool] `json:"healthy"`
-}
-
-func (r LoadBalancerPoolUpdateParamsNotificationFilterPool) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures origin steering for the pool. Controls how origins are selected for
-// new sessions and traffic without session affinity.
-type LoadBalancerPoolUpdateParamsOriginSteering struct {
-	// The type of origin steering policy to use.
-	//
-	//   - `"random"`: Select an origin randomly.
-	//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-	//     address.
-	//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-	//     origin weights, as well as each origin's number of outstanding requests.
-	//     Origins with more pending requests are weighted proportionately less relative
-	//     to others.
-	//   - `"least_connections"`: Select an origin by taking into consideration origin
-	//     weights, as well as each origin's number of open connections. Origins with
-	//     more open connections are weighted proportionately less relative to others.
-	//     Supported for HTTP/1 and HTTP/2 connections.
-	Policy param.Field[LoadBalancerPoolUpdateParamsOriginSteeringPolicy] `json:"policy"`
-}
-
-func (r LoadBalancerPoolUpdateParamsOriginSteering) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of origin steering policy to use.
-//
-//   - `"random"`: Select an origin randomly.
-//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-//     address.
-//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-//     origin weights, as well as each origin's number of outstanding requests.
-//     Origins with more pending requests are weighted proportionately less relative
-//     to others.
-//   - `"least_connections"`: Select an origin by taking into consideration origin
-//     weights, as well as each origin's number of open connections. Origins with
-//     more open connections are weighted proportionately less relative to others.
-//     Supported for HTTP/1 and HTTP/2 connections.
-type LoadBalancerPoolUpdateParamsOriginSteeringPolicy string
-
-const (
-	LoadBalancerPoolUpdateParamsOriginSteeringPolicyRandom                   LoadBalancerPoolUpdateParamsOriginSteeringPolicy = "random"
-	LoadBalancerPoolUpdateParamsOriginSteeringPolicyHash                     LoadBalancerPoolUpdateParamsOriginSteeringPolicy = "hash"
-	LoadBalancerPoolUpdateParamsOriginSteeringPolicyLeastOutstandingRequests LoadBalancerPoolUpdateParamsOriginSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerPoolUpdateParamsOriginSteeringPolicyLeastConnections         LoadBalancerPoolUpdateParamsOriginSteeringPolicy = "least_connections"
-)
-
-func (r LoadBalancerPoolUpdateParamsOriginSteeringPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolUpdateParamsOriginSteeringPolicyRandom, LoadBalancerPoolUpdateParamsOriginSteeringPolicyHash, LoadBalancerPoolUpdateParamsOriginSteeringPolicyLeastOutstandingRequests, LoadBalancerPoolUpdateParamsOriginSteeringPolicyLeastConnections:
 		return true
 	}
 	return false
@@ -1400,7 +702,7 @@ type LoadBalancerPoolEditParams struct {
 	// decimal degrees. If this is set, longitude must also be set.
 	Latitude param.Field[float64] `json:"latitude"`
 	// Configures load shedding policies and percentages for the pool.
-	LoadShedding param.Field[LoadBalancerPoolEditParamsLoadShedding] `json:"load_shedding"`
+	LoadShedding param.Field[load_balancers.LoadSheddingParam] `json:"load_shedding"`
 	// The longitude of the data center containing the origins used in this pool in
 	// decimal degrees. If this is set, latitude must also be set.
 	Longitude param.Field[float64] `json:"longitude"`
@@ -1422,13 +724,13 @@ type LoadBalancerPoolEditParams struct {
 	NotificationEmail param.Field[string] `json:"notification_email"`
 	// Filter pool and origin health notifications by resource type or health status.
 	// Use null to reset.
-	NotificationFilter param.Field[LoadBalancerPoolEditParamsNotificationFilter] `json:"notification_filter"`
+	NotificationFilter param.Field[load_balancers.NotificationFilterParam] `json:"notification_filter"`
 	// Configures origin steering for the pool. Controls how origins are selected for
 	// new sessions and traffic without session affinity.
-	OriginSteering param.Field[LoadBalancerPoolEditParamsOriginSteering] `json:"origin_steering"`
+	OriginSteering param.Field[load_balancers.OriginSteeringParam] `json:"origin_steering"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]LoadBalancerPoolEditParamsOrigin] `json:"origins"`
+	Origins param.Field[[]load_balancers.OriginParam] `json:"origins"`
 }
 
 func (r LoadBalancerPoolEditParams) MarshalJSON() (data []byte, err error) {
@@ -1465,204 +767,6 @@ func (r LoadBalancerPoolEditParamsCheckRegion) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Configures load shedding policies and percentages for the pool.
-type LoadBalancerPoolEditParamsLoadShedding struct {
-	// The percent of traffic to shed from the pool, according to the default policy.
-	// Applies to new sessions and traffic without session affinity.
-	DefaultPercent param.Field[float64] `json:"default_percent"`
-	// The default policy to use when load shedding. A random policy randomly sheds a
-	// given percent of requests. A hash policy computes a hash over the
-	// CF-Connecting-IP address and sheds all requests originating from a percent of
-	// IPs.
-	DefaultPolicy param.Field[LoadBalancerPoolEditParamsLoadSheddingDefaultPolicy] `json:"default_policy"`
-	// The percent of existing sessions to shed from the pool, according to the session
-	// policy.
-	SessionPercent param.Field[float64] `json:"session_percent"`
-	// Only the hash policy is supported for existing sessions (to avoid exponential
-	// decay).
-	SessionPolicy param.Field[LoadBalancerPoolEditParamsLoadSheddingSessionPolicy] `json:"session_policy"`
-}
-
-func (r LoadBalancerPoolEditParamsLoadShedding) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The default policy to use when load shedding. A random policy randomly sheds a
-// given percent of requests. A hash policy computes a hash over the
-// CF-Connecting-IP address and sheds all requests originating from a percent of
-// IPs.
-type LoadBalancerPoolEditParamsLoadSheddingDefaultPolicy string
-
-const (
-	LoadBalancerPoolEditParamsLoadSheddingDefaultPolicyRandom LoadBalancerPoolEditParamsLoadSheddingDefaultPolicy = "random"
-	LoadBalancerPoolEditParamsLoadSheddingDefaultPolicyHash   LoadBalancerPoolEditParamsLoadSheddingDefaultPolicy = "hash"
-)
-
-func (r LoadBalancerPoolEditParamsLoadSheddingDefaultPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolEditParamsLoadSheddingDefaultPolicyRandom, LoadBalancerPoolEditParamsLoadSheddingDefaultPolicyHash:
-		return true
-	}
-	return false
-}
-
-// Only the hash policy is supported for existing sessions (to avoid exponential
-// decay).
-type LoadBalancerPoolEditParamsLoadSheddingSessionPolicy string
-
-const (
-	LoadBalancerPoolEditParamsLoadSheddingSessionPolicyHash LoadBalancerPoolEditParamsLoadSheddingSessionPolicy = "hash"
-)
-
-func (r LoadBalancerPoolEditParamsLoadSheddingSessionPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolEditParamsLoadSheddingSessionPolicyHash:
-		return true
-	}
-	return false
-}
-
-// Filter pool and origin health notifications by resource type or health status.
-// Use null to reset.
-type LoadBalancerPoolEditParamsNotificationFilter struct {
-	// Filter options for a particular resource type (pool or origin). Use null to
-	// reset.
-	Origin param.Field[LoadBalancerPoolEditParamsNotificationFilterOrigin] `json:"origin"`
-	// Filter options for a particular resource type (pool or origin). Use null to
-	// reset.
-	Pool param.Field[LoadBalancerPoolEditParamsNotificationFilterPool] `json:"pool"`
-}
-
-func (r LoadBalancerPoolEditParamsNotificationFilter) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Filter options for a particular resource type (pool or origin). Use null to
-// reset.
-type LoadBalancerPoolEditParamsNotificationFilterOrigin struct {
-	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable param.Field[bool] `json:"disable"`
-	// If present, send notifications only for this health status (e.g. false for only
-	// DOWN events). Use null to reset (all events).
-	Healthy param.Field[bool] `json:"healthy"`
-}
-
-func (r LoadBalancerPoolEditParamsNotificationFilterOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Filter options for a particular resource type (pool or origin). Use null to
-// reset.
-type LoadBalancerPoolEditParamsNotificationFilterPool struct {
-	// If set true, disable notifications for this type of resource (pool or origin).
-	Disable param.Field[bool] `json:"disable"`
-	// If present, send notifications only for this health status (e.g. false for only
-	// DOWN events). Use null to reset (all events).
-	Healthy param.Field[bool] `json:"healthy"`
-}
-
-func (r LoadBalancerPoolEditParamsNotificationFilterPool) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures origin steering for the pool. Controls how origins are selected for
-// new sessions and traffic without session affinity.
-type LoadBalancerPoolEditParamsOriginSteering struct {
-	// The type of origin steering policy to use.
-	//
-	//   - `"random"`: Select an origin randomly.
-	//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-	//     address.
-	//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-	//     origin weights, as well as each origin's number of outstanding requests.
-	//     Origins with more pending requests are weighted proportionately less relative
-	//     to others.
-	//   - `"least_connections"`: Select an origin by taking into consideration origin
-	//     weights, as well as each origin's number of open connections. Origins with
-	//     more open connections are weighted proportionately less relative to others.
-	//     Supported for HTTP/1 and HTTP/2 connections.
-	Policy param.Field[LoadBalancerPoolEditParamsOriginSteeringPolicy] `json:"policy"`
-}
-
-func (r LoadBalancerPoolEditParamsOriginSteering) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of origin steering policy to use.
-//
-//   - `"random"`: Select an origin randomly.
-//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
-//     address.
-//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
-//     origin weights, as well as each origin's number of outstanding requests.
-//     Origins with more pending requests are weighted proportionately less relative
-//     to others.
-//   - `"least_connections"`: Select an origin by taking into consideration origin
-//     weights, as well as each origin's number of open connections. Origins with
-//     more open connections are weighted proportionately less relative to others.
-//     Supported for HTTP/1 and HTTP/2 connections.
-type LoadBalancerPoolEditParamsOriginSteeringPolicy string
-
-const (
-	LoadBalancerPoolEditParamsOriginSteeringPolicyRandom                   LoadBalancerPoolEditParamsOriginSteeringPolicy = "random"
-	LoadBalancerPoolEditParamsOriginSteeringPolicyHash                     LoadBalancerPoolEditParamsOriginSteeringPolicy = "hash"
-	LoadBalancerPoolEditParamsOriginSteeringPolicyLeastOutstandingRequests LoadBalancerPoolEditParamsOriginSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerPoolEditParamsOriginSteeringPolicyLeastConnections         LoadBalancerPoolEditParamsOriginSteeringPolicy = "least_connections"
-)
-
-func (r LoadBalancerPoolEditParamsOriginSteeringPolicy) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolEditParamsOriginSteeringPolicyRandom, LoadBalancerPoolEditParamsOriginSteeringPolicyHash, LoadBalancerPoolEditParamsOriginSteeringPolicyLeastOutstandingRequests, LoadBalancerPoolEditParamsOriginSteeringPolicyLeastConnections:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerPoolEditParamsOrigin struct {
-	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
-	// hostname. Hostnames entered here should resolve directly to the origin, and not
-	// be a hostname proxied by Cloudflare. To set an internal/reserved address,
-	// virtual_network_id must also be set.
-	Address param.Field[string] `json:"address"`
-	// Whether to enable (the default) this origin within the pool. Disabled origins
-	// will not receive traffic and are excluded from health checks. The origin will
-	// only be disabled for the current pool.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The request header is used to pass additional information with an HTTP request.
-	// Currently supported header is 'Host'.
-	Header param.Field[LoadBalancerPoolEditParamsOriginsHeader] `json:"header"`
-	// A human-identifiable name for the origin.
-	Name param.Field[string] `json:"name"`
-	// The virtual network subnet ID the origin belongs in. Virtual network must also
-	// belong to the account.
-	VirtualNetworkID param.Field[string] `json:"virtual_network_id"`
-	// The weight of this origin relative to other origins in the pool. Based on the
-	// configured weight the total traffic is distributed among origins within the
-	// pool.
-	//
-	//   - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
-	//     origin's outstanding requests.
-	//   - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
-	//     open connections.
-	Weight param.Field[float64] `json:"weight"`
-}
-
-func (r LoadBalancerPoolEditParamsOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The request header is used to pass additional information with an HTTP request.
-// Currently supported header is 'Host'.
-type LoadBalancerPoolEditParamsOriginsHeader struct {
-	// The 'Host' header allows to override the hostname set in the HTTP request.
-	// Current support is 1 'Host' header override per origin.
-	Host param.Field[[]string] `json:"Host"`
-}
-
-func (r LoadBalancerPoolEditParamsOriginsHeader) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type LoadBalancerPoolEditResponseEnvelope struct {

@@ -59,15 +59,67 @@ func (r *RuleCatchAllService) Get(ctx context.Context, zoneIdentifier string, op
 	return
 }
 
+// Action for the catch-all routing rule.
+type Action struct {
+	// Type of action for catch-all rule.
+	Type  ActionType `json:"type,required"`
+	Value []string   `json:"value"`
+	JSON  actionJSON `json:"-"`
+}
+
+// actionJSON contains the JSON metadata for the struct [Action]
+type actionJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Action) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r actionJSON) RawJSON() string {
+	return r.raw
+}
+
+// Type of action for catch-all rule.
+type ActionType string
+
+const (
+	ActionTypeDrop    ActionType = "drop"
+	ActionTypeForward ActionType = "forward"
+	ActionTypeWorker  ActionType = "worker"
+)
+
+func (r ActionType) IsKnown() bool {
+	switch r {
+	case ActionTypeDrop, ActionTypeForward, ActionTypeWorker:
+		return true
+	}
+	return false
+}
+
+// Action for the catch-all routing rule.
+type ActionParam struct {
+	// Type of action for catch-all rule.
+	Type  param.Field[ActionType] `json:"type,required"`
+	Value param.Field[[]string]   `json:"value"`
+}
+
+func (r ActionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type EmailCatchAllRule struct {
 	// Routing rule identifier.
 	ID string `json:"id"`
 	// List actions for the catch-all routing rule.
-	Actions []EmailCatchAllRuleAction `json:"actions"`
+	Actions []Action `json:"actions"`
 	// Routing rule status.
 	Enabled EmailCatchAllRuleEnabled `json:"enabled"`
 	// List of matchers for the catch-all routing rule.
-	Matchers []EmailCatchAllRuleMatcher `json:"matchers"`
+	Matchers []Matcher `json:"matchers"`
 	// Routing rule name.
 	Name string `json:"name"`
 	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
@@ -96,48 +148,6 @@ func (r emailCatchAllRuleJSON) RawJSON() string {
 	return r.raw
 }
 
-// Action for the catch-all routing rule.
-type EmailCatchAllRuleAction struct {
-	// Type of action for catch-all rule.
-	Type  EmailCatchAllRuleActionsType `json:"type,required"`
-	Value []string                     `json:"value"`
-	JSON  emailCatchAllRuleActionJSON  `json:"-"`
-}
-
-// emailCatchAllRuleActionJSON contains the JSON metadata for the struct
-// [EmailCatchAllRuleAction]
-type emailCatchAllRuleActionJSON struct {
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailCatchAllRuleAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r emailCatchAllRuleActionJSON) RawJSON() string {
-	return r.raw
-}
-
-// Type of action for catch-all rule.
-type EmailCatchAllRuleActionsType string
-
-const (
-	EmailCatchAllRuleActionsTypeDrop    EmailCatchAllRuleActionsType = "drop"
-	EmailCatchAllRuleActionsTypeForward EmailCatchAllRuleActionsType = "forward"
-	EmailCatchAllRuleActionsTypeWorker  EmailCatchAllRuleActionsType = "worker"
-)
-
-func (r EmailCatchAllRuleActionsType) IsKnown() bool {
-	switch r {
-	case EmailCatchAllRuleActionsTypeDrop, EmailCatchAllRuleActionsTypeForward, EmailCatchAllRuleActionsTypeWorker:
-		return true
-	}
-	return false
-}
-
 // Routing rule status.
 type EmailCatchAllRuleEnabled bool
 
@@ -155,48 +165,57 @@ func (r EmailCatchAllRuleEnabled) IsKnown() bool {
 }
 
 // Matcher for catch-all routing rule.
-type EmailCatchAllRuleMatcher struct {
+type Matcher struct {
 	// Type of matcher. Default is 'all'.
-	Type EmailCatchAllRuleMatchersType `json:"type,required"`
-	JSON emailCatchAllRuleMatcherJSON  `json:"-"`
+	Type MatcherType `json:"type,required"`
+	JSON matcherJSON `json:"-"`
 }
 
-// emailCatchAllRuleMatcherJSON contains the JSON metadata for the struct
-// [EmailCatchAllRuleMatcher]
-type emailCatchAllRuleMatcherJSON struct {
+// matcherJSON contains the JSON metadata for the struct [Matcher]
+type matcherJSON struct {
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailCatchAllRuleMatcher) UnmarshalJSON(data []byte) (err error) {
+func (r *Matcher) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r emailCatchAllRuleMatcherJSON) RawJSON() string {
+func (r matcherJSON) RawJSON() string {
 	return r.raw
 }
 
 // Type of matcher. Default is 'all'.
-type EmailCatchAllRuleMatchersType string
+type MatcherType string
 
 const (
-	EmailCatchAllRuleMatchersTypeAll EmailCatchAllRuleMatchersType = "all"
+	MatcherTypeAll MatcherType = "all"
 )
 
-func (r EmailCatchAllRuleMatchersType) IsKnown() bool {
+func (r MatcherType) IsKnown() bool {
 	switch r {
-	case EmailCatchAllRuleMatchersTypeAll:
+	case MatcherTypeAll:
 		return true
 	}
 	return false
 }
 
+// Matcher for catch-all routing rule.
+type MatcherParam struct {
+	// Type of matcher. Default is 'all'.
+	Type param.Field[MatcherType] `json:"type,required"`
+}
+
+func (r MatcherParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type RuleCatchAllUpdateParams struct {
 	// List actions for the catch-all routing rule.
-	Actions param.Field[[]RuleCatchAllUpdateParamsAction] `json:"actions,required"`
+	Actions param.Field[[]ActionParam] `json:"actions,required"`
 	// List of matchers for the catch-all routing rule.
-	Matchers param.Field[[]RuleCatchAllUpdateParamsMatcher] `json:"matchers,required"`
+	Matchers param.Field[[]MatcherParam] `json:"matchers,required"`
 	// Routing rule status.
 	Enabled param.Field[RuleCatchAllUpdateParamsEnabled] `json:"enabled"`
 	// Routing rule name.
@@ -205,59 +224,6 @@ type RuleCatchAllUpdateParams struct {
 
 func (r RuleCatchAllUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Action for the catch-all routing rule.
-type RuleCatchAllUpdateParamsAction struct {
-	// Type of action for catch-all rule.
-	Type  param.Field[RuleCatchAllUpdateParamsActionsType] `json:"type,required"`
-	Value param.Field[[]string]                            `json:"value"`
-}
-
-func (r RuleCatchAllUpdateParamsAction) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Type of action for catch-all rule.
-type RuleCatchAllUpdateParamsActionsType string
-
-const (
-	RuleCatchAllUpdateParamsActionsTypeDrop    RuleCatchAllUpdateParamsActionsType = "drop"
-	RuleCatchAllUpdateParamsActionsTypeForward RuleCatchAllUpdateParamsActionsType = "forward"
-	RuleCatchAllUpdateParamsActionsTypeWorker  RuleCatchAllUpdateParamsActionsType = "worker"
-)
-
-func (r RuleCatchAllUpdateParamsActionsType) IsKnown() bool {
-	switch r {
-	case RuleCatchAllUpdateParamsActionsTypeDrop, RuleCatchAllUpdateParamsActionsTypeForward, RuleCatchAllUpdateParamsActionsTypeWorker:
-		return true
-	}
-	return false
-}
-
-// Matcher for catch-all routing rule.
-type RuleCatchAllUpdateParamsMatcher struct {
-	// Type of matcher. Default is 'all'.
-	Type param.Field[RuleCatchAllUpdateParamsMatchersType] `json:"type,required"`
-}
-
-func (r RuleCatchAllUpdateParamsMatcher) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Type of matcher. Default is 'all'.
-type RuleCatchAllUpdateParamsMatchersType string
-
-const (
-	RuleCatchAllUpdateParamsMatchersTypeAll RuleCatchAllUpdateParamsMatchersType = "all"
-)
-
-func (r RuleCatchAllUpdateParamsMatchersType) IsKnown() bool {
-	switch r {
-	case RuleCatchAllUpdateParamsMatchersTypeAll:
-		return true
-	}
-	return false
 }
 
 // Routing rule status.

@@ -33,7 +33,7 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RoleListResponse], err error) {
+func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Role], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -51,7 +51,7 @@ func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...op
 }
 
 // Get all available roles for an account.
-func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RoleListResponse] {
+func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Role] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -104,10 +104,11 @@ type Role struct {
 	ID string `json:"id,required"`
 	// Description of role's permissions.
 	Description string `json:"description,required"`
-	// Role name.
-	Name        string           `json:"name,required"`
-	Permissions MemberPermission `json:"permissions,required"`
-	JSON        roleJSON         `json:"-"`
+	// Role Name.
+	Name string `json:"name,required"`
+	// Access permissions for this User.
+	Permissions []string `json:"permissions,required"`
+	JSON        roleJSON `json:"-"`
 }
 
 // roleJSON contains the JSON metadata for the struct [Role]
@@ -125,46 +126,6 @@ func (r *Role) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r roleJSON) RawJSON() string {
-	return r.raw
-}
-
-type RoleParam struct {
-	// Role identifier tag.
-	ID param.Field[string] `json:"id,required"`
-}
-
-func (r RoleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RoleListResponse struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role Name.
-	Name string `json:"name,required"`
-	// Access permissions for this User.
-	Permissions []string             `json:"permissions,required"`
-	JSON        roleListResponseJSON `json:"-"`
-}
-
-// roleListResponseJSON contains the JSON metadata for the struct
-// [RoleListResponse]
-type roleListResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RoleListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleListResponseJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -6,7 +6,10 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-go/v2/accounts"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -50,6 +53,67 @@ func (r *TokenPermissionGroupService) List(ctx context.Context, opts ...option.R
 // Find all available permission groups.
 func (r *TokenPermissionGroupService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TokenPermissionGroupListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
+}
+
+type Permission struct {
+	Analytics    accounts.PermissionGrant `json:"analytics"`
+	Billing      accounts.PermissionGrant `json:"billing"`
+	CachePurge   accounts.PermissionGrant `json:"cache_purge"`
+	DNS          accounts.PermissionGrant `json:"dns"`
+	DNSRecords   accounts.PermissionGrant `json:"dns_records"`
+	Lb           accounts.PermissionGrant `json:"lb"`
+	Logs         accounts.PermissionGrant `json:"logs"`
+	Organization accounts.PermissionGrant `json:"organization"`
+	SSL          accounts.PermissionGrant `json:"ssl"`
+	WAF          accounts.PermissionGrant `json:"waf"`
+	ZoneSettings accounts.PermissionGrant `json:"zone_settings"`
+	Zones        accounts.PermissionGrant `json:"zones"`
+	JSON         permissionJSON           `json:"-"`
+}
+
+// permissionJSON contains the JSON metadata for the struct [Permission]
+type permissionJSON struct {
+	Analytics    apijson.Field
+	Billing      apijson.Field
+	CachePurge   apijson.Field
+	DNS          apijson.Field
+	DNSRecords   apijson.Field
+	Lb           apijson.Field
+	Logs         apijson.Field
+	Organization apijson.Field
+	SSL          apijson.Field
+	WAF          apijson.Field
+	ZoneSettings apijson.Field
+	Zones        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *Permission) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionJSON) RawJSON() string {
+	return r.raw
+}
+
+type PermissionParam struct {
+	Analytics    param.Field[accounts.PermissionGrantParam] `json:"analytics"`
+	Billing      param.Field[accounts.PermissionGrantParam] `json:"billing"`
+	CachePurge   param.Field[accounts.PermissionGrantParam] `json:"cache_purge"`
+	DNS          param.Field[accounts.PermissionGrantParam] `json:"dns"`
+	DNSRecords   param.Field[accounts.PermissionGrantParam] `json:"dns_records"`
+	Lb           param.Field[accounts.PermissionGrantParam] `json:"lb"`
+	Logs         param.Field[accounts.PermissionGrantParam] `json:"logs"`
+	Organization param.Field[accounts.PermissionGrantParam] `json:"organization"`
+	SSL          param.Field[accounts.PermissionGrantParam] `json:"ssl"`
+	WAF          param.Field[accounts.PermissionGrantParam] `json:"waf"`
+	ZoneSettings param.Field[accounts.PermissionGrantParam] `json:"zone_settings"`
+	Zones        param.Field[accounts.PermissionGrantParam] `json:"zones"`
+}
+
+func (r PermissionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type TokenPermissionGroupListResponse = interface{}
