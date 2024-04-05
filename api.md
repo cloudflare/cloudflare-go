@@ -2975,10 +2975,6 @@ Methods:
 
 ### Events
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#DimensionItem">DimensionItem</a>
-
 #### Bytimes
 
 Methods:
