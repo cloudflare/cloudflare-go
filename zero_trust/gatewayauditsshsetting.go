@@ -34,7 +34,7 @@ func NewGatewayAuditSSHSettingService(opts ...option.RequestOption) (r *GatewayA
 }
 
 // Updates Zero Trust Audit SSH settings.
-func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewaySettings, err error) {
+func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayAuditSSHSettingUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/audit_ssh_settings", params.AccountID)
@@ -47,7 +47,7 @@ func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params Gatew
 }
 
 // Get all Zero Trust Audit SSH settings for an account.
-func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewaySettings, err error) {
+func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *Settings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayAuditSSHSettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/audit_ssh_settings", query.AccountID)
@@ -59,19 +59,18 @@ func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAu
 	return
 }
 
-type ZeroTrustGatewaySettings struct {
+type Settings struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// SSH encryption public key
 	PublicKey string `json:"public_key"`
 	// Seed ID
-	SeedID    string                       `json:"seed_id"`
-	UpdatedAt time.Time                    `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGatewaySettingsJSON `json:"-"`
+	SeedID    string       `json:"seed_id"`
+	UpdatedAt time.Time    `json:"updated_at" format:"date-time"`
+	JSON      settingsJSON `json:"-"`
 }
 
-// zeroTrustGatewaySettingsJSON contains the JSON metadata for the struct
-// [ZeroTrustGatewaySettings]
-type zeroTrustGatewaySettingsJSON struct {
+// settingsJSON contains the JSON metadata for the struct [Settings]
+type settingsJSON struct {
 	CreatedAt   apijson.Field
 	PublicKey   apijson.Field
 	SeedID      apijson.Field
@@ -80,12 +79,23 @@ type zeroTrustGatewaySettingsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewaySettings) UnmarshalJSON(data []byte) (err error) {
+func (r *Settings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustGatewaySettingsJSON) RawJSON() string {
+func (r settingsJSON) RawJSON() string {
 	return r.raw
+}
+
+type SettingsParam struct {
+	// SSH encryption public key
+	PublicKey param.Field[string] `json:"public_key"`
+	// Seed ID
+	SeedID param.Field[string] `json:"seed_id"`
+}
+
+func (r SettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type GatewayAuditSSHSettingUpdateParams struct {
@@ -103,7 +113,7 @@ func (r GatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte, err erro
 type GatewayAuditSSHSettingUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewaySettings                                  `json:"result,required"`
+	Result   Settings                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayAuditSSHSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -150,7 +160,7 @@ type GatewayAuditSSHSettingGetParams struct {
 type GatewayAuditSSHSettingGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewaySettings                                  `json:"result,required"`
+	Result   Settings                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayAuditSSHSettingGetResponseEnvelopeJSON    `json:"-"`

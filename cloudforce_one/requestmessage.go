@@ -36,7 +36,7 @@ func NewRequestMessageService(opts ...option.RequestOption) (r *RequestMessageSe
 // Creating a request adds the request into the Cloudforce One queue for analysis.
 // In addition to the content, a short title, type, priority, and releasability
 // should be provided. If one is not provided a default will be assigned.
-func (r *RequestMessageService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageNewParams, opts ...option.RequestOption) (res *CloudforceOneRequestMessageItem, err error) {
+func (r *RequestMessageService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageNewParams, opts ...option.RequestOption) (res *Message, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/new", accountIdentifier, requestIdentifier)
@@ -49,7 +49,7 @@ func (r *RequestMessageService) New(ctx context.Context, accountIdentifier strin
 }
 
 // Update a Request Message
-func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, body RequestMessageUpdateParams, opts ...option.RequestOption) (res *CloudforceOneRequestMessageItem, err error) {
+func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, body RequestMessageUpdateParams, opts ...option.RequestOption) (res *Message, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", accountIdentifier, requestIdentifier, messageIdentifer)
@@ -75,7 +75,7 @@ func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier st
 }
 
 // List Request Messages
-func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *[]CloudforceOneRequestMessageItem, err error) {
+func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *[]Message, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message", accountIdentifier, requestIdentifier)
@@ -87,7 +87,7 @@ func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier strin
 	return
 }
 
-type CloudforceOneRequestMessageItem struct {
+type Message struct {
 	// Message ID
 	ID int64 `json:"id,required"`
 	// Author of message
@@ -99,13 +99,12 @@ type CloudforceOneRequestMessageItem struct {
 	// Message last updated time
 	Updated time.Time `json:"updated,required" format:"date-time"`
 	// Message creation time
-	Created time.Time                           `json:"created" format:"date-time"`
-	JSON    cloudforceOneRequestMessageItemJSON `json:"-"`
+	Created time.Time   `json:"created" format:"date-time"`
+	JSON    messageJSON `json:"-"`
 }
 
-// cloudforceOneRequestMessageItemJSON contains the JSON metadata for the struct
-// [CloudforceOneRequestMessageItem]
-type cloudforceOneRequestMessageItemJSON struct {
+// messageJSON contains the JSON metadata for the struct [Message]
+type messageJSON struct {
 	ID                apijson.Field
 	Author            apijson.Field
 	Content           apijson.Field
@@ -116,11 +115,11 @@ type cloudforceOneRequestMessageItemJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *CloudforceOneRequestMessageItem) UnmarshalJSON(data []byte) (err error) {
+func (r *Message) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r cloudforceOneRequestMessageItemJSON) RawJSON() string {
+func (r messageJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -136,7 +135,7 @@ func (r RequestMessageNewParams) MarshalJSON() (data []byte, err error) {
 type RequestMessageNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CloudforceOneRequestMessageItem                           `json:"result,required"`
+	Result   Message                                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageNewResponseEnvelopeJSON    `json:"-"`
@@ -215,7 +214,7 @@ func (r RequestMessageUpdateParamsTlp) IsKnown() bool {
 type RequestMessageUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CloudforceOneRequestMessageItem                           `json:"result,required"`
+	Result   Message                                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageUpdateResponseEnvelopeJSON    `json:"-"`
@@ -336,7 +335,7 @@ func (r RequestMessageGetParamsSortOrder) IsKnown() bool {
 type RequestMessageGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []CloudforceOneRequestMessageItem                         `json:"result,required"`
+	Result   []Message                                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageGetResponseEnvelopeJSON    `json:"-"`

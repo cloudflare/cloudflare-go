@@ -35,7 +35,7 @@ func NewPrefixDelegationService(opts ...option.RequestOption) (r *PrefixDelegati
 }
 
 // Create a new account delegation for a given IP prefix.
-func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, params PrefixDelegationNewParams, opts ...option.RequestOption) (res *AddressingIpamDelegations, err error) {
+func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, params PrefixDelegationNewParams, opts ...option.RequestOption) (res *Delegations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PrefixDelegationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", params.AccountID, prefixID)
@@ -48,7 +48,7 @@ func (r *PrefixDelegationService) New(ctx context.Context, prefixID string, para
 }
 
 // List all delegations for a given account IP prefix.
-func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AddressingIpamDelegations], err error) {
+func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Delegations], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,7 +66,7 @@ func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, que
 }
 
 // List all delegations for a given account IP prefix.
-func (r *PrefixDelegationService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AddressingIpamDelegations] {
+func (r *PrefixDelegationService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixDelegationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Delegations] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
@@ -83,7 +83,7 @@ func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, d
 	return
 }
 
-type AddressingIpamDelegations struct {
+type Delegations struct {
 	// Delegation identifier tag.
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
@@ -93,13 +93,12 @@ type AddressingIpamDelegations struct {
 	DelegatedAccountID string    `json:"delegated_account_id"`
 	ModifiedAt         time.Time `json:"modified_at" format:"date-time"`
 	// Identifier
-	ParentPrefixID string                        `json:"parent_prefix_id"`
-	JSON           addressingIpamDelegationsJSON `json:"-"`
+	ParentPrefixID string          `json:"parent_prefix_id"`
+	JSON           delegationsJSON `json:"-"`
 }
 
-// addressingIpamDelegationsJSON contains the JSON metadata for the struct
-// [AddressingIpamDelegations]
-type addressingIpamDelegationsJSON struct {
+// delegationsJSON contains the JSON metadata for the struct [Delegations]
+type delegationsJSON struct {
 	ID                 apijson.Field
 	CIDR               apijson.Field
 	CreatedAt          apijson.Field
@@ -110,11 +109,11 @@ type addressingIpamDelegationsJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AddressingIpamDelegations) UnmarshalJSON(data []byte) (err error) {
+func (r *Delegations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r addressingIpamDelegationsJSON) RawJSON() string {
+func (r delegationsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -156,7 +155,7 @@ func (r PrefixDelegationNewParams) MarshalJSON() (data []byte, err error) {
 type PrefixDelegationNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   AddressingIpamDelegations                                 `json:"result,required"`
+	Result   Delegations                                               `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixDelegationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixDelegationNewResponseEnvelopeJSON    `json:"-"`

@@ -32,7 +32,7 @@ func NewAvailabilityService(opts ...option.RequestOption) (r *AvailabilityServic
 }
 
 // Retrieves quota for all plans, as well as the current zone quota.
-func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListParams, opts ...option.RequestOption) (res *ObservatoryAvailabilities, err error) {
+func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListParams, opts ...option.RequestOption) (res *Availability, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailabilityListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/availabilities", query.ZoneID)
@@ -44,16 +44,15 @@ func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListPa
 	return
 }
 
-type ObservatoryAvailabilities struct {
-	Quota          ObservatoryAvailabilitiesQuota `json:"quota"`
-	Regions        []LabeledRegion                `json:"regions"`
-	RegionsPerPlan interface{}                    `json:"regionsPerPlan"`
-	JSON           observatoryAvailabilitiesJSON  `json:"-"`
+type Availability struct {
+	Quota          AvailabilityQuota `json:"quota"`
+	Regions        []LabeledRegion   `json:"regions"`
+	RegionsPerPlan interface{}       `json:"regionsPerPlan"`
+	JSON           availabilityJSON  `json:"-"`
 }
 
-// observatoryAvailabilitiesJSON contains the JSON metadata for the struct
-// [ObservatoryAvailabilities]
-type observatoryAvailabilitiesJSON struct {
+// availabilityJSON contains the JSON metadata for the struct [Availability]
+type availabilityJSON struct {
 	Quota          apijson.Field
 	Regions        apijson.Field
 	RegionsPerPlan apijson.Field
@@ -61,15 +60,15 @@ type observatoryAvailabilitiesJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *ObservatoryAvailabilities) UnmarshalJSON(data []byte) (err error) {
+func (r *Availability) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observatoryAvailabilitiesJSON) RawJSON() string {
+func (r availabilityJSON) RawJSON() string {
 	return r.raw
 }
 
-type ObservatoryAvailabilitiesQuota struct {
+type AvailabilityQuota struct {
 	// Cloudflare plan.
 	Plan string `json:"plan"`
 	// The number of tests available per plan.
@@ -79,13 +78,13 @@ type ObservatoryAvailabilitiesQuota struct {
 	// The number of remaining tests available.
 	RemainingTests float64 `json:"remainingTests"`
 	// The number of schedules available per plan.
-	ScheduleQuotasPerPlan map[string]float64                 `json:"scheduleQuotasPerPlan"`
-	JSON                  observatoryAvailabilitiesQuotaJSON `json:"-"`
+	ScheduleQuotasPerPlan map[string]float64    `json:"scheduleQuotasPerPlan"`
+	JSON                  availabilityQuotaJSON `json:"-"`
 }
 
-// observatoryAvailabilitiesQuotaJSON contains the JSON metadata for the struct
-// [ObservatoryAvailabilitiesQuota]
-type observatoryAvailabilitiesQuotaJSON struct {
+// availabilityQuotaJSON contains the JSON metadata for the struct
+// [AvailabilityQuota]
+type availabilityQuotaJSON struct {
 	Plan                  apijson.Field
 	QuotasPerPlan         apijson.Field
 	RemainingSchedules    apijson.Field
@@ -95,11 +94,11 @@ type observatoryAvailabilitiesQuotaJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *ObservatoryAvailabilitiesQuota) UnmarshalJSON(data []byte) (err error) {
+func (r *AvailabilityQuota) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observatoryAvailabilitiesQuotaJSON) RawJSON() string {
+func (r availabilityQuotaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -112,7 +111,7 @@ type AvailabilityListResponseEnvelope struct {
 	Errors   interface{}                          `json:"errors,required"`
 	Messages interface{}                          `json:"messages,required"`
 	Success  interface{}                          `json:"success,required"`
-	Result   ObservatoryAvailabilities            `json:"result"`
+	Result   Availability                         `json:"result"`
 	JSON     availabilityListResponseEnvelopeJSON `json:"-"`
 }
 

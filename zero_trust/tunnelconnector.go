@@ -33,7 +33,7 @@ func NewTunnelConnectorService(opts ...option.RequestOption) (r *TunnelConnector
 }
 
 // Fetches connector and connection details for a Cloudflare Tunnel.
-func (r *TunnelConnectorService) Get(ctx context.Context, tunnelID string, connectorID string, query TunnelConnectorGetParams, opts ...option.RequestOption) (res *TunnelTunnelClient, err error) {
+func (r *TunnelConnectorService) Get(ctx context.Context, tunnelID string, connectorID string, query TunnelConnectorGetParams, opts ...option.RequestOption) (res *Client, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConnectorGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connectors/%s", query.AccountID, tunnelID, connectorID)
@@ -55,7 +55,7 @@ type TunnelConnectorGetResponseEnvelope struct {
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// A client (typically cloudflared) that maintains connections to a Cloudflare data
 	// center.
-	Result TunnelTunnelClient `json:"result,required"`
+	Result Client `json:"result,required"`
 	// Whether the API call was successful
 	Success TunnelConnectorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConnectorGetResponseEnvelopeJSON    `json:"-"`

@@ -36,7 +36,7 @@ func NewDomainHistoryService(opts ...option.RequestOption) (r *DomainHistoryServ
 }
 
 // Get Domain History
-func (r *DomainHistoryService) Get(ctx context.Context, params DomainHistoryGetParams, opts ...option.RequestOption) (res *[]IntelDomainHistory, err error) {
+func (r *DomainHistoryService) Get(ctx context.Context, params DomainHistoryGetParams, opts ...option.RequestOption) (res *[]DomainHistory, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainHistoryGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/domain-history", params.AccountID)
@@ -48,39 +48,38 @@ func (r *DomainHistoryService) Get(ctx context.Context, params DomainHistoryGetP
 	return
 }
 
-type IntelDomainHistory struct {
-	Categorizations []IntelDomainHistoryCategorization `json:"categorizations"`
-	Domain          string                             `json:"domain"`
-	JSON            intelDomainHistoryJSON             `json:"-"`
+type DomainHistory struct {
+	Categorizations []DomainHistoryCategorization `json:"categorizations"`
+	Domain          string                        `json:"domain"`
+	JSON            domainHistoryJSON             `json:"-"`
 }
 
-// intelDomainHistoryJSON contains the JSON metadata for the struct
-// [IntelDomainHistory]
-type intelDomainHistoryJSON struct {
+// domainHistoryJSON contains the JSON metadata for the struct [DomainHistory]
+type domainHistoryJSON struct {
 	Categorizations apijson.Field
 	Domain          apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *IntelDomainHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *DomainHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r intelDomainHistoryJSON) RawJSON() string {
+func (r domainHistoryJSON) RawJSON() string {
 	return r.raw
 }
 
-type IntelDomainHistoryCategorization struct {
-	Categories []interface{}                        `json:"categories"`
-	End        time.Time                            `json:"end" format:"date"`
-	Start      time.Time                            `json:"start" format:"date"`
-	JSON       intelDomainHistoryCategorizationJSON `json:"-"`
+type DomainHistoryCategorization struct {
+	Categories []interface{}                   `json:"categories"`
+	End        time.Time                       `json:"end" format:"date"`
+	Start      time.Time                       `json:"start" format:"date"`
+	JSON       domainHistoryCategorizationJSON `json:"-"`
 }
 
-// intelDomainHistoryCategorizationJSON contains the JSON metadata for the struct
-// [IntelDomainHistoryCategorization]
-type intelDomainHistoryCategorizationJSON struct {
+// domainHistoryCategorizationJSON contains the JSON metadata for the struct
+// [DomainHistoryCategorization]
+type domainHistoryCategorizationJSON struct {
 	Categories  apijson.Field
 	End         apijson.Field
 	Start       apijson.Field
@@ -88,11 +87,11 @@ type intelDomainHistoryCategorizationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainHistoryCategorization) UnmarshalJSON(data []byte) (err error) {
+func (r *DomainHistoryCategorization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r intelDomainHistoryCategorizationJSON) RawJSON() string {
+func (r domainHistoryCategorizationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -113,7 +112,7 @@ func (r DomainHistoryGetParams) URLQuery() (v url.Values) {
 type DomainHistoryGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []IntelDomainHistory                                      `json:"result,required,nullable"`
+	Result   []DomainHistory                                           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DomainHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DomainHistoryGetResponseEnvelopeResultInfo `json:"result_info"`

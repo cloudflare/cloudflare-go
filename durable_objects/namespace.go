@@ -34,7 +34,7 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 }
 
 // Returns the Durable Object namespaces owned by an account.
-func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DurableObjectNamespace], err error) {
+func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Namespace], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,21 +52,20 @@ func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, 
 }
 
 // Returns the Durable Object namespaces owned by an account.
-func (r *NamespaceService) ListAutoPaging(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DurableObjectNamespace] {
+func (r *NamespaceService) ListAutoPaging(ctx context.Context, query NamespaceListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Namespace] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-type DurableObjectNamespace struct {
-	ID     interface{}                `json:"id"`
-	Class  interface{}                `json:"class"`
-	Name   interface{}                `json:"name"`
-	Script interface{}                `json:"script"`
-	JSON   durableObjectNamespaceJSON `json:"-"`
+type Namespace struct {
+	ID     interface{}   `json:"id"`
+	Class  interface{}   `json:"class"`
+	Name   interface{}   `json:"name"`
+	Script interface{}   `json:"script"`
+	JSON   namespaceJSON `json:"-"`
 }
 
-// durableObjectNamespaceJSON contains the JSON metadata for the struct
-// [DurableObjectNamespace]
-type durableObjectNamespaceJSON struct {
+// namespaceJSON contains the JSON metadata for the struct [Namespace]
+type namespaceJSON struct {
 	ID          apijson.Field
 	Class       apijson.Field
 	Name        apijson.Field
@@ -75,11 +74,11 @@ type durableObjectNamespaceJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
+func (r *Namespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r durableObjectNamespaceJSON) RawJSON() string {
+func (r namespaceJSON) RawJSON() string {
 	return r.raw
 }
 

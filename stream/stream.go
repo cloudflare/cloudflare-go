@@ -75,7 +75,7 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 
 // Lists up to 1000 videos from a single request. For a specific range, refer to
 // the optional parameters.
-func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *pagination.SinglePage[StreamVideos], err error) {
+func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Video], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -94,7 +94,7 @@ func (r *StreamService) List(ctx context.Context, params StreamListParams, opts 
 
 // Lists up to 1000 videos from a single request. For a specific range, refer to
 // the optional parameters.
-func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[StreamVideos] {
+func (r *StreamService) ListAutoPaging(ctx context.Context, params StreamListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Video] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -108,7 +108,7 @@ func (r *StreamService) Delete(ctx context.Context, identifier string, params St
 }
 
 // Fetches details for a single video.
-func (r *StreamService) Get(ctx context.Context, identifier string, query StreamGetParams, opts ...option.RequestOption) (res *StreamVideos, err error) {
+func (r *StreamService) Get(ctx context.Context, identifier string, query StreamGetParams, opts ...option.RequestOption) (res *Video, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s", query.AccountID, identifier)
@@ -124,7 +124,7 @@ type AllowedOriginsItem = string
 
 type AllowedOriginsItemParam = string
 
-type StreamVideos struct {
+type Video struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -136,8 +136,8 @@ type StreamVideos struct {
 	// The duration of the video in seconds. A value of `-1` means the duration is
 	// unknown. The duration becomes available after the upload and before the video is
 	// ready.
-	Duration float64           `json:"duration"`
-	Input    StreamVideosInput `json:"input"`
+	Duration float64    `json:"duration"`
+	Input    VideoInput `json:"input"`
 	// The live input ID used to upload a video with Stream Live.
 	LiveInput string `json:"liveInput"`
 	// The maximum duration in seconds for a video upload. Can be set for a video that
@@ -149,8 +149,8 @@ type StreamVideos struct {
 	// managing videos.
 	Meta interface{} `json:"meta"`
 	// The date and time the media item was last modified.
-	Modified time.Time            `json:"modified" format:"date-time"`
-	Playback StreamVideosPlayback `json:"playback"`
+	Modified time.Time     `json:"modified" format:"date-time"`
+	Playback VideoPlayback `json:"playback"`
 	// The video's preview page URI. This field is omitted until encoding is complete.
 	Preview string `json:"preview" format:"uri"`
 	// Indicates whether the video is playable. The field is empty if the video is not
@@ -173,7 +173,7 @@ type StreamVideos struct {
 	// `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
 	// approximate percent of completion. If the `state` is `error`, `errorReasonCode`
 	// and `errorReasonText` provide additional details.
-	Status StreamVideosStatus `json:"status"`
+	Status VideoStatus `json:"status"`
 	// The media item's thumbnail URI. This field is omitted until encoding is
 	// complete.
 	Thumbnail string `json:"thumbnail" format:"uri"`
@@ -188,13 +188,13 @@ type StreamVideos struct {
 	Uploaded time.Time `json:"uploaded" format:"date-time"`
 	// The date and time when the video upload URL is no longer valid for direct user
 	// uploads.
-	UploadExpiry time.Time        `json:"uploadExpiry" format:"date-time"`
-	Watermark    StreamWatermarks `json:"watermark"`
-	JSON         streamVideosJSON `json:"-"`
+	UploadExpiry time.Time `json:"uploadExpiry" format:"date-time"`
+	Watermark    Watermaks `json:"watermark"`
+	JSON         videoJSON `json:"-"`
 }
 
-// streamVideosJSON contains the JSON metadata for the struct [StreamVideos]
-type streamVideosJSON struct {
+// videoJSON contains the JSON metadata for the struct [Video]
+type videoJSON struct {
 	AllowedOrigins        apijson.Field
 	Created               apijson.Field
 	Creator               apijson.Field
@@ -222,63 +222,61 @@ type streamVideosJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *StreamVideos) UnmarshalJSON(data []byte) (err error) {
+func (r *Video) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamVideosJSON) RawJSON() string {
+func (r videoJSON) RawJSON() string {
 	return r.raw
 }
 
-type StreamVideosInput struct {
+type VideoInput struct {
 	// The video height in pixels. A value of `-1` means the height is unknown. The
 	// value becomes available after the upload and before the video is ready.
 	Height int64 `json:"height"`
 	// The video width in pixels. A value of `-1` means the width is unknown. The value
 	// becomes available after the upload and before the video is ready.
-	Width int64                 `json:"width"`
-	JSON  streamVideosInputJSON `json:"-"`
+	Width int64          `json:"width"`
+	JSON  videoInputJSON `json:"-"`
 }
 
-// streamVideosInputJSON contains the JSON metadata for the struct
-// [StreamVideosInput]
-type streamVideosInputJSON struct {
+// videoInputJSON contains the JSON metadata for the struct [VideoInput]
+type videoInputJSON struct {
 	Height      apijson.Field
 	Width       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamVideosInput) UnmarshalJSON(data []byte) (err error) {
+func (r *VideoInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamVideosInputJSON) RawJSON() string {
+func (r videoInputJSON) RawJSON() string {
 	return r.raw
 }
 
-type StreamVideosPlayback struct {
+type VideoPlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
 	// The HLS manifest for the video.
-	Hls  string                   `json:"hls"`
-	JSON streamVideosPlaybackJSON `json:"-"`
+	Hls  string            `json:"hls"`
+	JSON videoPlaybackJSON `json:"-"`
 }
 
-// streamVideosPlaybackJSON contains the JSON metadata for the struct
-// [StreamVideosPlayback]
-type streamVideosPlaybackJSON struct {
+// videoPlaybackJSON contains the JSON metadata for the struct [VideoPlayback]
+type videoPlaybackJSON struct {
 	Dash        apijson.Field
 	Hls         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamVideosPlayback) UnmarshalJSON(data []byte) (err error) {
+func (r *VideoPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamVideosPlaybackJSON) RawJSON() string {
+func (r videoPlaybackJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -287,7 +285,7 @@ func (r streamVideosPlaybackJSON) RawJSON() string {
 // `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
 // approximate percent of completion. If the `state` is `error`, `errorReasonCode`
 // and `errorReasonText` provide additional details.
-type StreamVideosStatus struct {
+type VideoStatus struct {
 	// Specifies why the video failed to encode. This field is empty if the video is
 	// not in an `error` state. Preferred for programmatic use.
 	ErrorReasonCode string `json:"errorReasonCode"`
@@ -298,13 +296,12 @@ type StreamVideosStatus struct {
 	// non-negative integer.
 	PctComplete string `json:"pctComplete"`
 	// Specifies the processing status for all quality levels for a video.
-	State StreamVideosStatusState `json:"state"`
-	JSON  streamVideosStatusJSON  `json:"-"`
+	State VideoStatusState `json:"state"`
+	JSON  videoStatusJSON  `json:"-"`
 }
 
-// streamVideosStatusJSON contains the JSON metadata for the struct
-// [StreamVideosStatus]
-type streamVideosStatusJSON struct {
+// videoStatusJSON contains the JSON metadata for the struct [VideoStatus]
+type videoStatusJSON struct {
 	ErrorReasonCode apijson.Field
 	ErrorReasonText apijson.Field
 	PctComplete     apijson.Field
@@ -313,29 +310,29 @@ type streamVideosStatusJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *StreamVideosStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *VideoStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamVideosStatusJSON) RawJSON() string {
+func (r videoStatusJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies the processing status for all quality levels for a video.
-type StreamVideosStatusState string
+type VideoStatusState string
 
 const (
-	StreamVideosStatusStatePendingupload StreamVideosStatusState = "pendingupload"
-	StreamVideosStatusStateDownloading   StreamVideosStatusState = "downloading"
-	StreamVideosStatusStateQueued        StreamVideosStatusState = "queued"
-	StreamVideosStatusStateInprogress    StreamVideosStatusState = "inprogress"
-	StreamVideosStatusStateReady         StreamVideosStatusState = "ready"
-	StreamVideosStatusStateError         StreamVideosStatusState = "error"
+	VideoStatusStatePendingupload VideoStatusState = "pendingupload"
+	VideoStatusStateDownloading   VideoStatusState = "downloading"
+	VideoStatusStateQueued        VideoStatusState = "queued"
+	VideoStatusStateInprogress    VideoStatusState = "inprogress"
+	VideoStatusStateReady         VideoStatusState = "ready"
+	VideoStatusStateError         VideoStatusState = "error"
 )
 
-func (r StreamVideosStatusState) IsKnown() bool {
+func (r VideoStatusState) IsKnown() bool {
 	switch r {
-	case StreamVideosStatusStatePendingupload, StreamVideosStatusStateDownloading, StreamVideosStatusStateQueued, StreamVideosStatusStateInprogress, StreamVideosStatusStateReady, StreamVideosStatusStateError:
+	case VideoStatusStatePendingupload, VideoStatusStateDownloading, VideoStatusStateQueued, VideoStatusStateInprogress, VideoStatusStateReady, VideoStatusStateError:
 		return true
 	}
 	return false
@@ -448,7 +445,7 @@ type StreamGetParams struct {
 type StreamGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   StreamVideos                                              `json:"result,required"`
+	Result   Video                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamGetResponseEnvelopeJSON    `json:"-"`

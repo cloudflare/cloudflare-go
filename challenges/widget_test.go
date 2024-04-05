@@ -30,7 +30,7 @@ func TestWidgetNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Challenges.Widgets.New(context.TODO(), challenges.WidgetNewParams{
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Domains:        cloudflare.F([]challenges.ChallengesWidgetListItemParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
+		Domains:        cloudflare.F([]challenges.WidgetDomainItemParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
 		Mode:           cloudflare.F(challenges.WidgetNewParamsModeInvisible),
 		Name:           cloudflare.F("blog.cloudflare.com login form"),
 		Direction:      cloudflare.F(challenges.WidgetNewParamsDirectionAsc),
@@ -70,7 +70,7 @@ func TestWidgetUpdateWithOptionalParams(t *testing.T) {
 		"0x4AAF00AAAABn0R22HWm-YUc",
 		challenges.WidgetUpdateParams{
 			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Domains:        cloudflare.F([]challenges.ChallengesWidgetListItemParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
+			Domains:        cloudflare.F([]challenges.WidgetDomainItemParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
 			Mode:           cloudflare.F(challenges.WidgetUpdateParamsModeInvisible),
 			Name:           cloudflare.F("blog.cloudflare.com login form"),
 			BotFightMode:   cloudflare.F(false),

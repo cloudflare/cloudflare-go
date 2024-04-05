@@ -39,7 +39,7 @@ func NewWAFOverrideService(opts ...option.RequestOption) (r *WAFOverrideService)
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) New(ctx context.Context, zoneIdentifier string, body WAFOverrideNewParams, opts ...option.RequestOption) (res *WAFOverride, err error) {
+func (r *WAFOverrideService) New(ctx context.Context, zoneIdentifier string, body WAFOverrideNewParams, opts ...option.RequestOption) (res *Override, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides", zoneIdentifier)
@@ -55,7 +55,7 @@ func (r *WAFOverrideService) New(ctx context.Context, zoneIdentifier string, bod
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, id string, body WAFOverrideUpdateParams, opts ...option.RequestOption) (res *WAFOverride, err error) {
+func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, id string, body WAFOverrideUpdateParams, opts ...option.RequestOption) (res *Override, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
@@ -71,7 +71,7 @@ func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, 
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) List(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFOverride], err error) {
+func (r *WAFOverrideService) List(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Override], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -92,7 +92,7 @@ func (r *WAFOverrideService) List(ctx context.Context, zoneIdentifier string, qu
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFOverride] {
+func (r *WAFOverrideService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query WAFOverrideListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Override] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
@@ -116,7 +116,7 @@ func (r *WAFOverrideService) Delete(ctx context.Context, zoneIdentifier string, 
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *WAFOverride, err error) {
+func (r *WAFOverrideService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *Override, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WAFOverrideGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
@@ -128,7 +128,7 @@ func (r *WAFOverrideService) Get(ctx context.Context, zoneIdentifier string, id 
 	return
 }
 
-type WAFOverride struct {
+type Override struct {
 	// The unique identifier of the WAF override.
 	ID string `json:"id"`
 	// An informative summary of the current URI-based WAF override.
@@ -147,22 +147,22 @@ type WAFOverride struct {
 	Priority float64 `json:"priority"`
 	// Specifies that, when a WAF rule matches, its configured action will be replaced
 	// by the action configured in this object.
-	RewriteAction WAFOverrideRewriteAction `json:"rewrite_action"`
+	RewriteAction OverrideRewriteAction `json:"rewrite_action"`
 	// An object that allows you to override the action of specific WAF rules. Each key
 	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
 	// action. Unless you are disabling a rule, ensure that you also enable the rule
 	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
 	// you must provide a `groups` object or a `rules` object.
-	Rules map[string]WAFOverrideRule `json:"rules"`
+	Rules map[string]OverrideRule `json:"rules"`
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
-	URLs []string        `json:"urls"`
-	JSON wafOverrideJSON `json:"-"`
+	URLs []string     `json:"urls"`
+	JSON overrideJSON `json:"-"`
 }
 
-// wafOverrideJSON contains the JSON metadata for the struct [WAFOverride]
-type wafOverrideJSON struct {
+// overrideJSON contains the JSON metadata for the struct [Override]
+type overrideJSON struct {
 	ID            apijson.Field
 	Description   apijson.Field
 	Groups        apijson.Field
@@ -175,30 +175,30 @@ type wafOverrideJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WAFOverride) UnmarshalJSON(data []byte) (err error) {
+func (r *Override) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r wafOverrideJSON) RawJSON() string {
+func (r overrideJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
-type WAFOverrideRewriteAction struct {
+type OverrideRewriteAction struct {
 	// The WAF rule action to apply.
-	Block     WAFOverrideRewriteActionBlock `json:"block"`
-	Challenge string                        `json:"challenge"`
-	Default   string                        `json:"default"`
+	Block     OverrideRewriteActionBlock `json:"block"`
+	Challenge string                     `json:"challenge"`
+	Default   string                     `json:"default"`
 	// The WAF rule action to apply.
-	Disable  WAFOverrideRewriteActionDisable `json:"disable"`
-	Simulate string                          `json:"simulate"`
-	JSON     wafOverrideRewriteActionJSON    `json:"-"`
+	Disable  OverrideRewriteActionDisable `json:"disable"`
+	Simulate string                       `json:"simulate"`
+	JSON     overrideRewriteActionJSON    `json:"-"`
 }
 
-// wafOverrideRewriteActionJSON contains the JSON metadata for the struct
-// [WAFOverrideRewriteAction]
-type wafOverrideRewriteActionJSON struct {
+// overrideRewriteActionJSON contains the JSON metadata for the struct
+// [OverrideRewriteAction]
+type overrideRewriteActionJSON struct {
 	Block       apijson.Field
 	Challenge   apijson.Field
 	Default     apijson.Field
@@ -208,66 +208,66 @@ type wafOverrideRewriteActionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WAFOverrideRewriteAction) UnmarshalJSON(data []byte) (err error) {
+func (r *OverrideRewriteAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r wafOverrideRewriteActionJSON) RawJSON() string {
+func (r overrideRewriteActionJSON) RawJSON() string {
 	return r.raw
 }
 
 // The WAF rule action to apply.
-type WAFOverrideRewriteActionBlock string
+type OverrideRewriteActionBlock string
 
 const (
-	WAFOverrideRewriteActionBlockChallenge WAFOverrideRewriteActionBlock = "challenge"
-	WAFOverrideRewriteActionBlockBlock     WAFOverrideRewriteActionBlock = "block"
-	WAFOverrideRewriteActionBlockSimulate  WAFOverrideRewriteActionBlock = "simulate"
-	WAFOverrideRewriteActionBlockDisable   WAFOverrideRewriteActionBlock = "disable"
-	WAFOverrideRewriteActionBlockDefault   WAFOverrideRewriteActionBlock = "default"
+	OverrideRewriteActionBlockChallenge OverrideRewriteActionBlock = "challenge"
+	OverrideRewriteActionBlockBlock     OverrideRewriteActionBlock = "block"
+	OverrideRewriteActionBlockSimulate  OverrideRewriteActionBlock = "simulate"
+	OverrideRewriteActionBlockDisable   OverrideRewriteActionBlock = "disable"
+	OverrideRewriteActionBlockDefault   OverrideRewriteActionBlock = "default"
 )
 
-func (r WAFOverrideRewriteActionBlock) IsKnown() bool {
+func (r OverrideRewriteActionBlock) IsKnown() bool {
 	switch r {
-	case WAFOverrideRewriteActionBlockChallenge, WAFOverrideRewriteActionBlockBlock, WAFOverrideRewriteActionBlockSimulate, WAFOverrideRewriteActionBlockDisable, WAFOverrideRewriteActionBlockDefault:
+	case OverrideRewriteActionBlockChallenge, OverrideRewriteActionBlockBlock, OverrideRewriteActionBlockSimulate, OverrideRewriteActionBlockDisable, OverrideRewriteActionBlockDefault:
 		return true
 	}
 	return false
 }
 
 // The WAF rule action to apply.
-type WAFOverrideRewriteActionDisable string
+type OverrideRewriteActionDisable string
 
 const (
-	WAFOverrideRewriteActionDisableChallenge WAFOverrideRewriteActionDisable = "challenge"
-	WAFOverrideRewriteActionDisableBlock     WAFOverrideRewriteActionDisable = "block"
-	WAFOverrideRewriteActionDisableSimulate  WAFOverrideRewriteActionDisable = "simulate"
-	WAFOverrideRewriteActionDisableDisable   WAFOverrideRewriteActionDisable = "disable"
-	WAFOverrideRewriteActionDisableDefault   WAFOverrideRewriteActionDisable = "default"
+	OverrideRewriteActionDisableChallenge OverrideRewriteActionDisable = "challenge"
+	OverrideRewriteActionDisableBlock     OverrideRewriteActionDisable = "block"
+	OverrideRewriteActionDisableSimulate  OverrideRewriteActionDisable = "simulate"
+	OverrideRewriteActionDisableDisable   OverrideRewriteActionDisable = "disable"
+	OverrideRewriteActionDisableDefault   OverrideRewriteActionDisable = "default"
 )
 
-func (r WAFOverrideRewriteActionDisable) IsKnown() bool {
+func (r OverrideRewriteActionDisable) IsKnown() bool {
 	switch r {
-	case WAFOverrideRewriteActionDisableChallenge, WAFOverrideRewriteActionDisableBlock, WAFOverrideRewriteActionDisableSimulate, WAFOverrideRewriteActionDisableDisable, WAFOverrideRewriteActionDisableDefault:
+	case OverrideRewriteActionDisableChallenge, OverrideRewriteActionDisableBlock, OverrideRewriteActionDisableSimulate, OverrideRewriteActionDisableDisable, OverrideRewriteActionDisableDefault:
 		return true
 	}
 	return false
 }
 
 // The WAF rule action to apply.
-type WAFOverrideRule string
+type OverrideRule string
 
 const (
-	WAFOverrideRuleChallenge WAFOverrideRule = "challenge"
-	WAFOverrideRuleBlock     WAFOverrideRule = "block"
-	WAFOverrideRuleSimulate  WAFOverrideRule = "simulate"
-	WAFOverrideRuleDisable   WAFOverrideRule = "disable"
-	WAFOverrideRuleDefault   WAFOverrideRule = "default"
+	OverrideRuleChallenge OverrideRule = "challenge"
+	OverrideRuleBlock     OverrideRule = "block"
+	OverrideRuleSimulate  OverrideRule = "simulate"
+	OverrideRuleDisable   OverrideRule = "disable"
+	OverrideRuleDefault   OverrideRule = "default"
 )
 
-func (r WAFOverrideRule) IsKnown() bool {
+func (r OverrideRule) IsKnown() bool {
 	switch r {
-	case WAFOverrideRuleChallenge, WAFOverrideRuleBlock, WAFOverrideRuleSimulate, WAFOverrideRuleDisable, WAFOverrideRuleDefault:
+	case OverrideRuleChallenge, OverrideRuleBlock, OverrideRuleSimulate, OverrideRuleDisable, OverrideRuleDefault:
 		return true
 	}
 	return false
@@ -306,7 +306,7 @@ func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
 type WAFOverrideNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   WAFOverride                                               `json:"result,required,nullable"`
+	Result   Override                                                  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFOverrideNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideNewResponseEnvelopeJSON    `json:"-"`
@@ -357,7 +357,7 @@ func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
 type WAFOverrideUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   WAFOverride                                               `json:"result,required,nullable"`
+	Result   Override                                                  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFOverrideUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideUpdateResponseEnvelopeJSON    `json:"-"`
@@ -444,7 +444,7 @@ func (r wafOverrideDeleteResponseEnvelopeJSON) RawJSON() string {
 type WAFOverrideGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   WAFOverride                                               `json:"result,required,nullable"`
+	Result   Override                                                  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success WAFOverrideGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    wafOverrideGetResponseEnvelopeJSON    `json:"-"`

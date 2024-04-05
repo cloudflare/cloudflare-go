@@ -36,7 +36,7 @@ func NewHostnameCertificateService(opts ...option.RequestOption) (r *HostnameCer
 
 // Upload a certificate to be used for client authentication on a hostname. 10
 // hostname certificates per zone are allowed.
-func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCertificateNewParams, opts ...option.RequestOption) (res *OriginTLSClientCertificate, err error) {
+func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCertificateNewParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", params.ZoneID)
@@ -49,7 +49,7 @@ func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCer
 }
 
 // List Certificates
-func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OriginTLSClientCertificateID], err error) {
+func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ID], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,12 +67,12 @@ func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCer
 }
 
 // List Certificates
-func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OriginTLSClientCertificateID] {
+func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ID] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Hostname Client Certificate
-func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID string, params HostnameCertificateDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientCertificate, err error) {
+func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID string, params HostnameCertificateDeleteParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", params.ZoneID, certificateID)
@@ -85,7 +85,7 @@ func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID s
 }
 
 // Get the certificate by ID to be used for client authentication on a hostname.
-func (r *HostnameCertificateService) Get(ctx context.Context, certificateID string, query HostnameCertificateGetParams, opts ...option.RequestOption) (res *OriginTLSClientCertificate, err error) {
+func (r *HostnameCertificateService) Get(ctx context.Context, certificateID string, query HostnameCertificateGetParams, opts ...option.RequestOption) (res *Certificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", query.ZoneID, certificateID)
@@ -97,7 +97,7 @@ func (r *HostnameCertificateService) Get(ctx context.Context, certificateID stri
 	return
 }
 
-type OriginTLSClientCertificate struct {
+type Certificate struct {
 	// Identifier
 	ID string `json:"id"`
 	// The hostname certificate.
@@ -111,15 +111,14 @@ type OriginTLSClientCertificate struct {
 	// The type of hash used for the certificate.
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
-	Status OriginTLSClientCertificateStatus `json:"status"`
+	Status CertificateStatus `json:"status"`
 	// The time when the certificate was uploaded.
-	UploadedOn time.Time                      `json:"uploaded_on" format:"date-time"`
-	JSON       originTLSClientCertificateJSON `json:"-"`
+	UploadedOn time.Time       `json:"uploaded_on" format:"date-time"`
+	JSON       certificateJSON `json:"-"`
 }
 
-// originTLSClientCertificateJSON contains the JSON metadata for the struct
-// [OriginTLSClientCertificate]
-type originTLSClientCertificateJSON struct {
+// certificateJSON contains the JSON metadata for the struct [Certificate]
+type certificateJSON struct {
 	ID           apijson.Field
 	Certificate  apijson.Field
 	ExpiresOn    apijson.Field
@@ -132,30 +131,30 @@ type originTLSClientCertificateJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *OriginTLSClientCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *Certificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originTLSClientCertificateJSON) RawJSON() string {
+func (r certificateJSON) RawJSON() string {
 	return r.raw
 }
 
 // Status of the certificate or the association.
-type OriginTLSClientCertificateStatus string
+type CertificateStatus string
 
 const (
-	OriginTLSClientCertificateStatusInitializing       OriginTLSClientCertificateStatus = "initializing"
-	OriginTLSClientCertificateStatusPendingDeployment  OriginTLSClientCertificateStatus = "pending_deployment"
-	OriginTLSClientCertificateStatusPendingDeletion    OriginTLSClientCertificateStatus = "pending_deletion"
-	OriginTLSClientCertificateStatusActive             OriginTLSClientCertificateStatus = "active"
-	OriginTLSClientCertificateStatusDeleted            OriginTLSClientCertificateStatus = "deleted"
-	OriginTLSClientCertificateStatusDeploymentTimedOut OriginTLSClientCertificateStatus = "deployment_timed_out"
-	OriginTLSClientCertificateStatusDeletionTimedOut   OriginTLSClientCertificateStatus = "deletion_timed_out"
+	CertificateStatusInitializing       CertificateStatus = "initializing"
+	CertificateStatusPendingDeployment  CertificateStatus = "pending_deployment"
+	CertificateStatusPendingDeletion    CertificateStatus = "pending_deletion"
+	CertificateStatusActive             CertificateStatus = "active"
+	CertificateStatusDeleted            CertificateStatus = "deleted"
+	CertificateStatusDeploymentTimedOut CertificateStatus = "deployment_timed_out"
+	CertificateStatusDeletionTimedOut   CertificateStatus = "deletion_timed_out"
 )
 
-func (r OriginTLSClientCertificateStatus) IsKnown() bool {
+func (r CertificateStatus) IsKnown() bool {
 	switch r {
-	case OriginTLSClientCertificateStatusInitializing, OriginTLSClientCertificateStatusPendingDeployment, OriginTLSClientCertificateStatusPendingDeletion, OriginTLSClientCertificateStatusActive, OriginTLSClientCertificateStatusDeleted, OriginTLSClientCertificateStatusDeploymentTimedOut, OriginTLSClientCertificateStatusDeletionTimedOut:
+	case CertificateStatusInitializing, CertificateStatusPendingDeployment, CertificateStatusPendingDeletion, CertificateStatusActive, CertificateStatusDeleted, CertificateStatusDeploymentTimedOut, CertificateStatusDeletionTimedOut:
 		return true
 	}
 	return false
@@ -177,7 +176,7 @@ func (r HostnameCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type HostnameCertificateNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   OriginTLSClientCertificate                                `json:"result,required"`
+	Result   Certificate                                               `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -235,7 +234,7 @@ func (r HostnameCertificateDeleteParams) MarshalJSON() (data []byte, err error) 
 type HostnameCertificateDeleteResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   OriginTLSClientCertificate                                `json:"result,required"`
+	Result   Certificate                                               `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -283,7 +282,7 @@ type HostnameCertificateGetParams struct {
 type HostnameCertificateGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   OriginTLSClientCertificate                                `json:"result,required"`
+	Result   Certificate                                               `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameCertificateGetResponseEnvelopeJSON    `json:"-"`

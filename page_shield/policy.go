@@ -32,7 +32,7 @@ func NewPolicyService(opts ...option.RequestOption) (r *PolicyService) {
 }
 
 // Create a Page Shield policy.
-func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ...option.RequestOption) (res *PageShieldPolicy, err error) {
+func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ...option.RequestOption) (res *Policy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
@@ -40,7 +40,7 @@ func (r *PolicyService) New(ctx context.Context, params PolicyNewParams, opts ..
 }
 
 // Update a Page Shield policy by ID.
-func (r *PolicyService) Update(ctx context.Context, policyID string, params PolicyUpdateParams, opts ...option.RequestOption) (res *PageShieldPolicy, err error) {
+func (r *PolicyService) Update(ctx context.Context, policyID string, params PolicyUpdateParams, opts ...option.RequestOption) (res *Policy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", params.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
@@ -48,7 +48,7 @@ func (r *PolicyService) Update(ctx context.Context, policyID string, params Poli
 }
 
 // Lists all Page Shield policies.
-func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PageShieldPolicy], err error) {
+func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Policy], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,7 +66,7 @@ func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts .
 }
 
 // Lists all Page Shield policies.
-func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PageShieldPolicy] {
+func (r *PolicyService) ListAutoPaging(ctx context.Context, query PolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Policy] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -80,18 +80,18 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 }
 
 // Fetches a Page Shield policy by ID.
-func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *PageShieldPolicy, err error) {
+func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *Policy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", query.ZoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type PageShieldPolicy struct {
+type Policy struct {
 	// The ID of the policy
 	ID string `json:"id"`
 	// The action to take if the expression matches
-	Action PageShieldPolicyAction `json:"action"`
+	Action PolicyAction `json:"action"`
 	// A description for the policy
 	Description string `json:"description"`
 	// Whether the policy is enabled
@@ -100,13 +100,12 @@ type PageShieldPolicy struct {
 	// Cloudflare Firewall rule expression syntax
 	Expression string `json:"expression"`
 	// The policy which will be applied
-	Value string               `json:"value"`
-	JSON  pageShieldPolicyJSON `json:"-"`
+	Value string     `json:"value"`
+	JSON  policyJSON `json:"-"`
 }
 
-// pageShieldPolicyJSON contains the JSON metadata for the struct
-// [PageShieldPolicy]
-type pageShieldPolicyJSON struct {
+// policyJSON contains the JSON metadata for the struct [Policy]
+type policyJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -117,28 +116,48 @@ type pageShieldPolicyJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldPolicy) UnmarshalJSON(data []byte) (err error) {
+func (r *Policy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageShieldPolicyJSON) RawJSON() string {
+func (r policyJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action to take if the expression matches
-type PageShieldPolicyAction string
+type PolicyAction string
 
 const (
-	PageShieldPolicyActionAllow PageShieldPolicyAction = "allow"
-	PageShieldPolicyActionLog   PageShieldPolicyAction = "log"
+	PolicyActionAllow PolicyAction = "allow"
+	PolicyActionLog   PolicyAction = "log"
 )
 
-func (r PageShieldPolicyAction) IsKnown() bool {
+func (r PolicyAction) IsKnown() bool {
 	switch r {
-	case PageShieldPolicyActionAllow, PageShieldPolicyActionLog:
+	case PolicyActionAllow, PolicyActionLog:
 		return true
 	}
 	return false
+}
+
+type PolicyParam struct {
+	// The ID of the policy
+	ID param.Field[string] `json:"id"`
+	// The action to take if the expression matches
+	Action param.Field[PolicyAction] `json:"action"`
+	// A description for the policy
+	Description param.Field[string] `json:"description"`
+	// Whether the policy is enabled
+	Enabled param.Field[bool] `json:"enabled"`
+	// The expression which must match for the policy to be applied, using the
+	// Cloudflare Firewall rule expression syntax
+	Expression param.Field[string] `json:"expression"`
+	// The policy which will be applied
+	Value param.Field[string] `json:"value"`
+}
+
+func (r PolicyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type PolicyNewParams struct {

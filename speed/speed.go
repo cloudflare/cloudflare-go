@@ -55,7 +55,7 @@ func (r *SpeedService) Delete(ctx context.Context, url string, params SpeedDelet
 }
 
 // Retrieves the test schedule for a page in a specific region.
-func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params SpeedScheduleGetParams, opts ...option.RequestOption) (res *ObservatorySchedule, err error) {
+func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params SpeedScheduleGetParams, opts ...option.RequestOption) (res *Schedule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedScheduleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", params.ZoneID, url)
@@ -68,7 +68,7 @@ func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params Speed
 }
 
 // Lists the core web vital metrics trend over time for a specific page.
-func (r *SpeedService) TrendsList(ctx context.Context, url string, params SpeedTrendsListParams, opts ...option.RequestOption) (res *ObservatoryTrend, err error) {
+func (r *SpeedService) TrendsList(ctx context.Context, url string, params SpeedTrendsListParams, opts ...option.RequestOption) (res *Trend, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedTrendsListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/trend", params.ZoneID, url)
@@ -275,19 +275,18 @@ func (r LighthouseReportState) IsKnown() bool {
 }
 
 // The test schedule.
-type ObservatorySchedule struct {
+type Schedule struct {
 	// The frequency of the test.
-	Frequency ObservatoryScheduleFrequency `json:"frequency"`
+	Frequency ScheduleFrequency `json:"frequency"`
 	// A test region.
-	Region ObservatoryScheduleRegion `json:"region"`
+	Region ScheduleRegion `json:"region"`
 	// A URL.
-	URL  string                  `json:"url"`
-	JSON observatoryScheduleJSON `json:"-"`
+	URL  string       `json:"url"`
+	JSON scheduleJSON `json:"-"`
 }
 
-// observatoryScheduleJSON contains the JSON metadata for the struct
-// [ObservatorySchedule]
-type observatoryScheduleJSON struct {
+// scheduleJSON contains the JSON metadata for the struct [Schedule]
+type scheduleJSON struct {
 	Frequency   apijson.Field
 	Region      apijson.Field
 	URL         apijson.Field
@@ -295,66 +294,80 @@ type observatoryScheduleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ObservatorySchedule) UnmarshalJSON(data []byte) (err error) {
+func (r *Schedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observatoryScheduleJSON) RawJSON() string {
+func (r scheduleJSON) RawJSON() string {
 	return r.raw
 }
 
 // The frequency of the test.
-type ObservatoryScheduleFrequency string
+type ScheduleFrequency string
 
 const (
-	ObservatoryScheduleFrequencyDaily  ObservatoryScheduleFrequency = "DAILY"
-	ObservatoryScheduleFrequencyWeekly ObservatoryScheduleFrequency = "WEEKLY"
+	ScheduleFrequencyDaily  ScheduleFrequency = "DAILY"
+	ScheduleFrequencyWeekly ScheduleFrequency = "WEEKLY"
 )
 
-func (r ObservatoryScheduleFrequency) IsKnown() bool {
+func (r ScheduleFrequency) IsKnown() bool {
 	switch r {
-	case ObservatoryScheduleFrequencyDaily, ObservatoryScheduleFrequencyWeekly:
+	case ScheduleFrequencyDaily, ScheduleFrequencyWeekly:
 		return true
 	}
 	return false
 }
 
 // A test region.
-type ObservatoryScheduleRegion string
+type ScheduleRegion string
 
 const (
-	ObservatoryScheduleRegionAsiaEast1           ObservatoryScheduleRegion = "asia-east1"
-	ObservatoryScheduleRegionAsiaNortheast1      ObservatoryScheduleRegion = "asia-northeast1"
-	ObservatoryScheduleRegionAsiaNortheast2      ObservatoryScheduleRegion = "asia-northeast2"
-	ObservatoryScheduleRegionAsiaSouth1          ObservatoryScheduleRegion = "asia-south1"
-	ObservatoryScheduleRegionAsiaSoutheast1      ObservatoryScheduleRegion = "asia-southeast1"
-	ObservatoryScheduleRegionAustraliaSoutheast1 ObservatoryScheduleRegion = "australia-southeast1"
-	ObservatoryScheduleRegionEuropeNorth1        ObservatoryScheduleRegion = "europe-north1"
-	ObservatoryScheduleRegionEuropeSouthwest1    ObservatoryScheduleRegion = "europe-southwest1"
-	ObservatoryScheduleRegionEuropeWest1         ObservatoryScheduleRegion = "europe-west1"
-	ObservatoryScheduleRegionEuropeWest2         ObservatoryScheduleRegion = "europe-west2"
-	ObservatoryScheduleRegionEuropeWest3         ObservatoryScheduleRegion = "europe-west3"
-	ObservatoryScheduleRegionEuropeWest4         ObservatoryScheduleRegion = "europe-west4"
-	ObservatoryScheduleRegionEuropeWest8         ObservatoryScheduleRegion = "europe-west8"
-	ObservatoryScheduleRegionEuropeWest9         ObservatoryScheduleRegion = "europe-west9"
-	ObservatoryScheduleRegionMeWest1             ObservatoryScheduleRegion = "me-west1"
-	ObservatoryScheduleRegionSouthamericaEast1   ObservatoryScheduleRegion = "southamerica-east1"
-	ObservatoryScheduleRegionUsCentral1          ObservatoryScheduleRegion = "us-central1"
-	ObservatoryScheduleRegionUsEast1             ObservatoryScheduleRegion = "us-east1"
-	ObservatoryScheduleRegionUsEast4             ObservatoryScheduleRegion = "us-east4"
-	ObservatoryScheduleRegionUsSouth1            ObservatoryScheduleRegion = "us-south1"
-	ObservatoryScheduleRegionUsWest1             ObservatoryScheduleRegion = "us-west1"
+	ScheduleRegionAsiaEast1           ScheduleRegion = "asia-east1"
+	ScheduleRegionAsiaNortheast1      ScheduleRegion = "asia-northeast1"
+	ScheduleRegionAsiaNortheast2      ScheduleRegion = "asia-northeast2"
+	ScheduleRegionAsiaSouth1          ScheduleRegion = "asia-south1"
+	ScheduleRegionAsiaSoutheast1      ScheduleRegion = "asia-southeast1"
+	ScheduleRegionAustraliaSoutheast1 ScheduleRegion = "australia-southeast1"
+	ScheduleRegionEuropeNorth1        ScheduleRegion = "europe-north1"
+	ScheduleRegionEuropeSouthwest1    ScheduleRegion = "europe-southwest1"
+	ScheduleRegionEuropeWest1         ScheduleRegion = "europe-west1"
+	ScheduleRegionEuropeWest2         ScheduleRegion = "europe-west2"
+	ScheduleRegionEuropeWest3         ScheduleRegion = "europe-west3"
+	ScheduleRegionEuropeWest4         ScheduleRegion = "europe-west4"
+	ScheduleRegionEuropeWest8         ScheduleRegion = "europe-west8"
+	ScheduleRegionEuropeWest9         ScheduleRegion = "europe-west9"
+	ScheduleRegionMeWest1             ScheduleRegion = "me-west1"
+	ScheduleRegionSouthamericaEast1   ScheduleRegion = "southamerica-east1"
+	ScheduleRegionUsCentral1          ScheduleRegion = "us-central1"
+	ScheduleRegionUsEast1             ScheduleRegion = "us-east1"
+	ScheduleRegionUsEast4             ScheduleRegion = "us-east4"
+	ScheduleRegionUsSouth1            ScheduleRegion = "us-south1"
+	ScheduleRegionUsWest1             ScheduleRegion = "us-west1"
 )
 
-func (r ObservatoryScheduleRegion) IsKnown() bool {
+func (r ScheduleRegion) IsKnown() bool {
 	switch r {
-	case ObservatoryScheduleRegionAsiaEast1, ObservatoryScheduleRegionAsiaNortheast1, ObservatoryScheduleRegionAsiaNortheast2, ObservatoryScheduleRegionAsiaSouth1, ObservatoryScheduleRegionAsiaSoutheast1, ObservatoryScheduleRegionAustraliaSoutheast1, ObservatoryScheduleRegionEuropeNorth1, ObservatoryScheduleRegionEuropeSouthwest1, ObservatoryScheduleRegionEuropeWest1, ObservatoryScheduleRegionEuropeWest2, ObservatoryScheduleRegionEuropeWest3, ObservatoryScheduleRegionEuropeWest4, ObservatoryScheduleRegionEuropeWest8, ObservatoryScheduleRegionEuropeWest9, ObservatoryScheduleRegionMeWest1, ObservatoryScheduleRegionSouthamericaEast1, ObservatoryScheduleRegionUsCentral1, ObservatoryScheduleRegionUsEast1, ObservatoryScheduleRegionUsEast4, ObservatoryScheduleRegionUsSouth1, ObservatoryScheduleRegionUsWest1:
+	case ScheduleRegionAsiaEast1, ScheduleRegionAsiaNortheast1, ScheduleRegionAsiaNortheast2, ScheduleRegionAsiaSouth1, ScheduleRegionAsiaSoutheast1, ScheduleRegionAustraliaSoutheast1, ScheduleRegionEuropeNorth1, ScheduleRegionEuropeSouthwest1, ScheduleRegionEuropeWest1, ScheduleRegionEuropeWest2, ScheduleRegionEuropeWest3, ScheduleRegionEuropeWest4, ScheduleRegionEuropeWest8, ScheduleRegionEuropeWest9, ScheduleRegionMeWest1, ScheduleRegionSouthamericaEast1, ScheduleRegionUsCentral1, ScheduleRegionUsEast1, ScheduleRegionUsEast4, ScheduleRegionUsSouth1, ScheduleRegionUsWest1:
 		return true
 	}
 	return false
 }
 
-type ObservatoryTrend struct {
+// The test schedule.
+type ScheduleParam struct {
+	// The frequency of the test.
+	Frequency param.Field[ScheduleFrequency] `json:"frequency"`
+	// A test region.
+	Region param.Field[ScheduleRegion] `json:"region"`
+	// A URL.
+	URL param.Field[string] `json:"url"`
+}
+
+func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type Trend struct {
 	// Cumulative Layout Shift trend.
 	Cls []float64 `json:"cls"`
 	// First Contentful Paint trend.
@@ -370,13 +383,12 @@ type ObservatoryTrend struct {
 	// Time To First Byte trend.
 	Ttfb []float64 `json:"ttfb"`
 	// Time To Interactive trend.
-	Tti  []float64            `json:"tti"`
-	JSON observatoryTrendJSON `json:"-"`
+	Tti  []float64 `json:"tti"`
+	JSON trendJSON `json:"-"`
 }
 
-// observatoryTrendJSON contains the JSON metadata for the struct
-// [ObservatoryTrend]
-type observatoryTrendJSON struct {
+// trendJSON contains the JSON metadata for the struct [Trend]
+type trendJSON struct {
 	Cls              apijson.Field
 	Fcp              apijson.Field
 	Lcp              apijson.Field
@@ -389,11 +401,11 @@ type observatoryTrendJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ObservatoryTrend) UnmarshalJSON(data []byte) (err error) {
+func (r *Trend) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r observatoryTrendJSON) RawJSON() string {
+func (r trendJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -551,7 +563,7 @@ type SpeedScheduleGetResponseEnvelope struct {
 	Messages interface{} `json:"messages,required"`
 	Success  interface{} `json:"success,required"`
 	// The test schedule.
-	Result ObservatorySchedule                  `json:"result"`
+	Result Schedule                             `json:"result"`
 	JSON   speedScheduleGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -652,7 +664,7 @@ type SpeedTrendsListResponseEnvelope struct {
 	Errors   interface{}                         `json:"errors,required"`
 	Messages interface{}                         `json:"messages,required"`
 	Success  interface{}                         `json:"success,required"`
-	Result   ObservatoryTrend                    `json:"result"`
+	Result   Trend                               `json:"result"`
 	JSON     speedTrendsListResponseEnvelopeJSON `json:"-"`
 }
 

@@ -40,7 +40,7 @@ func NewDLPProfileService(opts ...option.RequestOption) (r *DLPProfileService) {
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPProfile], err error) {
+func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Profile], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -58,7 +58,7 @@ func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DLPProfile] {
+func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Profile] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -117,7 +117,7 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type DLPProfile struct {
+type Profile struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
 	// Scan the context of predefined entries to only return matches surrounded by
@@ -134,14 +134,14 @@ type DLPProfile struct {
 	Type      UnnamedSchemaRefE38bfdf1acf5a4bfada6779c79528bc0 `json:"type"`
 	CreatedAt time.Time                                        `json:"created_at" format:"date-time"`
 	// The description of the profile.
-	Description string         `json:"description"`
-	UpdatedAt   time.Time      `json:"updated_at" format:"date-time"`
-	JSON        dlpProfileJSON `json:"-"`
-	union       DLPProfileUnion
+	Description string      `json:"description"`
+	UpdatedAt   time.Time   `json:"updated_at" format:"date-time"`
+	JSON        profileJSON `json:"-"`
+	union       ProfileUnion
 }
 
-// dlpProfileJSON contains the JSON metadata for the struct [DLPProfile]
-type dlpProfileJSON struct {
+// profileJSON contains the JSON metadata for the struct [Profile]
+type profileJSON struct {
 	AllowedMatchCount apijson.Field
 	ContextAwareness  apijson.Field
 	Entries           apijson.Field
@@ -156,11 +156,11 @@ type dlpProfileJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r dlpProfileJSON) RawJSON() string {
+func (r profileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *DLPProfile) UnmarshalJSON(data []byte) (err error) {
+func (r *Profile) UnmarshalJSON(data []byte) (err error) {
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -168,19 +168,19 @@ func (r *DLPProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
-func (r DLPProfile) AsUnion() DLPProfileUnion {
+func (r Profile) AsUnion() ProfileUnion {
 	return r.union
 }
 
 // Union satisfied by [zero_trust.PredefinedProfile], [zero_trust.CustomProfile] or
-// [zero_trust.DLPProfileDLPIntegrationProfile].
-type DLPProfileUnion interface {
-	implementsZeroTrustDLPProfile()
+// [zero_trust.ProfileDLPIntegrationProfile].
+type ProfileUnion interface {
+	implementsZeroTrustProfile()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileUnion)(nil)).Elem(),
+		reflect.TypeOf((*ProfileUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -192,30 +192,30 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DLPProfileDLPIntegrationProfile{}),
+			Type:       reflect.TypeOf(ProfileDLPIntegrationProfile{}),
 		},
 	)
 }
 
-type DLPProfileDLPIntegrationProfile struct {
+type ProfileDLPIntegrationProfile struct {
 	// The ID for this profile
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string `json:"description"`
 	// The entries for this profile.
-	Entries []DLPProfileDLPIntegrationProfileEntry `json:"entries"`
+	Entries []ProfileDLPIntegrationProfileEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
 	// The type of the profile.
-	Type      DLPProfileDLPIntegrationProfileType `json:"type"`
-	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileDLPIntegrationProfileJSON `json:"-"`
+	Type      ProfileDLPIntegrationProfileType `json:"type"`
+	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
+	JSON      profileDLPIntegrationProfileJSON `json:"-"`
 }
 
-// dlpProfileDLPIntegrationProfileJSON contains the JSON metadata for the struct
-// [DLPProfileDLPIntegrationProfile]
-type dlpProfileDLPIntegrationProfileJSON struct {
+// profileDLPIntegrationProfileJSON contains the JSON metadata for the struct
+// [ProfileDLPIntegrationProfile]
+type profileDLPIntegrationProfileJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Description apijson.Field
@@ -227,18 +227,18 @@ type dlpProfileDLPIntegrationProfileJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPIntegrationProfile) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileDLPIntegrationProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpProfileDLPIntegrationProfileJSON) RawJSON() string {
+func (r profileDLPIntegrationProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DLPProfileDLPIntegrationProfile) implementsZeroTrustDLPProfile() {}
+func (r ProfileDLPIntegrationProfile) implementsZeroTrustProfile() {}
 
 // An entry derived from an integration
-type DLPProfileDLPIntegrationProfileEntry struct {
+type ProfileDLPIntegrationProfileEntry struct {
 	// The ID for this entry
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -247,14 +247,14 @@ type DLPProfileDLPIntegrationProfileEntry struct {
 	// The name of the entry.
 	Name string `json:"name"`
 	// ID of the parent profile
-	ProfileID interface{}                              `json:"profile_id"`
-	UpdatedAt time.Time                                `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileDLPIntegrationProfileEntryJSON `json:"-"`
+	ProfileID interface{}                           `json:"profile_id"`
+	UpdatedAt time.Time                             `json:"updated_at" format:"date-time"`
+	JSON      profileDLPIntegrationProfileEntryJSON `json:"-"`
 }
 
-// dlpProfileDLPIntegrationProfileEntryJSON contains the JSON metadata for the
-// struct [DLPProfileDLPIntegrationProfileEntry]
-type dlpProfileDLPIntegrationProfileEntryJSON struct {
+// profileDLPIntegrationProfileEntryJSON contains the JSON metadata for the struct
+// [ProfileDLPIntegrationProfileEntry]
+type profileDLPIntegrationProfileEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -265,24 +265,24 @@ type dlpProfileDLPIntegrationProfileEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileDLPIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpProfileDLPIntegrationProfileEntryJSON) RawJSON() string {
+func (r profileDLPIntegrationProfileEntryJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of the profile.
-type DLPProfileDLPIntegrationProfileType string
+type ProfileDLPIntegrationProfileType string
 
 const (
-	DLPProfileDLPIntegrationProfileTypeIntegration DLPProfileDLPIntegrationProfileType = "integration"
+	ProfileDLPIntegrationProfileTypeIntegration ProfileDLPIntegrationProfileType = "integration"
 )
 
-func (r DLPProfileDLPIntegrationProfileType) IsKnown() bool {
+func (r ProfileDLPIntegrationProfileType) IsKnown() bool {
 	switch r {
-	case DLPProfileDLPIntegrationProfileTypeIntegration:
+	case ProfileDLPIntegrationProfileTypeIntegration:
 		return true
 	}
 	return false

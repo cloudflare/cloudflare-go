@@ -50,7 +50,7 @@ func (r *GatewayListService) New(ctx context.Context, params GatewayListNewParam
 }
 
 // Updates a configured Zero Trust list.
-func (r *GatewayListService) Update(ctx context.Context, listID string, params GatewayListUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLists, err error) {
+func (r *GatewayListService) Update(ctx context.Context, listID string, params GatewayListUpdateParams, opts ...option.RequestOption) (res *Lists, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
@@ -63,7 +63,7 @@ func (r *GatewayListService) Update(ctx context.Context, listID string, params G
 }
 
 // Fetches all Zero Trust lists for an account.
-func (r *GatewayListService) List(ctx context.Context, query GatewayListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGatewayLists], err error) {
+func (r *GatewayListService) List(ctx context.Context, query GatewayListListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Lists], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -81,7 +81,7 @@ func (r *GatewayListService) List(ctx context.Context, query GatewayListListPara
 }
 
 // Fetches all Zero Trust lists for an account.
-func (r *GatewayListService) ListAutoPaging(ctx context.Context, query GatewayListListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGatewayLists] {
+func (r *GatewayListService) ListAutoPaging(ctx context.Context, query GatewayListListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Lists] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -99,7 +99,7 @@ func (r *GatewayListService) Delete(ctx context.Context, listID string, params G
 }
 
 // Appends or removes an item from a configured Zero Trust list.
-func (r *GatewayListService) Edit(ctx context.Context, listID string, params GatewayListEditParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLists, err error) {
+func (r *GatewayListService) Edit(ctx context.Context, listID string, params GatewayListEditParams, opts ...option.RequestOption) (res *Lists, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", params.AccountID, listID)
@@ -112,7 +112,7 @@ func (r *GatewayListService) Edit(ctx context.Context, listID string, params Gat
 }
 
 // Fetches a single Zero Trust list.
-func (r *GatewayListService) Get(ctx context.Context, listID string, query GatewayListGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLists, err error) {
+func (r *GatewayListService) Get(ctx context.Context, listID string, query GatewayListGetParams, opts ...option.RequestOption) (res *Lists, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/lists/%s", query.AccountID, listID)
@@ -124,7 +124,7 @@ func (r *GatewayListService) Get(ctx context.Context, listID string, query Gatew
 	return
 }
 
-type ZeroTrustGatewayLists struct {
+type Lists struct {
 	// API Resource UUID tag.
 	ID string `json:"id"`
 	// The number of items in the list.
@@ -135,14 +135,13 @@ type ZeroTrustGatewayLists struct {
 	// The name of the list.
 	Name string `json:"name"`
 	// The type of list.
-	Type      ZeroTrustGatewayListsType `json:"type"`
-	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGatewayListsJSON `json:"-"`
+	Type      ListsType `json:"type"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	JSON      listsJSON `json:"-"`
 }
 
-// zeroTrustGatewayListsJSON contains the JSON metadata for the struct
-// [ZeroTrustGatewayLists]
-type zeroTrustGatewayListsJSON struct {
+// listsJSON contains the JSON metadata for the struct [Lists]
+type listsJSON struct {
 	ID          apijson.Field
 	Count       apijson.Field
 	CreatedAt   apijson.Field
@@ -154,28 +153,28 @@ type zeroTrustGatewayListsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayLists) UnmarshalJSON(data []byte) (err error) {
+func (r *Lists) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r zeroTrustGatewayListsJSON) RawJSON() string {
+func (r listsJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of list.
-type ZeroTrustGatewayListsType string
+type ListsType string
 
 const (
-	ZeroTrustGatewayListsTypeSerial ZeroTrustGatewayListsType = "SERIAL"
-	ZeroTrustGatewayListsTypeURL    ZeroTrustGatewayListsType = "URL"
-	ZeroTrustGatewayListsTypeDomain ZeroTrustGatewayListsType = "DOMAIN"
-	ZeroTrustGatewayListsTypeEmail  ZeroTrustGatewayListsType = "EMAIL"
-	ZeroTrustGatewayListsTypeIP     ZeroTrustGatewayListsType = "IP"
+	ListsTypeSerial ListsType = "SERIAL"
+	ListsTypeURL    ListsType = "URL"
+	ListsTypeDomain ListsType = "DOMAIN"
+	ListsTypeEmail  ListsType = "EMAIL"
+	ListsTypeIP     ListsType = "IP"
 )
 
-func (r ZeroTrustGatewayListsType) IsKnown() bool {
+func (r ListsType) IsKnown() bool {
 	switch r {
-	case ZeroTrustGatewayListsTypeSerial, ZeroTrustGatewayListsTypeURL, ZeroTrustGatewayListsTypeDomain, ZeroTrustGatewayListsTypeEmail, ZeroTrustGatewayListsTypeIP:
+	case ListsTypeSerial, ListsTypeURL, ListsTypeDomain, ListsTypeEmail, ListsTypeIP:
 		return true
 	}
 	return false
@@ -340,7 +339,7 @@ func (r GatewayListUpdateParams) MarshalJSON() (data []byte, err error) {
 type GatewayListUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewayLists                                     `json:"result,required"`
+	Result   Lists                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayListUpdateResponseEnvelopeJSON    `json:"-"`
@@ -460,7 +459,7 @@ func (r GatewayListEditParamsAppend) MarshalJSON() (data []byte, err error) {
 type GatewayListEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewayLists                                     `json:"result,required"`
+	Result   Lists                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayListEditResponseEnvelopeJSON    `json:"-"`
@@ -507,7 +506,7 @@ type GatewayListGetParams struct {
 type GatewayListGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ZeroTrustGatewayLists                                     `json:"result,required"`
+	Result   Lists                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayListGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayListGetResponseEnvelopeJSON    `json:"-"`

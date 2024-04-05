@@ -34,7 +34,7 @@ func NewASNService(opts ...option.RequestOption) (r *ASNService) {
 }
 
 // Get ASN Overview
-func (r *ASNService) Get(ctx context.Context, asn IntelASNParam, query ASNGetParams, opts ...option.RequestOption) (res *IntelASN, err error) {
+func (r *ASNService) Get(ctx context.Context, asn ASNParam, query ASNGetParams, opts ...option.RequestOption) (res *ASN, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ASNGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v", query.AccountID, asn)
@@ -46,9 +46,9 @@ func (r *ASNService) Get(ctx context.Context, asn IntelASNParam, query ASNGetPar
 	return
 }
 
-type IntelASN = int64
+type ASN = int64
 
-type IntelASNParam = int64
+type ASNParam = int64
 
 type ASNGetParams struct {
 	// Identifier
@@ -58,7 +58,7 @@ type ASNGetParams struct {
 type ASNGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IntelASN                                                  `json:"result,required"`
+	Result   ASN                                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success ASNGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    asnGetResponseEnvelopeJSON    `json:"-"`

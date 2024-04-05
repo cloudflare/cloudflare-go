@@ -70,7 +70,7 @@ func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNam
 }
 
 // Fetch information about a script uploaded to a Workers for Platforms namespace.
-func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptGetParams, opts ...option.RequestOption) (res *WorkersForPlatformsNamespaceScript, err error) {
+func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptGetParams, opts ...option.RequestOption) (res *Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", query.AccountID, dispatchNamespace, scriptName)
@@ -83,20 +83,19 @@ func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamesp
 }
 
 // Details about a worker uploaded to a Workers for Platforms namespace.
-type WorkersForPlatformsNamespaceScript struct {
+type Script struct {
 	// When the script was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Name of the Workers for Platforms dispatch namespace.
 	DispatchNamespace string `json:"dispatch_namespace"`
 	// When the script was last modified.
-	ModifiedOn time.Time                              `json:"modified_on" format:"date-time"`
-	Script     workers.Script                         `json:"script"`
-	JSON       workersForPlatformsNamespaceScriptJSON `json:"-"`
+	ModifiedOn time.Time      `json:"modified_on" format:"date-time"`
+	Script     workers.Script `json:"script"`
+	JSON       scriptJSON     `json:"-"`
 }
 
-// workersForPlatformsNamespaceScriptJSON contains the JSON metadata for the struct
-// [WorkersForPlatformsNamespaceScript]
-type workersForPlatformsNamespaceScriptJSON struct {
+// scriptJSON contains the JSON metadata for the struct [Script]
+type scriptJSON struct {
 	CreatedOn         apijson.Field
 	DispatchNamespace apijson.Field
 	ModifiedOn        apijson.Field
@@ -105,11 +104,11 @@ type workersForPlatformsNamespaceScriptJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *WorkersForPlatformsNamespaceScript) UnmarshalJSON(data []byte) (err error) {
+func (r *Script) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r workersForPlatformsNamespaceScriptJSON) RawJSON() string {
+func (r scriptJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -336,7 +335,7 @@ type DispatchNamespaceScriptGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// Details about a worker uploaded to a Workers for Platforms namespace.
-	Result WorkersForPlatformsNamespaceScript `json:"result,required"`
+	Result Script `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptGetResponseEnvelopeJSON    `json:"-"`

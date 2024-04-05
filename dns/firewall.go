@@ -40,7 +40,7 @@ func NewFirewallService(opts ...option.RequestOption) (r *FirewallService) {
 }
 
 // Create a configured DNS Firewall Cluster.
-func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opts ...option.RequestOption) (res *DNSFirewall, err error) {
+func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opts ...option.RequestOption) (res *Firewall, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall", params.AccountID)
@@ -53,7 +53,7 @@ func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opt
 }
 
 // List configured DNS Firewall clusters for an account.
-func (r *FirewallService) List(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DNSFirewall], err error) {
+func (r *FirewallService) List(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Firewall], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -71,7 +71,7 @@ func (r *FirewallService) List(ctx context.Context, params FirewallListParams, o
 }
 
 // List configured DNS Firewall clusters for an account.
-func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DNSFirewall] {
+func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Firewall] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -89,7 +89,7 @@ func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, para
 }
 
 // Modify a DNS Firewall Cluster configuration.
-func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params FirewallEditParams, opts ...option.RequestOption) (res *DNSFirewall, err error) {
+func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params FirewallEditParams, opts ...option.RequestOption) (res *Firewall, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", params.AccountID, dnsFirewallID)
@@ -102,7 +102,7 @@ func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params
 }
 
 // Show a single configured DNS Firewall cluster for an account.
-func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query FirewallGetParams, opts ...option.RequestOption) (res *DNSFirewall, err error) {
+func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query FirewallGetParams, opts ...option.RequestOption) (res *Firewall, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", query.AccountID, dnsFirewallID)
@@ -154,12 +154,12 @@ func (r AttackMitigationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type DNSFirewall struct {
+type Firewall struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests bool                             `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []DNSFirewallDNSFirewallIPsUnion `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests bool                          `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       []FirewallDNSFirewallIPsUnion `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
 	EcsFallback bool `json:"ecs_fallback,required"`
 	// Maximum DNS Cache TTL.
@@ -169,8 +169,8 @@ type DNSFirewall struct {
 	// Last modification of DNS Firewall cluster.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// DNS Firewall Cluster Name.
-	Name        string                        `json:"name,required"`
-	UpstreamIPs []DNSFirewallUpstreamIPsUnion `json:"upstream_ips,required" format:"ipv4"`
+	Name        string                     `json:"name,required"`
+	UpstreamIPs []FirewallUpstreamIPsUnion `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation AttackMitigation `json:"attack_mitigation,nullable"`
 	// Negative DNS Cache TTL.
@@ -180,12 +180,12 @@ type DNSFirewall struct {
 	Ratelimit float64 `json:"ratelimit,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
 	// counting the initial attempt).
-	Retries float64         `json:"retries"`
-	JSON    dnsFirewallJSON `json:"-"`
+	Retries float64      `json:"retries"`
+	JSON    firewallJSON `json:"-"`
 }
 
-// dnsFirewallJSON contains the JSON metadata for the struct [DNSFirewall]
-type dnsFirewallJSON struct {
+// firewallJSON contains the JSON metadata for the struct [Firewall]
+type firewallJSON struct {
 	ID                   apijson.Field
 	DeprecateAnyRequests apijson.Field
 	DNSFirewallIPs       apijson.Field
@@ -203,24 +203,24 @@ type dnsFirewallJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *DNSFirewall) UnmarshalJSON(data []byte) (err error) {
+func (r *Firewall) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsFirewallJSON) RawJSON() string {
+func (r firewallJSON) RawJSON() string {
 	return r.raw
 }
 
 // Cloudflare-assigned DNS IPv4 Address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type DNSFirewallDNSFirewallIPsUnion interface {
-	ImplementsDNSDNSFirewallDNSFirewallIPsUnion()
+type FirewallDNSFirewallIPsUnion interface {
+	ImplementsDNSFirewallDNSFirewallIPsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSFirewallDNSFirewallIPsUnion)(nil)).Elem(),
+		reflect.TypeOf((*FirewallDNSFirewallIPsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -236,13 +236,13 @@ func init() {
 // Upstream DNS Server IPv4 Address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type DNSFirewallUpstreamIPsUnion interface {
-	ImplementsDNSDNSFirewallUpstreamIPsUnion()
+type FirewallUpstreamIPsUnion interface {
+	ImplementsDNSFirewallUpstreamIPsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSFirewallUpstreamIPsUnion)(nil)).Elem(),
+		reflect.TypeOf((*FirewallUpstreamIPsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -368,7 +368,7 @@ func (r FirewallNewParams) MarshalJSON() (data []byte, err error) {
 type FirewallNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DNSFirewall                                               `json:"result,required"`
+	Result   Firewall                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallNewResponseEnvelopeJSON    `json:"-"`
@@ -512,7 +512,7 @@ func (r FirewallEditParams) MarshalJSON() (data []byte, err error) {
 type FirewallEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DNSFirewall                                               `json:"result,required"`
+	Result   Firewall                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallEditResponseEnvelopeJSON    `json:"-"`
@@ -560,7 +560,7 @@ type FirewallGetParams struct {
 type FirewallGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DNSFirewall                                               `json:"result,required"`
+	Result   Firewall                                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallGetResponseEnvelopeJSON    `json:"-"`
