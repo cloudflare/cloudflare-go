@@ -120,8 +120,8 @@ func (r Binding) AsUnion() BindingUnion {
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by [workers.BindingWorkersKVNamespaceBinding],
-// [workers.ServiceBinding], [workers.DurableObjectBinding], [workers.R2Binding],
-// [workers.BindingWorkersQueueBinding], [workers.D1Binding],
+// [workers.BindingWorkersServiceBinding], [workers.DurableObjectBinding],
+// [workers.R2Binding], [workers.BindingWorkersQueueBinding], [workers.D1Binding],
 // [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
 type BindingUnion interface {
 	implementsWorkersBinding()
@@ -137,7 +137,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ServiceBinding{}),
+			Type:       reflect.TypeOf(BindingWorkersServiceBinding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -206,6 +206,54 @@ const (
 func (r BindingWorkersKVNamespaceBindingType) IsKnown() bool {
 	switch r {
 	case BindingWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
+type BindingWorkersServiceBinding struct {
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of Worker to bind to
+	Service string `json:"service,required"`
+	// The class of resource that the binding provides.
+	Type BindingWorkersServiceBindingType `json:"type,required"`
+	JSON bindingWorkersServiceBindingJSON `json:"-"`
+}
+
+// bindingWorkersServiceBindingJSON contains the JSON metadata for the struct
+// [BindingWorkersServiceBinding]
+type bindingWorkersServiceBindingJSON struct {
+	Environment apijson.Field
+	Name        apijson.Field
+	Service     apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingWorkersServiceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingWorkersServiceBinding) implementsWorkersBinding() {}
+
+// The class of resource that the binding provides.
+type BindingWorkersServiceBindingType string
+
+const (
+	BindingWorkersServiceBindingTypeService BindingWorkersServiceBindingType = "service"
+)
+
+func (r BindingWorkersServiceBindingType) IsKnown() bool {
+	switch r {
+	case BindingWorkersServiceBindingTypeService:
 		return true
 	}
 	return false
@@ -884,78 +932,6 @@ func (r R2BindingParam) implementsWorkersBindingItemUnionParam() {}
 func (r R2BindingParam) implementsWorkersBindingItemUnionParam() {}
 
 func (r R2BindingParam) implementsWorkersBindingItemUnionParam() {}
-
-type ServiceBinding struct {
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment,required"`
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Name of Worker to bind to
-	Service string `json:"service,required"`
-	// The class of resource that the binding provides.
-	Type ServiceBindingType `json:"type,required"`
-	JSON serviceBindingJSON `json:"-"`
-}
-
-// serviceBindingJSON contains the JSON metadata for the struct [ServiceBinding]
-type serviceBindingJSON struct {
-	Environment apijson.Field
-	Name        apijson.Field
-	Service     apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ServiceBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r serviceBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r ServiceBinding) implementsWorkersBinding() {}
-
-func (r ServiceBinding) implementsWorkersBindingItem() {}
-
-// The class of resource that the binding provides.
-type ServiceBindingType string
-
-const (
-	ServiceBindingTypeService ServiceBindingType = "service"
-)
-
-func (r ServiceBindingType) IsKnown() bool {
-	switch r {
-	case ServiceBindingTypeService:
-		return true
-	}
-	return false
-}
-
-type ServiceBindingParam struct {
-	// Optional environment if the Worker utilizes one.
-	Environment param.Field[string] `json:"environment,required"`
-	// Name of Worker to bind to
-	Service param.Field[string] `json:"service,required"`
-	// The class of resource that the binding provides.
-	Type param.Field[ServiceBindingType] `json:"type,required"`
-}
-
-func (r ServiceBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ServiceBindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r ServiceBindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r ServiceBindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r ServiceBindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r ServiceBindingParam) implementsWorkersBindingItemUnionParam() {}
 
 // A single set of migrations to apply.
 type SingleStepMigration struct {
