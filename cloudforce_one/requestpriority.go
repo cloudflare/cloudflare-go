@@ -98,6 +98,10 @@ func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier st
 	return
 }
 
+type LabelItem = string
+
+type LabelItemParam = string
+
 type Priority struct {
 	// UUID
 	ID string `json:"id,required"`
@@ -158,7 +162,7 @@ func (r PriorityTlp) IsKnown() bool {
 
 type RequestPriorityNewParams struct {
 	// List of labels
-	Labels param.Field[[]string] `json:"labels,required"`
+	Labels param.Field[[]LabelItemParam] `json:"labels,required"`
 	// Priority
 	Priority param.Field[int64] `json:"priority,required"`
 	// Requirement
@@ -235,7 +239,7 @@ func (r RequestPriorityNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestPriorityUpdateParams struct {
 	// List of labels
-	Labels param.Field[[]string] `json:"labels,required"`
+	Labels param.Field[[]LabelItemParam] `json:"labels,required"`
 	// Priority
 	Priority param.Field[int64] `json:"priority,required"`
 	// Requirement
