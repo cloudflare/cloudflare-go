@@ -121,8 +121,9 @@ func (r Binding) AsUnion() BindingUnion {
 //
 // Union satisfied by [workers.BindingWorkersKVNamespaceBinding],
 // [workers.BindingWorkersServiceBinding], [workers.BindingWorkersDoBinding],
-// [workers.R2Binding], [workers.BindingWorkersQueueBinding], [workers.D1Binding],
-// [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
+// [workers.BindingWorkersR2Binding], [workers.BindingWorkersQueueBinding],
+// [workers.D1Binding], [workers.DispatchNamespaceBinding] or
+// [workers.MTLSCERTBinding].
 type BindingUnion interface {
 	implementsWorkersBinding()
 }
@@ -145,7 +146,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(R2Binding{}),
+			Type:       reflect.TypeOf(BindingWorkersR2Binding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -308,6 +309,51 @@ const (
 func (r BindingWorkersDoBindingType) IsKnown() bool {
 	switch r {
 	case BindingWorkersDoBindingTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
+type BindingWorkersR2Binding struct {
+	// R2 bucket to bind to
+	BucketName string `json:"bucket_name,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type BindingWorkersR2BindingType `json:"type,required"`
+	JSON bindingWorkersR2BindingJSON `json:"-"`
+}
+
+// bindingWorkersR2BindingJSON contains the JSON metadata for the struct
+// [BindingWorkersR2Binding]
+type bindingWorkersR2BindingJSON struct {
+	BucketName  apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingWorkersR2Binding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingWorkersR2BindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingWorkersR2Binding) implementsWorkersBinding() {}
+
+// The class of resource that the binding provides.
+type BindingWorkersR2BindingType string
+
+const (
+	BindingWorkersR2BindingTypeR2Bucket BindingWorkersR2BindingType = "r2_bucket"
+)
+
+func (r BindingWorkersR2BindingType) IsKnown() bool {
+	switch r {
+	case BindingWorkersR2BindingTypeR2Bucket:
 		return true
 	}
 	return false
@@ -838,73 +884,6 @@ type PlacementConfigurationParam struct {
 func (r PlacementConfigurationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type R2Binding struct {
-	// R2 bucket to bind to
-	BucketName string `json:"bucket_name,required"`
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type R2BindingType `json:"type,required"`
-	JSON r2BindingJSON `json:"-"`
-}
-
-// r2BindingJSON contains the JSON metadata for the struct [R2Binding]
-type r2BindingJSON struct {
-	BucketName  apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *R2Binding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r r2BindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r R2Binding) implementsWorkersBinding() {}
-
-func (r R2Binding) implementsWorkersBindingItem() {}
-
-// The class of resource that the binding provides.
-type R2BindingType string
-
-const (
-	R2BindingTypeR2Bucket R2BindingType = "r2_bucket"
-)
-
-func (r R2BindingType) IsKnown() bool {
-	switch r {
-	case R2BindingTypeR2Bucket:
-		return true
-	}
-	return false
-}
-
-type R2BindingParam struct {
-	// R2 bucket to bind to
-	BucketName param.Field[string] `json:"bucket_name,required"`
-	// The class of resource that the binding provides.
-	Type param.Field[R2BindingType] `json:"type,required"`
-}
-
-func (r R2BindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r R2BindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r R2BindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r R2BindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r R2BindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r R2BindingParam) implementsWorkersBindingItemUnionParam() {}
 
 // A single set of migrations to apply.
 type SingleStepMigration struct {
