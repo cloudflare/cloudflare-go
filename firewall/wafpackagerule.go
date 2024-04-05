@@ -98,6 +98,23 @@ func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleI
 	return
 }
 
+// When set to `on`, the current WAF rule will be used when evaluating the request.
+// Applies to anomaly detection WAF rules.
+type AllowedModesAnomalyItem string
+
+const (
+	AllowedModesAnomalyItemOn  AllowedModesAnomalyItem = "on"
+	AllowedModesAnomalyItemOff AllowedModesAnomalyItem = "off"
+)
+
+func (r AllowedModesAnomalyItem) IsKnown() bool {
+	switch r {
+	case AllowedModesAnomalyItemOn, AllowedModesAnomalyItemOff:
+		return true
+	}
+	return false
+}
+
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
 // configure the total scoring threshold through the 'sensitivity' property of the
@@ -677,7 +694,7 @@ type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule struct {
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule. Applies to anomaly
 	// detection WAF rules.
-	AllowedModes []WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []AllowedModesAnomalyItem `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
@@ -715,23 +732,6 @@ func (r wafPackageRuleEditResponseWAFManagedRulesAnomalyRuleJSON) RawJSON() stri
 }
 
 func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule) implementsFirewallWAFPackageRuleEditResponse() {
-}
-
-// When set to `on`, the current WAF rule will be used when evaluating the request.
-// Applies to anomaly detection WAF rules.
-type WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode string
-
-const (
-	WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOn  WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode = "on"
-	WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOff WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode = "off"
-)
-
-func (r WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedMode) IsKnown() bool {
-	switch r {
-	case WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOn, WAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleAllowedModeOff:
-		return true
-	}
-	return false
 }
 
 // When set to `on`, the current WAF rule will be used when evaluating the request.
