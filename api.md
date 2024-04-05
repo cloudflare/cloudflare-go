@@ -3937,13 +3937,8 @@ Methods:
 
 # Stream
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream">stream</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream#AllowedOriginsItemParam">AllowedOriginsItemParam</a>
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream">stream</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream#AllowedOriginsItem">AllowedOriginsItem</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream">stream</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/stream#Video">Video</a>
 
 Methods:
