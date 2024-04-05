@@ -31,23 +31,23 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.User.Tokens.New(context.TODO(), user.TokenNewParams{
 		Name: cloudflare.F("readonly token"),
-		Policies: cloudflare.F([]user.TokenNewParamsPolicy{{
-			Effect:           cloudflare.F(user.TokenNewParamsPoliciesEffectAllow),
-			PermissionGroups: cloudflare.F([]user.TokenNewParamsPoliciesPermissionGroup{{}, {}}),
+		Policies: cloudflare.F([]user.PolicyWithPermissionGroupsParam{{
+			Effect:           cloudflare.F(user.PolicyWithPermissionGroupsEffectAllow),
+			PermissionGroups: cloudflare.F([]user.PolicyWithPermissionGroupsPermissionGroupParam{{}, {}}),
 			Resources: cloudflare.F[any](map[string]interface{}{
 				"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 			}),
 		}, {
-			Effect:           cloudflare.F(user.TokenNewParamsPoliciesEffectAllow),
-			PermissionGroups: cloudflare.F([]user.TokenNewParamsPoliciesPermissionGroup{{}, {}}),
+			Effect:           cloudflare.F(user.PolicyWithPermissionGroupsEffectAllow),
+			PermissionGroups: cloudflare.F([]user.PolicyWithPermissionGroupsPermissionGroupParam{{}, {}}),
 			Resources: cloudflare.F[any](map[string]interface{}{
 				"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 			}),
 		}, {
-			Effect:           cloudflare.F(user.TokenNewParamsPoliciesEffectAllow),
-			PermissionGroups: cloudflare.F([]user.TokenNewParamsPoliciesPermissionGroup{{}, {}}),
+			Effect:           cloudflare.F(user.PolicyWithPermissionGroupsEffectAllow),
+			PermissionGroups: cloudflare.F([]user.PolicyWithPermissionGroupsPermissionGroupParam{{}, {}}),
 			Resources: cloudflare.F[any](map[string]interface{}{
 				"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
@@ -55,8 +55,8 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 		}}),
 		Condition: cloudflare.F(user.TokenNewParamsCondition{
 			RequestIP: cloudflare.F(user.TokenNewParamsConditionRequestIP{
-				In:    cloudflare.F([]string{"123.123.123.0/24", "2606:4700::/32"}),
-				NotIn: cloudflare.F([]string{"123.123.123.100/24", "2606:4700:4700::/48"}),
+				In:    cloudflare.F([]user.CIDRListItemParam{"123.123.123.0/24", "2606:4700::/32"}),
+				NotIn: cloudflare.F([]user.CIDRListItemParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
 			}),
 		}),
 		ExpiresOn: cloudflare.F(time.Now()),
@@ -90,23 +90,23 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 		map[string]interface{}{},
 		user.TokenUpdateParams{
 			Name: cloudflare.F("readonly token"),
-			Policies: cloudflare.F([]user.TokenUpdateParamsPolicy{{
-				Effect:           cloudflare.F(user.TokenUpdateParamsPoliciesEffectAllow),
-				PermissionGroups: cloudflare.F([]user.TokenUpdateParamsPoliciesPermissionGroup{{}, {}}),
+			Policies: cloudflare.F([]user.PolicyWithPermissionGroupsParam{{
+				Effect:           cloudflare.F(user.PolicyWithPermissionGroupsEffectAllow),
+				PermissionGroups: cloudflare.F([]user.PolicyWithPermissionGroupsPermissionGroupParam{{}, {}}),
 				Resources: cloudflare.F[any](map[string]interface{}{
 					"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 					"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 				}),
 			}, {
-				Effect:           cloudflare.F(user.TokenUpdateParamsPoliciesEffectAllow),
-				PermissionGroups: cloudflare.F([]user.TokenUpdateParamsPoliciesPermissionGroup{{}, {}}),
+				Effect:           cloudflare.F(user.PolicyWithPermissionGroupsEffectAllow),
+				PermissionGroups: cloudflare.F([]user.PolicyWithPermissionGroupsPermissionGroupParam{{}, {}}),
 				Resources: cloudflare.F[any](map[string]interface{}{
 					"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 					"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 				}),
 			}, {
-				Effect:           cloudflare.F(user.TokenUpdateParamsPoliciesEffectAllow),
-				PermissionGroups: cloudflare.F([]user.TokenUpdateParamsPoliciesPermissionGroup{{}, {}}),
+				Effect:           cloudflare.F(user.PolicyWithPermissionGroupsEffectAllow),
+				PermissionGroups: cloudflare.F([]user.PolicyWithPermissionGroupsPermissionGroupParam{{}, {}}),
 				Resources: cloudflare.F[any](map[string]interface{}{
 					"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
 					"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
@@ -115,8 +115,8 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 			Status: cloudflare.F(user.TokenUpdateParamsStatusActive),
 			Condition: cloudflare.F(user.TokenUpdateParamsCondition{
 				RequestIP: cloudflare.F(user.TokenUpdateParamsConditionRequestIP{
-					In:    cloudflare.F([]string{"123.123.123.0/24", "2606:4700::/32"}),
-					NotIn: cloudflare.F([]string{"123.123.123.100/24", "2606:4700:4700::/48"}),
+					In:    cloudflare.F([]user.CIDRListItemParam{"123.123.123.0/24", "2606:4700::/32"}),
+					NotIn: cloudflare.F([]user.CIDRListItemParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
 				}),
 			}),
 			ExpiresOn: cloudflare.F(time.Now()),

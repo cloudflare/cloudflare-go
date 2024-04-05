@@ -127,6 +127,46 @@ func (r *TokenService) Verify(ctx context.Context, opts ...option.RequestOption)
 	return
 }
 
+type CIDRListItemParam = string
+
+type PolicyWithPermissionGroupsParam struct {
+	// Allow or deny operations against the resources.
+	Effect param.Field[PolicyWithPermissionGroupsEffect] `json:"effect,required"`
+	// A set of permission groups that are specified to the policy.
+	PermissionGroups param.Field[[]PolicyWithPermissionGroupsPermissionGroupParam] `json:"permission_groups,required"`
+	// A list of resource names that the policy applies to.
+	Resources param.Field[interface{}] `json:"resources,required"`
+}
+
+func (r PolicyWithPermissionGroupsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Allow or deny operations against the resources.
+type PolicyWithPermissionGroupsEffect string
+
+const (
+	PolicyWithPermissionGroupsEffectAllow PolicyWithPermissionGroupsEffect = "allow"
+	PolicyWithPermissionGroupsEffectDeny  PolicyWithPermissionGroupsEffect = "deny"
+)
+
+func (r PolicyWithPermissionGroupsEffect) IsKnown() bool {
+	switch r {
+	case PolicyWithPermissionGroupsEffectAllow, PolicyWithPermissionGroupsEffectDeny:
+		return true
+	}
+	return false
+}
+
+// A named group of permissions that map to a group of operations against
+// resources.
+type PolicyWithPermissionGroupsPermissionGroupParam struct {
+}
+
+func (r PolicyWithPermissionGroupsPermissionGroupParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type TokenNewResponse struct {
 	// The token value.
 	Value TokenValue           `json:"value"`
@@ -226,8 +266,8 @@ type TokenNewParams struct {
 	// Token name.
 	Name param.Field[string] `json:"name,required"`
 	// List of access policies assigned to the token.
-	Policies  param.Field[[]TokenNewParamsPolicy]  `json:"policies,required"`
-	Condition param.Field[TokenNewParamsCondition] `json:"condition"`
+	Policies  param.Field[[]PolicyWithPermissionGroupsParam] `json:"policies,required"`
+	Condition param.Field[TokenNewParamsCondition]           `json:"condition"`
 	// The expiration time on or after which the JWT MUST NOT be accepted for
 	// processing.
 	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
@@ -236,44 +276,6 @@ type TokenNewParams struct {
 }
 
 func (r TokenNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type TokenNewParamsPolicy struct {
-	// Allow or deny operations against the resources.
-	Effect param.Field[TokenNewParamsPoliciesEffect] `json:"effect,required"`
-	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]TokenNewParamsPoliciesPermissionGroup] `json:"permission_groups,required"`
-	// A list of resource names that the policy applies to.
-	Resources param.Field[interface{}] `json:"resources,required"`
-}
-
-func (r TokenNewParamsPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Allow or deny operations against the resources.
-type TokenNewParamsPoliciesEffect string
-
-const (
-	TokenNewParamsPoliciesEffectAllow TokenNewParamsPoliciesEffect = "allow"
-	TokenNewParamsPoliciesEffectDeny  TokenNewParamsPoliciesEffect = "deny"
-)
-
-func (r TokenNewParamsPoliciesEffect) IsKnown() bool {
-	switch r {
-	case TokenNewParamsPoliciesEffectAllow, TokenNewParamsPoliciesEffectDeny:
-		return true
-	}
-	return false
-}
-
-// A named group of permissions that map to a group of operations against
-// resources.
-type TokenNewParamsPoliciesPermissionGroup struct {
-}
-
-func (r TokenNewParamsPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -289,9 +291,9 @@ func (r TokenNewParamsCondition) MarshalJSON() (data []byte, err error) {
 // Client IP restrictions.
 type TokenNewParamsConditionRequestIP struct {
 	// List of IPv4/IPv6 CIDR addresses.
-	In param.Field[[]string] `json:"in"`
+	In param.Field[[]CIDRListItemParam] `json:"in"`
 	// List of IPv4/IPv6 CIDR addresses.
-	NotIn param.Field[[]string] `json:"not_in"`
+	NotIn param.Field[[]CIDRListItemParam] `json:"not_in"`
 }
 
 func (r TokenNewParamsConditionRequestIP) MarshalJSON() (data []byte, err error) {
@@ -345,7 +347,7 @@ type TokenUpdateParams struct {
 	// Token name.
 	Name param.Field[string] `json:"name,required"`
 	// List of access policies assigned to the token.
-	Policies param.Field[[]TokenUpdateParamsPolicy] `json:"policies,required"`
+	Policies param.Field[[]PolicyWithPermissionGroupsParam] `json:"policies,required"`
 	// Status of the token.
 	Status    param.Field[TokenUpdateParamsStatus]    `json:"status,required"`
 	Condition param.Field[TokenUpdateParamsCondition] `json:"condition"`
@@ -357,44 +359,6 @@ type TokenUpdateParams struct {
 }
 
 func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type TokenUpdateParamsPolicy struct {
-	// Allow or deny operations against the resources.
-	Effect param.Field[TokenUpdateParamsPoliciesEffect] `json:"effect,required"`
-	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]TokenUpdateParamsPoliciesPermissionGroup] `json:"permission_groups,required"`
-	// A list of resource names that the policy applies to.
-	Resources param.Field[interface{}] `json:"resources,required"`
-}
-
-func (r TokenUpdateParamsPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Allow or deny operations against the resources.
-type TokenUpdateParamsPoliciesEffect string
-
-const (
-	TokenUpdateParamsPoliciesEffectAllow TokenUpdateParamsPoliciesEffect = "allow"
-	TokenUpdateParamsPoliciesEffectDeny  TokenUpdateParamsPoliciesEffect = "deny"
-)
-
-func (r TokenUpdateParamsPoliciesEffect) IsKnown() bool {
-	switch r {
-	case TokenUpdateParamsPoliciesEffectAllow, TokenUpdateParamsPoliciesEffectDeny:
-		return true
-	}
-	return false
-}
-
-// A named group of permissions that map to a group of operations against
-// resources.
-type TokenUpdateParamsPoliciesPermissionGroup struct {
-}
-
-func (r TokenUpdateParamsPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -427,9 +391,9 @@ func (r TokenUpdateParamsCondition) MarshalJSON() (data []byte, err error) {
 // Client IP restrictions.
 type TokenUpdateParamsConditionRequestIP struct {
 	// List of IPv4/IPv6 CIDR addresses.
-	In param.Field[[]string] `json:"in"`
+	In param.Field[[]CIDRListItemParam] `json:"in"`
 	// List of IPv4/IPv6 CIDR addresses.
-	NotIn param.Field[[]string] `json:"not_in"`
+	NotIn param.Field[[]CIDRListItemParam] `json:"not_in"`
 }
 
 func (r TokenUpdateParamsConditionRequestIP) MarshalJSON() (data []byte, err error) {

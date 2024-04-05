@@ -31,20 +31,20 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Gateway.Configurations.Update(context.TODO(), zero_trust.GatewayConfigurationUpdateParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Settings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam{
-			ActivityLog: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogParam{
+			ActivityLog: cloudflare.F(zero_trust.ActivityLogSettingsParam{
 				Enabled: cloudflare.F(true),
 			}),
-			Antivirus: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusParam{
+			Antivirus: cloudflare.F(zero_trust.AntiVirusSettingsParam{
 				EnabledDownloadPhase: cloudflare.F(false),
 				EnabledUploadPhase:   cloudflare.F(false),
 				FailClosed:           cloudflare.F(false),
-				NotificationSettings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsParam{
+				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
 					Msg:        cloudflare.F("string"),
 					SupportURL: cloudflare.F("string"),
 				}),
 			}),
-			BlockPage: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageParam{
+			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
 				BackgroundColor: cloudflare.F("string"),
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
@@ -55,27 +55,27 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				Name:            cloudflare.F("Cloudflare"),
 				SuppressFooter:  cloudflare.F(false),
 			}),
-			BodyScanning: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningParam{
+			BodyScanning: cloudflare.F(zero_trust.BodyScanningSettingsParam{
 				InspectionMode: cloudflare.F("deep"),
 			}),
-			BrowserIsolation: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationParam{
+			BrowserIsolation: cloudflare.F(zero_trust.BrowserIsolationSettingsParam{
 				NonIdentityEnabled:         cloudflare.F(true),
 				URLBrowserIsolationEnabled: cloudflare.F(true),
 			}),
-			CustomCertificate: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateParam{
+			CustomCertificate: cloudflare.F(zero_trust.CustomCertificateSettingsParam{
 				Enabled: cloudflare.F(true),
 				ID:      cloudflare.F("d1b364c5-1311-466e-a194-f0e943e0799f"),
 			}),
-			ExtendedEmailMatching: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingParam{
+			ExtendedEmailMatching: cloudflare.F(zero_trust.ExtendedEmailMatchingParam{
 				Enabled: cloudflare.F(true),
 			}),
-			Fips: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsParam{
+			Fips: cloudflare.F(zero_trust.FipsSettingsParam{
 				TLS: cloudflare.F(true),
 			}),
-			ProtocolDetection: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionParam{
+			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
 			}),
-			TLSDecrypt: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptParam{
+			TLSDecrypt: cloudflare.F(zero_trust.TLSSettingsParam{
 				Enabled: cloudflare.F(true),
 			}),
 		}),
@@ -106,20 +106,20 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Gateway.Configurations.Edit(context.TODO(), zero_trust.GatewayConfigurationEditParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Settings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam{
-			ActivityLog: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogParam{
+			ActivityLog: cloudflare.F(zero_trust.ActivityLogSettingsParam{
 				Enabled: cloudflare.F(true),
 			}),
-			Antivirus: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusParam{
+			Antivirus: cloudflare.F(zero_trust.AntiVirusSettingsParam{
 				EnabledDownloadPhase: cloudflare.F(false),
 				EnabledUploadPhase:   cloudflare.F(false),
 				FailClosed:           cloudflare.F(false),
-				NotificationSettings: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsParam{
+				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
 					Msg:        cloudflare.F("string"),
 					SupportURL: cloudflare.F("string"),
 				}),
 			}),
-			BlockPage: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageParam{
+			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
 				BackgroundColor: cloudflare.F("string"),
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
@@ -130,27 +130,27 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 				Name:            cloudflare.F("Cloudflare"),
 				SuppressFooter:  cloudflare.F(false),
 			}),
-			BodyScanning: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningParam{
+			BodyScanning: cloudflare.F(zero_trust.BodyScanningSettingsParam{
 				InspectionMode: cloudflare.F("deep"),
 			}),
-			BrowserIsolation: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationParam{
+			BrowserIsolation: cloudflare.F(zero_trust.BrowserIsolationSettingsParam{
 				NonIdentityEnabled:         cloudflare.F(true),
 				URLBrowserIsolationEnabled: cloudflare.F(true),
 			}),
-			CustomCertificate: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateParam{
+			CustomCertificate: cloudflare.F(zero_trust.CustomCertificateSettingsParam{
 				Enabled: cloudflare.F(true),
 				ID:      cloudflare.F("d1b364c5-1311-466e-a194-f0e943e0799f"),
 			}),
-			ExtendedEmailMatching: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingParam{
+			ExtendedEmailMatching: cloudflare.F(zero_trust.ExtendedEmailMatchingParam{
 				Enabled: cloudflare.F(true),
 			}),
-			Fips: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsParam{
+			Fips: cloudflare.F(zero_trust.FipsSettingsParam{
 				TLS: cloudflare.F(true),
 			}),
-			ProtocolDetection: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionParam{
+			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
 			}),
-			TLSDecrypt: cloudflare.F(zero_trust.UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptParam{
+			TLSDecrypt: cloudflare.F(zero_trust.TLSSettingsParam{
 				Enabled: cloudflare.F(true),
 			}),
 		}),

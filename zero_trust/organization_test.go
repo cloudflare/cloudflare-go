@@ -36,7 +36,7 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AutoRedirectToIdentity:   cloudflare.F(true),
 		IsUiReadOnly:             cloudflare.F(true),
-		LoginDesign: cloudflare.F(zero_trust.OrganizationNewParamsLoginDesign{
+		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),
 			HeaderText:      cloudflare.F("This is an example description."),
@@ -82,7 +82,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 			IdentityDenied: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		}),
 		IsUiReadOnly: cloudflare.F(true),
-		LoginDesign: cloudflare.F(zero_trust.OrganizationUpdateParamsLoginDesign{
+		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),
 			HeaderText:      cloudflare.F("This is an example description."),

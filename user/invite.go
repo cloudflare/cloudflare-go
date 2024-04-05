@@ -35,7 +35,7 @@ func NewInviteService(opts ...option.RequestOption) (r *InviteService) {
 }
 
 // Lists all invitations associated with my user.
-func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[InviteListResponse], err error) {
+func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[Invite], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,7 +53,7 @@ func (r *InviteService) List(ctx context.Context, opts ...option.RequestOption) 
 }
 
 // Lists all invitations associated with my user.
-func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[InviteListResponse] {
+func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Invite] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
@@ -83,7 +83,7 @@ func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option
 	return
 }
 
-type InviteListResponse struct {
+type Invite struct {
 	// ID of the user to add to the organization.
 	InvitedMemberID string `json:"invited_member_id,required,nullable"`
 	// ID of the organization the user will be added to.
@@ -103,13 +103,12 @@ type InviteListResponse struct {
 	// Roles to be assigned to this user.
 	Roles []accounts.Role `json:"roles"`
 	// Current status of the invitation.
-	Status InviteListResponseStatus `json:"status"`
-	JSON   inviteListResponseJSON   `json:"-"`
+	Status InviteStatus `json:"status"`
+	JSON   inviteJSON   `json:"-"`
 }
 
-// inviteListResponseJSON contains the JSON metadata for the struct
-// [InviteListResponse]
-type inviteListResponseJSON struct {
+// inviteJSON contains the JSON metadata for the struct [Invite]
+type inviteJSON struct {
 	InvitedMemberID    apijson.Field
 	OrganizationID     apijson.Field
 	ID                 apijson.Field
@@ -124,27 +123,27 @@ type inviteListResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *InviteListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Invite) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r inviteListResponseJSON) RawJSON() string {
+func (r inviteJSON) RawJSON() string {
 	return r.raw
 }
 
 // Current status of the invitation.
-type InviteListResponseStatus string
+type InviteStatus string
 
 const (
-	InviteListResponseStatusPending  InviteListResponseStatus = "pending"
-	InviteListResponseStatusAccepted InviteListResponseStatus = "accepted"
-	InviteListResponseStatusRejected InviteListResponseStatus = "rejected"
-	InviteListResponseStatusExpired  InviteListResponseStatus = "expired"
+	InviteStatusPending  InviteStatus = "pending"
+	InviteStatusAccepted InviteStatus = "accepted"
+	InviteStatusRejected InviteStatus = "rejected"
+	InviteStatusExpired  InviteStatus = "expired"
 )
 
-func (r InviteListResponseStatus) IsKnown() bool {
+func (r InviteStatus) IsKnown() bool {
 	switch r {
-	case InviteListResponseStatusPending, InviteListResponseStatusAccepted, InviteListResponseStatusRejected, InviteListResponseStatusExpired:
+	case InviteStatusPending, InviteStatusAccepted, InviteStatusRejected, InviteStatusExpired:
 		return true
 	}
 	return false

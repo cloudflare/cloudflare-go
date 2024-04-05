@@ -28,15 +28,15 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.IdentityProviders.New(context.TODO(), zero_trust.IdentityProviderNewParamsAccessAzureAd{
-		Config: cloudflare.F(zero_trust.IdentityProviderNewParamsAccessAzureAdConfig{
+	_, err := client.ZeroTrust.IdentityProviders.New(context.TODO(), zero_trust.IdentityProviderNewParamsAzureAd{
+		Config: cloudflare.F(zero_trust.IdentityProviderNewParamsAzureAdConfig{
 			ClientID:                 cloudflare.F("<your client id>"),
 			ClientSecret:             cloudflare.F("<your client secret>"),
 			Claims:                   cloudflare.F([]string{"email_verified", "preferred_username", "custom_claim_name"}),
 			EmailClaimName:           cloudflare.F("custom_claim_name"),
 			ConditionalAccessEnabled: cloudflare.F(true),
 			DirectoryID:              cloudflare.F("<your azure directory uuid>"),
-			Prompt:                   cloudflare.F(zero_trust.IdentityProviderNewParamsAccessAzureAdConfigPromptLogin),
+			Prompt:                   cloudflare.F(zero_trust.IdentityProviderNewParamsAzureAdConfigPromptLogin),
 			SupportGroups:            cloudflare.F(true),
 		}),
 		Name:      cloudflare.F("Widget Corps IDP"),
@@ -77,15 +77,15 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.IdentityProviders.Update(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.IdentityProviderUpdateParamsAccessAzureAd{
-			Config: cloudflare.F(zero_trust.IdentityProviderUpdateParamsAccessAzureAdConfig{
+		zero_trust.IdentityProviderUpdateParamsAzureAd{
+			Config: cloudflare.F(zero_trust.IdentityProviderUpdateParamsAzureAdConfig{
 				ClientID:                 cloudflare.F("<your client id>"),
 				ClientSecret:             cloudflare.F("<your client secret>"),
 				Claims:                   cloudflare.F([]string{"email_verified", "preferred_username", "custom_claim_name"}),
 				EmailClaimName:           cloudflare.F("custom_claim_name"),
 				ConditionalAccessEnabled: cloudflare.F(true),
 				DirectoryID:              cloudflare.F("<your azure directory uuid>"),
-				Prompt:                   cloudflare.F(zero_trust.IdentityProviderUpdateParamsAccessAzureAdConfigPromptLogin),
+				Prompt:                   cloudflare.F(zero_trust.IdentityProviderUpdateParamsAzureAdConfigPromptLogin),
 				SupportGroups:            cloudflare.F(true),
 			}),
 			Name:      cloudflare.F("Widget Corps IDP"),

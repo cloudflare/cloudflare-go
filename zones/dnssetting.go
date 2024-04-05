@@ -59,8 +59,8 @@ func (r *DNSSettingService) Get(ctx context.Context, query DNSSettingGetParams, 
 
 type DNSSetting struct {
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers DNSSettingNameservers `json:"nameservers"`
-	JSON        dnsSettingJSON        `json:"-"`
+	Nameservers Nameserver     `json:"nameservers"`
+	JSON        dnsSettingJSON `json:"-"`
 }
 
 // dnsSettingJSON contains the JSON metadata for the struct [DNSSetting]
@@ -79,79 +79,62 @@ func (r dnsSettingJSON) RawJSON() string {
 }
 
 // Settings determining the nameservers through which the zone should be available.
-type DNSSettingNameservers struct {
+type Nameserver struct {
 	// Nameserver type
-	Type DNSSettingNameserversType `json:"type,required"`
-	JSON dnsSettingNameserversJSON `json:"-"`
+	Type NameserverType `json:"type,required"`
+	JSON nameserverJSON `json:"-"`
 }
 
-// dnsSettingNameserversJSON contains the JSON metadata for the struct
-// [DNSSettingNameservers]
-type dnsSettingNameserversJSON struct {
+// nameserverJSON contains the JSON metadata for the struct [Nameserver]
+type nameserverJSON struct {
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSSettingNameservers) UnmarshalJSON(data []byte) (err error) {
+func (r *Nameserver) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsSettingNameserversJSON) RawJSON() string {
+func (r nameserverJSON) RawJSON() string {
 	return r.raw
 }
 
 // Nameserver type
-type DNSSettingNameserversType string
+type NameserverType string
 
 const (
-	DNSSettingNameserversTypeCloudflareStandard      DNSSettingNameserversType = "cloudflare.standard"
-	DNSSettingNameserversTypeCloudflareFoundationDNS DNSSettingNameserversType = "cloudflare.foundation_dns"
+	NameserverTypeCloudflareStandard      NameserverType = "cloudflare.standard"
+	NameserverTypeCloudflareFoundationDNS NameserverType = "cloudflare.foundation_dns"
 )
 
-func (r DNSSettingNameserversType) IsKnown() bool {
+func (r NameserverType) IsKnown() bool {
 	switch r {
-	case DNSSettingNameserversTypeCloudflareStandard, DNSSettingNameserversTypeCloudflareFoundationDNS:
+	case NameserverTypeCloudflareStandard, NameserverTypeCloudflareFoundationDNS:
 		return true
 	}
 	return false
+}
+
+// Settings determining the nameservers through which the zone should be available.
+type NameserverParam struct {
+	// Nameserver type
+	Type param.Field[NameserverType] `json:"type,required"`
+}
+
+func (r NameserverParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type DNSSettingEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers param.Field[DNSSettingEditParamsNameservers] `json:"nameservers"`
+	Nameservers param.Field[NameserverParam] `json:"nameservers"`
 }
 
 func (r DNSSettingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Settings determining the nameservers through which the zone should be available.
-type DNSSettingEditParamsNameservers struct {
-	// Nameserver type
-	Type param.Field[DNSSettingEditParamsNameserversType] `json:"type,required"`
-}
-
-func (r DNSSettingEditParamsNameservers) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Nameserver type
-type DNSSettingEditParamsNameserversType string
-
-const (
-	DNSSettingEditParamsNameserversTypeCloudflareStandard      DNSSettingEditParamsNameserversType = "cloudflare.standard"
-	DNSSettingEditParamsNameserversTypeCloudflareFoundationDNS DNSSettingEditParamsNameserversType = "cloudflare.foundation_dns"
-)
-
-func (r DNSSettingEditParamsNameserversType) IsKnown() bool {
-	switch r {
-	case DNSSettingEditParamsNameserversTypeCloudflareStandard, DNSSettingEditParamsNameserversTypeCloudflareFoundationDNS:
-		return true
-	}
-	return false
 }
 
 type DNSSettingEditResponseEnvelope struct {

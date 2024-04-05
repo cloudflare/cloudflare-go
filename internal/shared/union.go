@@ -51,30 +51,12 @@ func (UnionString) ImplementsAlertingDestinationEligibleGetResponseUnion()      
 func (UnionString) ImplementsAlertingMechanismsIDUnionParam()                              {}
 func (UnionString) ImplementsAlertingMechanismsIDUnion()                                   {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                {}
-func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsSelfHostedApplicationAppIDUnion() {
-}
-func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsSaaSApplicationAppIDUnion() {}
-func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBrowserSSHApplicationAppIDUnion() {
-}
-func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBrowserVncApplicationAppIDUnion() {
-}
-func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsAppLauncherApplicationAppIDUnion() {
-}
-func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsDeviceEnrollmentPermissionsApplicationAppIDUnion() {
-}
-func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBrowserIsolationPermissionsApplicationAppIDUnion() {
-}
-func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBookmarkApplicationAppIDUnion() {}
-func (UnionString) ImplementsZeroTrustAccessApplicationDeleteParamsAppIDUnion()                    {}
-func (UnionString) ImplementsZeroTrustAccessApplicationGetParamsAppIDUnion()                       {}
-func (UnionString) ImplementsZeroTrustAccessApplicationRevokeTokensParamsAppIDUnion()              {}
-func (UnionString) ImplementsZeroTrustAccessApplicationUserPolicyCheckListParamsAppIDUnion()       {}
-func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()                                {}
-func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()                           {}
-func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()                     {}
-func (UnionString) ImplementsHostnamesHostnameSttingValueUnion()                                   {}
-func (UnionString) ImplementsHostnamesSettingTLSGetResponseValueUnion()                            {}
-func (UnionString) ImplementsHostnamesSettingTLSUpdateParamsValueUnion()                           {}
+func (UnionString) ImplementsZeroTrustAppIDUnionParam()                                    {}
+func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()                        {}
+func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()                   {}
+func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()             {}
+func (UnionString) ImplementsHostnamesSettingValueUnionParam()                             {}
+func (UnionString) ImplementsHostnamesSettingValueUnion()                                  {}
 
 type UnionInt int64
 
@@ -92,6 +74,5 @@ func (UnionFloat) ImplementsDNSTTLUnionParam()                                {}
 func (UnionFloat) ImplementsDNSTTLUnion()                                     {}
 func (UnionFloat) ImplementsEmailRoutingEmailDNSRecordTTLUnion()              {}
 func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
-func (UnionFloat) ImplementsHostnamesHostnameSttingValueUnion()               {}
-func (UnionFloat) ImplementsHostnamesSettingTLSGetResponseValueUnion()        {}
-func (UnionFloat) ImplementsHostnamesSettingTLSUpdateParamsValueUnion()       {}
+func (UnionFloat) ImplementsHostnamesSettingValueUnionParam()                 {}
+func (UnionFloat) ImplementsHostnamesSettingValueUnion()                      {}

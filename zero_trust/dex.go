@@ -36,6 +36,36 @@ func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 	return
 }
 
+type Percentiles struct {
+	// p50 observed in the time period
+	P50 float64 `json:"p50,nullable"`
+	// p90 observed in the time period
+	P90 float64 `json:"p90,nullable"`
+	// p95 observed in the time period
+	P95 float64 `json:"p95,nullable"`
+	// p99 observed in the time period
+	P99  float64         `json:"p99,nullable"`
+	JSON percentilesJSON `json:"-"`
+}
+
+// percentilesJSON contains the JSON metadata for the struct [Percentiles]
+type percentilesJSON struct {
+	P50         apijson.Field
+	P90         apijson.Field
+	P95         apijson.Field
+	P99         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Percentiles) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r percentilesJSON) RawJSON() string {
+	return r.raw
+}
+
 type UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11 struct {
 	ID string `json:"id,required"`
 	// Whether the policy is the default for the account

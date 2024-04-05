@@ -217,6 +217,188 @@ func (r ActionItemParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type EmailRule struct {
+	// Routing rule identifier.
+	ID string `json:"id"`
+	// List actions patterns.
+	Actions []Action `json:"actions"`
+	// Routing rule status.
+	Enabled EmailRuleEnabled `json:"enabled"`
+	// Matching patterns to forward to your actions.
+	Matchers []Matcher `json:"matchers"`
+	// Routing rule name.
+	Name string `json:"name"`
+	// Priority of the routing rule.
+	Priority float64 `json:"priority"`
+	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
+	Tag  string        `json:"tag"`
+	JSON emailRuleJSON `json:"-"`
+}
+
+// emailRuleJSON contains the JSON metadata for the struct [EmailRule]
+type emailRuleJSON struct {
+	ID          apijson.Field
+	Actions     apijson.Field
+	Enabled     apijson.Field
+	Matchers    apijson.Field
+	Name        apijson.Field
+	Priority    apijson.Field
+	Tag         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r EmailRule) implementsZeroTrustIncludeItem() {}
+
+func (r EmailRule) implementsZeroTrustRule() {}
+
+// Routing rule status.
+type EmailRuleEnabled bool
+
+const (
+	EmailRuleEnabledTrue  EmailRuleEnabled = true
+	EmailRuleEnabledFalse EmailRuleEnabled = false
+)
+
+func (r EmailRuleEnabled) IsKnown() bool {
+	switch r {
+	case EmailRuleEnabledTrue, EmailRuleEnabledFalse:
+		return true
+	}
+	return false
+}
+
+type EmailRuleParam struct {
+	// List actions patterns.
+	Actions param.Field[[]ActionParam] `json:"actions"`
+	// Routing rule status.
+	Enabled param.Field[EmailRuleEnabled] `json:"enabled"`
+	// Matching patterns to forward to your actions.
+	Matchers param.Field[[]MatcherParam] `json:"matchers"`
+	// Routing rule name.
+	Name param.Field[string] `json:"name"`
+	// Priority of the routing rule.
+	Priority param.Field[float64] `json:"priority"`
+}
+
+func (r EmailRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+
 // Matching pattern to forward your actions.
 type Matcher struct {
 	// Field for type matcher.

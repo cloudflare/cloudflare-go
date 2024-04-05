@@ -131,6 +131,145 @@ func (r *WaitingRoomService) Get(ctx context.Context, waitingRoomID string, quer
 	return
 }
 
+type AdditionalRoutesItem struct {
+	// The hostname to which this waiting room will be applied (no wildcards). The
+	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
+	// for SaaS) of this zone. Please do not include the scheme (http:// or https://).
+	Host string `json:"host"`
+	// Sets the path within the host to enable the waiting room on. The waiting room
+	// will be enabled for all subpaths as well. If there are two waiting rooms on the
+	// same subpath, the waiting room for the most specific path will be chosen.
+	// Wildcards and query parameters are not supported.
+	Path string                   `json:"path"`
+	JSON additionalRoutesItemJSON `json:"-"`
+}
+
+// additionalRoutesItemJSON contains the JSON metadata for the struct
+// [AdditionalRoutesItem]
+type additionalRoutesItemJSON struct {
+	Host        apijson.Field
+	Path        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AdditionalRoutesItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r additionalRoutesItemJSON) RawJSON() string {
+	return r.raw
+}
+
+type AdditionalRoutesItemParam struct {
+	// The hostname to which this waiting room will be applied (no wildcards). The
+	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
+	// for SaaS) of this zone. Please do not include the scheme (http:// or https://).
+	Host param.Field[string] `json:"host"`
+	// Sets the path within the host to enable the waiting room on. The waiting room
+	// will be enabled for all subpaths as well. If there are two waiting rooms on the
+	// same subpath, the waiting room for the most specific path will be chosen.
+	// Wildcards and query parameters are not supported.
+	Path param.Field[string] `json:"path"`
+}
+
+func (r AdditionalRoutesItemParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configures cookie attributes for the waiting room cookie. This encrypted cookie
+// stores a user's status in the waiting room, such as queue position.
+type CookieAttributes struct {
+	// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
+	// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
+	// Note that when using value `none`, the secure attribute cannot be set to
+	// `never`.
+	Samesite CookieAttributesSamesite `json:"samesite"`
+	// Configures the Secure attribute on the waiting room cookie. Value `always`
+	// indicates that the Secure attribute will be set in the Set-Cookie header,
+	// `never` indicates that the Secure attribute will not be set, and `auto` will set
+	// the Secure attribute depending if **Always Use HTTPS** is enabled.
+	Secure CookieAttributesSecure `json:"secure"`
+	JSON   cookieAttributesJSON   `json:"-"`
+}
+
+// cookieAttributesJSON contains the JSON metadata for the struct
+// [CookieAttributes]
+type cookieAttributesJSON struct {
+	Samesite    apijson.Field
+	Secure      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CookieAttributes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cookieAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
+// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
+// Note that when using value `none`, the secure attribute cannot be set to
+// `never`.
+type CookieAttributesSamesite string
+
+const (
+	CookieAttributesSamesiteAuto   CookieAttributesSamesite = "auto"
+	CookieAttributesSamesiteLax    CookieAttributesSamesite = "lax"
+	CookieAttributesSamesiteNone   CookieAttributesSamesite = "none"
+	CookieAttributesSamesiteStrict CookieAttributesSamesite = "strict"
+)
+
+func (r CookieAttributesSamesite) IsKnown() bool {
+	switch r {
+	case CookieAttributesSamesiteAuto, CookieAttributesSamesiteLax, CookieAttributesSamesiteNone, CookieAttributesSamesiteStrict:
+		return true
+	}
+	return false
+}
+
+// Configures the Secure attribute on the waiting room cookie. Value `always`
+// indicates that the Secure attribute will be set in the Set-Cookie header,
+// `never` indicates that the Secure attribute will not be set, and `auto` will set
+// the Secure attribute depending if **Always Use HTTPS** is enabled.
+type CookieAttributesSecure string
+
+const (
+	CookieAttributesSecureAuto   CookieAttributesSecure = "auto"
+	CookieAttributesSecureAlways CookieAttributesSecure = "always"
+	CookieAttributesSecureNever  CookieAttributesSecure = "never"
+)
+
+func (r CookieAttributesSecure) IsKnown() bool {
+	switch r {
+	case CookieAttributesSecureAuto, CookieAttributesSecureAlways, CookieAttributesSecureNever:
+		return true
+	}
+	return false
+}
+
+// Configures cookie attributes for the waiting room cookie. This encrypted cookie
+// stores a user's status in the waiting room, such as queue position.
+type CookieAttributesParam struct {
+	// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
+	// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
+	// Note that when using value `none`, the secure attribute cannot be set to
+	// `never`.
+	Samesite param.Field[CookieAttributesSamesite] `json:"samesite"`
+	// Configures the Secure attribute on the waiting room cookie. Value `always`
+	// indicates that the Secure attribute will be set in the Set-Cookie header,
+	// `never` indicates that the Secure attribute will not be set, and `auto` will set
+	// the Secure attribute depending if **Always Use HTTPS** is enabled.
+	Secure param.Field[CookieAttributesSecure] `json:"secure"`
+}
+
+func (r CookieAttributesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type WaitingRoom struct {
 	ID string `json:"id"`
 	// Only available for the Waiting Room Advanced subscription. Additional hostname
@@ -140,7 +279,7 @@ type WaitingRoom struct {
 	AdditionalRoutes []WaitingRoomAdditionalRoute `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
-	CookieAttributes WaitingRoomCookieAttributes `json:"cookie_attributes"`
+	CookieAttributes CookieAttributes `json:"cookie_attributes"`
 	// Appends a '\_' + a custom suffix to the end of Cloudflare Waiting Room's cookie
 	// name(**cf_waitingroom). If `cookie_suffix` is "abcd", the cookie name will be
 	// `**cf_waitingroom_abcd`. This field is required if using `additional_routes`.
@@ -465,80 +604,6 @@ func (r waitingRoomAdditionalRouteJSON) RawJSON() string {
 	return r.raw
 }
 
-// Configures cookie attributes for the waiting room cookie. This encrypted cookie
-// stores a user's status in the waiting room, such as queue position.
-type WaitingRoomCookieAttributes struct {
-	// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
-	// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
-	// Note that when using value `none`, the secure attribute cannot be set to
-	// `never`.
-	Samesite WaitingRoomCookieAttributesSamesite `json:"samesite"`
-	// Configures the Secure attribute on the waiting room cookie. Value `always`
-	// indicates that the Secure attribute will be set in the Set-Cookie header,
-	// `never` indicates that the Secure attribute will not be set, and `auto` will set
-	// the Secure attribute depending if **Always Use HTTPS** is enabled.
-	Secure WaitingRoomCookieAttributesSecure `json:"secure"`
-	JSON   waitingRoomCookieAttributesJSON   `json:"-"`
-}
-
-// waitingRoomCookieAttributesJSON contains the JSON metadata for the struct
-// [WaitingRoomCookieAttributes]
-type waitingRoomCookieAttributesJSON struct {
-	Samesite    apijson.Field
-	Secure      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WaitingRoomCookieAttributes) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r waitingRoomCookieAttributesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
-// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
-// Note that when using value `none`, the secure attribute cannot be set to
-// `never`.
-type WaitingRoomCookieAttributesSamesite string
-
-const (
-	WaitingRoomCookieAttributesSamesiteAuto   WaitingRoomCookieAttributesSamesite = "auto"
-	WaitingRoomCookieAttributesSamesiteLax    WaitingRoomCookieAttributesSamesite = "lax"
-	WaitingRoomCookieAttributesSamesiteNone   WaitingRoomCookieAttributesSamesite = "none"
-	WaitingRoomCookieAttributesSamesiteStrict WaitingRoomCookieAttributesSamesite = "strict"
-)
-
-func (r WaitingRoomCookieAttributesSamesite) IsKnown() bool {
-	switch r {
-	case WaitingRoomCookieAttributesSamesiteAuto, WaitingRoomCookieAttributesSamesiteLax, WaitingRoomCookieAttributesSamesiteNone, WaitingRoomCookieAttributesSamesiteStrict:
-		return true
-	}
-	return false
-}
-
-// Configures the Secure attribute on the waiting room cookie. Value `always`
-// indicates that the Secure attribute will be set in the Set-Cookie header,
-// `never` indicates that the Secure attribute will not be set, and `auto` will set
-// the Secure attribute depending if **Always Use HTTPS** is enabled.
-type WaitingRoomCookieAttributesSecure string
-
-const (
-	WaitingRoomCookieAttributesSecureAuto   WaitingRoomCookieAttributesSecure = "auto"
-	WaitingRoomCookieAttributesSecureAlways WaitingRoomCookieAttributesSecure = "always"
-	WaitingRoomCookieAttributesSecureNever  WaitingRoomCookieAttributesSecure = "never"
-)
-
-func (r WaitingRoomCookieAttributesSecure) IsKnown() bool {
-	switch r {
-	case WaitingRoomCookieAttributesSecureAuto, WaitingRoomCookieAttributesSecureAlways, WaitingRoomCookieAttributesSecureNever:
-		return true
-	}
-	return false
-}
-
 // The language of the default page template. If no default_template_language is
 // provided, then `en-US` (English) will be used.
 type WaitingRoomDefaultTemplateLanguage string
@@ -679,10 +744,10 @@ type WaitingRoomNewParams struct {
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
 	// be unique to this and all other waiting rooms.
-	AdditionalRoutes param.Field[[]WaitingRoomNewParamsAdditionalRoute] `json:"additional_routes"`
+	AdditionalRoutes param.Field[[]AdditionalRoutesItemParam] `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
-	CookieAttributes param.Field[WaitingRoomNewParamsCookieAttributes] `json:"cookie_attributes"`
+	CookieAttributes param.Field[CookieAttributesParam] `json:"cookie_attributes"`
 	// Appends a '\_' + a custom suffix to the end of Cloudflare Waiting Room's cookie
 	// name(**cf_waitingroom). If `cookie_suffix` is "abcd", the cookie name will be
 	// `**cf_waitingroom_abcd`. This field is required if using `additional_routes`.
@@ -918,82 +983,6 @@ func (r WaitingRoomNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WaitingRoomNewParamsAdditionalRoute struct {
-	// The hostname to which this waiting room will be applied (no wildcards). The
-	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
-	// for SaaS) of this zone. Please do not include the scheme (http:// or https://).
-	Host param.Field[string] `json:"host"`
-	// Sets the path within the host to enable the waiting room on. The waiting room
-	// will be enabled for all subpaths as well. If there are two waiting rooms on the
-	// same subpath, the waiting room for the most specific path will be chosen.
-	// Wildcards and query parameters are not supported.
-	Path param.Field[string] `json:"path"`
-}
-
-func (r WaitingRoomNewParamsAdditionalRoute) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures cookie attributes for the waiting room cookie. This encrypted cookie
-// stores a user's status in the waiting room, such as queue position.
-type WaitingRoomNewParamsCookieAttributes struct {
-	// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
-	// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
-	// Note that when using value `none`, the secure attribute cannot be set to
-	// `never`.
-	Samesite param.Field[WaitingRoomNewParamsCookieAttributesSamesite] `json:"samesite"`
-	// Configures the Secure attribute on the waiting room cookie. Value `always`
-	// indicates that the Secure attribute will be set in the Set-Cookie header,
-	// `never` indicates that the Secure attribute will not be set, and `auto` will set
-	// the Secure attribute depending if **Always Use HTTPS** is enabled.
-	Secure param.Field[WaitingRoomNewParamsCookieAttributesSecure] `json:"secure"`
-}
-
-func (r WaitingRoomNewParamsCookieAttributes) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
-// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
-// Note that when using value `none`, the secure attribute cannot be set to
-// `never`.
-type WaitingRoomNewParamsCookieAttributesSamesite string
-
-const (
-	WaitingRoomNewParamsCookieAttributesSamesiteAuto   WaitingRoomNewParamsCookieAttributesSamesite = "auto"
-	WaitingRoomNewParamsCookieAttributesSamesiteLax    WaitingRoomNewParamsCookieAttributesSamesite = "lax"
-	WaitingRoomNewParamsCookieAttributesSamesiteNone   WaitingRoomNewParamsCookieAttributesSamesite = "none"
-	WaitingRoomNewParamsCookieAttributesSamesiteStrict WaitingRoomNewParamsCookieAttributesSamesite = "strict"
-)
-
-func (r WaitingRoomNewParamsCookieAttributesSamesite) IsKnown() bool {
-	switch r {
-	case WaitingRoomNewParamsCookieAttributesSamesiteAuto, WaitingRoomNewParamsCookieAttributesSamesiteLax, WaitingRoomNewParamsCookieAttributesSamesiteNone, WaitingRoomNewParamsCookieAttributesSamesiteStrict:
-		return true
-	}
-	return false
-}
-
-// Configures the Secure attribute on the waiting room cookie. Value `always`
-// indicates that the Secure attribute will be set in the Set-Cookie header,
-// `never` indicates that the Secure attribute will not be set, and `auto` will set
-// the Secure attribute depending if **Always Use HTTPS** is enabled.
-type WaitingRoomNewParamsCookieAttributesSecure string
-
-const (
-	WaitingRoomNewParamsCookieAttributesSecureAuto   WaitingRoomNewParamsCookieAttributesSecure = "auto"
-	WaitingRoomNewParamsCookieAttributesSecureAlways WaitingRoomNewParamsCookieAttributesSecure = "always"
-	WaitingRoomNewParamsCookieAttributesSecureNever  WaitingRoomNewParamsCookieAttributesSecure = "never"
-)
-
-func (r WaitingRoomNewParamsCookieAttributesSecure) IsKnown() bool {
-	switch r {
-	case WaitingRoomNewParamsCookieAttributesSecureAuto, WaitingRoomNewParamsCookieAttributesSecureAlways, WaitingRoomNewParamsCookieAttributesSecureNever:
-		return true
-	}
-	return false
-}
-
 // The language of the default page template. If no default_template_language is
 // provided, then `en-US` (English) will be used.
 type WaitingRoomNewParamsDefaultTemplateLanguage string
@@ -1140,10 +1129,10 @@ type WaitingRoomUpdateParams struct {
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
 	// be unique to this and all other waiting rooms.
-	AdditionalRoutes param.Field[[]WaitingRoomUpdateParamsAdditionalRoute] `json:"additional_routes"`
+	AdditionalRoutes param.Field[[]AdditionalRoutesItemParam] `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
-	CookieAttributes param.Field[WaitingRoomUpdateParamsCookieAttributes] `json:"cookie_attributes"`
+	CookieAttributes param.Field[CookieAttributesParam] `json:"cookie_attributes"`
 	// Appends a '\_' + a custom suffix to the end of Cloudflare Waiting Room's cookie
 	// name(**cf_waitingroom). If `cookie_suffix` is "abcd", the cookie name will be
 	// `**cf_waitingroom_abcd`. This field is required if using `additional_routes`.
@@ -1379,82 +1368,6 @@ func (r WaitingRoomUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WaitingRoomUpdateParamsAdditionalRoute struct {
-	// The hostname to which this waiting room will be applied (no wildcards). The
-	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
-	// for SaaS) of this zone. Please do not include the scheme (http:// or https://).
-	Host param.Field[string] `json:"host"`
-	// Sets the path within the host to enable the waiting room on. The waiting room
-	// will be enabled for all subpaths as well. If there are two waiting rooms on the
-	// same subpath, the waiting room for the most specific path will be chosen.
-	// Wildcards and query parameters are not supported.
-	Path param.Field[string] `json:"path"`
-}
-
-func (r WaitingRoomUpdateParamsAdditionalRoute) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures cookie attributes for the waiting room cookie. This encrypted cookie
-// stores a user's status in the waiting room, such as queue position.
-type WaitingRoomUpdateParamsCookieAttributes struct {
-	// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
-	// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
-	// Note that when using value `none`, the secure attribute cannot be set to
-	// `never`.
-	Samesite param.Field[WaitingRoomUpdateParamsCookieAttributesSamesite] `json:"samesite"`
-	// Configures the Secure attribute on the waiting room cookie. Value `always`
-	// indicates that the Secure attribute will be set in the Set-Cookie header,
-	// `never` indicates that the Secure attribute will not be set, and `auto` will set
-	// the Secure attribute depending if **Always Use HTTPS** is enabled.
-	Secure param.Field[WaitingRoomUpdateParamsCookieAttributesSecure] `json:"secure"`
-}
-
-func (r WaitingRoomUpdateParamsCookieAttributes) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
-// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
-// Note that when using value `none`, the secure attribute cannot be set to
-// `never`.
-type WaitingRoomUpdateParamsCookieAttributesSamesite string
-
-const (
-	WaitingRoomUpdateParamsCookieAttributesSamesiteAuto   WaitingRoomUpdateParamsCookieAttributesSamesite = "auto"
-	WaitingRoomUpdateParamsCookieAttributesSamesiteLax    WaitingRoomUpdateParamsCookieAttributesSamesite = "lax"
-	WaitingRoomUpdateParamsCookieAttributesSamesiteNone   WaitingRoomUpdateParamsCookieAttributesSamesite = "none"
-	WaitingRoomUpdateParamsCookieAttributesSamesiteStrict WaitingRoomUpdateParamsCookieAttributesSamesite = "strict"
-)
-
-func (r WaitingRoomUpdateParamsCookieAttributesSamesite) IsKnown() bool {
-	switch r {
-	case WaitingRoomUpdateParamsCookieAttributesSamesiteAuto, WaitingRoomUpdateParamsCookieAttributesSamesiteLax, WaitingRoomUpdateParamsCookieAttributesSamesiteNone, WaitingRoomUpdateParamsCookieAttributesSamesiteStrict:
-		return true
-	}
-	return false
-}
-
-// Configures the Secure attribute on the waiting room cookie. Value `always`
-// indicates that the Secure attribute will be set in the Set-Cookie header,
-// `never` indicates that the Secure attribute will not be set, and `auto` will set
-// the Secure attribute depending if **Always Use HTTPS** is enabled.
-type WaitingRoomUpdateParamsCookieAttributesSecure string
-
-const (
-	WaitingRoomUpdateParamsCookieAttributesSecureAuto   WaitingRoomUpdateParamsCookieAttributesSecure = "auto"
-	WaitingRoomUpdateParamsCookieAttributesSecureAlways WaitingRoomUpdateParamsCookieAttributesSecure = "always"
-	WaitingRoomUpdateParamsCookieAttributesSecureNever  WaitingRoomUpdateParamsCookieAttributesSecure = "never"
-)
-
-func (r WaitingRoomUpdateParamsCookieAttributesSecure) IsKnown() bool {
-	switch r {
-	case WaitingRoomUpdateParamsCookieAttributesSecureAuto, WaitingRoomUpdateParamsCookieAttributesSecureAlways, WaitingRoomUpdateParamsCookieAttributesSecureNever:
-		return true
-	}
-	return false
-}
-
 // The language of the default page template. If no default_template_language is
 // provided, then `en-US` (English) will be used.
 type WaitingRoomUpdateParamsDefaultTemplateLanguage string
@@ -1643,10 +1556,10 @@ type WaitingRoomEditParams struct {
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
 	// be unique to this and all other waiting rooms.
-	AdditionalRoutes param.Field[[]WaitingRoomEditParamsAdditionalRoute] `json:"additional_routes"`
+	AdditionalRoutes param.Field[[]AdditionalRoutesItemParam] `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
-	CookieAttributes param.Field[WaitingRoomEditParamsCookieAttributes] `json:"cookie_attributes"`
+	CookieAttributes param.Field[CookieAttributesParam] `json:"cookie_attributes"`
 	// Appends a '\_' + a custom suffix to the end of Cloudflare Waiting Room's cookie
 	// name(**cf_waitingroom). If `cookie_suffix` is "abcd", the cookie name will be
 	// `**cf_waitingroom_abcd`. This field is required if using `additional_routes`.
@@ -1880,82 +1793,6 @@ type WaitingRoomEditParams struct {
 
 func (r WaitingRoomEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type WaitingRoomEditParamsAdditionalRoute struct {
-	// The hostname to which this waiting room will be applied (no wildcards). The
-	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
-	// for SaaS) of this zone. Please do not include the scheme (http:// or https://).
-	Host param.Field[string] `json:"host"`
-	// Sets the path within the host to enable the waiting room on. The waiting room
-	// will be enabled for all subpaths as well. If there are two waiting rooms on the
-	// same subpath, the waiting room for the most specific path will be chosen.
-	// Wildcards and query parameters are not supported.
-	Path param.Field[string] `json:"path"`
-}
-
-func (r WaitingRoomEditParamsAdditionalRoute) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures cookie attributes for the waiting room cookie. This encrypted cookie
-// stores a user's status in the waiting room, such as queue position.
-type WaitingRoomEditParamsCookieAttributes struct {
-	// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
-	// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
-	// Note that when using value `none`, the secure attribute cannot be set to
-	// `never`.
-	Samesite param.Field[WaitingRoomEditParamsCookieAttributesSamesite] `json:"samesite"`
-	// Configures the Secure attribute on the waiting room cookie. Value `always`
-	// indicates that the Secure attribute will be set in the Set-Cookie header,
-	// `never` indicates that the Secure attribute will not be set, and `auto` will set
-	// the Secure attribute depending if **Always Use HTTPS** is enabled.
-	Secure param.Field[WaitingRoomEditParamsCookieAttributesSecure] `json:"secure"`
-}
-
-func (r WaitingRoomEditParamsCookieAttributes) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures the SameSite attribute on the waiting room cookie. Value `auto` will
-// be translated to `lax` or `none` depending if **Always Use HTTPS** is enabled.
-// Note that when using value `none`, the secure attribute cannot be set to
-// `never`.
-type WaitingRoomEditParamsCookieAttributesSamesite string
-
-const (
-	WaitingRoomEditParamsCookieAttributesSamesiteAuto   WaitingRoomEditParamsCookieAttributesSamesite = "auto"
-	WaitingRoomEditParamsCookieAttributesSamesiteLax    WaitingRoomEditParamsCookieAttributesSamesite = "lax"
-	WaitingRoomEditParamsCookieAttributesSamesiteNone   WaitingRoomEditParamsCookieAttributesSamesite = "none"
-	WaitingRoomEditParamsCookieAttributesSamesiteStrict WaitingRoomEditParamsCookieAttributesSamesite = "strict"
-)
-
-func (r WaitingRoomEditParamsCookieAttributesSamesite) IsKnown() bool {
-	switch r {
-	case WaitingRoomEditParamsCookieAttributesSamesiteAuto, WaitingRoomEditParamsCookieAttributesSamesiteLax, WaitingRoomEditParamsCookieAttributesSamesiteNone, WaitingRoomEditParamsCookieAttributesSamesiteStrict:
-		return true
-	}
-	return false
-}
-
-// Configures the Secure attribute on the waiting room cookie. Value `always`
-// indicates that the Secure attribute will be set in the Set-Cookie header,
-// `never` indicates that the Secure attribute will not be set, and `auto` will set
-// the Secure attribute depending if **Always Use HTTPS** is enabled.
-type WaitingRoomEditParamsCookieAttributesSecure string
-
-const (
-	WaitingRoomEditParamsCookieAttributesSecureAuto   WaitingRoomEditParamsCookieAttributesSecure = "auto"
-	WaitingRoomEditParamsCookieAttributesSecureAlways WaitingRoomEditParamsCookieAttributesSecure = "always"
-	WaitingRoomEditParamsCookieAttributesSecureNever  WaitingRoomEditParamsCookieAttributesSecure = "never"
-)
-
-func (r WaitingRoomEditParamsCookieAttributesSecure) IsKnown() bool {
-	switch r {
-	case WaitingRoomEditParamsCookieAttributesSecureAuto, WaitingRoomEditParamsCookieAttributesSecureAlways, WaitingRoomEditParamsCookieAttributesSecureNever:
-		return true
-	}
-	return false
 }
 
 // The language of the default page template. If no default_template_language is

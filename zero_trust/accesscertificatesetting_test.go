@@ -29,7 +29,7 @@ func TestAccessCertificateSettingUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Certificates.Settings.Update(context.TODO(), zero_trust.AccessCertificateSettingUpdateParams{
-		Settings: cloudflare.F([]zero_trust.ZeroTrustSettingsParam{{
+		Settings: cloudflare.F([]zero_trust.SettingsParam{{
 			ChinaNetwork:                cloudflare.F(false),
 			ClientCertificateForwarding: cloudflare.F(true),
 			Hostname:                    cloudflare.F("admin.example.com"),
