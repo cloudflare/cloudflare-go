@@ -38,30 +38,30 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberParam">MemberParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleParam">RoleParam</a>
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#Member">Member</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberWithInviteCode">MemberWithInviteCode</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberUpdateResponse">MemberUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#Role">Role</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberListResponse">MemberListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberDeleteResponse">MemberDeleteResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberGetResponse">MemberGetResponse</a>
 
 Methods:
 
 - <code title="post /accounts/{account_id}/members">client.Accounts.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberNewParams">MemberNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberWithInviteCode">MemberWithInviteCode</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="put /accounts/{account_id}/members/{member_id}">client.Accounts.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, memberID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberUpdateParams">MemberUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberUpdateResponse">MemberUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /accounts/{account_id}/members/{member_id}">client.Accounts.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, memberID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberUpdateParams">MemberUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#Member">Member</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/members">client.Accounts.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberListParams">MemberListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberListResponse">MemberListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="delete /accounts/{account_id}/members/{member_id}">client.Accounts.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, memberID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberDeleteParams">MemberDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberDeleteResponse">MemberDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_id}/members/{member_id}">client.Accounts.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, memberID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberGetParams">MemberGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberGetResponse">MemberGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/members/{member_id}">client.Accounts.Members.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, memberID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#MemberGetParams">MemberGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#Member">Member</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Roles
 
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#PermissionGrantParam">PermissionGrantParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/accounts#RoleParam">RoleParam</a>
 
 Response Types:
 
@@ -6700,8 +6700,13 @@ Methods:
 
 ### Priority
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cloudforce_one#LabelItemParam">LabelItemParam</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cloudforce_one#LabelItem">LabelItem</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cloudforce_one">cloudforce_one</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/cloudforce_one#Priority">Priority</a>
 
 Methods:

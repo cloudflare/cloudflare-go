@@ -32,7 +32,7 @@ func TestRequestPriorityNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudforce_one.RequestPriorityNewParams{
-			Labels:      cloudflare.F([]string{"DoS", "CVE"}),
+			Labels:      cloudflare.F([]cloudforce_one.LabelItemParam{"DoS", "CVE"}),
 			Priority:    cloudflare.F(int64(1)),
 			Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
 			Tlp:         cloudflare.F(cloudforce_one.RequestPriorityNewParamsTlpClear),
@@ -66,7 +66,7 @@ func TestRequestPriorityUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudforce_one.RequestPriorityUpdateParams{
-			Labels:      cloudflare.F([]string{"DoS", "CVE"}),
+			Labels:      cloudflare.F([]cloudforce_one.LabelItemParam{"DoS", "CVE"}),
 			Priority:    cloudflare.F(int64(1)),
 			Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
 			Tlp:         cloudflare.F(cloudforce_one.RequestPriorityUpdateParamsTlpClear),
