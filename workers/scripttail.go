@@ -70,6 +70,48 @@ func (r *ScriptTailService) Get(ctx context.Context, scriptName string, query Sc
 	return
 }
 
+// A reference to a script that will consume logs from the attached Worker.
+type ConsumerScript struct {
+	// Name of Worker that is to be the consumer.
+	Service string `json:"service,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment"`
+	// Optional dispatch namespace the script belongs to.
+	Namespace string             `json:"namespace"`
+	JSON      consumerScriptJSON `json:"-"`
+}
+
+// consumerScriptJSON contains the JSON metadata for the struct [ConsumerScript]
+type consumerScriptJSON struct {
+	Service     apijson.Field
+	Environment apijson.Field
+	Namespace   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerScript) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerScriptJSON) RawJSON() string {
+	return r.raw
+}
+
+// A reference to a script that will consume logs from the attached Worker.
+type ConsumerScriptParam struct {
+	// Name of Worker that is to be the consumer.
+	Service param.Field[string] `json:"service,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment param.Field[string] `json:"environment"`
+	// Optional dispatch namespace the script belongs to.
+	Namespace param.Field[string] `json:"namespace"`
+}
+
+func (r ConsumerScriptParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ScriptTailNewResponse struct {
 	ID        interface{}               `json:"id"`
 	ExpiresAt interface{}               `json:"expires_at"`

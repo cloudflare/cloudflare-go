@@ -55,9 +55,9 @@ func TestServiceEnvironmentSettingEditWithOptionalParams(t *testing.T) {
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Result: cloudflare.F(workers.ServiceEnvironmentSettingEditParamsResult{
+			Result: cloudflare.F(workers.SettingsItemParam{
 				Logpush: cloudflare.F(false),
-				TailConsumers: cloudflare.F([]workers.ServiceEnvironmentSettingEditParamsResultTailConsumer{{
+				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),

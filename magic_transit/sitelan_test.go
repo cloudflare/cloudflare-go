@@ -36,35 +36,35 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 			LAN: cloudflare.F(magic_transit.SiteLANNewParamsLAN{
 				Description: cloudflare.F("string"),
 				HaLink:      cloudflare.F(true),
-				Nat: cloudflare.F(magic_transit.SiteLANNewParamsLANNat{
+				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
 				Physport: cloudflare.F(int64(1)),
-				RoutedSubnets: cloudflare.F([]magic_transit.SiteLANNewParamsLANRoutedSubnet{{
-					Nat: cloudflare.F(magic_transit.SiteLANNewParamsLANRoutedSubnetsNat{
+				RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
+					Nat: cloudflare.F(magic_transit.NatParam{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}, {
-					Nat: cloudflare.F(magic_transit.SiteLANNewParamsLANRoutedSubnetsNat{
+					Nat: cloudflare.F(magic_transit.NatParam{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}, {
-					Nat: cloudflare.F(magic_transit.SiteLANNewParamsLANRoutedSubnetsNat{
+					Nat: cloudflare.F(magic_transit.NatParam{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}}),
-				StaticAddressing: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressing{
+				StaticAddressing: cloudflare.F(magic_transit.StaticAddressingParam{
 					Address: cloudflare.F("192.0.2.0/24"),
-					DHCPRelay: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressingDHCPRelay{
+					DHCPRelay: cloudflare.F(magic_transit.DHCPRelayParam{
 						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 					}),
-					DHCPServer: cloudflare.F(magic_transit.SiteLANNewParamsLANStaticAddressingDHCPServer{
+					DHCPServer: cloudflare.F(magic_transit.DHCPServerParam{
 						DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
 						DHCPPoolStart: cloudflare.F("192.0.2.1"),
 						DNSServer:     cloudflare.F("192.0.2.1"),
@@ -111,35 +111,35 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			LAN: cloudflare.F(magic_transit.SiteLANUpdateParamsLAN{
 				Description: cloudflare.F("string"),
-				Nat: cloudflare.F(magic_transit.SiteLANUpdateParamsLANNat{
+				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
 				Physport: cloudflare.F(int64(1)),
-				RoutedSubnets: cloudflare.F([]magic_transit.SiteLANUpdateParamsLANRoutedSubnet{{
-					Nat: cloudflare.F(magic_transit.SiteLANUpdateParamsLANRoutedSubnetsNat{
+				RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
+					Nat: cloudflare.F(magic_transit.NatParam{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}, {
-					Nat: cloudflare.F(magic_transit.SiteLANUpdateParamsLANRoutedSubnetsNat{
+					Nat: cloudflare.F(magic_transit.NatParam{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}, {
-					Nat: cloudflare.F(magic_transit.SiteLANUpdateParamsLANRoutedSubnetsNat{
+					Nat: cloudflare.F(magic_transit.NatParam{
 						StaticPrefix: cloudflare.F("192.0.2.0/24"),
 					}),
 					NextHop: cloudflare.F("192.0.2.1"),
 					Prefix:  cloudflare.F("192.0.2.0/24"),
 				}}),
-				StaticAddressing: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressing{
+				StaticAddressing: cloudflare.F(magic_transit.StaticAddressingParam{
 					Address: cloudflare.F("192.0.2.0/24"),
-					DHCPRelay: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressingDHCPRelay{
+					DHCPRelay: cloudflare.F(magic_transit.DHCPRelayParam{
 						ServerAddresses: cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 					}),
-					DHCPServer: cloudflare.F(magic_transit.SiteLANUpdateParamsLANStaticAddressingDHCPServer{
+					DHCPServer: cloudflare.F(magic_transit.DHCPServerParam{
 						DHCPPoolEnd:   cloudflare.F("192.0.2.1"),
 						DHCPPoolStart: cloudflare.F("192.0.2.1"),
 						DNSServer:     cloudflare.F("192.0.2.1"),

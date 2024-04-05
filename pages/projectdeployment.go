@@ -39,7 +39,7 @@ func NewProjectDeploymentService(opts ...option.RequestOption) (r *ProjectDeploy
 
 // Start a new deployment from production. The repository and account must have
 // already been authorized on the Cloudflare Pages dashboard.
-func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, params ProjectDeploymentNewParams, opts ...option.RequestOption) (res *PagesDeployments, err error) {
+func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, params ProjectDeploymentNewParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", params.AccountID, projectName)
@@ -52,7 +52,7 @@ func (r *ProjectDeploymentService) New(ctx context.Context, projectName string, 
 }
 
 // Fetch a list of project deployments.
-func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PagesDeployments], err error) {
+func (r *ProjectDeploymentService) List(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Deployment], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -70,7 +70,7 @@ func (r *ProjectDeploymentService) List(ctx context.Context, projectName string,
 }
 
 // Fetch a list of project deployments.
-func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PagesDeployments] {
+func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectName string, params ProjectDeploymentListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Deployment] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, projectName, params, opts...))
 }
 
@@ -83,7 +83,7 @@ func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName strin
 }
 
 // Fetch information about a deployment.
-func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentGetParams, opts ...option.RequestOption) (res *PagesDeployments, err error) {
+func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentGetParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", query.AccountID, projectName, deploymentID)
@@ -96,7 +96,7 @@ func (r *ProjectDeploymentService) Get(ctx context.Context, projectName string, 
 }
 
 // Retry a previous deployment.
-func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentRetryParams, opts ...option.RequestOption) (res *PagesDeployments, err error) {
+func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentRetryParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentRetryResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/retry", params.AccountID, projectName, deploymentID)
@@ -110,7 +110,7 @@ func (r *ProjectDeploymentService) Retry(ctx context.Context, projectName string
 
 // Rollback the production deployment to a previous deployment. You can only
 // rollback to succesful builds on production.
-func (r *ProjectDeploymentService) Rollback(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentRollbackParams, opts ...option.RequestOption) (res *PagesDeployments, err error) {
+func (r *ProjectDeploymentService) Rollback(ctx context.Context, projectName string, deploymentID string, params ProjectDeploymentRollbackParams, opts ...option.RequestOption) (res *Deployment, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentRollbackResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/rollback", params.AccountID, projectName, deploymentID)
@@ -139,7 +139,7 @@ func (r ProjectDeploymentNewParams) MarshalJSON() (data []byte, err error) {
 type ProjectDeploymentNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PagesDeployments                                          `json:"result,required"`
+	Result   Deployment                                                `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentNewResponseEnvelopeJSON    `json:"-"`
@@ -229,7 +229,7 @@ type ProjectDeploymentGetParams struct {
 type ProjectDeploymentGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PagesDeployments                                          `json:"result,required"`
+	Result   Deployment                                                `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentGetResponseEnvelopeJSON    `json:"-"`
@@ -282,7 +282,7 @@ func (r ProjectDeploymentRetryParams) MarshalJSON() (data []byte, err error) {
 type ProjectDeploymentRetryResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PagesDeployments                                          `json:"result,required"`
+	Result   Deployment                                                `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRetryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRetryResponseEnvelopeJSON    `json:"-"`
@@ -335,7 +335,7 @@ func (r ProjectDeploymentRollbackParams) MarshalJSON() (data []byte, err error) 
 type ProjectDeploymentRollbackResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PagesDeployments                                          `json:"result,required"`
+	Result   Deployment                                                `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentRollbackResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentRollbackResponseEnvelopeJSON    `json:"-"`

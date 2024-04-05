@@ -43,11 +43,56 @@ func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts .
 	return
 }
 
+type Component struct {
+	// The default amount allocated.
+	Default float64 `json:"default"`
+	// The unique component.
+	Name ComponentName `json:"name"`
+	// The unit price of the addon.
+	UnitPrice float64       `json:"unit_price"`
+	JSON      componentJSON `json:"-"`
+}
+
+// componentJSON contains the JSON metadata for the struct [Component]
+type componentJSON struct {
+	Default     apijson.Field
+	Name        apijson.Field
+	UnitPrice   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Component) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r componentJSON) RawJSON() string {
+	return r.raw
+}
+
+// The unique component.
+type ComponentName string
+
+const (
+	ComponentNameZones                       ComponentName = "zones"
+	ComponentNamePageRules                   ComponentName = "page_rules"
+	ComponentNameDedicatedCertificates       ComponentName = "dedicated_certificates"
+	ComponentNameDedicatedCertificatesCustom ComponentName = "dedicated_certificates_custom"
+)
+
+func (r ComponentName) IsKnown() bool {
+	switch r {
+	case ComponentNameZones, ComponentNamePageRules, ComponentNameDedicatedCertificates, ComponentNameDedicatedCertificatesCustom:
+		return true
+	}
+	return false
+}
+
 type RatePlanGetResponse struct {
 	// Plan identifier tag.
 	ID string `json:"id"`
 	// Array of available components values for the plan.
-	Components []RatePlanGetResponseComponent `json:"components"`
+	Components []Component `json:"components"`
 	// The monetary unit in which pricing information is displayed.
 	Currency string `json:"currency"`
 	// The duration of the plan subscription.
@@ -78,52 +123,6 @@ func (r *RatePlanGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r ratePlanGetResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type RatePlanGetResponseComponent struct {
-	// The default amount allocated.
-	Default float64 `json:"default"`
-	// The unique component.
-	Name RatePlanGetResponseComponentsName `json:"name"`
-	// The unit price of the addon.
-	UnitPrice float64                          `json:"unit_price"`
-	JSON      ratePlanGetResponseComponentJSON `json:"-"`
-}
-
-// ratePlanGetResponseComponentJSON contains the JSON metadata for the struct
-// [RatePlanGetResponseComponent]
-type ratePlanGetResponseComponentJSON struct {
-	Default     apijson.Field
-	Name        apijson.Field
-	UnitPrice   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RatePlanGetResponseComponent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ratePlanGetResponseComponentJSON) RawJSON() string {
-	return r.raw
-}
-
-// The unique component.
-type RatePlanGetResponseComponentsName string
-
-const (
-	RatePlanGetResponseComponentsNameZones                       RatePlanGetResponseComponentsName = "zones"
-	RatePlanGetResponseComponentsNamePageRules                   RatePlanGetResponseComponentsName = "page_rules"
-	RatePlanGetResponseComponentsNameDedicatedCertificates       RatePlanGetResponseComponentsName = "dedicated_certificates"
-	RatePlanGetResponseComponentsNameDedicatedCertificatesCustom RatePlanGetResponseComponentsName = "dedicated_certificates_custom"
-)
-
-func (r RatePlanGetResponseComponentsName) IsKnown() bool {
-	switch r {
-	case RatePlanGetResponseComponentsNameZones, RatePlanGetResponseComponentsNamePageRules, RatePlanGetResponseComponentsNameDedicatedCertificates, RatePlanGetResponseComponentsNameDedicatedCertificatesCustom:
-		return true
-	}
-	return false
 }
 
 // The frequency at which you will be billed for this plan.

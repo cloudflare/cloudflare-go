@@ -106,8 +106,84 @@ func (r *SiteService) Get(ctx context.Context, siteID string, query SiteGetParam
 	return
 }
 
+type Site struct {
+	// Identifier
+	ID string `json:"id"`
+	// Magic WAN Connector identifier tag.
+	ConnectorID string `json:"connector_id"`
+	Description string `json:"description"`
+	// Site high availability mode. If set to true, the site can have two connectors
+	// and runs in high availability mode.
+	HaMode bool `json:"ha_mode"`
+	// Location of site in latitude and longitude.
+	Location SiteLocation `json:"location"`
+	// The name of the site.
+	Name string `json:"name"`
+	// Magic WAN Connector identifier tag. Used when high availability mode is on.
+	SecondaryConnectorID string   `json:"secondary_connector_id"`
+	JSON                 siteJSON `json:"-"`
+}
+
+// siteJSON contains the JSON metadata for the struct [Site]
+type siteJSON struct {
+	ID                   apijson.Field
+	ConnectorID          apijson.Field
+	Description          apijson.Field
+	HaMode               apijson.Field
+	Location             apijson.Field
+	Name                 apijson.Field
+	SecondaryConnectorID apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *Site) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of site in latitude and longitude.
+type SiteLocation struct {
+	// Latitude
+	Lat string `json:"lat"`
+	// Longitude
+	Lon  string           `json:"lon"`
+	JSON siteLocationJSON `json:"-"`
+}
+
+// siteLocationJSON contains the JSON metadata for the struct [SiteLocation]
+type siteLocationJSON struct {
+	Lat         apijson.Field
+	Lon         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SiteLocation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r siteLocationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Location of site in latitude and longitude.
+type SiteLocationParam struct {
+	// Latitude
+	Lat param.Field[string] `json:"lat"`
+	// Longitude
+	Lon param.Field[string] `json:"lon"`
+}
+
+func (r SiteLocationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SiteNewResponse struct {
-	Site SiteNewResponseSite `json:"site"`
+	Site Site                `json:"site"`
 	JSON siteNewResponseJSON `json:"-"`
 }
 
@@ -126,74 +202,8 @@ func (r siteNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteNewResponseSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteNewResponseSiteLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                  `json:"secondary_connector_id"`
-	JSON                 siteNewResponseSiteJSON `json:"-"`
-}
-
-// siteNewResponseSiteJSON contains the JSON metadata for the struct
-// [SiteNewResponseSite]
-type siteNewResponseSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteNewResponseSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteNewResponseSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteNewResponseSiteLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                          `json:"lon"`
-	JSON siteNewResponseSiteLocationJSON `json:"-"`
-}
-
-// siteNewResponseSiteLocationJSON contains the JSON metadata for the struct
-// [SiteNewResponseSiteLocation]
-type siteNewResponseSiteLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteNewResponseSiteLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteNewResponseSiteLocationJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteUpdateResponse struct {
-	Site SiteUpdateResponseSite `json:"site"`
+	Site Site                   `json:"site"`
 	JSON siteUpdateResponseJSON `json:"-"`
 }
 
@@ -213,75 +223,9 @@ func (r siteUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteUpdateResponseSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteUpdateResponseSiteLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                     `json:"secondary_connector_id"`
-	JSON                 siteUpdateResponseSiteJSON `json:"-"`
-}
-
-// siteUpdateResponseSiteJSON contains the JSON metadata for the struct
-// [SiteUpdateResponseSite]
-type siteUpdateResponseSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteUpdateResponseSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteUpdateResponseSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteUpdateResponseSiteLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                             `json:"lon"`
-	JSON siteUpdateResponseSiteLocationJSON `json:"-"`
-}
-
-// siteUpdateResponseSiteLocationJSON contains the JSON metadata for the struct
-// [SiteUpdateResponseSiteLocation]
-type siteUpdateResponseSiteLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteUpdateResponseSiteLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteUpdateResponseSiteLocationJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteListResponse struct {
-	Sites []SiteListResponseSite `json:"sites"`
-	JSON  siteListResponseJSON   `json:"-"`
+	Sites []Site               `json:"sites"`
+	JSON  siteListResponseJSON `json:"-"`
 }
 
 // siteListResponseJSON contains the JSON metadata for the struct
@@ -300,76 +244,10 @@ func (r siteListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteListResponseSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteListResponseSitesLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                   `json:"secondary_connector_id"`
-	JSON                 siteListResponseSiteJSON `json:"-"`
-}
-
-// siteListResponseSiteJSON contains the JSON metadata for the struct
-// [SiteListResponseSite]
-type siteListResponseSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteListResponseSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteListResponseSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteListResponseSitesLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                            `json:"lon"`
-	JSON siteListResponseSitesLocationJSON `json:"-"`
-}
-
-// siteListResponseSitesLocationJSON contains the JSON metadata for the struct
-// [SiteListResponseSitesLocation]
-type siteListResponseSitesLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteListResponseSitesLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteListResponseSitesLocationJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteDeleteResponse struct {
-	Deleted     bool                          `json:"deleted"`
-	DeletedSite SiteDeleteResponseDeletedSite `json:"deleted_site"`
-	JSON        siteDeleteResponseJSON        `json:"-"`
+	Deleted     bool                   `json:"deleted"`
+	DeletedSite Site                   `json:"deleted_site"`
+	JSON        siteDeleteResponseJSON `json:"-"`
 }
 
 // siteDeleteResponseJSON contains the JSON metadata for the struct
@@ -389,74 +267,8 @@ func (r siteDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SiteDeleteResponseDeletedSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteDeleteResponseDeletedSiteLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                            `json:"secondary_connector_id"`
-	JSON                 siteDeleteResponseDeletedSiteJSON `json:"-"`
-}
-
-// siteDeleteResponseDeletedSiteJSON contains the JSON metadata for the struct
-// [SiteDeleteResponseDeletedSite]
-type siteDeleteResponseDeletedSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteDeleteResponseDeletedSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteDeleteResponseDeletedSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteDeleteResponseDeletedSiteLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                                    `json:"lon"`
-	JSON siteDeleteResponseDeletedSiteLocationJSON `json:"-"`
-}
-
-// siteDeleteResponseDeletedSiteLocationJSON contains the JSON metadata for the
-// struct [SiteDeleteResponseDeletedSiteLocation]
-type siteDeleteResponseDeletedSiteLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteDeleteResponseDeletedSiteLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteDeleteResponseDeletedSiteLocationJSON) RawJSON() string {
-	return r.raw
-}
-
 type SiteGetResponse struct {
-	Site SiteGetResponseSite `json:"site"`
+	Site Site                `json:"site"`
 	JSON siteGetResponseJSON `json:"-"`
 }
 
@@ -472,72 +284,6 @@ func (r *SiteGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r siteGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SiteGetResponseSite struct {
-	// Identifier
-	ID string `json:"id"`
-	// Magic WAN Connector identifier tag.
-	ConnectorID string `json:"connector_id"`
-	Description string `json:"description"`
-	// Site high availability mode. If set to true, the site can have two connectors
-	// and runs in high availability mode.
-	HaMode bool `json:"ha_mode"`
-	// Location of site in latitude and longitude.
-	Location SiteGetResponseSiteLocation `json:"location"`
-	// The name of the site.
-	Name string `json:"name"`
-	// Magic WAN Connector identifier tag. Used when high availability mode is on.
-	SecondaryConnectorID string                  `json:"secondary_connector_id"`
-	JSON                 siteGetResponseSiteJSON `json:"-"`
-}
-
-// siteGetResponseSiteJSON contains the JSON metadata for the struct
-// [SiteGetResponseSite]
-type siteGetResponseSiteJSON struct {
-	ID                   apijson.Field
-	ConnectorID          apijson.Field
-	Description          apijson.Field
-	HaMode               apijson.Field
-	Location             apijson.Field
-	Name                 apijson.Field
-	SecondaryConnectorID apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SiteGetResponseSite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteGetResponseSiteJSON) RawJSON() string {
-	return r.raw
-}
-
-// Location of site in latitude and longitude.
-type SiteGetResponseSiteLocation struct {
-	// Latitude
-	Lat string `json:"lat"`
-	// Longitude
-	Lon  string                          `json:"lon"`
-	JSON siteGetResponseSiteLocationJSON `json:"-"`
-}
-
-// siteGetResponseSiteLocationJSON contains the JSON metadata for the struct
-// [SiteGetResponseSiteLocation]
-type siteGetResponseSiteLocationJSON struct {
-	Lat         apijson.Field
-	Lon         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SiteGetResponseSiteLocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r siteGetResponseSiteLocationJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -561,24 +307,12 @@ type SiteNewParamsSite struct {
 	// and runs in high availability mode.
 	HaMode param.Field[bool] `json:"ha_mode"`
 	// Location of site in latitude and longitude.
-	Location param.Field[SiteNewParamsSiteLocation] `json:"location"`
+	Location param.Field[SiteLocationParam] `json:"location"`
 	// Magic WAN Connector identifier tag. Used when high availability mode is on.
 	SecondaryConnectorID param.Field[string] `json:"secondary_connector_id"`
 }
 
 func (r SiteNewParamsSite) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Location of site in latitude and longitude.
-type SiteNewParamsSiteLocation struct {
-	// Latitude
-	Lat param.Field[string] `json:"lat"`
-	// Longitude
-	Lon param.Field[string] `json:"lon"`
-}
-
-func (r SiteNewParamsSiteLocation) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -640,7 +374,7 @@ type SiteUpdateParamsSite struct {
 	ConnectorID param.Field[string] `json:"connector_id"`
 	Description param.Field[string] `json:"description"`
 	// Location of site in latitude and longitude.
-	Location param.Field[SiteUpdateParamsSiteLocation] `json:"location"`
+	Location param.Field[SiteLocationParam] `json:"location"`
 	// The name of the site.
 	Name param.Field[string] `json:"name"`
 	// Magic WAN Connector identifier tag. Used when high availability mode is on.
@@ -648,18 +382,6 @@ type SiteUpdateParamsSite struct {
 }
 
 func (r SiteUpdateParamsSite) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Location of site in latitude and longitude.
-type SiteUpdateParamsSiteLocation struct {
-	// Latitude
-	Lat param.Field[string] `json:"lat"`
-	// Longitude
-	Lon param.Field[string] `json:"lon"`
-}
-
-func (r SiteUpdateParamsSiteLocation) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

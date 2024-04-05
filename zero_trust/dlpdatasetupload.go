@@ -33,7 +33,7 @@ func NewDLPDatasetUploadService(opts ...option.RequestOption) (r *DLPDatasetUplo
 }
 
 // Prepare to upload a new version of a dataset.
-func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *DLPDatasetNewVersion, err error) {
+func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *NewVersion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUploadNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload", body.AccountID, datasetID)
@@ -46,7 +46,7 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 }
 
 // Upload a new version of a dataset.
-func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *DLPDataset, err error) {
+func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUploadEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", params.AccountID, datasetID, version)
@@ -58,16 +58,15 @@ func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, ve
 	return
 }
 
-type DLPDatasetNewVersion struct {
-	MaxCells int64                    `json:"max_cells,required"`
-	Version  int64                    `json:"version,required"`
-	Secret   string                   `json:"secret" format:"password"`
-	JSON     dlpDatasetNewVersionJSON `json:"-"`
+type NewVersion struct {
+	MaxCells int64          `json:"max_cells,required"`
+	Version  int64          `json:"version,required"`
+	Secret   string         `json:"secret" format:"password"`
+	JSON     newVersionJSON `json:"-"`
 }
 
-// dlpDatasetNewVersionJSON contains the JSON metadata for the struct
-// [DLPDatasetNewVersion]
-type dlpDatasetNewVersionJSON struct {
+// newVersionJSON contains the JSON metadata for the struct [NewVersion]
+type newVersionJSON struct {
 	MaxCells    apijson.Field
 	Version     apijson.Field
 	Secret      apijson.Field
@@ -75,11 +74,11 @@ type dlpDatasetNewVersionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPDatasetNewVersion) UnmarshalJSON(data []byte) (err error) {
+func (r *NewVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpDatasetNewVersionJSON) RawJSON() string {
+func (r newVersionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -91,7 +90,7 @@ type DLPDatasetUploadNewResponseEnvelope struct {
 	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	Success    bool                                                      `json:"success,required"`
-	Result     DLPDatasetNewVersion                                      `json:"result"`
+	Result     NewVersion                                                `json:"result"`
 	ResultInfo DLPDatasetUploadNewResponseEnvelopeResultInfo             `json:"result_info"`
 	JSON       dlpDatasetUploadNewResponseEnvelopeJSON                   `json:"-"`
 }
@@ -160,7 +159,7 @@ type DLPDatasetUploadEditResponseEnvelope struct {
 	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	Success    bool                                                      `json:"success,required"`
-	Result     DLPDataset                                                `json:"result"`
+	Result     Dataset                                                   `json:"result"`
 	ResultInfo DLPDatasetUploadEditResponseEnvelopeResultInfo            `json:"result_info"`
 	JSON       dlpDatasetUploadEditResponseEnvelopeJSON                  `json:"-"`
 }

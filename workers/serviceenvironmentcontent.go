@@ -37,7 +37,7 @@ func NewServiceEnvironmentContentService(opts ...option.RequestOption) (r *Servi
 }
 
 // Put script content from a worker with an environment
-func (r *ServiceEnvironmentContentService) Update(ctx context.Context, serviceName string, environmentName string, params ServiceEnvironmentContentUpdateParams, opts ...option.RequestOption) (res *WorkersScript, err error) {
+func (r *ServiceEnvironmentContentService) Update(ctx context.Context, serviceName string, environmentName string, params ServiceEnvironmentContentUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ServiceEnvironmentContentUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/content", params.AccountID, serviceName, environmentName)
@@ -91,7 +91,7 @@ func (r ServiceEnvironmentContentUpdateParams) MarshalMultipart() (data []byte, 
 type ServiceEnvironmentContentUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   WorkersScript                                             `json:"result,required"`
+	Result   Script                                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success ServiceEnvironmentContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    serviceEnvironmentContentUpdateResponseEnvelopeJSON    `json:"-"`

@@ -24,26 +24,12 @@ func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                    
 func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()                             {}
 func (UnionString) ImplementsWorkersAIRunResponseUnion()                                   {}
 func (UnionString) ImplementsWorkersAIRunParamsTextEmbeddingsTextUnion()                   {}
-func (UnionString) ImplementsSpectrumAppNewResponseOriginPortUnion()                       {}
-func (UnionString) ImplementsSpectrumAppUpdateResponseOriginPortUnion()                    {}
-func (UnionString) ImplementsSpectrumAppNewParamsOriginPortUnion()                         {}
-func (UnionString) ImplementsSpectrumAppUpdateParamsOriginPortUnion()                      {}
+func (UnionString) ImplementsSpectrumOriginPortUnionParam()                                {}
+func (UnionString) ImplementsSpectrumOriginPortUnion()                                     {}
 func (UnionString) ImplementsImagesImageVariantsUnion()                                    {}
 func (UnionString) ImplementsIntelIntelSchemasIpipUnion()                                  {}
-func (UnionString) ImplementsMagicTransitSiteACLNewResponseACLsLan1SubnetsUnion()          {}
-func (UnionString) ImplementsMagicTransitSiteACLNewResponseACLsLan2SubnetsUnion()          {}
-func (UnionString) ImplementsMagicTransitSiteACLUpdateResponseAcllan1SubnetsUnion()        {}
-func (UnionString) ImplementsMagicTransitSiteACLUpdateResponseAcllan2SubnetsUnion()        {}
-func (UnionString) ImplementsMagicTransitSiteACLListResponseACLsLan1SubnetsUnion()         {}
-func (UnionString) ImplementsMagicTransitSiteACLListResponseACLsLan2SubnetsUnion()         {}
-func (UnionString) ImplementsMagicTransitSiteACLDeleteResponseDeletedAcllan1SubnetsUnion() {}
-func (UnionString) ImplementsMagicTransitSiteACLDeleteResponseDeletedAcllan2SubnetsUnion() {}
-func (UnionString) ImplementsMagicTransitSiteACLGetResponseAcllan1SubnetsUnion()           {}
-func (UnionString) ImplementsMagicTransitSiteACLGetResponseAcllan2SubnetsUnion()           {}
-func (UnionString) ImplementsMagicTransitSiteACLNewParamsAcllan1SubnetUnion()              {}
-func (UnionString) ImplementsMagicTransitSiteACLNewParamsAcllan2SubnetUnion()              {}
-func (UnionString) ImplementsMagicTransitSiteACLUpdateParamsAcllan1SubnetUnion()           {}
-func (UnionString) ImplementsMagicTransitSiteACLUpdateParamsAcllan2SubnetUnion()           {}
+func (UnionString) ImplementsMagicTransitSubnetUnionParam()                                {}
+func (UnionString) ImplementsMagicTransitSubnetUnion()                                     {}
 func (UnionString) ImplementsRulesListItemGetResponseUnion()                               {}
 func (UnionString) ImplementsStreamCaptionDeleteResponseUnion()                            {}
 func (UnionString) ImplementsAlertingAvailableAlertListResponseUnion()                     {}
@@ -60,13 +46,11 @@ func (UnionString) ImplementsHostnamesSettingValueUnion()                       
 
 type UnionInt int64
 
-func (UnionInt) ImplementsLogsReceivedGetParamsEndUnion()            {}
-func (UnionInt) ImplementsLogsReceivedGetParamsStartUnion()          {}
-func (UnionInt) ImplementsSpectrumAppNewResponseOriginPortUnion()    {}
-func (UnionInt) ImplementsSpectrumAppUpdateResponseOriginPortUnion() {}
-func (UnionInt) ImplementsSpectrumAppNewParamsOriginPortUnion()      {}
-func (UnionInt) ImplementsSpectrumAppUpdateParamsOriginPortUnion()   {}
-func (UnionInt) ImplementsRulesListItemGetResponseUnion()            {}
+func (UnionInt) ImplementsLogsReceivedGetParamsEndUnion()   {}
+func (UnionInt) ImplementsLogsReceivedGetParamsStartUnion() {}
+func (UnionInt) ImplementsSpectrumOriginPortUnionParam()    {}
+func (UnionInt) ImplementsSpectrumOriginPortUnion()         {}
+func (UnionInt) ImplementsRulesListItemGetResponseUnion()   {}
 
 type UnionFloat float64
 

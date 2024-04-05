@@ -55,7 +55,7 @@ type CopyNewParams struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
-	AllowedOrigins param.Field[[]string] `json:"allowedOrigins"`
+	AllowedOrigins param.Field[[]AllowedOriginsItemParam] `json:"allowedOrigins"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `json:"creator"`
 	// A user modifiable key-value store used to reference other systems of record for

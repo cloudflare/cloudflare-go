@@ -38,7 +38,7 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 			WebAnalyticsTag:   cloudflare.F("cee1c73f6e4743d0b5e6bb1a0bcaabcc"),
 			WebAnalyticsToken: cloudflare.F("021e1057c18547eca7b79f2516f06o7x"),
 		}),
-		CanonicalDeployment: cloudflare.F(pages.PagesDeploymentsParam{}),
+		CanonicalDeployment: cloudflare.F(pages.DeploymentParam{}),
 		DeploymentConfigs: cloudflare.F(pages.ProjectNewParamsDeploymentConfigs{
 			Preview: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreview{
 				AIBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewAIBindings{
@@ -187,7 +187,7 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 				}),
 			}),
 		}),
-		LatestDeployment: cloudflare.F(pages.PagesDeploymentsParam{}),
+		LatestDeployment: cloudflare.F(pages.DeploymentParam{}),
 		Name:             cloudflare.F("NextJS Blog"),
 		ProductionBranch: cloudflare.F("main"),
 	})
