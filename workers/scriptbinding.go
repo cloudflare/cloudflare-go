@@ -83,7 +83,7 @@ func (r Binding) AsUnion() BindingUnion {
 	return r.union
 }
 
-// Union satisfied by [workers.KVNamespaceBinding] or
+// Union satisfied by [workers.BindingWorkersKVNamespaceBinding] or
 // [workers.BindingWorkersWasmModuleBinding].
 type BindingUnion interface {
 	implementsWorkersBinding()
@@ -95,13 +95,58 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(KVNamespaceBinding{}),
+			Type:       reflect.TypeOf(BindingWorkersKVNamespaceBinding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(BindingWorkersWasmModuleBinding{}),
 		},
 	)
+}
+
+type BindingWorkersKVNamespaceBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id,required"`
+	// The class of resource that the binding provides.
+	Type BindingWorkersKVNamespaceBindingType `json:"type,required"`
+	JSON bindingWorkersKVNamespaceBindingJSON `json:"-"`
+}
+
+// bindingWorkersKVNamespaceBindingJSON contains the JSON metadata for the struct
+// [BindingWorkersKVNamespaceBinding]
+type bindingWorkersKVNamespaceBindingJSON struct {
+	Name        apijson.Field
+	NamespaceID apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingWorkersKVNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingWorkersKVNamespaceBinding) implementsWorkersBinding() {}
+
+// The class of resource that the binding provides.
+type BindingWorkersKVNamespaceBindingType string
+
+const (
+	BindingWorkersKVNamespaceBindingTypeKVNamespace BindingWorkersKVNamespaceBindingType = "kv_namespace"
+)
+
+func (r BindingWorkersKVNamespaceBindingType) IsKnown() bool {
+	switch r {
+	case BindingWorkersKVNamespaceBindingTypeKVNamespace:
+		return true
+	}
+	return false
 }
 
 type BindingWorkersWasmModuleBinding struct {
