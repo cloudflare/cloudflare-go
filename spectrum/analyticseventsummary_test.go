@@ -33,7 +33,7 @@ func TestAnalyticsEventSummaryGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		spectrum.AnalyticsEventSummaryGetParams{
-			Dimensions: cloudflare.F([]spectrum.DimensionItem{spectrum.DimensionItemEvent, spectrum.DimensionItemAppID}),
+			Dimensions: cloudflare.F([]spectrum.AnalyticsEventSummaryGetParamsDimension{spectrum.AnalyticsEventSummaryGetParamsDimensionEvent, spectrum.AnalyticsEventSummaryGetParamsDimensionAppID}),
 			Filters:    cloudflare.F("event==disconnect%20AND%20coloName!=SFO"),
 			Metrics:    cloudflare.F([]spectrum.AnalyticsEventSummaryGetParamsMetric{spectrum.AnalyticsEventSummaryGetParamsMetricCount, spectrum.AnalyticsEventSummaryGetParamsMetricBytesIngress}),
 			Since:      cloudflare.F(time.Now()),
