@@ -122,7 +122,7 @@ func (r Binding) AsUnion() BindingUnion {
 // Union satisfied by [workers.BindingWorkersKVNamespaceBinding],
 // [workers.BindingWorkersServiceBinding], [workers.BindingWorkersDoBinding],
 // [workers.BindingWorkersR2Binding], [workers.BindingWorkersQueueBinding],
-// [workers.D1Binding], [workers.DispatchNamespaceBinding] or
+// [workers.BindingWorkersD1Binding], [workers.DispatchNamespaceBinding] or
 // [workers.MTLSCERTBinding].
 type BindingUnion interface {
 	implementsWorkersBinding()
@@ -154,7 +154,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(D1Binding{}),
+			Type:       reflect.TypeOf(BindingWorkersD1Binding{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -404,6 +404,54 @@ func (r BindingWorkersQueueBindingType) IsKnown() bool {
 	return false
 }
 
+type BindingWorkersD1Binding struct {
+	// ID of the D1 database to bind to
+	ID string `json:"id,required"`
+	// A JavaScript variable name for the binding.
+	Binding string `json:"binding,required"`
+	// The name of the D1 database associated with the 'id' provided.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type BindingWorkersD1BindingType `json:"type,required"`
+	JSON bindingWorkersD1BindingJSON `json:"-"`
+}
+
+// bindingWorkersD1BindingJSON contains the JSON metadata for the struct
+// [BindingWorkersD1Binding]
+type bindingWorkersD1BindingJSON struct {
+	ID          apijson.Field
+	Binding     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingWorkersD1Binding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingWorkersD1BindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingWorkersD1Binding) implementsWorkersBinding() {}
+
+// The class of resource that the binding provides.
+type BindingWorkersD1BindingType string
+
+const (
+	BindingWorkersD1BindingTypeD1 BindingWorkersD1BindingType = "d1"
+)
+
+func (r BindingWorkersD1BindingType) IsKnown() bool {
+	switch r {
+	case BindingWorkersD1BindingTypeD1:
+		return true
+	}
+	return false
+}
+
 // The class of resource that the binding provides.
 type BindingType string
 
@@ -425,78 +473,6 @@ func (r BindingType) IsKnown() bool {
 	}
 	return false
 }
-
-type D1Binding struct {
-	// ID of the D1 database to bind to
-	ID string `json:"id,required"`
-	// A JavaScript variable name for the binding.
-	Binding string `json:"binding,required"`
-	// The name of the D1 database associated with the 'id' provided.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type D1BindingType `json:"type,required"`
-	JSON d1BindingJSON `json:"-"`
-}
-
-// d1BindingJSON contains the JSON metadata for the struct [D1Binding]
-type d1BindingJSON struct {
-	ID          apijson.Field
-	Binding     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *D1Binding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r d1BindingJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r D1Binding) implementsWorkersBinding() {}
-
-func (r D1Binding) implementsWorkersBindingItem() {}
-
-// The class of resource that the binding provides.
-type D1BindingType string
-
-const (
-	D1BindingTypeD1 D1BindingType = "d1"
-)
-
-func (r D1BindingType) IsKnown() bool {
-	switch r {
-	case D1BindingTypeD1:
-		return true
-	}
-	return false
-}
-
-type D1BindingParam struct {
-	// ID of the D1 database to bind to
-	ID param.Field[string] `json:"id,required"`
-	// The name of the D1 database associated with the 'id' provided.
-	Name param.Field[string] `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type param.Field[D1BindingType] `json:"type,required"`
-}
-
-func (r D1BindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r D1BindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r D1BindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r D1BindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r D1BindingParam) implementsWorkersBindingItemUnionParam() {}
-
-func (r D1BindingParam) implementsWorkersBindingItemUnionParam() {}
 
 type DispatchNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
