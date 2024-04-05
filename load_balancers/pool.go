@@ -250,7 +250,7 @@ type PoolUpdateParams struct {
 	Origins param.Field[[]OriginItemParam] `json:"origins,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]PoolUpdateParamsCheckRegion] `json:"check_regions"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
@@ -288,6 +288,38 @@ type PoolUpdateParams struct {
 
 func (r PoolUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
+// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
+// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
+// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
+// regions (ENTERPRISE customers only).
+type PoolUpdateParamsCheckRegion string
+
+const (
+	PoolUpdateParamsCheckRegionWnam       PoolUpdateParamsCheckRegion = "WNAM"
+	PoolUpdateParamsCheckRegionEnam       PoolUpdateParamsCheckRegion = "ENAM"
+	PoolUpdateParamsCheckRegionWeu        PoolUpdateParamsCheckRegion = "WEU"
+	PoolUpdateParamsCheckRegionEeu        PoolUpdateParamsCheckRegion = "EEU"
+	PoolUpdateParamsCheckRegionNsam       PoolUpdateParamsCheckRegion = "NSAM"
+	PoolUpdateParamsCheckRegionSsam       PoolUpdateParamsCheckRegion = "SSAM"
+	PoolUpdateParamsCheckRegionOc         PoolUpdateParamsCheckRegion = "OC"
+	PoolUpdateParamsCheckRegionMe         PoolUpdateParamsCheckRegion = "ME"
+	PoolUpdateParamsCheckRegionNaf        PoolUpdateParamsCheckRegion = "NAF"
+	PoolUpdateParamsCheckRegionSaf        PoolUpdateParamsCheckRegion = "SAF"
+	PoolUpdateParamsCheckRegionSas        PoolUpdateParamsCheckRegion = "SAS"
+	PoolUpdateParamsCheckRegionSeas       PoolUpdateParamsCheckRegion = "SEAS"
+	PoolUpdateParamsCheckRegionNeas       PoolUpdateParamsCheckRegion = "NEAS"
+	PoolUpdateParamsCheckRegionAllRegions PoolUpdateParamsCheckRegion = "ALL_REGIONS"
+)
+
+func (r PoolUpdateParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case PoolUpdateParamsCheckRegionWnam, PoolUpdateParamsCheckRegionEnam, PoolUpdateParamsCheckRegionWeu, PoolUpdateParamsCheckRegionEeu, PoolUpdateParamsCheckRegionNsam, PoolUpdateParamsCheckRegionSsam, PoolUpdateParamsCheckRegionOc, PoolUpdateParamsCheckRegionMe, PoolUpdateParamsCheckRegionNaf, PoolUpdateParamsCheckRegionSaf, PoolUpdateParamsCheckRegionSas, PoolUpdateParamsCheckRegionSeas, PoolUpdateParamsCheckRegionNeas, PoolUpdateParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
 }
 
 type PoolUpdateResponseEnvelope struct {
@@ -407,7 +439,7 @@ type PoolEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions param.Field[[]CheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]PoolEditParamsCheckRegion] `json:"check_regions"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
@@ -451,6 +483,38 @@ type PoolEditParams struct {
 
 func (r PoolEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
+// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
+// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
+// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
+// regions (ENTERPRISE customers only).
+type PoolEditParamsCheckRegion string
+
+const (
+	PoolEditParamsCheckRegionWnam       PoolEditParamsCheckRegion = "WNAM"
+	PoolEditParamsCheckRegionEnam       PoolEditParamsCheckRegion = "ENAM"
+	PoolEditParamsCheckRegionWeu        PoolEditParamsCheckRegion = "WEU"
+	PoolEditParamsCheckRegionEeu        PoolEditParamsCheckRegion = "EEU"
+	PoolEditParamsCheckRegionNsam       PoolEditParamsCheckRegion = "NSAM"
+	PoolEditParamsCheckRegionSsam       PoolEditParamsCheckRegion = "SSAM"
+	PoolEditParamsCheckRegionOc         PoolEditParamsCheckRegion = "OC"
+	PoolEditParamsCheckRegionMe         PoolEditParamsCheckRegion = "ME"
+	PoolEditParamsCheckRegionNaf        PoolEditParamsCheckRegion = "NAF"
+	PoolEditParamsCheckRegionSaf        PoolEditParamsCheckRegion = "SAF"
+	PoolEditParamsCheckRegionSas        PoolEditParamsCheckRegion = "SAS"
+	PoolEditParamsCheckRegionSeas       PoolEditParamsCheckRegion = "SEAS"
+	PoolEditParamsCheckRegionNeas       PoolEditParamsCheckRegion = "NEAS"
+	PoolEditParamsCheckRegionAllRegions PoolEditParamsCheckRegion = "ALL_REGIONS"
+)
+
+func (r PoolEditParamsCheckRegion) IsKnown() bool {
+	switch r {
+	case PoolEditParamsCheckRegionWnam, PoolEditParamsCheckRegionEnam, PoolEditParamsCheckRegionWeu, PoolEditParamsCheckRegionEeu, PoolEditParamsCheckRegionNsam, PoolEditParamsCheckRegionSsam, PoolEditParamsCheckRegionOc, PoolEditParamsCheckRegionMe, PoolEditParamsCheckRegionNaf, PoolEditParamsCheckRegionSaf, PoolEditParamsCheckRegionSas, PoolEditParamsCheckRegionSeas, PoolEditParamsCheckRegionNeas, PoolEditParamsCheckRegionAllRegions:
+		return true
+	}
+	return false
 }
 
 type PoolEditResponseEnvelope struct {

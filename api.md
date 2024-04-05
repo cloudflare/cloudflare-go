@@ -1008,7 +1008,6 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#AdaptiveRoutingParam">AdaptiveRoutingParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#CheckRegion">CheckRegion</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#DefaultPoolsItemParam">DefaultPoolsItemParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#FilterOptionsParam">FilterOptionsParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#HeaderParam">HeaderParam</a>
@@ -1026,7 +1025,6 @@ Params Types:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#AdaptiveRouting">AdaptiveRouting</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#CheckRegion">CheckRegion</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#DefaultPoolsItem">DefaultPoolsItem</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#FilterOptions">FilterOptions</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers">load_balancers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/load_balancers#Header">Header</a>

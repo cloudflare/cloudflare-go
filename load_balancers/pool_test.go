@@ -143,7 +143,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
 				Weight:           cloudflare.F(0.600000),
 			}}),
-			CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWeu, load_balancers.CheckRegionEnam}),
+			CheckRegions: cloudflare.F([]load_balancers.PoolUpdateParamsCheckRegion{load_balancers.PoolUpdateParamsCheckRegionWeu, load_balancers.PoolUpdateParamsCheckRegionEnam}),
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
 			Latitude:     cloudflare.F(0.000000),
@@ -258,7 +258,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 		"17b5962d775c646f3f9725cbc7a53df4",
 		load_balancers.PoolEditParams{
 			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWeu, load_balancers.CheckRegionEnam}),
+			CheckRegions: cloudflare.F([]load_balancers.PoolEditParamsCheckRegion{load_balancers.PoolEditParamsCheckRegionWeu, load_balancers.PoolEditParamsCheckRegionEnam}),
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
 			Latitude:     cloudflare.F(0.000000),
