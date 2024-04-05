@@ -147,7 +147,7 @@ type Override struct {
 	Priority float64 `json:"priority"`
 	// Specifies that, when a WAF rule matches, its configured action will be replaced
 	// by the action configured in this object.
-	RewriteAction OverrideRewriteAction `json:"rewrite_action"`
+	RewriteAction RewriteAction `json:"rewrite_action"`
 	// An object that allows you to override the action of specific WAF rules. Each key
 	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
 	// action. Unless you are disabling a rule, ensure that you also enable the rule
@@ -183,77 +183,6 @@ func (r overrideJSON) RawJSON() string {
 	return r.raw
 }
 
-// Specifies that, when a WAF rule matches, its configured action will be replaced
-// by the action configured in this object.
-type OverrideRewriteAction struct {
-	// The WAF rule action to apply.
-	Block     OverrideRewriteActionBlock `json:"block"`
-	Challenge string                     `json:"challenge"`
-	Default   string                     `json:"default"`
-	// The WAF rule action to apply.
-	Disable  OverrideRewriteActionDisable `json:"disable"`
-	Simulate string                       `json:"simulate"`
-	JSON     overrideRewriteActionJSON    `json:"-"`
-}
-
-// overrideRewriteActionJSON contains the JSON metadata for the struct
-// [OverrideRewriteAction]
-type overrideRewriteActionJSON struct {
-	Block       apijson.Field
-	Challenge   apijson.Field
-	Default     apijson.Field
-	Disable     apijson.Field
-	Simulate    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OverrideRewriteAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r overrideRewriteActionJSON) RawJSON() string {
-	return r.raw
-}
-
-// The WAF rule action to apply.
-type OverrideRewriteActionBlock string
-
-const (
-	OverrideRewriteActionBlockChallenge OverrideRewriteActionBlock = "challenge"
-	OverrideRewriteActionBlockBlock     OverrideRewriteActionBlock = "block"
-	OverrideRewriteActionBlockSimulate  OverrideRewriteActionBlock = "simulate"
-	OverrideRewriteActionBlockDisable   OverrideRewriteActionBlock = "disable"
-	OverrideRewriteActionBlockDefault   OverrideRewriteActionBlock = "default"
-)
-
-func (r OverrideRewriteActionBlock) IsKnown() bool {
-	switch r {
-	case OverrideRewriteActionBlockChallenge, OverrideRewriteActionBlockBlock, OverrideRewriteActionBlockSimulate, OverrideRewriteActionBlockDisable, OverrideRewriteActionBlockDefault:
-		return true
-	}
-	return false
-}
-
-// The WAF rule action to apply.
-type OverrideRewriteActionDisable string
-
-const (
-	OverrideRewriteActionDisableChallenge OverrideRewriteActionDisable = "challenge"
-	OverrideRewriteActionDisableBlock     OverrideRewriteActionDisable = "block"
-	OverrideRewriteActionDisableSimulate  OverrideRewriteActionDisable = "simulate"
-	OverrideRewriteActionDisableDisable   OverrideRewriteActionDisable = "disable"
-	OverrideRewriteActionDisableDefault   OverrideRewriteActionDisable = "default"
-)
-
-func (r OverrideRewriteActionDisable) IsKnown() bool {
-	switch r {
-	case OverrideRewriteActionDisableChallenge, OverrideRewriteActionDisableBlock, OverrideRewriteActionDisableSimulate, OverrideRewriteActionDisableDisable, OverrideRewriteActionDisableDefault:
-		return true
-	}
-	return false
-}
-
 // The WAF rule action to apply.
 type OverrideRule string
 
@@ -268,6 +197,76 @@ const (
 func (r OverrideRule) IsKnown() bool {
 	switch r {
 	case OverrideRuleChallenge, OverrideRuleBlock, OverrideRuleSimulate, OverrideRuleDisable, OverrideRuleDefault:
+		return true
+	}
+	return false
+}
+
+// Specifies that, when a WAF rule matches, its configured action will be replaced
+// by the action configured in this object.
+type RewriteAction struct {
+	// The WAF rule action to apply.
+	Block     RewriteActionBlock `json:"block"`
+	Challenge string             `json:"challenge"`
+	Default   string             `json:"default"`
+	// The WAF rule action to apply.
+	Disable  RewriteActionDisable `json:"disable"`
+	Simulate string               `json:"simulate"`
+	JSON     rewriteActionJSON    `json:"-"`
+}
+
+// rewriteActionJSON contains the JSON metadata for the struct [RewriteAction]
+type rewriteActionJSON struct {
+	Block       apijson.Field
+	Challenge   apijson.Field
+	Default     apijson.Field
+	Disable     apijson.Field
+	Simulate    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RewriteAction) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rewriteActionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The WAF rule action to apply.
+type RewriteActionBlock string
+
+const (
+	RewriteActionBlockChallenge RewriteActionBlock = "challenge"
+	RewriteActionBlockBlock     RewriteActionBlock = "block"
+	RewriteActionBlockSimulate  RewriteActionBlock = "simulate"
+	RewriteActionBlockDisable   RewriteActionBlock = "disable"
+	RewriteActionBlockDefault   RewriteActionBlock = "default"
+)
+
+func (r RewriteActionBlock) IsKnown() bool {
+	switch r {
+	case RewriteActionBlockChallenge, RewriteActionBlockBlock, RewriteActionBlockSimulate, RewriteActionBlockDisable, RewriteActionBlockDefault:
+		return true
+	}
+	return false
+}
+
+// The WAF rule action to apply.
+type RewriteActionDisable string
+
+const (
+	RewriteActionDisableChallenge RewriteActionDisable = "challenge"
+	RewriteActionDisableBlock     RewriteActionDisable = "block"
+	RewriteActionDisableSimulate  RewriteActionDisable = "simulate"
+	RewriteActionDisableDisable   RewriteActionDisable = "disable"
+	RewriteActionDisableDefault   RewriteActionDisable = "default"
+)
+
+func (r RewriteActionDisable) IsKnown() bool {
+	switch r {
+	case RewriteActionDisableChallenge, RewriteActionDisableBlock, RewriteActionDisableSimulate, RewriteActionDisableDisable, RewriteActionDisableDefault:
 		return true
 	}
 	return false
