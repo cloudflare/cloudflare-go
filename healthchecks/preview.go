@@ -102,7 +102,7 @@ type PreviewNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]PreviewNewParamsCheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]CheckRegionItem] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
@@ -112,7 +112,7 @@ type PreviewNewParams struct {
 	// A human-readable description of the health check.
 	Description param.Field[string] `json:"description"`
 	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig param.Field[PreviewNewParamsHTTPConfig] `json:"http_config"`
+	HTTPConfig param.Field[HTTPConfigurationParam] `json:"http_config"`
 	// The interval between each health check. Shorter intervals may give quicker
 	// notifications if the origin status changes, but will increase load on the origin
 	// as we check from multiple locations.
@@ -123,7 +123,7 @@ type PreviewNewParams struct {
 	// If suspended, no health checks are sent to the origin.
 	Suspended param.Field[bool] `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig param.Field[PreviewNewParamsTcpConfig] `json:"tcp_config"`
+	TcpConfig param.Field[TcpConfigurationParam] `json:"tcp_config"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
@@ -133,109 +133,6 @@ type PreviewNewParams struct {
 
 func (r PreviewNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
-// SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
-// and ENTERPRISE customers only).
-type PreviewNewParamsCheckRegion string
-
-const (
-	PreviewNewParamsCheckRegionWnam       PreviewNewParamsCheckRegion = "WNAM"
-	PreviewNewParamsCheckRegionEnam       PreviewNewParamsCheckRegion = "ENAM"
-	PreviewNewParamsCheckRegionWeu        PreviewNewParamsCheckRegion = "WEU"
-	PreviewNewParamsCheckRegionEeu        PreviewNewParamsCheckRegion = "EEU"
-	PreviewNewParamsCheckRegionNsam       PreviewNewParamsCheckRegion = "NSAM"
-	PreviewNewParamsCheckRegionSsam       PreviewNewParamsCheckRegion = "SSAM"
-	PreviewNewParamsCheckRegionOc         PreviewNewParamsCheckRegion = "OC"
-	PreviewNewParamsCheckRegionMe         PreviewNewParamsCheckRegion = "ME"
-	PreviewNewParamsCheckRegionNaf        PreviewNewParamsCheckRegion = "NAF"
-	PreviewNewParamsCheckRegionSaf        PreviewNewParamsCheckRegion = "SAF"
-	PreviewNewParamsCheckRegionIn         PreviewNewParamsCheckRegion = "IN"
-	PreviewNewParamsCheckRegionSeas       PreviewNewParamsCheckRegion = "SEAS"
-	PreviewNewParamsCheckRegionNeas       PreviewNewParamsCheckRegion = "NEAS"
-	PreviewNewParamsCheckRegionAllRegions PreviewNewParamsCheckRegion = "ALL_REGIONS"
-)
-
-func (r PreviewNewParamsCheckRegion) IsKnown() bool {
-	switch r {
-	case PreviewNewParamsCheckRegionWnam, PreviewNewParamsCheckRegionEnam, PreviewNewParamsCheckRegionWeu, PreviewNewParamsCheckRegionEeu, PreviewNewParamsCheckRegionNsam, PreviewNewParamsCheckRegionSsam, PreviewNewParamsCheckRegionOc, PreviewNewParamsCheckRegionMe, PreviewNewParamsCheckRegionNaf, PreviewNewParamsCheckRegionSaf, PreviewNewParamsCheckRegionIn, PreviewNewParamsCheckRegionSeas, PreviewNewParamsCheckRegionNeas, PreviewNewParamsCheckRegionAllRegions:
-		return true
-	}
-	return false
-}
-
-// Parameters specific to an HTTP or HTTPS health check.
-type PreviewNewParamsHTTPConfig struct {
-	// Do not validate the certificate when the health check uses HTTPS.
-	AllowInsecure param.Field[bool] `json:"allow_insecure"`
-	// A case-insensitive sub-string to look for in the response body. If this string
-	// is not found, the origin will be marked as unhealthy.
-	ExpectedBody param.Field[string] `json:"expected_body"`
-	// The expected HTTP response codes (e.g. "200") or code ranges (e.g. "2xx" for all
-	// codes starting with 2) of the health check.
-	ExpectedCodes param.Field[[]string] `json:"expected_codes"`
-	// Follow redirects if the origin returns a 3xx status code.
-	FollowRedirects param.Field[bool] `json:"follow_redirects"`
-	// The HTTP request headers to send in the health check. It is recommended you set
-	// a Host header by default. The User-Agent header cannot be overridden.
-	Header param.Field[interface{}] `json:"header"`
-	// The HTTP method to use for the health check.
-	Method param.Field[PreviewNewParamsHTTPConfigMethod] `json:"method"`
-	// The endpoint path to health check against.
-	Path param.Field[string] `json:"path"`
-	// Port number to connect to for the health check. Defaults to 80 if type is HTTP
-	// or 443 if type is HTTPS.
-	Port param.Field[int64] `json:"port"`
-}
-
-func (r PreviewNewParamsHTTPConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The HTTP method to use for the health check.
-type PreviewNewParamsHTTPConfigMethod string
-
-const (
-	PreviewNewParamsHTTPConfigMethodGet  PreviewNewParamsHTTPConfigMethod = "GET"
-	PreviewNewParamsHTTPConfigMethodHead PreviewNewParamsHTTPConfigMethod = "HEAD"
-)
-
-func (r PreviewNewParamsHTTPConfigMethod) IsKnown() bool {
-	switch r {
-	case PreviewNewParamsHTTPConfigMethodGet, PreviewNewParamsHTTPConfigMethodHead:
-		return true
-	}
-	return false
-}
-
-// Parameters specific to TCP health check.
-type PreviewNewParamsTcpConfig struct {
-	// The TCP connection method to use for the health check.
-	Method param.Field[PreviewNewParamsTcpConfigMethod] `json:"method"`
-	// Port number to connect to for the health check. Defaults to 80.
-	Port param.Field[int64] `json:"port"`
-}
-
-func (r PreviewNewParamsTcpConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The TCP connection method to use for the health check.
-type PreviewNewParamsTcpConfigMethod string
-
-const (
-	PreviewNewParamsTcpConfigMethodConnectionEstablished PreviewNewParamsTcpConfigMethod = "connection_established"
-)
-
-func (r PreviewNewParamsTcpConfigMethod) IsKnown() bool {
-	switch r {
-	case PreviewNewParamsTcpConfigMethodConnectionEstablished:
-		return true
-	}
-	return false
 }
 
 type PreviewNewResponseEnvelope struct {

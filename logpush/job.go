@@ -33,7 +33,7 @@ func NewJobService(opts ...option.RequestOption) (r *JobService) {
 }
 
 // Creates a new Logpush job for an account or zone.
-func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
+func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...option.RequestOption) (res *Job, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobNewResponseEnvelope
 	var accountOrZone string
@@ -55,7 +55,7 @@ func (r *JobService) New(ctx context.Context, params JobNewParams, opts ...optio
 }
 
 // Updates a Logpush job.
-func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
+func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdateParams, opts ...option.RequestOption) (res *Job, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobUpdateResponseEnvelope
 	var accountOrZone string
@@ -77,7 +77,7 @@ func (r *JobService) Update(ctx context.Context, jobID int64, params JobUpdatePa
 }
 
 // Lists Logpush jobs for an account or zone.
-func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LogpushJob], err error) {
+func (r *JobService) List(ctx context.Context, query JobListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Job], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -104,7 +104,7 @@ func (r *JobService) List(ctx context.Context, query JobListParams, opts ...opti
 }
 
 // Lists Logpush jobs for an account or zone.
-func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LogpushJob] {
+func (r *JobService) ListAutoPaging(ctx context.Context, query JobListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Job] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -131,7 +131,7 @@ func (r *JobService) Delete(ctx context.Context, jobID int64, params JobDeletePa
 }
 
 // Gets the details of a Logpush job.
-func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *LogpushJob, err error) {
+func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, opts ...option.RequestOption) (res *Job, err error) {
 	opts = append(r.Options[:], opts...)
 	var env JobGetResponseEnvelope
 	var accountOrZone string
@@ -181,7 +181,7 @@ type JobNewParams struct {
 	Name param.Field[string] `json:"name"`
 	// The structured replacement for `logpull_options`. When including this field, the
 	// `logpull_option` field will be ignored.
-	OutputOptions param.Field[JobNewParamsOutputOptions] `json:"output_options"`
+	OutputOptions param.Field[OutputOptionsParam] `json:"output_options"`
 	// Ownership challenge token to prove destination ownership.
 	OwnershipChallenge param.Field[string] `json:"ownership_challenge"`
 }
@@ -208,89 +208,10 @@ func (r JobNewParamsFrequency) IsKnown() bool {
 	return false
 }
 
-// The structured replacement for `logpull_options`. When including this field, the
-// `logpull_option` field will be ignored.
-type JobNewParamsOutputOptions struct {
-	// String to be prepended before each batch.
-	BatchPrefix param.Field[string] `json:"batch_prefix"`
-	// String to be appended after each batch.
-	BatchSuffix param.Field[string] `json:"batch_suffix"`
-	// If set to true, will cause all occurrences of `${` in the generated files to be
-	// replaced with `x{`.
-	Cve2021_4428 param.Field[bool] `json:"CVE-2021-4428"`
-	// String to join fields. This field be ignored when `record_template` is set.
-	FieldDelimiter param.Field[string] `json:"field_delimiter"`
-	// List of field names to be included in the Logpush output. For the moment, there
-	// is no option to add all fields at once, so you must specify all the fields names
-	// you are interested in.
-	FieldNames param.Field[[]string] `json:"field_names"`
-	// Specifies the output type, such as `ndjson` or `csv`. This sets default values
-	// for the rest of the settings, depending on the chosen output type. Some
-	// formatting rules, like string quoting, are different between output types.
-	OutputType param.Field[JobNewParamsOutputOptionsOutputType] `json:"output_type"`
-	// String to be inserted in-between the records as separator.
-	RecordDelimiter param.Field[string] `json:"record_delimiter"`
-	// String to be prepended before each record.
-	RecordPrefix param.Field[string] `json:"record_prefix"`
-	// String to be appended after each record.
-	RecordSuffix param.Field[string] `json:"record_suffix"`
-	// String to use as template for each record instead of the default comma-separated
-	// list. All fields used in the template must be present in `field_names` as well,
-	// otherwise they will end up as null. Format as a Go `text/template` without any
-	// standard functions, like conditionals, loops, sub-templates, etc.
-	RecordTemplate param.Field[string] `json:"record_template"`
-	// Floating number to specify sampling rate. Sampling is applied on top of
-	// filtering, and regardless of the current `sample_interval` of the data.
-	SampleRate param.Field[float64] `json:"sample_rate"`
-	// String to specify the format for timestamps, such as `unixnano`, `unix`, or
-	// `rfc3339`.
-	TimestampFormat param.Field[JobNewParamsOutputOptionsTimestampFormat] `json:"timestamp_format"`
-}
-
-func (r JobNewParamsOutputOptions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Specifies the output type, such as `ndjson` or `csv`. This sets default values
-// for the rest of the settings, depending on the chosen output type. Some
-// formatting rules, like string quoting, are different between output types.
-type JobNewParamsOutputOptionsOutputType string
-
-const (
-	JobNewParamsOutputOptionsOutputTypeNdjson JobNewParamsOutputOptionsOutputType = "ndjson"
-	JobNewParamsOutputOptionsOutputTypeCsv    JobNewParamsOutputOptionsOutputType = "csv"
-)
-
-func (r JobNewParamsOutputOptionsOutputType) IsKnown() bool {
-	switch r {
-	case JobNewParamsOutputOptionsOutputTypeNdjson, JobNewParamsOutputOptionsOutputTypeCsv:
-		return true
-	}
-	return false
-}
-
-// String to specify the format for timestamps, such as `unixnano`, `unix`, or
-// `rfc3339`.
-type JobNewParamsOutputOptionsTimestampFormat string
-
-const (
-	JobNewParamsOutputOptionsTimestampFormatUnixnano JobNewParamsOutputOptionsTimestampFormat = "unixnano"
-	JobNewParamsOutputOptionsTimestampFormatUnix     JobNewParamsOutputOptionsTimestampFormat = "unix"
-	JobNewParamsOutputOptionsTimestampFormatRfc3339  JobNewParamsOutputOptionsTimestampFormat = "rfc3339"
-)
-
-func (r JobNewParamsOutputOptionsTimestampFormat) IsKnown() bool {
-	switch r {
-	case JobNewParamsOutputOptionsTimestampFormatUnixnano, JobNewParamsOutputOptionsTimestampFormatUnix, JobNewParamsOutputOptionsTimestampFormatRfc3339:
-		return true
-	}
-	return false
-}
-
 type JobNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   LogpushJob                                                `json:"result,required,nullable"`
+	Result   Job                                                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobNewResponseEnvelopeJSON    `json:"-"`
@@ -353,7 +274,7 @@ type JobUpdateParams struct {
 	LogpullOptions param.Field[string] `json:"logpull_options" format:"uri-reference"`
 	// The structured replacement for `logpull_options`. When including this field, the
 	// `logpull_option` field will be ignored.
-	OutputOptions param.Field[JobUpdateParamsOutputOptions] `json:"output_options"`
+	OutputOptions param.Field[OutputOptionsParam] `json:"output_options"`
 	// Ownership challenge token to prove destination ownership.
 	OwnershipChallenge param.Field[string] `json:"ownership_challenge"`
 }
@@ -380,89 +301,10 @@ func (r JobUpdateParamsFrequency) IsKnown() bool {
 	return false
 }
 
-// The structured replacement for `logpull_options`. When including this field, the
-// `logpull_option` field will be ignored.
-type JobUpdateParamsOutputOptions struct {
-	// String to be prepended before each batch.
-	BatchPrefix param.Field[string] `json:"batch_prefix"`
-	// String to be appended after each batch.
-	BatchSuffix param.Field[string] `json:"batch_suffix"`
-	// If set to true, will cause all occurrences of `${` in the generated files to be
-	// replaced with `x{`.
-	Cve2021_4428 param.Field[bool] `json:"CVE-2021-4428"`
-	// String to join fields. This field be ignored when `record_template` is set.
-	FieldDelimiter param.Field[string] `json:"field_delimiter"`
-	// List of field names to be included in the Logpush output. For the moment, there
-	// is no option to add all fields at once, so you must specify all the fields names
-	// you are interested in.
-	FieldNames param.Field[[]string] `json:"field_names"`
-	// Specifies the output type, such as `ndjson` or `csv`. This sets default values
-	// for the rest of the settings, depending on the chosen output type. Some
-	// formatting rules, like string quoting, are different between output types.
-	OutputType param.Field[JobUpdateParamsOutputOptionsOutputType] `json:"output_type"`
-	// String to be inserted in-between the records as separator.
-	RecordDelimiter param.Field[string] `json:"record_delimiter"`
-	// String to be prepended before each record.
-	RecordPrefix param.Field[string] `json:"record_prefix"`
-	// String to be appended after each record.
-	RecordSuffix param.Field[string] `json:"record_suffix"`
-	// String to use as template for each record instead of the default comma-separated
-	// list. All fields used in the template must be present in `field_names` as well,
-	// otherwise they will end up as null. Format as a Go `text/template` without any
-	// standard functions, like conditionals, loops, sub-templates, etc.
-	RecordTemplate param.Field[string] `json:"record_template"`
-	// Floating number to specify sampling rate. Sampling is applied on top of
-	// filtering, and regardless of the current `sample_interval` of the data.
-	SampleRate param.Field[float64] `json:"sample_rate"`
-	// String to specify the format for timestamps, such as `unixnano`, `unix`, or
-	// `rfc3339`.
-	TimestampFormat param.Field[JobUpdateParamsOutputOptionsTimestampFormat] `json:"timestamp_format"`
-}
-
-func (r JobUpdateParamsOutputOptions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Specifies the output type, such as `ndjson` or `csv`. This sets default values
-// for the rest of the settings, depending on the chosen output type. Some
-// formatting rules, like string quoting, are different between output types.
-type JobUpdateParamsOutputOptionsOutputType string
-
-const (
-	JobUpdateParamsOutputOptionsOutputTypeNdjson JobUpdateParamsOutputOptionsOutputType = "ndjson"
-	JobUpdateParamsOutputOptionsOutputTypeCsv    JobUpdateParamsOutputOptionsOutputType = "csv"
-)
-
-func (r JobUpdateParamsOutputOptionsOutputType) IsKnown() bool {
-	switch r {
-	case JobUpdateParamsOutputOptionsOutputTypeNdjson, JobUpdateParamsOutputOptionsOutputTypeCsv:
-		return true
-	}
-	return false
-}
-
-// String to specify the format for timestamps, such as `unixnano`, `unix`, or
-// `rfc3339`.
-type JobUpdateParamsOutputOptionsTimestampFormat string
-
-const (
-	JobUpdateParamsOutputOptionsTimestampFormatUnixnano JobUpdateParamsOutputOptionsTimestampFormat = "unixnano"
-	JobUpdateParamsOutputOptionsTimestampFormatUnix     JobUpdateParamsOutputOptionsTimestampFormat = "unix"
-	JobUpdateParamsOutputOptionsTimestampFormatRfc3339  JobUpdateParamsOutputOptionsTimestampFormat = "rfc3339"
-)
-
-func (r JobUpdateParamsOutputOptionsTimestampFormat) IsKnown() bool {
-	switch r {
-	case JobUpdateParamsOutputOptionsTimestampFormatUnixnano, JobUpdateParamsOutputOptionsTimestampFormatUnix, JobUpdateParamsOutputOptionsTimestampFormatRfc3339:
-		return true
-	}
-	return false
-}
-
 type JobUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   LogpushJob                                                `json:"result,required,nullable"`
+	Result   Job                                                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobUpdateResponseEnvelopeJSON    `json:"-"`
@@ -574,7 +416,7 @@ type JobGetParams struct {
 type JobGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   LogpushJob                                                `json:"result,required,nullable"`
+	Result   Job                                                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobGetResponseEnvelopeJSON    `json:"-"`

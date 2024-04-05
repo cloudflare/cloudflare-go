@@ -58,6 +58,29 @@ func (r *DEXFleetStatusService) OverTime(ctx context.Context, params DEXFleetSta
 	return
 }
 
+type LiveStat struct {
+	// Number of unique devices
+	UniqueDevicesTotal float64      `json:"uniqueDevicesTotal"`
+	Value              string       `json:"value"`
+	JSON               liveStatJSON `json:"-"`
+}
+
+// liveStatJSON contains the JSON metadata for the struct [LiveStat]
+type liveStatJSON struct {
+	UniqueDevicesTotal apijson.Field
+	Value              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *LiveStat) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r liveStatJSON) RawJSON() string {
+	return r.raw
+}
+
 type DEXFleetStatusLiveResponse struct {
 	DeviceStats DEXFleetStatusLiveResponseDeviceStats `json:"deviceStats"`
 	JSON        dexFleetStatusLiveResponseJSON        `json:"-"`
@@ -80,11 +103,11 @@ func (r dexFleetStatusLiveResponseJSON) RawJSON() string {
 }
 
 type DEXFleetStatusLiveResponseDeviceStats struct {
-	ByColo     []DEXFleetStatusLiveResponseDeviceStatsByColo     `json:"byColo,nullable"`
-	ByMode     []DEXFleetStatusLiveResponseDeviceStatsByMode     `json:"byMode,nullable"`
-	ByPlatform []DEXFleetStatusLiveResponseDeviceStatsByPlatform `json:"byPlatform,nullable"`
-	ByStatus   []DEXFleetStatusLiveResponseDeviceStatsByStatus   `json:"byStatus,nullable"`
-	ByVersion  []DEXFleetStatusLiveResponseDeviceStatsByVersion  `json:"byVersion,nullable"`
+	ByColo     []LiveStat `json:"byColo,nullable"`
+	ByMode     []LiveStat `json:"byMode,nullable"`
+	ByPlatform []LiveStat `json:"byPlatform,nullable"`
+	ByStatus   []LiveStat `json:"byStatus,nullable"`
+	ByVersion  []LiveStat `json:"byVersion,nullable"`
 	// Number of unique devices
 	UniqueDevicesTotal float64                                   `json:"uniqueDevicesTotal"`
 	JSON               dexFleetStatusLiveResponseDeviceStatsJSON `json:"-"`
@@ -108,126 +131,6 @@ func (r *DEXFleetStatusLiveResponseDeviceStats) UnmarshalJSON(data []byte) (err 
 }
 
 func (r dexFleetStatusLiveResponseDeviceStatsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXFleetStatusLiveResponseDeviceStatsByColo struct {
-	// Number of unique devices
-	UniqueDevicesTotal float64                                         `json:"uniqueDevicesTotal"`
-	Value              string                                          `json:"value"`
-	JSON               dexFleetStatusLiveResponseDeviceStatsByColoJSON `json:"-"`
-}
-
-// dexFleetStatusLiveResponseDeviceStatsByColoJSON contains the JSON metadata for
-// the struct [DEXFleetStatusLiveResponseDeviceStatsByColo]
-type dexFleetStatusLiveResponseDeviceStatsByColoJSON struct {
-	UniqueDevicesTotal apijson.Field
-	Value              apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *DEXFleetStatusLiveResponseDeviceStatsByColo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexFleetStatusLiveResponseDeviceStatsByColoJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXFleetStatusLiveResponseDeviceStatsByMode struct {
-	// Number of unique devices
-	UniqueDevicesTotal float64                                         `json:"uniqueDevicesTotal"`
-	Value              string                                          `json:"value"`
-	JSON               dexFleetStatusLiveResponseDeviceStatsByModeJSON `json:"-"`
-}
-
-// dexFleetStatusLiveResponseDeviceStatsByModeJSON contains the JSON metadata for
-// the struct [DEXFleetStatusLiveResponseDeviceStatsByMode]
-type dexFleetStatusLiveResponseDeviceStatsByModeJSON struct {
-	UniqueDevicesTotal apijson.Field
-	Value              apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *DEXFleetStatusLiveResponseDeviceStatsByMode) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexFleetStatusLiveResponseDeviceStatsByModeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXFleetStatusLiveResponseDeviceStatsByPlatform struct {
-	// Number of unique devices
-	UniqueDevicesTotal float64                                             `json:"uniqueDevicesTotal"`
-	Value              string                                              `json:"value"`
-	JSON               dexFleetStatusLiveResponseDeviceStatsByPlatformJSON `json:"-"`
-}
-
-// dexFleetStatusLiveResponseDeviceStatsByPlatformJSON contains the JSON metadata
-// for the struct [DEXFleetStatusLiveResponseDeviceStatsByPlatform]
-type dexFleetStatusLiveResponseDeviceStatsByPlatformJSON struct {
-	UniqueDevicesTotal apijson.Field
-	Value              apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *DEXFleetStatusLiveResponseDeviceStatsByPlatform) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexFleetStatusLiveResponseDeviceStatsByPlatformJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXFleetStatusLiveResponseDeviceStatsByStatus struct {
-	// Number of unique devices
-	UniqueDevicesTotal float64                                           `json:"uniqueDevicesTotal"`
-	Value              string                                            `json:"value"`
-	JSON               dexFleetStatusLiveResponseDeviceStatsByStatusJSON `json:"-"`
-}
-
-// dexFleetStatusLiveResponseDeviceStatsByStatusJSON contains the JSON metadata for
-// the struct [DEXFleetStatusLiveResponseDeviceStatsByStatus]
-type dexFleetStatusLiveResponseDeviceStatsByStatusJSON struct {
-	UniqueDevicesTotal apijson.Field
-	Value              apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *DEXFleetStatusLiveResponseDeviceStatsByStatus) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexFleetStatusLiveResponseDeviceStatsByStatusJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXFleetStatusLiveResponseDeviceStatsByVersion struct {
-	// Number of unique devices
-	UniqueDevicesTotal float64                                            `json:"uniqueDevicesTotal"`
-	Value              string                                             `json:"value"`
-	JSON               dexFleetStatusLiveResponseDeviceStatsByVersionJSON `json:"-"`
-}
-
-// dexFleetStatusLiveResponseDeviceStatsByVersionJSON contains the JSON metadata
-// for the struct [DEXFleetStatusLiveResponseDeviceStatsByVersion]
-type dexFleetStatusLiveResponseDeviceStatsByVersionJSON struct {
-	UniqueDevicesTotal apijson.Field
-	Value              apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *DEXFleetStatusLiveResponseDeviceStatsByVersion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexFleetStatusLiveResponseDeviceStatsByVersionJSON) RawJSON() string {
 	return r.raw
 }
 

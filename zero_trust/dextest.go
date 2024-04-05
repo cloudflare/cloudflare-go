@@ -59,43 +59,81 @@ func (r *DEXTestService) ListAutoPaging(ctx context.Context, params DEXTestListP
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
-type DigitalExperienceMonitoringTests struct {
-	OverviewMetrics DigitalExperienceMonitoringTestsOverviewMetrics `json:"overviewMetrics,required"`
-	// array of test results objects.
-	Tests []DigitalExperienceMonitoringTestsTest `json:"tests,required"`
-	JSON  digitalExperienceMonitoringTestsJSON   `json:"-"`
+type AggregateTimePeriod struct {
+	Units AggregateTimePeriodUnits `json:"units,required"`
+	Value int64                    `json:"value,required"`
+	JSON  aggregateTimePeriodJSON  `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsJSON contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTests]
-type digitalExperienceMonitoringTestsJSON struct {
+// aggregateTimePeriodJSON contains the JSON metadata for the struct
+// [AggregateTimePeriod]
+type aggregateTimePeriodJSON struct {
+	Units       apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AggregateTimePeriod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aggregateTimePeriodJSON) RawJSON() string {
+	return r.raw
+}
+
+type AggregateTimePeriodUnits string
+
+const (
+	AggregateTimePeriodUnitsHours    AggregateTimePeriodUnits = "hours"
+	AggregateTimePeriodUnitsDays     AggregateTimePeriodUnits = "days"
+	AggregateTimePeriodUnitsTestRuns AggregateTimePeriodUnits = "testRuns"
+)
+
+func (r AggregateTimePeriodUnits) IsKnown() bool {
+	switch r {
+	case AggregateTimePeriodUnitsHours, AggregateTimePeriodUnitsDays, AggregateTimePeriodUnitsTestRuns:
+		return true
+	}
+	return false
+}
+
+type Tests struct {
+	OverviewMetrics TestsOverviewMetrics `json:"overviewMetrics,required"`
+	// array of test results objects.
+	Tests []TestsTest `json:"tests,required"`
+	JSON  testsJSON   `json:"-"`
+}
+
+// testsJSON contains the JSON metadata for the struct [Tests]
+type testsJSON struct {
 	OverviewMetrics apijson.Field
 	Tests           apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTests) UnmarshalJSON(data []byte) (err error) {
+func (r *Tests) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsJSON) RawJSON() string {
+func (r testsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsOverviewMetrics struct {
+type TestsOverviewMetrics struct {
 	// number of tests.
 	TestsTotal int64 `json:"testsTotal,required"`
 	// percentage availability for all HTTP test results in response
 	AvgHTTPAvailabilityPct float64 `json:"avgHttpAvailabilityPct,nullable"`
 	// percentage availability for all traceroutes results in response
-	AvgTracerouteAvailabilityPct float64                                             `json:"avgTracerouteAvailabilityPct,nullable"`
-	JSON                         digitalExperienceMonitoringTestsOverviewMetricsJSON `json:"-"`
+	AvgTracerouteAvailabilityPct float64                  `json:"avgTracerouteAvailabilityPct,nullable"`
+	JSON                         testsOverviewMetricsJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsOverviewMetricsJSON contains the JSON metadata
-// for the struct [DigitalExperienceMonitoringTestsOverviewMetrics]
-type digitalExperienceMonitoringTestsOverviewMetricsJSON struct {
+// testsOverviewMetricsJSON contains the JSON metadata for the struct
+// [TestsOverviewMetrics]
+type testsOverviewMetricsJSON struct {
 	TestsTotal                   apijson.Field
 	AvgHTTPAvailabilityPct       apijson.Field
 	AvgTracerouteAvailabilityPct apijson.Field
@@ -103,15 +141,15 @@ type digitalExperienceMonitoringTestsOverviewMetricsJSON struct {
 	ExtraFields                  map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsOverviewMetrics) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsOverviewMetrics) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsOverviewMetricsJSON) RawJSON() string {
+func (r testsOverviewMetricsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTest struct {
+type TestsTest struct {
 	// API Resource UUID tag.
 	ID string `json:"id,required"`
 	// date the test was created.
@@ -125,24 +163,23 @@ type DigitalExperienceMonitoringTestsTest struct {
 	// The interval at which the synthetic application test is set to run.
 	Interval string `json:"interval,required"`
 	// test type, http or traceroute
-	Kind DigitalExperienceMonitoringTestsTestsKind `json:"kind,required"`
+	Kind TestsTestsKind `json:"kind,required"`
 	// name given to this test
-	Name              string                                                   `json:"name,required"`
-	Updated           string                                                   `json:"updated,required"`
-	HTTPResults       DigitalExperienceMonitoringTestsTestsHTTPResults         `json:"httpResults,nullable"`
-	HTTPResultsByColo []DigitalExperienceMonitoringTestsTestsHTTPResultsByColo `json:"httpResultsByColo"`
+	Name              string                        `json:"name,required"`
+	Updated           string                        `json:"updated,required"`
+	HTTPResults       TestsTestsHTTPResults         `json:"httpResults,nullable"`
+	HTTPResultsByColo []TestsTestsHTTPResultsByColo `json:"httpResultsByColo"`
 	// for HTTP, the method to use when running the test
-	Method                  string                                                         `json:"method"`
-	TargetPolicies          []UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11             `json:"target_policies"`
-	Targeted                bool                                                           `json:"targeted"`
-	TracerouteResults       DigitalExperienceMonitoringTestsTestsTracerouteResults         `json:"tracerouteResults,nullable"`
-	TracerouteResultsByColo []DigitalExperienceMonitoringTestsTestsTracerouteResultsByColo `json:"tracerouteResultsByColo"`
-	JSON                    digitalExperienceMonitoringTestsTestJSON                       `json:"-"`
+	Method                  string                                             `json:"method"`
+	TargetPolicies          []UnnamedSchemaRefBf9e2abcf1b78a6cab8e6e29e2228a11 `json:"target_policies"`
+	Targeted                bool                                               `json:"targeted"`
+	TracerouteResults       TestsTestsTracerouteResults                        `json:"tracerouteResults,nullable"`
+	TracerouteResultsByColo []TestsTestsTracerouteResultsByColo                `json:"tracerouteResultsByColo"`
+	JSON                    testsTestJSON                                      `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestJSON contains the JSON metadata for the
-// struct [DigitalExperienceMonitoringTestsTest]
-type digitalExperienceMonitoringTestsTestJSON struct {
+// testsTestJSON contains the JSON metadata for the struct [TestsTest]
+type testsTestJSON struct {
 	ID                      apijson.Field
 	Created                 apijson.Field
 	Description             apijson.Field
@@ -163,62 +200,61 @@ type digitalExperienceMonitoringTestsTestJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTest) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestJSON) RawJSON() string {
+func (r testsTestJSON) RawJSON() string {
 	return r.raw
 }
 
 // test type, http or traceroute
-type DigitalExperienceMonitoringTestsTestsKind string
+type TestsTestsKind string
 
 const (
-	DigitalExperienceMonitoringTestsTestsKindHTTP       DigitalExperienceMonitoringTestsTestsKind = "http"
-	DigitalExperienceMonitoringTestsTestsKindTraceroute DigitalExperienceMonitoringTestsTestsKind = "traceroute"
+	TestsTestsKindHTTP       TestsTestsKind = "http"
+	TestsTestsKindTraceroute TestsTestsKind = "traceroute"
 )
 
-func (r DigitalExperienceMonitoringTestsTestsKind) IsKnown() bool {
+func (r TestsTestsKind) IsKnown() bool {
 	switch r {
-	case DigitalExperienceMonitoringTestsTestsKindHTTP, DigitalExperienceMonitoringTestsTestsKindTraceroute:
+	case TestsTestsKindHTTP, TestsTestsKindTraceroute:
 		return true
 	}
 	return false
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResults struct {
-	ResourceFetchTime DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTime `json:"resourceFetchTime,required"`
-	JSON              digitalExperienceMonitoringTestsTestsHTTPResultsJSON              `json:"-"`
+type TestsTestsHTTPResults struct {
+	ResourceFetchTime TestsTestsHTTPResultsResourceFetchTime `json:"resourceFetchTime,required"`
+	JSON              testsTestsHTTPResultsJSON              `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsJSON contains the JSON metadata
-// for the struct [DigitalExperienceMonitoringTestsTestsHTTPResults]
-type digitalExperienceMonitoringTestsTestsHTTPResultsJSON struct {
+// testsTestsHTTPResultsJSON contains the JSON metadata for the struct
+// [TestsTestsHTTPResults]
+type testsTestsHTTPResultsJSON struct {
 	ResourceFetchTime apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResults) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResults) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsJSON) RawJSON() string {
+func (r testsTestsHTTPResultsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTime struct {
-	History  []DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistory `json:"history,required"`
-	AvgMs    int64                                                                      `json:"avgMs,nullable"`
-	OverTime DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTime  `json:"overTime,nullable"`
-	JSON     digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeJSON      `json:"-"`
+type TestsTestsHTTPResultsResourceFetchTime struct {
+	History  []TestsTestsHTTPResultsResourceFetchTimeHistory `json:"history,required"`
+	AvgMs    int64                                           `json:"avgMs,nullable"`
+	OverTime TestsTestsHTTPResultsResourceFetchTimeOverTime  `json:"overTime,nullable"`
+	JSON     testsTestsHTTPResultsResourceFetchTimeJSON      `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeJSON contains
-// the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTime]
-type digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeJSON struct {
+// testsTestsHTTPResultsResourceFetchTimeJSON contains the JSON metadata for the
+// struct [TestsTestsHTTPResultsResourceFetchTime]
+type testsTestsHTTPResultsResourceFetchTimeJSON struct {
 	History     apijson.Field
 	AvgMs       apijson.Field
 	OverTime    apijson.Field
@@ -226,25 +262,24 @@ type digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeJSON struc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTime) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResultsResourceFetchTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeJSON) RawJSON() string {
+func (r testsTestsHTTPResultsResourceFetchTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistory struct {
-	TimePeriod DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriod `json:"timePeriod,required"`
-	AvgMs      int64                                                                              `json:"avgMs,nullable"`
-	DeltaPct   float64                                                                            `json:"deltaPct,nullable"`
-	JSON       digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryJSON       `json:"-"`
+type TestsTestsHTTPResultsResourceFetchTimeHistory struct {
+	TimePeriod AggregateTimePeriod                               `json:"timePeriod,required"`
+	AvgMs      int64                                             `json:"avgMs,nullable"`
+	DeltaPct   float64                                           `json:"deltaPct,nullable"`
+	JSON       testsTestsHTTPResultsResourceFetchTimeHistoryJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistory]
-type digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryJSON struct {
+// testsTestsHTTPResultsResourceFetchTimeHistoryJSON contains the JSON metadata for
+// the struct [TestsTestsHTTPResultsResourceFetchTimeHistory]
+type testsTestsHTTPResultsResourceFetchTimeHistoryJSON struct {
 	TimePeriod  apijson.Field
 	AvgMs       apijson.Field
 	DeltaPct    apijson.Field
@@ -252,177 +287,94 @@ type digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryJSO
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResultsResourceFetchTimeHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryJSON) RawJSON() string {
+func (r testsTestsHTTPResultsResourceFetchTimeHistoryJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriod struct {
-	Units DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits `json:"units,required"`
-	Value int64                                                                                   `json:"value,required"`
-	JSON  digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodJSON  `json:"-"`
+type TestsTestsHTTPResultsResourceFetchTimeOverTime struct {
+	TimePeriod AggregateTimePeriod                                   `json:"timePeriod,required"`
+	Values     []TestsTestsHTTPResultsResourceFetchTimeOverTimeValue `json:"values,required"`
+	JSON       testsTestsHTTPResultsResourceFetchTimeOverTimeJSON    `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriod]
-type digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodJSON struct {
-	Units       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits string
-
-const (
-	DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsHours    DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "hours"
-	DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "days"
-	DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "testRuns"
-)
-
-func (r DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits) IsKnown() bool {
-	switch r {
-	case DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsTestRuns:
-		return true
-	}
-	return false
-}
-
-type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTime struct {
-	TimePeriod DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod `json:"timePeriod,required"`
-	Values     []DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValue    `json:"values,required"`
-	JSON       digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeJSON       `json:"-"`
-}
-
-// digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTime]
-type digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeJSON struct {
+// testsTestsHTTPResultsResourceFetchTimeOverTimeJSON contains the JSON metadata
+// for the struct [TestsTestsHTTPResultsResourceFetchTimeOverTime]
+type testsTestsHTTPResultsResourceFetchTimeOverTimeJSON struct {
 	TimePeriod  apijson.Field
 	Values      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTime) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResultsResourceFetchTimeOverTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeJSON) RawJSON() string {
+func (r testsTestsHTTPResultsResourceFetchTimeOverTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod struct {
-	Units DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits `json:"units,required"`
-	Value int64                                                                                    `json:"value,required"`
-	JSON  digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodJSON  `json:"-"`
+type TestsTestsHTTPResultsResourceFetchTimeOverTimeValue struct {
+	AvgMs     int64                                                   `json:"avgMs,required"`
+	Timestamp string                                                  `json:"timestamp,required"`
+	JSON      testsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod]
-type digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodJSON struct {
-	Units       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits string
-
-const (
-	DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsHours    DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "hours"
-	DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "days"
-	DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "testRuns"
-)
-
-func (r DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits) IsKnown() bool {
-	switch r {
-	case DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsTestRuns:
-		return true
-	}
-	return false
-}
-
-type DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValue struct {
-	AvgMs     int64                                                                              `json:"avgMs,required"`
-	Timestamp string                                                                             `json:"timestamp,required"`
-	JSON      digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValue]
-type digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON struct {
+// testsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON contains the JSON
+// metadata for the struct [TestsTestsHTTPResultsResourceFetchTimeOverTimeValue]
+type testsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON struct {
 	AvgMs       apijson.Field
 	Timestamp   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResultsResourceFetchTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON) RawJSON() string {
+func (r testsTestsHTTPResultsResourceFetchTimeOverTimeValueJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResultsByColo struct {
+type TestsTestsHTTPResultsByColo struct {
 	// Cloudflare colo
-	Colo              string                                                                  `json:"colo,required"`
-	ResourceFetchTime DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTime `json:"resourceFetchTime,required"`
-	JSON              digitalExperienceMonitoringTestsTestsHTTPResultsByColoJSON              `json:"-"`
+	Colo              string                                       `json:"colo,required"`
+	ResourceFetchTime TestsTestsHTTPResultsByColoResourceFetchTime `json:"resourceFetchTime,required"`
+	JSON              testsTestsHTTPResultsByColoJSON              `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsByColoJSON contains the JSON
-// metadata for the struct [DigitalExperienceMonitoringTestsTestsHTTPResultsByColo]
-type digitalExperienceMonitoringTestsTestsHTTPResultsByColoJSON struct {
+// testsTestsHTTPResultsByColoJSON contains the JSON metadata for the struct
+// [TestsTestsHTTPResultsByColo]
+type testsTestsHTTPResultsByColoJSON struct {
 	Colo              apijson.Field
 	ResourceFetchTime apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsByColo) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResultsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsByColoJSON) RawJSON() string {
+func (r testsTestsHTTPResultsByColoJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTime struct {
-	History  []DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistory `json:"history,required"`
-	AvgMs    int64                                                                            `json:"avgMs,nullable"`
-	OverTime DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTime  `json:"overTime,nullable"`
-	JSON     digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeJSON      `json:"-"`
+type TestsTestsHTTPResultsByColoResourceFetchTime struct {
+	History  []TestsTestsHTTPResultsByColoResourceFetchTimeHistory `json:"history,required"`
+	AvgMs    int64                                                 `json:"avgMs,nullable"`
+	OverTime TestsTestsHTTPResultsByColoResourceFetchTimeOverTime  `json:"overTime,nullable"`
+	JSON     testsTestsHTTPResultsByColoResourceFetchTimeJSON      `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTime]
-type digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeJSON struct {
+// testsTestsHTTPResultsByColoResourceFetchTimeJSON contains the JSON metadata for
+// the struct [TestsTestsHTTPResultsByColoResourceFetchTime]
+type testsTestsHTTPResultsByColoResourceFetchTimeJSON struct {
 	History     apijson.Field
 	AvgMs       apijson.Field
 	OverTime    apijson.Field
@@ -430,25 +382,24 @@ type digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTime) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResultsByColoResourceFetchTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeJSON) RawJSON() string {
+func (r testsTestsHTTPResultsByColoResourceFetchTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistory struct {
-	TimePeriod DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod `json:"timePeriod,required"`
-	AvgMs      int64                                                                                    `json:"avgMs,nullable"`
-	DeltaPct   float64                                                                                  `json:"deltaPct,nullable"`
-	JSON       digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON       `json:"-"`
+type TestsTestsHTTPResultsByColoResourceFetchTimeHistory struct {
+	TimePeriod AggregateTimePeriod                                     `json:"timePeriod,required"`
+	AvgMs      int64                                                   `json:"avgMs,nullable"`
+	DeltaPct   float64                                                 `json:"deltaPct,nullable"`
+	JSON       testsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistory]
-type digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON struct {
+// testsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON contains the JSON
+// metadata for the struct [TestsTestsHTTPResultsByColoResourceFetchTimeHistory]
+type testsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON struct {
 	TimePeriod  apijson.Field
 	AvgMs       apijson.Field
 	DeltaPct    apijson.Field
@@ -456,174 +407,92 @@ type digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHist
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResultsByColoResourceFetchTimeHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON) RawJSON() string {
+func (r testsTestsHTTPResultsByColoResourceFetchTimeHistoryJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod struct {
-	Units DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits `json:"units,required"`
-	Value int64                                                                                         `json:"value,required"`
-	JSON  digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodJSON  `json:"-"`
+type TestsTestsHTTPResultsByColoResourceFetchTimeOverTime struct {
+	TimePeriod AggregateTimePeriod                                         `json:"timePeriod,required"`
+	Values     []TestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue `json:"values,required"`
+	JSON       testsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON    `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod]
-type digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodJSON struct {
-	Units       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits string
-
-const (
-	DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsHours    DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "hours"
-	DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "days"
-	DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "testRuns"
-)
-
-func (r DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits) IsKnown() bool {
-	switch r {
-	case DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsTestRuns:
-		return true
-	}
-	return false
-}
-
-type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTime struct {
-	TimePeriod DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod `json:"timePeriod,required"`
-	Values     []DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue    `json:"values,required"`
-	JSON       digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON       `json:"-"`
-}
-
-// digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTime]
-type digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON struct {
+// testsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON contains the JSON
+// metadata for the struct [TestsTestsHTTPResultsByColoResourceFetchTimeOverTime]
+type testsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON struct {
 	TimePeriod  apijson.Field
 	Values      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTime) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResultsByColoResourceFetchTimeOverTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON) RawJSON() string {
+func (r testsTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod struct {
-	Units DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits `json:"units,required"`
-	Value int64                                                                                          `json:"value,required"`
-	JSON  digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodJSON  `json:"-"`
+type TestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue struct {
+	AvgMs     int64                                                         `json:"avgMs,required"`
+	Timestamp string                                                        `json:"timestamp,required"`
+	JSON      testsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod]
-type digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodJSON struct {
-	Units       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits string
-
-const (
-	DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsHours    DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "hours"
-	DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "days"
-	DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "testRuns"
-)
-
-func (r DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits) IsKnown() bool {
-	switch r {
-	case DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsTestRuns:
-		return true
-	}
-	return false
-}
-
-type DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue struct {
-	AvgMs     int64                                                                                    `json:"avgMs,required"`
-	Timestamp string                                                                                   `json:"timestamp,required"`
-	JSON      digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue]
-type digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON struct {
+// testsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON contains the JSON
+// metadata for the struct
+// [TestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue]
+type testsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON struct {
 	AvgMs       apijson.Field
 	Timestamp   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON) RawJSON() string {
+func (r testsTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResults struct {
-	RoundTripTime DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTime `json:"roundTripTime,required"`
-	JSON          digitalExperienceMonitoringTestsTestsTracerouteResultsJSON          `json:"-"`
+type TestsTestsTracerouteResults struct {
+	RoundTripTime TestsTestsTracerouteResultsRoundTripTime `json:"roundTripTime,required"`
+	JSON          testsTestsTracerouteResultsJSON          `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsJSON contains the JSON
-// metadata for the struct [DigitalExperienceMonitoringTestsTestsTracerouteResults]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsJSON struct {
+// testsTestsTracerouteResultsJSON contains the JSON metadata for the struct
+// [TestsTestsTracerouteResults]
+type testsTestsTracerouteResultsJSON struct {
 	RoundTripTime apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResults) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResults) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTime struct {
-	History  []DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistory `json:"history,required"`
-	AvgMs    int64                                                                        `json:"avgMs,nullable"`
-	OverTime DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTime  `json:"overTime,nullable"`
-	JSON     digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeJSON      `json:"-"`
+type TestsTestsTracerouteResultsRoundTripTime struct {
+	History  []TestsTestsTracerouteResultsRoundTripTimeHistory `json:"history,required"`
+	AvgMs    int64                                             `json:"avgMs,nullable"`
+	OverTime TestsTestsTracerouteResultsRoundTripTimeOverTime  `json:"overTime,nullable"`
+	JSON     testsTestsTracerouteResultsRoundTripTimeJSON      `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeJSON contains
-// the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTime]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeJSON struct {
+// testsTestsTracerouteResultsRoundTripTimeJSON contains the JSON metadata for the
+// struct [TestsTestsTracerouteResultsRoundTripTime]
+type testsTestsTracerouteResultsRoundTripTimeJSON struct {
 	History     apijson.Field
 	AvgMs       apijson.Field
 	OverTime    apijson.Field
@@ -631,25 +500,24 @@ type digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeJSON str
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTime) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResultsRoundTripTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsRoundTripTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistory struct {
-	TimePeriod DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriod `json:"timePeriod,required"`
-	AvgMs      int64                                                                                `json:"avgMs,nullable"`
-	DeltaPct   float64                                                                              `json:"deltaPct,nullable"`
-	JSON       digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryJSON       `json:"-"`
+type TestsTestsTracerouteResultsRoundTripTimeHistory struct {
+	TimePeriod AggregateTimePeriod                                 `json:"timePeriod,required"`
+	AvgMs      int64                                               `json:"avgMs,nullable"`
+	DeltaPct   float64                                             `json:"deltaPct,nullable"`
+	JSON       testsTestsTracerouteResultsRoundTripTimeHistoryJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistory]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryJSON struct {
+// testsTestsTracerouteResultsRoundTripTimeHistoryJSON contains the JSON metadata
+// for the struct [TestsTestsTracerouteResultsRoundTripTimeHistory]
+type testsTestsTracerouteResultsRoundTripTimeHistoryJSON struct {
 	TimePeriod  apijson.Field
 	AvgMs       apijson.Field
 	DeltaPct    apijson.Field
@@ -657,178 +525,94 @@ type digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResultsRoundTripTimeHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsRoundTripTimeHistoryJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriod struct {
-	Units DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits `json:"units,required"`
-	Value int64                                                                                     `json:"value,required"`
-	JSON  digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodJSON  `json:"-"`
+type TestsTestsTracerouteResultsRoundTripTimeOverTime struct {
+	TimePeriod AggregateTimePeriod                                     `json:"timePeriod,required"`
+	Values     []TestsTestsTracerouteResultsRoundTripTimeOverTimeValue `json:"values,required"`
+	JSON       testsTestsTracerouteResultsRoundTripTimeOverTimeJSON    `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriod]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodJSON struct {
-	Units       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits string
-
-const (
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsHours    DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "hours"
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "days"
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "testRuns"
-)
-
-func (r DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits) IsKnown() bool {
-	switch r {
-	case DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsTestRuns:
-		return true
-	}
-	return false
-}
-
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTime struct {
-	TimePeriod DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod `json:"timePeriod,required"`
-	Values     []DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValue    `json:"values,required"`
-	JSON       digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeJSON       `json:"-"`
-}
-
-// digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTime]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeJSON struct {
+// testsTestsTracerouteResultsRoundTripTimeOverTimeJSON contains the JSON metadata
+// for the struct [TestsTestsTracerouteResultsRoundTripTimeOverTime]
+type testsTestsTracerouteResultsRoundTripTimeOverTimeJSON struct {
 	TimePeriod  apijson.Field
 	Values      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTime) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResultsRoundTripTimeOverTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsRoundTripTimeOverTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod struct {
-	Units DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits `json:"units,required"`
-	Value int64                                                                                      `json:"value,required"`
-	JSON  digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodJSON  `json:"-"`
+type TestsTestsTracerouteResultsRoundTripTimeOverTimeValue struct {
+	AvgMs     int64                                                     `json:"avgMs,required"`
+	Timestamp string                                                    `json:"timestamp,required"`
+	JSON      testsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodJSON struct {
-	Units       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits string
-
-const (
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsHours    DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "hours"
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "days"
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "testRuns"
-)
-
-func (r DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits) IsKnown() bool {
-	switch r {
-	case DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsTestRuns:
-		return true
-	}
-	return false
-}
-
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValue struct {
-	AvgMs     int64                                                                                `json:"avgMs,required"`
-	Timestamp string                                                                               `json:"timestamp,required"`
-	JSON      digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValue]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON struct {
+// testsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON contains the JSON
+// metadata for the struct [TestsTestsTracerouteResultsRoundTripTimeOverTimeValue]
+type testsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON struct {
 	AvgMs       apijson.Field
 	Timestamp   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResultsRoundTripTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsRoundTripTimeOverTimeValueJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColo struct {
+type TestsTestsTracerouteResultsByColo struct {
 	// Cloudflare colo
-	Colo          string                                                                    `json:"colo,required"`
-	RoundTripTime DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTime `json:"roundTripTime,required"`
-	JSON          digitalExperienceMonitoringTestsTestsTracerouteResultsByColoJSON          `json:"-"`
+	Colo          string                                         `json:"colo,required"`
+	RoundTripTime TestsTestsTracerouteResultsByColoRoundTripTime `json:"roundTripTime,required"`
+	JSON          testsTestsTracerouteResultsByColoJSON          `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsByColoJSON contains the
-// JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsByColo]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsByColoJSON struct {
+// testsTestsTracerouteResultsByColoJSON contains the JSON metadata for the struct
+// [TestsTestsTracerouteResultsByColo]
+type testsTestsTracerouteResultsByColoJSON struct {
 	Colo          apijson.Field
 	RoundTripTime apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsByColo) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResultsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsByColoJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsByColoJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTime struct {
-	History  []DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistory `json:"history,required"`
-	AvgMs    int64                                                                              `json:"avgMs,nullable"`
-	OverTime DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTime  `json:"overTime,nullable"`
-	JSON     digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeJSON      `json:"-"`
+type TestsTestsTracerouteResultsByColoRoundTripTime struct {
+	History  []TestsTestsTracerouteResultsByColoRoundTripTimeHistory `json:"history,required"`
+	AvgMs    int64                                                   `json:"avgMs,nullable"`
+	OverTime TestsTestsTracerouteResultsByColoRoundTripTimeOverTime  `json:"overTime,nullable"`
+	JSON     testsTestsTracerouteResultsByColoRoundTripTimeJSON      `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTime]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeJSON struct {
+// testsTestsTracerouteResultsByColoRoundTripTimeJSON contains the JSON metadata
+// for the struct [TestsTestsTracerouteResultsByColoRoundTripTime]
+type testsTestsTracerouteResultsByColoRoundTripTimeJSON struct {
 	History     apijson.Field
 	AvgMs       apijson.Field
 	OverTime    apijson.Field
@@ -836,25 +620,24 @@ type digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeJS
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTime) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResultsByColoRoundTripTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsByColoRoundTripTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistory struct {
-	TimePeriod DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod `json:"timePeriod,required"`
-	AvgMs      int64                                                                                      `json:"avgMs,nullable"`
-	DeltaPct   float64                                                                                    `json:"deltaPct,nullable"`
-	JSON       digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON       `json:"-"`
+type TestsTestsTracerouteResultsByColoRoundTripTimeHistory struct {
+	TimePeriod AggregateTimePeriod                                       `json:"timePeriod,required"`
+	AvgMs      int64                                                     `json:"avgMs,nullable"`
+	DeltaPct   float64                                                   `json:"deltaPct,nullable"`
+	JSON       testsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistory]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON struct {
+// testsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON contains the JSON
+// metadata for the struct [TestsTestsTracerouteResultsByColoRoundTripTimeHistory]
+type testsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON struct {
 	TimePeriod  apijson.Field
 	AvgMs       apijson.Field
 	DeltaPct    apijson.Field
@@ -862,146 +645,65 @@ type digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHi
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResultsByColoRoundTripTimeHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsByColoRoundTripTimeHistoryJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod struct {
-	Units DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits `json:"units,required"`
-	Value int64                                                                                           `json:"value,required"`
-	JSON  digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodJSON  `json:"-"`
+type TestsTestsTracerouteResultsByColoRoundTripTimeOverTime struct {
+	TimePeriod AggregateTimePeriod                                           `json:"timePeriod,required"`
+	Values     []TestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue `json:"values,required"`
+	JSON       testsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON    `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodJSON struct {
-	Units       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits string
-
-const (
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsHours    DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "hours"
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "days"
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "testRuns"
-)
-
-func (r DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits) IsKnown() bool {
-	switch r {
-	case DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsTestRuns:
-		return true
-	}
-	return false
-}
-
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTime struct {
-	TimePeriod DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod `json:"timePeriod,required"`
-	Values     []DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue    `json:"values,required"`
-	JSON       digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON       `json:"-"`
-}
-
-// digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTime]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON struct {
+// testsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON contains the JSON
+// metadata for the struct [TestsTestsTracerouteResultsByColoRoundTripTimeOverTime]
+type testsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON struct {
 	TimePeriod  apijson.Field
 	Values      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTime) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResultsByColoRoundTripTimeOverTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod struct {
-	Units DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits `json:"units,required"`
-	Value int64                                                                                            `json:"value,required"`
-	JSON  digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodJSON  `json:"-"`
+type TestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue struct {
+	AvgMs     int64                                                           `json:"avgMs,required"`
+	Timestamp string                                                          `json:"timestamp,required"`
+	JSON      testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON `json:"-"`
 }
 
-// digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodJSON struct {
-	Units       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodJSON) RawJSON() string {
-	return r.raw
-}
-
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits string
-
-const (
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsHours    DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "hours"
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsDays     DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "days"
-	DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsTestRuns DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "testRuns"
-)
-
-func (r DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits) IsKnown() bool {
-	switch r {
-	case DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsHours, DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsDays, DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsTestRuns:
-		return true
-	}
-	return false
-}
-
-type DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue struct {
-	AvgMs     int64                                                                                      `json:"avgMs,required"`
-	Timestamp string                                                                                     `json:"timestamp,required"`
-	JSON      digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON `json:"-"`
-}
-
-// digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON
-// contains the JSON metadata for the struct
-// [DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue]
-type digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON struct {
+// testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON contains the
+// JSON metadata for the struct
+// [TestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue]
+type testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON struct {
 	AvgMs       apijson.Field
 	Timestamp   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DigitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
+func (r *TestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r digitalExperienceMonitoringTestsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON) RawJSON() string {
+func (r testsTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON) RawJSON() string {
 	return r.raw
 }
 
 type DEXTestListResponse struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DigitalExperienceMonitoringTests                          `json:"result,required"`
+	Result   Tests                                                     `json:"result,required"`
 	// Whether the API call was successful
 	Success    DEXTestListResponseSuccess    `json:"success,required"`
 	ResultInfo DEXTestListResponseResultInfo `json:"result_info"`

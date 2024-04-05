@@ -74,7 +74,7 @@ func (r *OutgoingService) Delete(ctx context.Context, params OutgoingDeleteParam
 
 // Disable outgoing zone transfers for primary zone and clears IXFR backlog of
 // primary zone.
-func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisableParams, opts ...option.RequestOption) (res *SecondaryDNSDisableTransfer, err error) {
+func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisableParams, opts ...option.RequestOption) (res *DisableTransfer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/disable", params.ZoneID)
@@ -87,7 +87,7 @@ func (r *OutgoingService) Disable(ctx context.Context, params OutgoingDisablePar
 }
 
 // Enable outgoing zone transfers for primary zone.
-func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParams, opts ...option.RequestOption) (res *SecondaryDNSEnableTransfer, err error) {
+func (r *OutgoingService) Enable(ctx context.Context, params OutgoingEnableParams, opts ...option.RequestOption) (res *EnableTransfer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/outgoing/enable", params.ZoneID)
@@ -125,9 +125,9 @@ func (r *OutgoingService) Get(ctx context.Context, query OutgoingGetParams, opts
 	return
 }
 
-type SecondaryDNSDisableTransfer = string
+type DisableTransfer = string
 
-type SecondaryDNSEnableTransfer = string
+type EnableTransfer = string
 
 type OutgoingNewResponse struct {
 	ID string `json:"id"`
@@ -442,7 +442,7 @@ type OutgoingDisableResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// The zone transfer status of a primary zone
-	Result SecondaryDNSDisableTransfer `json:"result,required"`
+	Result DisableTransfer `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingDisableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingDisableResponseEnvelopeJSON    `json:"-"`
@@ -495,7 +495,7 @@ type OutgoingEnableResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// The zone transfer status of a primary zone
-	Result SecondaryDNSEnableTransfer `json:"result,required"`
+	Result EnableTransfer `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingEnableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingEnableResponseEnvelopeJSON    `json:"-"`

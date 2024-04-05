@@ -32,7 +32,7 @@ func NewForceAXFRService(opts ...option.RequestOption) (r *ForceAXFRService) {
 }
 
 // Sends AXFR zone transfer request to primary nameserver(s).
-func (r *ForceAXFRService) New(ctx context.Context, params ForceAXFRNewParams, opts ...option.RequestOption) (res *SecondaryDNSForce, err error) {
+func (r *ForceAXFRService) New(ctx context.Context, params ForceAXFRNewParams, opts ...option.RequestOption) (res *ForceAXFR, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ForceAXFRNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/secondary_dns/force_axfr", params.ZoneID)
@@ -44,7 +44,7 @@ func (r *ForceAXFRService) New(ctx context.Context, params ForceAXFRNewParams, o
 	return
 }
 
-type SecondaryDNSForce = string
+type ForceAXFR = string
 
 type ForceAXFRNewParams struct {
 	ZoneID param.Field[string]      `path:"zone_id,required"`
@@ -59,7 +59,7 @@ type ForceAXFRNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
 	// When force_axfr query parameter is set to true, the response is a simple string
-	Result SecondaryDNSForce `json:"result,required"`
+	Result ForceAXFR `json:"result,required"`
 	// Whether the API call was successful
 	Success ForceAXFRNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    forceAXFRNewResponseEnvelopeJSON    `json:"-"`

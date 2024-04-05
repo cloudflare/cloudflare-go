@@ -33,23 +33,23 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptVersionSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Settings: cloudflare.F(workers.ScriptVersionSettingEditParamsSettings{
-				Bindings: cloudflare.F([]workers.ScriptVersionSettingEditParamsSettingsBindingUnion{workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
-					Type: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				}, workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
-					Type: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace),
-				}, workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBinding{
-					Type: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsBindingsWorkersKVNamespaceBindingTypeKVNamespace),
+			Settings: cloudflare.F(workers.SettingsItemParam{
+				Bindings: cloudflare.F([]workers.BindingItemUnionParam{workers.BindingItemWorkersKVNamespaceBindingParam{
+					Type: cloudflare.F(workers.BindingItemWorkersKVNamespaceBindingTypeKVNamespace),
+				}, workers.BindingItemWorkersKVNamespaceBindingParam{
+					Type: cloudflare.F(workers.BindingItemWorkersKVNamespaceBindingTypeKVNamespace),
+				}, workers.BindingItemWorkersKVNamespaceBindingParam{
+					Type: cloudflare.F(workers.BindingItemWorkersKVNamespaceBindingTypeKVNamespace),
 				}}),
 				CompatibilityDate:  cloudflare.F("2022-04-05"),
-				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
+				CompatibilityFlags: cloudflare.F([]workers.CompatibilityFlagsItemParam{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
 				Logpush:            cloudflare.F(false),
-				Migrations: cloudflare.F[workers.ScriptVersionSettingEditParamsSettingsMigrationsUnion](workers.ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[workers.SettingsItemMigrationsUnionParam](workers.SettingsItemMigrationsWorkersSingleStepMigrationsParam{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]workers.ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsRenamedClass{{
+					RenamedClasses: cloudflare.F([]workers.SettingsItemMigrationsWorkersSingleStepMigrationsRenamedClassParam{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -59,7 +59,7 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]workers.ScriptVersionSettingEditParamsSettingsMigrationsWorkersSingleStepMigrationsTransferredClass{{
+					TransferredClasses: cloudflare.F([]workers.SettingsItemMigrationsWorkersSingleStepMigrationsTransferredClassParam{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -73,11 +73,11 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("string"),
 					}}),
 				}),
-				Placement: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsPlacement{
-					Mode: cloudflare.F(workers.ScriptVersionSettingEditParamsSettingsPlacementModeSmart),
+				Placement: cloudflare.F(workers.SettingsItemPlacementParam{
+					Mode: cloudflare.F(workers.SettingsItemPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
-				TailConsumers: cloudflare.F([]workers.ScriptVersionSettingEditParamsSettingsTailConsumer{{
+				TailConsumers: cloudflare.F([]workers.SettingsItemTailConsumerParam{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),

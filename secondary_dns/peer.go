@@ -33,7 +33,7 @@ func NewPeerService(opts ...option.RequestOption) (r *PeerService) {
 }
 
 // Create Peer.
-func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
+func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *Peer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers", params.AccountID)
@@ -46,7 +46,7 @@ func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...opt
 }
 
 // Modify Peer.
-func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
+func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpdateParams, opts ...option.RequestOption) (res *Peer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", params.AccountID, peerID)
@@ -59,7 +59,7 @@ func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpda
 }
 
 // List Peers.
-func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SecondaryDNSPeer], err error) {
+func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Peer], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,7 +77,7 @@ func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...op
 }
 
 // List Peers.
-func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SecondaryDNSPeer] {
+func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Peer] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -95,7 +95,7 @@ func (r *PeerService) Delete(ctx context.Context, peerID string, params PeerDele
 }
 
 // Get Peer.
-func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
+func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParams, opts ...option.RequestOption) (res *Peer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/secondary_dns/peers/%s", query.AccountID, peerID)
@@ -107,7 +107,7 @@ func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParam
 	return
 }
 
-type SecondaryDNSPeer struct {
+type Peer struct {
 	ID string `json:"id,required"`
 	// The name of the peer.
 	Name string `json:"name,required"`
@@ -124,13 +124,12 @@ type SecondaryDNSPeer struct {
 	// linked to.
 	Port float64 `json:"port"`
 	// TSIG authentication will be used for zone transfer if configured.
-	TSIGID string               `json:"tsig_id"`
-	JSON   secondaryDNSPeerJSON `json:"-"`
+	TSIGID string   `json:"tsig_id"`
+	JSON   peerJSON `json:"-"`
 }
 
-// secondaryDNSPeerJSON contains the JSON metadata for the struct
-// [SecondaryDNSPeer]
-type secondaryDNSPeerJSON struct {
+// peerJSON contains the JSON metadata for the struct [Peer]
+type peerJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	IP          apijson.Field
@@ -141,11 +140,11 @@ type secondaryDNSPeerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSPeer) UnmarshalJSON(data []byte) (err error) {
+func (r *Peer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r secondaryDNSPeerJSON) RawJSON() string {
+func (r peerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -182,7 +181,7 @@ func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
 type PeerNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SecondaryDNSPeer                                          `json:"result,required"`
+	Result   Peer                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerNewResponseEnvelopeJSON    `json:"-"`
@@ -249,7 +248,7 @@ func (r PeerUpdateParams) MarshalJSON() (data []byte, err error) {
 type PeerUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SecondaryDNSPeer                                          `json:"result,required"`
+	Result   Peer                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerUpdateResponseEnvelopeJSON    `json:"-"`
@@ -352,7 +351,7 @@ type PeerGetParams struct {
 type PeerGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SecondaryDNSPeer                                          `json:"result,required"`
+	Result   Peer                                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerGetResponseEnvelopeJSON    `json:"-"`

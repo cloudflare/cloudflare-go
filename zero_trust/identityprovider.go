@@ -155,6 +155,160 @@ func (r *IdentityProviderService) Get(ctx context.Context, uuid string, query Id
 	return
 }
 
+type AzureAd struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AzureAdConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
+	JSON       azureAdJSON                                      `json:"-"`
+}
+
+// azureAdJSON contains the JSON metadata for the struct [AzureAd]
+type azureAdJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AzureAd) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r azureAdJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AzureAd) implementsZeroTrustZeroTrustIdentityProviders() {}
+
+func (r AzureAd) implementsZeroTrustIdentityProviderListResponse() {}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AzureAdConfig struct {
+	// Custom claims
+	Claims []string `json:"claims"`
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string `json:"client_secret"`
+	// Should Cloudflare try to load authentication contexts from your account
+	ConditionalAccessEnabled bool `json:"conditional_access_enabled"`
+	// Your Azure directory uuid
+	DirectoryID string `json:"directory_id"`
+	// The claim name for email in the id_token response.
+	EmailClaimName string `json:"email_claim_name"`
+	// Indicates the type of user interaction that is required. prompt=login forces the
+	// user to enter their credentials on that request, negating single-sign on.
+	// prompt=none is the opposite. It ensures that the user isn't presented with any
+	// interactive prompt. If the request can't be completed silently by using
+	// single-sign on, the Microsoft identity platform returns an interaction_required
+	// error. prompt=select_account interrupts single sign-on providing account
+	// selection experience listing all the accounts either in session or any
+	// remembered account or an option to choose to use a different account altogether.
+	Prompt AzureAdConfigPrompt `json:"prompt"`
+	// Should Cloudflare try to load groups from your account
+	SupportGroups bool              `json:"support_groups"`
+	JSON          azureAdConfigJSON `json:"-"`
+}
+
+// azureAdConfigJSON contains the JSON metadata for the struct [AzureAdConfig]
+type azureAdConfigJSON struct {
+	Claims                   apijson.Field
+	ClientID                 apijson.Field
+	ClientSecret             apijson.Field
+	ConditionalAccessEnabled apijson.Field
+	DirectoryID              apijson.Field
+	EmailClaimName           apijson.Field
+	Prompt                   apijson.Field
+	SupportGroups            apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AzureAdConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r azureAdConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Indicates the type of user interaction that is required. prompt=login forces the
+// user to enter their credentials on that request, negating single-sign on.
+// prompt=none is the opposite. It ensures that the user isn't presented with any
+// interactive prompt. If the request can't be completed silently by using
+// single-sign on, the Microsoft identity platform returns an interaction_required
+// error. prompt=select_account interrupts single sign-on providing account
+// selection experience listing all the accounts either in session or any
+// remembered account or an option to choose to use a different account altogether.
+type AzureAdConfigPrompt string
+
+const (
+	AzureAdConfigPromptLogin         AzureAdConfigPrompt = "login"
+	AzureAdConfigPromptSelectAccount AzureAdConfigPrompt = "select_account"
+	AzureAdConfigPromptNone          AzureAdConfigPrompt = "none"
+)
+
+func (r AzureAdConfigPrompt) IsKnown() bool {
+	switch r {
+	case AzureAdConfigPromptLogin, AzureAdConfigPromptSelectAccount, AzureAdConfigPromptNone:
+		return true
+	}
+	return false
+}
+
+type GenericOAuthConfig struct {
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string                 `json:"client_secret"`
+	JSON         genericOAuthConfigJSON `json:"-"`
+}
+
+// genericOAuthConfigJSON contains the JSON metadata for the struct
+// [GenericOAuthConfig]
+type genericOAuthConfigJSON struct {
+	ClientID     apijson.Field
+	ClientSecret apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *GenericOAuthConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r genericOAuthConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+type GenericOAuthConfigParam struct {
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+}
+
+func (r GenericOAuthConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -299,7 +453,7 @@ func (r ZeroTrustIdentityProviders) AsUnion() ZeroTrustIdentityProvidersUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.ZeroTrustIdentityProvidersAccessAzureAd],
+// Union satisfied by [zero_trust.AzureAd],
 // [zero_trust.ZeroTrustIdentityProvidersAccessCentrify],
 // [zero_trust.ZeroTrustIdentityProvidersAccessFacebook],
 // [zero_trust.ZeroTrustIdentityProvidersAccessGitHub],
@@ -323,7 +477,7 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ZeroTrustIdentityProvidersAccessAzureAd{}),
+			Type:       reflect.TypeOf(AzureAd{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -378,124 +532,6 @@ func init() {
 			Type:       reflect.TypeOf(ZeroTrustIdentityProvidersAccessOnetimepin{}),
 		},
 	)
-}
-
-type ZeroTrustIdentityProvidersAccessAzureAd struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config ZeroTrustIdentityProvidersAccessAzureAdConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
-	JSON       zeroTrustIdentityProvidersAccessAzureAdJSON      `json:"-"`
-}
-
-// zeroTrustIdentityProvidersAccessAzureAdJSON contains the JSON metadata for the
-// struct [ZeroTrustIdentityProvidersAccessAzureAd]
-type zeroTrustIdentityProvidersAccessAzureAdJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustIdentityProvidersAccessAzureAd) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustIdentityProvidersAccessAzureAdJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r ZeroTrustIdentityProvidersAccessAzureAd) implementsZeroTrustZeroTrustIdentityProviders() {}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type ZeroTrustIdentityProvidersAccessAzureAdConfig struct {
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// Should Cloudflare try to load authentication contexts from your account
-	ConditionalAccessEnabled bool `json:"conditional_access_enabled"`
-	// Your Azure directory uuid
-	DirectoryID string `json:"directory_id"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string `json:"email_claim_name"`
-	// Indicates the type of user interaction that is required. prompt=login forces the
-	// user to enter their credentials on that request, negating single-sign on.
-	// prompt=none is the opposite. It ensures that the user isn't presented with any
-	// interactive prompt. If the request can't be completed silently by using
-	// single-sign on, the Microsoft identity platform returns an interaction_required
-	// error. prompt=select_account interrupts single sign-on providing account
-	// selection experience listing all the accounts either in session or any
-	// remembered account or an option to choose to use a different account altogether.
-	Prompt ZeroTrustIdentityProvidersAccessAzureAdConfigPrompt `json:"prompt"`
-	// Should Cloudflare try to load groups from your account
-	SupportGroups bool                                              `json:"support_groups"`
-	JSON          zeroTrustIdentityProvidersAccessAzureAdConfigJSON `json:"-"`
-}
-
-// zeroTrustIdentityProvidersAccessAzureAdConfigJSON contains the JSON metadata for
-// the struct [ZeroTrustIdentityProvidersAccessAzureAdConfig]
-type zeroTrustIdentityProvidersAccessAzureAdConfigJSON struct {
-	Claims                   apijson.Field
-	ClientID                 apijson.Field
-	ClientSecret             apijson.Field
-	ConditionalAccessEnabled apijson.Field
-	DirectoryID              apijson.Field
-	EmailClaimName           apijson.Field
-	Prompt                   apijson.Field
-	SupportGroups            apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
-}
-
-func (r *ZeroTrustIdentityProvidersAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustIdentityProvidersAccessAzureAdConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Indicates the type of user interaction that is required. prompt=login forces the
-// user to enter their credentials on that request, negating single-sign on.
-// prompt=none is the opposite. It ensures that the user isn't presented with any
-// interactive prompt. If the request can't be completed silently by using
-// single-sign on, the Microsoft identity platform returns an interaction_required
-// error. prompt=select_account interrupts single sign-on providing account
-// selection experience listing all the accounts either in session or any
-// remembered account or an option to choose to use a different account altogether.
-type ZeroTrustIdentityProvidersAccessAzureAdConfigPrompt string
-
-const (
-	ZeroTrustIdentityProvidersAccessAzureAdConfigPromptLogin         ZeroTrustIdentityProvidersAccessAzureAdConfigPrompt = "login"
-	ZeroTrustIdentityProvidersAccessAzureAdConfigPromptSelectAccount ZeroTrustIdentityProvidersAccessAzureAdConfigPrompt = "select_account"
-	ZeroTrustIdentityProvidersAccessAzureAdConfigPromptNone          ZeroTrustIdentityProvidersAccessAzureAdConfigPrompt = "none"
-)
-
-func (r ZeroTrustIdentityProvidersAccessAzureAdConfigPrompt) IsKnown() bool {
-	switch r {
-	case ZeroTrustIdentityProvidersAccessAzureAdConfigPromptLogin, ZeroTrustIdentityProvidersAccessAzureAdConfigPromptSelectAccount, ZeroTrustIdentityProvidersAccessAzureAdConfigPromptNone:
-		return true
-	}
-	return false
 }
 
 type ZeroTrustIdentityProvidersAccessCentrify struct {
@@ -583,7 +619,7 @@ type ZeroTrustIdentityProvidersAccessFacebook struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config ZeroTrustIdentityProvidersAccessFacebookConfig `json:"config,required"`
+	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -620,39 +656,11 @@ func (r zeroTrustIdentityProvidersAccessFacebookJSON) RawJSON() string {
 
 func (r ZeroTrustIdentityProvidersAccessFacebook) implementsZeroTrustZeroTrustIdentityProviders() {}
 
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type ZeroTrustIdentityProvidersAccessFacebookConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                             `json:"client_secret"`
-	JSON         zeroTrustIdentityProvidersAccessFacebookConfigJSON `json:"-"`
-}
-
-// zeroTrustIdentityProvidersAccessFacebookConfigJSON contains the JSON metadata
-// for the struct [ZeroTrustIdentityProvidersAccessFacebookConfig]
-type zeroTrustIdentityProvidersAccessFacebookConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *ZeroTrustIdentityProvidersAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustIdentityProvidersAccessFacebookConfigJSON) RawJSON() string {
-	return r.raw
-}
-
 type ZeroTrustIdentityProvidersAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config ZeroTrustIdentityProvidersAccessGitHubConfig `json:"config,required"`
+	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -688,34 +696,6 @@ func (r zeroTrustIdentityProvidersAccessGitHubJSON) RawJSON() string {
 }
 
 func (r ZeroTrustIdentityProvidersAccessGitHub) implementsZeroTrustZeroTrustIdentityProviders() {}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type ZeroTrustIdentityProvidersAccessGitHubConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                           `json:"client_secret"`
-	JSON         zeroTrustIdentityProvidersAccessGitHubConfigJSON `json:"-"`
-}
-
-// zeroTrustIdentityProvidersAccessGitHubConfigJSON contains the JSON metadata for
-// the struct [ZeroTrustIdentityProvidersAccessGitHubConfig]
-type zeroTrustIdentityProvidersAccessGitHubConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *ZeroTrustIdentityProvidersAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustIdentityProvidersAccessGitHubConfigJSON) RawJSON() string {
-	return r.raw
-}
 
 type ZeroTrustIdentityProvidersAccessGoogle struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -874,7 +854,7 @@ type ZeroTrustIdentityProvidersAccessLinkedin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config ZeroTrustIdentityProvidersAccessLinkedinConfig `json:"config,required"`
+	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -910,34 +890,6 @@ func (r zeroTrustIdentityProvidersAccessLinkedinJSON) RawJSON() string {
 }
 
 func (r ZeroTrustIdentityProvidersAccessLinkedin) implementsZeroTrustZeroTrustIdentityProviders() {}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type ZeroTrustIdentityProvidersAccessLinkedinConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                             `json:"client_secret"`
-	JSON         zeroTrustIdentityProvidersAccessLinkedinConfigJSON `json:"-"`
-}
-
-// zeroTrustIdentityProvidersAccessLinkedinConfigJSON contains the JSON metadata
-// for the struct [ZeroTrustIdentityProvidersAccessLinkedinConfig]
-type zeroTrustIdentityProvidersAccessLinkedinConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *ZeroTrustIdentityProvidersAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustIdentityProvidersAccessLinkedinConfigJSON) RawJSON() string {
-	return r.raw
-}
 
 type ZeroTrustIdentityProvidersAccessOidc struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -1380,7 +1332,7 @@ type ZeroTrustIdentityProvidersAccessYandex struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config ZeroTrustIdentityProvidersAccessYandexConfig `json:"config,required"`
+	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -1416,34 +1368,6 @@ func (r zeroTrustIdentityProvidersAccessYandexJSON) RawJSON() string {
 }
 
 func (r ZeroTrustIdentityProvidersAccessYandex) implementsZeroTrustZeroTrustIdentityProviders() {}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type ZeroTrustIdentityProvidersAccessYandexConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                           `json:"client_secret"`
-	JSON         zeroTrustIdentityProvidersAccessYandexConfigJSON `json:"-"`
-}
-
-// zeroTrustIdentityProvidersAccessYandexConfigJSON contains the JSON metadata for
-// the struct [ZeroTrustIdentityProvidersAccessYandexConfig]
-type zeroTrustIdentityProvidersAccessYandexConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *ZeroTrustIdentityProvidersAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r zeroTrustIdentityProvidersAccessYandexConfigJSON) RawJSON() string {
-	return r.raw
-}
 
 type ZeroTrustIdentityProvidersAccessOnetimepin struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -1531,7 +1455,7 @@ func (r IdentityProviderListResponse) AsUnion() IdentityProviderListResponseUnio
 	return r.union
 }
 
-// Union satisfied by [zero_trust.IdentityProviderListResponseAccessAzureAd],
+// Union satisfied by [zero_trust.AzureAd],
 // [zero_trust.IdentityProviderListResponseAccessCentrify],
 // [zero_trust.IdentityProviderListResponseAccessFacebook],
 // [zero_trust.IdentityProviderListResponseAccessGitHub],
@@ -1554,7 +1478,7 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IdentityProviderListResponseAccessAzureAd{}),
+			Type:       reflect.TypeOf(AzureAd{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1605,125 +1529,6 @@ func init() {
 			Type:       reflect.TypeOf(IdentityProviderListResponseAccessYandex{}),
 		},
 	)
-}
-
-type IdentityProviderListResponseAccessAzureAd struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config IdentityProviderListResponseAccessAzureAdConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type UnnamedSchemaRef9ab84e842cdf571c8f3898648bcdabcb `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1 `json:"scim_config"`
-	JSON       identityProviderListResponseAccessAzureAdJSON    `json:"-"`
-}
-
-// identityProviderListResponseAccessAzureAdJSON contains the JSON metadata for the
-// struct [IdentityProviderListResponseAccessAzureAd]
-type identityProviderListResponseAccessAzureAdJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseAccessAzureAd) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseAccessAzureAdJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r IdentityProviderListResponseAccessAzureAd) implementsZeroTrustIdentityProviderListResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderListResponseAccessAzureAdConfig struct {
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// Should Cloudflare try to load authentication contexts from your account
-	ConditionalAccessEnabled bool `json:"conditional_access_enabled"`
-	// Your Azure directory uuid
-	DirectoryID string `json:"directory_id"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string `json:"email_claim_name"`
-	// Indicates the type of user interaction that is required. prompt=login forces the
-	// user to enter their credentials on that request, negating single-sign on.
-	// prompt=none is the opposite. It ensures that the user isn't presented with any
-	// interactive prompt. If the request can't be completed silently by using
-	// single-sign on, the Microsoft identity platform returns an interaction_required
-	// error. prompt=select_account interrupts single sign-on providing account
-	// selection experience listing all the accounts either in session or any
-	// remembered account or an option to choose to use a different account altogether.
-	Prompt IdentityProviderListResponseAccessAzureAdConfigPrompt `json:"prompt"`
-	// Should Cloudflare try to load groups from your account
-	SupportGroups bool                                                `json:"support_groups"`
-	JSON          identityProviderListResponseAccessAzureAdConfigJSON `json:"-"`
-}
-
-// identityProviderListResponseAccessAzureAdConfigJSON contains the JSON metadata
-// for the struct [IdentityProviderListResponseAccessAzureAdConfig]
-type identityProviderListResponseAccessAzureAdConfigJSON struct {
-	Claims                   apijson.Field
-	ClientID                 apijson.Field
-	ClientSecret             apijson.Field
-	ConditionalAccessEnabled apijson.Field
-	DirectoryID              apijson.Field
-	EmailClaimName           apijson.Field
-	Prompt                   apijson.Field
-	SupportGroups            apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseAccessAzureAdConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Indicates the type of user interaction that is required. prompt=login forces the
-// user to enter their credentials on that request, negating single-sign on.
-// prompt=none is the opposite. It ensures that the user isn't presented with any
-// interactive prompt. If the request can't be completed silently by using
-// single-sign on, the Microsoft identity platform returns an interaction_required
-// error. prompt=select_account interrupts single sign-on providing account
-// selection experience listing all the accounts either in session or any
-// remembered account or an option to choose to use a different account altogether.
-type IdentityProviderListResponseAccessAzureAdConfigPrompt string
-
-const (
-	IdentityProviderListResponseAccessAzureAdConfigPromptLogin         IdentityProviderListResponseAccessAzureAdConfigPrompt = "login"
-	IdentityProviderListResponseAccessAzureAdConfigPromptSelectAccount IdentityProviderListResponseAccessAzureAdConfigPrompt = "select_account"
-	IdentityProviderListResponseAccessAzureAdConfigPromptNone          IdentityProviderListResponseAccessAzureAdConfigPrompt = "none"
-)
-
-func (r IdentityProviderListResponseAccessAzureAdConfigPrompt) IsKnown() bool {
-	switch r {
-	case IdentityProviderListResponseAccessAzureAdConfigPromptLogin, IdentityProviderListResponseAccessAzureAdConfigPromptSelectAccount, IdentityProviderListResponseAccessAzureAdConfigPromptNone:
-		return true
-	}
-	return false
 }
 
 type IdentityProviderListResponseAccessCentrify struct {
@@ -1812,7 +1617,7 @@ type IdentityProviderListResponseAccessFacebook struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config IdentityProviderListResponseAccessFacebookConfig `json:"config,required"`
+	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -1850,39 +1655,11 @@ func (r identityProviderListResponseAccessFacebookJSON) RawJSON() string {
 func (r IdentityProviderListResponseAccessFacebook) implementsZeroTrustIdentityProviderListResponse() {
 }
 
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderListResponseAccessFacebookConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                               `json:"client_secret"`
-	JSON         identityProviderListResponseAccessFacebookConfigJSON `json:"-"`
-}
-
-// identityProviderListResponseAccessFacebookConfigJSON contains the JSON metadata
-// for the struct [IdentityProviderListResponseAccessFacebookConfig]
-type identityProviderListResponseAccessFacebookConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseAccessFacebookConfigJSON) RawJSON() string {
-	return r.raw
-}
-
 type IdentityProviderListResponseAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config IdentityProviderListResponseAccessGitHubConfig `json:"config,required"`
+	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -1918,34 +1695,6 @@ func (r identityProviderListResponseAccessGitHubJSON) RawJSON() string {
 }
 
 func (r IdentityProviderListResponseAccessGitHub) implementsZeroTrustIdentityProviderListResponse() {}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderListResponseAccessGitHubConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                             `json:"client_secret"`
-	JSON         identityProviderListResponseAccessGitHubConfigJSON `json:"-"`
-}
-
-// identityProviderListResponseAccessGitHubConfigJSON contains the JSON metadata
-// for the struct [IdentityProviderListResponseAccessGitHubConfig]
-type identityProviderListResponseAccessGitHubConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseAccessGitHubConfigJSON) RawJSON() string {
-	return r.raw
-}
 
 type IdentityProviderListResponseAccessGoogle struct {
 	// The configuration parameters for the identity provider. To view the required
@@ -2105,7 +1854,7 @@ type IdentityProviderListResponseAccessLinkedin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config IdentityProviderListResponseAccessLinkedinConfig `json:"config,required"`
+	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -2141,34 +1890,6 @@ func (r identityProviderListResponseAccessLinkedinJSON) RawJSON() string {
 }
 
 func (r IdentityProviderListResponseAccessLinkedin) implementsZeroTrustIdentityProviderListResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderListResponseAccessLinkedinConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                               `json:"client_secret"`
-	JSON         identityProviderListResponseAccessLinkedinConfigJSON `json:"-"`
-}
-
-// identityProviderListResponseAccessLinkedinConfigJSON contains the JSON metadata
-// for the struct [IdentityProviderListResponseAccessLinkedinConfig]
-type identityProviderListResponseAccessLinkedinConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseAccessLinkedinConfigJSON) RawJSON() string {
-	return r.raw
 }
 
 type IdentityProviderListResponseAccessOidc struct {
@@ -2614,7 +2335,7 @@ type IdentityProviderListResponseAccessYandex struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config IdentityProviderListResponseAccessYandexConfig `json:"config,required"`
+	Config GenericOAuthConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -2651,34 +2372,6 @@ func (r identityProviderListResponseAccessYandexJSON) RawJSON() string {
 
 func (r IdentityProviderListResponseAccessYandex) implementsZeroTrustIdentityProviderListResponse() {}
 
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderListResponseAccessYandexConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                             `json:"client_secret"`
-	JSON         identityProviderListResponseAccessYandexConfigJSON `json:"-"`
-}
-
-// identityProviderListResponseAccessYandexConfigJSON contains the JSON metadata
-// for the struct [IdentityProviderListResponseAccessYandexConfig]
-type identityProviderListResponseAccessYandexConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *IdentityProviderListResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r identityProviderListResponseAccessYandexConfigJSON) RawJSON() string {
-	return r.raw
-}
-
 type IdentityProviderDeleteResponse struct {
 	// UUID
 	ID   string                             `json:"id"`
@@ -2702,8 +2395,7 @@ func (r identityProviderDeleteResponseJSON) RawJSON() string {
 }
 
 // This interface is a union satisfied by one of the following:
-// [IdentityProviderNewParamsAccessAzureAd],
-// [IdentityProviderNewParamsAccessCentrify],
+// [IdentityProviderNewParamsAzureAd], [IdentityProviderNewParamsAccessCentrify],
 // [IdentityProviderNewParamsAccessFacebook],
 // [IdentityProviderNewParamsAccessGitHub],
 // [IdentityProviderNewParamsAccessGoogle],
@@ -2722,11 +2414,11 @@ type IdentityProviderNewParams interface {
 	getZoneID() param.Field[string]
 }
 
-type IdentityProviderNewParamsAccessAzureAd struct {
+type IdentityProviderNewParamsAzureAd struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessAzureAdConfig] `json:"config,required"`
+	Config param.Field[IdentityProviderNewParamsAzureAdConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -2742,26 +2434,26 @@ type IdentityProviderNewParamsAccessAzureAd struct {
 	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
-func (r IdentityProviderNewParamsAccessAzureAd) MarshalJSON() (data []byte, err error) {
+func (r IdentityProviderNewParamsAzureAd) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderNewParamsAccessAzureAd) getAccountID() param.Field[string] {
+func (r IdentityProviderNewParamsAzureAd) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r IdentityProviderNewParamsAccessAzureAd) getZoneID() param.Field[string] {
+func (r IdentityProviderNewParamsAzureAd) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (IdentityProviderNewParamsAccessAzureAd) ImplementsIdentityProviderNewParams() {
+func (IdentityProviderNewParamsAzureAd) ImplementsIdentityProviderNewParams() {
 
 }
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessAzureAdConfig struct {
+type IdentityProviderNewParamsAzureAdConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
 	// Your OAuth Client ID
@@ -2782,12 +2474,12 @@ type IdentityProviderNewParamsAccessAzureAdConfig struct {
 	// error. prompt=select_account interrupts single sign-on providing account
 	// selection experience listing all the accounts either in session or any
 	// remembered account or an option to choose to use a different account altogether.
-	Prompt param.Field[IdentityProviderNewParamsAccessAzureAdConfigPrompt] `json:"prompt"`
+	Prompt param.Field[IdentityProviderNewParamsAzureAdConfigPrompt] `json:"prompt"`
 	// Should Cloudflare try to load groups from your account
 	SupportGroups param.Field[bool] `json:"support_groups"`
 }
 
-func (r IdentityProviderNewParamsAccessAzureAdConfig) MarshalJSON() (data []byte, err error) {
+func (r IdentityProviderNewParamsAzureAdConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2799,17 +2491,17 @@ func (r IdentityProviderNewParamsAccessAzureAdConfig) MarshalJSON() (data []byte
 // error. prompt=select_account interrupts single sign-on providing account
 // selection experience listing all the accounts either in session or any
 // remembered account or an option to choose to use a different account altogether.
-type IdentityProviderNewParamsAccessAzureAdConfigPrompt string
+type IdentityProviderNewParamsAzureAdConfigPrompt string
 
 const (
-	IdentityProviderNewParamsAccessAzureAdConfigPromptLogin         IdentityProviderNewParamsAccessAzureAdConfigPrompt = "login"
-	IdentityProviderNewParamsAccessAzureAdConfigPromptSelectAccount IdentityProviderNewParamsAccessAzureAdConfigPrompt = "select_account"
-	IdentityProviderNewParamsAccessAzureAdConfigPromptNone          IdentityProviderNewParamsAccessAzureAdConfigPrompt = "none"
+	IdentityProviderNewParamsAzureAdConfigPromptLogin         IdentityProviderNewParamsAzureAdConfigPrompt = "login"
+	IdentityProviderNewParamsAzureAdConfigPromptSelectAccount IdentityProviderNewParamsAzureAdConfigPrompt = "select_account"
+	IdentityProviderNewParamsAzureAdConfigPromptNone          IdentityProviderNewParamsAzureAdConfigPrompt = "none"
 )
 
-func (r IdentityProviderNewParamsAccessAzureAdConfigPrompt) IsKnown() bool {
+func (r IdentityProviderNewParamsAzureAdConfigPrompt) IsKnown() bool {
 	switch r {
-	case IdentityProviderNewParamsAccessAzureAdConfigPromptLogin, IdentityProviderNewParamsAccessAzureAdConfigPromptSelectAccount, IdentityProviderNewParamsAccessAzureAdConfigPromptNone:
+	case IdentityProviderNewParamsAzureAdConfigPromptLogin, IdentityProviderNewParamsAzureAdConfigPromptSelectAccount, IdentityProviderNewParamsAzureAdConfigPromptNone:
 		return true
 	}
 	return false
@@ -2877,7 +2569,7 @@ type IdentityProviderNewParamsAccessFacebook struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessFacebookConfig] `json:"config,required"`
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -2909,25 +2601,11 @@ func (IdentityProviderNewParamsAccessFacebook) ImplementsIdentityProviderNewPara
 
 }
 
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessFacebookConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r IdentityProviderNewParamsAccessFacebookConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type IdentityProviderNewParamsAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessGitHubConfig] `json:"config,required"`
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -2957,20 +2635,6 @@ func (r IdentityProviderNewParamsAccessGitHub) getZoneID() param.Field[string] {
 
 func (IdentityProviderNewParamsAccessGitHub) ImplementsIdentityProviderNewParams() {
 
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessGitHubConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r IdentityProviderNewParamsAccessGitHubConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type IdentityProviderNewParamsAccessGoogle struct {
@@ -3087,7 +2751,7 @@ type IdentityProviderNewParamsAccessLinkedin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessLinkedinConfig] `json:"config,required"`
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -3117,20 +2781,6 @@ func (r IdentityProviderNewParamsAccessLinkedin) getZoneID() param.Field[string]
 
 func (IdentityProviderNewParamsAccessLinkedin) ImplementsIdentityProviderNewParams() {
 
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessLinkedinConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r IdentityProviderNewParamsAccessLinkedinConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type IdentityProviderNewParamsAccessOidc struct {
@@ -3443,7 +3093,7 @@ type IdentityProviderNewParamsAccessYandex struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderNewParamsAccessYandexConfig] `json:"config,required"`
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -3473,20 +3123,6 @@ func (r IdentityProviderNewParamsAccessYandex) getZoneID() param.Field[string] {
 
 func (IdentityProviderNewParamsAccessYandex) ImplementsIdentityProviderNewParams() {
 
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderNewParamsAccessYandexConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r IdentityProviderNewParamsAccessYandexConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type IdentityProviderNewParamsAccessOnetimepin struct {
@@ -3569,7 +3205,7 @@ func (r IdentityProviderNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 // This interface is a union satisfied by one of the following:
-// [IdentityProviderUpdateParamsAccessAzureAd],
+// [IdentityProviderUpdateParamsAzureAd],
 // [IdentityProviderUpdateParamsAccessCentrify],
 // [IdentityProviderUpdateParamsAccessFacebook],
 // [IdentityProviderUpdateParamsAccessGitHub],
@@ -3591,11 +3227,11 @@ type IdentityProviderUpdateParams interface {
 	getZoneID() param.Field[string]
 }
 
-type IdentityProviderUpdateParamsAccessAzureAd struct {
+type IdentityProviderUpdateParamsAzureAd struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessAzureAdConfig] `json:"config,required"`
+	Config param.Field[IdentityProviderUpdateParamsAzureAdConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -3611,26 +3247,26 @@ type IdentityProviderUpdateParamsAccessAzureAd struct {
 	ScimConfig param.Field[UnnamedSchemaRefDd86d8b7ea73283da7b160ed3f86cae1Param] `json:"scim_config"`
 }
 
-func (r IdentityProviderUpdateParamsAccessAzureAd) MarshalJSON() (data []byte, err error) {
+func (r IdentityProviderUpdateParamsAzureAd) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IdentityProviderUpdateParamsAccessAzureAd) getAccountID() param.Field[string] {
+func (r IdentityProviderUpdateParamsAzureAd) getAccountID() param.Field[string] {
 	return r.AccountID
 }
 
-func (r IdentityProviderUpdateParamsAccessAzureAd) getZoneID() param.Field[string] {
+func (r IdentityProviderUpdateParamsAzureAd) getZoneID() param.Field[string] {
 	return r.ZoneID
 }
 
-func (IdentityProviderUpdateParamsAccessAzureAd) ImplementsIdentityProviderUpdateParams() {
+func (IdentityProviderUpdateParamsAzureAd) ImplementsIdentityProviderUpdateParams() {
 
 }
 
 // The configuration parameters for the identity provider. To view the required
 // parameters for a specific provider, refer to our
 // [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessAzureAdConfig struct {
+type IdentityProviderUpdateParamsAzureAdConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
 	// Your OAuth Client ID
@@ -3651,12 +3287,12 @@ type IdentityProviderUpdateParamsAccessAzureAdConfig struct {
 	// error. prompt=select_account interrupts single sign-on providing account
 	// selection experience listing all the accounts either in session or any
 	// remembered account or an option to choose to use a different account altogether.
-	Prompt param.Field[IdentityProviderUpdateParamsAccessAzureAdConfigPrompt] `json:"prompt"`
+	Prompt param.Field[IdentityProviderUpdateParamsAzureAdConfigPrompt] `json:"prompt"`
 	// Should Cloudflare try to load groups from your account
 	SupportGroups param.Field[bool] `json:"support_groups"`
 }
 
-func (r IdentityProviderUpdateParamsAccessAzureAdConfig) MarshalJSON() (data []byte, err error) {
+func (r IdentityProviderUpdateParamsAzureAdConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -3668,17 +3304,17 @@ func (r IdentityProviderUpdateParamsAccessAzureAdConfig) MarshalJSON() (data []b
 // error. prompt=select_account interrupts single sign-on providing account
 // selection experience listing all the accounts either in session or any
 // remembered account or an option to choose to use a different account altogether.
-type IdentityProviderUpdateParamsAccessAzureAdConfigPrompt string
+type IdentityProviderUpdateParamsAzureAdConfigPrompt string
 
 const (
-	IdentityProviderUpdateParamsAccessAzureAdConfigPromptLogin         IdentityProviderUpdateParamsAccessAzureAdConfigPrompt = "login"
-	IdentityProviderUpdateParamsAccessAzureAdConfigPromptSelectAccount IdentityProviderUpdateParamsAccessAzureAdConfigPrompt = "select_account"
-	IdentityProviderUpdateParamsAccessAzureAdConfigPromptNone          IdentityProviderUpdateParamsAccessAzureAdConfigPrompt = "none"
+	IdentityProviderUpdateParamsAzureAdConfigPromptLogin         IdentityProviderUpdateParamsAzureAdConfigPrompt = "login"
+	IdentityProviderUpdateParamsAzureAdConfigPromptSelectAccount IdentityProviderUpdateParamsAzureAdConfigPrompt = "select_account"
+	IdentityProviderUpdateParamsAzureAdConfigPromptNone          IdentityProviderUpdateParamsAzureAdConfigPrompt = "none"
 )
 
-func (r IdentityProviderUpdateParamsAccessAzureAdConfigPrompt) IsKnown() bool {
+func (r IdentityProviderUpdateParamsAzureAdConfigPrompt) IsKnown() bool {
 	switch r {
-	case IdentityProviderUpdateParamsAccessAzureAdConfigPromptLogin, IdentityProviderUpdateParamsAccessAzureAdConfigPromptSelectAccount, IdentityProviderUpdateParamsAccessAzureAdConfigPromptNone:
+	case IdentityProviderUpdateParamsAzureAdConfigPromptLogin, IdentityProviderUpdateParamsAzureAdConfigPromptSelectAccount, IdentityProviderUpdateParamsAzureAdConfigPromptNone:
 		return true
 	}
 	return false
@@ -3746,7 +3382,7 @@ type IdentityProviderUpdateParamsAccessFacebook struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessFacebookConfig] `json:"config,required"`
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -3778,25 +3414,11 @@ func (IdentityProviderUpdateParamsAccessFacebook) ImplementsIdentityProviderUpda
 
 }
 
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessFacebookConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r IdentityProviderUpdateParamsAccessFacebookConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type IdentityProviderUpdateParamsAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessGitHubConfig] `json:"config,required"`
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -3826,20 +3448,6 @@ func (r IdentityProviderUpdateParamsAccessGitHub) getZoneID() param.Field[string
 
 func (IdentityProviderUpdateParamsAccessGitHub) ImplementsIdentityProviderUpdateParams() {
 
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessGitHubConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r IdentityProviderUpdateParamsAccessGitHubConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type IdentityProviderUpdateParamsAccessGoogle struct {
@@ -3956,7 +3564,7 @@ type IdentityProviderUpdateParamsAccessLinkedin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessLinkedinConfig] `json:"config,required"`
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -3986,20 +3594,6 @@ func (r IdentityProviderUpdateParamsAccessLinkedin) getZoneID() param.Field[stri
 
 func (IdentityProviderUpdateParamsAccessLinkedin) ImplementsIdentityProviderUpdateParams() {
 
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessLinkedinConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r IdentityProviderUpdateParamsAccessLinkedinConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type IdentityProviderUpdateParamsAccessOidc struct {
@@ -4312,7 +3906,7 @@ type IdentityProviderUpdateParamsAccessYandex struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[IdentityProviderUpdateParamsAccessYandexConfig] `json:"config,required"`
+	Config param.Field[GenericOAuthConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -4342,20 +3936,6 @@ func (r IdentityProviderUpdateParamsAccessYandex) getZoneID() param.Field[string
 
 func (IdentityProviderUpdateParamsAccessYandex) ImplementsIdentityProviderUpdateParams() {
 
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type IdentityProviderUpdateParamsAccessYandexConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r IdentityProviderUpdateParamsAccessYandexConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type IdentityProviderUpdateParamsAccessOnetimepin struct {

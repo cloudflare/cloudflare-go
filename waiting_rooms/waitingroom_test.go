@@ -34,7 +34,7 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 		Name:              cloudflare.F("production_webinar"),
 		NewUsersPerMinute: cloudflare.F(int64(200)),
 		TotalActiveUsers:  cloudflare.F(int64(200)),
-		AdditionalRoutes: cloudflare.F([]waiting_rooms.WaitingRoomNewParamsAdditionalRoute{{
+		AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesItemParam{{
 			Host: cloudflare.F("shop2.example.com"),
 			Path: cloudflare.F("/shop2/checkout"),
 		}, {
@@ -44,9 +44,9 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 			Host: cloudflare.F("shop2.example.com"),
 			Path: cloudflare.F("/shop2/checkout"),
 		}}),
-		CookieAttributes: cloudflare.F(waiting_rooms.WaitingRoomNewParamsCookieAttributes{
-			Samesite: cloudflare.F(waiting_rooms.WaitingRoomNewParamsCookieAttributesSamesiteAuto),
-			Secure:   cloudflare.F(waiting_rooms.WaitingRoomNewParamsCookieAttributesSecureAuto),
+		CookieAttributes: cloudflare.F(waiting_rooms.CookieAttributesParam{
+			Samesite: cloudflare.F(waiting_rooms.CookieAttributesSamesiteAuto),
+			Secure:   cloudflare.F(waiting_rooms.CookieAttributesSecureAuto),
 		}),
 		CookieSuffix:            cloudflare.F("abcd"),
 		CustomPageHTML:          cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"),
@@ -93,7 +93,7 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 			Name:              cloudflare.F("production_webinar"),
 			NewUsersPerMinute: cloudflare.F(int64(200)),
 			TotalActiveUsers:  cloudflare.F(int64(200)),
-			AdditionalRoutes: cloudflare.F([]waiting_rooms.WaitingRoomUpdateParamsAdditionalRoute{{
+			AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesItemParam{{
 				Host: cloudflare.F("shop2.example.com"),
 				Path: cloudflare.F("/shop2/checkout"),
 			}, {
@@ -103,9 +103,9 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 				Host: cloudflare.F("shop2.example.com"),
 				Path: cloudflare.F("/shop2/checkout"),
 			}}),
-			CookieAttributes: cloudflare.F(waiting_rooms.WaitingRoomUpdateParamsCookieAttributes{
-				Samesite: cloudflare.F(waiting_rooms.WaitingRoomUpdateParamsCookieAttributesSamesiteAuto),
-				Secure:   cloudflare.F(waiting_rooms.WaitingRoomUpdateParamsCookieAttributesSecureAuto),
+			CookieAttributes: cloudflare.F(waiting_rooms.CookieAttributesParam{
+				Samesite: cloudflare.F(waiting_rooms.CookieAttributesSamesiteAuto),
+				Secure:   cloudflare.F(waiting_rooms.CookieAttributesSecureAuto),
 			}),
 			CookieSuffix:            cloudflare.F("abcd"),
 			CustomPageHTML:          cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"),
@@ -210,7 +210,7 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 			Name:              cloudflare.F("production_webinar"),
 			NewUsersPerMinute: cloudflare.F(int64(200)),
 			TotalActiveUsers:  cloudflare.F(int64(200)),
-			AdditionalRoutes: cloudflare.F([]waiting_rooms.WaitingRoomEditParamsAdditionalRoute{{
+			AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesItemParam{{
 				Host: cloudflare.F("shop2.example.com"),
 				Path: cloudflare.F("/shop2/checkout"),
 			}, {
@@ -220,9 +220,9 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 				Host: cloudflare.F("shop2.example.com"),
 				Path: cloudflare.F("/shop2/checkout"),
 			}}),
-			CookieAttributes: cloudflare.F(waiting_rooms.WaitingRoomEditParamsCookieAttributes{
-				Samesite: cloudflare.F(waiting_rooms.WaitingRoomEditParamsCookieAttributesSamesiteAuto),
-				Secure:   cloudflare.F(waiting_rooms.WaitingRoomEditParamsCookieAttributesSecureAuto),
+			CookieAttributes: cloudflare.F(waiting_rooms.CookieAttributesParam{
+				Samesite: cloudflare.F(waiting_rooms.CookieAttributesSamesiteAuto),
+				Secure:   cloudflare.F(waiting_rooms.CookieAttributesSecureAuto),
 			}),
 			CookieSuffix:            cloudflare.F("abcd"),
 			CustomPageHTML:          cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"),

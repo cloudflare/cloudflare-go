@@ -76,29 +76,478 @@ func (r *GatewayConfigurationService) Get(ctx context.Context, query GatewayConf
 	return
 }
 
+// Activity log settings.
+type ActivityLogSettings struct {
+	// Enable activity logging.
+	Enabled bool                    `json:"enabled"`
+	JSON    activityLogSettingsJSON `json:"-"`
+}
+
+// activityLogSettingsJSON contains the JSON metadata for the struct
+// [ActivityLogSettings]
+type activityLogSettingsJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ActivityLogSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r activityLogSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Activity log settings.
+type ActivityLogSettingsParam struct {
+	// Enable activity logging.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r ActivityLogSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Anti-virus settings.
+type AntiVirusSettings struct {
+	// Enable anti-virus scanning on downloads.
+	EnabledDownloadPhase bool `json:"enabled_download_phase"`
+	// Enable anti-virus scanning on uploads.
+	EnabledUploadPhase bool `json:"enabled_upload_phase"`
+	// Block requests for files that cannot be scanned.
+	FailClosed bool `json:"fail_closed"`
+	// Configure a message to display on the user's device when an antivirus search is
+	// performed.
+	NotificationSettings NotificationSettings  `json:"notification_settings"`
+	JSON                 antiVirusSettingsJSON `json:"-"`
+}
+
+// antiVirusSettingsJSON contains the JSON metadata for the struct
+// [AntiVirusSettings]
+type antiVirusSettingsJSON struct {
+	EnabledDownloadPhase apijson.Field
+	EnabledUploadPhase   apijson.Field
+	FailClosed           apijson.Field
+	NotificationSettings apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AntiVirusSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r antiVirusSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Anti-virus settings.
+type AntiVirusSettingsParam struct {
+	// Enable anti-virus scanning on downloads.
+	EnabledDownloadPhase param.Field[bool] `json:"enabled_download_phase"`
+	// Enable anti-virus scanning on uploads.
+	EnabledUploadPhase param.Field[bool] `json:"enabled_upload_phase"`
+	// Block requests for files that cannot be scanned.
+	FailClosed param.Field[bool] `json:"fail_closed"`
+	// Configure a message to display on the user's device when an antivirus search is
+	// performed.
+	NotificationSettings param.Field[NotificationSettingsParam] `json:"notification_settings"`
+}
+
+func (r AntiVirusSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Block page layout settings.
+type BlockPageSettings struct {
+	// Block page background color in #rrggbb format.
+	BackgroundColor string `json:"background_color"`
+	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	Enabled bool `json:"enabled"`
+	// Block page footer text.
+	FooterText string `json:"footer_text"`
+	// Block page header text.
+	HeaderText string `json:"header_text"`
+	// Full URL to the logo file.
+	LogoPath string `json:"logo_path"`
+	// Admin email for users to contact.
+	MailtoAddress string `json:"mailto_address"`
+	// Subject line for emails created from block page.
+	MailtoSubject string `json:"mailto_subject"`
+	// Block page title.
+	Name string `json:"name"`
+	// Suppress detailed info at the bottom of the block page.
+	SuppressFooter bool                  `json:"suppress_footer"`
+	JSON           blockPageSettingsJSON `json:"-"`
+}
+
+// blockPageSettingsJSON contains the JSON metadata for the struct
+// [BlockPageSettings]
+type blockPageSettingsJSON struct {
+	BackgroundColor apijson.Field
+	Enabled         apijson.Field
+	FooterText      apijson.Field
+	HeaderText      apijson.Field
+	LogoPath        apijson.Field
+	MailtoAddress   apijson.Field
+	MailtoSubject   apijson.Field
+	Name            apijson.Field
+	SuppressFooter  apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *BlockPageSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r blockPageSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Block page layout settings.
+type BlockPageSettingsParam struct {
+	// Block page background color in #rrggbb format.
+	BackgroundColor param.Field[string] `json:"background_color"`
+	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Block page footer text.
+	FooterText param.Field[string] `json:"footer_text"`
+	// Block page header text.
+	HeaderText param.Field[string] `json:"header_text"`
+	// Full URL to the logo file.
+	LogoPath param.Field[string] `json:"logo_path"`
+	// Admin email for users to contact.
+	MailtoAddress param.Field[string] `json:"mailto_address"`
+	// Subject line for emails created from block page.
+	MailtoSubject param.Field[string] `json:"mailto_subject"`
+	// Block page title.
+	Name param.Field[string] `json:"name"`
+	// Suppress detailed info at the bottom of the block page.
+	SuppressFooter param.Field[bool] `json:"suppress_footer"`
+}
+
+func (r BlockPageSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// DLP body scanning settings.
+type BodyScanningSettings struct {
+	// Set the inspection mode to either `deep` or `shallow`.
+	InspectionMode string                   `json:"inspection_mode"`
+	JSON           bodyScanningSettingsJSON `json:"-"`
+}
+
+// bodyScanningSettingsJSON contains the JSON metadata for the struct
+// [BodyScanningSettings]
+type bodyScanningSettingsJSON struct {
+	InspectionMode apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *BodyScanningSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bodyScanningSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// DLP body scanning settings.
+type BodyScanningSettingsParam struct {
+	// Set the inspection mode to either `deep` or `shallow`.
+	InspectionMode param.Field[string] `json:"inspection_mode"`
+}
+
+func (r BodyScanningSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Browser isolation settings.
+type BrowserIsolationSettings struct {
+	// Enable non-identity onramp support for Browser Isolation.
+	NonIdentityEnabled bool `json:"non_identity_enabled"`
+	// Enable Clientless Browser Isolation.
+	URLBrowserIsolationEnabled bool                         `json:"url_browser_isolation_enabled"`
+	JSON                       browserIsolationSettingsJSON `json:"-"`
+}
+
+// browserIsolationSettingsJSON contains the JSON metadata for the struct
+// [BrowserIsolationSettings]
+type browserIsolationSettingsJSON struct {
+	NonIdentityEnabled         apijson.Field
+	URLBrowserIsolationEnabled apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
+}
+
+func (r *BrowserIsolationSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r browserIsolationSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Browser isolation settings.
+type BrowserIsolationSettingsParam struct {
+	// Enable non-identity onramp support for Browser Isolation.
+	NonIdentityEnabled param.Field[bool] `json:"non_identity_enabled"`
+	// Enable Clientless Browser Isolation.
+	URLBrowserIsolationEnabled param.Field[bool] `json:"url_browser_isolation_enabled"`
+}
+
+func (r BrowserIsolationSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Custom certificate settings for BYO-PKI.
+type CustomCertificateSettings struct {
+	// Enable use of custom certificate authority for signing Gateway traffic.
+	Enabled bool `json:"enabled,required"`
+	// UUID of certificate (ID from MTLS certificate store).
+	ID string `json:"id"`
+	// Certificate status (internal).
+	BindingStatus string                        `json:"binding_status"`
+	UpdatedAt     time.Time                     `json:"updated_at" format:"date-time"`
+	JSON          customCertificateSettingsJSON `json:"-"`
+}
+
+// customCertificateSettingsJSON contains the JSON metadata for the struct
+// [CustomCertificateSettings]
+type customCertificateSettingsJSON struct {
+	Enabled       apijson.Field
+	ID            apijson.Field
+	BindingStatus apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *CustomCertificateSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customCertificateSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Custom certificate settings for BYO-PKI.
+type CustomCertificateSettingsParam struct {
+	// Enable use of custom certificate authority for signing Gateway traffic.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// UUID of certificate (ID from MTLS certificate store).
+	ID param.Field[string] `json:"id"`
+}
+
+func (r CustomCertificateSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Extended e-mail matching settings.
+type ExtendedEmailMatching struct {
+	// Enable matching all variants of user emails (with + or . modifiers) used as
+	// criteria in Firewall policies.
+	Enabled bool                      `json:"enabled"`
+	JSON    extendedEmailMatchingJSON `json:"-"`
+}
+
+// extendedEmailMatchingJSON contains the JSON metadata for the struct
+// [ExtendedEmailMatching]
+type extendedEmailMatchingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r extendedEmailMatchingJSON) RawJSON() string {
+	return r.raw
+}
+
+// Extended e-mail matching settings.
+type ExtendedEmailMatchingParam struct {
+	// Enable matching all variants of user emails (with + or . modifiers) used as
+	// criteria in Firewall policies.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r ExtendedEmailMatchingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// FIPS settings.
+type FipsSettings struct {
+	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	TLS  bool             `json:"tls"`
+	JSON fipsSettingsJSON `json:"-"`
+}
+
+// fipsSettingsJSON contains the JSON metadata for the struct [FipsSettings]
+type fipsSettingsJSON struct {
+	TLS         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FipsSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r fipsSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// FIPS settings.
+type FipsSettingsParam struct {
+	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
+	TLS param.Field[bool] `json:"tls"`
+}
+
+func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configure a message to display on the user's device when an antivirus search is
+// performed.
+type NotificationSettings struct {
+	// Set notification on
+	Enabled bool `json:"enabled"`
+	// Customize the message shown in the notification.
+	Msg string `json:"msg"`
+	// Optional URL to direct users to additional information. If not set, the
+	// notification will open a block page.
+	SupportURL string                   `json:"support_url"`
+	JSON       notificationSettingsJSON `json:"-"`
+}
+
+// notificationSettingsJSON contains the JSON metadata for the struct
+// [NotificationSettings]
+type notificationSettingsJSON struct {
+	Enabled     apijson.Field
+	Msg         apijson.Field
+	SupportURL  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NotificationSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r notificationSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configure a message to display on the user's device when an antivirus search is
+// performed.
+type NotificationSettingsParam struct {
+	// Set notification on
+	Enabled param.Field[bool] `json:"enabled"`
+	// Customize the message shown in the notification.
+	Msg param.Field[string] `json:"msg"`
+	// Optional URL to direct users to additional information. If not set, the
+	// notification will open a block page.
+	SupportURL param.Field[string] `json:"support_url"`
+}
+
+func (r NotificationSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Protocol Detection settings.
+type ProtocolDetection struct {
+	// Enable detecting protocol on initial bytes of client traffic.
+	Enabled bool                  `json:"enabled"`
+	JSON    protocolDetectionJSON `json:"-"`
+}
+
+// protocolDetectionJSON contains the JSON metadata for the struct
+// [ProtocolDetection]
+type protocolDetectionJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProtocolDetection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r protocolDetectionJSON) RawJSON() string {
+	return r.raw
+}
+
+// Protocol Detection settings.
+type ProtocolDetectionParam struct {
+	// Enable detecting protocol on initial bytes of client traffic.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r ProtocolDetectionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// TLS interception settings.
+type TLSSettings struct {
+	// Enable inspecting encrypted HTTP traffic.
+	Enabled bool            `json:"enabled"`
+	JSON    tlsSettingsJSON `json:"-"`
+}
+
+// tlsSettingsJSON contains the JSON metadata for the struct [TLSSettings]
+type tlsSettingsJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TLSSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tlsSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+// TLS interception settings.
+type TLSSettingsParam struct {
+	// Enable inspecting encrypted HTTP traffic.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r TLSSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // account settings.
 type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182e struct {
 	// Activity log settings.
-	ActivityLog UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLog `json:"activity_log"`
+	ActivityLog ActivityLogSettings `json:"activity_log"`
 	// Anti-virus settings.
-	Antivirus UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirus `json:"antivirus"`
+	Antivirus AntiVirusSettings `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPage `json:"block_page"`
+	BlockPage BlockPageSettings `json:"block_page"`
 	// DLP body scanning settings.
-	BodyScanning UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanning `json:"body_scanning"`
+	BodyScanning BodyScanningSettings `json:"body_scanning"`
 	// Browser isolation settings.
-	BrowserIsolation UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolation `json:"browser_isolation"`
+	BrowserIsolation BrowserIsolationSettings `json:"browser_isolation"`
 	// Custom certificate settings for BYO-PKI.
-	CustomCertificate UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificate `json:"custom_certificate"`
+	CustomCertificate CustomCertificateSettings `json:"custom_certificate"`
 	// Extended e-mail matching settings.
-	ExtendedEmailMatching UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatching `json:"extended_email_matching"`
+	ExtendedEmailMatching ExtendedEmailMatching `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFips `json:"fips"`
+	Fips FipsSettings `json:"fips"`
 	// Protocol Detection settings.
-	ProtocolDetection UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetection `json:"protocol_detection"`
+	ProtocolDetection ProtocolDetection `json:"protocol_detection"`
 	// TLS interception settings.
-	TLSDecrypt UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecrypt `json:"tls_decrypt"`
-	JSON       unnamedSchemaRef055aaf3918bf29f81c09d394a864182eJSON       `json:"-"`
+	TLSDecrypt TLSSettings                                          `json:"tls_decrypt"`
+	JSON       unnamedSchemaRef055aaf3918bf29f81c09d394a864182eJSON `json:"-"`
 }
 
 // unnamedSchemaRef055aaf3918bf29f81c09d394a864182eJSON contains the JSON metadata
@@ -126,492 +575,31 @@ func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eJSON) RawJSON() string {
 	return r.raw
 }
 
-// Activity log settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLog struct {
-	// Enable activity logging.
-	Enabled bool                                                            `json:"enabled"`
-	JSON    unnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogJSON contains the
-// JSON metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLog]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLog) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogJSON) RawJSON() string {
-	return r.raw
-}
-
-// Anti-virus settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirus struct {
-	// Enable anti-virus scanning on downloads.
-	EnabledDownloadPhase bool `json:"enabled_download_phase"`
-	// Enable anti-virus scanning on uploads.
-	EnabledUploadPhase bool `json:"enabled_upload_phase"`
-	// Block requests for files that cannot be scanned.
-	FailClosed bool `json:"fail_closed"`
-	// Configure a message to display on the user's device when an antivirus search is
-	// performed.
-	NotificationSettings UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettings `json:"notification_settings"`
-	JSON                 unnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusJSON                 `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusJSON contains the JSON
-// metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirus]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusJSON struct {
-	EnabledDownloadPhase apijson.Field
-	EnabledUploadPhase   apijson.Field
-	FailClosed           apijson.Field
-	NotificationSettings apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirus) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusJSON) RawJSON() string {
-	return r.raw
-}
-
-// Configure a message to display on the user's device when an antivirus search is
-// performed.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettings struct {
-	// Set notification on
-	Enabled bool `json:"enabled"`
-	// Customize the message shown in the notification.
-	Msg string `json:"msg"`
-	// Optional URL to direct users to additional information. If not set, the
-	// notification will open a block page.
-	SupportURL string                                                                            `json:"support_url"`
-	JSON       unnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsJSON
-// contains the JSON metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettings]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsJSON struct {
-	Enabled     apijson.Field
-	Msg         apijson.Field
-	SupportURL  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Block page layout settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPage struct {
-	// Block page background color in #rrggbb format.
-	BackgroundColor string `json:"background_color"`
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	Enabled bool `json:"enabled"`
-	// Block page footer text.
-	FooterText string `json:"footer_text"`
-	// Block page header text.
-	HeaderText string `json:"header_text"`
-	// Full URL to the logo file.
-	LogoPath string `json:"logo_path"`
-	// Admin email for users to contact.
-	MailtoAddress string `json:"mailto_address"`
-	// Subject line for emails created from block page.
-	MailtoSubject string `json:"mailto_subject"`
-	// Block page title.
-	Name string `json:"name"`
-	// Suppress detailed info at the bottom of the block page.
-	SuppressFooter bool                                                          `json:"suppress_footer"`
-	JSON           unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageJSON contains the JSON
-// metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPage]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageJSON struct {
-	BackgroundColor apijson.Field
-	Enabled         apijson.Field
-	FooterText      apijson.Field
-	HeaderText      apijson.Field
-	LogoPath        apijson.Field
-	MailtoAddress   apijson.Field
-	MailtoSubject   apijson.Field
-	Name            apijson.Field
-	SuppressFooter  apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageJSON) RawJSON() string {
-	return r.raw
-}
-
-// DLP body scanning settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanning struct {
-	// Set the inspection mode to either `deep` or `shallow`.
-	InspectionMode string                                                           `json:"inspection_mode"`
-	JSON           unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningJSON contains the
-// JSON metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanning]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningJSON struct {
-	InspectionMode apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanning) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningJSON) RawJSON() string {
-	return r.raw
-}
-
-// Browser isolation settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolation struct {
-	// Enable non-identity onramp support for Browser Isolation.
-	NonIdentityEnabled bool `json:"non_identity_enabled"`
-	// Enable Clientless Browser Isolation.
-	URLBrowserIsolationEnabled bool                                                                 `json:"url_browser_isolation_enabled"`
-	JSON                       unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationJSON contains
-// the JSON metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolation]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationJSON struct {
-	NonIdentityEnabled         apijson.Field
-	URLBrowserIsolationEnabled apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationJSON) RawJSON() string {
-	return r.raw
-}
-
-// Custom certificate settings for BYO-PKI.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificate struct {
-	// Enable use of custom certificate authority for signing Gateway traffic.
-	Enabled bool `json:"enabled,required"`
-	// UUID of certificate (ID from MTLS certificate store).
-	ID string `json:"id"`
-	// Certificate status (internal).
-	BindingStatus string                                                                `json:"binding_status"`
-	UpdatedAt     time.Time                                                             `json:"updated_at" format:"date-time"`
-	JSON          unnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateJSON contains
-// the JSON metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificate]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateJSON struct {
-	Enabled       apijson.Field
-	ID            apijson.Field
-	BindingStatus apijson.Field
-	UpdatedAt     apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificate) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateJSON) RawJSON() string {
-	return r.raw
-}
-
-// Extended e-mail matching settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatching struct {
-	// Enable matching all variants of user emails (with + or . modifiers) used as
-	// criteria in Firewall policies.
-	Enabled bool                                                                      `json:"enabled"`
-	JSON    unnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingJSON
-// contains the JSON metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatching]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingJSON) RawJSON() string {
-	return r.raw
-}
-
-// FIPS settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFips struct {
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	TLS  bool                                                     `json:"tls"`
-	JSON unnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsJSON contains the JSON
-// metadata for the struct [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFips]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsJSON struct {
-	TLS         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFips) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Protocol Detection settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetection struct {
-	// Enable detecting protocol on initial bytes of client traffic.
-	Enabled bool                                                                  `json:"enabled"`
-	JSON    unnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionJSON contains
-// the JSON metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetection]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionJSON) RawJSON() string {
-	return r.raw
-}
-
-// TLS interception settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecrypt struct {
-	// Enable inspecting encrypted HTTP traffic.
-	Enabled bool                                                           `json:"enabled"`
-	JSON    unnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptJSON `json:"-"`
-}
-
-// unnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptJSON contains the JSON
-// metadata for the struct
-// [UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecrypt]
-type unnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptJSON) RawJSON() string {
-	return r.raw
-}
-
 // account settings.
 type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam struct {
 	// Activity log settings.
-	ActivityLog param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogParam] `json:"activity_log"`
+	ActivityLog param.Field[ActivityLogSettingsParam] `json:"activity_log"`
 	// Anti-virus settings.
-	Antivirus param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusParam] `json:"antivirus"`
+	Antivirus param.Field[AntiVirusSettingsParam] `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageParam] `json:"block_page"`
+	BlockPage param.Field[BlockPageSettingsParam] `json:"block_page"`
 	// DLP body scanning settings.
-	BodyScanning param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningParam] `json:"body_scanning"`
+	BodyScanning param.Field[BodyScanningSettingsParam] `json:"body_scanning"`
 	// Browser isolation settings.
-	BrowserIsolation param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationParam] `json:"browser_isolation"`
+	BrowserIsolation param.Field[BrowserIsolationSettingsParam] `json:"browser_isolation"`
 	// Custom certificate settings for BYO-PKI.
-	CustomCertificate param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateParam] `json:"custom_certificate"`
+	CustomCertificate param.Field[CustomCertificateSettingsParam] `json:"custom_certificate"`
 	// Extended e-mail matching settings.
-	ExtendedEmailMatching param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingParam] `json:"extended_email_matching"`
+	ExtendedEmailMatching param.Field[ExtendedEmailMatchingParam] `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsParam] `json:"fips"`
+	Fips param.Field[FipsSettingsParam] `json:"fips"`
 	// Protocol Detection settings.
-	ProtocolDetection param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionParam] `json:"protocol_detection"`
+	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
 	// TLS interception settings.
-	TLSDecrypt param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptParam] `json:"tls_decrypt"`
+	TLSDecrypt param.Field[TLSSettingsParam] `json:"tls_decrypt"`
 }
 
 func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Activity log settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogParam struct {
-	// Enable activity logging.
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eActivityLogParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Anti-virus settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusParam struct {
-	// Enable anti-virus scanning on downloads.
-	EnabledDownloadPhase param.Field[bool] `json:"enabled_download_phase"`
-	// Enable anti-virus scanning on uploads.
-	EnabledUploadPhase param.Field[bool] `json:"enabled_upload_phase"`
-	// Block requests for files that cannot be scanned.
-	FailClosed param.Field[bool] `json:"fail_closed"`
-	// Configure a message to display on the user's device when an antivirus search is
-	// performed.
-	NotificationSettings param.Field[UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsParam] `json:"notification_settings"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configure a message to display on the user's device when an antivirus search is
-// performed.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsParam struct {
-	// Set notification on
-	Enabled param.Field[bool] `json:"enabled"`
-	// Customize the message shown in the notification.
-	Msg param.Field[string] `json:"msg"`
-	// Optional URL to direct users to additional information. If not set, the
-	// notification will open a block page.
-	SupportURL param.Field[string] `json:"support_url"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eAntivirusNotificationSettingsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Block page layout settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageParam struct {
-	// Block page background color in #rrggbb format.
-	BackgroundColor param.Field[string] `json:"background_color"`
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Block page footer text.
-	FooterText param.Field[string] `json:"footer_text"`
-	// Block page header text.
-	HeaderText param.Field[string] `json:"header_text"`
-	// Full URL to the logo file.
-	LogoPath param.Field[string] `json:"logo_path"`
-	// Admin email for users to contact.
-	MailtoAddress param.Field[string] `json:"mailto_address"`
-	// Subject line for emails created from block page.
-	MailtoSubject param.Field[string] `json:"mailto_subject"`
-	// Block page title.
-	Name param.Field[string] `json:"name"`
-	// Suppress detailed info at the bottom of the block page.
-	SuppressFooter param.Field[bool] `json:"suppress_footer"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBlockPageParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// DLP body scanning settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningParam struct {
-	// Set the inspection mode to either `deep` or `shallow`.
-	InspectionMode param.Field[string] `json:"inspection_mode"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBodyScanningParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Browser isolation settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationParam struct {
-	// Enable non-identity onramp support for Browser Isolation.
-	NonIdentityEnabled param.Field[bool] `json:"non_identity_enabled"`
-	// Enable Clientless Browser Isolation.
-	URLBrowserIsolationEnabled param.Field[bool] `json:"url_browser_isolation_enabled"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eBrowserIsolationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Custom certificate settings for BYO-PKI.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateParam struct {
-	// Enable use of custom certificate authority for signing Gateway traffic.
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// UUID of certificate (ID from MTLS certificate store).
-	ID param.Field[string] `json:"id"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eCustomCertificateParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Extended e-mail matching settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingParam struct {
-	// Enable matching all variants of user emails (with + or . modifiers) used as
-	// criteria in Firewall policies.
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eExtendedEmailMatchingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// FIPS settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsParam struct {
-	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	TLS param.Field[bool] `json:"tls"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eFipsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Protocol Detection settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionParam struct {
-	// Enable detecting protocol on initial bytes of client traffic.
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eProtocolDetectionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// TLS interception settings.
-type UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptParam struct {
-	// Enable inspecting encrypted HTTP traffic.
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r UnnamedSchemaRef055aaf3918bf29f81c09d394a864182eTLSDecryptParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

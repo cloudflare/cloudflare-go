@@ -32,11 +32,11 @@ func TestPreviewNewWithOptionalParams(t *testing.T) {
 		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Address:              cloudflare.F("www.example.com"),
 		Name:                 cloudflare.F("server-1"),
-		CheckRegions:         cloudflare.F([]healthchecks.PreviewNewParamsCheckRegion{healthchecks.PreviewNewParamsCheckRegionWeu, healthchecks.PreviewNewParamsCheckRegionEnam}),
+		CheckRegions:         cloudflare.F([]healthchecks.CheckRegionItem{healthchecks.CheckRegionItemWeu, healthchecks.CheckRegionItemEnam}),
 		ConsecutiveFails:     cloudflare.F(int64(0)),
 		ConsecutiveSuccesses: cloudflare.F(int64(0)),
 		Description:          cloudflare.F("Health check for www.example.com"),
-		HTTPConfig: cloudflare.F(healthchecks.PreviewNewParamsHTTPConfig{
+		HTTPConfig: cloudflare.F(healthchecks.HTTPConfigurationParam{
 			AllowInsecure:   cloudflare.F(true),
 			ExpectedBody:    cloudflare.F("success"),
 			ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
@@ -49,15 +49,15 @@ func TestPreviewNewWithOptionalParams(t *testing.T) {
 					"0": "abc123",
 				},
 			}),
-			Method: cloudflare.F(healthchecks.PreviewNewParamsHTTPConfigMethodGet),
+			Method: cloudflare.F(healthchecks.HTTPConfigurationMethodGet),
 			Path:   cloudflare.F("/health"),
 			Port:   cloudflare.F(int64(0)),
 		}),
 		Interval:  cloudflare.F(int64(0)),
 		Retries:   cloudflare.F(int64(0)),
 		Suspended: cloudflare.F(true),
-		TcpConfig: cloudflare.F(healthchecks.PreviewNewParamsTcpConfig{
-			Method: cloudflare.F(healthchecks.PreviewNewParamsTcpConfigMethodConnectionEstablished),
+		TcpConfig: cloudflare.F(healthchecks.TcpConfigurationParam{
+			Method: cloudflare.F(healthchecks.TcpConfigurationMethodConnectionEstablished),
 			Port:   cloudflare.F(int64(0)),
 		}),
 		Timeout: cloudflare.F(int64(0)),
