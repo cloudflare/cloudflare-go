@@ -13,7 +13,7 @@ func TestListHostnameAssociations(t *testing.T) {
 	setup()
 	defer teardown()
 
-	params := HostnameAssociationParams{
+	params := ListHostnameAssociationParams{
 		CertificateID: "af7149d5-1ca0-4768-8bb1-d50a51c7d845",
 	}
 
@@ -40,6 +40,7 @@ func TestListHostnameAssociations(t *testing.T) {
 	}
 
 	actual, err := client.ListHostnameAssociations(context.Background(), ZoneIdentifier(testZoneID), params)
+
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
@@ -49,7 +50,7 @@ func TestListHostnameAssociationsWithoutID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	params := HostnameAssociationParams{}
+	params := ListHostnameAssociationParams{}
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("content-type", "application/json")
