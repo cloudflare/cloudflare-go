@@ -250,8 +250,6 @@ func (r filterJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Filter) implementsFirewallUnnamedSchemaRefAb48d2d33259c9107401d174735701c7() {}
-
 type FilterAlertTriggerPreferencesValue string
 
 const (

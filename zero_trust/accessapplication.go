@@ -577,7 +577,7 @@ type ApplicationSaaSApplicationSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 `json:"name_id_format"`
+	NameIDFormat ApplicationSaaSApplicationSaasAppNameIDFormat `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -791,6 +791,22 @@ const (
 func (r ApplicationSaaSApplicationSaasAppAuthType) IsKnown() bool {
 	switch r {
 	case ApplicationSaaSApplicationSaasAppAuthTypeSaml, ApplicationSaaSApplicationSaasAppAuthTypeOidc:
+		return true
+	}
+	return false
+}
+
+// The format of the name identifier sent to the SaaS application.
+type ApplicationSaaSApplicationSaasAppNameIDFormat string
+
+const (
+	ApplicationSaaSApplicationSaasAppNameIDFormatID    ApplicationSaaSApplicationSaasAppNameIDFormat = "id"
+	ApplicationSaaSApplicationSaasAppNameIDFormatEmail ApplicationSaaSApplicationSaasAppNameIDFormat = "email"
+)
+
+func (r ApplicationSaaSApplicationSaasAppNameIDFormat) IsKnown() bool {
+	switch r {
+	case ApplicationSaaSApplicationSaasAppNameIDFormatID, ApplicationSaaSApplicationSaasAppNameIDFormatEmail:
 		return true
 	}
 	return false
@@ -1387,7 +1403,7 @@ type SamlSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 `json:"name_id_format"`
+	NameIDFormat SamlSaasAppNameIDFormat `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1459,9 +1475,9 @@ type SamlSaasAppCustomAttributes struct {
 	// The name of the attribute.
 	Name string `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9 `json:"name_format"`
-	Source     UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832 `json:"source"`
-	JSON       samlSaasAppCustomAttributesJSON                  `json:"-"`
+	NameFormat SamlSaasAppCustomAttributesNameFormat `json:"name_format"`
+	Source     SamlSaasAppCustomAttributesSource     `json:"source"`
+	JSON       samlSaasAppCustomAttributesJSON       `json:"-"`
 }
 
 // samlSaasAppCustomAttributesJSON contains the JSON metadata for the struct
@@ -1482,6 +1498,61 @@ func (r samlSaasAppCustomAttributesJSON) RawJSON() string {
 	return r.raw
 }
 
+// A globally unique name for an identity or service provider.
+type SamlSaasAppCustomAttributesNameFormat string
+
+const (
+	SamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified SamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+	SamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       SamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+	SamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI         SamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+)
+
+func (r SamlSaasAppCustomAttributesNameFormat) IsKnown() bool {
+	switch r {
+	case SamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, SamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic, SamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatURI:
+		return true
+	}
+	return false
+}
+
+type SamlSaasAppCustomAttributesSource struct {
+	// The name of the IdP attribute.
+	Name string                                `json:"name"`
+	JSON samlSaasAppCustomAttributesSourceJSON `json:"-"`
+}
+
+// samlSaasAppCustomAttributesSourceJSON contains the JSON metadata for the struct
+// [SamlSaasAppCustomAttributesSource]
+type samlSaasAppCustomAttributesSourceJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SamlSaasAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r samlSaasAppCustomAttributesSourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// The format of the name identifier sent to the SaaS application.
+type SamlSaasAppNameIDFormat string
+
+const (
+	SamlSaasAppNameIDFormatID    SamlSaasAppNameIDFormat = "id"
+	SamlSaasAppNameIDFormatEmail SamlSaasAppNameIDFormat = "email"
+)
+
+func (r SamlSaasAppNameIDFormat) IsKnown() bool {
+	switch r {
+	case SamlSaasAppNameIDFormatID, SamlSaasAppNameIDFormatEmail:
+		return true
+	}
+	return false
+}
+
 type SamlSaasAppParam struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
@@ -1496,7 +1567,7 @@ type SamlSaasAppParam struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419] `json:"name_id_format"`
+	NameIDFormat param.Field[SamlSaasAppNameIDFormat] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1530,81 +1601,26 @@ type SamlSaasAppCustomAttributesParam struct {
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9]      `json:"name_format"`
-	Source     param.Field[UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832Param] `json:"source"`
+	NameFormat param.Field[SamlSaasAppCustomAttributesNameFormat]  `json:"name_format"`
+	Source     param.Field[SamlSaasAppCustomAttributesSourceParam] `json:"source"`
 }
 
 func (r SamlSaasAppCustomAttributesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SelfHostedDomainsItem = string
-
-type SelfHostedDomainsItemParam = string
-
-type UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832 struct {
-	// The name of the IdP attribute.
-	Name string                                               `json:"name"`
-	JSON unnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832JSON `json:"-"`
-}
-
-// unnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832]
-type unnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832JSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832JSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832Param struct {
+type SamlSaasAppCustomAttributesSourceParam struct {
 	// The name of the IdP attribute.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r UnnamedSchemaRef6ed9646890b9be79e16f1cfff86ec832Param) MarshalJSON() (data []byte, err error) {
+func (r SamlSaasAppCustomAttributesSourceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A globally unique name for an identity or service provider.
-type UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9 string
+type SelfHostedDomainsItem = string
 
-const (
-	UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatUnspecified UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9 = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatBasic       UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9 = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatURI         UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9 = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-)
-
-func (r UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatUnspecified, UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatBasic, UnnamedSchemaRefC335ce55d4fdf132c942dfce6e45dcb9UrnOasisNamesTcSaml2_0AttrnameFormatURI:
-		return true
-	}
-	return false
-}
-
-// The format of the name identifier sent to the SaaS application.
-type UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 string
-
-const (
-	UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419ID    UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 = "id"
-	UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419Email UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419 = "email"
-)
-
-func (r UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419ID, UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419Email:
-		return true
-	}
-	return false
-}
+type SelfHostedDomainsItemParam = string
 
 type AccessApplicationDeleteResponse struct {
 	// UUID
@@ -1786,7 +1802,7 @@ type AccessApplicationNewParamsSaaSApplicationSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419] `json:"name_id_format"`
+	NameIDFormat param.Field[AccessApplicationNewParamsSaaSApplicationSaasAppNameIDFormat] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -1922,6 +1938,22 @@ const (
 func (r AccessApplicationNewParamsSaaSApplicationSaasAppAuthType) IsKnown() bool {
 	switch r {
 	case AccessApplicationNewParamsSaaSApplicationSaasAppAuthTypeSaml, AccessApplicationNewParamsSaaSApplicationSaasAppAuthTypeOidc:
+		return true
+	}
+	return false
+}
+
+// The format of the name identifier sent to the SaaS application.
+type AccessApplicationNewParamsSaaSApplicationSaasAppNameIDFormat string
+
+const (
+	AccessApplicationNewParamsSaaSApplicationSaasAppNameIDFormatID    AccessApplicationNewParamsSaaSApplicationSaasAppNameIDFormat = "id"
+	AccessApplicationNewParamsSaaSApplicationSaasAppNameIDFormatEmail AccessApplicationNewParamsSaaSApplicationSaasAppNameIDFormat = "email"
+)
+
+func (r AccessApplicationNewParamsSaaSApplicationSaasAppNameIDFormat) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsSaaSApplicationSaasAppNameIDFormatID, AccessApplicationNewParamsSaaSApplicationSaasAppNameIDFormatEmail:
 		return true
 	}
 	return false
@@ -2500,7 +2532,7 @@ type AccessApplicationUpdateParamsSaaSApplicationSaasApp struct {
 	// The unique identifier for your SaaS application.
 	IDPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[UnnamedSchemaRefC6200e37c458aaa3c42e6e5b999bc419] `json:"name_id_format"`
+	NameIDFormat param.Field[AccessApplicationUpdateParamsSaaSApplicationSaasAppNameIDFormat] `json:"name_id_format"`
 	// A [JSONata](https://jsonata.org/) expression that transforms an application's
 	// user identities into a NameID value for its SAML assertion. This expression
 	// should evaluate to a singular string. The output of this expression can override
@@ -2636,6 +2668,22 @@ const (
 func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthType) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthTypeSaml, AccessApplicationUpdateParamsSaaSApplicationSaasAppAuthTypeOidc:
+		return true
+	}
+	return false
+}
+
+// The format of the name identifier sent to the SaaS application.
+type AccessApplicationUpdateParamsSaaSApplicationSaasAppNameIDFormat string
+
+const (
+	AccessApplicationUpdateParamsSaaSApplicationSaasAppNameIDFormatID    AccessApplicationUpdateParamsSaaSApplicationSaasAppNameIDFormat = "id"
+	AccessApplicationUpdateParamsSaaSApplicationSaasAppNameIDFormatEmail AccessApplicationUpdateParamsSaaSApplicationSaasAppNameIDFormat = "email"
+)
+
+func (r AccessApplicationUpdateParamsSaaSApplicationSaasAppNameIDFormat) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsSaaSApplicationSaasAppNameIDFormatID, AccessApplicationUpdateParamsSaaSApplicationSaasAppNameIDFormatEmail:
 		return true
 	}
 	return false

@@ -45,25 +45,25 @@ func (r *AccessUserLastSeenIdentityService) Get(ctx context.Context, identifier 
 }
 
 type Identity struct {
-	AccountID          string                                           `json:"account_id"`
-	AuthStatus         string                                           `json:"auth_status"`
-	CommonName         string                                           `json:"common_name"`
-	DeviceID           string                                           `json:"device_id"`
-	DeviceSessions     map[string]IdentityDeviceSession                 `json:"device_sessions"`
-	DevicePosture      map[string]IdentityDevicePosture                 `json:"devicePosture"`
-	Email              string                                           `json:"email"`
-	Geo                UnnamedSchemaRef6a02fe18089d53b52b2cd3949b717919 `json:"geo"`
-	Iat                float64                                          `json:"iat"`
-	IDP                IdentityIDP                                      `json:"idp"`
-	IP                 string                                           `json:"ip"`
-	IsGateway          bool                                             `json:"is_gateway"`
-	IsWARP             bool                                             `json:"is_warp"`
-	MTLSAuth           IdentityMTLSAuth                                 `json:"mtls_auth"`
-	ServiceTokenID     string                                           `json:"service_token_id"`
-	ServiceTokenStatus bool                                             `json:"service_token_status"`
-	UserUUID           string                                           `json:"user_uuid"`
-	Version            float64                                          `json:"version"`
-	JSON               identityJSON                                     `json:"-"`
+	AccountID          string                           `json:"account_id"`
+	AuthStatus         string                           `json:"auth_status"`
+	CommonName         string                           `json:"common_name"`
+	DeviceID           string                           `json:"device_id"`
+	DeviceSessions     map[string]IdentityDeviceSession `json:"device_sessions"`
+	DevicePosture      map[string]IdentityDevicePosture `json:"devicePosture"`
+	Email              string                           `json:"email"`
+	Geo                IdentityGeo                      `json:"geo"`
+	Iat                float64                          `json:"iat"`
+	IDP                IdentityIDP                      `json:"idp"`
+	IP                 string                           `json:"ip"`
+	IsGateway          bool                             `json:"is_gateway"`
+	IsWARP             bool                             `json:"is_warp"`
+	MTLSAuth           IdentityMTLSAuth                 `json:"mtls_auth"`
+	ServiceTokenID     string                           `json:"service_token_id"`
+	ServiceTokenStatus bool                             `json:"service_token_status"`
+	UserUUID           string                           `json:"user_uuid"`
+	Version            float64                          `json:"version"`
+	JSON               identityJSON                     `json:"-"`
 }
 
 // identityJSON contains the JSON metadata for the struct [Identity]
@@ -176,6 +176,26 @@ func (r *IdentityDevicePostureCheck) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r identityDevicePostureCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityGeo struct {
+	Country string          `json:"country"`
+	JSON    identityGeoJSON `json:"-"`
+}
+
+// identityGeoJSON contains the JSON metadata for the struct [IdentityGeo]
+type identityGeoJSON struct {
+	Country     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityGeoJSON) RawJSON() string {
 	return r.raw
 }
 
