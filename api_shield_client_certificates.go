@@ -69,12 +69,17 @@ type CreateClientCertificateParams struct {
 	ValidityDays int    `json:"validity_days"`
 }
 
+type ClientCertificateResponse struct {
+	Response
+	Result ClientCertificate `json:"result"`
+}
+
 // ListHostnameAssociations returns a list of all domain associations for a given certificate_id.
 //
 // API reference: https://developers.cloudflare.com/api/operations/client-certificate-for-a-zone-list-hostname-associations
 func (api *API) ListHostnameAssociations(ctx context.Context, rc *ResourceContainer, params ListHostnameAssociationParams) (HostnameAssociation, error) {
 	if rc.Level != ZoneRouteLevel {
-		return HostnameAssociation{}, ErrRequiredAccountLevelResourceContainer
+		return HostnameAssociation{}, ErrRequiredZoneLevelResourceContainer
 	}
 
 	if rc.Identifier == "" {
@@ -98,7 +103,7 @@ func (api *API) ListHostnameAssociations(ctx context.Context, rc *ResourceContai
 // API reference: https://developers.cloudflare.com/api/operations/client-certificate-for-a-zone-put-hostname-associations
 func (api *API) ReplaceHostnameAssociations(ctx context.Context, rc *ResourceContainer, params ReplaceHostnameAssociationParams) (HostnameAssociation, error) {
 	if rc.Level != ZoneRouteLevel {
-		return HostnameAssociation{}, ErrRequiredAccountLevelResourceContainer
+		return HostnameAssociation{}, ErrRequiredZoneLevelResourceContainer
 	}
 
 	if rc.Identifier == "" {
@@ -122,7 +127,7 @@ func (api *API) ReplaceHostnameAssociations(ctx context.Context, rc *ResourceCon
 // API reference: https://developers.cloudflare.com/api/operations/client-certificate-for-a-zone-list-client-certificates
 func (api *API) ListClientCertificates(ctx context.Context, rc *ResourceContainer, params ListClientCertificatesParams) ([]ClientCertificate, *ResultInfo, error) {
 	if rc.Level != ZoneRouteLevel {
-		return []ClientCertificate{}, &ResultInfo{}, ErrRequiredAccountLevelResourceContainer
+		return []ClientCertificate{}, &ResultInfo{}, ErrRequiredZoneLevelResourceContainer
 	}
 
 	if rc.Identifier == "" {
@@ -171,7 +176,7 @@ func (api *API) ListClientCertificates(ctx context.Context, rc *ResourceContaine
 // API reference: https://developers.cloudflare.com/api/operations/client-certificate-for-a-zone-create-client-certificate
 func (api *API) CreateClientCertificate(ctx context.Context, rc *ResourceContainer, params CreateClientCertificateParams) (ClientCertificate, error) {
 	if rc.Level != ZoneRouteLevel {
-		return ClientCertificate{}, ErrRequiredAccountLevelResourceContainer
+		return ClientCertificate{}, ErrRequiredZoneLevelResourceContainer
 	}
 
 	if rc.Identifier == "" {
@@ -183,9 +188,93 @@ func (api *API) CreateClientCertificate(ctx context.Context, rc *ResourceContain
 	if err != nil {
 		return ClientCertificate{}, err
 	}
-	var r ClientCertificate
+	var r ClientCertificateResponse
 	if err := json.Unmarshal(res, &r); err != nil {
 		return ClientCertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
-	return r, err
+	return r.Result, err
+}
+
+// RevokeClientCertificate sets a API Shield mTLS Client Certificate to pending_revocation status for processing to revoked status.
+//
+// API reference: https://developers.cloudflare.com/api/operations/client-certificate-for-a-zone-delete-client-certificate
+func (api *API) RevokeClientCertificate(ctx context.Context, rc *ResourceContainer, certificateID string) (ClientCertificate, error) {
+	if rc.Level != ZoneRouteLevel {
+		return ClientCertificate{}, ErrRequiredZoneLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return ClientCertificate{}, ErrMissingZoneID
+	}
+
+	if certificateID == "" {
+		return ClientCertificate{}, ErrMissingCertificateID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/client_certificates/%s", rc.Identifier, certificateID)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+	if err != nil {
+		return ClientCertificate{}, err
+	}
+	var r ClientCertificateResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return ClientCertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, err
+}
+
+// ClientCertificateDetails gets details for a single mTLS API Shield Client Certificate
+//
+// API reference: https://developers.cloudflare.com/api/operations/client-certificate-for-a-zone-client-certificate-details
+func (api *API) GetClientCertificateDetails(ctx context.Context, rc *ResourceContainer, certificateID string) (ClientCertificate, error) {
+	if rc.Level != ZoneRouteLevel {
+		return ClientCertificate{}, ErrRequiredZoneLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return ClientCertificate{}, ErrMissingZoneID
+	}
+
+	if certificateID == "" {
+		return ClientCertificate{}, ErrMissingCertificateID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/client_certificates/%s", rc.Identifier, certificateID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return ClientCertificate{}, err
+	}
+	var r ClientCertificateResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return ClientCertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, err
+}
+
+// ReactivateClientCertificate reactivates a API Shield mTLS Client Certificate, if it is in a pending_revocation state
+//
+// API reference: https://developers.cloudflare.com/api/operations/client-certificate-for-a-zone-edit-client-certificate
+func (api *API) ReactivateClientCertificate(ctx context.Context, rc *ResourceContainer, certificateID string) (ClientCertificate, error) {
+	if rc.Level != ZoneRouteLevel {
+		return ClientCertificate{}, ErrRequiredZoneLevelResourceContainer
+	}
+
+	if rc.Identifier == "" {
+		return ClientCertificate{}, ErrMissingZoneID
+	}
+
+	if certificateID == "" {
+		return ClientCertificate{}, ErrMissingCertificateID
+	}
+
+	uri := fmt.Sprintf("/zones/%s/client_certificates/%s", rc.Identifier, certificateID)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, nil)
+	if err != nil {
+		return ClientCertificate{}, err
+	}
+	var r ClientCertificateResponse
+	if err := json.Unmarshal(res, &r); err != nil {
+		return ClientCertificate{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, err
 }
