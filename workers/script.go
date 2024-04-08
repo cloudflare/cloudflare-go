@@ -33,7 +33,6 @@ type ScriptService struct {
 	Tail        *ScriptTailService
 	UsageModel  *ScriptUsageModelService
 	Content     *ScriptContentService
-	ContentV2   *ScriptContentV2Service
 	Settings    *ScriptSettingService
 	Deployments *ScriptDeploymentService
 	Versions    *ScriptVersionService
@@ -50,7 +49,6 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	r.Tail = NewScriptTailService(opts...)
 	r.UsageModel = NewScriptUsageModelService(opts...)
 	r.Content = NewScriptContentService(opts...)
-	r.ContentV2 = NewScriptContentV2Service(opts...)
 	r.Settings = NewScriptSettingService(opts...)
 	r.Deployments = NewScriptDeploymentService(opts...)
 	r.Versions = NewScriptVersionService(opts...)
