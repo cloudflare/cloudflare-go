@@ -51,7 +51,7 @@ func NewV1Service(opts ...option.RequestOption) (r *V1Service) {
 func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.RequestOption) (res *Image, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1NewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1", params.getAccountID())
+	path := fmt.Sprintf("accounts/%s/images/v1", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -254,50 +254,23 @@ func (r V1ListResponseSuccess) IsKnown() bool {
 	return false
 }
 
-// This interface is a union satisfied by one of the following:
-// [V1NewParamsImagesImageUploadViaFile], [V1NewParamsImagesImageUploadViaURL].
-type V1NewParams interface {
-	ImplementsV1NewParams()
-
-	getAccountID() param.Field[string]
-}
-
-type V1NewParamsImagesImageUploadViaFile struct {
+type V1NewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// An image binary data.
-	File param.Field[interface{}] `json:"file,required"`
+	// An image binary data. Only needed when type is uploading a file.
+	File param.Field[interface{}] `json:"file"`
+	// User modifiable key-value store. Can use used for keeping references to another
+	// system of record for managing images.
+	Metadata param.Field[interface{}] `json:"metadata"`
+	// Indicates whether the image requires a signature token for the access.
+	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
+	// A URL to fetch an image from origin. Only needed when type is uploading from a
+	// URL.
+	URL param.Field[string] `json:"url"`
 }
 
-func (r V1NewParamsImagesImageUploadViaFile) MarshalJSON() (data []byte, err error) {
+func (r V1NewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r V1NewParamsImagesImageUploadViaFile) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (V1NewParamsImagesImageUploadViaFile) ImplementsV1NewParams() {
-
-}
-
-type V1NewParamsImagesImageUploadViaURL struct {
-	// Account identifier tag.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// A URL to fetch an image from origin.
-	URL param.Field[string] `json:"url,required"`
-}
-
-func (r V1NewParamsImagesImageUploadViaURL) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r V1NewParamsImagesImageUploadViaURL) getAccountID() param.Field[string] {
-	return r.AccountID
-}
-
-func (V1NewParamsImagesImageUploadViaURL) ImplementsV1NewParams() {
-
 }
 
 type V1NewResponseEnvelope struct {
