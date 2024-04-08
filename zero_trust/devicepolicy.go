@@ -167,8 +167,9 @@ type SettingsPolicy struct {
 	// The URL to launch when the Send Feedback button is clicked.
 	SupportURL string `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
-	SwitchLocked bool               `json:"switch_locked"`
-	JSON         settingsPolicyJSON `json:"-"`
+	SwitchLocked bool                       `json:"switch_locked"`
+	TargetTests  []SettingsPolicyTargetTest `json:"target_tests"`
+	JSON         settingsPolicyJSON         `json:"-"`
 }
 
 // settingsPolicyJSON contains the JSON metadata for the struct [SettingsPolicy]
@@ -196,6 +197,7 @@ type settingsPolicyJSON struct {
 	ServiceModeV2       apijson.Field
 	SupportURL          apijson.Field
 	SwitchLocked        apijson.Field
+	TargetTests         apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -230,6 +232,31 @@ func (r *SettingsPolicyServiceModeV2) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r settingsPolicyServiceModeV2JSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingsPolicyTargetTest struct {
+	// The id of the DEX test targeting this policy
+	ID string `json:"id"`
+	// The name of the DEX test targeting this policy
+	Name string                       `json:"name"`
+	JSON settingsPolicyTargetTestJSON `json:"-"`
+}
+
+// settingsPolicyTargetTestJSON contains the JSON metadata for the struct
+// [SettingsPolicyTargetTest]
+type settingsPolicyTargetTestJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingsPolicyTargetTest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingsPolicyTargetTestJSON) RawJSON() string {
 	return r.raw
 }
 
