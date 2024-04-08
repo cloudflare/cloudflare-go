@@ -76,8 +76,8 @@ func TestScriptVersionSettingEditWithOptionalParams(t *testing.T) {
 				Placement: cloudflare.F(workers.PlacementConfigurationParam{
 					Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
 				}),
-				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
-				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
+				Tags: cloudflare.F([]workers.TagsItemParam{"my-tag", "my-tag", "my-tag"}),
+				TailConsumers: cloudflare.F([]workers.ConsumerScriptItemParam{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),

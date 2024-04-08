@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // RoleService contains methods and other services that help with interacting with
@@ -107,8 +108,8 @@ type Role struct {
 	// Role Name.
 	Name string `json:"name,required"`
 	// Access permissions for this User.
-	Permissions []string `json:"permissions,required"`
-	JSON        roleJSON `json:"-"`
+	Permissions []user.PermissionItem `json:"permissions,required"`
+	JSON        roleJSON              `json:"-"`
 }
 
 // roleJSON contains the JSON metadata for the struct [Role]

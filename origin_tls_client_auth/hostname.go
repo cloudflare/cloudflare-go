@@ -39,7 +39,7 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 // even if activated at the zone level. 100 maximum associations on a single
 // certificate are allowed. Note: Use a null value for parameter _enabled_ to
 // invalidate the association.
-func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]ID, err error) {
+func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]AuthenticatedOriginPull, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", params.ZoneID)
@@ -62,6 +62,45 @@ func (r *HostnameService) Get(ctx context.Context, hostname string, query Hostna
 	}
 	res = &env.Result
 	return
+}
+
+type AuthenticatedOriginPull struct {
+	// Identifier
+	ID string `json:"id"`
+	// Identifier
+	CERTID string `json:"cert_id"`
+	// The hostname certificate.
+	Certificate string `json:"certificate"`
+	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
+	// value voids the association.
+	Enabled bool `json:"enabled,nullable"`
+	// The hostname on the origin for which the client certificate uploaded will be
+	// used.
+	Hostname string `json:"hostname"`
+	// The hostname certificate's private key.
+	PrivateKey string                      `json:"private_key"`
+	JSON       authenticatedOriginPullJSON `json:"-"`
+}
+
+// authenticatedOriginPullJSON contains the JSON metadata for the struct
+// [AuthenticatedOriginPull]
+type authenticatedOriginPullJSON struct {
+	ID          apijson.Field
+	CERTID      apijson.Field
+	Certificate apijson.Field
+	Enabled     apijson.Field
+	Hostname    apijson.Field
+	PrivateKey  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AuthenticatedOriginPull) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r authenticatedOriginPullJSON) RawJSON() string {
+	return r.raw
 }
 
 type ID struct {
@@ -196,7 +235,7 @@ func (r HostnameUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
 type HostnameUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []ID                                                      `json:"result,required,nullable"`
+	Result   []AuthenticatedOriginPull                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    HostnameUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo HostnameUpdateResponseEnvelopeResultInfo `json:"result_info"`

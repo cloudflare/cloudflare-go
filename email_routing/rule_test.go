@@ -32,27 +32,27 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		email_routing.RuleNewParams{
-			Actions: cloudflare.F([]email_routing.ActionParam{{
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+			Actions: cloudflare.F([]email_routing.ActionItemParam{{
+				Type:  cloudflare.F(email_routing.ActionItemTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.ActionItemTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.ActionItemTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}}),
-			Matchers: cloudflare.F([]email_routing.MatcherParam{{
-				Field: cloudflare.F(email_routing.MatcherFieldTo),
-				Type:  cloudflare.F(email_routing.MatcherTypeLiteral),
+			Matchers: cloudflare.F([]email_routing.MatcherItemParam{{
+				Field: cloudflare.F(email_routing.MatcherItemFieldTo),
+				Type:  cloudflare.F(email_routing.MatcherItemTypeLiteral),
 				Value: cloudflare.F("test@example.com"),
 			}, {
-				Field: cloudflare.F(email_routing.MatcherFieldTo),
-				Type:  cloudflare.F(email_routing.MatcherTypeLiteral),
+				Field: cloudflare.F(email_routing.MatcherItemFieldTo),
+				Type:  cloudflare.F(email_routing.MatcherItemTypeLiteral),
 				Value: cloudflare.F("test@example.com"),
 			}, {
-				Field: cloudflare.F(email_routing.MatcherFieldTo),
-				Type:  cloudflare.F(email_routing.MatcherTypeLiteral),
+				Field: cloudflare.F(email_routing.MatcherItemFieldTo),
+				Type:  cloudflare.F(email_routing.MatcherItemTypeLiteral),
 				Value: cloudflare.F("test@example.com"),
 			}}),
 			Enabled:  cloudflare.F(email_routing.RuleNewParamsEnabledTrue),

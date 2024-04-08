@@ -158,8 +158,8 @@ type Firewall struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests bool                          `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []FirewallDNSFirewallIPsUnion `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests bool                   `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       []FirewallIPsItemUnion `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
 	EcsFallback bool `json:"ecs_fallback,required"`
 	// Maximum DNS Cache TTL.
@@ -169,8 +169,8 @@ type Firewall struct {
 	// Last modification of DNS Firewall cluster.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// DNS Firewall Cluster Name.
-	Name        string                     `json:"name,required"`
-	UpstreamIPs []FirewallUpstreamIPsUnion `json:"upstream_ips,required" format:"ipv4"`
+	Name        string                  `json:"name,required"`
+	UpstreamIPs []UpstreamIPsItemsUnion `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation AttackMitigation `json:"attack_mitigation,nullable"`
 	// Negative DNS Cache TTL.
@@ -209,50 +209,6 @@ func (r *Firewall) UnmarshalJSON(data []byte) (err error) {
 
 func (r firewallJSON) RawJSON() string {
 	return r.raw
-}
-
-// Cloudflare-assigned DNS IPv4 Address.
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type FirewallDNSFirewallIPsUnion interface {
-	ImplementsDNSFirewallDNSFirewallIPsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallDNSFirewallIPsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Upstream DNS Server IPv4 Address.
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type FirewallUpstreamIPsUnion interface {
-	ImplementsDNSFirewallUpstreamIPsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallUpstreamIPsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 // Cloudflare-assigned DNS IPv4 Address.

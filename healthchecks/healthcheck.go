@@ -163,7 +163,7 @@ type Healthcheck struct {
 	Address string `json:"address"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions []HealthcheckCheckRegion `json:"check_regions,nullable"`
+	CheckRegions []CheckRegionItem `json:"check_regions,nullable"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails int64 `json:"consecutive_fails"`
@@ -232,38 +232,6 @@ func (r *Healthcheck) UnmarshalJSON(data []byte) (err error) {
 
 func (r healthcheckJSON) RawJSON() string {
 	return r.raw
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
-// SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
-// and ENTERPRISE customers only).
-type HealthcheckCheckRegion string
-
-const (
-	HealthcheckCheckRegionWnam       HealthcheckCheckRegion = "WNAM"
-	HealthcheckCheckRegionEnam       HealthcheckCheckRegion = "ENAM"
-	HealthcheckCheckRegionWeu        HealthcheckCheckRegion = "WEU"
-	HealthcheckCheckRegionEeu        HealthcheckCheckRegion = "EEU"
-	HealthcheckCheckRegionNsam       HealthcheckCheckRegion = "NSAM"
-	HealthcheckCheckRegionSsam       HealthcheckCheckRegion = "SSAM"
-	HealthcheckCheckRegionOc         HealthcheckCheckRegion = "OC"
-	HealthcheckCheckRegionMe         HealthcheckCheckRegion = "ME"
-	HealthcheckCheckRegionNaf        HealthcheckCheckRegion = "NAF"
-	HealthcheckCheckRegionSaf        HealthcheckCheckRegion = "SAF"
-	HealthcheckCheckRegionIn         HealthcheckCheckRegion = "IN"
-	HealthcheckCheckRegionSeas       HealthcheckCheckRegion = "SEAS"
-	HealthcheckCheckRegionNeas       HealthcheckCheckRegion = "NEAS"
-	HealthcheckCheckRegionAllRegions HealthcheckCheckRegion = "ALL_REGIONS"
-)
-
-func (r HealthcheckCheckRegion) IsKnown() bool {
-	switch r {
-	case HealthcheckCheckRegionWnam, HealthcheckCheckRegionEnam, HealthcheckCheckRegionWeu, HealthcheckCheckRegionEeu, HealthcheckCheckRegionNsam, HealthcheckCheckRegionSsam, HealthcheckCheckRegionOc, HealthcheckCheckRegionMe, HealthcheckCheckRegionNaf, HealthcheckCheckRegionSaf, HealthcheckCheckRegionIn, HealthcheckCheckRegionSeas, HealthcheckCheckRegionNeas, HealthcheckCheckRegionAllRegions:
-		return true
-	}
-	return false
 }
 
 // The current status of the origin server according to the health check.

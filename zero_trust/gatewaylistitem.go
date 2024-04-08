@@ -79,6 +79,15 @@ func (r listsItemJSON) RawJSON() string {
 	return r.raw
 }
 
+type ListsItemParam struct {
+	// The value of the item in a list.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r ListsItemParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type GatewayListItemListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }

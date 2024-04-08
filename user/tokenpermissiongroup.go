@@ -116,4 +116,6 @@ func (r PermissionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type PermissionItem = string
+
 type TokenPermissionGroupListResponse = interface{}

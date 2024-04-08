@@ -47,7 +47,7 @@ func (r *DomainService) Update(ctx context.Context, domainName string, params Do
 }
 
 // List domains handled by Registrar.
-func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DomainListResponse], err error) {
+func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Domain], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -65,7 +65,7 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 }
 
 // List domains handled by Registrar.
-func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DomainListResponse] {
+func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Domain] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -234,162 +234,6 @@ func (r *DomainTransferIn) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r domainTransferInJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainListResponse struct {
-	// Domain identifier.
-	ID string `json:"id"`
-	// Shows if a domain is available for transferring into Cloudflare Registrar.
-	Available bool `json:"available"`
-	// Indicates if the domain can be registered as a new domain.
-	CanRegister bool `json:"can_register"`
-	// Shows time of creation.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Shows name of current registrar.
-	CurrentRegistrar string `json:"current_registrar"`
-	// Shows when domain name registration expires.
-	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
-	// Shows whether a registrar lock is in place for a domain.
-	Locked bool `json:"locked"`
-	// Shows contact information for domain registrant.
-	RegistrantContact DomainListResponseRegistrantContact `json:"registrant_contact"`
-	// A comma-separated list of registry status codes. A full list of status codes can
-	// be found at
-	// [EPP Status Codes](https://www.icann.org/resources/pages/epp-status-codes-2014-06-16-en).
-	RegistryStatuses string `json:"registry_statuses"`
-	// Whether a particular TLD is currently supported by Cloudflare Registrar. Refer
-	// to [TLD Policies](https://www.cloudflare.com/tld-policies/) for a list of
-	// supported TLDs.
-	SupportedTld bool `json:"supported_tld"`
-	// Statuses for domain transfers into Cloudflare Registrar.
-	TransferIn DomainListResponseTransferIn `json:"transfer_in"`
-	// Last updated.
-	UpdatedAt time.Time              `json:"updated_at" format:"date-time"`
-	JSON      domainListResponseJSON `json:"-"`
-}
-
-// domainListResponseJSON contains the JSON metadata for the struct
-// [DomainListResponse]
-type domainListResponseJSON struct {
-	ID                apijson.Field
-	Available         apijson.Field
-	CanRegister       apijson.Field
-	CreatedAt         apijson.Field
-	CurrentRegistrar  apijson.Field
-	ExpiresAt         apijson.Field
-	Locked            apijson.Field
-	RegistrantContact apijson.Field
-	RegistryStatuses  apijson.Field
-	SupportedTld      apijson.Field
-	TransferIn        apijson.Field
-	UpdatedAt         apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DomainListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Shows contact information for domain registrant.
-type DomainListResponseRegistrantContact struct {
-	// Address.
-	Address string `json:"address,required"`
-	// City.
-	City string `json:"city,required"`
-	// The country in which the user lives.
-	Country string `json:"country,required,nullable"`
-	// User's first name
-	FirstName string `json:"first_name,required,nullable"`
-	// User's last name
-	LastName string `json:"last_name,required,nullable"`
-	// Name of organization.
-	Organization string `json:"organization,required"`
-	// User's telephone number
-	Phone string `json:"phone,required,nullable"`
-	// State.
-	State string `json:"state,required"`
-	// The zipcode or postal code where the user lives.
-	Zip string `json:"zip,required,nullable"`
-	// Contact Identifier.
-	ID string `json:"id"`
-	// Optional address line for unit, floor, suite, etc.
-	Address2 string `json:"address2"`
-	// The contact email address of the user.
-	Email string `json:"email"`
-	// Contact fax number.
-	Fax  string                                  `json:"fax"`
-	JSON domainListResponseRegistrantContactJSON `json:"-"`
-}
-
-// domainListResponseRegistrantContactJSON contains the JSON metadata for the
-// struct [DomainListResponseRegistrantContact]
-type domainListResponseRegistrantContactJSON struct {
-	Address      apijson.Field
-	City         apijson.Field
-	Country      apijson.Field
-	FirstName    apijson.Field
-	LastName     apijson.Field
-	Organization apijson.Field
-	Phone        apijson.Field
-	State        apijson.Field
-	Zip          apijson.Field
-	ID           apijson.Field
-	Address2     apijson.Field
-	Email        apijson.Field
-	Fax          apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *DomainListResponseRegistrantContact) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseRegistrantContactJSON) RawJSON() string {
-	return r.raw
-}
-
-// Statuses for domain transfers into Cloudflare Registrar.
-type DomainListResponseTransferIn struct {
-	// Form of authorization has been accepted by the registrant.
-	AcceptFoa string `json:"accept_foa"`
-	// Shows transfer status with the registry.
-	ApproveTransfer string `json:"approve_transfer"`
-	// Indicates if cancellation is still possible.
-	CanCancelTransfer bool `json:"can_cancel_transfer"`
-	// Privacy guards are disabled at the foreign registrar.
-	DisablePrivacy interface{} `json:"disable_privacy"`
-	// Auth code has been entered and verified.
-	EnterAuthCode string `json:"enter_auth_code"`
-	// Domain is unlocked at the foreign registrar.
-	UnlockDomain interface{}                      `json:"unlock_domain"`
-	JSON         domainListResponseTransferInJSON `json:"-"`
-}
-
-// domainListResponseTransferInJSON contains the JSON metadata for the struct
-// [DomainListResponseTransferIn]
-type domainListResponseTransferInJSON struct {
-	AcceptFoa         apijson.Field
-	ApproveTransfer   apijson.Field
-	CanCancelTransfer apijson.Field
-	DisablePrivacy    apijson.Field
-	EnterAuthCode     apijson.Field
-	UnlockDomain      apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DomainListResponseTransferIn) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseTransferInJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -164,9 +164,9 @@ type Certificate struct {
 	// The ID of the application that will use this certificate.
 	ID string `json:"id"`
 	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames []string  `json:"associated_hostnames"`
-	CreatedAt           time.Time `json:"created_at" format:"date-time"`
-	ExpiresOn           time.Time `json:"expires_on" format:"date-time"`
+	AssociatedHostnames []AssociatedHostnamesItem `json:"associated_hostnames"`
+	CreatedAt           time.Time                 `json:"created_at" format:"date-time"`
+	ExpiresOn           time.Time                 `json:"expires_on" format:"date-time"`
 	// The MD5 fingerprint of the certificate.
 	Fingerprint string `json:"fingerprint"`
 	// The name of the certificate.

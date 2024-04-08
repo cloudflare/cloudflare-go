@@ -126,9 +126,9 @@ type Location struct {
 	// The name of the location.
 	Name string `json:"name"`
 	// A list of network ranges that requests from this location would originate from.
-	Networks  []Network    `json:"networks"`
-	UpdatedAt time.Time    `json:"updated_at" format:"date-time"`
-	JSON      locationJSON `json:"-"`
+	Networks  []NetworkItem `json:"networks"`
+	UpdatedAt time.Time     `json:"updated_at" format:"date-time"`
+	JSON      locationJSON  `json:"-"`
 }
 
 // locationJSON contains the JSON metadata for the struct [Location]
@@ -172,6 +172,27 @@ func (r *Network) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r networkJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkItem struct {
+	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
+	Network string          `json:"network,required"`
+	JSON    networkItemJSON `json:"-"`
+}
+
+// networkItemJSON contains the JSON metadata for the struct [NetworkItem]
+type networkItemJSON struct {
+	Network     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkItemJSON) RawJSON() string {
 	return r.raw
 }
 

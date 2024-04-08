@@ -320,9 +320,9 @@ type SettingsItem struct {
 	Migrations SettingsItemMigrations `json:"migrations"`
 	Placement  PlacementConfiguration `json:"placement"`
 	// Tags to help you manage your Workers
-	Tags []string `json:"tags"`
+	Tags []TagsItem `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers"`
+	TailConsumers []ConsumerScriptItem `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
 	UsageModel string           `json:"usage_model"`
 	JSON       settingsItemJSON `json:"-"`
@@ -432,9 +432,9 @@ type SettingsItemParam struct {
 	Migrations param.Field[SettingsItemMigrationsUnionParam] `json:"migrations"`
 	Placement  param.Field[PlacementConfigurationParam]      `json:"placement"`
 	// Tags to help you manage your Workers
-	Tags param.Field[[]string] `json:"tags"`
+	Tags param.Field[[]TagsItemParam] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
+	TailConsumers param.Field[[]ConsumerScriptItemParam] `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
 	UsageModel param.Field[string] `json:"usage_model"`
 }
@@ -470,6 +470,10 @@ func (r SettingsItemMigrationsParam) implementsWorkersSettingsItemMigrationsUnio
 type SettingsItemMigrationsUnionParam interface {
 	implementsWorkersSettingsItemMigrationsUnionParam()
 }
+
+type TagsItem = string
+
+type TagsItemParam = string
 
 type ScriptVersionSettingEditParams struct {
 	// Identifier
