@@ -164,19 +164,24 @@ type SchemaHTTP struct {
 	// The name of the DEX test. Must be unique.
 	Name string `json:"name,required"`
 	// Additional details about the test.
-	Description string         `json:"description"`
-	JSON        schemaHTTPJSON `json:"-"`
+	Description string `json:"description"`
+	// Device settings profiles targeted by this test
+	TargetPolicies []SchemaHTTPTargetPolicy `json:"target_policies"`
+	Targeted       bool                     `json:"targeted"`
+	JSON           schemaHTTPJSON           `json:"-"`
 }
 
 // schemaHTTPJSON contains the JSON metadata for the struct [SchemaHTTP]
 type schemaHTTPJSON struct {
-	Data        apijson.Field
-	Enabled     apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data           apijson.Field
+	Enabled        apijson.Field
+	Interval       apijson.Field
+	Name           apijson.Field
+	Description    apijson.Field
+	TargetPolicies apijson.Field
+	Targeted       apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
 }
 
 func (r *SchemaHTTP) UnmarshalJSON(data []byte) (err error) {
@@ -184,6 +189,34 @@ func (r *SchemaHTTP) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r schemaHTTPJSON) RawJSON() string {
+	return r.raw
+}
+
+type SchemaHTTPTargetPolicy struct {
+	// The id of the device settings profile
+	ID string `json:"id"`
+	// Whether the profile is the account default
+	Default bool `json:"default"`
+	// The name of the device settings profile
+	Name string                     `json:"name"`
+	JSON schemaHTTPTargetPolicyJSON `json:"-"`
+}
+
+// schemaHTTPTargetPolicyJSON contains the JSON metadata for the struct
+// [SchemaHTTPTargetPolicy]
+type schemaHTTPTargetPolicyJSON struct {
+	ID          apijson.Field
+	Default     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SchemaHTTPTargetPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r schemaHTTPTargetPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -200,9 +233,25 @@ type DeviceDEXTestNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// Additional details about the test.
 	Description param.Field[string] `json:"description"`
+	// Device settings profiles targeted by this test
+	TargetPolicies param.Field[[]DeviceDEXTestNewParamsTargetPolicy] `json:"target_policies"`
+	Targeted       param.Field[bool]                                 `json:"targeted"`
 }
 
 func (r DeviceDEXTestNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DeviceDEXTestNewParamsTargetPolicy struct {
+	// The id of the device settings profile
+	ID param.Field[string] `json:"id"`
+	// Whether the profile is the account default
+	Default param.Field[bool] `json:"default"`
+	// The name of the device settings profile
+	Name param.Field[string] `json:"name"`
+}
+
+func (r DeviceDEXTestNewParamsTargetPolicy) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -262,9 +311,25 @@ type DeviceDEXTestUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// Additional details about the test.
 	Description param.Field[string] `json:"description"`
+	// Device settings profiles targeted by this test
+	TargetPolicies param.Field[[]DeviceDEXTestUpdateParamsTargetPolicy] `json:"target_policies"`
+	Targeted       param.Field[bool]                                    `json:"targeted"`
 }
 
 func (r DeviceDEXTestUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DeviceDEXTestUpdateParamsTargetPolicy struct {
+	// The id of the device settings profile
+	ID param.Field[string] `json:"id"`
+	// Whether the profile is the account default
+	Default param.Field[bool] `json:"default"`
+	// The name of the device settings profile
+	Name param.Field[string] `json:"name"`
+}
+
+func (r DeviceDEXTestUpdateParamsTargetPolicy) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

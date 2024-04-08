@@ -39,6 +39,20 @@ func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 		Interval:    cloudflare.F("30m"),
 		Name:        cloudflare.F("HTTP dash health check"),
 		Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
+		TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestNewParamsTargetPolicy{{
+			Default: cloudflare.F(true),
+			ID:      cloudflare.F("string"),
+			Name:    cloudflare.F("string"),
+		}, {
+			Default: cloudflare.F(true),
+			ID:      cloudflare.F("string"),
+			Name:    cloudflare.F("string"),
+		}, {
+			Default: cloudflare.F(true),
+			ID:      cloudflare.F("string"),
+			Name:    cloudflare.F("string"),
+		}}),
+		Targeted: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -77,6 +91,20 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 			Interval:    cloudflare.F("30m"),
 			Name:        cloudflare.F("HTTP dash health check"),
 			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
+			TargetPolicies: cloudflare.F([]zero_trust.DeviceDEXTestUpdateParamsTargetPolicy{{
+				Default: cloudflare.F(true),
+				ID:      cloudflare.F("string"),
+				Name:    cloudflare.F("string"),
+			}, {
+				Default: cloudflare.F(true),
+				ID:      cloudflare.F("string"),
+				Name:    cloudflare.F("string"),
+			}, {
+				Default: cloudflare.F(true),
+				ID:      cloudflare.F("string"),
+				Name:    cloudflare.F("string"),
+			}}),
+			Targeted: cloudflare.F(true),
 		},
 	)
 	if err != nil {
