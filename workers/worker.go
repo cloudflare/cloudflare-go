@@ -19,12 +19,9 @@ type WorkerService struct {
 	Options         []option.RequestOption
 	AI              *AIService
 	Scripts         *ScriptService
-	Filters         *FilterService
-	Routes          *RouteService
 	AccountSettings *AccountSettingService
 	Domains         *DomainService
 	Subdomains      *SubdomainService
-	Services        *ServiceService
 }
 
 // NewWorkerService generates a new service that applies the given options to each
@@ -35,12 +32,9 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r.Options = opts
 	r.AI = NewAIService(opts...)
 	r.Scripts = NewScriptService(opts...)
-	r.Filters = NewFilterService(opts...)
-	r.Routes = NewRouteService(opts...)
 	r.AccountSettings = NewAccountSettingService(opts...)
 	r.Domains = NewDomainService(opts...)
 	r.Subdomains = NewSubdomainService(opts...)
-	r.Services = NewServiceService(opts...)
 	return
 }
 
