@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -14,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // SubscriptionService contains methods and other services that help with
@@ -61,7 +61,7 @@ func (r *SubscriptionService) Update(ctx context.Context, accountIdentifier stri
 }
 
 // Lists all of an account's subscriptions.
-func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[SubscriptionListResponse], err error) {
+func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[user.Subscription], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string
 }
 
 // Lists all of an account's subscriptions.
-func (r *SubscriptionService) ListAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SubscriptionListResponse] {
+func (r *SubscriptionService) ListAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Subscription] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, accountIdentifier, opts...))
 }
 
@@ -107,218 +107,6 @@ func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts .
 	}
 	res = &env.Result
 	return
-}
-
-type SubscriptionListResponse struct {
-	// Subscription identifier tag.
-	ID  string                      `json:"id"`
-	App SubscriptionListResponseApp `json:"app"`
-	// The list of add-ons subscribed to.
-	ComponentValues []SubscriptionListResponseComponentValue `json:"component_values"`
-	// The monetary unit in which pricing information is displayed.
-	Currency string `json:"currency"`
-	// The end of the current period and also when the next billing is due.
-	CurrentPeriodEnd time.Time `json:"current_period_end" format:"date-time"`
-	// When the current billing period started. May match initial_period_start if this
-	// is the first period.
-	CurrentPeriodStart time.Time `json:"current_period_start" format:"date-time"`
-	// How often the subscription is renewed automatically.
-	Frequency SubscriptionListResponseFrequency `json:"frequency"`
-	// The price of the subscription that will be billed, in US dollars.
-	Price float64 `json:"price"`
-	// The rate plan applied to the subscription.
-	RatePlan SubscriptionListResponseRatePlan `json:"rate_plan"`
-	// The state that the subscription is in.
-	State SubscriptionListResponseState `json:"state"`
-	// A simple zone object. May have null properties if not a zone subscription.
-	Zone SubscriptionListResponseZone `json:"zone"`
-	JSON subscriptionListResponseJSON `json:"-"`
-}
-
-// subscriptionListResponseJSON contains the JSON metadata for the struct
-// [SubscriptionListResponse]
-type subscriptionListResponseJSON struct {
-	ID                 apijson.Field
-	App                apijson.Field
-	ComponentValues    apijson.Field
-	Currency           apijson.Field
-	CurrentPeriodEnd   apijson.Field
-	CurrentPeriodStart apijson.Field
-	Frequency          apijson.Field
-	Price              apijson.Field
-	RatePlan           apijson.Field
-	State              apijson.Field
-	Zone               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SubscriptionListResponseApp struct {
-	// app install id.
-	InstallID string                          `json:"install_id"`
-	JSON      subscriptionListResponseAppJSON `json:"-"`
-}
-
-// subscriptionListResponseAppJSON contains the JSON metadata for the struct
-// [SubscriptionListResponseApp]
-type subscriptionListResponseAppJSON struct {
-	InstallID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponseApp) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseAppJSON) RawJSON() string {
-	return r.raw
-}
-
-// A component value for a subscription.
-type SubscriptionListResponseComponentValue struct {
-	// The default amount assigned.
-	Default float64 `json:"default"`
-	// The name of the component value.
-	Name string `json:"name"`
-	// The unit price for the component value.
-	Price float64 `json:"price"`
-	// The amount of the component value assigned.
-	Value float64                                    `json:"value"`
-	JSON  subscriptionListResponseComponentValueJSON `json:"-"`
-}
-
-// subscriptionListResponseComponentValueJSON contains the JSON metadata for the
-// struct [SubscriptionListResponseComponentValue]
-type subscriptionListResponseComponentValueJSON struct {
-	Default     apijson.Field
-	Name        apijson.Field
-	Price       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponseComponentValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseComponentValueJSON) RawJSON() string {
-	return r.raw
-}
-
-// How often the subscription is renewed automatically.
-type SubscriptionListResponseFrequency string
-
-const (
-	SubscriptionListResponseFrequencyWeekly    SubscriptionListResponseFrequency = "weekly"
-	SubscriptionListResponseFrequencyMonthly   SubscriptionListResponseFrequency = "monthly"
-	SubscriptionListResponseFrequencyQuarterly SubscriptionListResponseFrequency = "quarterly"
-	SubscriptionListResponseFrequencyYearly    SubscriptionListResponseFrequency = "yearly"
-)
-
-func (r SubscriptionListResponseFrequency) IsKnown() bool {
-	switch r {
-	case SubscriptionListResponseFrequencyWeekly, SubscriptionListResponseFrequencyMonthly, SubscriptionListResponseFrequencyQuarterly, SubscriptionListResponseFrequencyYearly:
-		return true
-	}
-	return false
-}
-
-// The rate plan applied to the subscription.
-type SubscriptionListResponseRatePlan struct {
-	// The ID of the rate plan.
-	ID string `json:"id"`
-	// The currency applied to the rate plan subscription.
-	Currency string `json:"currency"`
-	// Whether this rate plan is managed externally from Cloudflare.
-	ExternallyManaged bool `json:"externally_managed"`
-	// Whether a rate plan is enterprise-based (or newly adopted term contract).
-	IsContract bool `json:"is_contract"`
-	// The full name of the rate plan.
-	PublicName string `json:"public_name"`
-	// The scope that this rate plan applies to.
-	Scope string `json:"scope"`
-	// The list of sets this rate plan applies to.
-	Sets []string                             `json:"sets"`
-	JSON subscriptionListResponseRatePlanJSON `json:"-"`
-}
-
-// subscriptionListResponseRatePlanJSON contains the JSON metadata for the struct
-// [SubscriptionListResponseRatePlan]
-type subscriptionListResponseRatePlanJSON struct {
-	ID                apijson.Field
-	Currency          apijson.Field
-	ExternallyManaged apijson.Field
-	IsContract        apijson.Field
-	PublicName        apijson.Field
-	Scope             apijson.Field
-	Sets              apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponseRatePlan) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseRatePlanJSON) RawJSON() string {
-	return r.raw
-}
-
-// The state that the subscription is in.
-type SubscriptionListResponseState string
-
-const (
-	SubscriptionListResponseStateTrial           SubscriptionListResponseState = "Trial"
-	SubscriptionListResponseStateProvisioned     SubscriptionListResponseState = "Provisioned"
-	SubscriptionListResponseStatePaid            SubscriptionListResponseState = "Paid"
-	SubscriptionListResponseStateAwaitingPayment SubscriptionListResponseState = "AwaitingPayment"
-	SubscriptionListResponseStateCancelled       SubscriptionListResponseState = "Cancelled"
-	SubscriptionListResponseStateFailed          SubscriptionListResponseState = "Failed"
-	SubscriptionListResponseStateExpired         SubscriptionListResponseState = "Expired"
-)
-
-func (r SubscriptionListResponseState) IsKnown() bool {
-	switch r {
-	case SubscriptionListResponseStateTrial, SubscriptionListResponseStateProvisioned, SubscriptionListResponseStatePaid, SubscriptionListResponseStateAwaitingPayment, SubscriptionListResponseStateCancelled, SubscriptionListResponseStateFailed, SubscriptionListResponseStateExpired:
-		return true
-	}
-	return false
-}
-
-// A simple zone object. May have null properties if not a zone subscription.
-type SubscriptionListResponseZone struct {
-	// Identifier
-	ID string `json:"id"`
-	// The domain name
-	Name string                           `json:"name"`
-	JSON subscriptionListResponseZoneJSON `json:"-"`
-}
-
-// subscriptionListResponseZoneJSON contains the JSON metadata for the struct
-// [SubscriptionListResponseZone]
-type subscriptionListResponseZoneJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionListResponseZone) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionListResponseZoneJSON) RawJSON() string {
-	return r.raw
 }
 
 type SubscriptionDeleteResponse struct {

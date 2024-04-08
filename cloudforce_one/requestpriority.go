@@ -108,7 +108,7 @@ type Priority struct {
 	// Priority creation time
 	Created time.Time `json:"created,required" format:"date-time"`
 	// List of labels
-	Labels []string `json:"labels,required"`
+	Labels []LabelItem `json:"labels,required"`
 	// Priority
 	Priority int64 `json:"priority,required"`
 	// Requirement

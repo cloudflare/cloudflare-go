@@ -45,7 +45,7 @@ func NewCustomHostnameService(opts ...option.RequestOption) (r *CustomHostnameSe
 // plus hostmaster, postmaster, webmaster, admin, administrator. If http is used
 // and the domain is not already pointing to the Managed CNAME host, the PATCH
 // method must be used once it is (to complete validation).
-func (r *CustomHostnameService) New(ctx context.Context, params CustomHostnameNewParams, opts ...option.RequestOption) (res *CustomHostnameNewResponse, err error) {
+func (r *CustomHostnameService) New(ctx context.Context, params CustomHostnameNewParams, opts ...option.RequestOption) (res *CustomHostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames", params.ZoneID)
@@ -58,7 +58,7 @@ func (r *CustomHostnameService) New(ctx context.Context, params CustomHostnameNe
 }
 
 // List, search, sort, and filter all of your custom hostnames.
-func (r *CustomHostnameService) List(ctx context.Context, params CustomHostnameListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CustomHostnameListResponse], err error) {
+func (r *CustomHostnameService) List(ctx context.Context, params CustomHostnameListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[CustomHostname], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -76,7 +76,7 @@ func (r *CustomHostnameService) List(ctx context.Context, params CustomHostnameL
 }
 
 // List, search, sort, and filter all of your custom hostnames.
-func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, params CustomHostnameListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[CustomHostnameListResponse] {
+func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, params CustomHostnameListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[CustomHostname] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -92,7 +92,7 @@ func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID str
 // matches existing config, used to indicate that hostname should pass domain
 // control validation (DCV). Can also be used to change validation type, e.g., from
 // 'http' to 'email'.
-func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID string, params CustomHostnameEditParams, opts ...option.RequestOption) (res *CustomHostnameEditResponse, err error) {
+func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID string, params CustomHostnameEditParams, opts ...option.RequestOption) (res *CustomHostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", params.ZoneID, customHostnameID)
@@ -105,7 +105,7 @@ func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID strin
 }
 
 // Custom Hostname Details
-func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string, query CustomHostnameGetParams, opts ...option.RequestOption) (res *CustomHostnameGetResponse, err error) {
+func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string, query CustomHostnameGetParams, opts ...option.RequestOption) (res *CustomHostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", query.ZoneID, customHostnameID)
@@ -115,6 +115,33 @@ func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string
 	}
 	res = &env.Result
 	return
+}
+
+type CustomHostname struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// The custom hostname that will point to your hostname via CNAME.
+	Hostname string `json:"hostname,required"`
+	// SSL properties for the custom hostname.
+	SSL  SSL                `json:"ssl,required"`
+	JSON customHostnameJSON `json:"-"`
+}
+
+// customHostnameJSON contains the JSON metadata for the struct [CustomHostname]
+type customHostnameJSON struct {
+	ID          apijson.Field
+	Hostname    apijson.Field
+	SSL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameJSON) RawJSON() string {
+	return r.raw
 }
 
 // SSL properties for the custom hostname.
@@ -464,118 +491,6 @@ func (r UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1) IsKnown() bool {
 	return false
 }
 
-type CustomHostnameNewResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
-	// SSL properties for the custom hostname.
-	SSL  SSL                           `json:"ssl,required"`
-	JSON customHostnameNewResponseJSON `json:"-"`
-}
-
-// customHostnameNewResponseJSON contains the JSON metadata for the struct
-// [CustomHostnameNewResponse]
-type customHostnameNewResponseJSON struct {
-	ID          apijson.Field
-	Hostname    apijson.Field
-	SSL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomHostnameListResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
-	// SSL properties for the custom hostname.
-	SSL  SSL                            `json:"ssl,required"`
-	JSON customHostnameListResponseJSON `json:"-"`
-}
-
-// customHostnameListResponseJSON contains the JSON metadata for the struct
-// [CustomHostnameListResponse]
-type customHostnameListResponseJSON struct {
-	ID          apijson.Field
-	Hostname    apijson.Field
-	SSL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomHostnameEditResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
-	// SSL properties for the custom hostname.
-	SSL  SSL                            `json:"ssl,required"`
-	JSON customHostnameEditResponseJSON `json:"-"`
-}
-
-// customHostnameEditResponseJSON contains the JSON metadata for the struct
-// [CustomHostnameEditResponse]
-type customHostnameEditResponseJSON struct {
-	ID          apijson.Field
-	Hostname    apijson.Field
-	SSL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type CustomHostnameGetResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
-	// SSL properties for the custom hostname.
-	SSL  SSL                           `json:"ssl,required"`
-	JSON customHostnameGetResponseJSON `json:"-"`
-}
-
-// customHostnameGetResponseJSON contains the JSON metadata for the struct
-// [CustomHostnameGetResponse]
-type customHostnameGetResponseJSON struct {
-	ID          apijson.Field
-	Hostname    apijson.Field
-	SSL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type CustomHostnameNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -734,7 +649,7 @@ func (r CustomHostnameNewParamsCustomMetadata) MarshalJSON() (data []byte, err e
 type CustomHostnameNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CustomHostnameNewResponse                                 `json:"result,required"`
+	Result   CustomHostname                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameNewResponseEnvelopeJSON    `json:"-"`
@@ -1028,7 +943,7 @@ func (r CustomHostnameEditParamsSSLSettingsTLS1_3) IsKnown() bool {
 type CustomHostnameEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CustomHostnameEditResponse                                `json:"result,required"`
+	Result   CustomHostname                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameEditResponseEnvelopeJSON    `json:"-"`
@@ -1076,7 +991,7 @@ type CustomHostnameGetParams struct {
 type CustomHostnameGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CustomHostnameGetResponse                                 `json:"result,required"`
+	Result   CustomHostname                                            `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameGetResponseEnvelopeJSON    `json:"-"`

@@ -37,7 +37,7 @@ func NewAddressService(opts ...option.RequestOption) (r *AddressService) {
 
 // Create a destination address to forward your emails to. Destination addresses
 // need to be verified before they can be used.
-func (r *AddressService) New(ctx context.Context, accountIdentifier string, body AddressNewParams, opts ...option.RequestOption) (res *DestinationAddress, err error) {
+func (r *AddressService) New(ctx context.Context, accountIdentifier string, body AddressNewParams, opts ...option.RequestOption) (res *Address, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses", accountIdentifier)
@@ -50,7 +50,7 @@ func (r *AddressService) New(ctx context.Context, accountIdentifier string, body
 }
 
 // Lists existing destination addresses.
-func (r *AddressService) List(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DestinationAddress], err error) {
+func (r *AddressService) List(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Address], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,12 +68,12 @@ func (r *AddressService) List(ctx context.Context, accountIdentifier string, que
 }
 
 // Lists existing destination addresses.
-func (r *AddressService) ListAutoPaging(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DestinationAddress] {
+func (r *AddressService) ListAutoPaging(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Address] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, query, opts...))
 }
 
 // Deletes a specific destination address.
-func (r *AddressService) Delete(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *DestinationAddress, err error) {
+func (r *AddressService) Delete(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *Address, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", accountIdentifier, destinationAddressIdentifier)
@@ -86,7 +86,7 @@ func (r *AddressService) Delete(ctx context.Context, accountIdentifier string, d
 }
 
 // Gets information for a specific destination email already created.
-func (r *AddressService) Get(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *DestinationAddress, err error) {
+func (r *AddressService) Get(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *Address, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", accountIdentifier, destinationAddressIdentifier)
@@ -98,7 +98,7 @@ func (r *AddressService) Get(ctx context.Context, accountIdentifier string, dest
 	return
 }
 
-type DestinationAddress struct {
+type Address struct {
 	// Destination address identifier.
 	ID string `json:"id"`
 	// The date and time the destination address has been created.
@@ -112,13 +112,12 @@ type DestinationAddress struct {
 	Tag string `json:"tag"`
 	// The date and time the destination address has been verified. Null means not
 	// verified yet.
-	Verified time.Time              `json:"verified" format:"date-time"`
-	JSON     destinationAddressJSON `json:"-"`
+	Verified time.Time   `json:"verified" format:"date-time"`
+	JSON     addressJSON `json:"-"`
 }
 
-// destinationAddressJSON contains the JSON metadata for the struct
-// [DestinationAddress]
-type destinationAddressJSON struct {
+// addressJSON contains the JSON metadata for the struct [Address]
+type addressJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Email       apijson.Field
@@ -129,11 +128,11 @@ type destinationAddressJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DestinationAddress) UnmarshalJSON(data []byte) (err error) {
+func (r *Address) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r destinationAddressJSON) RawJSON() string {
+func (r addressJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -149,7 +148,7 @@ func (r AddressNewParams) MarshalJSON() (data []byte, err error) {
 type AddressNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DestinationAddress                                        `json:"result,required"`
+	Result   Address                                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressNewResponseEnvelopeJSON    `json:"-"`
@@ -243,7 +242,7 @@ func (r AddressListParamsVerified) IsKnown() bool {
 type AddressDeleteResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DestinationAddress                                        `json:"result,required"`
+	Result   Address                                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressDeleteResponseEnvelopeJSON    `json:"-"`
@@ -286,7 +285,7 @@ func (r AddressDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type AddressGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DestinationAddress                                        `json:"result,required"`
+	Result   Address                                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressGetResponseEnvelopeJSON    `json:"-"`

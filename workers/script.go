@@ -128,7 +128,7 @@ type Script struct {
 	// Specifies the placement mode for the Worker (e.g. 'smart').
 	PlacementMode string `json:"placement_mode"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers"`
+	TailConsumers []ConsumerScriptItem `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
 	UsageModel string     `json:"usage_model"`
 	JSON       scriptJSON `json:"-"`
@@ -203,8 +203,8 @@ type SettingsItem struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ConsumerScript `json:"tail_consumers"`
-	JSON          settingsItemJSON `json:"-"`
+	TailConsumers []ConsumerScriptItem `json:"tail_consumers"`
+	JSON          settingsItemJSON     `json:"-"`
 }
 
 // settingsItemJSON contains the JSON metadata for the struct [SettingsItem]
@@ -227,7 +227,7 @@ type SettingsItemParam struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
+	TailConsumers param.Field[[]ConsumerScriptItemParam] `json:"tail_consumers"`
 }
 
 func (r SettingsItemParam) MarshalJSON() (data []byte, err error) {
@@ -317,7 +317,7 @@ type ScriptUpdateParamsVariant0Metadata struct {
 	// List of strings to use as tags for this Worker
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
+	TailConsumers param.Field[[]ConsumerScriptItemParam] `json:"tail_consumers"`
 	// Usage model to apply to invocations.
 	UsageModel param.Field[ScriptUpdateParamsVariant0MetadataUsageModel] `json:"usage_model"`
 	// Key-value pairs to use as tags for this version of this Worker

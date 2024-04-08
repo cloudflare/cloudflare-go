@@ -34,7 +34,7 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 		workers.ScriptSettingEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Logpush:   cloudflare.F(false),
-			TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
+			TailConsumers: cloudflare.F([]workers.ConsumerScriptItemParam{{
 				Environment: cloudflare.F("production"),
 				Namespace:   cloudflare.F("my-namespace"),
 				Service:     cloudflare.F("my-log-consumer"),

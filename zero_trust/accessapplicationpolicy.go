@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/tidwall/gjson"
 )
 
 // AccessApplicationPolicyService contains methods and other services that help
@@ -198,6 +200,170 @@ func (r ApprovalGroupItemParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Matches a specific email.
+type ExcludeItem struct {
+	Email                interface{}     `json:"email,required"`
+	EmailList            interface{}     `json:"email_list,required"`
+	EmailDomain          interface{}     `json:"email_domain,required"`
+	Everyone             interface{}     `json:"everyone,required"`
+	IP                   interface{}     `json:"ip,required"`
+	IPList               interface{}     `json:"ip_list,required"`
+	Certificate          interface{}     `json:"certificate,required"`
+	Group                interface{}     `json:"group,required"`
+	AzureAd              interface{}     `json:"azureAD,required"`
+	GitHubOrganization   interface{}     `json:"github-organization,required"`
+	Gsuite               interface{}     `json:"gsuite,required"`
+	Okta                 interface{}     `json:"okta,required"`
+	Saml                 interface{}     `json:"saml,required"`
+	ServiceToken         interface{}     `json:"service_token,required"`
+	AnyValidServiceToken interface{}     `json:"any_valid_service_token,required"`
+	ExternalEvaluation   interface{}     `json:"external_evaluation,required"`
+	Geo                  interface{}     `json:"geo,required"`
+	AuthMethod           interface{}     `json:"auth_method,required"`
+	DevicePosture        interface{}     `json:"device_posture,required"`
+	JSON                 excludeItemJSON `json:"-"`
+	union                ExcludeItemUnion
+}
+
+// excludeItemJSON contains the JSON metadata for the struct [ExcludeItem]
+type excludeItemJSON struct {
+	Email                apijson.Field
+	EmailList            apijson.Field
+	EmailDomain          apijson.Field
+	Everyone             apijson.Field
+	IP                   apijson.Field
+	IPList               apijson.Field
+	Certificate          apijson.Field
+	Group                apijson.Field
+	AzureAd              apijson.Field
+	GitHubOrganization   apijson.Field
+	Gsuite               apijson.Field
+	Okta                 apijson.Field
+	Saml                 apijson.Field
+	ServiceToken         apijson.Field
+	AnyValidServiceToken apijson.Field
+	ExternalEvaluation   apijson.Field
+	Geo                  apijson.Field
+	AuthMethod           apijson.Field
+	DevicePosture        apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r excludeItemJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ExcludeItem) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r ExcludeItem) AsUnion() ExcludeItemUnion {
+	return r.union
+}
+
+// Matches a specific email.
+//
+// Union satisfied by [zero_trust.EmailRule], [zero_trust.EmailListRule],
+// [zero_trust.DomainRule], [zero_trust.EveryoneRule], [zero_trust.IPRule],
+// [zero_trust.IPListRule], [zero_trust.CertificateRule], [zero_trust.GroupRule],
+// [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
+// [zero_trust.GsuiteGroupRule], [zero_trust.OktaGroupRule],
+// [zero_trust.SamlGroupRule], [zero_trust.ServiceTokenRule],
+// [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
+// [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
+// [zero_trust.DevicePostureRule].
+type ExcludeItemUnion interface {
+	implementsZeroTrustExcludeItem()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ExcludeItemUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(OktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DevicePostureRule{}),
+		},
+	)
+}
+
+// Matches a specific email.
 type ExcludeItemParam struct {
 	Email                param.Field[interface{}] `json:"email,required"`
 	EmailList            param.Field[interface{}] `json:"email_list,required"`
@@ -247,7 +413,7 @@ type Policy struct {
 	// UUID
 	ID string `json:"id"`
 	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	ApprovalGroups []ApprovalGroupItem `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired bool      `json:"approval_required"`
@@ -256,7 +422,7 @@ type Policy struct {
 	Decision PolicyDecision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
-	Exclude []Rule `json:"exclude"`
+	Exclude []ExcludeItem `json:"exclude"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []IncludeItem `json:"include"`
@@ -274,7 +440,7 @@ type Policy struct {
 	PurposeJustificationRequired bool `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
-	Require []Rule `json:"require"`
+	Require []RequireItem `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -332,7 +498,7 @@ func (r PolicyDecision) IsKnown() bool {
 
 type PolicyParam struct {
 	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
+	ApprovalGroups param.Field[[]ApprovalGroupItemParam] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
@@ -340,7 +506,7 @@ type PolicyParam struct {
 	Decision param.Field[PolicyDecision] `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
-	Exclude param.Field[[]RuleUnionParam] `json:"exclude"`
+	Exclude param.Field[[]ExcludeItemUnionParam] `json:"exclude"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]IncludeItemUnionParam] `json:"include"`
@@ -358,7 +524,7 @@ type PolicyParam struct {
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
-	Require param.Field[[]RuleUnionParam] `json:"require"`
+	Require param.Field[[]RequireItemUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -367,6 +533,170 @@ type PolicyParam struct {
 
 func (r PolicyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Matches a specific email.
+type RequireItem struct {
+	Email                interface{}     `json:"email,required"`
+	EmailList            interface{}     `json:"email_list,required"`
+	EmailDomain          interface{}     `json:"email_domain,required"`
+	Everyone             interface{}     `json:"everyone,required"`
+	IP                   interface{}     `json:"ip,required"`
+	IPList               interface{}     `json:"ip_list,required"`
+	Certificate          interface{}     `json:"certificate,required"`
+	Group                interface{}     `json:"group,required"`
+	AzureAd              interface{}     `json:"azureAD,required"`
+	GitHubOrganization   interface{}     `json:"github-organization,required"`
+	Gsuite               interface{}     `json:"gsuite,required"`
+	Okta                 interface{}     `json:"okta,required"`
+	Saml                 interface{}     `json:"saml,required"`
+	ServiceToken         interface{}     `json:"service_token,required"`
+	AnyValidServiceToken interface{}     `json:"any_valid_service_token,required"`
+	ExternalEvaluation   interface{}     `json:"external_evaluation,required"`
+	Geo                  interface{}     `json:"geo,required"`
+	AuthMethod           interface{}     `json:"auth_method,required"`
+	DevicePosture        interface{}     `json:"device_posture,required"`
+	JSON                 requireItemJSON `json:"-"`
+	union                RequireItemUnion
+}
+
+// requireItemJSON contains the JSON metadata for the struct [RequireItem]
+type requireItemJSON struct {
+	Email                apijson.Field
+	EmailList            apijson.Field
+	EmailDomain          apijson.Field
+	Everyone             apijson.Field
+	IP                   apijson.Field
+	IPList               apijson.Field
+	Certificate          apijson.Field
+	Group                apijson.Field
+	AzureAd              apijson.Field
+	GitHubOrganization   apijson.Field
+	Gsuite               apijson.Field
+	Okta                 apijson.Field
+	Saml                 apijson.Field
+	ServiceToken         apijson.Field
+	AnyValidServiceToken apijson.Field
+	ExternalEvaluation   apijson.Field
+	Geo                  apijson.Field
+	AuthMethod           apijson.Field
+	DevicePosture        apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r requireItemJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *RequireItem) UnmarshalJSON(data []byte) (err error) {
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+func (r RequireItem) AsUnion() RequireItemUnion {
+	return r.union
+}
+
+// Matches a specific email.
+//
+// Union satisfied by [zero_trust.EmailRule], [zero_trust.EmailListRule],
+// [zero_trust.DomainRule], [zero_trust.EveryoneRule], [zero_trust.IPRule],
+// [zero_trust.IPListRule], [zero_trust.CertificateRule], [zero_trust.GroupRule],
+// [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
+// [zero_trust.GsuiteGroupRule], [zero_trust.OktaGroupRule],
+// [zero_trust.SamlGroupRule], [zero_trust.ServiceTokenRule],
+// [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
+// [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
+// [zero_trust.DevicePostureRule].
+type RequireItemUnion interface {
+	implementsZeroTrustRequireItem()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RequireItemUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(OktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
