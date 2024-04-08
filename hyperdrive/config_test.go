@@ -31,7 +31,7 @@ func TestConfigNew(t *testing.T) {
 	_, err := client.Hyperdrive.Configs.New(context.TODO(), hyperdrive.ConfigNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F[any](map[string]interface{}{}),
-		Origin: cloudflare.F(hyperdrive.ConfigNewParamsOrigin{
+		Origin: cloudflare.F(hyperdrive.ConfigurationParam{
 			Password: cloudflare.F("password1234!"),
 		}),
 	})
@@ -64,7 +64,7 @@ func TestConfigUpdate(t *testing.T) {
 		hyperdrive.ConfigUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F[any](map[string]interface{}{}),
-			Origin: cloudflare.F(hyperdrive.ConfigUpdateParamsOrigin{
+			Origin: cloudflare.F(hyperdrive.ConfigurationParam{
 				Password: cloudflare.F("password1234!"),
 			}),
 		},
@@ -153,7 +153,7 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		hyperdrive.ConfigEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Origin: cloudflare.F(hyperdrive.ConfigEditParamsOrigin{
+			Origin: cloudflare.F(hyperdrive.ConfigurationParam{
 				Password: cloudflare.F("password1234!"),
 			}),
 		},

@@ -75,6 +75,10 @@ func (r AnyValidServiceTokenRule) implementsZeroTrustIncludeItem() {}
 
 func (r AnyValidServiceTokenRule) implementsZeroTrustRule() {}
 
+func (r AnyValidServiceTokenRule) implementsZeroTrustExcludeItem() {}
+
+func (r AnyValidServiceTokenRule) implementsZeroTrustRequireItem() {}
+
 // Matches any valid Access Service Token
 type AnyValidServiceTokenRuleParam struct {
 	// An empty object which matches on all service tokens.
@@ -91,11 +95,11 @@ func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -105,11 +109,11 @@ func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam(
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -117,49 +121,35 @@ func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam(
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -167,29 +157,43 @@ func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam(
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AnyValidServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 // Enforce different MFA options
 type AuthenticationMethodRule struct {
@@ -216,6 +220,10 @@ func (r authenticationMethodRuleJSON) RawJSON() string {
 func (r AuthenticationMethodRule) implementsZeroTrustIncludeItem() {}
 
 func (r AuthenticationMethodRule) implementsZeroTrustRule() {}
+
+func (r AuthenticationMethodRule) implementsZeroTrustExcludeItem() {}
+
+func (r AuthenticationMethodRule) implementsZeroTrustRequireItem() {}
 
 type AuthenticationMethodRuleAuthMethod struct {
 	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
@@ -254,11 +262,11 @@ func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -268,11 +276,11 @@ func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam(
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -280,49 +288,35 @@ func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam(
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -330,29 +324,43 @@ func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam(
 
 func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AuthenticationMethodRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AuthenticationMethodRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type AuthenticationMethodRuleAuthMethodParam struct {
 	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
@@ -387,6 +395,10 @@ func (r azureGroupRuleJSON) RawJSON() string {
 func (r AzureGroupRule) implementsZeroTrustIncludeItem() {}
 
 func (r AzureGroupRule) implementsZeroTrustRule() {}
+
+func (r AzureGroupRule) implementsZeroTrustExcludeItem() {}
+
+func (r AzureGroupRule) implementsZeroTrustRequireItem() {}
 
 type AzureGroupRuleAzureAd struct {
 	// The ID of an Azure group.
@@ -428,11 +440,11 @@ func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -442,11 +454,11 @@ func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -454,49 +466,35 @@ func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -504,29 +502,43 @@ func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r AzureGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r AzureGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type AzureGroupRuleAzureAdParam struct {
 	// The ID of an Azure group.
@@ -564,6 +576,10 @@ func (r CertificateRule) implementsZeroTrustIncludeItem() {}
 
 func (r CertificateRule) implementsZeroTrustRule() {}
 
+func (r CertificateRule) implementsZeroTrustExcludeItem() {}
+
+func (r CertificateRule) implementsZeroTrustRequireItem() {}
+
 // Matches any valid client certificate.
 type CertificateRuleParam struct {
 	Certificate param.Field[interface{}] `json:"certificate,required"`
@@ -579,11 +595,11 @@ func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -593,11 +609,11 @@ func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -605,49 +621,35 @@ func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -655,29 +657,43 @@ func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CertificateRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r CertificateRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 // Matches a specific country
 type CountryRule struct {
@@ -703,6 +719,10 @@ func (r countryRuleJSON) RawJSON() string {
 func (r CountryRule) implementsZeroTrustIncludeItem() {}
 
 func (r CountryRule) implementsZeroTrustRule() {}
+
+func (r CountryRule) implementsZeroTrustExcludeItem() {}
+
+func (r CountryRule) implementsZeroTrustRequireItem() {}
 
 type CountryRuleGeo struct {
 	// The country code that should be matched.
@@ -740,11 +760,11 @@ func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -754,11 +774,11 @@ func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -766,49 +786,35 @@ func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -816,29 +822,43 @@ func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r CountryRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r CountryRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type CountryRuleGeoParam struct {
 	// The country code that should be matched.
@@ -874,6 +894,10 @@ func (r devicePostureRuleJSON) RawJSON() string {
 func (r DevicePostureRule) implementsZeroTrustIncludeItem() {}
 
 func (r DevicePostureRule) implementsZeroTrustRule() {}
+
+func (r DevicePostureRule) implementsZeroTrustExcludeItem() {}
+
+func (r DevicePostureRule) implementsZeroTrustRequireItem() {}
 
 type DevicePostureRuleDevicePosture struct {
 	// The ID of a device posture integration.
@@ -912,11 +936,11 @@ func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -926,11 +950,11 @@ func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -938,49 +962,35 @@ func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -988,29 +998,43 @@ func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type DevicePostureRuleDevicePostureParam struct {
 	// The ID of a device posture integration.
@@ -1045,6 +1069,10 @@ func (r domainRuleJSON) RawJSON() string {
 func (r DomainRule) implementsZeroTrustIncludeItem() {}
 
 func (r DomainRule) implementsZeroTrustRule() {}
+
+func (r DomainRule) implementsZeroTrustExcludeItem() {}
+
+func (r DomainRule) implementsZeroTrustRequireItem() {}
 
 type DomainRuleEmailDomain struct {
 	// The email domain to match.
@@ -1083,11 +1111,11 @@ func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -1097,11 +1125,11 @@ func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1109,49 +1137,35 @@ func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1159,29 +1173,43 @@ func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DomainRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DomainRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type DomainRuleEmailDomainParam struct {
 	// The email domain to match.
@@ -1216,6 +1244,10 @@ func (r emailListRuleJSON) RawJSON() string {
 func (r EmailListRule) implementsZeroTrustIncludeItem() {}
 
 func (r EmailListRule) implementsZeroTrustRule() {}
+
+func (r EmailListRule) implementsZeroTrustExcludeItem() {}
+
+func (r EmailListRule) implementsZeroTrustRequireItem() {}
 
 type EmailListRuleEmailList struct {
 	// The ID of a previously created email list.
@@ -1254,11 +1286,11 @@ func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -1268,11 +1300,11 @@ func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1280,49 +1312,35 @@ func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1330,29 +1348,43 @@ func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type EmailListRuleEmailListParam struct {
 	// The ID of a previously created email list.
@@ -1387,6 +1419,10 @@ func (r emailRuleJSON) RawJSON() string {
 func (r EmailRule) implementsZeroTrustIncludeItem() {}
 
 func (r EmailRule) implementsZeroTrustRule() {}
+
+func (r EmailRule) implementsZeroTrustExcludeItem() {}
+
+func (r EmailRule) implementsZeroTrustRequireItem() {}
 
 type EmailRuleEmail struct {
 	// The email of the user.
@@ -1424,11 +1460,11 @@ func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -1438,11 +1474,11 @@ func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1450,49 +1486,35 @@ func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1500,29 +1522,43 @@ func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EmailRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EmailRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type EmailRuleEmailParam struct {
 	// The email of the user.
@@ -1559,6 +1595,10 @@ func (r EveryoneRule) implementsZeroTrustIncludeItem() {}
 
 func (r EveryoneRule) implementsZeroTrustRule() {}
 
+func (r EveryoneRule) implementsZeroTrustExcludeItem() {}
+
+func (r EveryoneRule) implementsZeroTrustRequireItem() {}
+
 // Matches everyone.
 type EveryoneRuleParam struct {
 	// An empty object which matches on all users.
@@ -1575,11 +1615,11 @@ func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -1589,11 +1629,11 @@ func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1601,49 +1641,35 @@ func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1651,29 +1677,43 @@ func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r EveryoneRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r EveryoneRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRule struct {
@@ -1700,6 +1740,10 @@ func (r externalEvaluationRuleJSON) RawJSON() string {
 func (r ExternalEvaluationRule) implementsZeroTrustIncludeItem() {}
 
 func (r ExternalEvaluationRule) implementsZeroTrustRule() {}
+
+func (r ExternalEvaluationRule) implementsZeroTrustExcludeItem() {}
+
+func (r ExternalEvaluationRule) implementsZeroTrustRequireItem() {}
 
 type ExternalEvaluationRuleExternalEvaluation struct {
 	// The API endpoint containing your business logic.
@@ -1742,11 +1786,11 @@ func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -1756,11 +1800,11 @@ func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() 
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1768,49 +1812,35 @@ func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() 
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1818,29 +1848,43 @@ func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() 
 
 func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ExternalEvaluationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r ExternalEvaluationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type ExternalEvaluationRuleExternalEvaluationParam struct {
 	// The API endpoint containing your business logic.
@@ -1879,6 +1923,10 @@ func (r githubOrganizationRuleJSON) RawJSON() string {
 func (r GitHubOrganizationRule) implementsZeroTrustIncludeItem() {}
 
 func (r GitHubOrganizationRule) implementsZeroTrustRule() {}
+
+func (r GitHubOrganizationRule) implementsZeroTrustExcludeItem() {}
+
+func (r GitHubOrganizationRule) implementsZeroTrustRequireItem() {}
 
 type GitHubOrganizationRuleGitHubOrganization struct {
 	// The ID of your Github identity provider.
@@ -1920,11 +1968,11 @@ func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -1934,11 +1982,11 @@ func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() 
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1946,49 +1994,35 @@ func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() 
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -1996,29 +2030,43 @@ func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() 
 
 func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GitHubOrganizationRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GitHubOrganizationRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type GitHubOrganizationRuleGitHubOrganizationParam struct {
 	// The ID of your Github identity provider.
@@ -2056,6 +2104,10 @@ func (r GroupRule) implementsZeroTrustIncludeItem() {}
 
 func (r GroupRule) implementsZeroTrustRule() {}
 
+func (r GroupRule) implementsZeroTrustExcludeItem() {}
+
+func (r GroupRule) implementsZeroTrustRequireItem() {}
+
 type GroupRuleGroup struct {
 	// The ID of a previously created Access group.
 	ID   string             `json:"id,required"`
@@ -2092,11 +2144,11 @@ func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -2106,11 +2158,11 @@ func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -2118,49 +2170,35 @@ func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -2168,29 +2206,43 @@ func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type GroupRuleGroupParam struct {
 	// The ID of a previously created Access group.
@@ -2226,6 +2278,10 @@ func (r gsuiteGroupRuleJSON) RawJSON() string {
 func (r GsuiteGroupRule) implementsZeroTrustIncludeItem() {}
 
 func (r GsuiteGroupRule) implementsZeroTrustRule() {}
+
+func (r GsuiteGroupRule) implementsZeroTrustExcludeItem() {}
+
+func (r GsuiteGroupRule) implementsZeroTrustRequireItem() {}
 
 type GsuiteGroupRuleGsuite struct {
 	// The ID of your Google Workspace identity provider.
@@ -2268,11 +2324,11 @@ func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -2282,11 +2338,11 @@ func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -2294,49 +2350,35 @@ func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -2344,29 +2386,43 @@ func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r GsuiteGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r GsuiteGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type GsuiteGroupRuleGsuiteParam struct {
 	// The ID of your Google Workspace identity provider.
@@ -2614,6 +2670,10 @@ func (r IPListRule) implementsZeroTrustIncludeItem() {}
 
 func (r IPListRule) implementsZeroTrustRule() {}
 
+func (r IPListRule) implementsZeroTrustExcludeItem() {}
+
+func (r IPListRule) implementsZeroTrustRequireItem() {}
+
 type IPListRuleIPList struct {
 	// The ID of a previously created IP list.
 	ID   string               `json:"id,required"`
@@ -2651,11 +2711,11 @@ func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -2665,11 +2725,11 @@ func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -2677,49 +2737,35 @@ func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -2727,29 +2773,43 @@ func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPListRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r IPListRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type IPListRuleIPListParam struct {
 	// The ID of a previously created IP list.
@@ -2784,6 +2844,10 @@ func (r ipRuleJSON) RawJSON() string {
 func (r IPRule) implementsZeroTrustIncludeItem() {}
 
 func (r IPRule) implementsZeroTrustRule() {}
+
+func (r IPRule) implementsZeroTrustExcludeItem() {}
+
+func (r IPRule) implementsZeroTrustRequireItem() {}
 
 type IPRuleIP struct {
 	// An IPv4 or IPv6 CIDR block.
@@ -2821,11 +2885,11 @@ func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -2835,11 +2899,11 @@ func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -2847,49 +2911,35 @@ func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -2897,29 +2947,43 @@ func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r IPRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r IPRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type IPRuleIPParam struct {
 	// An IPv4 or IPv6 CIDR block.
@@ -2954,6 +3018,10 @@ func (r oktaGroupRuleJSON) RawJSON() string {
 func (r OktaGroupRule) implementsZeroTrustIncludeItem() {}
 
 func (r OktaGroupRule) implementsZeroTrustRule() {}
+
+func (r OktaGroupRule) implementsZeroTrustExcludeItem() {}
+
+func (r OktaGroupRule) implementsZeroTrustRequireItem() {}
 
 type OktaGroupRuleOkta struct {
 	// The ID of your Okta identity provider.
@@ -2995,11 +3063,11 @@ func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -3009,11 +3077,11 @@ func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -3021,49 +3089,35 @@ func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -3071,29 +3125,43 @@ func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r OktaGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r OktaGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type OktaGroupRuleOktaParam struct {
 	// The ID of your Okta identity provider.
@@ -3341,6 +3409,10 @@ func (r SamlGroupRule) implementsZeroTrustIncludeItem() {}
 
 func (r SamlGroupRule) implementsZeroTrustRule() {}
 
+func (r SamlGroupRule) implementsZeroTrustExcludeItem() {}
+
+func (r SamlGroupRule) implementsZeroTrustRequireItem() {}
+
 type SamlGroupRuleSaml struct {
 	// The name of the SAML attribute.
 	AttributeName string `json:"attribute_name,required"`
@@ -3381,11 +3453,11 @@ func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -3395,11 +3467,11 @@ func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -3407,49 +3479,35 @@ func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -3457,29 +3515,43 @@ func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r SamlGroupRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r SamlGroupRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type SamlGroupRuleSamlParam struct {
 	// The name of the SAML attribute.
@@ -3518,6 +3590,10 @@ func (r ServiceTokenRule) implementsZeroTrustIncludeItem() {}
 
 func (r ServiceTokenRule) implementsZeroTrustRule() {}
 
+func (r ServiceTokenRule) implementsZeroTrustExcludeItem() {}
+
+func (r ServiceTokenRule) implementsZeroTrustRequireItem() {}
+
 type ServiceTokenRuleServiceToken struct {
 	// The ID of a Service Token.
 	TokenID string                           `json:"token_id,required"`
@@ -3555,11 +3631,11 @@ func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -3569,11 +3645,11 @@ func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -3581,49 +3657,35 @@ func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -3631,29 +3693,43 @@ func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r ServiceTokenRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r ServiceTokenRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 type ServiceTokenRuleServiceTokenParam struct {
 	// The ID of a Service Token.

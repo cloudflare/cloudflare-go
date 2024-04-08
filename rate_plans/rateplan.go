@@ -31,7 +31,7 @@ func NewRatePlanService(opts ...option.RequestOption) (r *RatePlanService) {
 }
 
 // Lists all rate plans the zone can subscribe to.
-func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]RatePlanGetResponse, err error) {
+func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]RatePlan, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RatePlanGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/available_rate_plans", zoneIdentifier)
@@ -88,7 +88,7 @@ func (r ComponentName) IsKnown() bool {
 	return false
 }
 
-type RatePlanGetResponse struct {
+type RatePlan struct {
 	// Plan identifier tag.
 	ID string `json:"id"`
 	// Array of available components values for the plan.
@@ -98,15 +98,14 @@ type RatePlanGetResponse struct {
 	// The duration of the plan subscription.
 	Duration float64 `json:"duration"`
 	// The frequency at which you will be billed for this plan.
-	Frequency RatePlanGetResponseFrequency `json:"frequency"`
+	Frequency RatePlanFrequency `json:"frequency"`
 	// The plan name.
-	Name string                  `json:"name"`
-	JSON ratePlanGetResponseJSON `json:"-"`
+	Name string       `json:"name"`
+	JSON ratePlanJSON `json:"-"`
 }
 
-// ratePlanGetResponseJSON contains the JSON metadata for the struct
-// [RatePlanGetResponse]
-type ratePlanGetResponseJSON struct {
+// ratePlanJSON contains the JSON metadata for the struct [RatePlan]
+type ratePlanJSON struct {
 	ID          apijson.Field
 	Components  apijson.Field
 	Currency    apijson.Field
@@ -117,27 +116,27 @@ type ratePlanGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RatePlanGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RatePlan) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ratePlanGetResponseJSON) RawJSON() string {
+func (r ratePlanJSON) RawJSON() string {
 	return r.raw
 }
 
 // The frequency at which you will be billed for this plan.
-type RatePlanGetResponseFrequency string
+type RatePlanFrequency string
 
 const (
-	RatePlanGetResponseFrequencyWeekly    RatePlanGetResponseFrequency = "weekly"
-	RatePlanGetResponseFrequencyMonthly   RatePlanGetResponseFrequency = "monthly"
-	RatePlanGetResponseFrequencyQuarterly RatePlanGetResponseFrequency = "quarterly"
-	RatePlanGetResponseFrequencyYearly    RatePlanGetResponseFrequency = "yearly"
+	RatePlanFrequencyWeekly    RatePlanFrequency = "weekly"
+	RatePlanFrequencyMonthly   RatePlanFrequency = "monthly"
+	RatePlanFrequencyQuarterly RatePlanFrequency = "quarterly"
+	RatePlanFrequencyYearly    RatePlanFrequency = "yearly"
 )
 
-func (r RatePlanGetResponseFrequency) IsKnown() bool {
+func (r RatePlanFrequency) IsKnown() bool {
 	switch r {
-	case RatePlanGetResponseFrequencyWeekly, RatePlanGetResponseFrequencyMonthly, RatePlanGetResponseFrequencyQuarterly, RatePlanGetResponseFrequencyYearly:
+	case RatePlanFrequencyWeekly, RatePlanFrequencyMonthly, RatePlanFrequencyQuarterly, RatePlanFrequencyYearly:
 		return true
 	}
 	return false
@@ -146,7 +145,7 @@ func (r RatePlanGetResponseFrequency) IsKnown() bool {
 type RatePlanGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []RatePlanGetResponse                                     `json:"result,required,nullable"`
+	Result   []RatePlan                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RatePlanGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RatePlanGetResponseEnvelopeResultInfo `json:"result_info"`

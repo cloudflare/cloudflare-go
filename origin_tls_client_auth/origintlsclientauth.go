@@ -55,7 +55,7 @@ func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSCl
 }
 
 // List Certificates
-func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OriginTLSClientAuthListResponse], err error) {
+func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZoneAuthenticatedOriginPull], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -73,7 +73,7 @@ func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSCl
 }
 
 // List Certificates
-func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[OriginTLSClientAuthListResponse] {
+func (r *OriginTLSClientAuthService) ListAutoPaging(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZoneAuthenticatedOriginPull] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -103,7 +103,7 @@ func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID stri
 	return
 }
 
-type OriginTLSClientAuthListResponse struct {
+type ZoneAuthenticatedOriginPull struct {
 	// Identifier
 	ID string `json:"id"`
 	// The zone's leaf certificate.
@@ -111,13 +111,13 @@ type OriginTLSClientAuthListResponse struct {
 	// Indicates whether zone-level authenticated origin pulls is enabled.
 	Enabled bool `json:"enabled"`
 	// The zone's private key.
-	PrivateKey string                              `json:"private_key"`
-	JSON       originTLSClientAuthListResponseJSON `json:"-"`
+	PrivateKey string                          `json:"private_key"`
+	JSON       zoneAuthenticatedOriginPullJSON `json:"-"`
 }
 
-// originTLSClientAuthListResponseJSON contains the JSON metadata for the struct
-// [OriginTLSClientAuthListResponse]
-type originTLSClientAuthListResponseJSON struct {
+// zoneAuthenticatedOriginPullJSON contains the JSON metadata for the struct
+// [ZoneAuthenticatedOriginPull]
+type zoneAuthenticatedOriginPullJSON struct {
 	ID          apijson.Field
 	Certificate apijson.Field
 	Enabled     apijson.Field
@@ -126,11 +126,11 @@ type originTLSClientAuthListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginTLSClientAuthListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneAuthenticatedOriginPull) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r originTLSClientAuthListResponseJSON) RawJSON() string {
+func (r zoneAuthenticatedOriginPullJSON) RawJSON() string {
 	return r.raw
 }
 

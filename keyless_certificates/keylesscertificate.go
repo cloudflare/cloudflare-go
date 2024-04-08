@@ -49,7 +49,7 @@ func (r *KeylessCertificateService) New(ctx context.Context, params KeylessCerti
 }
 
 // List all Keyless SSL configurations for a given zone.
-func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Hostname], err error) {
+func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[KeylessCertificate], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,7 +67,7 @@ func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCerti
 }
 
 // List all Keyless SSL configurations for a given zone.
-func (r *KeylessCertificateService) ListAutoPaging(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hostname] {
+func (r *KeylessCertificateService) ListAutoPaging(ctx context.Context, query KeylessCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[KeylessCertificate] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -191,6 +191,73 @@ type HostnameParam struct {
 
 func (r HostnameParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type KeylessCertificate struct {
+	// Keyless certificate identifier tag.
+	ID string `json:"id,required"`
+	// When the Keyless SSL was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Whether or not the Keyless SSL is on or off.
+	Enabled bool `json:"enabled,required"`
+	// The keyless SSL name.
+	Host string `json:"host,required" format:"hostname"`
+	// When the Keyless SSL was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The keyless SSL name.
+	Name string `json:"name,required"`
+	// Available permissions for the Keyless SSL for the current user requesting the
+	// item.
+	Permissions []interface{} `json:"permissions,required"`
+	// The keyless SSL port used to communicate between Cloudflare and the client's
+	// Keyless SSL server.
+	Port float64 `json:"port,required"`
+	// Status of the Keyless SSL.
+	Status KeylessCertificateStatus `json:"status,required"`
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	Tunnel Tunnel                 `json:"tunnel"`
+	JSON   keylessCertificateJSON `json:"-"`
+}
+
+// keylessCertificateJSON contains the JSON metadata for the struct
+// [KeylessCertificate]
+type keylessCertificateJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Enabled     apijson.Field
+	Host        apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	Port        apijson.Field
+	Status      apijson.Field
+	Tunnel      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the Keyless SSL.
+type KeylessCertificateStatus string
+
+const (
+	KeylessCertificateStatusActive  KeylessCertificateStatus = "active"
+	KeylessCertificateStatusDeleted KeylessCertificateStatus = "deleted"
+)
+
+func (r KeylessCertificateStatus) IsKnown() bool {
+	switch r {
+	case KeylessCertificateStatusActive, KeylessCertificateStatusDeleted:
+		return true
+	}
+	return false
 }
 
 // Configuration for using Keyless SSL through a Cloudflare Tunnel

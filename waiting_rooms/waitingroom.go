@@ -276,7 +276,7 @@ type WaitingRoom struct {
 	// and path combinations to which this waiting room will be applied. There is an
 	// implied wildcard at the end of the path. The hostname and path combination must
 	// be unique to this and all other waiting rooms.
-	AdditionalRoutes []WaitingRoomAdditionalRoute `json:"additional_routes"`
+	AdditionalRoutes []AdditionalRoutesItem `json:"additional_routes"`
 	// Configures cookie attributes for the waiting room cookie. This encrypted cookie
 	// stores a user's status in the waiting room, such as queue position.
 	CookieAttributes CookieAttributes `json:"cookie_attributes"`
@@ -571,36 +571,6 @@ func (r *WaitingRoom) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r waitingRoomJSON) RawJSON() string {
-	return r.raw
-}
-
-type WaitingRoomAdditionalRoute struct {
-	// The hostname to which this waiting room will be applied (no wildcards). The
-	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
-	// for SaaS) of this zone. Please do not include the scheme (http:// or https://).
-	Host string `json:"host"`
-	// Sets the path within the host to enable the waiting room on. The waiting room
-	// will be enabled for all subpaths as well. If there are two waiting rooms on the
-	// same subpath, the waiting room for the most specific path will be chosen.
-	// Wildcards and query parameters are not supported.
-	Path string                         `json:"path"`
-	JSON waitingRoomAdditionalRouteJSON `json:"-"`
-}
-
-// waitingRoomAdditionalRouteJSON contains the JSON metadata for the struct
-// [WaitingRoomAdditionalRoute]
-type waitingRoomAdditionalRouteJSON struct {
-	Host        apijson.Field
-	Path        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WaitingRoomAdditionalRoute) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r waitingRoomAdditionalRouteJSON) RawJSON() string {
 	return r.raw
 }
 

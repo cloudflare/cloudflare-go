@@ -84,7 +84,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string", "string", "string"}),
-				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
+				TailConsumers: cloudflare.F([]workers.ConsumerScriptItemParam{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),

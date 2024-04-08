@@ -218,7 +218,7 @@ type ARecord struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -303,7 +303,7 @@ type AAAARecord struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -387,7 +387,7 @@ type CAARecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -499,7 +499,7 @@ type CERTRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -615,7 +615,7 @@ type CNAMERecord struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -699,7 +699,7 @@ type DNSKEYRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -815,7 +815,7 @@ type DSRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -930,7 +930,7 @@ type HTTPSRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1042,7 +1042,7 @@ type LOCRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1214,7 +1214,7 @@ type MXRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1298,7 +1298,7 @@ type NAPTRRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1417,7 +1417,7 @@ type NSRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1498,7 +1498,7 @@ type PTRRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1817,7 +1817,7 @@ type SMIMEARecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1936,7 +1936,7 @@ type SRVRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2067,7 +2067,7 @@ type SSHFPRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2179,7 +2179,7 @@ type SVCBRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2291,7 +2291,7 @@ type TLSARecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2451,7 +2451,7 @@ type TXTRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2592,7 +2592,7 @@ type URIRecord struct {
 	// Whether the record can be proxied by Cloudflare or not.
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []string `json:"tags"`
+	Tags []RecordTagsItem `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.

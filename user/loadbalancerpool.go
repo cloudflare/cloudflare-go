@@ -171,8 +171,8 @@ type Pool struct {
 	ID string `json:"id"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions []PoolCheckRegion `json:"check_regions,nullable"`
-	CreatedOn    time.Time         `json:"created_on" format:"date-time"`
+	CheckRegions []load_balancers.CheckRegion `json:"check_regions,nullable"`
+	CreatedOn    time.Time                    `json:"created_on" format:"date-time"`
 	// A human-readable description of the pool.
 	Description string `json:"description"`
 	// This field shows up only if the pool is disabled. This field is set with the
@@ -215,8 +215,8 @@ type Pool struct {
 	OriginSteering load_balancers.OriginSteering `json:"origin_steering"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins []load_balancers.Origin `json:"origins"`
-	JSON    poolJSON                `json:"-"`
+	Origins []load_balancers.OriginItem `json:"origins"`
+	JSON    poolJSON                    `json:"-"`
 }
 
 // poolJSON contains the JSON metadata for the struct [Pool]
@@ -248,38 +248,6 @@ func (r *Pool) UnmarshalJSON(data []byte) (err error) {
 
 func (r poolJSON) RawJSON() string {
 	return r.raw
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
-// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
-// regions (ENTERPRISE customers only).
-type PoolCheckRegion string
-
-const (
-	PoolCheckRegionWnam       PoolCheckRegion = "WNAM"
-	PoolCheckRegionEnam       PoolCheckRegion = "ENAM"
-	PoolCheckRegionWeu        PoolCheckRegion = "WEU"
-	PoolCheckRegionEeu        PoolCheckRegion = "EEU"
-	PoolCheckRegionNsam       PoolCheckRegion = "NSAM"
-	PoolCheckRegionSsam       PoolCheckRegion = "SSAM"
-	PoolCheckRegionOc         PoolCheckRegion = "OC"
-	PoolCheckRegionMe         PoolCheckRegion = "ME"
-	PoolCheckRegionNaf        PoolCheckRegion = "NAF"
-	PoolCheckRegionSaf        PoolCheckRegion = "SAF"
-	PoolCheckRegionSas        PoolCheckRegion = "SAS"
-	PoolCheckRegionSeas       PoolCheckRegion = "SEAS"
-	PoolCheckRegionNeas       PoolCheckRegion = "NEAS"
-	PoolCheckRegionAllRegions PoolCheckRegion = "ALL_REGIONS"
-)
-
-func (r PoolCheckRegion) IsKnown() bool {
-	switch r {
-	case PoolCheckRegionWnam, PoolCheckRegionEnam, PoolCheckRegionWeu, PoolCheckRegionEeu, PoolCheckRegionNsam, PoolCheckRegionSsam, PoolCheckRegionOc, PoolCheckRegionMe, PoolCheckRegionNaf, PoolCheckRegionSaf, PoolCheckRegionSas, PoolCheckRegionSeas, PoolCheckRegionNeas, PoolCheckRegionAllRegions:
-		return true
-	}
-	return false
 }
 
 type LoadBalancerPoolDeleteResponse struct {
@@ -380,10 +348,10 @@ type LoadBalancerPoolNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]load_balancers.OriginParam] `json:"origins,required"`
+	Origins param.Field[[]load_balancers.OriginItemParam] `json:"origins,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions param.Field[[]LoadBalancerPoolNewParamsCheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]load_balancers.CheckRegion] `json:"check_regions"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
@@ -421,38 +389,6 @@ type LoadBalancerPoolNewParams struct {
 
 func (r LoadBalancerPoolNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
-// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
-// regions (ENTERPRISE customers only).
-type LoadBalancerPoolNewParamsCheckRegion string
-
-const (
-	LoadBalancerPoolNewParamsCheckRegionWnam       LoadBalancerPoolNewParamsCheckRegion = "WNAM"
-	LoadBalancerPoolNewParamsCheckRegionEnam       LoadBalancerPoolNewParamsCheckRegion = "ENAM"
-	LoadBalancerPoolNewParamsCheckRegionWeu        LoadBalancerPoolNewParamsCheckRegion = "WEU"
-	LoadBalancerPoolNewParamsCheckRegionEeu        LoadBalancerPoolNewParamsCheckRegion = "EEU"
-	LoadBalancerPoolNewParamsCheckRegionNsam       LoadBalancerPoolNewParamsCheckRegion = "NSAM"
-	LoadBalancerPoolNewParamsCheckRegionSsam       LoadBalancerPoolNewParamsCheckRegion = "SSAM"
-	LoadBalancerPoolNewParamsCheckRegionOc         LoadBalancerPoolNewParamsCheckRegion = "OC"
-	LoadBalancerPoolNewParamsCheckRegionMe         LoadBalancerPoolNewParamsCheckRegion = "ME"
-	LoadBalancerPoolNewParamsCheckRegionNaf        LoadBalancerPoolNewParamsCheckRegion = "NAF"
-	LoadBalancerPoolNewParamsCheckRegionSaf        LoadBalancerPoolNewParamsCheckRegion = "SAF"
-	LoadBalancerPoolNewParamsCheckRegionSas        LoadBalancerPoolNewParamsCheckRegion = "SAS"
-	LoadBalancerPoolNewParamsCheckRegionSeas       LoadBalancerPoolNewParamsCheckRegion = "SEAS"
-	LoadBalancerPoolNewParamsCheckRegionNeas       LoadBalancerPoolNewParamsCheckRegion = "NEAS"
-	LoadBalancerPoolNewParamsCheckRegionAllRegions LoadBalancerPoolNewParamsCheckRegion = "ALL_REGIONS"
-)
-
-func (r LoadBalancerPoolNewParamsCheckRegion) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolNewParamsCheckRegionWnam, LoadBalancerPoolNewParamsCheckRegionEnam, LoadBalancerPoolNewParamsCheckRegionWeu, LoadBalancerPoolNewParamsCheckRegionEeu, LoadBalancerPoolNewParamsCheckRegionNsam, LoadBalancerPoolNewParamsCheckRegionSsam, LoadBalancerPoolNewParamsCheckRegionOc, LoadBalancerPoolNewParamsCheckRegionMe, LoadBalancerPoolNewParamsCheckRegionNaf, LoadBalancerPoolNewParamsCheckRegionSaf, LoadBalancerPoolNewParamsCheckRegionSas, LoadBalancerPoolNewParamsCheckRegionSeas, LoadBalancerPoolNewParamsCheckRegionNeas, LoadBalancerPoolNewParamsCheckRegionAllRegions:
-		return true
-	}
-	return false
 }
 
 type LoadBalancerPoolNewResponseEnvelope struct {
@@ -504,10 +440,10 @@ type LoadBalancerPoolUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]load_balancers.OriginParam] `json:"origins,required"`
+	Origins param.Field[[]load_balancers.OriginItemParam] `json:"origins,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions param.Field[[]LoadBalancerPoolUpdateParamsCheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]load_balancers.CheckRegion] `json:"check_regions"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
@@ -545,38 +481,6 @@ type LoadBalancerPoolUpdateParams struct {
 
 func (r LoadBalancerPoolUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
-// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
-// regions (ENTERPRISE customers only).
-type LoadBalancerPoolUpdateParamsCheckRegion string
-
-const (
-	LoadBalancerPoolUpdateParamsCheckRegionWnam       LoadBalancerPoolUpdateParamsCheckRegion = "WNAM"
-	LoadBalancerPoolUpdateParamsCheckRegionEnam       LoadBalancerPoolUpdateParamsCheckRegion = "ENAM"
-	LoadBalancerPoolUpdateParamsCheckRegionWeu        LoadBalancerPoolUpdateParamsCheckRegion = "WEU"
-	LoadBalancerPoolUpdateParamsCheckRegionEeu        LoadBalancerPoolUpdateParamsCheckRegion = "EEU"
-	LoadBalancerPoolUpdateParamsCheckRegionNsam       LoadBalancerPoolUpdateParamsCheckRegion = "NSAM"
-	LoadBalancerPoolUpdateParamsCheckRegionSsam       LoadBalancerPoolUpdateParamsCheckRegion = "SSAM"
-	LoadBalancerPoolUpdateParamsCheckRegionOc         LoadBalancerPoolUpdateParamsCheckRegion = "OC"
-	LoadBalancerPoolUpdateParamsCheckRegionMe         LoadBalancerPoolUpdateParamsCheckRegion = "ME"
-	LoadBalancerPoolUpdateParamsCheckRegionNaf        LoadBalancerPoolUpdateParamsCheckRegion = "NAF"
-	LoadBalancerPoolUpdateParamsCheckRegionSaf        LoadBalancerPoolUpdateParamsCheckRegion = "SAF"
-	LoadBalancerPoolUpdateParamsCheckRegionSas        LoadBalancerPoolUpdateParamsCheckRegion = "SAS"
-	LoadBalancerPoolUpdateParamsCheckRegionSeas       LoadBalancerPoolUpdateParamsCheckRegion = "SEAS"
-	LoadBalancerPoolUpdateParamsCheckRegionNeas       LoadBalancerPoolUpdateParamsCheckRegion = "NEAS"
-	LoadBalancerPoolUpdateParamsCheckRegionAllRegions LoadBalancerPoolUpdateParamsCheckRegion = "ALL_REGIONS"
-)
-
-func (r LoadBalancerPoolUpdateParamsCheckRegion) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolUpdateParamsCheckRegionWnam, LoadBalancerPoolUpdateParamsCheckRegionEnam, LoadBalancerPoolUpdateParamsCheckRegionWeu, LoadBalancerPoolUpdateParamsCheckRegionEeu, LoadBalancerPoolUpdateParamsCheckRegionNsam, LoadBalancerPoolUpdateParamsCheckRegionSsam, LoadBalancerPoolUpdateParamsCheckRegionOc, LoadBalancerPoolUpdateParamsCheckRegionMe, LoadBalancerPoolUpdateParamsCheckRegionNaf, LoadBalancerPoolUpdateParamsCheckRegionSaf, LoadBalancerPoolUpdateParamsCheckRegionSas, LoadBalancerPoolUpdateParamsCheckRegionSeas, LoadBalancerPoolUpdateParamsCheckRegionNeas, LoadBalancerPoolUpdateParamsCheckRegionAllRegions:
-		return true
-	}
-	return false
 }
 
 type LoadBalancerPoolUpdateResponseEnvelope struct {
@@ -691,7 +595,7 @@ func (r LoadBalancerPoolDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type LoadBalancerPoolEditParams struct {
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	CheckRegions param.Field[[]LoadBalancerPoolEditParamsCheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]load_balancers.CheckRegion] `json:"check_regions"`
 	// A human-readable description of the pool.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) or disable this pool. Disabled pools will not
@@ -730,43 +634,11 @@ type LoadBalancerPoolEditParams struct {
 	OriginSteering param.Field[load_balancers.OriginSteeringParam] `json:"origin_steering"`
 	// The list of origins within this pool. Traffic directed at this pool is balanced
 	// across all currently healthy origins, provided the pool itself is healthy.
-	Origins param.Field[[]load_balancers.OriginParam] `json:"origins"`
+	Origins param.Field[[]load_balancers.OriginItemParam] `json:"origins"`
 }
 
 func (r LoadBalancerPoolEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
-// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
-// regions (ENTERPRISE customers only).
-type LoadBalancerPoolEditParamsCheckRegion string
-
-const (
-	LoadBalancerPoolEditParamsCheckRegionWnam       LoadBalancerPoolEditParamsCheckRegion = "WNAM"
-	LoadBalancerPoolEditParamsCheckRegionEnam       LoadBalancerPoolEditParamsCheckRegion = "ENAM"
-	LoadBalancerPoolEditParamsCheckRegionWeu        LoadBalancerPoolEditParamsCheckRegion = "WEU"
-	LoadBalancerPoolEditParamsCheckRegionEeu        LoadBalancerPoolEditParamsCheckRegion = "EEU"
-	LoadBalancerPoolEditParamsCheckRegionNsam       LoadBalancerPoolEditParamsCheckRegion = "NSAM"
-	LoadBalancerPoolEditParamsCheckRegionSsam       LoadBalancerPoolEditParamsCheckRegion = "SSAM"
-	LoadBalancerPoolEditParamsCheckRegionOc         LoadBalancerPoolEditParamsCheckRegion = "OC"
-	LoadBalancerPoolEditParamsCheckRegionMe         LoadBalancerPoolEditParamsCheckRegion = "ME"
-	LoadBalancerPoolEditParamsCheckRegionNaf        LoadBalancerPoolEditParamsCheckRegion = "NAF"
-	LoadBalancerPoolEditParamsCheckRegionSaf        LoadBalancerPoolEditParamsCheckRegion = "SAF"
-	LoadBalancerPoolEditParamsCheckRegionSas        LoadBalancerPoolEditParamsCheckRegion = "SAS"
-	LoadBalancerPoolEditParamsCheckRegionSeas       LoadBalancerPoolEditParamsCheckRegion = "SEAS"
-	LoadBalancerPoolEditParamsCheckRegionNeas       LoadBalancerPoolEditParamsCheckRegion = "NEAS"
-	LoadBalancerPoolEditParamsCheckRegionAllRegions LoadBalancerPoolEditParamsCheckRegion = "ALL_REGIONS"
-)
-
-func (r LoadBalancerPoolEditParamsCheckRegion) IsKnown() bool {
-	switch r {
-	case LoadBalancerPoolEditParamsCheckRegionWnam, LoadBalancerPoolEditParamsCheckRegionEnam, LoadBalancerPoolEditParamsCheckRegionWeu, LoadBalancerPoolEditParamsCheckRegionEeu, LoadBalancerPoolEditParamsCheckRegionNsam, LoadBalancerPoolEditParamsCheckRegionSsam, LoadBalancerPoolEditParamsCheckRegionOc, LoadBalancerPoolEditParamsCheckRegionMe, LoadBalancerPoolEditParamsCheckRegionNaf, LoadBalancerPoolEditParamsCheckRegionSaf, LoadBalancerPoolEditParamsCheckRegionSas, LoadBalancerPoolEditParamsCheckRegionSeas, LoadBalancerPoolEditParamsCheckRegionNeas, LoadBalancerPoolEditParamsCheckRegionAllRegions:
-		return true
-	}
-	return false
 }
 
 type LoadBalancerPoolEditResponseEnvelope struct {

@@ -31,11 +31,11 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.User.LoadBalancers.Pools.New(context.TODO(), user.LoadBalancerPoolNewParams{
 		Name: cloudflare.F("primary-dc-1"),
-		Origins: cloudflare.F([]load_balancers.OriginParam{{
+		Origins: cloudflare.F([]load_balancers.OriginItemParam{{
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
 			Header: cloudflare.F(load_balancers.HeaderParam{
-				Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+				Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
 			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -44,7 +44,7 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
 			Header: cloudflare.F(load_balancers.HeaderParam{
-				Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+				Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
 			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -53,13 +53,13 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
 			Header: cloudflare.F(load_balancers.HeaderParam{
-				Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+				Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
 			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
 			Weight:           cloudflare.F(0.600000),
 		}}),
-		CheckRegions: cloudflare.F([]user.LoadBalancerPoolNewParamsCheckRegion{user.LoadBalancerPoolNewParamsCheckRegionWeu, user.LoadBalancerPoolNewParamsCheckRegionEnam}),
+		CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWeu, load_balancers.CheckRegionEnam}),
 		Description:  cloudflare.F("Primary data center - Provider XYZ"),
 		Enabled:      cloudflare.F(false),
 		Latitude:     cloudflare.F(0.000000),
@@ -115,11 +115,11 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 		"17b5962d775c646f3f9725cbc7a53df4",
 		user.LoadBalancerPoolUpdateParams{
 			Name: cloudflare.F("primary-dc-1"),
-			Origins: cloudflare.F([]load_balancers.OriginParam{{
+			Origins: cloudflare.F([]load_balancers.OriginItemParam{{
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -128,7 +128,7 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -137,13 +137,13 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
 				Weight:           cloudflare.F(0.600000),
 			}}),
-			CheckRegions: cloudflare.F([]user.LoadBalancerPoolUpdateParamsCheckRegion{user.LoadBalancerPoolUpdateParamsCheckRegionWeu, user.LoadBalancerPoolUpdateParamsCheckRegionEnam}),
+			CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWeu, load_balancers.CheckRegionEnam}),
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
 			Latitude:     cloudflare.F(0.000000),
@@ -255,7 +255,7 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"17b5962d775c646f3f9725cbc7a53df4",
 		user.LoadBalancerPoolEditParams{
-			CheckRegions: cloudflare.F([]user.LoadBalancerPoolEditParamsCheckRegion{user.LoadBalancerPoolEditParamsCheckRegionWeu, user.LoadBalancerPoolEditParamsCheckRegionEnam}),
+			CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWeu, load_balancers.CheckRegionEnam}),
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
 			Latitude:     cloudflare.F(0.000000),
@@ -283,11 +283,11 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 			OriginSteering: cloudflare.F(load_balancers.OriginSteeringParam{
 				Policy: cloudflare.F(load_balancers.OriginSteeringPolicyRandom),
 			}),
-			Origins: cloudflare.F([]load_balancers.OriginParam{{
+			Origins: cloudflare.F([]load_balancers.OriginItemParam{{
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -296,7 +296,7 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -305,7 +305,7 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),

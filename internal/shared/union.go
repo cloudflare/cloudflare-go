@@ -14,8 +14,6 @@ func (UnionString) ImplementsUserLoadBalancerPoolHealthResponseUnion()          
 func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                     {}
 func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()                         {}
 func (UnionString) ImplementsCacheCachePurgeParamsCachePurgeFilesFileUnion()               {}
-func (UnionString) ImplementsDNSFirewallDNSFirewallIPsUnion()                              {}
-func (UnionString) ImplementsDNSFirewallUpstreamIPsUnion()                                 {}
 func (UnionString) ImplementsDNSFirewallIPsItemUnionParam()                                {}
 func (UnionString) ImplementsDNSFirewallIPsItemUnion()                                     {}
 func (UnionString) ImplementsDNSUpstreamIPsItemsUnionParam()                               {}

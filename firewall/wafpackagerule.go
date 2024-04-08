@@ -209,7 +209,7 @@ type RuleWAFManagedRulesAnomalyRule struct {
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule. Applies to anomaly
 	// detection WAF rules.
-	AllowedModes []RuleWAFManagedRulesAnomalyRuleAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []AllowedModesAnomalyItem `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
@@ -247,23 +247,6 @@ func (r ruleWAFManagedRulesAnomalyRuleJSON) RawJSON() string {
 }
 
 func (r RuleWAFManagedRulesAnomalyRule) implementsFirewallRule() {}
-
-// When set to `on`, the current WAF rule will be used when evaluating the request.
-// Applies to anomaly detection WAF rules.
-type RuleWAFManagedRulesAnomalyRuleAllowedMode string
-
-const (
-	RuleWAFManagedRulesAnomalyRuleAllowedModeOn  RuleWAFManagedRulesAnomalyRuleAllowedMode = "on"
-	RuleWAFManagedRulesAnomalyRuleAllowedModeOff RuleWAFManagedRulesAnomalyRuleAllowedMode = "off"
-)
-
-func (r RuleWAFManagedRulesAnomalyRuleAllowedMode) IsKnown() bool {
-	switch r {
-	case RuleWAFManagedRulesAnomalyRuleAllowedModeOn, RuleWAFManagedRulesAnomalyRuleAllowedModeOff:
-		return true
-	}
-	return false
-}
 
 // When set to `on`, the current WAF rule will be used when evaluating the request.
 // Applies to anomaly detection WAF rules.

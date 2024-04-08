@@ -183,7 +183,7 @@ type DispatchNamespaceScriptUpdateParamsVariant0Metadata struct {
 	// List of strings to use as tags for this Worker
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]workers.ConsumerScriptParam] `json:"tail_consumers"`
+	TailConsumers param.Field[[]workers.ConsumerScriptItemParam] `json:"tail_consumers"`
 	// Usage model to apply to invocations.
 	UsageModel param.Field[DispatchNamespaceScriptUpdateParamsVariant0MetadataUsageModel] `json:"usage_model"`
 	// Key-value pairs to use as tags for this version of this Worker

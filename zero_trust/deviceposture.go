@@ -161,6 +161,10 @@ func (r DevicePostureRule) implementsZeroTrustIncludeItem() {}
 
 func (r DevicePostureRule) implementsZeroTrustRule() {}
 
+func (r DevicePostureRule) implementsZeroTrustExcludeItem() {}
+
+func (r DevicePostureRule) implementsZeroTrustRequireItem() {}
+
 // The type of device posture rule.
 type DevicePostureRuleType string
 
@@ -225,11 +229,11 @@ func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
@@ -239,11 +243,11 @@ func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -251,49 +255,35 @@ func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
-
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
-
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
@@ -301,29 +291,43 @@ func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
 func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
-func (r DevicePostureRuleParam) implementsZeroTrustRuleUnionParam() {}
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustExcludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustIncludeItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
+
+func (r DevicePostureRuleParam) implementsZeroTrustRequireItemUnionParam() {}
 
 // The value to be checked against.
 type Input struct {

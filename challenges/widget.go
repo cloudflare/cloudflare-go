@@ -135,8 +135,8 @@ type Widget struct {
 	// challenge clearance, this setting can determine the clearance level to be set
 	ClearanceLevel WidgetClearanceLevel `json:"clearance_level,required"`
 	// When the widget was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	Domains   []string  `json:"domains,required"`
+	CreatedOn time.Time          `json:"created_on,required" format:"date-time"`
+	Domains   []WidgetDomainItem `json:"domains,required"`
 	// Widget Mode
 	Mode WidgetMode `json:"mode,required"`
 	// When the widget was modified.
@@ -241,8 +241,8 @@ type WidgetDomain struct {
 	// challenge clearance, this setting can determine the clearance level to be set
 	ClearanceLevel WidgetDomainClearanceLevel `json:"clearance_level,required"`
 	// When the widget was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	Domains   []string  `json:"domains,required"`
+	CreatedOn time.Time          `json:"created_on,required" format:"date-time"`
+	Domains   []WidgetDomainItem `json:"domains,required"`
 	// Widget Mode
 	Mode WidgetDomainMode `json:"mode,required"`
 	// When the widget was modified.

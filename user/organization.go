@@ -85,7 +85,7 @@ type Organization struct {
 	// Organization name.
 	Name string `json:"name"`
 	// Access permissions for this User.
-	Permissions []string `json:"permissions"`
+	Permissions []PermissionItem `json:"permissions"`
 	// List of roles that a user has within an organization.
 	Roles []string `json:"roles"`
 	// Whether the user is a member of the organization or has an inivitation pending.

@@ -117,7 +117,7 @@ type ProxyEndpoint struct {
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// A list of CIDRs to restrict ingress connections.
-	IPs []string `json:"ips"`
+	IPs []GatewayIPsItem `json:"ips"`
 	// The name of the proxy endpoint.
 	Name string `json:"name"`
 	// The subdomain to be used as the destination in the proxy client.

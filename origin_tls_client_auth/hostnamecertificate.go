@@ -49,7 +49,7 @@ func (r *HostnameCertificateService) New(ctx context.Context, params HostnameCer
 }
 
 // List Certificates
-func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ID], err error) {
+func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AuthenticatedOriginPull], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,7 +67,7 @@ func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCer
 }
 
 // List Certificates
-func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ID] {
+func (r *HostnameCertificateService) ListAutoPaging(ctx context.Context, query HostnameCertificateListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AuthenticatedOriginPull] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 

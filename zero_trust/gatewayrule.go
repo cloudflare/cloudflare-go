@@ -244,7 +244,7 @@ type Rule struct {
 	Enabled bool `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters []RuleFilter `json:"filters"`
+	Filters []FilterItem `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity string `json:"identity"`
 	// The name of the rule.
@@ -323,24 +323,6 @@ func (r RuleAction) IsKnown() bool {
 	return false
 }
 
-// The protocol or layer to use.
-type RuleFilter string
-
-const (
-	RuleFilterHTTP   RuleFilter = "http"
-	RuleFilterDNS    RuleFilter = "dns"
-	RuleFilterL4     RuleFilter = "l4"
-	RuleFilterEgress RuleFilter = "egress"
-)
-
-func (r RuleFilter) IsKnown() bool {
-	switch r {
-	case RuleFilterHTTP, RuleFilterDNS, RuleFilterL4, RuleFilterEgress:
-		return true
-	}
-	return false
-}
-
 type RuleParam struct {
 	// The API resource UUID.
 	ID param.Field[string] `json:"id"`
@@ -355,7 +337,7 @@ type RuleParam struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters param.Field[[]RuleFilter] `json:"filters"`
+	Filters param.Field[[]FilterItem] `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity param.Field[string] `json:"identity"`
 	// The name of the rule.

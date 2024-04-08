@@ -33,7 +33,7 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 }
 
 // Creates and returns a new Hyperdrive configuration.
-func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *ConfigNewResponse, err error) {
+func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", params.AccountID)
@@ -46,7 +46,7 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 }
 
 // Updates and returns the specified Hyperdrive configuration.
-func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *ConfigUpdateResponse, err error) {
+func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params ConfigUpdateParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
@@ -59,7 +59,7 @@ func (r *ConfigService) Update(ctx context.Context, hyperdriveID string, params 
 }
 
 // Returns a list of Hyperdrives
-func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ConfigListResponse], err error) {
+func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Hyperdrive], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -77,7 +77,7 @@ func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts .
 }
 
 // Returns a list of Hyperdrives
-func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ConfigListResponse] {
+func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hyperdrive] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -96,7 +96,7 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 
 // Patches and returns the specified Hyperdrive configuration. Updates to the
 // origin and caching settings are applied with an all-or-nothing approach.
-func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *ConfigEditResponse, err error) {
+func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
@@ -109,7 +109,7 @@ func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params Co
 }
 
 // Returns the specified Hyperdrive configuration.
-func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query ConfigGetParams, opts ...option.RequestOption) (res *ConfigGetResponse, err error) {
+func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query ConfigGetParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", query.AccountID, hyperdriveID)
@@ -121,141 +121,21 @@ func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query Conf
 	return
 }
 
-type ConfigNewResponse struct {
-	// Identifier
-	ID   string                `json:"id"`
-	JSON configNewResponseJSON `json:"-"`
-}
-
-// configNewResponseJSON contains the JSON metadata for the struct
-// [ConfigNewResponse]
-type configNewResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigUpdateResponse struct {
-	// Identifier
-	ID   string                   `json:"id"`
-	JSON configUpdateResponseJSON `json:"-"`
-}
-
-// configUpdateResponseJSON contains the JSON metadata for the struct
-// [ConfigUpdateResponse]
-type configUpdateResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigListResponse struct {
-	// Identifier
-	ID   string                 `json:"id"`
-	JSON configListResponseJSON `json:"-"`
-}
-
-// configListResponseJSON contains the JSON metadata for the struct
-// [ConfigListResponse]
-type configListResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigEditResponse struct {
-	// Identifier
-	ID   string                 `json:"id"`
-	JSON configEditResponseJSON `json:"-"`
-}
-
-// configEditResponseJSON contains the JSON metadata for the struct
-// [ConfigEditResponse]
-type configEditResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigGetResponse struct {
-	// Identifier
-	ID   string                `json:"id"`
-	JSON configGetResponseJSON `json:"-"`
-}
-
-// configGetResponseJSON contains the JSON metadata for the struct
-// [ConfigGetResponse]
-type configGetResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConfigNewParams struct {
 	// Identifier
-	AccountID param.Field[string]                `path:"account_id,required"`
-	Name      param.Field[interface{}]           `json:"name,required"`
-	Origin    param.Field[ConfigNewParamsOrigin] `json:"origin,required"`
+	AccountID param.Field[string]             `path:"account_id,required"`
+	Name      param.Field[interface{}]        `json:"name,required"`
+	Origin    param.Field[ConfigurationParam] `json:"origin,required"`
 }
 
 func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ConfigNewParamsOrigin struct {
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
-	Password param.Field[string] `json:"password,required"`
-}
-
-func (r ConfigNewParamsOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ConfigNewResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ConfigNewResponse                                         `json:"result,required,nullable"`
+	Result   Hyperdrive                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
@@ -297,29 +177,19 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]                   `path:"account_id,required"`
-	Name      param.Field[interface{}]              `json:"name,required"`
-	Origin    param.Field[ConfigUpdateParamsOrigin] `json:"origin,required"`
+	AccountID param.Field[string]             `path:"account_id,required"`
+	Name      param.Field[interface{}]        `json:"name,required"`
+	Origin    param.Field[ConfigurationParam] `json:"origin,required"`
 }
 
 func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ConfigUpdateParamsOrigin struct {
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
-	Password param.Field[string] `json:"password,required"`
-}
-
-func (r ConfigUpdateParamsOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ConfigUpdateResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ConfigUpdateResponse                                      `json:"result,required,nullable"`
+	Result   Hyperdrive                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
@@ -414,28 +284,18 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigEditParams struct {
 	// Identifier
-	AccountID param.Field[string]                 `path:"account_id,required"`
-	Origin    param.Field[ConfigEditParamsOrigin] `json:"origin"`
+	AccountID param.Field[string]             `path:"account_id,required"`
+	Origin    param.Field[ConfigurationParam] `json:"origin"`
 }
 
 func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ConfigEditParamsOrigin struct {
-	// The password required to access your origin database. This value is write-only
-	// and never returned by the API.
-	Password param.Field[string] `json:"password,required"`
-}
-
-func (r ConfigEditParamsOrigin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type ConfigEditResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ConfigEditResponse                                        `json:"result,required,nullable"`
+	Result   Hyperdrive                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
@@ -483,7 +343,7 @@ type ConfigGetParams struct {
 type ConfigGetResponseEnvelope struct {
 	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
 	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ConfigGetResponse                                         `json:"result,required,nullable"`
+	Result   Hyperdrive                                                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`
