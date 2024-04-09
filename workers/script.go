@@ -28,12 +28,9 @@ import (
 // service directly, and instead use the [NewScriptService] method instead.
 type ScriptService struct {
 	Options     []option.RequestOption
-	Bindings    *ScriptBindingService
 	Schedules   *ScriptScheduleService
 	Tail        *ScriptTailService
-	UsageModel  *ScriptUsageModelService
 	Content     *ScriptContentService
-	ContentV2   *ScriptContentV2Service
 	Settings    *ScriptSettingService
 	Deployments *ScriptDeploymentService
 	Versions    *ScriptVersionService
@@ -45,12 +42,9 @@ type ScriptService struct {
 func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	r = &ScriptService{}
 	r.Options = opts
-	r.Bindings = NewScriptBindingService(opts...)
 	r.Schedules = NewScriptScheduleService(opts...)
 	r.Tail = NewScriptTailService(opts...)
-	r.UsageModel = NewScriptUsageModelService(opts...)
 	r.Content = NewScriptContentService(opts...)
-	r.ContentV2 = NewScriptContentV2Service(opts...)
 	r.Settings = NewScriptSettingService(opts...)
 	r.Deployments = NewScriptDeploymentService(opts...)
 	r.Versions = NewScriptVersionService(opts...)
