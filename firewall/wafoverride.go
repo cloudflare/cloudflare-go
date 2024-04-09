@@ -157,8 +157,8 @@ type Override struct {
 	// The URLs to include in the current WAF override. You can use wildcards. Each
 	// entered URL will be escaped before use, which means you can only use simple
 	// wildcard patterns.
-	URLs []URLs       `json:"urls"`
-	JSON overrideJSON `json:"-"`
+	URLs []OverrideURL `json:"urls"`
+	JSON overrideJSON  `json:"-"`
 }
 
 // overrideJSON contains the JSON metadata for the struct [Override]
@@ -182,6 +182,8 @@ func (r *Override) UnmarshalJSON(data []byte) (err error) {
 func (r overrideJSON) RawJSON() string {
 	return r.raw
 }
+
+type OverrideURL = string
 
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
@@ -252,8 +254,6 @@ func (r RewriteActionDisable) IsKnown() bool {
 	}
 	return false
 }
-
-type URLs = string
 
 type WAFRule map[string]WAFRuleItem
 
