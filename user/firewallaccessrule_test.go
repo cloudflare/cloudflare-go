@@ -30,8 +30,8 @@ func TestFirewallAccessRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Firewall.AccessRules.New(context.TODO(), user.FirewallAccessRuleNewParams{
-		Configuration: cloudflare.F[user.FirewallAccessRuleNewParamsConfigurationUnion](firewall.IPConfigurationParam{
-			Target: cloudflare.F(firewall.IPConfigurationTargetIP),
+		Configuration: cloudflare.F[user.FirewallAccessRuleNewParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
+			Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
 		}),
 		Mode:  cloudflare.F(user.FirewallAccessRuleNewParamsModeChallenge),

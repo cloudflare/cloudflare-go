@@ -166,6 +166,137 @@ func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, que
 	return
 }
 
+type AccessRuleCIDRConfiguration struct {
+	// The configuration target. You must set the target to `ip_range` when specifying
+	// an IP address range in the rule.
+	Target AccessRuleCIDRConfigurationTarget `json:"target"`
+	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
+	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
+	Value string                          `json:"value"`
+	JSON  accessRuleCIDRConfigurationJSON `json:"-"`
+}
+
+// accessRuleCIDRConfigurationJSON contains the JSON metadata for the struct
+// [AccessRuleCIDRConfiguration]
+type accessRuleCIDRConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleCIDRConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleCIDRConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleCIDRConfiguration) implementsUserFirewallRuleConfiguration() {}
+
+// The configuration target. You must set the target to `ip_range` when specifying
+// an IP address range in the rule.
+type AccessRuleCIDRConfigurationTarget string
+
+const (
+	AccessRuleCIDRConfigurationTargetIPRange AccessRuleCIDRConfigurationTarget = "ip_range"
+)
+
+func (r AccessRuleCIDRConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleCIDRConfigurationTargetIPRange:
+		return true
+	}
+	return false
+}
+
+type AccessRuleCIDRConfigurationParam struct {
+	// The configuration target. You must set the target to `ip_range` when specifying
+	// an IP address range in the rule.
+	Target param.Field[AccessRuleCIDRConfigurationTarget] `json:"target"`
+	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
+	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r AccessRuleCIDRConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleCIDRConfigurationParam) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {
+}
+
+func (r AccessRuleCIDRConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
+
+func (r AccessRuleCIDRConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
+}
+
+type AccessRuleIPConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the rule.
+	Target AccessRuleIPConfigurationTarget `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value string                        `json:"value"`
+	JSON  accessRuleIPConfigurationJSON `json:"-"`
+}
+
+// accessRuleIPConfigurationJSON contains the JSON metadata for the struct
+// [AccessRuleIPConfiguration]
+type accessRuleIPConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleIPConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleIPConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleIPConfiguration) implementsUserFirewallRuleConfiguration() {}
+
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the rule.
+type AccessRuleIPConfigurationTarget string
+
+const (
+	AccessRuleIPConfigurationTargetIP AccessRuleIPConfigurationTarget = "ip"
+)
+
+func (r AccessRuleIPConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleIPConfigurationTargetIP:
+		return true
+	}
+	return false
+}
+
+type AccessRuleIPConfigurationParam struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the rule.
+	Target param.Field[AccessRuleIPConfigurationTarget] `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r AccessRuleIPConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleIPConfigurationParam) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {
+}
+
+func (r AccessRuleIPConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
+
+func (r AccessRuleIPConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
+
 type ASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
@@ -227,84 +358,6 @@ func (r ASNConfigurationParam) implementsUserFirewallAccessRuleNewParamsConfigur
 func (r ASNConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
 
 func (r ASNConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
-
-type CIDRConfiguration struct {
-	// The configuration target. You must set the target to `ip_range` when specifying
-	// an IP address range in the rule.
-	Target CIDRConfigurationTarget `json:"target"`
-	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
-	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
-	Value string                `json:"value"`
-	JSON  cidrConfigurationJSON `json:"-"`
-}
-
-// cidrConfigurationJSON contains the JSON metadata for the struct
-// [CIDRConfiguration]
-type cidrConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CIDRConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cidrConfigurationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r CIDRConfiguration) implementsUserFirewallRuleConfiguration() {}
-
-func (r CIDRConfiguration) implementsFirewallConfiguration() {}
-
-// The configuration target. You must set the target to `ip_range` when specifying
-// an IP address range in the rule.
-type CIDRConfigurationTarget string
-
-const (
-	CIDRConfigurationTargetIPRange CIDRConfigurationTarget = "ip_range"
-)
-
-func (r CIDRConfigurationTarget) IsKnown() bool {
-	switch r {
-	case CIDRConfigurationTargetIPRange:
-		return true
-	}
-	return false
-}
-
-type CIDRConfigurationParam struct {
-	// The configuration target. You must set the target to `ip_range` when specifying
-	// an IP address range in the rule.
-	Target param.Field[CIDRConfigurationTarget] `json:"target"`
-	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
-	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r CIDRConfigurationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CIDRConfigurationParam) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r CIDRConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
 
 type CountryConfiguration struct {
 	// The configuration target. You must set the target to `country` when specifying a
@@ -369,83 +422,6 @@ func (r CountryConfigurationParam) implementsUserFirewallAccessRuleNewParamsConf
 func (r CountryConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
 
 func (r CountryConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
-
-type IPConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the rule.
-	Target IPConfigurationTarget `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value string              `json:"value"`
-	JSON  ipConfigurationJSON `json:"-"`
-}
-
-// ipConfigurationJSON contains the JSON metadata for the struct [IPConfiguration]
-type ipConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipConfigurationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r IPConfiguration) implementsUserFirewallRuleConfiguration() {}
-
-func (r IPConfiguration) implementsFirewallConfiguration() {}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the rule.
-type IPConfigurationTarget string
-
-const (
-	IPConfigurationTargetIP IPConfigurationTarget = "ip"
-)
-
-func (r IPConfigurationTarget) IsKnown() bool {
-	switch r {
-	case IPConfigurationTargetIP:
-		return true
-	}
-	return false
-}
-
-type IPConfigurationParam struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the rule.
-	Target param.Field[IPConfigurationTarget] `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r IPConfigurationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IPConfigurationParam) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r IPConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
 
 type IPV6Configuration struct {
 	// The configuration target. You must set the target to `ip6` when specifying an
@@ -568,9 +544,10 @@ func (r AccessRuleNewParamsConfiguration) implementsFirewallAccessRuleNewParamsC
 
 // The rule configuration.
 //
-// Satisfied by [firewall.IPConfigurationParam], [firewall.IPV6ConfigurationParam],
-// [firewall.CIDRConfigurationParam], [firewall.ASNConfigurationParam],
-// [firewall.CountryConfigurationParam], [AccessRuleNewParamsConfiguration].
+// Satisfied by [firewall.AccessRuleIPConfigurationParam],
+// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
+// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
+// [AccessRuleNewParamsConfiguration].
 type AccessRuleNewParamsConfigurationUnion interface {
 	implementsFirewallAccessRuleNewParamsConfigurationUnion()
 }
@@ -918,9 +895,10 @@ func (r AccessRuleEditParamsConfiguration) implementsFirewallAccessRuleEditParam
 
 // The rule configuration.
 //
-// Satisfied by [firewall.IPConfigurationParam], [firewall.IPV6ConfigurationParam],
-// [firewall.CIDRConfigurationParam], [firewall.ASNConfigurationParam],
-// [firewall.CountryConfigurationParam], [AccessRuleEditParamsConfiguration].
+// Satisfied by [firewall.AccessRuleIPConfigurationParam],
+// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
+// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
+// [AccessRuleEditParamsConfiguration].
 type AccessRuleEditParamsConfigurationUnion interface {
 	implementsFirewallAccessRuleEditParamsConfigurationUnion()
 }

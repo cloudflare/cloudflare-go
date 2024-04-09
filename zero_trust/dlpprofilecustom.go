@@ -100,7 +100,7 @@ type CustomProfile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type      CustomProfile     `json:"type"`
+	Type      CustomProfileType `json:"type"`
 	UpdatedAt time.Time         `json:"updated_at" format:"date-time"`
 	JSON      customProfileJSON `json:"-"`
 }
@@ -170,6 +170,21 @@ func (r *CustomProfileEntry) UnmarshalJSON(data []byte) (err error) {
 
 func (r customProfileEntryJSON) RawJSON() string {
 	return r.raw
+}
+
+// The type of the profile.
+type CustomProfileType string
+
+const (
+	CustomProfileTypeCustom CustomProfileType = "custom"
+)
+
+func (r CustomProfileType) IsKnown() bool {
+	switch r {
+	case CustomProfileTypeCustom:
+		return true
+	}
+	return false
 }
 
 // A pattern that matches an entry
