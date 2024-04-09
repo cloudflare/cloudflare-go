@@ -20,28 +20,28 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// LoadBalancerPoolService contains methods and other services that help with
+// LoadBalancingPoolService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewLoadBalancerPoolService] method
+// this service directly, and instead use the [NewLoadBalancingPoolService] method
 // instead.
-type LoadBalancerPoolService struct {
+type LoadBalancingPoolService struct {
 	Options []option.RequestOption
 }
 
-// NewLoadBalancerPoolService generates a new service that applies the given
+// NewLoadBalancingPoolService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewLoadBalancerPoolService(opts ...option.RequestOption) (r *LoadBalancerPoolService) {
-	r = &LoadBalancerPoolService{}
+func NewLoadBalancingPoolService(opts ...option.RequestOption) (r *LoadBalancingPoolService) {
+	r = &LoadBalancingPoolService{}
 	r.Options = opts
 	return
 }
 
 // Create a new pool.
-func (r *LoadBalancerPoolService) New(ctx context.Context, body LoadBalancerPoolNewParams, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
+func (r *LoadBalancingPoolService) New(ctx context.Context, body LoadBalancingPoolNewParams, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerPoolNewResponseEnvelope
+	var env LoadBalancingPoolNewResponseEnvelope
 	path := "user/load_balancers/pools"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -52,9 +52,9 @@ func (r *LoadBalancerPoolService) New(ctx context.Context, body LoadBalancerPool
 }
 
 // Modify a configured pool.
-func (r *LoadBalancerPoolService) Update(ctx context.Context, poolID string, body LoadBalancerPoolUpdateParams, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
+func (r *LoadBalancingPoolService) Update(ctx context.Context, poolID string, body LoadBalancingPoolUpdateParams, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerPoolUpdateResponseEnvelope
+	var env LoadBalancingPoolUpdateResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s", poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -65,7 +65,7 @@ func (r *LoadBalancerPoolService) Update(ctx context.Context, poolID string, bod
 }
 
 // List configured pools.
-func (r *LoadBalancerPoolService) List(ctx context.Context, query LoadBalancerPoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[load_balancers.Pool], err error) {
+func (r *LoadBalancingPoolService) List(ctx context.Context, query LoadBalancingPoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[load_balancers.Pool], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -83,14 +83,14 @@ func (r *LoadBalancerPoolService) List(ctx context.Context, query LoadBalancerPo
 }
 
 // List configured pools.
-func (r *LoadBalancerPoolService) ListAutoPaging(ctx context.Context, query LoadBalancerPoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[load_balancers.Pool] {
+func (r *LoadBalancingPoolService) ListAutoPaging(ctx context.Context, query LoadBalancingPoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[load_balancers.Pool] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a configured pool.
-func (r *LoadBalancerPoolService) Delete(ctx context.Context, poolID string, body LoadBalancerPoolDeleteParams, opts ...option.RequestOption) (res *LoadBalancerPoolDeleteResponse, err error) {
+func (r *LoadBalancingPoolService) Delete(ctx context.Context, poolID string, body LoadBalancingPoolDeleteParams, opts ...option.RequestOption) (res *LoadBalancingPoolDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerPoolDeleteResponseEnvelope
+	var env LoadBalancingPoolDeleteResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s", poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -101,9 +101,9 @@ func (r *LoadBalancerPoolService) Delete(ctx context.Context, poolID string, bod
 }
 
 // Apply changes to an existing pool, overwriting the supplied properties.
-func (r *LoadBalancerPoolService) Edit(ctx context.Context, poolID string, body LoadBalancerPoolEditParams, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
+func (r *LoadBalancingPoolService) Edit(ctx context.Context, poolID string, body LoadBalancingPoolEditParams, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerPoolEditResponseEnvelope
+	var env LoadBalancingPoolEditResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s", poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -114,9 +114,9 @@ func (r *LoadBalancerPoolService) Edit(ctx context.Context, poolID string, body 
 }
 
 // Fetch a single configured pool.
-func (r *LoadBalancerPoolService) Get(ctx context.Context, poolID string, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
+func (r *LoadBalancingPoolService) Get(ctx context.Context, poolID string, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerPoolGetResponseEnvelope
+	var env LoadBalancingPoolGetResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s", poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -127,9 +127,9 @@ func (r *LoadBalancerPoolService) Get(ctx context.Context, poolID string, opts .
 }
 
 // Fetch the latest pool health status for a single pool.
-func (r *LoadBalancerPoolService) Health(ctx context.Context, poolID string, opts ...option.RequestOption) (res *LoadBalancerPoolHealthResponseUnion, err error) {
+func (r *LoadBalancingPoolService) Health(ctx context.Context, poolID string, opts ...option.RequestOption) (res *LoadBalancingPoolHealthResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerPoolHealthResponseEnvelope
+	var env LoadBalancingPoolHealthResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s/health", poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -141,9 +141,9 @@ func (r *LoadBalancerPoolService) Health(ctx context.Context, poolID string, opt
 
 // Preview pool health using provided monitor details. The returned preview_id can
 // be used in the preview endpoint to retrieve the results.
-func (r *LoadBalancerPoolService) Preview(ctx context.Context, poolID string, body LoadBalancerPoolPreviewParams, opts ...option.RequestOption) (res *LoadBalancerPoolPreviewResponse, err error) {
+func (r *LoadBalancingPoolService) Preview(ctx context.Context, poolID string, body LoadBalancingPoolPreviewParams, opts ...option.RequestOption) (res *LoadBalancingPoolPreviewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerPoolPreviewResponseEnvelope
+	var env LoadBalancingPoolPreviewResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s/preview", poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -154,9 +154,9 @@ func (r *LoadBalancerPoolService) Preview(ctx context.Context, poolID string, bo
 }
 
 // Get the list of resources that reference the provided pool.
-func (r *LoadBalancerPoolService) References(ctx context.Context, poolID string, opts ...option.RequestOption) (res *[]LoadBalancerPoolReferencesResponse, err error) {
+func (r *LoadBalancingPoolService) References(ctx context.Context, poolID string, opts ...option.RequestOption) (res *[]LoadBalancingPoolReferencesResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerPoolReferencesResponseEnvelope
+	var env LoadBalancingPoolReferencesResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s/references", poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -166,39 +166,39 @@ func (r *LoadBalancerPoolService) References(ctx context.Context, poolID string,
 	return
 }
 
-type LoadBalancerPoolDeleteResponse struct {
-	ID   string                             `json:"id"`
-	JSON loadBalancerPoolDeleteResponseJSON `json:"-"`
+type LoadBalancingPoolDeleteResponse struct {
+	ID   string                              `json:"id"`
+	JSON loadBalancingPoolDeleteResponseJSON `json:"-"`
 }
 
-// loadBalancerPoolDeleteResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerPoolDeleteResponse]
-type loadBalancerPoolDeleteResponseJSON struct {
+// loadBalancingPoolDeleteResponseJSON contains the JSON metadata for the struct
+// [LoadBalancingPoolDeleteResponse]
+type loadBalancingPoolDeleteResponseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolDeleteResponseJSON) RawJSON() string {
+func (r loadBalancingPoolDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // A list of regions from which to run health checks. Null means every Cloudflare
 // data center.
 //
-// Union satisfied by [user.LoadBalancerPoolHealthResponseUnknown] or
+// Union satisfied by [user.LoadBalancingPoolHealthResponseUnknown] or
 // [shared.UnionString].
-type LoadBalancerPoolHealthResponseUnion interface {
-	ImplementsUserLoadBalancerPoolHealthResponseUnion()
+type LoadBalancingPoolHealthResponseUnion interface {
+	ImplementsUserLoadBalancingPoolHealthResponseUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*LoadBalancerPoolHealthResponseUnion)(nil)).Elem(),
+		reflect.TypeOf((*LoadBalancingPoolHealthResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -207,41 +207,41 @@ func init() {
 	)
 }
 
-type LoadBalancerPoolPreviewResponse struct {
+type LoadBalancingPoolPreviewResponse struct {
 	// Monitored pool IDs mapped to their respective names.
-	Pools     map[string]string                   `json:"pools"`
-	PreviewID string                              `json:"preview_id"`
-	JSON      loadBalancerPoolPreviewResponseJSON `json:"-"`
+	Pools     map[string]string                    `json:"pools"`
+	PreviewID string                               `json:"preview_id"`
+	JSON      loadBalancingPoolPreviewResponseJSON `json:"-"`
 }
 
-// loadBalancerPoolPreviewResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerPoolPreviewResponse]
-type loadBalancerPoolPreviewResponseJSON struct {
+// loadBalancingPoolPreviewResponseJSON contains the JSON metadata for the struct
+// [LoadBalancingPoolPreviewResponse]
+type loadBalancingPoolPreviewResponseJSON struct {
 	Pools       apijson.Field
 	PreviewID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolPreviewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolPreviewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolPreviewResponseJSON) RawJSON() string {
+func (r loadBalancingPoolPreviewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type LoadBalancerPoolReferencesResponse struct {
-	ReferenceType LoadBalancerPoolReferencesResponseReferenceType `json:"reference_type"`
-	ResourceID    string                                          `json:"resource_id"`
-	ResourceName  string                                          `json:"resource_name"`
-	ResourceType  string                                          `json:"resource_type"`
-	JSON          loadBalancerPoolReferencesResponseJSON          `json:"-"`
+type LoadBalancingPoolReferencesResponse struct {
+	ReferenceType LoadBalancingPoolReferencesResponseReferenceType `json:"reference_type"`
+	ResourceID    string                                           `json:"resource_id"`
+	ResourceName  string                                           `json:"resource_name"`
+	ResourceType  string                                           `json:"resource_type"`
+	JSON          loadBalancingPoolReferencesResponseJSON          `json:"-"`
 }
 
-// loadBalancerPoolReferencesResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerPoolReferencesResponse]
-type loadBalancerPoolReferencesResponseJSON struct {
+// loadBalancingPoolReferencesResponseJSON contains the JSON metadata for the
+// struct [LoadBalancingPoolReferencesResponse]
+type loadBalancingPoolReferencesResponseJSON struct {
 	ReferenceType apijson.Field
 	ResourceID    apijson.Field
 	ResourceName  apijson.Field
@@ -250,31 +250,31 @@ type loadBalancerPoolReferencesResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolReferencesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolReferencesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolReferencesResponseJSON) RawJSON() string {
+func (r loadBalancingPoolReferencesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type LoadBalancerPoolReferencesResponseReferenceType string
+type LoadBalancingPoolReferencesResponseReferenceType string
 
 const (
-	LoadBalancerPoolReferencesResponseReferenceTypeStar     LoadBalancerPoolReferencesResponseReferenceType = "*"
-	LoadBalancerPoolReferencesResponseReferenceTypeReferral LoadBalancerPoolReferencesResponseReferenceType = "referral"
-	LoadBalancerPoolReferencesResponseReferenceTypeReferrer LoadBalancerPoolReferencesResponseReferenceType = "referrer"
+	LoadBalancingPoolReferencesResponseReferenceTypeStar     LoadBalancingPoolReferencesResponseReferenceType = "*"
+	LoadBalancingPoolReferencesResponseReferenceTypeReferral LoadBalancingPoolReferencesResponseReferenceType = "referral"
+	LoadBalancingPoolReferencesResponseReferenceTypeReferrer LoadBalancingPoolReferencesResponseReferenceType = "referrer"
 )
 
-func (r LoadBalancerPoolReferencesResponseReferenceType) IsKnown() bool {
+func (r LoadBalancingPoolReferencesResponseReferenceType) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolReferencesResponseReferenceTypeStar, LoadBalancerPoolReferencesResponseReferenceTypeReferral, LoadBalancerPoolReferencesResponseReferenceTypeReferrer:
+	case LoadBalancingPoolReferencesResponseReferenceTypeStar, LoadBalancingPoolReferencesResponseReferenceTypeReferral, LoadBalancingPoolReferencesResponseReferenceTypeReferrer:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolNewParams struct {
+type LoadBalancingPoolNewParams struct {
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name param.Field[string] `json:"name,required"`
@@ -319,22 +319,22 @@ type LoadBalancerPoolNewParams struct {
 	OriginSteering param.Field[load_balancers.OriginSteeringParam] `json:"origin_steering"`
 }
 
-func (r LoadBalancerPoolNewParams) MarshalJSON() (data []byte, err error) {
+func (r LoadBalancingPoolNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type LoadBalancerPoolNewResponseEnvelope struct {
+type LoadBalancingPoolNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   load_balancers.Pool   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerPoolNewResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingPoolNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingPoolNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerPoolNewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolNewResponseEnvelope]
-type loadBalancerPoolNewResponseEnvelopeJSON struct {
+// loadBalancingPoolNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingPoolNewResponseEnvelope]
+type loadBalancingPoolNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -343,30 +343,30 @@ type loadBalancerPoolNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolNewResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingPoolNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerPoolNewResponseEnvelopeSuccess bool
+type LoadBalancingPoolNewResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPoolNewResponseEnvelopeSuccessTrue LoadBalancerPoolNewResponseEnvelopeSuccess = true
+	LoadBalancingPoolNewResponseEnvelopeSuccessTrue LoadBalancingPoolNewResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerPoolNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingPoolNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolNewResponseEnvelopeSuccessTrue:
+	case LoadBalancingPoolNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolUpdateParams struct {
+type LoadBalancingPoolUpdateParams struct {
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name param.Field[string] `json:"name,required"`
@@ -411,22 +411,22 @@ type LoadBalancerPoolUpdateParams struct {
 	OriginSteering param.Field[load_balancers.OriginSteeringParam] `json:"origin_steering"`
 }
 
-func (r LoadBalancerPoolUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r LoadBalancingPoolUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type LoadBalancerPoolUpdateResponseEnvelope struct {
+type LoadBalancingPoolUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   load_balancers.Pool   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerPoolUpdateResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingPoolUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingPoolUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerPoolUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolUpdateResponseEnvelope]
-type loadBalancerPoolUpdateResponseEnvelopeJSON struct {
+// loadBalancingPoolUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingPoolUpdateResponseEnvelope]
+type loadBalancingPoolUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -435,64 +435,64 @@ type loadBalancerPoolUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolUpdateResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingPoolUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerPoolUpdateResponseEnvelopeSuccess bool
+type LoadBalancingPoolUpdateResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPoolUpdateResponseEnvelopeSuccessTrue LoadBalancerPoolUpdateResponseEnvelopeSuccess = true
+	LoadBalancingPoolUpdateResponseEnvelopeSuccessTrue LoadBalancingPoolUpdateResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerPoolUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingPoolUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolUpdateResponseEnvelopeSuccessTrue:
+	case LoadBalancingPoolUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolListParams struct {
+type LoadBalancingPoolListParams struct {
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor param.Field[interface{}] `query:"monitor"`
 }
 
-// URLQuery serializes [LoadBalancerPoolListParams]'s query parameters as
+// URLQuery serializes [LoadBalancingPoolListParams]'s query parameters as
 // `url.Values`.
-func (r LoadBalancerPoolListParams) URLQuery() (v url.Values) {
+func (r LoadBalancingPoolListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type LoadBalancerPoolDeleteParams struct {
+type LoadBalancingPoolDeleteParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r LoadBalancerPoolDeleteParams) MarshalJSON() (data []byte, err error) {
+func (r LoadBalancingPoolDeleteParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type LoadBalancerPoolDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   LoadBalancerPoolDeleteResponse `json:"result,required"`
+type LoadBalancingPoolDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   LoadBalancingPoolDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerPoolDeleteResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingPoolDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingPoolDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerPoolDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolDeleteResponseEnvelope]
-type loadBalancerPoolDeleteResponseEnvelopeJSON struct {
+// loadBalancingPoolDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingPoolDeleteResponseEnvelope]
+type loadBalancingPoolDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -501,30 +501,30 @@ type loadBalancerPoolDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingPoolDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerPoolDeleteResponseEnvelopeSuccess bool
+type LoadBalancingPoolDeleteResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPoolDeleteResponseEnvelopeSuccessTrue LoadBalancerPoolDeleteResponseEnvelopeSuccess = true
+	LoadBalancingPoolDeleteResponseEnvelopeSuccessTrue LoadBalancingPoolDeleteResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerPoolDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingPoolDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolDeleteResponseEnvelopeSuccessTrue:
+	case LoadBalancingPoolDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolEditParams struct {
+type LoadBalancingPoolEditParams struct {
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions param.Field[[]load_balancers.CheckRegion] `json:"check_regions"`
@@ -569,22 +569,22 @@ type LoadBalancerPoolEditParams struct {
 	Origins param.Field[[]load_balancers.OriginParam] `json:"origins"`
 }
 
-func (r LoadBalancerPoolEditParams) MarshalJSON() (data []byte, err error) {
+func (r LoadBalancingPoolEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type LoadBalancerPoolEditResponseEnvelope struct {
+type LoadBalancingPoolEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   load_balancers.Pool   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerPoolEditResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingPoolEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingPoolEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerPoolEditResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolEditResponseEnvelope]
-type loadBalancerPoolEditResponseEnvelopeJSON struct {
+// loadBalancingPoolEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingPoolEditResponseEnvelope]
+type loadBalancingPoolEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -593,41 +593,41 @@ type loadBalancerPoolEditResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolEditResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingPoolEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerPoolEditResponseEnvelopeSuccess bool
+type LoadBalancingPoolEditResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPoolEditResponseEnvelopeSuccessTrue LoadBalancerPoolEditResponseEnvelopeSuccess = true
+	LoadBalancingPoolEditResponseEnvelopeSuccessTrue LoadBalancingPoolEditResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerPoolEditResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingPoolEditResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolEditResponseEnvelopeSuccessTrue:
+	case LoadBalancingPoolEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolGetResponseEnvelope struct {
+type LoadBalancingPoolGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   load_balancers.Pool   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerPoolGetResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingPoolGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingPoolGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerPoolGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolGetResponseEnvelope]
-type loadBalancerPoolGetResponseEnvelopeJSON struct {
+// loadBalancingPoolGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingPoolGetResponseEnvelope]
+type loadBalancingPoolGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -636,43 +636,43 @@ type loadBalancerPoolGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolGetResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingPoolGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerPoolGetResponseEnvelopeSuccess bool
+type LoadBalancingPoolGetResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPoolGetResponseEnvelopeSuccessTrue LoadBalancerPoolGetResponseEnvelopeSuccess = true
+	LoadBalancingPoolGetResponseEnvelopeSuccessTrue LoadBalancingPoolGetResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerPoolGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingPoolGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolGetResponseEnvelopeSuccessTrue:
+	case LoadBalancingPoolGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolHealthResponseEnvelope struct {
+type LoadBalancingPoolHealthResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	Result LoadBalancerPoolHealthResponseUnion `json:"result,required"`
+	Result LoadBalancingPoolHealthResponseUnion `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolHealthResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerPoolHealthResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingPoolHealthResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingPoolHealthResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerPoolHealthResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolHealthResponseEnvelope]
-type loadBalancerPoolHealthResponseEnvelopeJSON struct {
+// loadBalancingPoolHealthResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingPoolHealthResponseEnvelope]
+type loadBalancingPoolHealthResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -681,30 +681,30 @@ type loadBalancerPoolHealthResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolHealthResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolHealthResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolHealthResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingPoolHealthResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerPoolHealthResponseEnvelopeSuccess bool
+type LoadBalancingPoolHealthResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPoolHealthResponseEnvelopeSuccessTrue LoadBalancerPoolHealthResponseEnvelopeSuccess = true
+	LoadBalancingPoolHealthResponseEnvelopeSuccessTrue LoadBalancingPoolHealthResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerPoolHealthResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingPoolHealthResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolHealthResponseEnvelopeSuccessTrue:
+	case LoadBalancingPoolHealthResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolPreviewParams struct {
+type LoadBalancingPoolPreviewParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
@@ -753,46 +753,46 @@ type LoadBalancerPoolPreviewParams struct {
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type param.Field[LoadBalancerPoolPreviewParamsType] `json:"type"`
+	Type param.Field[LoadBalancingPoolPreviewParamsType] `json:"type"`
 }
 
-func (r LoadBalancerPoolPreviewParams) MarshalJSON() (data []byte, err error) {
+func (r LoadBalancingPoolPreviewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerPoolPreviewParamsType string
+type LoadBalancingPoolPreviewParamsType string
 
 const (
-	LoadBalancerPoolPreviewParamsTypeHTTP     LoadBalancerPoolPreviewParamsType = "http"
-	LoadBalancerPoolPreviewParamsTypeHTTPS    LoadBalancerPoolPreviewParamsType = "https"
-	LoadBalancerPoolPreviewParamsTypeTCP      LoadBalancerPoolPreviewParamsType = "tcp"
-	LoadBalancerPoolPreviewParamsTypeUdpIcmp  LoadBalancerPoolPreviewParamsType = "udp_icmp"
-	LoadBalancerPoolPreviewParamsTypeIcmpPing LoadBalancerPoolPreviewParamsType = "icmp_ping"
-	LoadBalancerPoolPreviewParamsTypeSmtp     LoadBalancerPoolPreviewParamsType = "smtp"
+	LoadBalancingPoolPreviewParamsTypeHTTP     LoadBalancingPoolPreviewParamsType = "http"
+	LoadBalancingPoolPreviewParamsTypeHTTPS    LoadBalancingPoolPreviewParamsType = "https"
+	LoadBalancingPoolPreviewParamsTypeTCP      LoadBalancingPoolPreviewParamsType = "tcp"
+	LoadBalancingPoolPreviewParamsTypeUdpIcmp  LoadBalancingPoolPreviewParamsType = "udp_icmp"
+	LoadBalancingPoolPreviewParamsTypeIcmpPing LoadBalancingPoolPreviewParamsType = "icmp_ping"
+	LoadBalancingPoolPreviewParamsTypeSmtp     LoadBalancingPoolPreviewParamsType = "smtp"
 )
 
-func (r LoadBalancerPoolPreviewParamsType) IsKnown() bool {
+func (r LoadBalancingPoolPreviewParamsType) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolPreviewParamsTypeHTTP, LoadBalancerPoolPreviewParamsTypeHTTPS, LoadBalancerPoolPreviewParamsTypeTCP, LoadBalancerPoolPreviewParamsTypeUdpIcmp, LoadBalancerPoolPreviewParamsTypeIcmpPing, LoadBalancerPoolPreviewParamsTypeSmtp:
+	case LoadBalancingPoolPreviewParamsTypeHTTP, LoadBalancingPoolPreviewParamsTypeHTTPS, LoadBalancingPoolPreviewParamsTypeTCP, LoadBalancingPoolPreviewParamsTypeUdpIcmp, LoadBalancingPoolPreviewParamsTypeIcmpPing, LoadBalancingPoolPreviewParamsTypeSmtp:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolPreviewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   LoadBalancerPoolPreviewResponse `json:"result,required"`
+type LoadBalancingPoolPreviewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   LoadBalancingPoolPreviewResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolPreviewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerPoolPreviewResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingPoolPreviewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingPoolPreviewResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerPoolPreviewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerPoolPreviewResponseEnvelope]
-type loadBalancerPoolPreviewResponseEnvelopeJSON struct {
+// loadBalancingPoolPreviewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingPoolPreviewResponseEnvelope]
+type loadBalancingPoolPreviewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -801,43 +801,43 @@ type loadBalancerPoolPreviewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolPreviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolPreviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolPreviewResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingPoolPreviewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerPoolPreviewResponseEnvelopeSuccess bool
+type LoadBalancingPoolPreviewResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPoolPreviewResponseEnvelopeSuccessTrue LoadBalancerPoolPreviewResponseEnvelopeSuccess = true
+	LoadBalancingPoolPreviewResponseEnvelopeSuccessTrue LoadBalancingPoolPreviewResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerPoolPreviewResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingPoolPreviewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolPreviewResponseEnvelopeSuccessTrue:
+	case LoadBalancingPoolPreviewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolReferencesResponseEnvelope struct {
+type LoadBalancingPoolReferencesResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// List of resources that reference a given pool.
-	Result []LoadBalancerPoolReferencesResponse `json:"result,required,nullable"`
+	Result []LoadBalancingPoolReferencesResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    LoadBalancerPoolReferencesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo LoadBalancerPoolReferencesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       loadBalancerPoolReferencesResponseEnvelopeJSON       `json:"-"`
+	Success    LoadBalancingPoolReferencesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancingPoolReferencesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancingPoolReferencesResponseEnvelopeJSON       `json:"-"`
 }
 
-// loadBalancerPoolReferencesResponseEnvelopeJSON contains the JSON metadata for
-// the struct [LoadBalancerPoolReferencesResponseEnvelope]
-type loadBalancerPoolReferencesResponseEnvelopeJSON struct {
+// loadBalancingPoolReferencesResponseEnvelopeJSON contains the JSON metadata for
+// the struct [LoadBalancingPoolReferencesResponseEnvelope]
+type loadBalancingPoolReferencesResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -847,30 +847,30 @@ type loadBalancerPoolReferencesResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolReferencesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolReferencesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolReferencesResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingPoolReferencesResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerPoolReferencesResponseEnvelopeSuccess bool
+type LoadBalancingPoolReferencesResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPoolReferencesResponseEnvelopeSuccessTrue LoadBalancerPoolReferencesResponseEnvelopeSuccess = true
+	LoadBalancingPoolReferencesResponseEnvelopeSuccessTrue LoadBalancingPoolReferencesResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerPoolReferencesResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingPoolReferencesResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerPoolReferencesResponseEnvelopeSuccessTrue:
+	case LoadBalancingPoolReferencesResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerPoolReferencesResponseEnvelopeResultInfo struct {
+type LoadBalancingPoolReferencesResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -878,13 +878,13 @@ type LoadBalancerPoolReferencesResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                  `json:"total_count"`
-	JSON       loadBalancerPoolReferencesResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                   `json:"total_count"`
+	JSON       loadBalancingPoolReferencesResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// loadBalancerPoolReferencesResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [LoadBalancerPoolReferencesResponseEnvelopeResultInfo]
-type loadBalancerPoolReferencesResponseEnvelopeResultInfoJSON struct {
+// loadBalancingPoolReferencesResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct [LoadBalancingPoolReferencesResponseEnvelopeResultInfo]
+type loadBalancingPoolReferencesResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -893,10 +893,10 @@ type loadBalancerPoolReferencesResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolReferencesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingPoolReferencesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerPoolReferencesResponseEnvelopeResultInfoJSON) RawJSON() string {
+func (r loadBalancingPoolReferencesResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
 }

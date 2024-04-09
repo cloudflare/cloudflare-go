@@ -11,6 +11,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
@@ -35,16 +36,26 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 }
 
 // Get Passive DNS by IP
-func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...option.RequestOption) (res *DNS, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DNSGetResponseEnvelope
+func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DNSListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/intel/dns", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get Passive DNS by IP
+func (r *DNSService) ListAutoPaging(ctx context.Context, params DNSListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DNSListResponse] {
+	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 type DNS struct {
@@ -120,53 +131,17 @@ func (r unnamedSchemaRefB5e16cee4f32382c294201aedb9fc050JSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSGetParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	IPV4      param.Field[string] `query:"ipv4"`
-	// Requested page within paginated list of results.
-	Page param.Field[float64] `query:"page"`
-	// Maximum number of results requested.
-	PerPage        param.Field[float64]                    `query:"per_page"`
-	StartEndParams param.Field[DNSGetParamsStartEndParams] `query:"start_end_params"`
-}
-
-// URLQuery serializes [DNSGetParams]'s query parameters as `url.Values`.
-func (r DNSGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type DNSGetParamsStartEndParams struct {
-	// Defaults to the current date.
-	End param.Field[time.Time] `query:"end" format:"date"`
-	// Defaults to 30 days before the end parameter value.
-	Start param.Field[time.Time] `query:"start" format:"date"`
-}
-
-// URLQuery serializes [DNSGetParamsStartEndParams]'s query parameters as
-// `url.Values`.
-func (r DNSGetParamsStartEndParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type DNSGetResponseEnvelope struct {
+type DNSListResponse struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   DNS                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DNSGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dnsGetResponseEnvelopeJSON    `json:"-"`
+	Success DNSListResponseSuccess `json:"success,required"`
+	JSON    dnsListResponseJSON    `json:"-"`
 }
 
-// dnsGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DNSGetResponseEnvelope]
-type dnsGetResponseEnvelopeJSON struct {
+// dnsListResponseJSON contains the JSON metadata for the struct [DNSListResponse]
+type dnsListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -175,25 +150,60 @@ type dnsGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsGetResponseEnvelopeJSON) RawJSON() string {
+func (r dnsListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type DNSGetResponseEnvelopeSuccess bool
+type DNSListResponseSuccess bool
 
 const (
-	DNSGetResponseEnvelopeSuccessTrue DNSGetResponseEnvelopeSuccess = true
+	DNSListResponseSuccessTrue DNSListResponseSuccess = true
 )
 
-func (r DNSGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r DNSListResponseSuccess) IsKnown() bool {
 	switch r {
-	case DNSGetResponseEnvelopeSuccessTrue:
+	case DNSListResponseSuccessTrue:
 		return true
 	}
 	return false
+}
+
+type DNSListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	IPV4      param.Field[string] `query:"ipv4"`
+	// Requested page within paginated list of results.
+	Page param.Field[float64] `query:"page"`
+	// Maximum number of results requested.
+	PerPage        param.Field[float64]                     `query:"per_page"`
+	StartEndParams param.Field[DNSListParamsStartEndParams] `query:"start_end_params"`
+}
+
+// URLQuery serializes [DNSListParams]'s query parameters as `url.Values`.
+func (r DNSListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type DNSListParamsStartEndParams struct {
+	// Defaults to the current date.
+	End param.Field[time.Time] `query:"end" format:"date"`
+	// Defaults to 30 days before the end parameter value.
+	Start param.Field[time.Time] `query:"start" format:"date"`
+}
+
+// URLQuery serializes [DNSListParamsStartEndParams]'s query parameters as
+// `url.Values`.
+func (r DNSListParamsStartEndParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
