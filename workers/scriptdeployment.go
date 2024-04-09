@@ -62,45 +62,44 @@ func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, qu
 	return
 }
 
-type UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8 struct {
+type Deployment struct {
 	// Human-readable message about the deployment.
-	WorkersMessage string                                               `json:"workers/message"`
-	JSON           unnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8JSON `json:"-"`
+	WorkersMessage string         `json:"workers/message"`
+	JSON           deploymentJSON `json:"-"`
 }
 
-// unnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8]
-type unnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8JSON struct {
+// deploymentJSON contains the JSON metadata for the struct [Deployment]
+type deploymentJSON struct {
 	WorkersMessage apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8) UnmarshalJSON(data []byte) (err error) {
+func (r *Deployment) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r unnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8JSON) RawJSON() string {
+func (r deploymentJSON) RawJSON() string {
 	return r.raw
 }
 
-type UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8Param struct {
+type DeploymentParam struct {
 	// Human-readable message about the deployment.
 	WorkersMessage param.Field[string] `json:"workers/message"`
 }
 
-func (r UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8Param) MarshalJSON() (data []byte, err error) {
+func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type ScriptDeploymentNewResponse struct {
-	ID          string                                           `json:"id"`
-	Annotations UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8 `json:"annotations"`
-	AuthorEmail string                                           `json:"author_email"`
-	CreatedOn   string                                           `json:"created_on"`
-	Source      string                                           `json:"source"`
-	Strategy    string                                           `json:"strategy"`
-	JSON        scriptDeploymentNewResponseJSON                  `json:"-"`
+	ID          string                          `json:"id"`
+	Annotations Deployment                      `json:"annotations"`
+	AuthorEmail string                          `json:"author_email"`
+	CreatedOn   string                          `json:"created_on"`
+	Source      string                          `json:"source"`
+	Strategy    string                          `json:"strategy"`
+	JSON        scriptDeploymentNewResponseJSON `json:"-"`
 }
 
 // scriptDeploymentNewResponseJSON contains the JSON metadata for the struct
@@ -146,13 +145,13 @@ func (r scriptDeploymentGetResponseJSON) RawJSON() string {
 }
 
 type ScriptDeploymentGetResponseDeployment struct {
-	ID          string                                           `json:"id"`
-	Annotations UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8 `json:"annotations"`
-	AuthorEmail string                                           `json:"author_email"`
-	CreatedOn   string                                           `json:"created_on"`
-	Source      string                                           `json:"source"`
-	Strategy    string                                           `json:"strategy"`
-	JSON        scriptDeploymentGetResponseDeploymentJSON        `json:"-"`
+	ID          string                                    `json:"id"`
+	Annotations Deployment                                `json:"annotations"`
+	AuthorEmail string                                    `json:"author_email"`
+	CreatedOn   string                                    `json:"created_on"`
+	Source      string                                    `json:"source"`
+	Strategy    string                                    `json:"strategy"`
+	JSON        scriptDeploymentGetResponseDeploymentJSON `json:"-"`
 }
 
 // scriptDeploymentGetResponseDeploymentJSON contains the JSON metadata for the
@@ -178,9 +177,9 @@ func (r scriptDeploymentGetResponseDeploymentJSON) RawJSON() string {
 
 type ScriptDeploymentNewParams struct {
 	// Identifier
-	AccountID   param.Field[string]                                                `path:"account_id,required"`
-	Annotations param.Field[UnnamedSchemaRefFda1c6f6758e763ae3b2964521f2fdd8Param] `json:"annotations"`
-	Strategy    param.Field[string]                                                `json:"strategy"`
+	AccountID   param.Field[string]          `path:"account_id,required"`
+	Annotations param.Field[DeploymentParam] `json:"annotations"`
+	Strategy    param.Field[string]          `json:"strategy"`
 }
 
 func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {

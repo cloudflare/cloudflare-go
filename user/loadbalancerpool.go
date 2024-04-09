@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -39,7 +40,7 @@ func NewLoadBalancerPoolService(opts ...option.RequestOption) (r *LoadBalancerPo
 }
 
 // Create a new pool.
-func (r *LoadBalancerPoolService) New(ctx context.Context, body LoadBalancerPoolNewParams, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
+func (r *LoadBalancerPoolService) New(ctx context.Context, body LoadBalancerPoolNewParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolNewResponseEnvelope
 	path := "user/load_balancers/pools"
@@ -52,7 +53,7 @@ func (r *LoadBalancerPoolService) New(ctx context.Context, body LoadBalancerPool
 }
 
 // Modify a configured pool.
-func (r *LoadBalancerPoolService) Update(ctx context.Context, poolID string, body LoadBalancerPoolUpdateParams, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
+func (r *LoadBalancerPoolService) Update(ctx context.Context, poolID string, body LoadBalancerPoolUpdateParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolUpdateResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s", poolID)
@@ -65,7 +66,7 @@ func (r *LoadBalancerPoolService) Update(ctx context.Context, poolID string, bod
 }
 
 // List configured pools.
-func (r *LoadBalancerPoolService) List(ctx context.Context, query LoadBalancerPoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[load_balancers.Pool], err error) {
+func (r *LoadBalancerPoolService) List(ctx context.Context, query LoadBalancerPoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Pool], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -83,7 +84,7 @@ func (r *LoadBalancerPoolService) List(ctx context.Context, query LoadBalancerPo
 }
 
 // List configured pools.
-func (r *LoadBalancerPoolService) ListAutoPaging(ctx context.Context, query LoadBalancerPoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[load_balancers.Pool] {
+func (r *LoadBalancerPoolService) ListAutoPaging(ctx context.Context, query LoadBalancerPoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Pool] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -101,7 +102,7 @@ func (r *LoadBalancerPoolService) Delete(ctx context.Context, poolID string, bod
 }
 
 // Apply changes to an existing pool, overwriting the supplied properties.
-func (r *LoadBalancerPoolService) Edit(ctx context.Context, poolID string, body LoadBalancerPoolEditParams, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
+func (r *LoadBalancerPoolService) Edit(ctx context.Context, poolID string, body LoadBalancerPoolEditParams, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolEditResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s", poolID)
@@ -114,7 +115,7 @@ func (r *LoadBalancerPoolService) Edit(ctx context.Context, poolID string, body 
 }
 
 // Fetch a single configured pool.
-func (r *LoadBalancerPoolService) Get(ctx context.Context, poolID string, opts ...option.RequestOption) (res *load_balancers.Pool, err error) {
+func (r *LoadBalancerPoolService) Get(ctx context.Context, poolID string, opts ...option.RequestOption) (res *Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolGetResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s", poolID)
@@ -164,6 +165,89 @@ func (r *LoadBalancerPoolService) References(ctx context.Context, poolID string,
 	}
 	res = &env.Result
 	return
+}
+
+type Pool struct {
+	ID string `json:"id"`
+	// A list of regions from which to run health checks. Null means every Cloudflare
+	// data center.
+	CheckRegions []load_balancers.CheckRegion `json:"check_regions,nullable"`
+	CreatedOn    time.Time                    `json:"created_on" format:"date-time"`
+	// A human-readable description of the pool.
+	Description string `json:"description"`
+	// This field shows up only if the pool is disabled. This field is set with the
+	// time the pool was disabled at.
+	DisabledAt time.Time `json:"disabled_at" format:"date-time"`
+	// Whether to enable (the default) or disable this pool. Disabled pools will not
+	// receive traffic and are excluded from health checks. Disabling a pool will cause
+	// any load balancers using it to failover to the next pool (if any).
+	Enabled bool `json:"enabled"`
+	// The latitude of the data center containing the origins used in this pool in
+	// decimal degrees. If this is set, longitude must also be set.
+	Latitude float64 `json:"latitude"`
+	// Configures load shedding policies and percentages for the pool.
+	LoadShedding load_balancers.LoadShedding `json:"load_shedding"`
+	// The longitude of the data center containing the origins used in this pool in
+	// decimal degrees. If this is set, latitude must also be set.
+	Longitude float64 `json:"longitude"`
+	// The minimum number of origins that must be healthy for this pool to serve
+	// traffic. If the number of healthy origins falls below this number, the pool will
+	// be marked unhealthy and will failover to the next available pool.
+	MinimumOrigins int64     `json:"minimum_origins"`
+	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
+	// The ID of the Monitor to use for checking the health of origins within this
+	// pool.
+	Monitor interface{} `json:"monitor"`
+	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
+	// underscores are allowed.
+	Name string `json:"name"`
+	// This field is now deprecated. It has been moved to Cloudflare's Centralized
+	// Notification service
+	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
+	// to send health status notifications to. This can be an individual mailbox or a
+	// mailing list. Multiple emails can be supplied as a comma delimited list.
+	NotificationEmail string `json:"notification_email"`
+	// Filter pool and origin health notifications by resource type or health status.
+	// Use null to reset.
+	NotificationFilter load_balancers.NotificationFilter `json:"notification_filter,nullable"`
+	// Configures origin steering for the pool. Controls how origins are selected for
+	// new sessions and traffic without session affinity.
+	OriginSteering load_balancers.OriginSteering `json:"origin_steering"`
+	// The list of origins within this pool. Traffic directed at this pool is balanced
+	// across all currently healthy origins, provided the pool itself is healthy.
+	Origins []load_balancers.Origin `json:"origins"`
+	JSON    poolJSON                `json:"-"`
+}
+
+// poolJSON contains the JSON metadata for the struct [Pool]
+type poolJSON struct {
+	ID                 apijson.Field
+	CheckRegions       apijson.Field
+	CreatedOn          apijson.Field
+	Description        apijson.Field
+	DisabledAt         apijson.Field
+	Enabled            apijson.Field
+	Latitude           apijson.Field
+	LoadShedding       apijson.Field
+	Longitude          apijson.Field
+	MinimumOrigins     apijson.Field
+	ModifiedOn         apijson.Field
+	Monitor            apijson.Field
+	Name               apijson.Field
+	NotificationEmail  apijson.Field
+	NotificationFilter apijson.Field
+	OriginSteering     apijson.Field
+	Origins            apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *Pool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r poolJSON) RawJSON() string {
+	return r.raw
 }
 
 type LoadBalancerPoolDeleteResponse struct {
@@ -326,7 +410,7 @@ func (r LoadBalancerPoolNewParams) MarshalJSON() (data []byte, err error) {
 type LoadBalancerPoolNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   load_balancers.Pool   `json:"result,required"`
+	Result   Pool                  `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolNewResponseEnvelopeJSON    `json:"-"`
@@ -418,7 +502,7 @@ func (r LoadBalancerPoolUpdateParams) MarshalJSON() (data []byte, err error) {
 type LoadBalancerPoolUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   load_balancers.Pool   `json:"result,required"`
+	Result   Pool                  `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolUpdateResponseEnvelopeJSON    `json:"-"`
@@ -576,7 +660,7 @@ func (r LoadBalancerPoolEditParams) MarshalJSON() (data []byte, err error) {
 type LoadBalancerPoolEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   load_balancers.Pool   `json:"result,required"`
+	Result   Pool                  `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolEditResponseEnvelopeJSON    `json:"-"`
@@ -619,7 +703,7 @@ func (r LoadBalancerPoolEditResponseEnvelopeSuccess) IsKnown() bool {
 type LoadBalancerPoolGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   load_balancers.Pool   `json:"result,required"`
+	Result   Pool                  `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerPoolGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolGetResponseEnvelopeJSON    `json:"-"`

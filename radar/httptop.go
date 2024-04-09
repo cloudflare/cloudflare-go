@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -61,10 +60,32 @@ func (r *HTTPTopService) Browsers(ctx context.Context, query HTTPTopBrowsersPara
 	return
 }
 
+type Browser struct {
+	Name  string      `json:"name,required"`
+	Value string      `json:"value,required"`
+	JSON  browserJSON `json:"-"`
+}
+
+// browserJSON contains the JSON metadata for the struct [Browser]
+type browserJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Browser) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r browserJSON) RawJSON() string {
+	return r.raw
+}
+
 type HTTPTopBrowserFamiliesResponse struct {
-	Meta HTTPTopBrowserFamiliesResponseMeta                        `json:"meta,required"`
-	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
-	JSON httpTopBrowserFamiliesResponseJSON                        `json:"-"`
+	Meta HTTPTopBrowserFamiliesResponseMeta `json:"meta,required"`
+	Top0 []Browser                          `json:"top_0,required"`
+	JSON httpTopBrowserFamiliesResponseJSON `json:"-"`
 }
 
 // httpTopBrowserFamiliesResponseJSON contains the JSON metadata for the struct
@@ -133,9 +154,9 @@ func (r httpTopBrowserFamiliesResponseMetaConfidenceInfoJSON) RawJSON() string {
 }
 
 type HTTPTopBrowsersResponse struct {
-	Meta HTTPTopBrowsersResponseMeta                               `json:"meta,required"`
-	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
-	JSON httpTopBrowsersResponseJSON                               `json:"-"`
+	Meta HTTPTopBrowsersResponseMeta `json:"meta,required"`
+	Top0 []Browser                   `json:"top_0,required"`
+	JSON httpTopBrowsersResponseJSON `json:"-"`
 }
 
 // httpTopBrowsersResponseJSON contains the JSON metadata for the struct

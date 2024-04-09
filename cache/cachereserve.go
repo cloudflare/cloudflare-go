@@ -102,6 +102,21 @@ func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStat
 }
 
 // ID of the zone setting.
+type CacheReserve string
+
+const (
+	CacheReserveCacheReserve CacheReserve = "cache_reserve"
+)
+
+func (r CacheReserve) IsKnown() bool {
+	switch r {
+	case CacheReserveCacheReserve:
+		return true
+	}
+	return false
+}
+
+// ID of the zone setting.
 type UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d string
 
 const (
@@ -111,21 +126,6 @@ const (
 func (r UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968d) IsKnown() bool {
 	switch r {
 	case UnnamedSchemaRef2b5e755404a4bfd7892291ce97c4968dCacheReserveClear:
-		return true
-	}
-	return false
-}
-
-// ID of the zone setting.
-type UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad string
-
-const (
-	UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7adCacheReserve UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad = "cache_reserve"
-)
-
-func (r UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad) IsKnown() bool {
-	switch r {
-	case UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7adCacheReserve:
 		return true
 	}
 	return false
@@ -193,7 +193,7 @@ func (r CacheReserveClearResponseState) IsKnown() bool {
 // for more information.
 type CacheReserveEditResponse struct {
 	// ID of the zone setting.
-	ID UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad `json:"id,required"`
+	ID CacheReserve `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the Cache Reserve zone setting.
@@ -243,7 +243,7 @@ func (r CacheReserveEditResponseValue) IsKnown() bool {
 // for more information.
 type CacheReserveGetResponse struct {
 	// ID of the zone setting.
-	ID UnnamedSchemaRef37c385b4ebac5c7a6475b3f81ef9a7ad `json:"id,required"`
+	ID CacheReserve `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the Cache Reserve zone setting.

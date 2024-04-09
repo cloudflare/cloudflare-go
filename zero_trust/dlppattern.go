@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/logpush"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,7 +36,7 @@ func NewDLPPatternService(opts ...option.RequestOption) (r *DLPPatternService) {
 // regular expression is too complex or can match an unbounded-length string. Your
 // regex will be rejected if it uses the Kleene Star -- be sure to bound the
 // maximum number of characters that can be matched.
-func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854, err error) {
+func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *logpush.OwnershipValidation, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPPatternValidateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/patterns/validate", params.AccountID)
@@ -59,9 +60,9 @@ func (r DLPPatternValidateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPPatternValidateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                                   `json:"errors,required"`
-	Messages []shared.ResponseInfo                                   `json:"messages,required"`
-	Result   shared.UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   logpush.OwnershipValidation `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DLPPatternValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpPatternValidateResponseEnvelopeJSON    `json:"-"`

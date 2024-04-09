@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -49,9 +48,9 @@ func (r *EmailSecurityTopTldMaliciousService) Get(ctx context.Context, malicious
 }
 
 type EmailSecurityTopTldMaliciousGetResponse struct {
-	Meta EmailSecurityTopTldMaliciousGetResponseMeta               `json:"meta,required"`
-	Top0 []shared.UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 `json:"top_0,required"`
-	JSON emailSecurityTopTldMaliciousGetResponseJSON               `json:"-"`
+	Meta EmailSecurityTopTldMaliciousGetResponseMeta `json:"meta,required"`
+	Top0 []Browser                                   `json:"top_0,required"`
+	JSON emailSecurityTopTldMaliciousGetResponseJSON `json:"-"`
 }
 
 // emailSecurityTopTldMaliciousGetResponseJSON contains the JSON metadata for the

@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // PoolService contains methods and other services that help with interacting with
@@ -40,7 +41,7 @@ func NewPoolService(opts ...option.RequestOption) (r *PoolService) {
 }
 
 // Create a new pool.
-func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...option.RequestOption) (res *Pool, err error) {
+func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...option.RequestOption) (res *user.Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
@@ -53,7 +54,7 @@ func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...opt
 }
 
 // Modify a configured pool.
-func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpdateParams, opts ...option.RequestOption) (res *Pool, err error) {
+func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpdateParams, opts ...option.RequestOption) (res *user.Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
@@ -66,7 +67,7 @@ func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpda
 }
 
 // List configured pools.
-func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Pool], err error) {
+func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.Pool], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -84,7 +85,7 @@ func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...o
 }
 
 // List configured pools.
-func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Pool] {
+func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Pool] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -102,7 +103,7 @@ func (r *PoolService) Delete(ctx context.Context, poolID string, params PoolDele
 }
 
 // Apply changes to an existing pool, overwriting the supplied properties.
-func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *Pool, err error) {
+func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *user.Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
@@ -115,7 +116,7 @@ func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditPa
 }
 
 // Fetch a single configured pool.
-func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParams, opts ...option.RequestOption) (res *Pool, err error) {
+func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParams, opts ...option.RequestOption) (res *user.Pool, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PoolGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", query.AccountID, poolID)
@@ -179,7 +180,7 @@ type Pool struct {
 	JSON    poolJSON `json:"-"`
 }
 
-// poolJSON contains the JSON metadata for the struct [Pool]
+// poolJSON contains the JSON metadata for the struct [user.Pool]
 type poolJSON struct {
 	ID                 apijson.Field
 	CheckRegions       apijson.Field
@@ -202,7 +203,7 @@ type poolJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *Pool) UnmarshalJSON(data []byte) (err error) {
+func (r *user.Pool) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -282,7 +283,7 @@ func (r PoolNewParams) MarshalJSON() (data []byte, err error) {
 type PoolNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Result   user.Pool             `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolNewResponseEnvelopeJSON    `json:"-"`
@@ -376,7 +377,7 @@ func (r PoolUpdateParams) MarshalJSON() (data []byte, err error) {
 type PoolUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Result   user.Pool             `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolUpdateResponseEnvelopeJSON    `json:"-"`
@@ -539,7 +540,7 @@ func (r PoolEditParams) MarshalJSON() (data []byte, err error) {
 type PoolEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Result   user.Pool             `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolEditResponseEnvelopeJSON    `json:"-"`
@@ -587,7 +588,7 @@ type PoolGetParams struct {
 type PoolGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Pool                  `json:"result,required"`
+	Result   user.Pool             `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolGetResponseEnvelopeJSON    `json:"-"`

@@ -63,29 +63,6 @@ func (r ResponseInfoParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 struct {
-	Name  string                                               `json:"name,required"`
-	Value string                                               `json:"value,required"`
-	JSON  unnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9JSON `json:"-"`
-}
-
-// unnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9]
-type unnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9JSON struct {
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9JSON) RawJSON() string {
-	return r.raw
-}
-
 // An object configuring the rule's logging behavior.
 type UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751c struct {
 	// Whether to generate a log when the rule matches.
@@ -135,27 +112,6 @@ func init() {
 			Type:       reflect.TypeOf(UnionString("")),
 		},
 	)
-}
-
-type UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854 struct {
-	Valid bool                                                 `json:"valid"`
-	JSON  unnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854JSON `json:"-"`
-}
-
-// unnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854]
-type unnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854JSON struct {
-	Valid       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRefCc2ac1a037e5d6702fc77b3bcb527854JSON) RawJSON() string {
-	return r.raw
 }
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
