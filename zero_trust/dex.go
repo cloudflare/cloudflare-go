@@ -36,6 +36,157 @@ func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 	return
 }
 
+type NetworkPath struct {
+	// API Resource UUID tag.
+	ID         string `json:"id,required"`
+	DeviceName string `json:"deviceName"`
+	// The interval at which the Traceroute synthetic application test is set to run.
+	Interval    string                 `json:"interval"`
+	Kind        NetworkPathKind        `json:"kind"`
+	Name        string                 `json:"name"`
+	NetworkPath NetworkPathNetworkPath `json:"networkPath,nullable"`
+	// The host of the Traceroute synthetic application test
+	URL  string          `json:"url"`
+	JSON networkPathJSON `json:"-"`
+}
+
+// networkPathJSON contains the JSON metadata for the struct [NetworkPath]
+type networkPathJSON struct {
+	ID          apijson.Field
+	DeviceName  apijson.Field
+	Interval    apijson.Field
+	Kind        apijson.Field
+	Name        apijson.Field
+	NetworkPath apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkPath) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkPathJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkPathKind string
+
+const (
+	NetworkPathKindTraceroute NetworkPathKind = "traceroute"
+)
+
+func (r NetworkPathKind) IsKnown() bool {
+	switch r {
+	case NetworkPathKindTraceroute:
+		return true
+	}
+	return false
+}
+
+type NetworkPathNetworkPath struct {
+	Slots []NetworkPathNetworkPathSlot `json:"slots,required"`
+	// Specifies the sampling applied, if any, to the slots response. When sampled,
+	// results shown represent the first test run to the start of each sampling
+	// interval.
+	Sampling NetworkPathNetworkPathSampling `json:"sampling,nullable"`
+	JSON     networkPathNetworkPathJSON     `json:"-"`
+}
+
+// networkPathNetworkPathJSON contains the JSON metadata for the struct
+// [NetworkPathNetworkPath]
+type networkPathNetworkPathJSON struct {
+	Slots       apijson.Field
+	Sampling    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkPathNetworkPath) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkPathNetworkPathJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkPathNetworkPathSlot struct {
+	// API Resource UUID tag.
+	ID string `json:"id,required"`
+	// Round trip time in ms of the client to app mile
+	ClientToAppRTTMs int64 `json:"clientToAppRttMs,required,nullable"`
+	// Round trip time in ms of the client to Cloudflare egress mile
+	ClientToCfEgressRTTMs int64 `json:"clientToCfEgressRttMs,required,nullable"`
+	// Round trip time in ms of the client to Cloudflare ingress mile
+	ClientToCfIngressRTTMs int64  `json:"clientToCfIngressRttMs,required,nullable"`
+	Timestamp              string `json:"timestamp,required"`
+	// Round trip time in ms of the client to ISP mile
+	ClientToIspRTTMs int64                          `json:"clientToIspRttMs,nullable"`
+	JSON             networkPathNetworkPathSlotJSON `json:"-"`
+}
+
+// networkPathNetworkPathSlotJSON contains the JSON metadata for the struct
+// [NetworkPathNetworkPathSlot]
+type networkPathNetworkPathSlotJSON struct {
+	ID                     apijson.Field
+	ClientToAppRTTMs       apijson.Field
+	ClientToCfEgressRTTMs  apijson.Field
+	ClientToCfIngressRTTMs apijson.Field
+	Timestamp              apijson.Field
+	ClientToIspRTTMs       apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *NetworkPathNetworkPathSlot) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkPathNetworkPathSlotJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the sampling applied, if any, to the slots response. When sampled,
+// results shown represent the first test run to the start of each sampling
+// interval.
+type NetworkPathNetworkPathSampling struct {
+	Unit  NetworkPathNetworkPathSamplingUnit `json:"unit,required"`
+	Value int64                              `json:"value,required"`
+	JSON  networkPathNetworkPathSamplingJSON `json:"-"`
+}
+
+// networkPathNetworkPathSamplingJSON contains the JSON metadata for the struct
+// [NetworkPathNetworkPathSampling]
+type networkPathNetworkPathSamplingJSON struct {
+	Unit        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkPathNetworkPathSampling) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkPathNetworkPathSamplingJSON) RawJSON() string {
+	return r.raw
+}
+
+type NetworkPathNetworkPathSamplingUnit string
+
+const (
+	NetworkPathNetworkPathSamplingUnitHours NetworkPathNetworkPathSamplingUnit = "hours"
+)
+
+func (r NetworkPathNetworkPathSamplingUnit) IsKnown() bool {
+	switch r {
+	case NetworkPathNetworkPathSamplingUnitHours:
+		return true
+	}
+	return false
+}
+
 type Percentiles struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
