@@ -24,8 +24,7 @@ import (
 // this service directly, and instead use the [NewScriptVersionService] method
 // instead.
 type ScriptVersionService struct {
-	Options  []option.RequestOption
-	Settings *ScriptVersionSettingService
+	Options []option.RequestOption
 }
 
 // NewScriptVersionService generates a new service that applies the given options
@@ -34,7 +33,6 @@ type ScriptVersionService struct {
 func NewScriptVersionService(opts ...option.RequestOption) (r *ScriptVersionService) {
 	r = &ScriptVersionService{}
 	r.Options = opts
-	r.Settings = NewScriptVersionSettingService(opts...)
 	return
 }
 
