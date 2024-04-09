@@ -68,7 +68,7 @@ type PredefinedProfile struct {
 	// If true, scan images via OCR to determine if any text present matches filters.
 	OCREnabled bool `json:"ocr_enabled"`
 	// The type of the profile.
-	Type PredefinedProfile     `json:"type"`
+	Type PredefinedProfileType `json:"type"`
 	JSON predefinedProfileJSON `json:"-"`
 }
 
@@ -128,6 +128,21 @@ func (r *PredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
 
 func (r predefinedProfileEntryJSON) RawJSON() string {
 	return r.raw
+}
+
+// The type of the profile.
+type PredefinedProfileType string
+
+const (
+	PredefinedProfileTypePredefined PredefinedProfileType = "predefined"
+)
+
+func (r PredefinedProfileType) IsKnown() bool {
+	switch r {
+	case PredefinedProfileTypePredefined:
+		return true
+	}
+	return false
 }
 
 type DLPProfilePredefinedUpdateParams struct {

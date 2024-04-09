@@ -114,82 +114,6 @@ func (r *LockdownService) Get(ctx context.Context, zoneIdentifier string, id str
 	return
 }
 
-type CIDRConfiguration struct {
-	// The configuration target. You must set the target to `ip_range` when specifying
-	// an IP address range in the Zone Lockdown rule.
-	Target CIDRConfigurationTarget `json:"target"`
-	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
-	Value string                `json:"value"`
-	JSON  cidrConfigurationJSON `json:"-"`
-}
-
-// cidrConfigurationJSON contains the JSON metadata for the struct
-// [CIDRConfiguration]
-type cidrConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CIDRConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cidrConfigurationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r CIDRConfiguration) implementsUserFirewallRuleConfiguration() {}
-
-func (r CIDRConfiguration) implementsFirewallConfiguration() {}
-
-// The configuration target. You must set the target to `ip_range` when specifying
-// an IP address range in the Zone Lockdown rule.
-type CIDRConfigurationTarget string
-
-const (
-	CIDRConfigurationTargetIPRange CIDRConfigurationTarget = "ip_range"
-)
-
-func (r CIDRConfigurationTarget) IsKnown() bool {
-	switch r {
-	case CIDRConfigurationTargetIPRange:
-		return true
-	}
-	return false
-}
-
-type CIDRConfigurationParam struct {
-	// The configuration target. You must set the target to `ip_range` when specifying
-	// an IP address range in the Zone Lockdown rule.
-	Target param.Field[CIDRConfigurationTarget] `json:"target"`
-	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r CIDRConfigurationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CIDRConfigurationParam) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r CIDRConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r CIDRConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
-
 // A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 // specified in the Zone Lockdown rule. You can include any number of `ip` or
 // `ip_range` configurations.
@@ -232,7 +156,8 @@ func (r Configuration) AsUnion() ConfigurationUnion {
 // specified in the Zone Lockdown rule. You can include any number of `ip` or
 // `ip_range` configurations.
 //
-// Union satisfied by [firewall.IPConfiguration] or [firewall.CIDRConfiguration].
+// Union satisfied by [firewall.LockdownIPConfiguration] or
+// [firewall.LockdownCIDRConfiguration].
 type ConfigurationUnion interface {
 	implementsFirewallConfiguration()
 }
@@ -243,11 +168,11 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPConfiguration{}),
+			Type:       reflect.TypeOf(LockdownIPConfiguration{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CIDRConfiguration{}),
+			Type:       reflect.TypeOf(LockdownCIDRConfiguration{}),
 		},
 	)
 }
@@ -291,88 +216,11 @@ func (r ConfigurationParam) implementsFirewallConfigurationUnionParam() {}
 // specified in the Zone Lockdown rule. You can include any number of `ip` or
 // `ip_range` configurations.
 //
-// Satisfied by [firewall.IPConfigurationParam], [firewall.CIDRConfigurationParam],
-// [ConfigurationParam].
+// Satisfied by [firewall.LockdownIPConfigurationParam],
+// [firewall.LockdownCIDRConfigurationParam], [ConfigurationParam].
 type ConfigurationUnionParam interface {
 	implementsFirewallConfigurationUnionParam()
 }
-
-type IPConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the Zone Lockdown rule.
-	Target IPConfigurationTarget `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value string              `json:"value"`
-	JSON  ipConfigurationJSON `json:"-"`
-}
-
-// ipConfigurationJSON contains the JSON metadata for the struct [IPConfiguration]
-type ipConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipConfigurationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r IPConfiguration) implementsUserFirewallRuleConfiguration() {}
-
-func (r IPConfiguration) implementsFirewallConfiguration() {}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the Zone Lockdown rule.
-type IPConfigurationTarget string
-
-const (
-	IPConfigurationTargetIP IPConfigurationTarget = "ip"
-)
-
-func (r IPConfigurationTarget) IsKnown() bool {
-	switch r {
-	case IPConfigurationTargetIP:
-		return true
-	}
-	return false
-}
-
-type IPConfigurationParam struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the Zone Lockdown rule.
-	Target param.Field[IPConfigurationTarget] `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r IPConfigurationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r IPConfigurationParam) implementsUserFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
-
-func (r IPConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r IPConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
 
 type Lockdown struct {
 	// The unique identifier of the Zone Lockdown rule.
@@ -415,6 +263,95 @@ func (r *Lockdown) UnmarshalJSON(data []byte) (err error) {
 
 func (r lockdownJSON) RawJSON() string {
 	return r.raw
+}
+
+type LockdownCIDRConfiguration struct {
+	// The configuration target. You must set the target to `ip_range` when specifying
+	// an IP address range in the Zone Lockdown rule.
+	Target LockdownCIDRConfigurationTarget `json:"target"`
+	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
+	Value string                        `json:"value"`
+	JSON  lockdownCIDRConfigurationJSON `json:"-"`
+}
+
+// lockdownCIDRConfigurationJSON contains the JSON metadata for the struct
+// [LockdownCIDRConfiguration]
+type lockdownCIDRConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LockdownCIDRConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r lockdownCIDRConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r LockdownCIDRConfiguration) implementsFirewallConfiguration() {}
+
+// The configuration target. You must set the target to `ip_range` when specifying
+// an IP address range in the Zone Lockdown rule.
+type LockdownCIDRConfigurationTarget string
+
+const (
+	LockdownCIDRConfigurationTargetIPRange LockdownCIDRConfigurationTarget = "ip_range"
+)
+
+func (r LockdownCIDRConfigurationTarget) IsKnown() bool {
+	switch r {
+	case LockdownCIDRConfigurationTargetIPRange:
+		return true
+	}
+	return false
+}
+
+type LockdownIPConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the Zone Lockdown rule.
+	Target LockdownIPConfigurationTarget `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value string                      `json:"value"`
+	JSON  lockdownIPConfigurationJSON `json:"-"`
+}
+
+// lockdownIPConfigurationJSON contains the JSON metadata for the struct
+// [LockdownIPConfiguration]
+type lockdownIPConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LockdownIPConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r lockdownIPConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r LockdownIPConfiguration) implementsFirewallConfiguration() {}
+
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the Zone Lockdown rule.
+type LockdownIPConfigurationTarget string
+
+const (
+	LockdownIPConfigurationTargetIP LockdownIPConfigurationTarget = "ip"
+)
+
+func (r LockdownIPConfigurationTarget) IsKnown() bool {
+	switch r {
+	case LockdownIPConfigurationTargetIP:
+		return true
+	}
+	return false
 }
 
 type URLsItem = string
