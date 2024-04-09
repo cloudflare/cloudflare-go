@@ -221,8 +221,8 @@ func (r SubscriptionNewParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
@@ -353,8 +353,8 @@ func (r SubscriptionUpdateParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -404,9 +404,9 @@ func (r SubscriptionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SubscriptionDeleteResponse                                `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   SubscriptionDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionDeleteResponseEnvelopeJSON    `json:"-"`
@@ -447,8 +447,8 @@ func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`

@@ -322,9 +322,9 @@ func (r FirewallNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FirewallNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Firewall                                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Firewall              `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallNewResponseEnvelopeJSON    `json:"-"`
@@ -392,9 +392,9 @@ func (r FirewallDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FirewallDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   FirewallDeleteResponse                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   FirewallDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallDeleteResponseEnvelopeJSON    `json:"-"`
@@ -466,9 +466,9 @@ func (r FirewallEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type FirewallEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Firewall                                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Firewall              `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallEditResponseEnvelopeJSON    `json:"-"`
@@ -514,9 +514,9 @@ type FirewallGetParams struct {
 }
 
 type FirewallGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Firewall                                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Firewall              `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallGetResponseEnvelopeJSON    `json:"-"`

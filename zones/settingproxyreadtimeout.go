@@ -148,8 +148,8 @@ func (r SettingProxyReadTimeoutEditParams) MarshalJSON() (data []byte, err error
 }
 
 type SettingProxyReadTimeoutEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Maximum time between two read operations from origin.
@@ -182,8 +182,8 @@ type SettingProxyReadTimeoutGetParams struct {
 }
 
 type SettingProxyReadTimeoutGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Maximum time between two read operations from origin.

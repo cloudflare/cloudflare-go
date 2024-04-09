@@ -279,8 +279,8 @@ func (r SettingMinifyEditParamsValueJs) IsKnown() bool {
 }
 
 type SettingMinifyEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically minify certain assets for your website. Refer to
@@ -315,8 +315,8 @@ type SettingMinifyGetParams struct {
 }
 
 type SettingMinifyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically minify certain assets for your website. Refer to

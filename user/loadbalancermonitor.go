@@ -409,9 +409,9 @@ func (r LoadBalancerMonitorNewParamsType) IsKnown() bool {
 }
 
 type LoadBalancerMonitorNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Monitor                                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Monitor               `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorNewResponseEnvelopeJSON    `json:"-"`
@@ -529,9 +529,9 @@ func (r LoadBalancerMonitorUpdateParamsType) IsKnown() bool {
 }
 
 type LoadBalancerMonitorUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Monitor                                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Monitor               `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorUpdateResponseEnvelopeJSON    `json:"-"`
@@ -580,9 +580,9 @@ func (r LoadBalancerMonitorDeleteParams) MarshalJSON() (data []byte, err error) 
 }
 
 type LoadBalancerMonitorDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   LoadBalancerMonitorDeleteResponse                         `json:"result,required"`
+	Errors   []shared.ResponseInfo             `json:"errors,required"`
+	Messages []shared.ResponseInfo             `json:"messages,required"`
+	Result   LoadBalancerMonitorDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorDeleteResponseEnvelopeJSON    `json:"-"`
@@ -700,9 +700,9 @@ func (r LoadBalancerMonitorEditParamsType) IsKnown() bool {
 }
 
 type LoadBalancerMonitorEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Monitor                                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Monitor               `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorEditResponseEnvelopeJSON    `json:"-"`
@@ -743,9 +743,9 @@ func (r LoadBalancerMonitorEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerMonitorGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Monitor                                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Monitor               `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorGetResponseEnvelopeJSON    `json:"-"`
@@ -863,9 +863,9 @@ func (r LoadBalancerMonitorPreviewParamsType) IsKnown() bool {
 }
 
 type LoadBalancerMonitorPreviewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   LoadBalancerMonitorPreviewResponse                        `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   LoadBalancerMonitorPreviewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success LoadBalancerMonitorPreviewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorPreviewResponseEnvelopeJSON    `json:"-"`
@@ -906,8 +906,8 @@ func (r LoadBalancerMonitorPreviewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LoadBalancerMonitorReferencesResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// List of resources that reference a given monitor.
 	Result []LoadBalancerMonitorReferencesResponse `json:"result,required,nullable"`
 	// Whether the API call was successful

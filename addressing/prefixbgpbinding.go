@@ -198,9 +198,9 @@ func (r PrefixBGPBindingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PrefixBGPBindingNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ServiceBinding                                            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ServiceBinding        `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingNewResponseEnvelopeJSON    `json:"-"`
@@ -251,8 +251,8 @@ type PrefixBGPBindingDeleteParams struct {
 }
 
 type PrefixBGPBindingDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -299,9 +299,9 @@ type PrefixBGPBindingGetParams struct {
 }
 
 type PrefixBGPBindingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ServiceBinding                                            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ServiceBinding        `json:"result,required"`
 	// Whether the API call was successful
 	Success PrefixBGPBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    prefixBGPBindingGetResponseEnvelopeJSON    `json:"-"`

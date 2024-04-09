@@ -226,9 +226,9 @@ func (r MonitorNewParamsType) IsKnown() bool {
 }
 
 type MonitorNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   user.Monitor                                              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Monitor          `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorNewResponseEnvelopeJSON    `json:"-"`
@@ -348,9 +348,9 @@ func (r MonitorUpdateParamsType) IsKnown() bool {
 }
 
 type MonitorUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   user.Monitor                                              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Monitor          `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorUpdateResponseEnvelopeJSON    `json:"-"`
@@ -406,9 +406,9 @@ func (r MonitorDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MonitorDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   MonitorDeleteResponse                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   MonitorDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorDeleteResponseEnvelopeJSON    `json:"-"`
@@ -528,9 +528,9 @@ func (r MonitorEditParamsType) IsKnown() bool {
 }
 
 type MonitorEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   user.Monitor                                              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Monitor          `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorEditResponseEnvelopeJSON    `json:"-"`
@@ -576,9 +576,9 @@ type MonitorGetParams struct {
 }
 
 type MonitorGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   user.Monitor                                              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   user.Monitor          `json:"result,required"`
 	// Whether the API call was successful
 	Success MonitorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    monitorGetResponseEnvelopeJSON    `json:"-"`

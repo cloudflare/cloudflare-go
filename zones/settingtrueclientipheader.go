@@ -171,8 +171,8 @@ func (r SettingTrueClientIPHeaderEditParamsValue) IsKnown() bool {
 }
 
 type SettingTrueClientIPHeaderEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Allows customer to continue to use True Client IP (Akamai feature) in the
@@ -206,8 +206,8 @@ type SettingTrueClientIPHeaderGetParams struct {
 }
 
 type SettingTrueClientIPHeaderGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Allows customer to continue to use True Client IP (Akamai feature) in the

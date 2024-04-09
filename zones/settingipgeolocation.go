@@ -173,8 +173,8 @@ func (r SettingIPGeolocationEditParamsValue) IsKnown() bool {
 }
 
 type SettingIPGeolocationEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
@@ -209,8 +209,8 @@ type SettingIPGeolocationGetParams struct {
 }
 
 type SettingIPGeolocationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and

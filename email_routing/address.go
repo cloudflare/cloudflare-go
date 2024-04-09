@@ -146,9 +146,9 @@ func (r AddressNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Address                                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Address               `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressNewResponseEnvelopeJSON    `json:"-"`
@@ -240,9 +240,9 @@ func (r AddressListParamsVerified) IsKnown() bool {
 }
 
 type AddressDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Address                                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Address               `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressDeleteResponseEnvelopeJSON    `json:"-"`
@@ -283,9 +283,9 @@ func (r AddressDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AddressGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Address                                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Address               `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressGetResponseEnvelopeJSON    `json:"-"`

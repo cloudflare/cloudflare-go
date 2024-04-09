@@ -158,9 +158,9 @@ type DestinationPagerdutyNewParams struct {
 }
 
 type DestinationPagerdutyNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DestinationPagerdutyNewResponse                           `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   DestinationPagerdutyNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationPagerdutyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationPagerdutyNewResponseEnvelopeJSON    `json:"-"`
@@ -206,8 +206,8 @@ type DestinationPagerdutyDeleteParams struct {
 }
 
 type DestinationPagerdutyDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyDeleteResponseEnvelopeSuccess    `json:"success,required"`
@@ -287,9 +287,9 @@ type DestinationPagerdutyGetParams struct {
 }
 
 type DestinationPagerdutyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []Pagerduty                                               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []Pagerduty           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DestinationPagerdutyGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DestinationPagerdutyGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -368,9 +368,9 @@ type DestinationPagerdutyLinkParams struct {
 }
 
 type DestinationPagerdutyLinkResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DestinationPagerdutyLinkResponse                          `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   DestinationPagerdutyLinkResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DestinationPagerdutyLinkResponseEnvelopeSuccess `json:"success,required"`
 	JSON    destinationPagerdutyLinkResponseEnvelopeJSON    `json:"-"`

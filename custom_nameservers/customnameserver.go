@@ -204,8 +204,8 @@ func (r CustomNameserverNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A single account custom nameserver.
 	Result CustomNameserver `json:"result,required"`
 	// Whether the API call was successful
@@ -258,8 +258,8 @@ func (r CustomNameserverDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverDeleteResponseEnvelopeSuccess    `json:"success,required"`
@@ -339,9 +339,9 @@ type CustomNameserverAvailabiltyParams struct {
 }
 
 type CustomNameserverAvailabiltyResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []string                                                  `json:"result,required,nullable" format:"hostname"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []string              `json:"result,required,nullable" format:"hostname"`
 	// Whether the API call was successful
 	Success    CustomNameserverAvailabiltyResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverAvailabiltyResponseEnvelopeResultInfo `json:"result_info"`
@@ -420,9 +420,9 @@ type CustomNameserverGetParams struct {
 }
 
 type CustomNameserverGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []CustomNameserver                                        `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []CustomNameserver    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -506,9 +506,9 @@ func (r CustomNameserverVerifyParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CustomNameserverVerifyResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []CustomNameserver                                        `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []CustomNameserver    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverVerifyResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverVerifyResponseEnvelopeResultInfo `json:"result_info"`

@@ -3161,9 +3161,9 @@ func (IdentityProviderNewParamsAccessOnetimepin) ImplementsIdentityProviderNewPa
 }
 
 type IdentityProviderNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IdentityProvider                                          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IdentityProvider      `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderNewResponseEnvelopeJSON    `json:"-"`
@@ -3974,9 +3974,9 @@ func (IdentityProviderUpdateParamsAccessOnetimepin) ImplementsIdentityProviderUp
 }
 
 type IdentityProviderUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IdentityProvider                                          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IdentityProvider      `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderUpdateResponseEnvelopeJSON    `json:"-"`
@@ -4031,9 +4031,9 @@ type IdentityProviderDeleteParams struct {
 }
 
 type IdentityProviderDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IdentityProviderDeleteResponse                            `json:"result,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   IdentityProviderDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderDeleteResponseEnvelopeJSON    `json:"-"`
@@ -4081,9 +4081,9 @@ type IdentityProviderGetParams struct {
 }
 
 type IdentityProviderGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IdentityProvider                                          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IdentityProvider      `json:"result,required"`
 	// Whether the API call was successful
 	Success IdentityProviderGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    identityProviderGetResponseEnvelopeJSON    `json:"-"`

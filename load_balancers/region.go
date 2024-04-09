@@ -100,8 +100,8 @@ func (r RegionListParams) URLQuery() (v url.Values) {
 }
 
 type RegionListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success RegionListResponseEnvelopeSuccess `json:"success,required"`
@@ -179,8 +179,8 @@ func (r RegionGetParamsRegionID) IsKnown() bool {
 }
 
 type RegionGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A list of countries and subdivisions mapped to a region.
 	Result RegionGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful

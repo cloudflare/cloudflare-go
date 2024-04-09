@@ -188,9 +188,9 @@ func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptDeploymentNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ScriptDeploymentNewResponse                               `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   ScriptDeploymentNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptDeploymentNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptDeploymentNewResponseEnvelopeJSON    `json:"-"`
@@ -236,9 +236,9 @@ type ScriptDeploymentGetParams struct {
 }
 
 type ScriptDeploymentGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ScriptDeploymentGetResponse                               `json:"result,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   ScriptDeploymentGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptDeploymentGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptDeploymentGetResponseEnvelopeJSON    `json:"-"`

@@ -169,8 +169,8 @@ func (r SettingPseudoIPV4EditParamsValue) IsKnown() bool {
 }
 
 type SettingPseudoIPV4EditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The value set for the Pseudo IPv4 setting.
@@ -203,8 +203,8 @@ type SettingPseudoIPV4GetParams struct {
 }
 
 type SettingPseudoIPV4GetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The value set for the Pseudo IPv4 setting.

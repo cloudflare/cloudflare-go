@@ -157,9 +157,9 @@ func (r IndicatorFeedPermissionNewParams) MarshalJSON() (data []byte, err error)
 }
 
 type IndicatorFeedPermissionNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IndicatorFeedPermissionNewResponse                        `json:"result,required"`
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   IndicatorFeedPermissionNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedPermissionNewResponseEnvelopeJSON    `json:"-"`
@@ -205,9 +205,9 @@ type IndicatorFeedPermissionListParams struct {
 }
 
 type IndicatorFeedPermissionListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []IndicatorFeedPermissionListResponse                     `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Result   []IndicatorFeedPermissionListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedPermissionListResponseEnvelopeJSON    `json:"-"`
@@ -261,9 +261,9 @@ func (r IndicatorFeedPermissionDeleteParams) MarshalJSON() (data []byte, err err
 }
 
 type IndicatorFeedPermissionDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IndicatorFeedPermissionDeleteResponse                     `json:"result,required"`
+	Errors   []shared.ResponseInfo                 `json:"errors,required"`
+	Messages []shared.ResponseInfo                 `json:"messages,required"`
+	Result   IndicatorFeedPermissionDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success IndicatorFeedPermissionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indicatorFeedPermissionDeleteResponseEnvelopeJSON    `json:"-"`

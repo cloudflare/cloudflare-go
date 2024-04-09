@@ -87,12 +87,12 @@ type DLPDatasetUploadNewParams struct {
 }
 
 type DLPDatasetUploadNewResponseEnvelope struct {
-	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Success    bool                                                      `json:"success,required"`
-	Result     NewVersion                                                `json:"result"`
-	ResultInfo DLPDatasetUploadNewResponseEnvelopeResultInfo             `json:"result_info"`
-	JSON       dlpDatasetUploadNewResponseEnvelopeJSON                   `json:"-"`
+	Errors     []shared.ResponseInfo                         `json:"errors,required"`
+	Messages   []shared.ResponseInfo                         `json:"messages,required"`
+	Success    bool                                          `json:"success,required"`
+	Result     NewVersion                                    `json:"result"`
+	ResultInfo DLPDatasetUploadNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dlpDatasetUploadNewResponseEnvelopeJSON       `json:"-"`
 }
 
 // dlpDatasetUploadNewResponseEnvelopeJSON contains the JSON metadata for the
@@ -156,12 +156,12 @@ func (r DLPDatasetUploadEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPDatasetUploadEditResponseEnvelope struct {
-	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Success    bool                                                      `json:"success,required"`
-	Result     Dataset                                                   `json:"result"`
-	ResultInfo DLPDatasetUploadEditResponseEnvelopeResultInfo            `json:"result_info"`
-	JSON       dlpDatasetUploadEditResponseEnvelopeJSON                  `json:"-"`
+	Errors     []shared.ResponseInfo                          `json:"errors,required"`
+	Messages   []shared.ResponseInfo                          `json:"messages,required"`
+	Success    bool                                           `json:"success,required"`
+	Result     Dataset                                        `json:"result"`
+	ResultInfo DLPDatasetUploadEditResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dlpDatasetUploadEditResponseEnvelopeJSON       `json:"-"`
 }
 
 // dlpDatasetUploadEditResponseEnvelopeJSON contains the JSON metadata for the

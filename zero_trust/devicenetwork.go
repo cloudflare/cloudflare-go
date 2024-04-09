@@ -231,9 +231,9 @@ func (r DeviceNetworkNewParamsType) IsKnown() bool {
 }
 
 type DeviceNetworkNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Network                                                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Network               `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -320,9 +320,9 @@ func (r DeviceNetworkUpdateParamsType) IsKnown() bool {
 }
 
 type DeviceNetworkUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Network                                                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Network               `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -376,9 +376,9 @@ func (r DeviceNetworkDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceNetworkDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []Network                                                 `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []Network             `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DeviceNetworkDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DeviceNetworkDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -456,9 +456,9 @@ type DeviceNetworkGetParams struct {
 }
 
 type DeviceNetworkGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Network                                                   `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Network               `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceNetworkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceNetworkGetResponseEnvelopeJSON    `json:"-"`

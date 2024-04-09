@@ -178,8 +178,8 @@ func (r BucketNewParamsLocationHint) IsKnown() bool {
 }
 
 type BucketNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []string                                                  `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
 	// A single R2 bucket
 	Result Bucket `json:"result,required"`
 	// Whether the API call was successful
@@ -285,9 +285,9 @@ type BucketDeleteParams struct {
 }
 
 type BucketDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []string                                                  `json:"messages,required"`
-	Result   BucketDeleteResponse                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
+	Result   BucketDeleteResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success BucketDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    bucketDeleteResponseEnvelopeJSON    `json:"-"`
@@ -333,8 +333,8 @@ type BucketGetParams struct {
 }
 
 type BucketGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []string                                                  `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []string              `json:"messages,required"`
 	// A single R2 bucket
 	Result Bucket `json:"result,required"`
 	// Whether the API call was successful

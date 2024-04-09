@@ -174,9 +174,9 @@ func (r ScriptTailNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ScriptTailNewResponse                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ScriptTailNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptTailNewResponseEnvelopeJSON    `json:"-"`
@@ -227,8 +227,8 @@ func (r ScriptTailDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -275,9 +275,9 @@ type ScriptTailGetParams struct {
 }
 
 type ScriptTailGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ScriptTailGetResponse                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ScriptTailGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptTailGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptTailGetResponseEnvelopeJSON    `json:"-"`

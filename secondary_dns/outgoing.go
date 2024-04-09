@@ -280,9 +280,9 @@ func (r OutgoingNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OutgoingNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   OutgoingNewResponse                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   OutgoingNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingNewResponseEnvelopeJSON    `json:"-"`
@@ -335,9 +335,9 @@ func (r OutgoingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OutgoingUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   OutgoingUpdateResponse                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   OutgoingUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -387,9 +387,9 @@ func (r OutgoingDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OutgoingDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   OutgoingDeleteResponse                                    `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   OutgoingDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingDeleteResponseEnvelopeJSON    `json:"-"`
@@ -439,8 +439,8 @@ func (r OutgoingDisableParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OutgoingDisableResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// The zone transfer status of a primary zone
 	Result DisableTransfer `json:"result,required"`
 	// Whether the API call was successful
@@ -492,8 +492,8 @@ func (r OutgoingEnableParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OutgoingEnableResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// The zone transfer status of a primary zone
 	Result EnableTransfer `json:"result,required"`
 	// Whether the API call was successful
@@ -545,8 +545,8 @@ func (r OutgoingForceNotifyParams) MarshalJSON() (data []byte, err error) {
 }
 
 type OutgoingForceNotifyResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// When force_notify query parameter is set to true, the response is a simple
 	// string
 	Result string `json:"result,required"`
@@ -594,9 +594,9 @@ type OutgoingGetParams struct {
 }
 
 type OutgoingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   OutgoingGetResponse                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   OutgoingGetResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingGetResponseEnvelopeJSON    `json:"-"`

@@ -186,8 +186,8 @@ func (r SettingHotlinkProtectionEditParamsValue) IsKnown() bool {
 }
 
 type SettingHotlinkProtectionEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, the Hotlink Protection option ensures that other sites cannot suck
@@ -226,8 +226,8 @@ type SettingHotlinkProtectionGetParams struct {
 }
 
 type SettingHotlinkProtectionGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, the Hotlink Protection option ensures that other sites cannot suck

@@ -81,7 +81,7 @@ func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, params Custo
 }
 
 // Delete Custom Hostname (and any issued SSL certificates)
-func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, params CustomHostnameDeleteParams, opts ...option.RequestOption) (res *shared.UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837, err error) {
+func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, params CustomHostnameDeleteParams, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", params.ZoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
@@ -635,6 +635,28 @@ func (r UnnamedSchemaRef9a9935a9a770967bb604ae41a81e42e1) IsKnown() bool {
 	return false
 }
 
+type CustomHostnameDeleteResponse struct {
+	// Identifier
+	ID   string                           `json:"id"`
+	JSON customHostnameDeleteResponseJSON `json:"-"`
+}
+
+// customHostnameDeleteResponseJSON contains the JSON metadata for the struct
+// [CustomHostnameDeleteResponse]
+type customHostnameDeleteResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -781,9 +803,9 @@ func (r CustomHostnameNewParamsSSLSettingsTLS1_3) IsKnown() bool {
 }
 
 type CustomHostnameNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CustomHostname                                            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CustomHostname        `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameNewResponseEnvelopeJSON    `json:"-"`
@@ -1065,9 +1087,9 @@ func (r CustomHostnameEditParamsSSLSettingsTLS1_3) IsKnown() bool {
 }
 
 type CustomHostnameEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CustomHostname                                            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CustomHostname        `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameEditResponseEnvelopeJSON    `json:"-"`
@@ -1113,9 +1135,9 @@ type CustomHostnameGetParams struct {
 }
 
 type CustomHostnameGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CustomHostname                                            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CustomHostname        `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomHostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customHostnameGetResponseEnvelopeJSON    `json:"-"`

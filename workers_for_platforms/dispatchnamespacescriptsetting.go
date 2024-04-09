@@ -61,10 +61,10 @@ func (r *DispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatc
 
 type DispatchNamespaceScriptSettingEditParams struct {
 	// Identifier
-	AccountID param.Field[string]                                                         `path:"account_id,required"`
-	Errors    param.Field[[]shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param] `json:"errors,required"`
-	Messages  param.Field[[]shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param] `json:"messages,required"`
-	Result    param.Field[workers.ScriptSettingParam]                                     `json:"result,required"`
+	AccountID param.Field[string]                     `path:"account_id,required"`
+	Errors    param.Field[[]shared.ResponseInfoParam] `json:"errors,required"`
+	Messages  param.Field[[]shared.ResponseInfoParam] `json:"messages,required"`
+	Result    param.Field[workers.ScriptSettingParam] `json:"result,required"`
 	// Whether the API call was successful
 	Success param.Field[DispatchNamespaceScriptSettingEditParamsSuccess] `json:"success,required"`
 }
@@ -89,9 +89,9 @@ func (r DispatchNamespaceScriptSettingEditParamsSuccess) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   workers.ScriptSetting                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   workers.ScriptSetting `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -137,9 +137,9 @@ type DispatchNamespaceScriptSettingGetParams struct {
 }
 
 type DispatchNamespaceScriptSettingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   workers.ScriptSetting                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   workers.ScriptSetting `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptSettingGetResponseEnvelopeJSON    `json:"-"`

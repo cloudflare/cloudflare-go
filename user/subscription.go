@@ -402,8 +402,8 @@ func (r SubscriptionUpdateParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -542,8 +542,8 @@ func (r SubscriptionEditParamsZone) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionEditResponseEnvelopeSuccess `json:"success,required"`
@@ -585,9 +585,9 @@ func (r SubscriptionEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []Subscription                                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []Subscription        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SubscriptionGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SubscriptionGetResponseEnvelopeResultInfo `json:"result_info"`

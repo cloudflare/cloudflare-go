@@ -202,8 +202,8 @@ func (r MembershipUpdateParamsStatus) IsKnown() bool {
 }
 
 type MembershipUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success MembershipUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -341,9 +341,9 @@ func (r MembershipDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MembershipDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   MembershipDeleteResponse                                  `json:"result,required"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   MembershipDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success MembershipDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    membershipDeleteResponseEnvelopeJSON    `json:"-"`
@@ -384,8 +384,8 @@ func (r MembershipDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MembershipGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success MembershipGetResponseEnvelopeSuccess `json:"success,required"`

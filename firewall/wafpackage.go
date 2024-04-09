@@ -142,8 +142,8 @@ func init() {
 }
 
 type WAFPackageListResponseFirewallAPIResponseCollection struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef67bbb1ccdd42c3e2937b9fd19f791151Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    WAFPackageListResponseFirewallAPIResponseCollectionSuccess    `json:"success,required"`
@@ -685,8 +685,8 @@ func init() {
 }
 
 type WAFPackageGetResponseFirewallAPIResponseSingle struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef8d6a37a1e4190f86652802244d29525fUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success,required"`

@@ -618,9 +618,9 @@ func (r DEXTracerouteTestGetParamsInterval) IsKnown() bool {
 }
 
 type DEXTracerouteTestGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Traceroute                                                `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Traceroute            `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestGetResponseEnvelopeJSON    `json:"-"`
@@ -698,9 +698,9 @@ func (r DEXTracerouteTestNetworkPathParamsInterval) IsKnown() bool {
 }
 
 type DEXTracerouteTestNetworkPathResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   NetworkPath                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   NetworkPath           `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestNetworkPathResponseEnvelopeJSON    `json:"-"`
@@ -764,9 +764,9 @@ func (r DEXTracerouteTestPercentilesParams) URLQuery() (v url.Values) {
 }
 
 type DEXTracerouteTestPercentilesResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DEXTracerouteTestPercentilesResponse                      `json:"result,required"`
+	Errors   []shared.ResponseInfo                `json:"errors,required"`
+	Messages []shared.ResponseInfo                `json:"messages,required"`
+	Result   DEXTracerouteTestPercentilesResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestPercentilesResponseEnvelopeJSON    `json:"-"`

@@ -501,9 +501,9 @@ func (r AppNewParamsTrafficType) IsKnown() bool {
 }
 
 type AppNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   AppNewResponse                                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AppNewResponse        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AppNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    appNewResponseEnvelopeJSON    `json:"-"`
@@ -645,9 +645,9 @@ func (r AppUpdateParamsTrafficType) IsKnown() bool {
 }
 
 type AppUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   AppUpdateResponse                                         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AppUpdateResponse     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AppUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    appUpdateResponseEnvelopeJSON    `json:"-"`
@@ -752,9 +752,9 @@ func (r AppDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AppDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   AppDeleteResponse                                         `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   AppDeleteResponse     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success AppDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    appDeleteResponseEnvelopeJSON    `json:"-"`
@@ -795,8 +795,8 @@ func (r AppDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AppGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success AppGetResponseEnvelopeSuccess `json:"success,required"`

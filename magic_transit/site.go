@@ -317,9 +317,9 @@ func (r SiteNewParamsSite) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteNewResponse                                           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteNewResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteNewResponseEnvelopeJSON    `json:"-"`
@@ -386,9 +386,9 @@ func (r SiteUpdateParamsSite) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteUpdateResponse                                        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteUpdateResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteUpdateResponseEnvelopeJSON    `json:"-"`
@@ -444,9 +444,9 @@ func (r SiteListParams) URLQuery() (v url.Values) {
 }
 
 type SiteListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteListResponse                                          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteListResponse      `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteListResponseEnvelopeJSON    `json:"-"`
@@ -497,9 +497,9 @@ func (r SiteDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteDeleteResponse                                        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteDeleteResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteDeleteResponseEnvelopeJSON    `json:"-"`
@@ -545,9 +545,9 @@ type SiteGetParams struct {
 }
 
 type SiteGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteGetResponse                                           `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteGetResponse       `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteGetResponseEnvelopeJSON    `json:"-"`

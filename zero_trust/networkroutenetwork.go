@@ -97,9 +97,9 @@ func (r NetworkRouteNetworkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkRouteNetworkNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Route                                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Route                 `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -179,9 +179,9 @@ func (r NetworkRouteNetworkDeleteParamsTunType) IsKnown() bool {
 }
 
 type NetworkRouteNetworkDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Route                                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Route                 `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -227,9 +227,9 @@ type NetworkRouteNetworkEditParams struct {
 }
 
 type NetworkRouteNetworkEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Route                                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Route                 `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkEditResponseEnvelopeJSON    `json:"-"`

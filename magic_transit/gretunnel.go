@@ -330,9 +330,9 @@ func (r GRETunnelNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   GRETunnelNewResponse                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   GRETunnelNewResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -401,9 +401,9 @@ func (r GRETunnelUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   GRETunnelUpdateResponse                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   GRETunnelUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelUpdateResponseEnvelopeJSON    `json:"-"`
@@ -449,9 +449,9 @@ type GRETunnelListParams struct {
 }
 
 type GRETunnelListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   GRETunnelListResponse                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   GRETunnelListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelListResponseEnvelopeJSON    `json:"-"`
@@ -502,9 +502,9 @@ func (r GRETunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GRETunnelDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   GRETunnelDeleteResponse                                   `json:"result,required"`
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []shared.ResponseInfo   `json:"messages,required"`
+	Result   GRETunnelDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -550,9 +550,9 @@ type GRETunnelGetParams struct {
 }
 
 type GRETunnelGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   GRETunnelGetResponse                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   GRETunnelGetResponse  `json:"result,required"`
 	// Whether the API call was successful
 	Success GRETunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    greTunnelGetResponseEnvelopeJSON    `json:"-"`

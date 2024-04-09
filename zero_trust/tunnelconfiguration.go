@@ -237,8 +237,8 @@ func (r TunnelConfigurationUpdateParamsConfigWARPRouting) MarshalJSON() (data []
 }
 
 type TunnelConfigurationUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success TunnelConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
@@ -285,8 +285,8 @@ type TunnelConfigurationGetParams struct {
 }
 
 type TunnelConfigurationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success TunnelConfigurationGetResponseEnvelopeSuccess `json:"success,required"`

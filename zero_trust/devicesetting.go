@@ -105,9 +105,9 @@ func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceSettingUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DeviceSettings                                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceSettings        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -152,9 +152,9 @@ type DeviceSettingListParams struct {
 }
 
 type DeviceSettingListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DeviceSettings                                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceSettings        `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceSettingListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceSettingListResponseEnvelopeJSON    `json:"-"`

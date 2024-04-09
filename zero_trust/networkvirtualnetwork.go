@@ -150,8 +150,8 @@ func (r NetworkVirtualNetworkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkVirtualNetworkNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkNewResponseEnvelopeSuccess `json:"success,required"`
@@ -229,8 +229,8 @@ func (r NetworkVirtualNetworkDeleteParams) MarshalJSON() (data []byte, err error
 }
 
 type NetworkVirtualNetworkDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -287,8 +287,8 @@ func (r NetworkVirtualNetworkEditParams) MarshalJSON() (data []byte, err error) 
 }
 
 type NetworkVirtualNetworkEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkEditResponseEnvelopeSuccess `json:"success,required"`

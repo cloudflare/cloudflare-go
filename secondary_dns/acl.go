@@ -168,9 +168,9 @@ func (r ACLNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ACLNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ACL                                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ACL                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclNewResponseEnvelopeJSON    `json:"-"`
@@ -227,9 +227,9 @@ func (r ACLUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ACLUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ACL                                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ACL                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclUpdateResponseEnvelopeJSON    `json:"-"`
@@ -283,9 +283,9 @@ func (r ACLDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ACLDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ACLDeleteResponse                                         `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ACLDeleteResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclDeleteResponseEnvelopeJSON    `json:"-"`
@@ -330,9 +330,9 @@ type ACLGetParams struct {
 }
 
 type ACLGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   ACL                                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ACL                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ACLGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    aclGetResponseEnvelopeJSON    `json:"-"`

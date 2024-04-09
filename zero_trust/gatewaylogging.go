@@ -140,9 +140,9 @@ func (r GatewayLoggingUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type GatewayLoggingUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   LoggingSetting                                            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoggingSetting        `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLoggingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -187,9 +187,9 @@ type GatewayLoggingGetParams struct {
 }
 
 type GatewayLoggingGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   LoggingSetting                                            `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   LoggingSetting        `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLoggingGetResponseEnvelopeJSON    `json:"-"`

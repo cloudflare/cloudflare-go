@@ -209,9 +209,9 @@ func (r JobNewParamsFrequency) IsKnown() bool {
 }
 
 type JobNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Job                                                       `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Job                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobNewResponseEnvelopeJSON    `json:"-"`
@@ -302,9 +302,9 @@ func (r JobUpdateParamsFrequency) IsKnown() bool {
 }
 
 type JobUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Job                                                       `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Job                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobUpdateResponseEnvelopeJSON    `json:"-"`
@@ -364,8 +364,8 @@ func (r JobDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type JobDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef65e3c8c1a9c4638ec25cdbbaca7165c1Union `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -414,9 +414,9 @@ type JobGetParams struct {
 }
 
 type JobGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Job                                                       `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Job                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success JobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    jobGetResponseEnvelopeJSON    `json:"-"`

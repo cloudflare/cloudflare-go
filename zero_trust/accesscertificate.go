@@ -236,9 +236,9 @@ func (r AccessCertificateNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCertificateNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Certificate                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Certificate           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -294,9 +294,9 @@ func (r AccessCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCertificateUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Certificate                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Certificate           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
@@ -351,9 +351,9 @@ type AccessCertificateDeleteParams struct {
 }
 
 type AccessCertificateDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   AccessCertificateDeleteResponse                           `json:"result,required"`
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   AccessCertificateDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -401,9 +401,9 @@ type AccessCertificateGetParams struct {
 }
 
 type AccessCertificateGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Certificate                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Certificate           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateGetResponseEnvelopeJSON    `json:"-"`

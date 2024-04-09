@@ -173,8 +173,8 @@ func (r SettingAlwaysUseHTTPSEditParamsValue) IsKnown() bool {
 }
 
 type SettingAlwaysUseHTTPSEditResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Reply to all requests for URLs that use "http" with a 301 redirect to the
@@ -209,8 +209,8 @@ type SettingAlwaysUseHTTPSGetParams struct {
 }
 
 type SettingAlwaysUseHTTPSGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Reply to all requests for URLs that use "http" with a 301 redirect to the
