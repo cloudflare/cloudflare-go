@@ -136,9 +136,9 @@ func (r PreviewNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PreviewNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Healthcheck                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Healthcheck           `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewNewResponseEnvelopeJSON    `json:"-"`
@@ -189,9 +189,9 @@ func (r PreviewDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PreviewDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   PreviewDeleteResponse                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   PreviewDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewDeleteResponseEnvelopeJSON    `json:"-"`
@@ -237,9 +237,9 @@ type PreviewGetParams struct {
 }
 
 type PreviewGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Healthcheck                                               `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Healthcheck           `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`

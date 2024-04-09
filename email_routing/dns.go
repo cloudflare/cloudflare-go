@@ -151,9 +151,9 @@ func (r DNSRecordType) IsKnown() bool {
 }
 
 type DNSGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []DNSRecord                                               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []DNSRecord           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DNSGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DNSGetResponseEnvelopeResultInfo `json:"result_info"`

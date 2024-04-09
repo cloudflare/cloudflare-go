@@ -90,9 +90,9 @@ func (r accessRequestsJSON) RawJSON() string {
 }
 
 type AccessLogAccessRequestListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []AccessRequests                                          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []AccessRequests      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessLogAccessRequestListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessLogAccessRequestListResponseEnvelopeResultInfo `json:"result_info"`

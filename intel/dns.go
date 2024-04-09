@@ -156,9 +156,9 @@ func (r DNSGetParamsStartEndParams) URLQuery() (v url.Values) {
 }
 
 type DNSGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   DNS                                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DNS                   `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsGetResponseEnvelopeJSON    `json:"-"`

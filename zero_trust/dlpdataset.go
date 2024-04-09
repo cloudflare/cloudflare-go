@@ -249,12 +249,12 @@ func (r DLPDatasetNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPDatasetNewResponseEnvelope struct {
-	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Success    bool                                                      `json:"success,required"`
-	Result     DatasetCreation                                           `json:"result"`
-	ResultInfo DLPDatasetNewResponseEnvelopeResultInfo                   `json:"result_info"`
-	JSON       dlpDatasetNewResponseEnvelopeJSON                         `json:"-"`
+	Errors     []shared.ResponseInfo                   `json:"errors,required"`
+	Messages   []shared.ResponseInfo                   `json:"messages,required"`
+	Success    bool                                    `json:"success,required"`
+	Result     DatasetCreation                         `json:"result"`
+	ResultInfo DLPDatasetNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dlpDatasetNewResponseEnvelopeJSON       `json:"-"`
 }
 
 // dlpDatasetNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -319,12 +319,12 @@ func (r DLPDatasetUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPDatasetUpdateResponseEnvelope struct {
-	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Success    bool                                                      `json:"success,required"`
-	Result     Dataset                                                   `json:"result"`
-	ResultInfo DLPDatasetUpdateResponseEnvelopeResultInfo                `json:"result_info"`
-	JSON       dlpDatasetUpdateResponseEnvelopeJSON                      `json:"-"`
+	Errors     []shared.ResponseInfo                      `json:"errors,required"`
+	Messages   []shared.ResponseInfo                      `json:"messages,required"`
+	Success    bool                                       `json:"success,required"`
+	Result     Dataset                                    `json:"result"`
+	ResultInfo DLPDatasetUpdateResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dlpDatasetUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
 // dlpDatasetUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -391,12 +391,12 @@ type DLPDatasetGetParams struct {
 }
 
 type DLPDatasetGetResponseEnvelope struct {
-	Errors     []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Success    bool                                                      `json:"success,required"`
-	Result     Dataset                                                   `json:"result"`
-	ResultInfo DLPDatasetGetResponseEnvelopeResultInfo                   `json:"result_info"`
-	JSON       dlpDatasetGetResponseEnvelopeJSON                         `json:"-"`
+	Errors     []shared.ResponseInfo                   `json:"errors,required"`
+	Messages   []shared.ResponseInfo                   `json:"messages,required"`
+	Success    bool                                    `json:"success,required"`
+	Result     Dataset                                 `json:"result"`
+	ResultInfo DLPDatasetGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dlpDatasetGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // dlpDatasetGetResponseEnvelopeJSON contains the JSON metadata for the struct

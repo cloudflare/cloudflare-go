@@ -492,9 +492,9 @@ func (r IndexNewParamsConfigMetric) IsKnown() bool {
 }
 
 type IndexNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CreateIndex                                               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CreateIndex           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexNewResponseEnvelopeJSON    `json:"-"`
@@ -544,9 +544,9 @@ func (r IndexUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CreateIndex                                               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CreateIndex           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexUpdateResponseEnvelopeJSON    `json:"-"`
@@ -587,8 +587,8 @@ func (r IndexUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IndexDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -639,9 +639,9 @@ func (r IndexDeleteByIDsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexDeleteByIDsResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IndexDeleteVectorsByID                                    `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   IndexDeleteVectorsByID `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexDeleteByIDsResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteByIDsResponseEnvelopeJSON    `json:"-"`
@@ -682,9 +682,9 @@ func (r IndexDeleteByIDsResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type IndexGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   CreateIndex                                               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   CreateIndex           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexGetResponseEnvelopeJSON    `json:"-"`
@@ -734,8 +734,8 @@ func (r IndexGetByIDsParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexGetByIDsResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Array of vectors with matching ids.
 	Result IndexGetByIDsResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
@@ -786,9 +786,9 @@ func (r IndexInsertParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexInsertResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IndexInsert                                               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IndexInsert           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexInsertResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexInsertResponseEnvelopeJSON    `json:"-"`
@@ -844,9 +844,9 @@ func (r IndexQueryParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexQueryResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IndexQuery                                                `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IndexQuery            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexQueryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexQueryResponseEnvelopeJSON    `json:"-"`
@@ -895,9 +895,9 @@ func (r IndexUpsertParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexUpsertResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   IndexUpsert                                               `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   IndexUpsert           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexUpsertResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexUpsertResponseEnvelopeJSON    `json:"-"`

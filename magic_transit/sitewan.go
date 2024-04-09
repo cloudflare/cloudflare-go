@@ -312,9 +312,9 @@ func (r SiteWANNewParamsWAN) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteWANNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteWANNewResponse                                        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteWANNewResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteWANNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteWANNewResponseEnvelopeJSON    `json:"-"`
@@ -380,9 +380,9 @@ func (r SiteWANUpdateParamsWAN) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteWANUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteWANUpdateResponse                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteWANUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteWANUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteWANUpdateResponseEnvelopeJSON    `json:"-"`
@@ -428,9 +428,9 @@ type SiteWANListParams struct {
 }
 
 type SiteWANListResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteWANListResponse                                       `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteWANListResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteWANListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteWANListResponseEnvelopeJSON    `json:"-"`
@@ -481,9 +481,9 @@ func (r SiteWANDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SiteWANDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteWANDeleteResponse                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteWANDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteWANDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteWANDeleteResponseEnvelopeJSON    `json:"-"`
@@ -529,9 +529,9 @@ type SiteWANGetParams struct {
 }
 
 type SiteWANGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   SiteWANGetResponse                                        `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   SiteWANGetResponse    `json:"result,required"`
 	// Whether the API call was successful
 	Success SiteWANGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    siteWANGetResponseEnvelopeJSON    `json:"-"`

@@ -504,9 +504,9 @@ func (r RequestNewParamsTlp) IsKnown() bool {
 }
 
 type RequestNewResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Item                                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Item                  `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestNewResponseEnvelopeJSON    `json:"-"`
@@ -583,9 +583,9 @@ func (r RequestUpdateParamsTlp) IsKnown() bool {
 }
 
 type RequestUpdateResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Item                                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Item                  `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestUpdateResponseEnvelopeJSON    `json:"-"`
@@ -689,8 +689,8 @@ func (r RequestListParamsStatus) IsKnown() bool {
 }
 
 type RequestDeleteResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72    `json:"messages,required"`
+	Errors   []shared.ResponseInfo                                        `json:"errors,required"`
+	Messages []shared.ResponseInfo                                        `json:"messages,required"`
 	Result   shared.UnnamedSchemaRefEc4d85c3d1bcc6b3b7e99c199ae99846Union `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestDeleteResponseEnvelopeSuccess `json:"success,required"`
@@ -732,9 +732,9 @@ func (r RequestDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestConstantsResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   RequestConstants                                          `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RequestConstants      `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestConstantsResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestConstantsResponseEnvelopeJSON    `json:"-"`
@@ -775,9 +775,9 @@ func (r RequestConstantsResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Item                                                      `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Item                  `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestGetResponseEnvelopeJSON    `json:"-"`
@@ -818,9 +818,9 @@ func (r RequestGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestQuotaResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   Quota                                                     `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Quota                 `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestQuotaResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestQuotaResponseEnvelopeJSON    `json:"-"`
@@ -861,9 +861,9 @@ func (r RequestQuotaResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestTypesResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   RequestTypes                                              `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RequestTypes          `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestTypesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestTypesResponseEnvelopeJSON    `json:"-"`

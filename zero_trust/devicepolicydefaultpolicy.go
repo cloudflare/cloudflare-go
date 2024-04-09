@@ -52,9 +52,9 @@ type DevicePolicyDefaultPolicyGetParams struct {
 }
 
 type DevicePolicyDefaultPolicyGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []DevicePolicyDefaultPolicyGetResponse                    `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
+	Result   []DevicePolicyDefaultPolicyGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyDefaultPolicyGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyDefaultPolicyGetResponseEnvelopeResultInfo `json:"result_info"`

@@ -34,6 +34,37 @@ func (r errorDataJSON) RawJSON() string {
 	return r.raw
 }
 
+type ResponseInfo struct {
+	Code    int64            `json:"code,required"`
+	Message string           `json:"message,required"`
+	JSON    responseInfoJSON `json:"-"`
+}
+
+// responseInfoJSON contains the JSON metadata for the struct [ResponseInfo]
+type responseInfoJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResponseInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r responseInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResponseInfoParam struct {
+	Code    param.Field[int64]  `json:"code,required"`
+	Message param.Field[string] `json:"message,required"`
+}
+
+func (r ResponseInfoParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9 struct {
 	Name  string                                               `json:"name,required"`
 	Value string                                               `json:"value,required"`
@@ -55,38 +86,6 @@ func (r *UnnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9) UnmarshalJSON(data []
 
 func (r unnamedSchemaRef2173d81a0b2d332c9e2ac46900fe8bb9JSON) RawJSON() string {
 	return r.raw
-}
-
-type UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    unnamedSchemaRef3248f24329456e19dfa042fff9986f72JSON `json:"-"`
-}
-
-// unnamedSchemaRef3248f24329456e19dfa042fff9986f72JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef3248f24329456e19dfa042fff9986f72]
-type unnamedSchemaRef3248f24329456e19dfa042fff9986f72JSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef3248f24329456e19dfa042fff9986f72) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef3248f24329456e19dfa042fff9986f72JSON) RawJSON() string {
-	return r.raw
-}
-
-type UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param struct {
-	Code    param.Field[int64]  `json:"code,required"`
-	Message param.Field[string] `json:"message,required"`
-}
-
-func (r UnnamedSchemaRef3248f24329456e19dfa042fff9986f72Param) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
@@ -440,28 +439,6 @@ type UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam struct {
 
 func (r UnnamedSchemaRef70f2c6ccd8a405358ac7ef8fc3d6751cParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837 struct {
-	// Identifier
-	ID   string                                               `json:"id"`
-	JSON unnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837JSON `json:"-"`
-}
-
-// unnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837JSON contains the JSON metadata
-// for the struct [UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837]
-type unnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837JSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UnnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r unnamedSchemaRef8900f4cb9dca9b9ed0ac41ad571e6837JSON) RawJSON() string {
-	return r.raw
 }
 
 // Union satisfied by

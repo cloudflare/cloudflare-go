@@ -51,9 +51,9 @@ func (r *ListBulkOperationService) Get(ctx context.Context, accountIdentifier st
 type ListBulkOperationGetResponse = interface{}
 
 type ListBulkOperationGetResponseEnvelope struct {
-	Errors   []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"errors,required"`
-	Messages []shared.UnnamedSchemaRef3248f24329456e19dfa042fff9986f72 `json:"messages,required"`
-	Result   []ListBulkOperationGetResponse                            `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   []ListBulkOperationGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ListBulkOperationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listBulkOperationGetResponseEnvelopeJSON    `json:"-"`
