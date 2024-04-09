@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestLoadBalancerPreviewGet(t *testing.T) {
+func TestLoadBalancingPreviewGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,7 +27,7 @@ func TestLoadBalancerPreviewGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Preview.Get(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
+	_, err := client.User.LoadBalancing.Preview.Get(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -10,9 +10,9 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -35,16 +35,26 @@ func NewBillingHistoryService(opts ...option.RequestOption) (r *BillingHistorySe
 }
 
 // Accesses your billing history object.
-func (r *BillingHistoryService) Get(ctx context.Context, query BillingHistoryGetParams, opts ...option.RequestOption) (res *[]BillingHistory, err error) {
-	opts = append(r.Options[:], opts...)
-	var env BillingHistoryGetResponseEnvelope
+func (r *BillingHistoryService) List(ctx context.Context, query BillingHistoryListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[BillingHistory], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/billing/history"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Accesses your billing history object.
+func (r *BillingHistoryService) ListAutoPaging(ctx context.Context, query BillingHistoryListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[BillingHistory] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
 type BillingHistory struct {
@@ -109,7 +119,7 @@ func (r billingHistoryZoneJSON) RawJSON() string {
 	return r.raw
 }
 
-type BillingHistoryGetParams struct {
+type BillingHistoryListParams struct {
 	// The billing item action.
 	Action param.Field[string] `query:"action"`
 	// When the billing item was created.
@@ -117,7 +127,7 @@ type BillingHistoryGetParams struct {
 	// When the billing item was created.
 	OccurredAt param.Field[time.Time] `query:"occurred_at" format:"date-time"`
 	// Field to order billing history by.
-	Order param.Field[BillingHistoryGetParamsOrder] `query:"order"`
+	Order param.Field[BillingHistoryListParamsOrder] `query:"order"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of items per page.
@@ -126,9 +136,9 @@ type BillingHistoryGetParams struct {
 	Type param.Field[string] `query:"type"`
 }
 
-// URLQuery serializes [BillingHistoryGetParams]'s query parameters as
+// URLQuery serializes [BillingHistoryListParams]'s query parameters as
 // `url.Values`.
-func (r BillingHistoryGetParams) URLQuery() (v url.Values) {
+func (r BillingHistoryListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -136,94 +146,18 @@ func (r BillingHistoryGetParams) URLQuery() (v url.Values) {
 }
 
 // Field to order billing history by.
-type BillingHistoryGetParamsOrder string
+type BillingHistoryListParamsOrder string
 
 const (
-	BillingHistoryGetParamsOrderType      BillingHistoryGetParamsOrder = "type"
-	BillingHistoryGetParamsOrderOccuredAt BillingHistoryGetParamsOrder = "occured_at"
-	BillingHistoryGetParamsOrderAction    BillingHistoryGetParamsOrder = "action"
+	BillingHistoryListParamsOrderType      BillingHistoryListParamsOrder = "type"
+	BillingHistoryListParamsOrderOccuredAt BillingHistoryListParamsOrder = "occured_at"
+	BillingHistoryListParamsOrderAction    BillingHistoryListParamsOrder = "action"
 )
 
-func (r BillingHistoryGetParamsOrder) IsKnown() bool {
+func (r BillingHistoryListParamsOrder) IsKnown() bool {
 	switch r {
-	case BillingHistoryGetParamsOrderType, BillingHistoryGetParamsOrderOccuredAt, BillingHistoryGetParamsOrderAction:
+	case BillingHistoryListParamsOrderType, BillingHistoryListParamsOrderOccuredAt, BillingHistoryListParamsOrderAction:
 		return true
 	}
 	return false
-}
-
-type BillingHistoryGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []BillingHistory      `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    BillingHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo BillingHistoryGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       billingHistoryGetResponseEnvelopeJSON       `json:"-"`
-}
-
-// billingHistoryGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [BillingHistoryGetResponseEnvelope]
-type billingHistoryGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingHistoryGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r billingHistoryGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type BillingHistoryGetResponseEnvelopeSuccess bool
-
-const (
-	BillingHistoryGetResponseEnvelopeSuccessTrue BillingHistoryGetResponseEnvelopeSuccess = true
-)
-
-func (r BillingHistoryGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case BillingHistoryGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type BillingHistoryGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                         `json:"total_count"`
-	JSON       billingHistoryGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// billingHistoryGetResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [BillingHistoryGetResponseEnvelopeResultInfo]
-type billingHistoryGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BillingHistoryGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r billingHistoryGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

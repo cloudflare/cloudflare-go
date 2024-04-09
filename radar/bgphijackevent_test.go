@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/radar"
 )
 
-func TestBGPHijackEventsWithOptionalParams(t *testing.T) {
+func TestBGPHijackEventListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,12 +29,12 @@ func TestBGPHijackEventsWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Radar.BGP.Hijacks.Events(context.TODO(), radar.BGPHijackEventsParams{
+	_, err := client.Radar.BGP.Hijacks.Events.List(context.TODO(), radar.BGPHijackEventListParams{
 		DateEnd:         cloudflare.F(time.Now()),
-		DateRange:       cloudflare.F(radar.BGPHijackEventsParamsDateRange7d),
+		DateRange:       cloudflare.F(radar.BGPHijackEventListParamsDateRange7d),
 		DateStart:       cloudflare.F(time.Now()),
 		EventID:         cloudflare.F(int64(0)),
-		Format:          cloudflare.F(radar.BGPHijackEventsParamsFormatJson),
+		Format:          cloudflare.F(radar.BGPHijackEventListParamsFormatJson),
 		HijackerASN:     cloudflare.F(int64(0)),
 		InvolvedASN:     cloudflare.F(int64(0)),
 		InvolvedCountry: cloudflare.F("string"),
@@ -43,8 +43,8 @@ func TestBGPHijackEventsWithOptionalParams(t *testing.T) {
 		Page:            cloudflare.F(int64(0)),
 		PerPage:         cloudflare.F(int64(0)),
 		Prefix:          cloudflare.F("string"),
-		SortBy:          cloudflare.F(radar.BGPHijackEventsParamsSortByTime),
-		SortOrder:       cloudflare.F(radar.BGPHijackEventsParamsSortOrderDesc),
+		SortBy:          cloudflare.F(radar.BGPHijackEventListParamsSortByTime),
+		SortOrder:       cloudflare.F(radar.BGPHijackEventListParamsSortOrderDesc),
 		VictimASN:       cloudflare.F(int64(0)),
 	})
 	if err != nil {

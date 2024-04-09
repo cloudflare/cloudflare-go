@@ -23,7 +23,7 @@ type UserService struct {
 	Billing       *BillingService
 	Firewall      *FirewallService
 	Invites       *InviteService
-	LoadBalancers *LoadBalancerService
+	LoadBalancing *LoadBalancingService
 	Organizations *OrganizationService
 	Subscriptions *SubscriptionService
 	Tokens        *TokenService
@@ -39,7 +39,7 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 	r.Billing = NewBillingService(opts...)
 	r.Firewall = NewFirewallService(opts...)
 	r.Invites = NewInviteService(opts...)
-	r.LoadBalancers = NewLoadBalancerService(opts...)
+	r.LoadBalancing = NewLoadBalancingService(opts...)
 	r.Organizations = NewOrganizationService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
 	r.Tokens = NewTokenService(opts...)

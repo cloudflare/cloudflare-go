@@ -16,28 +16,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-// LoadBalancerMonitorService contains methods and other services that help with
+// LoadBalancingMonitorService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewLoadBalancerMonitorService]
+// this service directly, and instead use the [NewLoadBalancingMonitorService]
 // method instead.
-type LoadBalancerMonitorService struct {
+type LoadBalancingMonitorService struct {
 	Options []option.RequestOption
 }
 
-// NewLoadBalancerMonitorService generates a new service that applies the given
+// NewLoadBalancingMonitorService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewLoadBalancerMonitorService(opts ...option.RequestOption) (r *LoadBalancerMonitorService) {
-	r = &LoadBalancerMonitorService{}
+func NewLoadBalancingMonitorService(opts ...option.RequestOption) (r *LoadBalancingMonitorService) {
+	r = &LoadBalancingMonitorService{}
 	r.Options = opts
 	return
 }
 
 // Create a configured monitor.
-func (r *LoadBalancerMonitorService) New(ctx context.Context, body LoadBalancerMonitorNewParams, opts ...option.RequestOption) (res *LoadBalancerMonitorNewResponse, err error) {
+func (r *LoadBalancingMonitorService) New(ctx context.Context, body LoadBalancingMonitorNewParams, opts ...option.RequestOption) (res *LoadBalancingMonitorNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorNewResponseEnvelope
+	var env LoadBalancingMonitorNewResponseEnvelope
 	path := "user/load_balancers/monitors"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -48,9 +48,9 @@ func (r *LoadBalancerMonitorService) New(ctx context.Context, body LoadBalancerM
 }
 
 // Modify a configured monitor.
-func (r *LoadBalancerMonitorService) Update(ctx context.Context, monitorID string, body LoadBalancerMonitorUpdateParams, opts ...option.RequestOption) (res *LoadBalancerMonitorUpdateResponse, err error) {
+func (r *LoadBalancingMonitorService) Update(ctx context.Context, monitorID string, body LoadBalancingMonitorUpdateParams, opts ...option.RequestOption) (res *LoadBalancingMonitorUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorUpdateResponseEnvelope
+	var env LoadBalancingMonitorUpdateResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s", monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -61,7 +61,7 @@ func (r *LoadBalancerMonitorService) Update(ctx context.Context, monitorID strin
 }
 
 // List configured monitors for a user.
-func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancerMonitorListResponse], err error) {
+func (r *LoadBalancingMonitorService) List(ctx context.Context, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancingMonitorListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,14 +79,14 @@ func (r *LoadBalancerMonitorService) List(ctx context.Context, opts ...option.Re
 }
 
 // List configured monitors for a user.
-func (r *LoadBalancerMonitorService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LoadBalancerMonitorListResponse] {
+func (r *LoadBalancingMonitorService) ListAutoPaging(ctx context.Context, opts ...option.RequestOption) *pagination.SinglePageAutoPager[LoadBalancingMonitorListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, opts...))
 }
 
 // Delete a configured monitor.
-func (r *LoadBalancerMonitorService) Delete(ctx context.Context, monitorID string, body LoadBalancerMonitorDeleteParams, opts ...option.RequestOption) (res *LoadBalancerMonitorDeleteResponse, err error) {
+func (r *LoadBalancingMonitorService) Delete(ctx context.Context, monitorID string, body LoadBalancingMonitorDeleteParams, opts ...option.RequestOption) (res *LoadBalancingMonitorDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorDeleteResponseEnvelope
+	var env LoadBalancingMonitorDeleteResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s", monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -97,9 +97,9 @@ func (r *LoadBalancerMonitorService) Delete(ctx context.Context, monitorID strin
 }
 
 // Apply changes to an existing monitor, overwriting the supplied properties.
-func (r *LoadBalancerMonitorService) Edit(ctx context.Context, monitorID string, body LoadBalancerMonitorEditParams, opts ...option.RequestOption) (res *LoadBalancerMonitorEditResponse, err error) {
+func (r *LoadBalancingMonitorService) Edit(ctx context.Context, monitorID string, body LoadBalancingMonitorEditParams, opts ...option.RequestOption) (res *LoadBalancingMonitorEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorEditResponseEnvelope
+	var env LoadBalancingMonitorEditResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s", monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -110,9 +110,9 @@ func (r *LoadBalancerMonitorService) Edit(ctx context.Context, monitorID string,
 }
 
 // List a single configured monitor for a user.
-func (r *LoadBalancerMonitorService) Get(ctx context.Context, monitorID string, opts ...option.RequestOption) (res *LoadBalancerMonitorGetResponse, err error) {
+func (r *LoadBalancingMonitorService) Get(ctx context.Context, monitorID string, opts ...option.RequestOption) (res *LoadBalancingMonitorGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorGetResponseEnvelope
+	var env LoadBalancingMonitorGetResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s", monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -124,9 +124,9 @@ func (r *LoadBalancerMonitorService) Get(ctx context.Context, monitorID string, 
 
 // Preview pools using the specified monitor with provided monitor details. The
 // returned preview_id can be used in the preview endpoint to retrieve the results.
-func (r *LoadBalancerMonitorService) Preview(ctx context.Context, monitorID string, body LoadBalancerMonitorPreviewParams, opts ...option.RequestOption) (res *LoadBalancerMonitorPreviewResponse, err error) {
+func (r *LoadBalancingMonitorService) Preview(ctx context.Context, monitorID string, body LoadBalancingMonitorPreviewParams, opts ...option.RequestOption) (res *LoadBalancingMonitorPreviewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorPreviewResponseEnvelope
+	var env LoadBalancingMonitorPreviewResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s/preview", monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -137,9 +137,9 @@ func (r *LoadBalancerMonitorService) Preview(ctx context.Context, monitorID stri
 }
 
 // Get the list of resources that reference the provided monitor.
-func (r *LoadBalancerMonitorService) References(ctx context.Context, monitorID string, opts ...option.RequestOption) (res *[]LoadBalancerMonitorReferencesResponse, err error) {
+func (r *LoadBalancingMonitorService) References(ctx context.Context, monitorID string, opts ...option.RequestOption) (res *[]LoadBalancingMonitorReferencesResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorReferencesResponseEnvelope
+	var env LoadBalancingMonitorReferencesResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s/references", monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -149,7 +149,7 @@ func (r *LoadBalancerMonitorService) References(ctx context.Context, monitorID s
 	return
 }
 
-type LoadBalancerMonitorNewResponse struct {
+type LoadBalancingMonitorNewResponse struct {
 	ID string `json:"id"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -201,13 +201,13 @@ type LoadBalancerMonitorNewResponse struct {
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type LoadBalancerMonitorNewResponseType `json:"type"`
-	JSON loadBalancerMonitorNewResponseJSON `json:"-"`
+	Type LoadBalancingMonitorNewResponseType `json:"type"`
+	JSON loadBalancingMonitorNewResponseJSON `json:"-"`
 }
 
-// loadBalancerMonitorNewResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerMonitorNewResponse]
-type loadBalancerMonitorNewResponseJSON struct {
+// loadBalancingMonitorNewResponseJSON contains the JSON metadata for the struct
+// [LoadBalancingMonitorNewResponse]
+type loadBalancingMonitorNewResponseJSON struct {
 	ID              apijson.Field
 	AllowInsecure   apijson.Field
 	ConsecutiveDown apijson.Field
@@ -231,36 +231,36 @@ type loadBalancerMonitorNewResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorNewResponseJSON) RawJSON() string {
+func (r loadBalancingMonitorNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorNewResponseType string
+type LoadBalancingMonitorNewResponseType string
 
 const (
-	LoadBalancerMonitorNewResponseTypeHTTP     LoadBalancerMonitorNewResponseType = "http"
-	LoadBalancerMonitorNewResponseTypeHTTPS    LoadBalancerMonitorNewResponseType = "https"
-	LoadBalancerMonitorNewResponseTypeTCP      LoadBalancerMonitorNewResponseType = "tcp"
-	LoadBalancerMonitorNewResponseTypeUdpIcmp  LoadBalancerMonitorNewResponseType = "udp_icmp"
-	LoadBalancerMonitorNewResponseTypeIcmpPing LoadBalancerMonitorNewResponseType = "icmp_ping"
-	LoadBalancerMonitorNewResponseTypeSmtp     LoadBalancerMonitorNewResponseType = "smtp"
+	LoadBalancingMonitorNewResponseTypeHTTP     LoadBalancingMonitorNewResponseType = "http"
+	LoadBalancingMonitorNewResponseTypeHTTPS    LoadBalancingMonitorNewResponseType = "https"
+	LoadBalancingMonitorNewResponseTypeTCP      LoadBalancingMonitorNewResponseType = "tcp"
+	LoadBalancingMonitorNewResponseTypeUdpIcmp  LoadBalancingMonitorNewResponseType = "udp_icmp"
+	LoadBalancingMonitorNewResponseTypeIcmpPing LoadBalancingMonitorNewResponseType = "icmp_ping"
+	LoadBalancingMonitorNewResponseTypeSmtp     LoadBalancingMonitorNewResponseType = "smtp"
 )
 
-func (r LoadBalancerMonitorNewResponseType) IsKnown() bool {
+func (r LoadBalancingMonitorNewResponseType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorNewResponseTypeHTTP, LoadBalancerMonitorNewResponseTypeHTTPS, LoadBalancerMonitorNewResponseTypeTCP, LoadBalancerMonitorNewResponseTypeUdpIcmp, LoadBalancerMonitorNewResponseTypeIcmpPing, LoadBalancerMonitorNewResponseTypeSmtp:
+	case LoadBalancingMonitorNewResponseTypeHTTP, LoadBalancingMonitorNewResponseTypeHTTPS, LoadBalancingMonitorNewResponseTypeTCP, LoadBalancingMonitorNewResponseTypeUdpIcmp, LoadBalancingMonitorNewResponseTypeIcmpPing, LoadBalancingMonitorNewResponseTypeSmtp:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorUpdateResponse struct {
+type LoadBalancingMonitorUpdateResponse struct {
 	ID string `json:"id"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -312,13 +312,13 @@ type LoadBalancerMonitorUpdateResponse struct {
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type LoadBalancerMonitorUpdateResponseType `json:"type"`
-	JSON loadBalancerMonitorUpdateResponseJSON `json:"-"`
+	Type LoadBalancingMonitorUpdateResponseType `json:"type"`
+	JSON loadBalancingMonitorUpdateResponseJSON `json:"-"`
 }
 
-// loadBalancerMonitorUpdateResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerMonitorUpdateResponse]
-type loadBalancerMonitorUpdateResponseJSON struct {
+// loadBalancingMonitorUpdateResponseJSON contains the JSON metadata for the struct
+// [LoadBalancingMonitorUpdateResponse]
+type loadBalancingMonitorUpdateResponseJSON struct {
 	ID              apijson.Field
 	AllowInsecure   apijson.Field
 	ConsecutiveDown apijson.Field
@@ -342,36 +342,36 @@ type loadBalancerMonitorUpdateResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorUpdateResponseJSON) RawJSON() string {
+func (r loadBalancingMonitorUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorUpdateResponseType string
+type LoadBalancingMonitorUpdateResponseType string
 
 const (
-	LoadBalancerMonitorUpdateResponseTypeHTTP     LoadBalancerMonitorUpdateResponseType = "http"
-	LoadBalancerMonitorUpdateResponseTypeHTTPS    LoadBalancerMonitorUpdateResponseType = "https"
-	LoadBalancerMonitorUpdateResponseTypeTCP      LoadBalancerMonitorUpdateResponseType = "tcp"
-	LoadBalancerMonitorUpdateResponseTypeUdpIcmp  LoadBalancerMonitorUpdateResponseType = "udp_icmp"
-	LoadBalancerMonitorUpdateResponseTypeIcmpPing LoadBalancerMonitorUpdateResponseType = "icmp_ping"
-	LoadBalancerMonitorUpdateResponseTypeSmtp     LoadBalancerMonitorUpdateResponseType = "smtp"
+	LoadBalancingMonitorUpdateResponseTypeHTTP     LoadBalancingMonitorUpdateResponseType = "http"
+	LoadBalancingMonitorUpdateResponseTypeHTTPS    LoadBalancingMonitorUpdateResponseType = "https"
+	LoadBalancingMonitorUpdateResponseTypeTCP      LoadBalancingMonitorUpdateResponseType = "tcp"
+	LoadBalancingMonitorUpdateResponseTypeUdpIcmp  LoadBalancingMonitorUpdateResponseType = "udp_icmp"
+	LoadBalancingMonitorUpdateResponseTypeIcmpPing LoadBalancingMonitorUpdateResponseType = "icmp_ping"
+	LoadBalancingMonitorUpdateResponseTypeSmtp     LoadBalancingMonitorUpdateResponseType = "smtp"
 )
 
-func (r LoadBalancerMonitorUpdateResponseType) IsKnown() bool {
+func (r LoadBalancingMonitorUpdateResponseType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorUpdateResponseTypeHTTP, LoadBalancerMonitorUpdateResponseTypeHTTPS, LoadBalancerMonitorUpdateResponseTypeTCP, LoadBalancerMonitorUpdateResponseTypeUdpIcmp, LoadBalancerMonitorUpdateResponseTypeIcmpPing, LoadBalancerMonitorUpdateResponseTypeSmtp:
+	case LoadBalancingMonitorUpdateResponseTypeHTTP, LoadBalancingMonitorUpdateResponseTypeHTTPS, LoadBalancingMonitorUpdateResponseTypeTCP, LoadBalancingMonitorUpdateResponseTypeUdpIcmp, LoadBalancingMonitorUpdateResponseTypeIcmpPing, LoadBalancingMonitorUpdateResponseTypeSmtp:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorListResponse struct {
+type LoadBalancingMonitorListResponse struct {
 	ID string `json:"id"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -423,13 +423,13 @@ type LoadBalancerMonitorListResponse struct {
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type LoadBalancerMonitorListResponseType `json:"type"`
-	JSON loadBalancerMonitorListResponseJSON `json:"-"`
+	Type LoadBalancingMonitorListResponseType `json:"type"`
+	JSON loadBalancingMonitorListResponseJSON `json:"-"`
 }
 
-// loadBalancerMonitorListResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerMonitorListResponse]
-type loadBalancerMonitorListResponseJSON struct {
+// loadBalancingMonitorListResponseJSON contains the JSON metadata for the struct
+// [LoadBalancingMonitorListResponse]
+type loadBalancingMonitorListResponseJSON struct {
 	ID              apijson.Field
 	AllowInsecure   apijson.Field
 	ConsecutiveDown apijson.Field
@@ -453,57 +453,57 @@ type loadBalancerMonitorListResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorListResponseJSON) RawJSON() string {
+func (r loadBalancingMonitorListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorListResponseType string
+type LoadBalancingMonitorListResponseType string
 
 const (
-	LoadBalancerMonitorListResponseTypeHTTP     LoadBalancerMonitorListResponseType = "http"
-	LoadBalancerMonitorListResponseTypeHTTPS    LoadBalancerMonitorListResponseType = "https"
-	LoadBalancerMonitorListResponseTypeTCP      LoadBalancerMonitorListResponseType = "tcp"
-	LoadBalancerMonitorListResponseTypeUdpIcmp  LoadBalancerMonitorListResponseType = "udp_icmp"
-	LoadBalancerMonitorListResponseTypeIcmpPing LoadBalancerMonitorListResponseType = "icmp_ping"
-	LoadBalancerMonitorListResponseTypeSmtp     LoadBalancerMonitorListResponseType = "smtp"
+	LoadBalancingMonitorListResponseTypeHTTP     LoadBalancingMonitorListResponseType = "http"
+	LoadBalancingMonitorListResponseTypeHTTPS    LoadBalancingMonitorListResponseType = "https"
+	LoadBalancingMonitorListResponseTypeTCP      LoadBalancingMonitorListResponseType = "tcp"
+	LoadBalancingMonitorListResponseTypeUdpIcmp  LoadBalancingMonitorListResponseType = "udp_icmp"
+	LoadBalancingMonitorListResponseTypeIcmpPing LoadBalancingMonitorListResponseType = "icmp_ping"
+	LoadBalancingMonitorListResponseTypeSmtp     LoadBalancingMonitorListResponseType = "smtp"
 )
 
-func (r LoadBalancerMonitorListResponseType) IsKnown() bool {
+func (r LoadBalancingMonitorListResponseType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorListResponseTypeHTTP, LoadBalancerMonitorListResponseTypeHTTPS, LoadBalancerMonitorListResponseTypeTCP, LoadBalancerMonitorListResponseTypeUdpIcmp, LoadBalancerMonitorListResponseTypeIcmpPing, LoadBalancerMonitorListResponseTypeSmtp:
+	case LoadBalancingMonitorListResponseTypeHTTP, LoadBalancingMonitorListResponseTypeHTTPS, LoadBalancingMonitorListResponseTypeTCP, LoadBalancingMonitorListResponseTypeUdpIcmp, LoadBalancingMonitorListResponseTypeIcmpPing, LoadBalancingMonitorListResponseTypeSmtp:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorDeleteResponse struct {
-	ID   string                                `json:"id"`
-	JSON loadBalancerMonitorDeleteResponseJSON `json:"-"`
+type LoadBalancingMonitorDeleteResponse struct {
+	ID   string                                 `json:"id"`
+	JSON loadBalancingMonitorDeleteResponseJSON `json:"-"`
 }
 
-// loadBalancerMonitorDeleteResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerMonitorDeleteResponse]
-type loadBalancerMonitorDeleteResponseJSON struct {
+// loadBalancingMonitorDeleteResponseJSON contains the JSON metadata for the struct
+// [LoadBalancingMonitorDeleteResponse]
+type loadBalancingMonitorDeleteResponseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorDeleteResponseJSON) RawJSON() string {
+func (r loadBalancingMonitorDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type LoadBalancerMonitorEditResponse struct {
+type LoadBalancingMonitorEditResponse struct {
 	ID string `json:"id"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -555,13 +555,13 @@ type LoadBalancerMonitorEditResponse struct {
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type LoadBalancerMonitorEditResponseType `json:"type"`
-	JSON loadBalancerMonitorEditResponseJSON `json:"-"`
+	Type LoadBalancingMonitorEditResponseType `json:"type"`
+	JSON loadBalancingMonitorEditResponseJSON `json:"-"`
 }
 
-// loadBalancerMonitorEditResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerMonitorEditResponse]
-type loadBalancerMonitorEditResponseJSON struct {
+// loadBalancingMonitorEditResponseJSON contains the JSON metadata for the struct
+// [LoadBalancingMonitorEditResponse]
+type loadBalancingMonitorEditResponseJSON struct {
 	ID              apijson.Field
 	AllowInsecure   apijson.Field
 	ConsecutiveDown apijson.Field
@@ -585,36 +585,36 @@ type loadBalancerMonitorEditResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorEditResponseJSON) RawJSON() string {
+func (r loadBalancingMonitorEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorEditResponseType string
+type LoadBalancingMonitorEditResponseType string
 
 const (
-	LoadBalancerMonitorEditResponseTypeHTTP     LoadBalancerMonitorEditResponseType = "http"
-	LoadBalancerMonitorEditResponseTypeHTTPS    LoadBalancerMonitorEditResponseType = "https"
-	LoadBalancerMonitorEditResponseTypeTCP      LoadBalancerMonitorEditResponseType = "tcp"
-	LoadBalancerMonitorEditResponseTypeUdpIcmp  LoadBalancerMonitorEditResponseType = "udp_icmp"
-	LoadBalancerMonitorEditResponseTypeIcmpPing LoadBalancerMonitorEditResponseType = "icmp_ping"
-	LoadBalancerMonitorEditResponseTypeSmtp     LoadBalancerMonitorEditResponseType = "smtp"
+	LoadBalancingMonitorEditResponseTypeHTTP     LoadBalancingMonitorEditResponseType = "http"
+	LoadBalancingMonitorEditResponseTypeHTTPS    LoadBalancingMonitorEditResponseType = "https"
+	LoadBalancingMonitorEditResponseTypeTCP      LoadBalancingMonitorEditResponseType = "tcp"
+	LoadBalancingMonitorEditResponseTypeUdpIcmp  LoadBalancingMonitorEditResponseType = "udp_icmp"
+	LoadBalancingMonitorEditResponseTypeIcmpPing LoadBalancingMonitorEditResponseType = "icmp_ping"
+	LoadBalancingMonitorEditResponseTypeSmtp     LoadBalancingMonitorEditResponseType = "smtp"
 )
 
-func (r LoadBalancerMonitorEditResponseType) IsKnown() bool {
+func (r LoadBalancingMonitorEditResponseType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorEditResponseTypeHTTP, LoadBalancerMonitorEditResponseTypeHTTPS, LoadBalancerMonitorEditResponseTypeTCP, LoadBalancerMonitorEditResponseTypeUdpIcmp, LoadBalancerMonitorEditResponseTypeIcmpPing, LoadBalancerMonitorEditResponseTypeSmtp:
+	case LoadBalancingMonitorEditResponseTypeHTTP, LoadBalancingMonitorEditResponseTypeHTTPS, LoadBalancingMonitorEditResponseTypeTCP, LoadBalancingMonitorEditResponseTypeUdpIcmp, LoadBalancingMonitorEditResponseTypeIcmpPing, LoadBalancingMonitorEditResponseTypeSmtp:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorGetResponse struct {
+type LoadBalancingMonitorGetResponse struct {
 	ID string `json:"id"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
@@ -666,13 +666,13 @@ type LoadBalancerMonitorGetResponse struct {
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type LoadBalancerMonitorGetResponseType `json:"type"`
-	JSON loadBalancerMonitorGetResponseJSON `json:"-"`
+	Type LoadBalancingMonitorGetResponseType `json:"type"`
+	JSON loadBalancingMonitorGetResponseJSON `json:"-"`
 }
 
-// loadBalancerMonitorGetResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerMonitorGetResponse]
-type loadBalancerMonitorGetResponseJSON struct {
+// loadBalancingMonitorGetResponseJSON contains the JSON metadata for the struct
+// [LoadBalancingMonitorGetResponse]
+type loadBalancingMonitorGetResponseJSON struct {
 	ID              apijson.Field
 	AllowInsecure   apijson.Field
 	ConsecutiveDown apijson.Field
@@ -696,70 +696,70 @@ type loadBalancerMonitorGetResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorGetResponseJSON) RawJSON() string {
+func (r loadBalancingMonitorGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorGetResponseType string
+type LoadBalancingMonitorGetResponseType string
 
 const (
-	LoadBalancerMonitorGetResponseTypeHTTP     LoadBalancerMonitorGetResponseType = "http"
-	LoadBalancerMonitorGetResponseTypeHTTPS    LoadBalancerMonitorGetResponseType = "https"
-	LoadBalancerMonitorGetResponseTypeTCP      LoadBalancerMonitorGetResponseType = "tcp"
-	LoadBalancerMonitorGetResponseTypeUdpIcmp  LoadBalancerMonitorGetResponseType = "udp_icmp"
-	LoadBalancerMonitorGetResponseTypeIcmpPing LoadBalancerMonitorGetResponseType = "icmp_ping"
-	LoadBalancerMonitorGetResponseTypeSmtp     LoadBalancerMonitorGetResponseType = "smtp"
+	LoadBalancingMonitorGetResponseTypeHTTP     LoadBalancingMonitorGetResponseType = "http"
+	LoadBalancingMonitorGetResponseTypeHTTPS    LoadBalancingMonitorGetResponseType = "https"
+	LoadBalancingMonitorGetResponseTypeTCP      LoadBalancingMonitorGetResponseType = "tcp"
+	LoadBalancingMonitorGetResponseTypeUdpIcmp  LoadBalancingMonitorGetResponseType = "udp_icmp"
+	LoadBalancingMonitorGetResponseTypeIcmpPing LoadBalancingMonitorGetResponseType = "icmp_ping"
+	LoadBalancingMonitorGetResponseTypeSmtp     LoadBalancingMonitorGetResponseType = "smtp"
 )
 
-func (r LoadBalancerMonitorGetResponseType) IsKnown() bool {
+func (r LoadBalancingMonitorGetResponseType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorGetResponseTypeHTTP, LoadBalancerMonitorGetResponseTypeHTTPS, LoadBalancerMonitorGetResponseTypeTCP, LoadBalancerMonitorGetResponseTypeUdpIcmp, LoadBalancerMonitorGetResponseTypeIcmpPing, LoadBalancerMonitorGetResponseTypeSmtp:
+	case LoadBalancingMonitorGetResponseTypeHTTP, LoadBalancingMonitorGetResponseTypeHTTPS, LoadBalancingMonitorGetResponseTypeTCP, LoadBalancingMonitorGetResponseTypeUdpIcmp, LoadBalancingMonitorGetResponseTypeIcmpPing, LoadBalancingMonitorGetResponseTypeSmtp:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorPreviewResponse struct {
+type LoadBalancingMonitorPreviewResponse struct {
 	// Monitored pool IDs mapped to their respective names.
-	Pools     map[string]string                      `json:"pools"`
-	PreviewID string                                 `json:"preview_id"`
-	JSON      loadBalancerMonitorPreviewResponseJSON `json:"-"`
+	Pools     map[string]string                       `json:"pools"`
+	PreviewID string                                  `json:"preview_id"`
+	JSON      loadBalancingMonitorPreviewResponseJSON `json:"-"`
 }
 
-// loadBalancerMonitorPreviewResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerMonitorPreviewResponse]
-type loadBalancerMonitorPreviewResponseJSON struct {
+// loadBalancingMonitorPreviewResponseJSON contains the JSON metadata for the
+// struct [LoadBalancingMonitorPreviewResponse]
+type loadBalancingMonitorPreviewResponseJSON struct {
 	Pools       apijson.Field
 	PreviewID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorPreviewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorPreviewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorPreviewResponseJSON) RawJSON() string {
+func (r loadBalancingMonitorPreviewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type LoadBalancerMonitorReferencesResponse struct {
-	ReferenceType LoadBalancerMonitorReferencesResponseReferenceType `json:"reference_type"`
-	ResourceID    string                                             `json:"resource_id"`
-	ResourceName  string                                             `json:"resource_name"`
-	ResourceType  string                                             `json:"resource_type"`
-	JSON          loadBalancerMonitorReferencesResponseJSON          `json:"-"`
+type LoadBalancingMonitorReferencesResponse struct {
+	ReferenceType LoadBalancingMonitorReferencesResponseReferenceType `json:"reference_type"`
+	ResourceID    string                                              `json:"resource_id"`
+	ResourceName  string                                              `json:"resource_name"`
+	ResourceType  string                                              `json:"resource_type"`
+	JSON          loadBalancingMonitorReferencesResponseJSON          `json:"-"`
 }
 
-// loadBalancerMonitorReferencesResponseJSON contains the JSON metadata for the
-// struct [LoadBalancerMonitorReferencesResponse]
-type loadBalancerMonitorReferencesResponseJSON struct {
+// loadBalancingMonitorReferencesResponseJSON contains the JSON metadata for the
+// struct [LoadBalancingMonitorReferencesResponse]
+type loadBalancingMonitorReferencesResponseJSON struct {
 	ReferenceType apijson.Field
 	ResourceID    apijson.Field
 	ResourceName  apijson.Field
@@ -768,31 +768,31 @@ type loadBalancerMonitorReferencesResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorReferencesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorReferencesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorReferencesResponseJSON) RawJSON() string {
+func (r loadBalancingMonitorReferencesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type LoadBalancerMonitorReferencesResponseReferenceType string
+type LoadBalancingMonitorReferencesResponseReferenceType string
 
 const (
-	LoadBalancerMonitorReferencesResponseReferenceTypeStar     LoadBalancerMonitorReferencesResponseReferenceType = "*"
-	LoadBalancerMonitorReferencesResponseReferenceTypeReferral LoadBalancerMonitorReferencesResponseReferenceType = "referral"
-	LoadBalancerMonitorReferencesResponseReferenceTypeReferrer LoadBalancerMonitorReferencesResponseReferenceType = "referrer"
+	LoadBalancingMonitorReferencesResponseReferenceTypeStar     LoadBalancingMonitorReferencesResponseReferenceType = "*"
+	LoadBalancingMonitorReferencesResponseReferenceTypeReferral LoadBalancingMonitorReferencesResponseReferenceType = "referral"
+	LoadBalancingMonitorReferencesResponseReferenceTypeReferrer LoadBalancingMonitorReferencesResponseReferenceType = "referrer"
 )
 
-func (r LoadBalancerMonitorReferencesResponseReferenceType) IsKnown() bool {
+func (r LoadBalancingMonitorReferencesResponseReferenceType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorReferencesResponseReferenceTypeStar, LoadBalancerMonitorReferencesResponseReferenceTypeReferral, LoadBalancerMonitorReferencesResponseReferenceTypeReferrer:
+	case LoadBalancingMonitorReferencesResponseReferenceTypeStar, LoadBalancingMonitorReferencesResponseReferenceTypeReferral, LoadBalancingMonitorReferencesResponseReferenceTypeReferrer:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorNewParams struct {
+type LoadBalancingMonitorNewParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
@@ -841,46 +841,46 @@ type LoadBalancerMonitorNewParams struct {
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type param.Field[LoadBalancerMonitorNewParamsType] `json:"type"`
+	Type param.Field[LoadBalancingMonitorNewParamsType] `json:"type"`
 }
 
-func (r LoadBalancerMonitorNewParams) MarshalJSON() (data []byte, err error) {
+func (r LoadBalancingMonitorNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorNewParamsType string
+type LoadBalancingMonitorNewParamsType string
 
 const (
-	LoadBalancerMonitorNewParamsTypeHTTP     LoadBalancerMonitorNewParamsType = "http"
-	LoadBalancerMonitorNewParamsTypeHTTPS    LoadBalancerMonitorNewParamsType = "https"
-	LoadBalancerMonitorNewParamsTypeTCP      LoadBalancerMonitorNewParamsType = "tcp"
-	LoadBalancerMonitorNewParamsTypeUdpIcmp  LoadBalancerMonitorNewParamsType = "udp_icmp"
-	LoadBalancerMonitorNewParamsTypeIcmpPing LoadBalancerMonitorNewParamsType = "icmp_ping"
-	LoadBalancerMonitorNewParamsTypeSmtp     LoadBalancerMonitorNewParamsType = "smtp"
+	LoadBalancingMonitorNewParamsTypeHTTP     LoadBalancingMonitorNewParamsType = "http"
+	LoadBalancingMonitorNewParamsTypeHTTPS    LoadBalancingMonitorNewParamsType = "https"
+	LoadBalancingMonitorNewParamsTypeTCP      LoadBalancingMonitorNewParamsType = "tcp"
+	LoadBalancingMonitorNewParamsTypeUdpIcmp  LoadBalancingMonitorNewParamsType = "udp_icmp"
+	LoadBalancingMonitorNewParamsTypeIcmpPing LoadBalancingMonitorNewParamsType = "icmp_ping"
+	LoadBalancingMonitorNewParamsTypeSmtp     LoadBalancingMonitorNewParamsType = "smtp"
 )
 
-func (r LoadBalancerMonitorNewParamsType) IsKnown() bool {
+func (r LoadBalancingMonitorNewParamsType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorNewParamsTypeHTTP, LoadBalancerMonitorNewParamsTypeHTTPS, LoadBalancerMonitorNewParamsTypeTCP, LoadBalancerMonitorNewParamsTypeUdpIcmp, LoadBalancerMonitorNewParamsTypeIcmpPing, LoadBalancerMonitorNewParamsTypeSmtp:
+	case LoadBalancingMonitorNewParamsTypeHTTP, LoadBalancingMonitorNewParamsTypeHTTPS, LoadBalancingMonitorNewParamsTypeTCP, LoadBalancingMonitorNewParamsTypeUdpIcmp, LoadBalancingMonitorNewParamsTypeIcmpPing, LoadBalancingMonitorNewParamsTypeSmtp:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   LoadBalancerMonitorNewResponse `json:"result,required"`
+type LoadBalancingMonitorNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   LoadBalancingMonitorNewResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerMonitorNewResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingMonitorNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingMonitorNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerMonitorNewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerMonitorNewResponseEnvelope]
-type loadBalancerMonitorNewResponseEnvelopeJSON struct {
+// loadBalancingMonitorNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingMonitorNewResponseEnvelope]
+type loadBalancingMonitorNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -889,30 +889,30 @@ type loadBalancerMonitorNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorNewResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingMonitorNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerMonitorNewResponseEnvelopeSuccess bool
+type LoadBalancingMonitorNewResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerMonitorNewResponseEnvelopeSuccessTrue LoadBalancerMonitorNewResponseEnvelopeSuccess = true
+	LoadBalancingMonitorNewResponseEnvelopeSuccessTrue LoadBalancingMonitorNewResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerMonitorNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingMonitorNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorNewResponseEnvelopeSuccessTrue:
+	case LoadBalancingMonitorNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorUpdateParams struct {
+type LoadBalancingMonitorUpdateParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
@@ -961,46 +961,46 @@ type LoadBalancerMonitorUpdateParams struct {
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type param.Field[LoadBalancerMonitorUpdateParamsType] `json:"type"`
+	Type param.Field[LoadBalancingMonitorUpdateParamsType] `json:"type"`
 }
 
-func (r LoadBalancerMonitorUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r LoadBalancingMonitorUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorUpdateParamsType string
+type LoadBalancingMonitorUpdateParamsType string
 
 const (
-	LoadBalancerMonitorUpdateParamsTypeHTTP     LoadBalancerMonitorUpdateParamsType = "http"
-	LoadBalancerMonitorUpdateParamsTypeHTTPS    LoadBalancerMonitorUpdateParamsType = "https"
-	LoadBalancerMonitorUpdateParamsTypeTCP      LoadBalancerMonitorUpdateParamsType = "tcp"
-	LoadBalancerMonitorUpdateParamsTypeUdpIcmp  LoadBalancerMonitorUpdateParamsType = "udp_icmp"
-	LoadBalancerMonitorUpdateParamsTypeIcmpPing LoadBalancerMonitorUpdateParamsType = "icmp_ping"
-	LoadBalancerMonitorUpdateParamsTypeSmtp     LoadBalancerMonitorUpdateParamsType = "smtp"
+	LoadBalancingMonitorUpdateParamsTypeHTTP     LoadBalancingMonitorUpdateParamsType = "http"
+	LoadBalancingMonitorUpdateParamsTypeHTTPS    LoadBalancingMonitorUpdateParamsType = "https"
+	LoadBalancingMonitorUpdateParamsTypeTCP      LoadBalancingMonitorUpdateParamsType = "tcp"
+	LoadBalancingMonitorUpdateParamsTypeUdpIcmp  LoadBalancingMonitorUpdateParamsType = "udp_icmp"
+	LoadBalancingMonitorUpdateParamsTypeIcmpPing LoadBalancingMonitorUpdateParamsType = "icmp_ping"
+	LoadBalancingMonitorUpdateParamsTypeSmtp     LoadBalancingMonitorUpdateParamsType = "smtp"
 )
 
-func (r LoadBalancerMonitorUpdateParamsType) IsKnown() bool {
+func (r LoadBalancingMonitorUpdateParamsType) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorUpdateParamsTypeHTTP, LoadBalancerMonitorUpdateParamsTypeHTTPS, LoadBalancerMonitorUpdateParamsTypeTCP, LoadBalancerMonitorUpdateParamsTypeUdpIcmp, LoadBalancerMonitorUpdateParamsTypeIcmpPing, LoadBalancerMonitorUpdateParamsTypeSmtp:
+	case LoadBalancingMonitorUpdateParamsTypeHTTP, LoadBalancingMonitorUpdateParamsTypeHTTPS, LoadBalancingMonitorUpdateParamsTypeTCP, LoadBalancingMonitorUpdateParamsTypeUdpIcmp, LoadBalancingMonitorUpdateParamsTypeIcmpPing, LoadBalancingMonitorUpdateParamsTypeSmtp:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   LoadBalancerMonitorUpdateResponse `json:"result,required"`
+type LoadBalancingMonitorUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []shared.ResponseInfo              `json:"messages,required"`
+	Result   LoadBalancingMonitorUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerMonitorUpdateResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingMonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingMonitorUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerMonitorUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerMonitorUpdateResponseEnvelope]
-type loadBalancerMonitorUpdateResponseEnvelopeJSON struct {
+// loadBalancingMonitorUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [LoadBalancingMonitorUpdateResponseEnvelope]
+type loadBalancingMonitorUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1009,332 +1009,49 @@ type loadBalancerMonitorUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorUpdateResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingMonitorUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerMonitorUpdateResponseEnvelopeSuccess bool
+type LoadBalancingMonitorUpdateResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerMonitorUpdateResponseEnvelopeSuccessTrue LoadBalancerMonitorUpdateResponseEnvelopeSuccess = true
+	LoadBalancingMonitorUpdateResponseEnvelopeSuccessTrue LoadBalancingMonitorUpdateResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerMonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingMonitorUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorUpdateResponseEnvelopeSuccessTrue:
+	case LoadBalancingMonitorUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorDeleteParams struct {
+type LoadBalancingMonitorDeleteParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r LoadBalancerMonitorDeleteParams) MarshalJSON() (data []byte, err error) {
+func (r LoadBalancingMonitorDeleteParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type LoadBalancerMonitorDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo             `json:"errors,required"`
-	Messages []shared.ResponseInfo             `json:"messages,required"`
-	Result   LoadBalancerMonitorDeleteResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success LoadBalancerMonitorDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerMonitorDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// loadBalancerMonitorDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerMonitorDeleteResponseEnvelope]
-type loadBalancerMonitorDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerMonitorDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type LoadBalancerMonitorDeleteResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerMonitorDeleteResponseEnvelopeSuccessTrue LoadBalancerMonitorDeleteResponseEnvelopeSuccess = true
-)
-
-func (r LoadBalancerMonitorDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case LoadBalancerMonitorDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerMonitorEditParams struct {
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
-	// Do not validate the certificate when monitor use HTTPS. This parameter is
-	// currently only valid for HTTP and HTTPS monitors.
-	AllowInsecure param.Field[bool] `json:"allow_insecure"`
-	// To be marked unhealthy the monitored origin must fail this healthcheck N
-	// consecutive times.
-	ConsecutiveDown param.Field[int64] `json:"consecutive_down"`
-	// To be marked healthy the monitored origin must pass this healthcheck N
-	// consecutive times.
-	ConsecutiveUp param.Field[int64] `json:"consecutive_up"`
-	// Object description.
-	Description param.Field[string] `json:"description"`
-	// A case-insensitive sub-string to look for in the response body. If this string
-	// is not found, the origin will be marked as unhealthy. This parameter is only
-	// valid for HTTP and HTTPS monitors.
-	ExpectedBody param.Field[string] `json:"expected_body"`
-	// Follow redirects if returned by the origin. This parameter is only valid for
-	// HTTP and HTTPS monitors.
-	FollowRedirects param.Field[bool] `json:"follow_redirects"`
-	// The HTTP request headers to send in the health check. It is recommended you set
-	// a Host header by default. The User-Agent header cannot be overridden. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	Header param.Field[interface{}] `json:"header"`
-	// The interval between each health check. Shorter intervals may improve failover
-	// time, but will increase load on the origins as we check from multiple locations.
-	Interval param.Field[int64] `json:"interval"`
-	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
-	// based checks and 'connection_established' for TCP based health checks.
-	Method param.Field[string] `json:"method"`
-	// The endpoint path you want to conduct a health check against. This parameter is
-	// only valid for HTTP and HTTPS monitors.
-	Path param.Field[string] `json:"path"`
-	// The port number to connect to for the health check. Required for TCP, UDP, and
-	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
-	// non-standard port (HTTP: default 80, HTTPS: default 443).
-	Port param.Field[int64] `json:"port"`
-	// Assign this monitor to emulate the specified zone while probing. This parameter
-	// is only valid for HTTP and HTTPS monitors.
-	ProbeZone param.Field[string] `json:"probe_zone"`
-	// The number of retries to attempt in case of a timeout before marking the origin
-	// as unhealthy. Retries are attempted immediately.
-	Retries param.Field[int64] `json:"retries"`
-	// The timeout (in seconds) before marking the health check as failed.
-	Timeout param.Field[int64] `json:"timeout"`
-	// The protocol to use for the health check. Currently supported protocols are
-	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type param.Field[LoadBalancerMonitorEditParamsType] `json:"type"`
-}
-
-func (r LoadBalancerMonitorEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The protocol to use for the health check. Currently supported protocols are
-// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorEditParamsType string
-
-const (
-	LoadBalancerMonitorEditParamsTypeHTTP     LoadBalancerMonitorEditParamsType = "http"
-	LoadBalancerMonitorEditParamsTypeHTTPS    LoadBalancerMonitorEditParamsType = "https"
-	LoadBalancerMonitorEditParamsTypeTCP      LoadBalancerMonitorEditParamsType = "tcp"
-	LoadBalancerMonitorEditParamsTypeUdpIcmp  LoadBalancerMonitorEditParamsType = "udp_icmp"
-	LoadBalancerMonitorEditParamsTypeIcmpPing LoadBalancerMonitorEditParamsType = "icmp_ping"
-	LoadBalancerMonitorEditParamsTypeSmtp     LoadBalancerMonitorEditParamsType = "smtp"
-)
-
-func (r LoadBalancerMonitorEditParamsType) IsKnown() bool {
-	switch r {
-	case LoadBalancerMonitorEditParamsTypeHTTP, LoadBalancerMonitorEditParamsTypeHTTPS, LoadBalancerMonitorEditParamsTypeTCP, LoadBalancerMonitorEditParamsTypeUdpIcmp, LoadBalancerMonitorEditParamsTypeIcmpPing, LoadBalancerMonitorEditParamsTypeSmtp:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerMonitorEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   LoadBalancerMonitorEditResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success LoadBalancerMonitorEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerMonitorEditResponseEnvelopeJSON    `json:"-"`
-}
-
-// loadBalancerMonitorEditResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerMonitorEditResponseEnvelope]
-type loadBalancerMonitorEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerMonitorEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type LoadBalancerMonitorEditResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerMonitorEditResponseEnvelopeSuccessTrue LoadBalancerMonitorEditResponseEnvelopeSuccess = true
-)
-
-func (r LoadBalancerMonitorEditResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case LoadBalancerMonitorEditResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerMonitorGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   LoadBalancerMonitorGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success LoadBalancerMonitorGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerMonitorGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// loadBalancerMonitorGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerMonitorGetResponseEnvelope]
-type loadBalancerMonitorGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerMonitorGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type LoadBalancerMonitorGetResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerMonitorGetResponseEnvelopeSuccessTrue LoadBalancerMonitorGetResponseEnvelopeSuccess = true
-)
-
-func (r LoadBalancerMonitorGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case LoadBalancerMonitorGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerMonitorPreviewParams struct {
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
-	// Do not validate the certificate when monitor use HTTPS. This parameter is
-	// currently only valid for HTTP and HTTPS monitors.
-	AllowInsecure param.Field[bool] `json:"allow_insecure"`
-	// To be marked unhealthy the monitored origin must fail this healthcheck N
-	// consecutive times.
-	ConsecutiveDown param.Field[int64] `json:"consecutive_down"`
-	// To be marked healthy the monitored origin must pass this healthcheck N
-	// consecutive times.
-	ConsecutiveUp param.Field[int64] `json:"consecutive_up"`
-	// Object description.
-	Description param.Field[string] `json:"description"`
-	// A case-insensitive sub-string to look for in the response body. If this string
-	// is not found, the origin will be marked as unhealthy. This parameter is only
-	// valid for HTTP and HTTPS monitors.
-	ExpectedBody param.Field[string] `json:"expected_body"`
-	// Follow redirects if returned by the origin. This parameter is only valid for
-	// HTTP and HTTPS monitors.
-	FollowRedirects param.Field[bool] `json:"follow_redirects"`
-	// The HTTP request headers to send in the health check. It is recommended you set
-	// a Host header by default. The User-Agent header cannot be overridden. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	Header param.Field[interface{}] `json:"header"`
-	// The interval between each health check. Shorter intervals may improve failover
-	// time, but will increase load on the origins as we check from multiple locations.
-	Interval param.Field[int64] `json:"interval"`
-	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
-	// based checks and 'connection_established' for TCP based health checks.
-	Method param.Field[string] `json:"method"`
-	// The endpoint path you want to conduct a health check against. This parameter is
-	// only valid for HTTP and HTTPS monitors.
-	Path param.Field[string] `json:"path"`
-	// The port number to connect to for the health check. Required for TCP, UDP, and
-	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
-	// non-standard port (HTTP: default 80, HTTPS: default 443).
-	Port param.Field[int64] `json:"port"`
-	// Assign this monitor to emulate the specified zone while probing. This parameter
-	// is only valid for HTTP and HTTPS monitors.
-	ProbeZone param.Field[string] `json:"probe_zone"`
-	// The number of retries to attempt in case of a timeout before marking the origin
-	// as unhealthy. Retries are attempted immediately.
-	Retries param.Field[int64] `json:"retries"`
-	// The timeout (in seconds) before marking the health check as failed.
-	Timeout param.Field[int64] `json:"timeout"`
-	// The protocol to use for the health check. Currently supported protocols are
-	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type param.Field[LoadBalancerMonitorPreviewParamsType] `json:"type"`
-}
-
-func (r LoadBalancerMonitorPreviewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The protocol to use for the health check. Currently supported protocols are
-// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorPreviewParamsType string
-
-const (
-	LoadBalancerMonitorPreviewParamsTypeHTTP     LoadBalancerMonitorPreviewParamsType = "http"
-	LoadBalancerMonitorPreviewParamsTypeHTTPS    LoadBalancerMonitorPreviewParamsType = "https"
-	LoadBalancerMonitorPreviewParamsTypeTCP      LoadBalancerMonitorPreviewParamsType = "tcp"
-	LoadBalancerMonitorPreviewParamsTypeUdpIcmp  LoadBalancerMonitorPreviewParamsType = "udp_icmp"
-	LoadBalancerMonitorPreviewParamsTypeIcmpPing LoadBalancerMonitorPreviewParamsType = "icmp_ping"
-	LoadBalancerMonitorPreviewParamsTypeSmtp     LoadBalancerMonitorPreviewParamsType = "smtp"
-)
-
-func (r LoadBalancerMonitorPreviewParamsType) IsKnown() bool {
-	switch r {
-	case LoadBalancerMonitorPreviewParamsTypeHTTP, LoadBalancerMonitorPreviewParamsTypeHTTPS, LoadBalancerMonitorPreviewParamsTypeTCP, LoadBalancerMonitorPreviewParamsTypeUdpIcmp, LoadBalancerMonitorPreviewParamsTypeIcmpPing, LoadBalancerMonitorPreviewParamsTypeSmtp:
-		return true
-	}
-	return false
-}
-
-type LoadBalancerMonitorPreviewResponseEnvelope struct {
+type LoadBalancingMonitorDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo              `json:"errors,required"`
 	Messages []shared.ResponseInfo              `json:"messages,required"`
-	Result   LoadBalancerMonitorPreviewResponse `json:"result,required"`
+	Result   LoadBalancingMonitorDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorPreviewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerMonitorPreviewResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancingMonitorDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingMonitorDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerMonitorPreviewResponseEnvelopeJSON contains the JSON metadata for
-// the struct [LoadBalancerMonitorPreviewResponseEnvelope]
-type loadBalancerMonitorPreviewResponseEnvelopeJSON struct {
+// loadBalancingMonitorDeleteResponseEnvelopeJSON contains the JSON metadata for
+// the struct [LoadBalancingMonitorDeleteResponseEnvelope]
+type loadBalancingMonitorDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1343,43 +1060,326 @@ type loadBalancerMonitorPreviewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorPreviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorPreviewResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingMonitorDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerMonitorPreviewResponseEnvelopeSuccess bool
+type LoadBalancingMonitorDeleteResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerMonitorPreviewResponseEnvelopeSuccessTrue LoadBalancerMonitorPreviewResponseEnvelopeSuccess = true
+	LoadBalancingMonitorDeleteResponseEnvelopeSuccessTrue LoadBalancingMonitorDeleteResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerMonitorPreviewResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingMonitorDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorPreviewResponseEnvelopeSuccessTrue:
+	case LoadBalancingMonitorDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorReferencesResponseEnvelope struct {
+type LoadBalancingMonitorEditParams struct {
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
+	// Do not validate the certificate when monitor use HTTPS. This parameter is
+	// currently only valid for HTTP and HTTPS monitors.
+	AllowInsecure param.Field[bool] `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown param.Field[int64] `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp param.Field[int64] `json:"consecutive_up"`
+	// Object description.
+	Description param.Field[string] `json:"description"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy. This parameter is only
+	// valid for HTTP and HTTPS monitors.
+	ExpectedBody param.Field[string] `json:"expected_body"`
+	// Follow redirects if returned by the origin. This parameter is only valid for
+	// HTTP and HTTPS monitors.
+	FollowRedirects param.Field[bool] `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	Header param.Field[interface{}] `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval param.Field[int64] `json:"interval"`
+	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
+	// based checks and 'connection_established' for TCP based health checks.
+	Method param.Field[string] `json:"method"`
+	// The endpoint path you want to conduct a health check against. This parameter is
+	// only valid for HTTP and HTTPS monitors.
+	Path param.Field[string] `json:"path"`
+	// The port number to connect to for the health check. Required for TCP, UDP, and
+	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
+	// non-standard port (HTTP: default 80, HTTPS: default 443).
+	Port param.Field[int64] `json:"port"`
+	// Assign this monitor to emulate the specified zone while probing. This parameter
+	// is only valid for HTTP and HTTPS monitors.
+	ProbeZone param.Field[string] `json:"probe_zone"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries param.Field[int64] `json:"retries"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout param.Field[int64] `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+	Type param.Field[LoadBalancingMonitorEditParamsType] `json:"type"`
+}
+
+func (r LoadBalancingMonitorEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The protocol to use for the health check. Currently supported protocols are
+// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+type LoadBalancingMonitorEditParamsType string
+
+const (
+	LoadBalancingMonitorEditParamsTypeHTTP     LoadBalancingMonitorEditParamsType = "http"
+	LoadBalancingMonitorEditParamsTypeHTTPS    LoadBalancingMonitorEditParamsType = "https"
+	LoadBalancingMonitorEditParamsTypeTCP      LoadBalancingMonitorEditParamsType = "tcp"
+	LoadBalancingMonitorEditParamsTypeUdpIcmp  LoadBalancingMonitorEditParamsType = "udp_icmp"
+	LoadBalancingMonitorEditParamsTypeIcmpPing LoadBalancingMonitorEditParamsType = "icmp_ping"
+	LoadBalancingMonitorEditParamsTypeSmtp     LoadBalancingMonitorEditParamsType = "smtp"
+)
+
+func (r LoadBalancingMonitorEditParamsType) IsKnown() bool {
+	switch r {
+	case LoadBalancingMonitorEditParamsTypeHTTP, LoadBalancingMonitorEditParamsTypeHTTPS, LoadBalancingMonitorEditParamsTypeTCP, LoadBalancingMonitorEditParamsTypeUdpIcmp, LoadBalancingMonitorEditParamsTypeIcmpPing, LoadBalancingMonitorEditParamsTypeSmtp:
+		return true
+	}
+	return false
+}
+
+type LoadBalancingMonitorEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   LoadBalancingMonitorEditResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success LoadBalancingMonitorEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingMonitorEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// loadBalancingMonitorEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingMonitorEditResponseEnvelope]
+type loadBalancingMonitorEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancingMonitorEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancingMonitorEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type LoadBalancingMonitorEditResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancingMonitorEditResponseEnvelopeSuccessTrue LoadBalancingMonitorEditResponseEnvelopeSuccess = true
+)
+
+func (r LoadBalancingMonitorEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancingMonitorEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type LoadBalancingMonitorGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   LoadBalancingMonitorGetResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success LoadBalancingMonitorGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingMonitorGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// loadBalancingMonitorGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancingMonitorGetResponseEnvelope]
+type loadBalancingMonitorGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancingMonitorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancingMonitorGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type LoadBalancingMonitorGetResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancingMonitorGetResponseEnvelopeSuccessTrue LoadBalancingMonitorGetResponseEnvelopeSuccess = true
+)
+
+func (r LoadBalancingMonitorGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancingMonitorGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type LoadBalancingMonitorPreviewParams struct {
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
+	// Do not validate the certificate when monitor use HTTPS. This parameter is
+	// currently only valid for HTTP and HTTPS monitors.
+	AllowInsecure param.Field[bool] `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown param.Field[int64] `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp param.Field[int64] `json:"consecutive_up"`
+	// Object description.
+	Description param.Field[string] `json:"description"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy. This parameter is only
+	// valid for HTTP and HTTPS monitors.
+	ExpectedBody param.Field[string] `json:"expected_body"`
+	// Follow redirects if returned by the origin. This parameter is only valid for
+	// HTTP and HTTPS monitors.
+	FollowRedirects param.Field[bool] `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	Header param.Field[interface{}] `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval param.Field[int64] `json:"interval"`
+	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
+	// based checks and 'connection_established' for TCP based health checks.
+	Method param.Field[string] `json:"method"`
+	// The endpoint path you want to conduct a health check against. This parameter is
+	// only valid for HTTP and HTTPS monitors.
+	Path param.Field[string] `json:"path"`
+	// The port number to connect to for the health check. Required for TCP, UDP, and
+	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
+	// non-standard port (HTTP: default 80, HTTPS: default 443).
+	Port param.Field[int64] `json:"port"`
+	// Assign this monitor to emulate the specified zone while probing. This parameter
+	// is only valid for HTTP and HTTPS monitors.
+	ProbeZone param.Field[string] `json:"probe_zone"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries param.Field[int64] `json:"retries"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout param.Field[int64] `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+	Type param.Field[LoadBalancingMonitorPreviewParamsType] `json:"type"`
+}
+
+func (r LoadBalancingMonitorPreviewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The protocol to use for the health check. Currently supported protocols are
+// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+type LoadBalancingMonitorPreviewParamsType string
+
+const (
+	LoadBalancingMonitorPreviewParamsTypeHTTP     LoadBalancingMonitorPreviewParamsType = "http"
+	LoadBalancingMonitorPreviewParamsTypeHTTPS    LoadBalancingMonitorPreviewParamsType = "https"
+	LoadBalancingMonitorPreviewParamsTypeTCP      LoadBalancingMonitorPreviewParamsType = "tcp"
+	LoadBalancingMonitorPreviewParamsTypeUdpIcmp  LoadBalancingMonitorPreviewParamsType = "udp_icmp"
+	LoadBalancingMonitorPreviewParamsTypeIcmpPing LoadBalancingMonitorPreviewParamsType = "icmp_ping"
+	LoadBalancingMonitorPreviewParamsTypeSmtp     LoadBalancingMonitorPreviewParamsType = "smtp"
+)
+
+func (r LoadBalancingMonitorPreviewParamsType) IsKnown() bool {
+	switch r {
+	case LoadBalancingMonitorPreviewParamsTypeHTTP, LoadBalancingMonitorPreviewParamsTypeHTTPS, LoadBalancingMonitorPreviewParamsTypeTCP, LoadBalancingMonitorPreviewParamsTypeUdpIcmp, LoadBalancingMonitorPreviewParamsTypeIcmpPing, LoadBalancingMonitorPreviewParamsTypeSmtp:
+		return true
+	}
+	return false
+}
+
+type LoadBalancingMonitorPreviewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo               `json:"errors,required"`
+	Messages []shared.ResponseInfo               `json:"messages,required"`
+	Result   LoadBalancingMonitorPreviewResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success LoadBalancingMonitorPreviewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancingMonitorPreviewResponseEnvelopeJSON    `json:"-"`
+}
+
+// loadBalancingMonitorPreviewResponseEnvelopeJSON contains the JSON metadata for
+// the struct [LoadBalancingMonitorPreviewResponseEnvelope]
+type loadBalancingMonitorPreviewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancingMonitorPreviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancingMonitorPreviewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type LoadBalancingMonitorPreviewResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancingMonitorPreviewResponseEnvelopeSuccessTrue LoadBalancingMonitorPreviewResponseEnvelopeSuccess = true
+)
+
+func (r LoadBalancingMonitorPreviewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case LoadBalancingMonitorPreviewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type LoadBalancingMonitorReferencesResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// List of resources that reference a given monitor.
-	Result []LoadBalancerMonitorReferencesResponse `json:"result,required,nullable"`
+	Result []LoadBalancingMonitorReferencesResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    LoadBalancerMonitorReferencesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo LoadBalancerMonitorReferencesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       loadBalancerMonitorReferencesResponseEnvelopeJSON       `json:"-"`
+	Success    LoadBalancingMonitorReferencesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancingMonitorReferencesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancingMonitorReferencesResponseEnvelopeJSON       `json:"-"`
 }
 
-// loadBalancerMonitorReferencesResponseEnvelopeJSON contains the JSON metadata for
-// the struct [LoadBalancerMonitorReferencesResponseEnvelope]
-type loadBalancerMonitorReferencesResponseEnvelopeJSON struct {
+// loadBalancingMonitorReferencesResponseEnvelopeJSON contains the JSON metadata
+// for the struct [LoadBalancingMonitorReferencesResponseEnvelope]
+type loadBalancingMonitorReferencesResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1389,30 +1389,30 @@ type loadBalancerMonitorReferencesResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorReferencesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorReferencesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorReferencesResponseEnvelopeJSON) RawJSON() string {
+func (r loadBalancingMonitorReferencesResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LoadBalancerMonitorReferencesResponseEnvelopeSuccess bool
+type LoadBalancingMonitorReferencesResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerMonitorReferencesResponseEnvelopeSuccessTrue LoadBalancerMonitorReferencesResponseEnvelopeSuccess = true
+	LoadBalancingMonitorReferencesResponseEnvelopeSuccessTrue LoadBalancingMonitorReferencesResponseEnvelopeSuccess = true
 )
 
-func (r LoadBalancerMonitorReferencesResponseEnvelopeSuccess) IsKnown() bool {
+func (r LoadBalancingMonitorReferencesResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LoadBalancerMonitorReferencesResponseEnvelopeSuccessTrue:
+	case LoadBalancingMonitorReferencesResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type LoadBalancerMonitorReferencesResponseEnvelopeResultInfo struct {
+type LoadBalancingMonitorReferencesResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -1420,14 +1420,14 @@ type LoadBalancerMonitorReferencesResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                     `json:"total_count"`
-	JSON       loadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                      `json:"total_count"`
+	JSON       loadBalancingMonitorReferencesResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// loadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON contains the JSON
+// loadBalancingMonitorReferencesResponseEnvelopeResultInfoJSON contains the JSON
 // metadata for the struct
-// [LoadBalancerMonitorReferencesResponseEnvelopeResultInfo]
-type loadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON struct {
+// [LoadBalancingMonitorReferencesResponseEnvelopeResultInfo]
+type loadBalancingMonitorReferencesResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -1436,10 +1436,10 @@ type loadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorReferencesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingMonitorReferencesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON) RawJSON() string {
+func (r loadBalancingMonitorReferencesResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
 }

@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
-func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
+func TestLoadBalancingPoolNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.New(context.TODO(), user.LoadBalancerPoolNewParams{
+	_, err := client.User.LoadBalancing.Pools.New(context.TODO(), user.LoadBalancingPoolNewParams{
 		Name: cloudflare.F("primary-dc-1"),
 		Origins: cloudflare.F([]load_balancers.OriginParam{{
 			Address: cloudflare.F("0.0.0.0"),
@@ -96,7 +96,7 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
+func TestLoadBalancingPoolUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -110,10 +110,10 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.Update(
+	_, err := client.User.LoadBalancing.Pools.Update(
 		context.TODO(),
 		"17b5962d775c646f3f9725cbc7a53df4",
-		user.LoadBalancerPoolUpdateParams{
+		user.LoadBalancingPoolUpdateParams{
 			Name: cloudflare.F("primary-dc-1"),
 			Origins: cloudflare.F([]load_balancers.OriginParam{{
 				Address: cloudflare.F("0.0.0.0"),
@@ -181,7 +181,7 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerPoolListWithOptionalParams(t *testing.T) {
+func TestLoadBalancingPoolListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -195,7 +195,7 @@ func TestLoadBalancerPoolListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.List(context.TODO(), user.LoadBalancerPoolListParams{
+	_, err := client.User.LoadBalancing.Pools.List(context.TODO(), user.LoadBalancingPoolListParams{
 		Monitor: cloudflare.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
@@ -207,7 +207,7 @@ func TestLoadBalancerPoolListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerPoolDelete(t *testing.T) {
+func TestLoadBalancingPoolDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -221,10 +221,10 @@ func TestLoadBalancerPoolDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.Delete(
+	_, err := client.User.LoadBalancing.Pools.Delete(
 		context.TODO(),
 		"17b5962d775c646f3f9725cbc7a53df4",
-		user.LoadBalancerPoolDeleteParams{
+		user.LoadBalancingPoolDeleteParams{
 			Body: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
@@ -237,7 +237,7 @@ func TestLoadBalancerPoolDelete(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
+func TestLoadBalancingPoolEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -251,10 +251,10 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.Edit(
+	_, err := client.User.LoadBalancing.Pools.Edit(
 		context.TODO(),
 		"17b5962d775c646f3f9725cbc7a53df4",
-		user.LoadBalancerPoolEditParams{
+		user.LoadBalancingPoolEditParams{
 			CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWeu, load_balancers.CheckRegionEnam}),
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
@@ -322,7 +322,7 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerPoolGet(t *testing.T) {
+func TestLoadBalancingPoolGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -336,7 +336,7 @@ func TestLoadBalancerPoolGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.Get(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
+	_, err := client.User.LoadBalancing.Pools.Get(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -346,7 +346,7 @@ func TestLoadBalancerPoolGet(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerPoolHealth(t *testing.T) {
+func TestLoadBalancingPoolHealth(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -360,7 +360,7 @@ func TestLoadBalancerPoolHealth(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.Health(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
+	_, err := client.User.LoadBalancing.Pools.Health(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -370,7 +370,7 @@ func TestLoadBalancerPoolHealth(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerPoolPreviewWithOptionalParams(t *testing.T) {
+func TestLoadBalancingPoolPreviewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -384,10 +384,10 @@ func TestLoadBalancerPoolPreviewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.Preview(
+	_, err := client.User.LoadBalancing.Pools.Preview(
 		context.TODO(),
 		"17b5962d775c646f3f9725cbc7a53df4",
-		user.LoadBalancerPoolPreviewParams{
+		user.LoadBalancingPoolPreviewParams{
 			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
 			ConsecutiveDown: cloudflare.F(int64(0)),
@@ -410,7 +410,7 @@ func TestLoadBalancerPoolPreviewWithOptionalParams(t *testing.T) {
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(user.LoadBalancerPoolPreviewParamsTypeHTTPS),
+			Type:      cloudflare.F(user.LoadBalancingPoolPreviewParamsTypeHTTPS),
 		},
 	)
 	if err != nil {
@@ -422,7 +422,7 @@ func TestLoadBalancerPoolPreviewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLoadBalancerPoolReferences(t *testing.T) {
+func TestLoadBalancingPoolReferences(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -436,7 +436,7 @@ func TestLoadBalancerPoolReferences(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Pools.References(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
+	_, err := client.User.LoadBalancing.Pools.References(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

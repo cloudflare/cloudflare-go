@@ -6,7 +6,7 @@ type UnionString string
 
 func (UnionString) ImplementsSharedUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion() {}
 func (UnionString) ImplementsUserAuditLogListResponse()                                    {}
-func (UnionString) ImplementsUserLoadBalancerPoolHealthResponseUnion()                     {}
+func (UnionString) ImplementsUserLoadBalancingPoolHealthResponseUnion()                    {}
 func (UnionString) ImplementsZonesCustomNameserverUpdateResponseUnion()                    {}
 func (UnionString) ImplementsZonesCustomNameserverGetResponseUnion()                       {}
 func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                     {}
