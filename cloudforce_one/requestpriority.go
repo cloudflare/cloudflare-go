@@ -100,9 +100,9 @@ func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier st
 	return
 }
 
-type LabelItem = string
+type Label = string
 
-type LabelItemParam = string
+type LabelParam = string
 
 type Priority struct {
 	// UUID
@@ -110,7 +110,7 @@ type Priority struct {
 	// Priority creation time
 	Created time.Time `json:"created,required" format:"date-time"`
 	// List of labels
-	Labels []LabelItem `json:"labels,required"`
+	Labels []Label `json:"labels,required"`
 	// Priority
 	Priority int64 `json:"priority,required"`
 	// Requirement
@@ -190,7 +190,7 @@ func (r RequestPriorityDeleteResponseArray) ImplementsCloudforceOneRequestPriori
 
 type RequestPriorityNewParams struct {
 	// List of labels
-	Labels param.Field[[]LabelItemParam] `json:"labels,required"`
+	Labels param.Field[[]LabelParam] `json:"labels,required"`
 	// Priority
 	Priority param.Field[int64] `json:"priority,required"`
 	// Requirement
@@ -267,7 +267,7 @@ func (r RequestPriorityNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type RequestPriorityUpdateParams struct {
 	// List of labels
-	Labels param.Field[[]LabelItemParam] `json:"labels,required"`
+	Labels param.Field[[]LabelParam] `json:"labels,required"`
 	// Priority
 	Priority param.Field[int64] `json:"priority,required"`
 	// Requirement

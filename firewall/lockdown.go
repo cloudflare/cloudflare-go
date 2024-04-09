@@ -240,7 +240,7 @@ type Lockdown struct {
 	// The URLs to include in the rule definition. You can use wildcards. Each entered
 	// URL will be escaped before use, which means you can only use simple wildcard
 	// patterns.
-	URLs []URLsItem   `json:"urls,required"`
+	URLs []URLs       `json:"urls,required"`
 	JSON lockdownJSON `json:"-"`
 }
 
@@ -354,7 +354,7 @@ func (r LockdownIPConfigurationTarget) IsKnown() bool {
 	return false
 }
 
-type URLsItem = string
+type URLs = string
 
 type LockdownDeleteResponse struct {
 	// The unique identifier of the Zone Lockdown rule.

@@ -34,7 +34,7 @@ func NewGatewayListItemService(opts ...option.RequestOption) (r *GatewayListItem
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[[]ListsItem], err error) {
+func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *pagination.SinglePage[[]Lists], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,39 +52,39 @@ func (r *GatewayListItemService) List(ctx context.Context, listID string, query 
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[[]ListsItem] {
+func (r *GatewayListItemService) ListAutoPaging(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[[]Lists] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, listID, query, opts...))
 }
 
-type ListsItem struct {
+type Lists struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The value of the item in a list.
-	Value string        `json:"value"`
-	JSON  listsItemJSON `json:"-"`
+	Value string    `json:"value"`
+	JSON  listsJSON `json:"-"`
 }
 
-// listsItemJSON contains the JSON metadata for the struct [ListsItem]
-type listsItemJSON struct {
+// listsJSON contains the JSON metadata for the struct [Lists]
+type listsJSON struct {
 	CreatedAt   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ListsItem) UnmarshalJSON(data []byte) (err error) {
+func (r *Lists) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listsItemJSON) RawJSON() string {
+func (r listsJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListsItemParam struct {
+type ListsParam struct {
 	// The value of the item in a list.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r ListsItemParam) MarshalJSON() (data []byte, err error) {
+func (r ListsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

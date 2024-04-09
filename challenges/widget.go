@@ -62,7 +62,7 @@ func (r *WidgetService) Update(ctx context.Context, sitekey string, params Widge
 }
 
 // Lists all turnstile widgets of an account.
-func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WidgetDomain], err error) {
+func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WidgetListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,7 +80,7 @@ func (r *WidgetService) List(ctx context.Context, params WidgetListParams, opts 
 }
 
 // Lists all turnstile widgets of an account.
-func (r *WidgetService) ListAutoPaging(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WidgetDomain] {
+func (r *WidgetService) ListAutoPaging(ctx context.Context, params WidgetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WidgetListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -135,8 +135,8 @@ type Widget struct {
 	// challenge clearance, this setting can determine the clearance level to be set
 	ClearanceLevel WidgetClearanceLevel `json:"clearance_level,required"`
 	// When the widget was created.
-	CreatedOn time.Time          `json:"created_on,required" format:"date-time"`
-	Domains   []WidgetDomainItem `json:"domains,required"`
+	CreatedOn time.Time      `json:"created_on,required" format:"date-time"`
+	Domains   []WidgetDomain `json:"domains,required"`
 	// Widget Mode
 	Mode WidgetMode `json:"mode,required"`
 	// When the widget was modified.
@@ -232,19 +232,23 @@ func (r WidgetRegion) IsKnown() bool {
 	return false
 }
 
+type WidgetDomain = string
+
+type WidgetDomainParam = string
+
 // A Turnstile Widgets configuration as it appears in listings
-type WidgetDomain struct {
+type WidgetListResponse struct {
 	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
 	// challenges in response to malicious bots (ENT only).
 	BotFightMode bool `json:"bot_fight_mode,required"`
 	// If Turnstile is embedded on a Cloudflare site and the widget should grant
 	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel WidgetDomainClearanceLevel `json:"clearance_level,required"`
+	ClearanceLevel WidgetListResponseClearanceLevel `json:"clearance_level,required"`
 	// When the widget was created.
-	CreatedOn time.Time          `json:"created_on,required" format:"date-time"`
-	Domains   []WidgetDomainItem `json:"domains,required"`
+	CreatedOn time.Time      `json:"created_on,required" format:"date-time"`
+	Domains   []WidgetDomain `json:"domains,required"`
 	// Widget Mode
-	Mode WidgetDomainMode `json:"mode,required"`
+	Mode WidgetListResponseMode `json:"mode,required"`
 	// When the widget was modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
@@ -254,14 +258,15 @@ type WidgetDomain struct {
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel bool `json:"offlabel,required"`
 	// Region where this widget can be used.
-	Region WidgetDomainRegion `json:"region,required"`
+	Region WidgetListResponseRegion `json:"region,required"`
 	// Widget item identifier tag.
-	Sitekey string           `json:"sitekey,required"`
-	JSON    widgetDomainJSON `json:"-"`
+	Sitekey string                 `json:"sitekey,required"`
+	JSON    widgetListResponseJSON `json:"-"`
 }
 
-// widgetDomainJSON contains the JSON metadata for the struct [WidgetDomain]
-type widgetDomainJSON struct {
+// widgetListResponseJSON contains the JSON metadata for the struct
+// [WidgetListResponse]
+type widgetListResponseJSON struct {
 	BotFightMode   apijson.Field
 	ClearanceLevel apijson.Field
 	CreatedOn      apijson.Field
@@ -276,73 +281,69 @@ type widgetDomainJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *WidgetDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *WidgetListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r widgetDomainJSON) RawJSON() string {
+func (r widgetListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
-type WidgetDomainClearanceLevel string
+type WidgetListResponseClearanceLevel string
 
 const (
-	WidgetDomainClearanceLevelNoClearance WidgetDomainClearanceLevel = "no_clearance"
-	WidgetDomainClearanceLevelJschallenge WidgetDomainClearanceLevel = "jschallenge"
-	WidgetDomainClearanceLevelManaged     WidgetDomainClearanceLevel = "managed"
-	WidgetDomainClearanceLevelInteractive WidgetDomainClearanceLevel = "interactive"
+	WidgetListResponseClearanceLevelNoClearance WidgetListResponseClearanceLevel = "no_clearance"
+	WidgetListResponseClearanceLevelJschallenge WidgetListResponseClearanceLevel = "jschallenge"
+	WidgetListResponseClearanceLevelManaged     WidgetListResponseClearanceLevel = "managed"
+	WidgetListResponseClearanceLevelInteractive WidgetListResponseClearanceLevel = "interactive"
 )
 
-func (r WidgetDomainClearanceLevel) IsKnown() bool {
+func (r WidgetListResponseClearanceLevel) IsKnown() bool {
 	switch r {
-	case WidgetDomainClearanceLevelNoClearance, WidgetDomainClearanceLevelJschallenge, WidgetDomainClearanceLevelManaged, WidgetDomainClearanceLevelInteractive:
+	case WidgetListResponseClearanceLevelNoClearance, WidgetListResponseClearanceLevelJschallenge, WidgetListResponseClearanceLevelManaged, WidgetListResponseClearanceLevelInteractive:
 		return true
 	}
 	return false
 }
 
 // Widget Mode
-type WidgetDomainMode string
+type WidgetListResponseMode string
 
 const (
-	WidgetDomainModeNonInteractive WidgetDomainMode = "non-interactive"
-	WidgetDomainModeInvisible      WidgetDomainMode = "invisible"
-	WidgetDomainModeManaged        WidgetDomainMode = "managed"
+	WidgetListResponseModeNonInteractive WidgetListResponseMode = "non-interactive"
+	WidgetListResponseModeInvisible      WidgetListResponseMode = "invisible"
+	WidgetListResponseModeManaged        WidgetListResponseMode = "managed"
 )
 
-func (r WidgetDomainMode) IsKnown() bool {
+func (r WidgetListResponseMode) IsKnown() bool {
 	switch r {
-	case WidgetDomainModeNonInteractive, WidgetDomainModeInvisible, WidgetDomainModeManaged:
+	case WidgetListResponseModeNonInteractive, WidgetListResponseModeInvisible, WidgetListResponseModeManaged:
 		return true
 	}
 	return false
 }
 
 // Region where this widget can be used.
-type WidgetDomainRegion string
+type WidgetListResponseRegion string
 
 const (
-	WidgetDomainRegionWorld WidgetDomainRegion = "world"
+	WidgetListResponseRegionWorld WidgetListResponseRegion = "world"
 )
 
-func (r WidgetDomainRegion) IsKnown() bool {
+func (r WidgetListResponseRegion) IsKnown() bool {
 	switch r {
-	case WidgetDomainRegionWorld:
+	case WidgetListResponseRegionWorld:
 		return true
 	}
 	return false
 }
 
-type WidgetDomainItem = string
-
-type WidgetDomainItemParam = string
-
 type WidgetNewParams struct {
 	// Identifier
-	AccountID param.Field[string]                  `path:"account_id,required"`
-	Domains   param.Field[[]WidgetDomainItemParam] `json:"domains,required"`
+	AccountID param.Field[string]              `path:"account_id,required"`
+	Domains   param.Field[[]WidgetDomainParam] `json:"domains,required"`
 	// Widget Mode
 	Mode param.Field[WidgetNewParamsMode] `json:"mode,required"`
 	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
@@ -531,8 +532,8 @@ func (r widgetNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 
 type WidgetUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]                  `path:"account_id,required"`
-	Domains   param.Field[[]WidgetDomainItemParam] `json:"domains,required"`
+	AccountID param.Field[string]              `path:"account_id,required"`
+	Domains   param.Field[[]WidgetDomainParam] `json:"domains,required"`
 	// Widget Mode
 	Mode param.Field[WidgetUpdateParamsMode] `json:"mode,required"`
 	// Human readable widget name. Not unique. Cloudflare suggests that you set this to

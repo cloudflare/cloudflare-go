@@ -73,19 +73,18 @@ func (r *ScriptTailService) Get(ctx context.Context, scriptName string, query Sc
 }
 
 // A reference to a script that will consume logs from the attached Worker.
-type ConsumerScriptItem struct {
+type ConsumerScript struct {
 	// Name of Worker that is to be the consumer.
 	Service string `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment"`
 	// Optional dispatch namespace the script belongs to.
-	Namespace string                 `json:"namespace"`
-	JSON      consumerScriptItemJSON `json:"-"`
+	Namespace string             `json:"namespace"`
+	JSON      consumerScriptJSON `json:"-"`
 }
 
-// consumerScriptItemJSON contains the JSON metadata for the struct
-// [ConsumerScriptItem]
-type consumerScriptItemJSON struct {
+// consumerScriptJSON contains the JSON metadata for the struct [ConsumerScript]
+type consumerScriptJSON struct {
 	Service     apijson.Field
 	Environment apijson.Field
 	Namespace   apijson.Field
@@ -93,16 +92,16 @@ type consumerScriptItemJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConsumerScriptItem) UnmarshalJSON(data []byte) (err error) {
+func (r *ConsumerScript) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r consumerScriptItemJSON) RawJSON() string {
+func (r consumerScriptJSON) RawJSON() string {
 	return r.raw
 }
 
 // A reference to a script that will consume logs from the attached Worker.
-type ConsumerScriptItemParam struct {
+type ConsumerScriptParam struct {
 	// Name of Worker that is to be the consumer.
 	Service param.Field[string] `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
@@ -111,7 +110,7 @@ type ConsumerScriptItemParam struct {
 	Namespace param.Field[string] `json:"namespace"`
 }
 
-func (r ConsumerScriptItemParam) MarshalJSON() (data []byte, err error) {
+func (r ConsumerScriptParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

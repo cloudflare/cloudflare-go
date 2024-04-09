@@ -120,15 +120,15 @@ func (r *StreamService) Get(ctx context.Context, identifier string, query Stream
 	return
 }
 
-type AllowedOriginsItem = string
+type AllowedOrigins = string
 
-type AllowedOriginsItemParam = string
+type AllowedOriginsParam = string
 
 type Video struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
-	AllowedOrigins []AllowedOriginsItem `json:"allowedOrigins"`
+	AllowedOrigins []AllowedOrigins `json:"allowedOrigins"`
 	// The date and time the media item was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// A user-defined identifier for the media creator.

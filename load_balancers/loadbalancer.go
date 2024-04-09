@@ -216,9 +216,9 @@ func (r CheckRegion) IsKnown() bool {
 	return false
 }
 
-type DefaultPoolsItem = string
+type DefaultPools = string
 
-type DefaultPoolsItemParam = string
+type DefaultPoolsParam = string
 
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
@@ -266,7 +266,7 @@ func (r FilterOptionsParam) MarshalJSON() (data []byte, err error) {
 type Header struct {
 	// The 'Host' header allows to override the hostname set in the HTTP request.
 	// Current support is 1 'Host' header override per origin.
-	Host []HostItem `json:"Host"`
+	Host []Host     `json:"Host"`
 	JSON headerJSON `json:"-"`
 }
 
@@ -290,16 +290,16 @@ func (r headerJSON) RawJSON() string {
 type HeaderParam struct {
 	// The 'Host' header allows to override the hostname set in the HTTP request.
 	// Current support is 1 'Host' header override per origin.
-	Host param.Field[[]HostItemParam] `json:"Host"`
+	Host param.Field[[]HostParam] `json:"Host"`
 }
 
 func (r HeaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type HostItem = string
+type Host = string
 
-type HostItemParam = string
+type HostParam = string
 
 type LoadBalancer struct {
 	ID string `json:"id"`
@@ -318,7 +318,7 @@ type LoadBalancer struct {
 	CreatedOn    time.Time   `json:"created_on" format:"date-time"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools []DefaultPoolsItem `json:"default_pools"`
+	DefaultPools []DefaultPools `json:"default_pools"`
 	// Object description.
 	Description string `json:"description"`
 	// Whether to enable (the default) this load balancer.
@@ -355,7 +355,7 @@ type LoadBalancer struct {
 	RegionPools interface{} `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
-	Rules []RulesItem `json:"rules"`
+	Rules []Rules `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
 	// specified as `"none"` or "" (default). The supported types are:
 	//
@@ -1018,7 +1018,7 @@ func (r RandomSteeringParam) MarshalJSON() (data []byte, err error) {
 
 // A rule object containing conditions and overrides for this load balancer to
 // evaluate.
-type RulesItem struct {
+type Rules struct {
 	// The condition expressions to evaluate. If the condition evaluates to true, the
 	// overrides or fixed_response in this rule will be applied. An empty condition is
 	// always true. For more details on condition expressions, please see
@@ -1030,12 +1030,12 @@ type RulesItem struct {
 	// A collection of fields used to directly respond to the eyeball instead of
 	// routing to a pool. If a fixed_response is supplied the rule will be marked as
 	// terminates.
-	FixedResponse RulesItemFixedResponse `json:"fixed_response"`
+	FixedResponse RulesFixedResponse `json:"fixed_response"`
 	// Name of this rule. Only used for human readability.
 	Name string `json:"name"`
 	// A collection of overrides to apply to the load balancer when this rule's
 	// condition is true. All fields are optional.
-	Overrides RulesItemOverrides `json:"overrides"`
+	Overrides RulesOverrides `json:"overrides"`
 	// The order in which rules should be executed in relation to each other. Lower
 	// values are executed first. Values do not need to be sequential. If no value is
 	// provided for any rule the array order of the rules field will be used to assign
@@ -1043,12 +1043,12 @@ type RulesItem struct {
 	Priority int64 `json:"priority"`
 	// If this rule's condition is true, this causes rule evaluation to stop after
 	// processing this rule.
-	Terminates bool          `json:"terminates"`
-	JSON       rulesItemJSON `json:"-"`
+	Terminates bool      `json:"terminates"`
+	JSON       rulesJSON `json:"-"`
 }
 
-// rulesItemJSON contains the JSON metadata for the struct [RulesItem]
-type rulesItemJSON struct {
+// rulesJSON contains the JSON metadata for the struct [Rules]
+type rulesJSON struct {
 	Condition     apijson.Field
 	Disabled      apijson.Field
 	FixedResponse apijson.Field
@@ -1060,18 +1060,18 @@ type rulesItemJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *RulesItem) UnmarshalJSON(data []byte) (err error) {
+func (r *Rules) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r rulesItemJSON) RawJSON() string {
+func (r rulesJSON) RawJSON() string {
 	return r.raw
 }
 
 // A collection of fields used to directly respond to the eyeball instead of
 // routing to a pool. If a fixed_response is supplied the rule will be marked as
 // terminates.
-type RulesItemFixedResponse struct {
+type RulesFixedResponse struct {
 	// The http 'Content-Type' header to include in the response.
 	ContentType string `json:"content_type"`
 	// The http 'Location' header to include in the response.
@@ -1079,13 +1079,13 @@ type RulesItemFixedResponse struct {
 	// Text to include as the http body.
 	MessageBody string `json:"message_body"`
 	// The http status code to respond with.
-	StatusCode int64                      `json:"status_code"`
-	JSON       rulesItemFixedResponseJSON `json:"-"`
+	StatusCode int64                  `json:"status_code"`
+	JSON       rulesFixedResponseJSON `json:"-"`
 }
 
-// rulesItemFixedResponseJSON contains the JSON metadata for the struct
-// [RulesItemFixedResponse]
-type rulesItemFixedResponseJSON struct {
+// rulesFixedResponseJSON contains the JSON metadata for the struct
+// [RulesFixedResponse]
+type rulesFixedResponseJSON struct {
 	ContentType apijson.Field
 	Location    apijson.Field
 	MessageBody apijson.Field
@@ -1094,17 +1094,17 @@ type rulesItemFixedResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesItemFixedResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RulesFixedResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r rulesItemFixedResponseJSON) RawJSON() string {
+func (r rulesFixedResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // A collection of overrides to apply to the load balancer when this rule's
 // condition is true. All fields are optional.
-type RulesItemOverrides struct {
+type RulesOverrides struct {
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -1119,7 +1119,7 @@ type RulesItemOverrides struct {
 	CountryPools interface{} `json:"country_pools"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools []DefaultPoolsItem `json:"default_pools"`
+	DefaultPools []DefaultPools `json:"default_pools"`
 	// The pool ID to use when all other pools are detected as unhealthy.
 	FallbackPool interface{} `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
@@ -1166,7 +1166,7 @@ type RulesItemOverrides struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity RulesItemOverridesSessionAffinity `json:"session_affinity"`
+	SessionAffinity RulesOverridesSessionAffinity `json:"session_affinity"`
 	// Configures attributes for session affinity.
 	SessionAffinityAttributes SessionAffinityAttributes `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
@@ -1202,16 +1202,15 @@ type RulesItemOverrides struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy RulesItemOverridesSteeringPolicy `json:"steering_policy"`
+	SteeringPolicy RulesOverridesSteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	TTL  float64                `json:"ttl"`
-	JSON rulesItemOverridesJSON `json:"-"`
+	TTL  float64            `json:"ttl"`
+	JSON rulesOverridesJSON `json:"-"`
 }
 
-// rulesItemOverridesJSON contains the JSON metadata for the struct
-// [RulesItemOverrides]
-type rulesItemOverridesJSON struct {
+// rulesOverridesJSON contains the JSON metadata for the struct [RulesOverrides]
+type rulesOverridesJSON struct {
 	AdaptiveRouting           apijson.Field
 	CountryPools              apijson.Field
 	DefaultPools              apijson.Field
@@ -1229,11 +1228,11 @@ type rulesItemOverridesJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *RulesItemOverrides) UnmarshalJSON(data []byte) (err error) {
+func (r *RulesOverrides) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r rulesItemOverridesJSON) RawJSON() string {
+func (r rulesOverridesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1260,19 +1259,19 @@ func (r rulesItemOverridesJSON) RawJSON() string {
 //     server is unhealthy, then a new origin server is calculated and used. See
 //     `headers` in `session_affinity_attributes` for additional required
 //     configuration.
-type RulesItemOverridesSessionAffinity string
+type RulesOverridesSessionAffinity string
 
 const (
-	RulesItemOverridesSessionAffinityNone     RulesItemOverridesSessionAffinity = "none"
-	RulesItemOverridesSessionAffinityCookie   RulesItemOverridesSessionAffinity = "cookie"
-	RulesItemOverridesSessionAffinityIPCookie RulesItemOverridesSessionAffinity = "ip_cookie"
-	RulesItemOverridesSessionAffinityHeader   RulesItemOverridesSessionAffinity = "header"
-	RulesItemOverridesSessionAffinityEmpty    RulesItemOverridesSessionAffinity = "\"\""
+	RulesOverridesSessionAffinityNone     RulesOverridesSessionAffinity = "none"
+	RulesOverridesSessionAffinityCookie   RulesOverridesSessionAffinity = "cookie"
+	RulesOverridesSessionAffinityIPCookie RulesOverridesSessionAffinity = "ip_cookie"
+	RulesOverridesSessionAffinityHeader   RulesOverridesSessionAffinity = "header"
+	RulesOverridesSessionAffinityEmpty    RulesOverridesSessionAffinity = "\"\""
 )
 
-func (r RulesItemOverridesSessionAffinity) IsKnown() bool {
+func (r RulesOverridesSessionAffinity) IsKnown() bool {
 	switch r {
-	case RulesItemOverridesSessionAffinityNone, RulesItemOverridesSessionAffinityCookie, RulesItemOverridesSessionAffinityIPCookie, RulesItemOverridesSessionAffinityHeader, RulesItemOverridesSessionAffinityEmpty:
+	case RulesOverridesSessionAffinityNone, RulesOverridesSessionAffinityCookie, RulesOverridesSessionAffinityIPCookie, RulesOverridesSessionAffinityHeader, RulesOverridesSessionAffinityEmpty:
 		return true
 	}
 	return false
@@ -1300,22 +1299,22 @@ func (r RulesItemOverridesSessionAffinity) IsKnown() bool {
 //     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type RulesItemOverridesSteeringPolicy string
+type RulesOverridesSteeringPolicy string
 
 const (
-	RulesItemOverridesSteeringPolicyOff                      RulesItemOverridesSteeringPolicy = "off"
-	RulesItemOverridesSteeringPolicyGeo                      RulesItemOverridesSteeringPolicy = "geo"
-	RulesItemOverridesSteeringPolicyRandom                   RulesItemOverridesSteeringPolicy = "random"
-	RulesItemOverridesSteeringPolicyDynamicLatency           RulesItemOverridesSteeringPolicy = "dynamic_latency"
-	RulesItemOverridesSteeringPolicyProximity                RulesItemOverridesSteeringPolicy = "proximity"
-	RulesItemOverridesSteeringPolicyLeastOutstandingRequests RulesItemOverridesSteeringPolicy = "least_outstanding_requests"
-	RulesItemOverridesSteeringPolicyLeastConnections         RulesItemOverridesSteeringPolicy = "least_connections"
-	RulesItemOverridesSteeringPolicyEmpty                    RulesItemOverridesSteeringPolicy = "\"\""
+	RulesOverridesSteeringPolicyOff                      RulesOverridesSteeringPolicy = "off"
+	RulesOverridesSteeringPolicyGeo                      RulesOverridesSteeringPolicy = "geo"
+	RulesOverridesSteeringPolicyRandom                   RulesOverridesSteeringPolicy = "random"
+	RulesOverridesSteeringPolicyDynamicLatency           RulesOverridesSteeringPolicy = "dynamic_latency"
+	RulesOverridesSteeringPolicyProximity                RulesOverridesSteeringPolicy = "proximity"
+	RulesOverridesSteeringPolicyLeastOutstandingRequests RulesOverridesSteeringPolicy = "least_outstanding_requests"
+	RulesOverridesSteeringPolicyLeastConnections         RulesOverridesSteeringPolicy = "least_connections"
+	RulesOverridesSteeringPolicyEmpty                    RulesOverridesSteeringPolicy = "\"\""
 )
 
-func (r RulesItemOverridesSteeringPolicy) IsKnown() bool {
+func (r RulesOverridesSteeringPolicy) IsKnown() bool {
 	switch r {
-	case RulesItemOverridesSteeringPolicyOff, RulesItemOverridesSteeringPolicyGeo, RulesItemOverridesSteeringPolicyRandom, RulesItemOverridesSteeringPolicyDynamicLatency, RulesItemOverridesSteeringPolicyProximity, RulesItemOverridesSteeringPolicyLeastOutstandingRequests, RulesItemOverridesSteeringPolicyLeastConnections, RulesItemOverridesSteeringPolicyEmpty:
+	case RulesOverridesSteeringPolicyOff, RulesOverridesSteeringPolicyGeo, RulesOverridesSteeringPolicyRandom, RulesOverridesSteeringPolicyDynamicLatency, RulesOverridesSteeringPolicyProximity, RulesOverridesSteeringPolicyLeastOutstandingRequests, RulesOverridesSteeringPolicyLeastConnections, RulesOverridesSteeringPolicyEmpty:
 		return true
 	}
 	return false
@@ -1323,7 +1322,7 @@ func (r RulesItemOverridesSteeringPolicy) IsKnown() bool {
 
 // A rule object containing conditions and overrides for this load balancer to
 // evaluate.
-type RulesItemParam struct {
+type RulesParam struct {
 	// The condition expressions to evaluate. If the condition evaluates to true, the
 	// overrides or fixed_response in this rule will be applied. An empty condition is
 	// always true. For more details on condition expressions, please see
@@ -1335,12 +1334,12 @@ type RulesItemParam struct {
 	// A collection of fields used to directly respond to the eyeball instead of
 	// routing to a pool. If a fixed_response is supplied the rule will be marked as
 	// terminates.
-	FixedResponse param.Field[RulesItemFixedResponseParam] `json:"fixed_response"`
+	FixedResponse param.Field[RulesFixedResponseParam] `json:"fixed_response"`
 	// Name of this rule. Only used for human readability.
 	Name param.Field[string] `json:"name"`
 	// A collection of overrides to apply to the load balancer when this rule's
 	// condition is true. All fields are optional.
-	Overrides param.Field[RulesItemOverridesParam] `json:"overrides"`
+	Overrides param.Field[RulesOverridesParam] `json:"overrides"`
 	// The order in which rules should be executed in relation to each other. Lower
 	// values are executed first. Values do not need to be sequential. If no value is
 	// provided for any rule the array order of the rules field will be used to assign
@@ -1351,14 +1350,14 @@ type RulesItemParam struct {
 	Terminates param.Field[bool] `json:"terminates"`
 }
 
-func (r RulesItemParam) MarshalJSON() (data []byte, err error) {
+func (r RulesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A collection of fields used to directly respond to the eyeball instead of
 // routing to a pool. If a fixed_response is supplied the rule will be marked as
 // terminates.
-type RulesItemFixedResponseParam struct {
+type RulesFixedResponseParam struct {
 	// The http 'Content-Type' header to include in the response.
 	ContentType param.Field[string] `json:"content_type"`
 	// The http 'Location' header to include in the response.
@@ -1369,13 +1368,13 @@ type RulesItemFixedResponseParam struct {
 	StatusCode param.Field[int64] `json:"status_code"`
 }
 
-func (r RulesItemFixedResponseParam) MarshalJSON() (data []byte, err error) {
+func (r RulesFixedResponseParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A collection of overrides to apply to the load balancer when this rule's
 // condition is true. All fields are optional.
-type RulesItemOverridesParam struct {
+type RulesOverridesParam struct {
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -1390,7 +1389,7 @@ type RulesItemOverridesParam struct {
 	CountryPools param.Field[interface{}] `json:"country_pools"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools param.Field[[]DefaultPoolsItemParam] `json:"default_pools"`
+	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools"`
 	// The pool ID to use when all other pools are detected as unhealthy.
 	FallbackPool param.Field[interface{}] `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
@@ -1437,7 +1436,7 @@ type RulesItemOverridesParam struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity param.Field[RulesItemOverridesSessionAffinity] `json:"session_affinity"`
+	SessionAffinity param.Field[RulesOverridesSessionAffinity] `json:"session_affinity"`
 	// Configures attributes for session affinity.
 	SessionAffinityAttributes param.Field[SessionAffinityAttributesParam] `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
@@ -1473,13 +1472,13 @@ type RulesItemOverridesParam struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy param.Field[RulesItemOverridesSteeringPolicy] `json:"steering_policy"`
+	SteeringPolicy param.Field[RulesOverridesSteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
 	TTL param.Field[float64] `json:"ttl"`
 }
 
-func (r RulesItemOverridesParam) MarshalJSON() (data []byte, err error) {
+func (r RulesOverridesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1697,7 +1696,7 @@ type LoadBalancerNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools param.Field[[]DefaultPoolsItemParam] `json:"default_pools,required"`
+	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools,required"`
 	// The pool ID to use when all other pools are detected as unhealthy.
 	FallbackPool param.Field[interface{}] `json:"fallback_pool,required"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
@@ -1743,7 +1742,7 @@ type LoadBalancerNewParams struct {
 	RegionPools param.Field[interface{}] `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
-	Rules param.Field[[]RulesItemParam] `json:"rules"`
+	Rules param.Field[[]RulesParam] `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
 	// specified as `"none"` or "" (default). The supported types are:
 	//
@@ -1944,7 +1943,7 @@ type LoadBalancerUpdateParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools param.Field[[]DefaultPoolsItemParam] `json:"default_pools,required"`
+	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools,required"`
 	// The pool ID to use when all other pools are detected as unhealthy.
 	FallbackPool param.Field[interface{}] `json:"fallback_pool,required"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
@@ -1992,7 +1991,7 @@ type LoadBalancerUpdateParams struct {
 	RegionPools param.Field[interface{}] `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
-	Rules param.Field[[]RulesItemParam] `json:"rules"`
+	Rules param.Field[[]RulesParam] `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
 	// specified as `"none"` or "" (default). The supported types are:
 	//
@@ -2261,7 +2260,7 @@ type LoadBalancerEditParams struct {
 	CountryPools param.Field[interface{}] `json:"country_pools"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools param.Field[[]DefaultPoolsItemParam] `json:"default_pools"`
+	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools"`
 	// Object description.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) this load balancer.
@@ -2297,7 +2296,7 @@ type LoadBalancerEditParams struct {
 	RegionPools param.Field[interface{}] `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
-	Rules param.Field[[]RulesItemParam] `json:"rules"`
+	Rules param.Field[[]RulesParam] `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
 	// specified as `"none"` or "" (default). The supported types are:
 	//

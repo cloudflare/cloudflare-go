@@ -156,17 +156,17 @@ func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query A
 	return
 }
 
-type AssociatedHostnamesItem = string
+type AssociatedHostnames = string
 
-type AssociatedHostnamesItemParam = string
+type AssociatedHostnamesParam = string
 
 type Certificate struct {
 	// The ID of the application that will use this certificate.
 	ID string `json:"id"`
 	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames []AssociatedHostnamesItem `json:"associated_hostnames"`
-	CreatedAt           time.Time                 `json:"created_at" format:"date-time"`
-	ExpiresOn           time.Time                 `json:"expires_on" format:"date-time"`
+	AssociatedHostnames []AssociatedHostnames `json:"associated_hostnames"`
+	CreatedAt           time.Time             `json:"created_at" format:"date-time"`
+	ExpiresOn           time.Time             `json:"expires_on" format:"date-time"`
 	// The MD5 fingerprint of the certificate.
 	Fingerprint string `json:"fingerprint"`
 	// The name of the certificate.
@@ -228,7 +228,7 @@ type AccessCertificateNewParams struct {
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames param.Field[[]AssociatedHostnamesItemParam] `json:"associated_hostnames"`
+	AssociatedHostnames param.Field[[]AssociatedHostnamesParam] `json:"associated_hostnames"`
 }
 
 func (r AccessCertificateNewParams) MarshalJSON() (data []byte, err error) {
@@ -280,7 +280,7 @@ func (r AccessCertificateNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type AccessCertificateUpdateParams struct {
 	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames param.Field[[]AssociatedHostnamesItemParam] `json:"associated_hostnames,required"`
+	AssociatedHostnames param.Field[[]AssociatedHostnamesParam] `json:"associated_hostnames,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.

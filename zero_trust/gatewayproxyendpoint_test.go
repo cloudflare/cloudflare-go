@@ -30,7 +30,7 @@ func TestGatewayProxyEndpointNew(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.New(context.TODO(), zero_trust.GatewayProxyEndpointNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		IPs:       cloudflare.F([]zero_trust.GatewayIPsItemParam{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
+		IPs:       cloudflare.F([]zero_trust.GatewayIPsParam{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
 		Name:      cloudflare.F("Devops team"),
 	})
 	if err != nil {
@@ -118,7 +118,7 @@ func TestGatewayProxyEndpointEditWithOptionalParams(t *testing.T) {
 		"ed35569b41ce4d1facfe683550f54086",
 		zero_trust.GatewayProxyEndpointEditParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			IPs:       cloudflare.F([]zero_trust.GatewayIPsItemParam{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
+			IPs:       cloudflare.F([]zero_trust.GatewayIPsParam{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
 			Name:      cloudflare.F("Devops team"),
 		},
 	)

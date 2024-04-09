@@ -28,18 +28,18 @@ func NewAnalyticsEventService(opts ...option.RequestOption) (r *AnalyticsEventSe
 	return
 }
 
-type DimensionItem string
+type Dimension string
 
 const (
-	DimensionItemEvent     DimensionItem = "event"
-	DimensionItemAppID     DimensionItem = "appID"
-	DimensionItemColoName  DimensionItem = "coloName"
-	DimensionItemIPVersion DimensionItem = "ipVersion"
+	DimensionEvent     Dimension = "event"
+	DimensionAppID     Dimension = "appID"
+	DimensionColoName  Dimension = "coloName"
+	DimensionIPVersion Dimension = "ipVersion"
 )
 
-func (r DimensionItem) IsKnown() bool {
+func (r Dimension) IsKnown() bool {
 	switch r {
-	case DimensionItemEvent, DimensionItemAppID, DimensionItemColoName, DimensionItemIPVersion:
+	case DimensionEvent, DimensionAppID, DimensionColoName, DimensionIPVersion:
 		return true
 	}
 	return false

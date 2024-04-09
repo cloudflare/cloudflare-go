@@ -68,7 +68,7 @@ type ScriptSettingEditParams struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]ConsumerScriptItemParam] `json:"tail_consumers"`
+	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
 }
 
 func (r ScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
