@@ -36,7 +36,7 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 		Type:    cloudflare.F(dns.RecordNewParamsARecordTypeA),
 		Comment: cloudflare.F("Domain verification record"),
 		Proxied: cloudflare.F(false),
-		Tags:    cloudflare.F([]dns.RecordTagsItemParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+		Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
 		TTL:     cloudflare.F[dns.TTLUnionParam](shared.UnionFloat(3600.000000)),
 	})
 	if err != nil {
@@ -72,7 +72,7 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 			Type:    cloudflare.F(dns.RecordUpdateParamsARecordTypeA),
 			Comment: cloudflare.F("Domain verification record"),
 			Proxied: cloudflare.F(false),
-			Tags:    cloudflare.F([]dns.RecordTagsItemParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
 			TTL:     cloudflare.F[dns.TTLUnionParam](shared.UnionFloat(3600.000000)),
 		},
 	)
@@ -193,7 +193,7 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 			Type:    cloudflare.F(dns.RecordEditParamsARecordTypeA),
 			Comment: cloudflare.F("Domain verification record"),
 			Proxied: cloudflare.F(false),
-			Tags:    cloudflare.F([]dns.RecordTagsItemParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
 			TTL:     cloudflare.F[dns.TTLUnionParam](shared.UnionFloat(3600.000000)),
 		},
 	)

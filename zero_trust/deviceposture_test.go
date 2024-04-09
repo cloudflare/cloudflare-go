@@ -41,12 +41,12 @@ func TestDevicePostureNewWithOptionalParams(t *testing.T) {
 			Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 			Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
 		}),
-		Match: cloudflare.F([]zero_trust.MatchItemParam{{
-			Platform: cloudflare.F(zero_trust.MatchItemPlatformWindows),
+		Match: cloudflare.F([]zero_trust.MatchParam{{
+			Platform: cloudflare.F(zero_trust.MatchPlatformWindows),
 		}, {
-			Platform: cloudflare.F(zero_trust.MatchItemPlatformWindows),
+			Platform: cloudflare.F(zero_trust.MatchPlatformWindows),
 		}, {
-			Platform: cloudflare.F(zero_trust.MatchItemPlatformWindows),
+			Platform: cloudflare.F(zero_trust.MatchPlatformWindows),
 		}}),
 		Schedule: cloudflare.F("1h"),
 	})
@@ -89,12 +89,12 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
 			}),
-			Match: cloudflare.F([]zero_trust.MatchItemParam{{
-				Platform: cloudflare.F(zero_trust.MatchItemPlatformWindows),
+			Match: cloudflare.F([]zero_trust.MatchParam{{
+				Platform: cloudflare.F(zero_trust.MatchPlatformWindows),
 			}, {
-				Platform: cloudflare.F(zero_trust.MatchItemPlatformWindows),
+				Platform: cloudflare.F(zero_trust.MatchPlatformWindows),
 			}, {
-				Platform: cloudflare.F(zero_trust.MatchItemPlatformWindows),
+				Platform: cloudflare.F(zero_trust.MatchPlatformWindows),
 			}}),
 			Schedule: cloudflare.F("1h"),
 		},

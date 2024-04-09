@@ -123,7 +123,7 @@ type DevicePostureRule struct {
 	// The value to be checked against.
 	Input Input `json:"input"`
 	// The conditions that the client must match to run the rule.
-	Match []MatchItem `json:"match"`
+	Match []Match `json:"match"`
 	// The name of the device posture rule.
 	Name string `json:"name"`
 	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
@@ -1664,49 +1664,49 @@ func (r InputTeamsDevicesSentineloneS2sInputRequestParam) MarshalJSON() (data []
 
 func (r InputTeamsDevicesSentineloneS2sInputRequestParam) implementsZeroTrustInputUnionParam() {}
 
-type MatchItem struct {
-	Platform MatchItemPlatform `json:"platform"`
-	JSON     matchItemJSON     `json:"-"`
+type Match struct {
+	Platform MatchPlatform `json:"platform"`
+	JSON     matchJSON     `json:"-"`
 }
 
-// matchItemJSON contains the JSON metadata for the struct [MatchItem]
-type matchItemJSON struct {
+// matchJSON contains the JSON metadata for the struct [Match]
+type matchJSON struct {
 	Platform    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MatchItem) UnmarshalJSON(data []byte) (err error) {
+func (r *Match) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r matchItemJSON) RawJSON() string {
+func (r matchJSON) RawJSON() string {
 	return r.raw
 }
 
-type MatchItemPlatform string
+type MatchPlatform string
 
 const (
-	MatchItemPlatformWindows MatchItemPlatform = "windows"
-	MatchItemPlatformMac     MatchItemPlatform = "mac"
-	MatchItemPlatformLinux   MatchItemPlatform = "linux"
-	MatchItemPlatformAndroid MatchItemPlatform = "android"
-	MatchItemPlatformIos     MatchItemPlatform = "ios"
+	MatchPlatformWindows MatchPlatform = "windows"
+	MatchPlatformMac     MatchPlatform = "mac"
+	MatchPlatformLinux   MatchPlatform = "linux"
+	MatchPlatformAndroid MatchPlatform = "android"
+	MatchPlatformIos     MatchPlatform = "ios"
 )
 
-func (r MatchItemPlatform) IsKnown() bool {
+func (r MatchPlatform) IsKnown() bool {
 	switch r {
-	case MatchItemPlatformWindows, MatchItemPlatformMac, MatchItemPlatformLinux, MatchItemPlatformAndroid, MatchItemPlatformIos:
+	case MatchPlatformWindows, MatchPlatformMac, MatchPlatformLinux, MatchPlatformAndroid, MatchPlatformIos:
 		return true
 	}
 	return false
 }
 
-type MatchItemParam struct {
-	Platform param.Field[MatchItemPlatform] `json:"platform"`
+type MatchParam struct {
+	Platform param.Field[MatchPlatform] `json:"platform"`
 }
 
-func (r MatchItemParam) MarshalJSON() (data []byte, err error) {
+func (r MatchParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1782,7 +1782,7 @@ type DevicePostureNewParams struct {
 	// The value to be checked against.
 	Input param.Field[InputUnionParam] `json:"input"`
 	// The conditions that the client must match to run the rule.
-	Match param.Field[[]MatchItemParam] `json:"match"`
+	Match param.Field[[]MatchParam] `json:"match"`
 	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
 	// five minutes). Minimum: `1m`.
 	Schedule param.Field[string] `json:"schedule"`
@@ -1882,7 +1882,7 @@ type DevicePostureUpdateParams struct {
 	// The value to be checked against.
 	Input param.Field[InputUnionParam] `json:"input"`
 	// The conditions that the client must match to run the rule.
-	Match param.Field[[]MatchItemParam] `json:"match"`
+	Match param.Field[[]MatchParam] `json:"match"`
 	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
 	// five minutes). Minimum: `1m`.
 	Schedule param.Field[string] `json:"schedule"`

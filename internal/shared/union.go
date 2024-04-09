@@ -6,15 +6,14 @@ type UnionString string
 
 func (UnionString) ImplementsSharedUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716aUnion() {}
 func (UnionString) ImplementsUserAuditLogListResponse()                                    {}
-func (UnionString) ImplementsUserLoadBalancingPoolHealthResponseUnion()                    {}
 func (UnionString) ImplementsZonesCustomNameserverUpdateResponseUnion()                    {}
 func (UnionString) ImplementsZonesCustomNameserverGetResponseUnion()                       {}
 func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                     {}
 func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()                         {}
 func (UnionString) ImplementsCacheCachePurgeParamsCachePurgeFilesFileUnion()               {}
 func (UnionString) ImplementsCustomNameserversCustomNameserverDeleteResponseUnion()        {}
-func (UnionString) ImplementsDNSFirewallIPsItemUnionParam()                                {}
-func (UnionString) ImplementsDNSFirewallIPsItemUnion()                                     {}
+func (UnionString) ImplementsDNSFirewallIPsUnionParam()                                    {}
+func (UnionString) ImplementsDNSFirewallIPsUnion()                                         {}
 func (UnionString) ImplementsDNSUpstreamIPsUnionParam()                                    {}
 func (UnionString) ImplementsDNSUpstreamIPsUnion()                                         {}
 func (UnionString) ImplementsDNSSECDNSSECDeleteResponseUnion()                             {}

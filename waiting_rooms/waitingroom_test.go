@@ -34,7 +34,7 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 		Name:              cloudflare.F("production_webinar"),
 		NewUsersPerMinute: cloudflare.F(int64(200)),
 		TotalActiveUsers:  cloudflare.F(int64(200)),
-		AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesItemParam{{
+		AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
 			Host: cloudflare.F("shop2.example.com"),
 			Path: cloudflare.F("/shop2/checkout"),
 		}, {
@@ -93,7 +93,7 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 			Name:              cloudflare.F("production_webinar"),
 			NewUsersPerMinute: cloudflare.F(int64(200)),
 			TotalActiveUsers:  cloudflare.F(int64(200)),
-			AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesItemParam{{
+			AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
 				Host: cloudflare.F("shop2.example.com"),
 				Path: cloudflare.F("/shop2/checkout"),
 			}, {
@@ -210,7 +210,7 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 			Name:              cloudflare.F("production_webinar"),
 			NewUsersPerMinute: cloudflare.F(int64(200)),
 			TotalActiveUsers:  cloudflare.F(int64(200)),
-			AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesItemParam{{
+			AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
 				Host: cloudflare.F("shop2.example.com"),
 				Path: cloudflare.F("/shop2/checkout"),
 			}, {

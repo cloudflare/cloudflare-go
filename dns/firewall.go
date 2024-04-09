@@ -158,8 +158,8 @@ type Firewall struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests bool                   `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []FirewallIPsItemUnion `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests bool               `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       []FirewallIPsUnion `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
 	EcsFallback bool `json:"ecs_fallback,required"`
 	// Maximum DNS Cache TTL.
@@ -214,13 +214,13 @@ func (r firewallJSON) RawJSON() string {
 // Cloudflare-assigned DNS IPv4 Address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type FirewallIPsItemUnion interface {
-	ImplementsDNSFirewallIPsItemUnion()
+type FirewallIPsUnion interface {
+	ImplementsDNSFirewallIPsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallIPsItemUnion)(nil)).Elem(),
+		reflect.TypeOf((*FirewallIPsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -236,8 +236,8 @@ func init() {
 // Cloudflare-assigned DNS IPv4 Address.
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type FirewallIPsItemUnionParam interface {
-	ImplementsDNSFirewallIPsItemUnionParam()
+type FirewallIPsUnionParam interface {
+	ImplementsDNSFirewallIPsUnionParam()
 }
 
 // Upstream DNS Server IPv4 Address.
@@ -438,8 +438,8 @@ type FirewallEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests param.Field[bool]                        `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       param.Field[[]FirewallIPsItemUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests param.Field[bool]                    `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       param.Field[[]FirewallIPsUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
 	EcsFallback param.Field[bool] `json:"ecs_fallback,required"`
 	// Maximum DNS Cache TTL.

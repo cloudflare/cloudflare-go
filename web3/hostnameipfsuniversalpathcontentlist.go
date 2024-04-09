@@ -97,11 +97,20 @@ func (r ContentListAction) IsKnown() bool {
 	return false
 }
 
+type ContentListParam struct {
+	// Behavior of the content list.
+	Action param.Field[ContentListAction] `json:"action"`
+}
+
+func (r ContentListParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type HostnameIPFSUniversalPathContentListUpdateParams struct {
 	// Behavior of the content list.
 	Action param.Field[HostnameIPFSUniversalPathContentListUpdateParamsAction] `json:"action,required"`
 	// Content list entries.
-	Entries param.Field[[]ContentListItemParam] `json:"entries,required"`
+	Entries param.Field[[]ContentListParam] `json:"entries,required"`
 }
 
 func (r HostnameIPFSUniversalPathContentListUpdateParams) MarshalJSON() (data []byte, err error) {

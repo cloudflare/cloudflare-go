@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // MembershipService contains methods and other services that help with interacting
@@ -108,7 +107,7 @@ type Membership struct {
 	// The unique activation code for the account membership.
 	Code string `json:"code"`
 	// All access permissions for the user at the account.
-	Permissions user.Permission `json:"permissions"`
+	Permissions MembershipPermissions `json:"permissions"`
 	// List of role names for the user at the account.
 	Roles accounts.MemberRoles `json:"roles"`
 	// Status of this membership.
@@ -134,6 +133,50 @@ func (r *Membership) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r membershipJSON) RawJSON() string {
+	return r.raw
+}
+
+// All access permissions for the user at the account.
+type MembershipPermissions struct {
+	Analytics    accounts.PermissionGrant  `json:"analytics"`
+	Billing      accounts.PermissionGrant  `json:"billing"`
+	CachePurge   accounts.PermissionGrant  `json:"cache_purge"`
+	DNS          accounts.PermissionGrant  `json:"dns"`
+	DNSRecords   accounts.PermissionGrant  `json:"dns_records"`
+	Lb           accounts.PermissionGrant  `json:"lb"`
+	Logs         accounts.PermissionGrant  `json:"logs"`
+	Organization accounts.PermissionGrant  `json:"organization"`
+	SSL          accounts.PermissionGrant  `json:"ssl"`
+	WAF          accounts.PermissionGrant  `json:"waf"`
+	ZoneSettings accounts.PermissionGrant  `json:"zone_settings"`
+	Zones        accounts.PermissionGrant  `json:"zones"`
+	JSON         membershipPermissionsJSON `json:"-"`
+}
+
+// membershipPermissionsJSON contains the JSON metadata for the struct
+// [MembershipPermissions]
+type membershipPermissionsJSON struct {
+	Analytics    apijson.Field
+	Billing      apijson.Field
+	CachePurge   apijson.Field
+	DNS          apijson.Field
+	DNSRecords   apijson.Field
+	Lb           apijson.Field
+	Logs         apijson.Field
+	Organization apijson.Field
+	SSL          apijson.Field
+	WAF          apijson.Field
+	ZoneSettings apijson.Field
+	Zones        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *MembershipPermissions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r membershipPermissionsJSON) RawJSON() string {
 	return r.raw
 }
 

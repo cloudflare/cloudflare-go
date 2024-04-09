@@ -35,7 +35,7 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
 			Header: cloudflare.F(load_balancers.HeaderParam{
-				Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
+				Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
 			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -44,7 +44,7 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
 			Header: cloudflare.F(load_balancers.HeaderParam{
-				Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
+				Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
 			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -53,7 +53,7 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 			Address: cloudflare.F("0.0.0.0"),
 			Enabled: cloudflare.F(true),
 			Header: cloudflare.F(load_balancers.HeaderParam{
-				Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
+				Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
 			}),
 			Name:             cloudflare.F("app-server-1"),
 			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -119,7 +119,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -128,7 +128,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -137,7 +137,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -290,7 +290,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -299,7 +299,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
@@ -308,7 +308,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
 				Header: cloudflare.F(load_balancers.HeaderParam{
-					Host: cloudflare.F([]load_balancers.HostItemParam{"example.com", "example.com", "example.com"}),
+					Host: cloudflare.F([]load_balancers.HostParam{"example.com", "example.com", "example.com"}),
 				}),
 				Name:             cloudflare.F("app-server-1"),
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),

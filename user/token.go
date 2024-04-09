@@ -127,7 +127,7 @@ func (r *TokenService) Verify(ctx context.Context, opts ...option.RequestOption)
 	return
 }
 
-type CIDRListItemParam = string
+type CIDRListParam = string
 
 type Policy struct {
 	// Policy identifier.
@@ -348,9 +348,9 @@ func (r TokenNewParamsCondition) MarshalJSON() (data []byte, err error) {
 // Client IP restrictions.
 type TokenNewParamsConditionRequestIP struct {
 	// List of IPv4/IPv6 CIDR addresses.
-	In param.Field[[]CIDRListItemParam] `json:"in"`
+	In param.Field[[]CIDRListParam] `json:"in"`
 	// List of IPv4/IPv6 CIDR addresses.
-	NotIn param.Field[[]CIDRListItemParam] `json:"not_in"`
+	NotIn param.Field[[]CIDRListParam] `json:"not_in"`
 }
 
 func (r TokenNewParamsConditionRequestIP) MarshalJSON() (data []byte, err error) {
@@ -448,9 +448,9 @@ func (r TokenUpdateParamsCondition) MarshalJSON() (data []byte, err error) {
 // Client IP restrictions.
 type TokenUpdateParamsConditionRequestIP struct {
 	// List of IPv4/IPv6 CIDR addresses.
-	In param.Field[[]CIDRListItemParam] `json:"in"`
+	In param.Field[[]CIDRListParam] `json:"in"`
 	// List of IPv4/IPv6 CIDR addresses.
-	NotIn param.Field[[]CIDRListItemParam] `json:"not_in"`
+	NotIn param.Field[[]CIDRListParam] `json:"not_in"`
 }
 
 func (r TokenUpdateParamsConditionRequestIP) MarshalJSON() (data []byte, err error) {

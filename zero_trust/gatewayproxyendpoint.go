@@ -109,15 +109,15 @@ func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID s
 	return
 }
 
-type GatewayIPsItem = string
+type GatewayIPs = string
 
-type GatewayIPsItemParam = string
+type GatewayIPsParam = string
 
 type ProxyEndpoint struct {
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// A list of CIDRs to restrict ingress connections.
-	IPs []GatewayIPsItem `json:"ips"`
+	IPs []GatewayIPs `json:"ips"`
 	// The name of the proxy endpoint.
 	Name string `json:"name"`
 	// The subdomain to be used as the destination in the proxy client.
@@ -149,7 +149,7 @@ func (r proxyEndpointJSON) RawJSON() string {
 type GatewayProxyEndpointNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of CIDRs to restrict ingress connections.
-	IPs param.Field[[]GatewayIPsItemParam] `json:"ips,required"`
+	IPs param.Field[[]GatewayIPsParam] `json:"ips,required"`
 	// The name of the proxy endpoint.
 	Name param.Field[string] `json:"name,required"`
 }
@@ -260,7 +260,7 @@ func (r GatewayProxyEndpointDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type GatewayProxyEndpointEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of CIDRs to restrict ingress connections.
-	IPs param.Field[[]GatewayIPsItemParam] `json:"ips"`
+	IPs param.Field[[]GatewayIPsParam] `json:"ips"`
 	// The name of the proxy endpoint.
 	Name param.Field[string] `json:"name"`
 }

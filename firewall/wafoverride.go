@@ -274,6 +274,8 @@ func (r Rule) IsKnown() bool {
 	return false
 }
 
+type RulesParam map[string]Rule
+
 type URLs = string
 
 type WAFOverrideDeleteResponse struct {
