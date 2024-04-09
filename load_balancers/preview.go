@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // PreviewService contains methods and other services that help with interacting
@@ -33,7 +32,7 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 }
 
 // Get the result of a previous preview operation using the provided preview_id.
-func (r *PreviewService) Get(ctx context.Context, previewID string, query PreviewGetParams, opts ...option.RequestOption) (res *user.Preview, err error) {
+func (r *PreviewService) Get(ctx context.Context, previewID string, query PreviewGetParams, opts ...option.RequestOption) (res *PreviewGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%s", query.AccountID, previewID)
@@ -45,6 +44,8 @@ func (r *PreviewService) Get(ctx context.Context, previewID string, query Previe
 	return
 }
 
+type PreviewGetResponse map[string]PreviewGetResponse
+
 type PreviewGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -54,7 +55,7 @@ type PreviewGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Resulting health data from a preview operation.
-	Result user.Preview `json:"result,required"`
+	Result PreviewGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`

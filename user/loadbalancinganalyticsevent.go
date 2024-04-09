@@ -15,26 +15,26 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-// LoadBalancerAnalyticsEventService contains methods and other services that help
+// LoadBalancingAnalyticsEventService contains methods and other services that help
 // with interacting with the cloudflare API. Note, unlike clients, this service
 // does not read variables from the environment automatically. You should not
 // instantiate this service directly, and instead use the
-// [NewLoadBalancerAnalyticsEventService] method instead.
-type LoadBalancerAnalyticsEventService struct {
+// [NewLoadBalancingAnalyticsEventService] method instead.
+type LoadBalancingAnalyticsEventService struct {
 	Options []option.RequestOption
 }
 
-// NewLoadBalancerAnalyticsEventService generates a new service that applies the
+// NewLoadBalancingAnalyticsEventService generates a new service that applies the
 // given options to each request. These options are applied after the parent
 // client's options (if there is one), and before any request-specific options.
-func NewLoadBalancerAnalyticsEventService(opts ...option.RequestOption) (r *LoadBalancerAnalyticsEventService) {
-	r = &LoadBalancerAnalyticsEventService{}
+func NewLoadBalancingAnalyticsEventService(opts ...option.RequestOption) (r *LoadBalancingAnalyticsEventService) {
+	r = &LoadBalancingAnalyticsEventService{}
 	r.Options = opts
 	return
 }
 
 // List origin health changes.
-func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Analytics], err error) {
+func (r *LoadBalancingAnalyticsEventService) List(ctx context.Context, query LoadBalancingAnalyticsEventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Analytics], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -52,11 +52,11 @@ func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query Load
 }
 
 // List origin health changes.
-func (r *LoadBalancerAnalyticsEventService) ListAutoPaging(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Analytics] {
+func (r *LoadBalancingAnalyticsEventService) ListAutoPaging(ctx context.Context, query LoadBalancingAnalyticsEventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Analytics] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-type LoadBalancerAnalyticsEventListParams struct {
+type LoadBalancingAnalyticsEventListParams struct {
 	// If true, filter events where the origin status is healthy. If false, filter
 	// events where the origin status is unhealthy.
 	OriginHealthy param.Field[bool] `query:"origin_healthy"`
@@ -74,9 +74,9 @@ type LoadBalancerAnalyticsEventListParams struct {
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-// URLQuery serializes [LoadBalancerAnalyticsEventListParams]'s query parameters as
-// `url.Values`.
-func (r LoadBalancerAnalyticsEventListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [LoadBalancingAnalyticsEventListParams]'s query parameters
+// as `url.Values`.
+func (r LoadBalancingAnalyticsEventListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

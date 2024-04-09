@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestDNSGetWithOptionalParams(t *testing.T) {
+func TestDNSListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,12 +29,12 @@ func TestDNSGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Intel.DNS.Get(context.TODO(), intel.DNSGetParams{
+	_, err := client.Intel.DNS.List(context.TODO(), intel.DNSListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		IPV4:      cloudflare.F("string"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(20.000000),
-		StartEndParams: cloudflare.F(intel.DNSGetParamsStartEndParams{
+		StartEndParams: cloudflare.F(intel.DNSListParamsStartEndParams{
 			End:   cloudflare.F(time.Now()),
 			Start: cloudflare.F(time.Now()),
 		}),

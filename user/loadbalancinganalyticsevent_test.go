@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
-func TestLoadBalancerAnalyticsEventListWithOptionalParams(t *testing.T) {
+func TestLoadBalancingAnalyticsEventListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestLoadBalancerAnalyticsEventListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.LoadBalancers.Analytics.Events.List(context.TODO(), user.LoadBalancerAnalyticsEventListParams{
+	_, err := client.User.LoadBalancing.Analytics.Events.List(context.TODO(), user.LoadBalancingAnalyticsEventListParams{
 		OriginHealthy: cloudflare.F(true),
 		OriginName:    cloudflare.F("primary-dc-1"),
 		PoolHealthy:   cloudflare.F(true),
